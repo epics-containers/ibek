@@ -131,8 +131,8 @@ html_show_copyright = True
 html_css_files = ["theme_overrides.css"]
 
 # Logo
-html_logo = "images/dls-logo.svg"
-html_favicon = "images/dls-favicon.ico"
+html_logo = "images/ibek-logo.svg"
+html_favicon = "images/ibek-favicon.ico"
 
 # sphinx-multiversion config
 smv_rebuild_tags = False

@@ -1,6 +1,8 @@
 .. include:: ../README.rst
     :end-before: when included in index.rst
 
+.. |logo| image:: images/ibek-logo.svg
+
 How the documentation is structured
 -----------------------------------
 

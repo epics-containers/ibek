@@ -1,10 +1,19 @@
-ibek
+|logo| ibek
 ===========================
 
 |code_ci| |docs_ci| |coverage| |pypi_version| |license|
 
-This is where you should write a short paragraph that describes what your module does,
-how it does it, and why people should use it.
+IOC Builder for EPICS in Kubernetes:
+
+- In an EPICS support module describe what entities an IOC using it can create,
+  what arguments they take, and what database and st.cmd snippets it should
+  generate in a ``builder.yaml`` file
+- Build support modules together in a container image and use ``ibek`` in the
+  image to create a JSON schema of what an IOC using that image can contain
+- Write an ``ioc.yaml`` file against that schema listing instances of the
+  entities with arguments
+- Use ``ibek`` to generate a startup script, database and Helm chart that runs
+  up the IOC contained in the image with them
 
 ============== ==============================================================
 PyPI           ``pip install ibek``
@@ -12,21 +21,7 @@ Source code    https://github.com/dls-controls/ibek
 Documentation  https://dls-controls.github.io/ibek
 ============== ==============================================================
 
-This is where you should put some images or code snippets that illustrate
-some relevant examples. If it is a library then you might put some
-introductory code here:
-
-.. code:: python
-
-    from ibek import HelloClass
-
-    hello = HelloClass("me")
-    print(hello.format_greeting())
-
-Or if it is a commandline tool then you might put some example commands here::
-
-    ibek person --times=2
-
+Add a diagram and more details...
 
 .. |code_ci| image:: https://github.com/dls-controls/ibek/workflows/Code%20CI/badge.svg?branch=master
     :target: https://github.com/dls-controls/ibek/actions?query=workflow%3A%22Code+CI%22
@@ -53,3 +48,5 @@ Or if it is a commandline tool then you might put some example commands here::
     when included in index.rst
 
 See https://dls-controls.github.io/ibek for more detailed documentation.
+
+.. |logo| image:: https://raw.githubusercontent.com/dls-controls/ibek/master/docs/images/ibek-logo.svg
