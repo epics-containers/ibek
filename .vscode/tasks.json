@@ -1,0 +1,44 @@
+// See https://go.microsoft.com/fwlink/?LinkId=733558
+// for the documentation about the tasks.json format
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "type": "shell",
+            "label": "Fix all isort issues",
+            "command": "pipenv run isort .",
+            "options": {
+                "cwd": "${workspaceRoot}"
+            },
+            "problemMatcher": []
+        },
+        {
+            "type": "shell",
+            "label": "Fix all black issues",
+            "command": "pipenv run black .",
+            "options": {
+                "cwd": "${workspaceRoot}"
+            },
+            "problemMatcher": []
+        },
+        {
+            "type": "shell",
+            "label": "Tests with coverage",
+            "command": "pipenv run tests --cov-report xml:cov.xml",
+            "options": {
+                "cwd": "${workspaceRoot}"
+            },
+            "problemMatcher": [],
+        },
+        {
+            "label": "Pre-commit",
+            "dependsOrder": "sequence",
+            "dependsOn": [
+                "Fix all isort issues",
+                "Fix all black issues",
+                "Tests with coverage"
+            ],
+            "problemMatcher": []
+        }
+    ]
+}

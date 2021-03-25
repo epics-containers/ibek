@@ -1,0 +1,35 @@
+[[source]]
+name = "pypi"
+url = "https://pypi.org/simple"
+verify_ssl = true
+
+[dev-packages]
+# Pinning black stops us having to allow pre-releases globally
+black = "==19.10b0"
+pytest-cov = "*"
+pytest-mypy = "*"
+pytest-flake8 = "*"
+pytest-black = "*"
+flake8-isort = "*"
+isort = ">5.0"
+sphinx-rtd-theme = "*"
+
+# Without these lines lockfile isn't usable on multiple Python versions and platforms
+mypy = "*"
+atomicwrites = "*"
+# switch to main repo after PR https://github.com/Holzhaus/sphinx-multiversion/pull/60 is merged
+sphinx-multiversion = {editable = true,git = "https://github.com/dls-controls/sphinx-multiversion.git",ref = "only-arg"}
+
+
+# Required because this pytest dependency gets incorrect marker by default
+typing-extensions = {version = ">=3.7.4.3", markers="python_version >= '3.7'" }
+
+[packages]
+# All other package requirements from setup.cfg
+ibek = {editable = true,path = "."}
+
+[scripts]
+# Put coverage here so we don't interfere with debugging in the IDE
+tests = "python -m pytest --cov=ibek --cov-report term"
+docs = "sphinx-build -EWT --keep-going docs build/html"
+clean = "rm -rf build prefix */__pycache__ .coverage cov.xml *.egg-info .mypy_cache .pytest_cache"
