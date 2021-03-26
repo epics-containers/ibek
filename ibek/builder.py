@@ -1,9 +1,10 @@
 from dataclasses import dataclass
-from typing import Any, Literal, Mapping, Optional, Sequence, Type, TypeVar, Union
+from typing import Any, Mapping, Optional, Sequence, Type, TypeVar, Union
 
 from apischema import Undefined, UndefinedType, deserialize, deserializer, schema
 from apischema.conversions import Conversion, identity
 from typing_extensions import Annotated as A
+from typing_extensions import Literal
 
 T = TypeVar("T")
 

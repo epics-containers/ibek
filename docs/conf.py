@@ -65,6 +65,7 @@ nitpick_ignore = [
     ("py:class", "'float'"),
     ("py:class", "'int'"),
     ("py:class", "apischema.utils.UndefinedType"),
+    ("py:class", "typing_extensions.Literal"),
 ]
 
 # Both the class’ and the __init__ method’s docstring are concatenated and
