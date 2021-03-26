@@ -17,8 +17,8 @@ using ``autoclass`` and ``autofunction`` directives instead of
 
     Version number as calculated by https://github.com/dls-controls/versiongit
 
-.. automodule:: ibek.ibek
+.. automodule:: ibek.builder
     :members:
 
-    ``ibek.ibek``
+    ``ibek.builder``
     -------------------------------------------------------------------

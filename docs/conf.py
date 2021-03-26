@@ -47,6 +47,8 @@ extensions = [
     "sphinx.ext.inheritance_diagram",
     # Add multiple versions of documentation on CI
     "sphinx_multiversion",
+    # Add apischema information to autodoc entries
+    "ibek.sphinxext",
 ]
 
 # If true, Sphinx will warn about all references where the target cannot
@@ -57,7 +59,13 @@ nitpicky = True
 # generating warnings in "nitpicky mode". Note that type should include the
 # domain name if present. Example entries would be ('py:func', 'int') or
 # ('envvar', 'LD_LIBRARY_PATH').
-nitpick_ignore = [("py:func", "int")]
+nitpick_ignore = [
+    ("py:class", "NoneType"),
+    ("py:class", "'str'"),
+    ("py:class", "'float'"),
+    ("py:class", "'int'"),
+    ("py:class", "apischema.utils.UndefinedType"),
+]
 
 # Both the class’ and the __init__ method’s docstring are concatenated and
 # inserted into the main body of the autoclass directive
