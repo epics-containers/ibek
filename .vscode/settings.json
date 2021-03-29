@@ -9,5 +9,9 @@
     "python.formatting.provider": "black",
     "restructuredtext.confPath": "${workspaceFolder}/docs",
     "restructuredtext.builtDocumentationPath": "${workspaceFolder}/build/html",
-    "python.languageServer": "Pylance"
+    "python.languageServer": "Pylance",
+    "python.pythonPath": "/home/tom/.local/share/virtualenvs/ibek-49lXI2xq/bin/python",
+    "yaml.schemas": {
+        "tests/builder-schema.json": ["builder.yaml"]
+    }
 }

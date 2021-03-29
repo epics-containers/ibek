@@ -3,7 +3,7 @@
 
 |code_ci| |docs_ci| |coverage| |pypi_version| |license|
 
-IOC Builder for EPICS in Kubernetes:
+IOC Builder for EPICS and Kubernetes:
 
 - In an EPICS support module describe what entities an IOC using it can create,
   what arguments they take, and what database and st.cmd snippets it should

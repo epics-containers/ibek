@@ -1,0 +1,193 @@
+{
+  "type": "object",
+  "properties": {
+    "module": {
+      "type": "string",
+      "description": "Support module name, normally the repo name"
+    },
+    "entities": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Publish Entity as type <module>.<name> for IOC instances"
+          },
+          "args": {
+            "type": "array",
+            "items": {
+              "anyOf": [
+                {
+                  "type": "object",
+                  "properties": {
+                    "name": {
+                      "type": "string",
+                      "description": "Name of the argument that the IOC instance should pass"
+                    },
+                    "description": {
+                      "type": "string",
+                      "description": "Description of what the argument will be used for"
+                    },
+                    "default": {
+                      "type": [
+                        "string",
+                        "null"
+                      ],
+                      "description": "If given, and instance doesn't supply argument, what value should be used"
+                    },
+                    "is_id": {
+                      "type": "boolean",
+                      "description": "If true, instances may refer to this instance by this arg"
+                    },
+                    "type": {
+                      "type": "string",
+                      "const": "str"
+                    }
+                  },
+                  "required": [
+                    "name",
+                    "description"
+                  ],
+                  "additionalProperties": false
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "name": {
+                      "type": "string",
+                      "description": "Name of the argument that the IOC instance should pass"
+                    },
+                    "description": {
+                      "type": "string",
+                      "description": "Description of what the argument will be used for"
+                    },
+                    "default": {
+                      "type": [
+                        "integer",
+                        "null"
+                      ],
+                      "description": "If given, and instance doesn't supply argument, what value should be used"
+                    },
+                    "type": {
+                      "type": "string",
+                      "const": "int"
+                    }
+                  },
+                  "required": [
+                    "name",
+                    "description"
+                  ],
+                  "additionalProperties": false
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "name": {
+                      "type": "string",
+                      "description": "Name of the argument that the IOC instance should pass"
+                    },
+                    "description": {
+                      "type": "string",
+                      "description": "Description of what the argument will be used for"
+                    },
+                    "default": {
+                      "type": [
+                        "number",
+                        "null"
+                      ],
+                      "description": "If given, and instance doesn't supply argument, what value should be used"
+                    },
+                    "type": {
+                      "type": "string",
+                      "const": "float"
+                    }
+                  },
+                  "required": [
+                    "name",
+                    "description"
+                  ],
+                  "additionalProperties": false
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "name": {
+                      "type": "string",
+                      "description": "Name of the argument that the IOC instance should pass"
+                    },
+                    "description": {
+                      "type": "string",
+                      "description": "Description of what the argument will be used for"
+                    },
+                    "type": {
+                      "type": "string",
+                      "description": "Entity class, <module>.<entity_name>"
+                    },
+                    "default": {
+                      "type": [
+                        "string",
+                        "null"
+                      ],
+                      "description": "If given, and instance doesn't supply argument, what value should be used"
+                    }
+                  },
+                  "required": [
+                    "name",
+                    "description",
+                    "type"
+                  ],
+                  "additionalProperties": false
+                }
+              ]
+            },
+            "description": "The arguments IOC instance should supply"
+          },
+          "databases": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "file": {
+                  "type": "string",
+                  "description": "Filename of the database template in <module_root>/db"
+                },
+                "include_args": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "description": "List of args to pass through to database"
+                },
+                "define_args": {
+                  "type": "string",
+                  "description": "Arg string list to be generated as Jinja template"
+                }
+              },
+              "required": [
+                "file"
+              ],
+              "additionalProperties": false
+            },
+            "description": "Databases to instantiate"
+          },
+          "script": {
+            "type": "string",
+            "description": "Startup script snippet defined as Jinja template"
+          }
+        },
+        "required": [
+          "name"
+        ],
+        "additionalProperties": false
+      },
+      "description": "The entities an IOC can create using this module"
+    }
+  },
+  "required": [
+    "module",
+    "entities"
+  ],
+  "additionalProperties": false,
+  "$schema": "http://json-schema.org/draft/2019-09/schema#"
+}
