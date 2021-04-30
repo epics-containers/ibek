@@ -45,7 +45,7 @@ jobs:
         env:
           TWINE_USERNAME: __token__
           TWINE_PASSWORD: ${{ secrets.pypi_token }}
-        run: twine upload
+        run: twine upload dist/*
 
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v1
