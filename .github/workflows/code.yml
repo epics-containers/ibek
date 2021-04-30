@@ -23,7 +23,8 @@ jobs:
 
       - name: Install Python Dependencies
         run: |
-          python -c "import os;[print(t, v[:10], len(v)) for t, v in sorted(os.environ.items())]"
+          env
+          python -c "import os;[print(t, v[:20], len(v)) for t, v in os.environ.items()]"
           pip install pipenv
           pipenv install --dev --deploy --python $(which python) && pipenv graph
 
