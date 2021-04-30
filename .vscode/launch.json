@@ -9,6 +9,9 @@
             "type": "python",
             "request": "test",
             "justMyCode": false,
+            "env": {
+                "PYTEST_ADDOPTS": "--no-cov"
+            }
         }
     ]
 }
