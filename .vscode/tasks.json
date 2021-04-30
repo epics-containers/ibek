@@ -5,40 +5,12 @@
     "tasks": [
         {
             "type": "shell",
-            "label": "Fix all isort issues",
-            "command": "pipenv run isort .",
-            "options": {
-                "cwd": "${workspaceRoot}"
-            },
-            "problemMatcher": []
-        },
-        {
-            "type": "shell",
-            "label": "Fix all black issues",
-            "command": "pipenv run black .",
-            "options": {
-                "cwd": "${workspaceRoot}"
-            },
-            "problemMatcher": []
-        },
-        {
-            "type": "shell",
             "label": "Tests with coverage",
-            "command": "pipenv run tests --cov-report xml:cov.xml",
+            "command": "pipenv run tests",
             "options": {
                 "cwd": "${workspaceRoot}"
             },
             "problemMatcher": [],
-        },
-        {
-            "label": "Pre-commit",
-            "dependsOrder": "sequence",
-            "dependsOn": [
-                "Fix all isort issues",
-                "Fix all black issues",
-                "Tests with coverage"
-            ],
-            "problemMatcher": []
         }
     ]
 }
