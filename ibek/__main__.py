@@ -6,7 +6,7 @@ import typer
 from apischema.json_schema import deserialization_schema
 
 from ibek import __version__
-from ibek.builder import Builder
+from ibek.support import Support
 
 app = typer.Typer()
 
@@ -27,15 +27,15 @@ def main(
         help="Print the version of ibek and exit",
     )
 ):
-    """Top level help text"""
+    """Do 3 things..."""
 
 
 @app.command()
-def builder_schema(
+def ibek_schema(
     output: Path = typer.Argument(..., help="The filename to write the schema to")
 ):
-    """Produce the JSON schema for a builder.yaml file"""
-    schema = json.dumps(deserialization_schema(Builder), indent=2)
+    """Produce the JSON schema for a <support_module>.ibek.yaml file"""
+    schema = json.dumps(deserialization_schema(Support), indent=2)
     with open(output, "w") as f:
         f.write(schema)
 
@@ -49,7 +49,12 @@ def ioc_schema():
 
 @app.command()
 def build_ioc():
-    """Build a startup script and Helm chart from <ioc>.yaml"""
+    """Build a startup script, database and Helm chart from <ioc>.yaml"""
+    # Deserialize all the ibek yaml files into Support instances
+    # Read the ioc yaml file into dictionaries
+    # Read the type of each instance, and get the correct Entity
+    # Call format_script on the entity with the rest of the args from the dict
+    # Write out the script
 
 
 # test with:

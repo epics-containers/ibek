@@ -3,6 +3,7 @@ from typing import Any, Mapping, Optional, Sequence, Type, TypeVar, Union
 
 from apischema import Undefined, UndefinedType, deserialize, deserializer, schema
 from apischema.conversions import Conversion, identity
+from jinja2 import Template
 from typing_extensions import Annotated as A
 from typing_extensions import Literal
 
@@ -85,9 +86,13 @@ class Entity:
     databases: A[Sequence[Database], desc("Databases to instantiate")] = ()
     script: A[str, desc("Startup script snippet defined as Jinja template")] = ""
 
+    def format_script(self, **kwargs: str) -> str:
+        template = Template(self.script)
+        return template.render(**kwargs)
+
 
 @dataclass
-class Builder:
+class Support:
     """Lists the entities a support module can build"""
 
     module: A[str, desc("Support module name, normally the repo name")]

@@ -21,7 +21,9 @@ Source code    https://github.com/dls-controls/ibek
 Documentation  https://dls-controls.github.io/ibek
 ============== ==============================================================
 
-Add a diagram and more details...
+Add a diagram and more details.
+
+Use draw.io for image, and save as SVG with source embed in it, save as something.draw.io.svg
 
 .. |code_ci| image:: https://github.com/dls-controls/ibek/workflows/Code%20CI/badge.svg?branch=master
     :target: https://github.com/dls-controls/ibek/actions?query=workflow%3A%22Code+CI%22
