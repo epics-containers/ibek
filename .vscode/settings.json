@@ -12,10 +12,9 @@
     "editor.codeActionsOnSave": {
         "source.organizeImports": true
     },
-    "python.pythonPath": "/home/tom/.local/share/virtualenvs/ibek-49lXI2xq/bin/python",
     "yaml.schemas": {
-        "tests/builder-schema.json": [
-            "builder.yaml"
+        "tests/ibek.schema.json": [
+            "*.ibek.yaml"
         ]
     }
 }

@@ -17,9 +17,9 @@ def test_version():
 
 def test_builder_schema(tmp_path: Path):
     schema_path = tmp_path / "schema.json"
-    result = runner.invoke(app, ["builder-schema", str(schema_path)])
+    result = runner.invoke(app, ["ibek-schema", str(schema_path)])
     assert result.exit_code == 0
-    expected = json.loads(open(Path(__file__).parent / "builder-schema.json").read())
+    expected = json.loads(open(Path(__file__).parent / "ibek.schema.json").read())
     # Don't care if version number didn't update to match if the rest is the same
     # expected["title"] = mock.ANY
     actual = json.loads(open(schema_path).read())
