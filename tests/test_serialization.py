@@ -5,22 +5,32 @@ from ruamel.yaml import YAML
 from ibek.support import Database, Entity, ObjectArg, StrArg, Support
 
 SUPPORT = Support(
-    module="asyn",
+    module="pmac",
     entities=(
         Entity(
-            name="AsynIP",
+            name="PMAC",
+            args=(StrArg(name="PORT", description="Asyn port name", is_id=True),),
+            script="PMACPortConfigure({{ PORT }}, 100)​",
+        ),
+        Entity(
+            name="motor",
             args=(
-                StrArg(name="name", description="Asyn port name", is_id=True),
-                StrArg(name="port", description="Asyn port number"),
+                ObjectArg(
+                    name="PMAC", type="pmac.PMAC", description="PMAC to attach to"
+                ),
             ),
-            script="PMACAsynIPPort({{name}}, {{port}})​",
+            databases=(
+                Database(
+                    file="pmac_asyn_motor.template", define_args="PORT={{ PMAC.PORT }}"
+                ),
+            ),
         ),
     ),
 )
 
 
 def test_deserialize_support() -> None:
-    with open(Path(__file__).parent / "asyn.ibek.yaml") as f:
+    with open(Path(__file__).parent / "pmac.ibek.yaml") as f:
         actual = Support.deserialize(YAML().load(f))
     assert actual == SUPPORT
 

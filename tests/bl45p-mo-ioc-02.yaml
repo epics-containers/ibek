@@ -1,18 +1,24 @@
 instances:
-  - type: asyn.AsynIP
-    PORT: port_1
+  - type: pmac.pmacAsynIPPort
+    name: BRICK1port
+    IP: 192.168.0.12:1111
 
-  - type: asyn.AsynIP
-    PORT: port_2
+  - type: pmac.pmacAsynIPPort
+    name: BRICK2port
+    IP: 192.168.0.12:1112
 
-  - type: asyn.AsynIP
-    PORT: port_3
+  - type: pmac.pmacAsynIPPort
+    name: BRICK3port
+    IP: 192.168.0.12:1113
 
-  - type: asyn.AsynIP
-    PORT: port_4
+  - type: pmac.pmacAsynIPPort
+    name: BRICK4port
+    IP: 192.168.0.12:1114
 
-  - type: asyn.AsynIP
-    PORT: port_5
+  - type: pmac.pmacAsynIPPort
+    name: BRICK5port
+    IP: 192.168.0.12
 
-  - type: asyn.AsynIP
-    PORT: port_6
+  - type: pmac.pmacAsynIPPort
+    name: BRICK6port
+    IP: 192.168.0.13

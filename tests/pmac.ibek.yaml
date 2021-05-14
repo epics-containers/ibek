@@ -1,17 +1,13 @@
 module: pmac
 entities:
-  - name: PMAC
+  - name: pmacAsynIPPort
     args:
       - type: str
-        name: PORT
+        name: name
         description: Asyn port name
-        is_id: true
-    script: PMACPortConfigure({{ PORT }}, 100)​
-  - name: motor
-    args:
-      - name: PMAC
-        description: PMAC to attach to
-        type: pmac.PMAC
-    databases:
-      - file: pmac_asyn_motor.template
-        define_args: PORT={{ PMAC.PORT }}
+
+      - type: str
+        name: IP
+        description: IP address of pmac
+
+    script: PMACAsynIPPort({{name}}, {{IP + "" if ":" in IP else IP + "1025"}})
