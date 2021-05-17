@@ -20,8 +20,8 @@ SUPPORT = Support(
                 ),
                 ObjectArg(
                     name="port",
-                    description="Asyn port name for pmacAsynIPPort to connect to",
-                    type="pmac.pmacAsynIPPort",
+                    description="Asyn port name for PmacAsynIPPort to connect to",
+                    type="pmac.PmacAsynIPPort",
                     default=Undefined,
                 ),
                 StrArg(
@@ -57,12 +57,13 @@ SUPPORT = Support(
                 ),
             ),
             script=(
-                "pmacCreateController({{name}}, {{port.port}}, 0, 8, {{movingPoll}}, {{idlePoll}})",
+                "pmacCreateController({{name}}, {{port.port}}, 0, 8, "
+                "{{movingPoll}}, {{idlePoll}})",
                 "pmacCreateAxes({{name}}, 8)",
             ),
         ),
         Entity(
-            name="pmacAsynIPPort",
+            name="PmacAsynIPPort",
             args=(
                 StrArg(
                     name="port",
@@ -85,7 +86,7 @@ SUPPORT = Support(
             ),
         ),
         Entity(
-            name="motor",
+            name="Motor",
             args=(
                 ObjectArg(
                     name="pmac",
@@ -96,7 +97,7 @@ SUPPORT = Support(
             ),
             databases=(
                 Database(
-                    file="pmac_asyn_motor.template",
+                    file="pmac_asyn_Motor.template",
                     include_args=(),
                     define_args="PMAC={{ pmac.P }}",
                 ),

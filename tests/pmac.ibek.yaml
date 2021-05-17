@@ -8,9 +8,9 @@ entities:
       description: Name to use for the geobrick's asyn port
       is_id: true
 
-    - type: pmac.pmacAsynIPPort
+    - type: pmac.PmacAsynIPPort
       name: port
-      description: Asyn port name for pmacAsynIPPort to connect to
+      description: Asyn port name for PmacAsynIPPort to connect to
 
     - type: str
       name: P
@@ -36,7 +36,7 @@ entities:
     - file: pmacStatus.template
       define_args: PMAC={{ P }}
 
-  - name: pmacAsynIPPort
+  - name: PmacAsynIPPort
     args:
       - type: str
         name: port
@@ -50,12 +50,13 @@ entities:
     script:
     - PMACAsynIPPort({{port}}, {{IP + "" if ":" in IP else IP + ":1025"}})
 
-  - name: motor
+  - name: Motor
     args:
     - name: pmac
       description: PMAC to attach to
       type: pmac.name
 
     databases:
-    - file: pmac_asyn_motor.template
+    # TODO more parameters required for pmac_asyn_Motor.template
+    - file: pmac_asyn_Motor.template
       define_args: PMAC={{ pmac.P }}

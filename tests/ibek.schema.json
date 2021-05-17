@@ -29,6 +29,10 @@
                       "type": "string",
                       "description": "Description of what the argument will be used for"
                     },
+                    "type": {
+                      "type": "string",
+                      "const": "str"
+                    },
                     "default": {
                       "type": [
                         "string",
@@ -39,10 +43,6 @@
                     "is_id": {
                       "type": "boolean",
                       "description": "If true, instances may refer to this instance by this arg"
-                    },
-                    "type": {
-                      "type": "string",
-                      "const": "str"
                     }
                   },
                   "required": [
@@ -61,6 +61,10 @@
                     "description": {
                       "type": "string",
                       "description": "Description of what the argument will be used for"
+                    },
+                    "type": {
+                      "type": "string",
+                      "const": "int"
                     },
                     "default": {
                       "type": [
@@ -68,10 +72,6 @@
                         "null"
                       ],
                       "description": "If given, and instance doesn't supply argument, what value should be used"
-                    },
-                    "type": {
-                      "type": "string",
-                      "const": "int"
                     }
                   },
                   "required": [
@@ -91,16 +91,16 @@
                       "type": "string",
                       "description": "Description of what the argument will be used for"
                     },
+                    "type": {
+                      "type": "string",
+                      "const": "float"
+                    },
                     "default": {
                       "type": [
                         "number",
                         "null"
                       ],
                       "description": "If given, and instance doesn't supply argument, what value should be used"
-                    },
-                    "type": {
-                      "type": "string",
-                      "const": "float"
                     }
                   },
                   "required": [
@@ -172,7 +172,10 @@
             "description": "Databases to instantiate"
           },
           "script": {
-            "type": "string",
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
             "description": "Startup script snippet defined as Jinja template"
           }
         },
