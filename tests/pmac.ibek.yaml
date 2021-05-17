@@ -3,7 +3,7 @@ entities:
 
   - name: Geobrick
     args:
-    - type str
+    - type: str
       name: name
       description: Name to use for the geobrick's asyn port
       is_id: true
@@ -24,22 +24,22 @@ entities:
       name: movingPoll
       description: Moving Poll Period in ms
 
-    script: -
-        # axes hard coded to 8 for geobrick (builder.py counted the axes created)
-        # TODO num axes is an example of something hard to do in this new approach?
-        print 'pmacCreateController({name}, {port.name}, 0, 8, {movingPoll}, {idlePoll})
-        print 'pmacCreateAxes({name}, 8)
+    # axes hard coded to 8 for geobrick (builder.py counted the axes created)
+    # TODO is num_axes is an example of something hard to do in this new approach?
+    script:
+    - pmacCreateController({{name}}, {{port.port}}, 0, 8, {{movingPoll}}, {{idlePoll}})
+    - pmacCreateAxes({{name}}, 8)
 
     databases:
     - file: pmacController.template
-      define_args: PMAC={{ PMAC.P }}
+      define_args: PMAC={{ P }}
     - file: pmacStatus.template
-      define_args: PMAC={{ PMAC.P }}
+      define_args: PMAC={{ P }}
 
   - name: pmacAsynIPPort
     args:
       - type: str
-        name: PORT
+        name: port
         description: Asyn port name
         is_id: true
 
@@ -47,7 +47,8 @@ entities:
         name: IP
         description: IP address of pmac
 
-    script: PMACAsynIPPort({{name}}, {{IP + "" if ":" in IP else IP + "1025"}})
+    script:
+    - PMACAsynIPPort({{port}}, {{IP + "" if ":" in IP else IP + ":1025"}})
 
   - name: motor
     args:
