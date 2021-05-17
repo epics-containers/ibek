@@ -32,7 +32,7 @@ class PmacAsynIPPort(EntityInstance):
 class Geobrick(EntityInstance):
     """ defines a Geobrick motion controller """
 
-    type: Literal["Geobrick"] = "Geobrick"
+    type: Literal["pmac.Geobrick"] = "pmac.Geobrick"
     port: A[
         PmacAsynIPPort, desc("Asyn port name for PmacAsynIPPort to connect to")
     ] = PmacAsynIPPort("None")
@@ -45,7 +45,7 @@ class Geobrick(EntityInstance):
 class Motor(EntityInstance):
     """ defines an individual axis connected to a geobrick or pmac """
 
-    type: Literal["Motor"] = "Motor"
+    type: Literal["pmac.Motor"] = "pmac.Motor"
     port: A[
         PmacAsynIPPort, desc("Asyn port name for PmacAsynIPPort to connect to")
     ] = PmacAsynIPPort("None")

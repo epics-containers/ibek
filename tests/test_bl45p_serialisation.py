@@ -2,13 +2,10 @@ from pathlib import Path
 
 from ruamel.yaml import YAML
 
-from ibek.pmac import PmacAsynIPPort, PmacIOC
+from ibek.pmac import Geobrick, PmacAsynIPPort, PmacIOC
 
 BL45P_MO_IOC_02 = PmacIOC(
     instances=(
-        PmacAsynIPPort(
-            name="BRICK1port", type="pmac.PmacAsynIPPort", IP="192.168.0.12:1111"
-        ),
         PmacAsynIPPort(
             name="BRICK2port", type="pmac.PmacAsynIPPort", IP="192.168.0.12:1112"
         ),
@@ -23,6 +20,16 @@ BL45P_MO_IOC_02 = PmacIOC(
         ),
         PmacAsynIPPort(
             name="BRICK6port", type="pmac.PmacAsynIPPort", IP="192.168.0.13"
+        ),
+        Geobrick(
+            name="BL45P-MO-BRICK-01",
+            type="pmac.Geobrick",
+            port=PmacAsynIPPort(
+                name="BRICK1port", type="pmac.PmacAsynIPPort", IP="192.168.0.12:1111"
+            ),
+            P="BL45P-MO-STEP-01:",
+            idlePoll=100,
+            movingPoll=500,
         ),
     )
 )

@@ -1,9 +1,5 @@
 instances:
   - type: pmac.PmacAsynIPPort
-    name: BRICK1port
-    IP: 192.168.0.12:1111
-
-  - type: pmac.PmacAsynIPPort
     name: BRICK2port
     IP: 192.168.0.12:1112
 
@@ -22,3 +18,10 @@ instances:
   - type: pmac.PmacAsynIPPort
     name: BRICK6port
     IP: 192.168.0.13
+
+  - type: pmac.Geobrick
+    name: BL45P-MO-BRICK-01
+    port:
+        name: BRICK1port
+        IP: 192.168.0.12:1111
+    P: 'BL45P-MO-STEP-01:'
