@@ -11,15 +11,14 @@ T = TypeVar("T")
 
 
 @dataclass
-class PmacAsynIPPort:
-    IP: A[str, desc("IP address of the pmac to be connected to")]
+class EntityInstance:
+    type: A[str, desc("name of type of instance")]
+    name: A[str, desc("Name of the entity instance we are creating")]
 
 
 @dataclass
-class EntityInstance:
-    IP: A[PmacAsynIPPort, desc("IP address of the pmac to be connected to")]
-    type: A[str, desc("name of type of instance")] = "pmac.pmacAsynIPPort"
-    name: A[str, desc("Name of the entity instance we are creating")] = "BRICKPortx"
+class PmacAsynIPPort(EntityInstance):
+    IP: A[str, desc("IP address of the pmac to be connected to")]
 
 
 @dataclass
@@ -30,4 +29,3 @@ class PmacIOC:
     @classmethod
     def deserialize(cls: Type[T], d: Mapping[str, Any]) -> T:
         return deserialize(cls, d)
-

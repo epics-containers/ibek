@@ -1,5 +1,5 @@
-from dataclasses import dataclass
-from typing import Any, Mapping, Optional, Sequence, Type, TypeVar, Union
+from dataclasses import dataclass, field
+from typing import Any, List, Mapping, Optional, Sequence, Type, TypeVar, Union
 
 from apischema import Undefined, UndefinedType, deserialize, deserializer, schema
 from apischema.conversions import Conversion, identity
@@ -84,11 +84,15 @@ class Entity:
     name: A[str, desc("Publish Entity as type <module>.<name> for IOC instances")]
     args: A[Sequence[Arg], desc("The arguments IOC instance should supply")] = ()
     databases: A[Sequence[Database], desc("Databases to instantiate")] = ()
-    script: A[str, desc("Startup script snippet defined as Jinja template")] = ""
+    script: A[
+        Sequence[str], desc("Startup script snippet defined as Jinja template")
+    ] = ()
 
-    def format_script(self, **kwargs: str) -> str:
-        template = Template(self.script)
-        return template.render(**kwargs)
+    def format_script(self, **kwargs: Any) -> str:
+        all_lines = "\n".join(self.script)
+        template = Template(all_lines)
+        result = template.render(**kwargs)
+        return result
 
 
 @dataclass
