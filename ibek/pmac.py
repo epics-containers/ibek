@@ -56,8 +56,10 @@ class DlsPmacAsynMotor(EntityInstance):
 @dataclass
 class PmacIOC:
     # instances should possibly exist in base class later
+    ioc_name: A[str, desc("Name of the IOC")]
     instances: A[Sequence[EntityInstance], desc("List of entity instances of the IOCs")]
 
     @classmethod
     def deserialize(cls: Type[T], d: Mapping[str, Any]) -> T:
         return deserialize(cls, d)
+
