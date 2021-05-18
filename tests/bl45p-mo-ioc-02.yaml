@@ -1,5 +1,9 @@
 instances:
   - type: pmac.PmacAsynIPPort
+    name: BRICK1port
+    IP: 192.168.0.12:1112
+
+  - type: pmac.PmacAsynIPPort
     name: BRICK2port
     IP: 192.168.0.12:1112
 
@@ -21,7 +25,11 @@ instances:
 
   - type: pmac.Geobrick
     name: BL45P-MO-BRICK-01
-    port:
-        name: BRICK1port
-        IP: 192.168.0.12:1111
-    P: 'BL45P-MO-STEP-01:'
+    port: BRICK1port
+    P: "BL45P-MO-STEP-01:"
+
+  - type: pmac.DlsPmacAsynMotor
+    name: AxisOne
+    pmac: BL45P-MO-BRICK-01port
+    axis: 1
+    P: "BL45P-MO-MIRR-01:X1"

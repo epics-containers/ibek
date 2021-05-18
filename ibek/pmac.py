@@ -12,7 +12,7 @@ T = TypeVar("T")
 
 @dataclass
 class EntityInstance:
-    name: A[str, desc("Name of the entity instance we are creating")]
+    name: A[str, desc("Name of the entity instance we are creating"), identity]
 
     # https://wyfo.github.io/apischema/examples/subclasses_union/
     def __init_subclass__(cls):
@@ -33,25 +33,24 @@ class Geobrick(EntityInstance):
     """ defines a Geobrick motion controller """
 
     type: Literal["pmac.Geobrick"] = "pmac.Geobrick"
-    port: A[
-        PmacAsynIPPort, desc("Asyn port name for PmacAsynIPPort to connect to")
-    ] = PmacAsynIPPort("None")
+    # port should match a PmacAsynIPPort name
+    # (we dont have a way for schema to verify this at present -
+    # TODO I've looked at this with Tom and it may not be possible)
+    port: A[str, desc("Asyn port name for PmacAsynIPPort to connect to")] = ""
     P: A[str, desc("PV Prefix for all pmac db templates")] = ""
     idlePoll: A[int, desc("Idle Poll Period in ms")] = 100
     movingPoll: A[int, desc("Moving Poll Period in ms")] = 500
 
 
 @dataclass
-class Motor(EntityInstance):
+class DlsPmacAsynMotor(EntityInstance):
     """ defines an individual axis connected to a geobrick or pmac """
 
-    type: Literal["pmac.Motor"] = "pmac.Motor"
-    port: A[
-        PmacAsynIPPort, desc("Asyn port name for PmacAsynIPPort to connect to")
-    ] = PmacAsynIPPort("None")
-    P: A[str, desc("PV Prefix for all pmac db templates")] = ""
-    idlePoll: A[int, desc("Idle Poll Period in ms")] = 100
-    movingPoll: A[int, desc("Moving Poll Period in ms")] = 500
+    type: Literal["pmac.DlsPmacAsynMotor"] = "pmac.DlsPmacAsynMotor"
+    # port should match a Geobrick or Pmac name
+    pmac: A[str, desc("pmac controlelr for this axis")] = ""
+    P: A[str, desc("PV Name for the motor record")] = ""
+    axis: A[int, desc("Axis number for this motor")] = 0
 
 
 @dataclass

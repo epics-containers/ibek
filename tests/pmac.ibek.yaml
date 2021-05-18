@@ -1,40 +1,39 @@
 module: pmac
 entities:
-
   - name: Geobrick
     args:
-    - type: str
-      name: name
-      description: Name to use for the geobrick's asyn port
-      is_id: true
+      - type: str
+        name: name
+        description: Name to use for the geobrick's asyn port
+        is_id: true
 
-    - type: pmac.PmacAsynIPPort
-      name: port
-      description: Asyn port name for PmacAsynIPPort to connect to
+      - type: str # pmac.PmacAsynIPPort
+        name: port
+        description: Asyn port name for PmacAsynIPPort to connect to
 
-    - type: str
-      name: P
-      description: PV Prefix for all pmac db templates
+      - type: str
+        name: P
+        description: PV Prefix for all pmac db templates
 
-    - type: int
-      name: idlePoll
-      description: Idle Poll Period in ms
+      - type: int
+        name: idlePoll
+        description: Idle Poll Period in ms
 
-    - type: int
-      name: movingPoll
-      description: Moving Poll Period in ms
+      - type: int
+        name: movingPoll
+        description: Moving Poll Period in ms
 
     # axes hard coded to 8 for geobrick (builder.py counted the axes created)
     # TODO is num_axes is an example of something hard to do in this new approach?
     script:
-    - pmacCreateController({{name}}, {{port.port}}, 0, 8, {{movingPoll}}, {{idlePoll}})
-    - pmacCreateAxes({{name}}, 8)
+      - pmacCreateController({{name}}, {{port}}, 0, 8, {{movingPoll}}, {{idlePoll}})
+      - pmacCreateAxes({{name}}, 8)
 
     databases:
-    - file: pmacController.template
-      define_args: PMAC={{ P }}
-    - file: pmacStatus.template
-      define_args: PMAC={{ P }}
+      - file: pmacController.template
+        define_args: PMAC={{ P }}
+      - file: pmacStatus.template
+        define_args: PMAC={{ P }}
 
   - name: PmacAsynIPPort
     args:
@@ -48,15 +47,19 @@ entities:
         description: IP address of pmac
 
     script:
-    - PMACAsynIPPort({{port}}, {{IP + "" if ":" in IP else IP + ":1025"}})
+      - PMACAsynIPPort({{port}}, {{IP + "" if ":" in IP else IP + ":1025"}})
 
-  - name: Motor
+  - name: DlsPmacAsynMotor
     args:
-    - name: pmac
-      description: PMAC to attach to
-      type: pmac.name
+      - type: str # pmac.Geobrick
+        name: pmac
+        description: PMAC to attach to
+
+      - type: int
+        name: axis
+        description: which axis number this motor drives
 
     databases:
-    # TODO more parameters required for pmac_asyn_Motor.template
-    - file: pmac_asyn_Motor.template
-      define_args: PMAC={{ pmac.P }}
+      # TODO more parameters required for pmac_asyn_Motor.template
+      - file: pmac_asyn_Motor.template
+        define_args: PMAC={{ pmac.P }}

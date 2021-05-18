@@ -3,7 +3,7 @@ from pathlib import Path
 from apischema.utils import Undefined
 from ruamel.yaml import YAML
 
-from ibek.support import Database, Entity, IntArg, ObjectArg, StrArg, Support
+from ibek.support import Database, Entity, IntArg, StrArg, Support
 
 SUPPORT = Support(
     module="pmac",
@@ -18,11 +18,12 @@ SUPPORT = Support(
                     default=Undefined,
                     is_id=True,
                 ),
-                ObjectArg(
+                StrArg(
                     name="port",
                     description="Asyn port name for PmacAsynIPPort to connect to",
-                    type="pmac.PmacAsynIPPort",
+                    type="str",
                     default=Undefined,
+                    is_id=False,
                 ),
                 StrArg(
                     name="P",
@@ -57,8 +58,7 @@ SUPPORT = Support(
                 ),
             ),
             script=(
-                "pmacCreateController({{name}}, {{port.port}}, 0, 8, "
-                "{{movingPoll}}, {{idlePoll}})",
+                "pmacCreateController({{name}}, {{port}}, 0, 8, {{movingPoll}}, {{idlePoll}})",
                 "pmacCreateAxes({{name}}, 8)",
             ),
         ),
@@ -86,12 +86,19 @@ SUPPORT = Support(
             ),
         ),
         Entity(
-            name="Motor",
+            name="DlsPmacAsynMotor",
             args=(
-                ObjectArg(
+                StrArg(
                     name="pmac",
                     description="PMAC to attach to",
-                    type="pmac.name",
+                    type="str",
+                    default=Undefined,
+                    is_id=False,
+                ),
+                IntArg(
+                    name="axis",
+                    description="which axis number this motor drives",
+                    type="int",
                     default=Undefined,
                 ),
             ),
