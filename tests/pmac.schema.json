@@ -1,0 +1,106 @@
+{
+    "type": "object",
+    "properties": {
+        "ioc_name": {
+            "type": "string",
+            "description": "Name of the IOC"
+        },
+        "instances": {
+            "type": "array",
+            "items": {
+                "anyOf": [
+                    {
+                        "type": "object",
+                        "properties": {
+                            "name": {
+                                "type": "string",
+                                "description": "Name of the entity instance we are creating"
+                            },
+                            "type": {
+                                "type": "string",
+                                "const": "pmac.PmacAsynIPPort"
+                            },
+                            "IP": {
+                                "type": "string",
+                                "description": "IP address of the pmac to be connected to"
+                            }
+                        },
+                        "required": [
+                            "name"
+                        ],
+                        "additionalProperties": false
+                    },
+                    {
+                        "type": "object",
+                        "properties": {
+                            "name": {
+                                "type": "string",
+                                "description": "Name of the entity instance we are creating"
+                            },
+                            "type": {
+                                "type": "string",
+                                "const": "pmac.Geobrick"
+                            },
+                            "port": {
+                                "type": "string",
+                                "description": "Asyn port name for PmacAsynIPPort to connect to"
+                            },
+                            "P": {
+                                "type": "string",
+                                "description": "PV Prefix for all pmac db templates"
+                            },
+                            "idlePoll": {
+                                "type": "integer",
+                                "description": "Idle Poll Period in ms"
+                            },
+                            "movingPoll": {
+                                "type": "integer",
+                                "description": "Moving Poll Period in ms"
+                            }
+                        },
+                        "required": [
+                            "name"
+                        ],
+                        "additionalProperties": false
+                    },
+                    {
+                        "type": "object",
+                        "properties": {
+                            "name": {
+                                "type": "string",
+                                "description": "Name of the entity instance we are creating"
+                            },
+                            "type": {
+                                "type": "string",
+                                "const": "pmac.DlsPmacAsynMotor"
+                            },
+                            "pmac": {
+                                "type": "string",
+                                "description": "pmac controlelr for this axis"
+                            },
+                            "P": {
+                                "type": "string",
+                                "description": "PV Name for the motor record"
+                            },
+                            "axis": {
+                                "type": "integer",
+                                "description": "Axis number for this motor"
+                            }
+                        },
+                        "required": [
+                            "name"
+                        ],
+                        "additionalProperties": false
+                    }
+                ]
+            },
+            "description": "List of entity instances of the IOCs"
+        }
+    },
+    "required": [
+        "ioc_name",
+        "instances"
+    ],
+    "additionalProperties": false,
+    "$schema": "http://json-schema.org/draft/2019-09/schema#"
+}
