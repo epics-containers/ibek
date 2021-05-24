@@ -13,6 +13,7 @@ T = TypeVar("T")
 @dataclass
 class EntityInstance:
     name: A[str, desc("Name of the entity instance we are creating"), identity]
+    script: A[str, desc("boot script jinja template")] = ""
 
     # https://wyfo.github.io/apischema/examples/subclasses_union/
     def __init_subclass__(cls):
@@ -26,6 +27,9 @@ class PmacAsynIPPort(EntityInstance):
 
     type: Literal["pmac.PmacAsynIPPort"] = "pmac.PmacAsynIPPort"
     IP: A[str, desc("IP address of the pmac to be connected to")] = "127.0.0.0"
+    script: A[
+        str, desc("jinja template script for ioc.boot")
+    ] = "pmacAsynIPConfigure({{name}}, {{IP}})"
 
 
 @dataclass
