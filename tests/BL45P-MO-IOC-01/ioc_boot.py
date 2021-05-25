@@ -1,9 +1,10 @@
 from pathlib import Path
+from typing import Sequence
 
 from jinja2 import Template
 from ruamel.yaml import YAML
 
-from ibek.pmac import PmacIOC
+from ibek.pmac import EntityInstance, PmacIOC
 
 yaml = YAML()
 
@@ -31,17 +32,38 @@ iocInit
  """
 
 
+def evaluate_scripts(instance: EntityInstance) -> Sequence[str]:
+    return_list = []
+    for script in instance.script:
+        script = Template(script)
+        script = script.render(instance.__dict__)
+        return_list += script + "\n"
+    return return_list
+
+
+def evaluate_db(instance: EntityInstance) -> Sequence[str]:
+    return_list = []
+    """
+    Evaluate the db portion of this EntityInstance
+    """
+    return return_list
+
+
 def generate_boot_script() -> str:
     """ Function which returns a string representing the boot script. 
     Adds boilerplate to the start and end of the script and adds """
     boot_script = boot_initial_boilerplate
     my_ioc = open_ioc_yaml()
     instances = my_ioc.instances
+    # Add script components to the startup script
     for instance in instances:
-        script = Template(instance.script)
-        script = script.render(instance.__dict__)
-        boot_script += str(script) + "\n"
+        for script in evaluate_scripts(instance):
+            boot_script += script
     # add dbloadrecords
+    for instance in instances:
+        for db_record in evaluate_db(instance):
+            boot_script += db_record
+
     boot_script += boot_final_boilerplate
     return boot_script
     # look in bulder.py for pmac project

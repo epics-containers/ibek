@@ -27,9 +27,9 @@ class PmacAsynIPPort(EntityInstance):
 
     type: Literal["pmac.PmacAsynIPPort"] = "pmac.PmacAsynIPPort"
     IP: A[str, desc("IP address of the pmac to be connected to")] = "127.0.0.0"
-    script: A[
-        str, desc("jinja template script for ioc.boot")
-    ] = 'pmacAsynIPConfigure({{name}}, {{IP + "" if ":" in IP else IP + ":1025"}})'
+    script: Sequence[A[str, desc("scripts required for boot script")]] = (
+        'pmacAsynIPConfigure({{name}}, {{IP + "" if ":" in IP else IP + ":1025"}})',
+    )
 
 
 @dataclass
@@ -44,6 +44,10 @@ class Geobrick(EntityInstance):
     P: A[str, desc("PV Prefix for all pmac db templates")] = ""
     idlePoll: A[int, desc("Idle Poll Period in ms")] = 100
     movingPoll: A[int, desc("Moving Poll Period in ms")] = 500
+    script: Sequence[A[str, desc("scripts required for the boot script")]] = (
+        "pmacCreateController({{name}}, {{port}}, 0, 8, {{movingPoll}}, {{idlePoll}})",
+        "pmacCreateAxes({{name}}, 8)",
+    )
 
 
 @dataclass
