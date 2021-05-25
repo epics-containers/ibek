@@ -15,6 +15,7 @@ def open_ioc_yaml() -> PmacIOC:
         return ioc_yaml
 
 
+# migrate over to jinja template object
 boot_initial_boilerplate = """
 cd "$(TOP)"
 epicsEnvSet "EPICS_CA_MAX_ARRAY_BYTES", '6000000'
@@ -40,8 +41,10 @@ def generate_boot_script() -> str:
         script = Template(instance.script)
         script = script.render(instance.__dict__)
         boot_script += str(script) + "\n"
+    # add dbloadrecords
     boot_script += boot_final_boilerplate
     return boot_script
+    # look in bulder.py for pmac project
 
 
 if __name__ == "__main__":
