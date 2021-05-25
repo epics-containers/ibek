@@ -29,7 +29,7 @@ class PmacAsynIPPort(EntityInstance):
     IP: A[str, desc("IP address of the pmac to be connected to")] = "127.0.0.0"
     script: A[
         str, desc("jinja template script for ioc.boot")
-    ] = "pmacAsynIPConfigure({{name}}, {{IP}})"
+    ] = 'pmacAsynIPConfigure({{name}}, {{IP + "" if ":" in IP else IP + ":1025"}})'
 
 
 @dataclass
