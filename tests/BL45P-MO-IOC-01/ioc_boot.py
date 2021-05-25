@@ -52,20 +52,25 @@ def evaluate_db(instance: EntityInstance) -> Sequence[str]:
 def generate_boot_script() -> str:
     """ Function which returns a string representing the boot script. 
     Adds boilerplate to the start and end of the script and adds """
-    boot_script = boot_initial_boilerplate
-    my_ioc = open_ioc_yaml()
-    instances = my_ioc.instances
-    # Add script components to the startup script
-    for instance in instances:
-        for script in evaluate_scripts(instance):
-            boot_script += script
-    # add dbloadrecords
-    for instance in instances:
-        for db_record in evaluate_db(instance):
-            boot_script += db_record
 
-    boot_script += boot_final_boilerplate
-    return boot_script
+    # Open jinja template for script
+    with open((Path(__file__).parent / "startup_script.txt"), "r") as f:
+        boot_template = Template(f.read())
+
+    boot_script_instance_elements = ""
+    my_ioc = open_ioc_yaml()
+
+    # Add script components to the startup script
+    for instance in my_ioc.instances:
+        for script in evaluate_scripts(instance):
+            boot_script_instance_elements += script
+    # add dbloadrecords
+    for instance in my_ioc.instances:
+        for db_record in evaluate_db(instance):
+            boot_script_instance_elements += db_record
+
+    return boot_template.render(script_elements=boot_script_instance_elements)
+
     # look in bulder.py for pmac project
 
 
