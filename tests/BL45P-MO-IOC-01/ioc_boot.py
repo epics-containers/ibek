@@ -16,22 +16,6 @@ def open_ioc_yaml() -> PmacIOC:
         return ioc_yaml
 
 
-# migrate over to jinja template object
-boot_initial_boilerplate = """
-cd "$(TOP)"
-epicsEnvSet "EPICS_CA_MAX_ARRAY_BYTES", '6000000'
-epicsEnvSet "EPICS_TS_MIN_WEST", '0'
-cd "$(TOP)"
-dbLoadDatabase "dbd/ioc.dbd"
-ioc_registerRecordDeviceDriver(pdbbase)
-"""
-
-boot_final_boilerplate = """
-cd "$(TOP)"
-iocInit
- """
-
-
 def evaluate_scripts(instance: EntityInstance) -> Sequence[str]:
     return_list = []
     for script in instance.script:
