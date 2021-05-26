@@ -5,7 +5,7 @@ from apischema.conversions import Conversion, deserializer, identity
 from apischema.deserialization import deserialize
 from typing_extensions import Annotated as A
 
-from ibek.support import desc
+from ibek.support import Database, desc
 
 T = TypeVar("T")
 
@@ -48,6 +48,13 @@ class Geobrick(EntityInstance):
         "pmacCreateController({{name}}, {{port}}, 0, 8, {{movingPoll}}, {{idlePoll}})",
         "pmacCreateAxes({{name}}, 8)",
     )
+    databases: A[
+        Sequence[Database],
+        desc("Sequence of databases elements/records to instantiate"),
+    ] = (
+        Database(file="pmacController.template", define_args="PMAC = {{  P  }}"),
+        Database(file="pmacStatus.template", define_args="PMAC = {{  P  }}"),
+    )
 
 
 @dataclass
@@ -59,6 +66,10 @@ class DlsPmacAsynMotor(EntityInstance):
     pmac: A[str, desc("pmac controlelr for this axis")] = ""
     P: A[str, desc("PV Name for the motor record")] = ""
     axis: A[int, desc("Axis number for this motor")] = 0
+    databases: A[
+        Sequence[Database],
+        desc("Sequence of databases elements/records to instantiate"),
+    ] = (Database(file="pmac_asyn_Motor.template", define_args="PMAC={{  pmac.P  }}"))
 
 
 @dataclass
