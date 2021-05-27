@@ -1,11 +1,11 @@
 from dataclasses import dataclass
-from typing import Any, Literal, Mapping, Sequence, Type, TypeVar
+from typing import Any, Literal, Mapping, Sequence, Tuple, Type, TypeVar
 
 from apischema.conversions import Conversion, deserializer, identity
 from apischema.deserialization import deserialize
 from typing_extensions import Annotated as A
 
-from ibek.support import Database, desc
+from ibek.support import desc
 
 T = TypeVar("T")
 
@@ -14,6 +14,10 @@ T = TypeVar("T")
 class EntityInstance:
     name: A[str, desc("Name of the entity instance we are creating"), identity]
     script: A[str, desc("boot script jinja template")] = ""
+    databases: A[
+        Sequence[Tuple[str, str]],
+        desc("Sequence of databases elements/records to instantiate"),
+    ] = ()
 
     # https://wyfo.github.io/apischema/examples/subclasses_union/
     def __init_subclass__(cls):
@@ -49,11 +53,11 @@ class Geobrick(EntityInstance):
         "pmacCreateAxes({{name}}, 8)",
     )
     databases: A[
-        Sequence[Database],
+        Sequence[Tuple[str, str]],
         desc("Sequence of databases elements/records to instantiate"),
     ] = (
-        Database(file="pmacController.template", define_args="PMAC = {{  P  }}"),
-        Database(file="pmacStatus.template", define_args="PMAC = {{  P  }}"),
+        ("pmacController.template", "PMAC = {{  P  }}"),
+        ("pmacStatus.template", "PMAC = {{  P  }}"),
     )
 
 
@@ -67,9 +71,9 @@ class DlsPmacAsynMotor(EntityInstance):
     P: A[str, desc("PV Name for the motor record")] = ""
     axis: A[int, desc("Axis number for this motor")] = 0
     databases: A[
-        Sequence[Database],
+        Sequence[Tuple[str, str]],
         desc("Sequence of databases elements/records to instantiate"),
-    ] = (Database(file="pmac_asyn_Motor.template", define_args="PMAC={{  pmac.P  }}"))
+    ] = (("pmac_asyn_Motor.template", "PMAC={{  P  }}"),)
 
 
 @dataclass

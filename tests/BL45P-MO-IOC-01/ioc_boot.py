@@ -1,5 +1,5 @@
 from pathlib import Path
-from typing import Sequence
+from typing import List
 
 from jinja2 import Template
 from ruamel.yaml import YAML
@@ -16,26 +16,28 @@ def open_ioc_yaml() -> PmacIOC:
         return ioc_yaml
 
 
-def evaluate_scripts(instance: EntityInstance) -> Sequence[str]:
+def evaluate_scripts(instance: EntityInstance) -> List[str]:
     return_list = []
     for script in instance.script:
-        script = Template(script)
-        script = script.render(instance.__dict__)
-        return_list += script + "\n"
+        return_list += Template(script).render(instance.__dict__) + "\n"
     return return_list
 
 
-def evaluate_db(instance: EntityInstance) -> Sequence[str]:
+def evaluate_db(instance: EntityInstance) -> List[str]:
     return_list = []
-    """
-    Evaluate the db portion of this EntityInstance
-    """
+    print("printing instance:" + str(instance) + "\n")
+    for database in instance.databases:
+
+        filepath = database[0]
+        define_args = (Template(database[1])).render(instance.__dict__)
+        return_list += f'dbLoadRecord("{filepath}", "{define_args}")\n'
+
     return return_list
 
 
 def generate_boot_script() -> str:
     """ Function which returns a string representing the boot script. 
-    Adds boilerplate to the start and end of the script and adds """
+    Substitutes instance specific elements into a jinja template. """
 
     # Open jinja template for script
     with open((Path(__file__).parent / "startup_script.txt"), "r") as f:
