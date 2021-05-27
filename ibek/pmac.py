@@ -1,8 +1,9 @@
 from dataclasses import dataclass
-from typing import Any, Literal, Mapping, Sequence, Tuple, Type, TypeVar
+from typing import Any, List, Literal, Mapping, Sequence, Tuple, Type, TypeVar
 
 from apischema.conversions import Conversion, deserializer, identity
 from apischema.deserialization import deserialize
+from jinja2 import Template
 from typing_extensions import Annotated as A
 
 from ibek.support import desc
@@ -38,6 +39,15 @@ class EntityInstance:
         # Deserializers stack directly as a Union
         deserializer(Conversion(identity, source=cls, target=EntityInstance))
 
+    def create_scripts(self, scripts: List[str], substitutions: dict) -> list:
+        return_list = []
+        for script in scripts:
+            return_list += Template(script).render(substitutions)
+        return return_list
+
+    def create_database(self, databases, substitutions):
+        pass
+
 
 @dataclass
 class PmacAsynIPPort(EntityInstance):
@@ -66,6 +76,7 @@ class Geobrick(EntityInstance):
         "pmacCreateController({{name}}, {{port}}, 0, 8, {{movingPoll}}, {{idlePoll}})",
         "pmacCreateAxes({{name}}, 8)",
     )
+
     databases: A[
         Sequence[Database],
         desc("Sequence of databases elements/records to instantiate"),
