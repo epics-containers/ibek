@@ -9,13 +9,27 @@ from ibek.support import desc
 
 T = TypeVar("T")
 
+# /scratch/work/pmac/iocs/lab path on pc0116 for pmac
+# /scratch/work/pmac/iocs/lab/labApp/Db/lab_expanded.substitutions contains all substitutions
+
+
+@dataclass
+class Database:
+    """A database file that should be loaded by the startup script and its args"""
+
+    file: A[str, desc("Filename of the database template in <module_root>/db")]
+    include_args: A[
+        Sequence[str], desc("List of args to pass through to database")
+    ] = ()
+    define_args: A[str, desc("Arg string list to be generated as Jinja template")] = ""
+
 
 @dataclass
 class EntityInstance:
     name: A[str, desc("Name of the entity instance we are creating"), identity]
     script: A[str, desc("boot script jinja template")] = ""
     databases: A[
-        Sequence[Tuple[str, str]],
+        Sequence[Database],
         desc("Sequence of databases elements/records to instantiate"),
     ] = ()
 
@@ -53,11 +67,17 @@ class Geobrick(EntityInstance):
         "pmacCreateAxes({{name}}, 8)",
     )
     databases: A[
-        Sequence[Tuple[str, str]],
+        Sequence[Database],
         desc("Sequence of databases elements/records to instantiate"),
     ] = (
-        ("pmacController.template", "PMAC = {{  P  }}"),
-        ("pmacStatus.template", "PMAC = {{  P  }}"),
+        Database(
+            file="pmacController.template",
+            include_args=(),
+            define_args="PMAC = {{  P  }}",
+        ),
+        Database(
+            file="pmacStatus.template", include_args=(), define_args="PMAC = {{  P  }}"
+        ),
     )
 
 
@@ -71,9 +91,15 @@ class DlsPmacAsynMotor(EntityInstance):
     P: A[str, desc("PV Name for the motor record")] = ""
     axis: A[int, desc("Axis number for this motor")] = 0
     databases: A[
-        Sequence[Tuple[str, str]],
+        Sequence[Database],
         desc("Sequence of databases elements/records to instantiate"),
-    ] = (("pmac_asyn_Motor.template", "PMAC={{  P  }}"),)
+    ] = (
+        Database(
+            file="pmac_asyn_Motor.template",
+            include_args=(),
+            define_args="PMAC={{  P  }}",
+        ),
+    )
 
 
 @dataclass

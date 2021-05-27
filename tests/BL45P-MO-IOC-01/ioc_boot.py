@@ -4,7 +4,7 @@ from typing import List
 from jinja2 import Template
 from ruamel.yaml import YAML
 
-from ibek.pmac import EntityInstance, PmacIOC
+from ibek.pmac import Database, EntityInstance, PmacIOC
 
 yaml = YAML()
 
@@ -28,9 +28,9 @@ def evaluate_db(instance: EntityInstance) -> List[str]:
     print("printing instance:" + str(instance) + "\n")
     for database in instance.databases:
 
-        filepath = database[0]
-        define_args = (Template(database[1])).render(instance.__dict__)
-        return_list += f'dbLoadRecord("{filepath}", "{define_args}")\n'
+        filepath = database.file
+        define_args = (Template(database.define_args)).render(instance.__dict__)
+        return_list += f'dbLoadRecords("{filepath}", "{define_args}")\n'
 
     return return_list
 
@@ -44,6 +44,7 @@ def generate_boot_script() -> str:
         boot_template = Template(f.read())
 
     boot_script_instance_elements = ""
+    boot_db_instance_elements = ""
     my_ioc = open_ioc_yaml()
 
     # Add script components to the startup script
@@ -52,13 +53,19 @@ def generate_boot_script() -> str:
             boot_script_instance_elements += script
     # add dbloadrecords
     for instance in my_ioc.instances:
-        for db_record in evaluate_db(instance):
-            boot_script_instance_elements += db_record
 
-    return boot_template.render(script_elements=boot_script_instance_elements)
+        for db_record in evaluate_db(instance):
+            boot_db_instance_elements += db_record
+
+    return boot_template.render(
+        script_elements=boot_script_instance_elements,
+        database_elements=boot_db_instance_elements,
+    )
 
     # look in bulder.py for pmac project
 
 
 if __name__ == "__main__":
     print(generate_boot_script())
+    with open("ioc.boot", "w") as f:
+        f.write(generate_boot_script())
