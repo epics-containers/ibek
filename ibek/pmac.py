@@ -78,11 +78,43 @@ class Geobrick(EntityInstance):
         "pmacCreateAxes({{name}}, 8)",
     )
 
+    timeout: A[int, desc("timeout time")] = 200
+    feedrate: A[int, desc("feedrate")] = 150
+
+    CSG0: A[str, desc("Name for Coordinate System Group 0")] = ""
+    CSG1: A[str, desc("Name for Coordinate System Group 1")] = ""
+    CSG2: A[str, desc("Name for Coordinate System Group 2")] = ""
+    CSG3: A[str, desc("Name for Coordinate System Group 3")] = ""
+    CSG4: A[str, desc("Name for Coordinate System Group 4")] = ""
+    CSG5: A[str, desc("Name for Coordinate System Group 5")] = ""
+    CSG6: A[str, desc("Name for Coordinate System Group 6")] = ""
+    CSG7: A[str, desc("Name for Coordinate System Group 7")] = ""
+
     def create_database(
         self,
         databases=[
-            DatabaseEntry(file="pmacController.template", define_args="PMAC = {{ P }}"),
-            DatabaseEntry(file="pmacStatus.template", define_args="PMAC = {{ P }}"),
+            DatabaseEntry(
+                file='"pmacController.template"',
+                define_args=(
+                    '"'
+                    "PORT={{ port }}, "
+                    "P={{ P }}, "
+                    "TIMEOUT={{ timeout }}, "
+                    "FEEDRATE={{ feedrate}}, "
+                    "CSG0={{ CSG0 }}, "
+                    "CSG1={{ CSG1 }}, "
+                    "CSG2={{ CSG2 }}, "
+                    "CSG3={{ CSG3 }}, "
+                    "CSG4={{ CSG4 }}, "
+                    "CSG5={{ CSG5 }}, "
+                    "CSG6={{ CSG6 }}, "
+                    "CSG7={{ CSG7 }}, "
+                    '"'
+                ),
+            ),
+            DatabaseEntry(
+                file="pmacStatus.template", define_args="PORT = {{ port }}, P = {{ P }}"
+            ),
         ],
     ):
         return super().create_database(databases=databases)
