@@ -4,7 +4,7 @@ from typing import List
 from jinja2 import Template
 from ruamel.yaml import YAML
 
-from ibek.pmac import Database, EntityInstance, PmacIOC
+from ibek.pmac import EntityInstance, PmacIOC
 
 yaml = YAML()
 
