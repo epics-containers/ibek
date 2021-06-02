@@ -43,5 +43,20 @@ def test_geobrick_script():
 
 
 def test_geobrick_database():
-    pass
+    pmac_geobrick_instance = Geobrick(
+        name="test_geobrick",
+        port="my_asyn_port",
+        P="geobrick_one",
+        idlePoll=200,
+        movingPoll=800,
+    )
+    db_script_entries = pmac_geobrick_instance.create_database()
+    assert (
+        db_script_entries[0].render(pmac_geobrick_instance.__dict__)
+        == 'dbLoadRecords("pmacController.template", "PORT=my_asyn_port, P=geobrick_one, TIMEOUT=200, FEEDRATE=150, CSG0=, CSG1=, CSG2=, CSG3=, CSG4=, CSG5=, CSG6=, CSG7=, ")'
+    )
+    assert (
+        db_script_entries[1].render(pmac_geobrick_instance.__dict__)
+        == "dbLoadRecords(pmacStatus.template, PORT = my_asyn_port, P = geobrick_one)"
+    )
 
