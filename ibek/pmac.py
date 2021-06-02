@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from typing import Any, Literal, Mapping, Sequence, Type, TypeVar
+from typing import Any, List, Literal, Mapping, Sequence, Type, TypeVar
 
 from apischema.conversions import Conversion, deserializer, identity
 from apischema.deserialization import deserialize
@@ -32,21 +32,23 @@ class EntityInstance:
         # Deserializers stack directly as a Union
         deserializer(Conversion(identity, source=cls, target=EntityInstance))
 
-    def create_scripts(self) -> list:
+    def create_scripts(self) -> List[str]:
+        """returns a list of jinja templates representing startup script elements 
+        for a particular EntityInstance instance. To be expanded using EntityInstance attributes"""
         return_list = []
         for script in self.script:
-            return_list += [Template(script).render(self.__dict__)]
+            return_list += [script]
         return return_list
 
-    def create_database(self, databases):
+    def create_database(self, databases) -> List[str]:
+        """returns a list of jinja templates representing startup dbLoadRecords lines 
+        for a particular EntityInstance instance. To be expanded using EntityInstance attributes"""
         return_list = []
-        print(databases)
         for database in databases:
             file = database.__dict__["file"]
             define_args = database.__dict__["define_args"]
             template = f"dbLoadRecords({file}, {define_args})"
-            return_list += [Template(template)]
-            print(return_list)
+            return_list += [template]
         return return_list
 
 
