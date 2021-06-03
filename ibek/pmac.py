@@ -45,10 +45,10 @@ class EntityInstance:
         for a particular EntityInstance instance. To be expanded using EntityInstance attributes"""
         return_list = []
         for database in databases:
-            file = database.__dict__["file"]
-            define_args = database.__dict__["define_args"]
-            template = f"dbLoadRecords({file}, {define_args})"
-            return_list += [template]
+            return_list += [
+                f"dbLoadRecords({database.__dict__['file']}, {database.__dict__['define_args']})"
+            ]
+        print(return_list)
         return return_list
 
 
@@ -82,6 +82,12 @@ class Geobrick(EntityInstance):
 
     timeout: A[int, desc("timeout time")] = 200
     feedrate: A[int, desc("feedrate")] = 150
+    ControlIP: A[str, desc("dls-pmac-control.py IP or Hostname")] = ""
+    ControlPort: A[str, desc("dls-pmac-control.py Port")] = ""
+    ControlMode: A[
+        str, desc("dls-pmac-control.py Mode (tcp.ip or terminal server")
+    ] = ""
+    Description: A[str, desc("geobrick description")] = ""
 
     CSG0: A[str, desc("Name for Coordinate System Group 0")] = ""
     CSG1: A[str, desc("Name for Coordinate System Group 1")] = ""
@@ -115,7 +121,18 @@ class Geobrick(EntityInstance):
                 ),
             ),
             DatabaseEntry(
-                file="pmacStatus.template", define_args="PORT = {{ port }}, P = {{ P }}"
+                file="pmacStatus.template",
+                # define_args="PORT = {{ port }}, P = {{ P }}, Description = {{ }}, ControlIP = {{ ControlIP }}, ControlPort = {{ ControlPort }}, ControlMode = {{ ControlMode }}",
+                define_args=(
+                    '"'
+                    "PORT = {{ port }}, "
+                    "P = {{ P }}, "
+                    "Description = {{ Description }}, "
+                    "ControlIP = {{ ControlIP }}, "
+                    "ControlPort = {{ ControlPort }}, "
+                    "ControlMode = {{ ControlMode }}"
+                    '"'
+                ),
             ),
         ],
     ):

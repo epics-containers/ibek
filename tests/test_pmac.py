@@ -17,7 +17,7 @@ def test_create_database():
         ),
     )
     assert (
-        ei.create_database(db)[0].render(ei.__dict__)
+        Template(ei.create_database(db)[0]).render(ei.__dict__)
         == 'dbLoadRecords("database_entry_one.template", "name = Test Entity")'
     )
 
