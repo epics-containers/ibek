@@ -1,4 +1,5 @@
 from pathlib import Path
+from typing import List
 
 from jinja2 import Template
 from ruamel.yaml import YAML
@@ -8,7 +9,7 @@ from ibek.pmac import EntityInstance, PmacIOC
 yaml = YAML()
 
 
-def create_script_elements(ioc_instance: EntityInstance) -> str:
+def render_script_elements(ioc_instance) -> str:
     scripts = ""
     for instance in ioc_instance.instances:
         for script in instance.create_scripts():
@@ -16,7 +17,7 @@ def create_script_elements(ioc_instance: EntityInstance) -> str:
     return scripts
 
 
-def create_database_elements(ioc_instance: EntityInstance) -> str:
+def create_database_elements(ioc_instance) -> str:
     databases = ""
     for instance in ioc_instance.instances:
         for database in instance.create_database():
@@ -24,7 +25,7 @@ def create_database_elements(ioc_instance: EntityInstance) -> str:
     return databases
 
 
-def create_boot_script(ioc_instance_yaml_path) -> str:
+def create_boot_script(ioc_instance_yaml_path):
     with open(ioc_instance_yaml_path, "r") as f:
         ioc_instance = PmacIOC.deserialize(yaml.load(f))
 
@@ -32,7 +33,7 @@ def create_boot_script(ioc_instance_yaml_path) -> str:
         template = Template(f.read())
 
     template = template.render(
-        script_elements=create_script_elements(ioc_instance),
+        script_elements=render_script_elements(ioc_instance),
         database_elements=create_database_elements(ioc_instance),
     )
     return template
