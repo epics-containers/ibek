@@ -40,15 +40,14 @@ class EntityInstance:
             return_list += [script]
         return return_list
 
-    def create_database(self, databases) -> List[str]:
-        """returns a list of jinja templates representing startup dbLoadRecords lines 
+    def create_database(self, databases: list) -> List[str]:
+        """returns a list of jinja templates representing startup dbLoadRecords lines
         for a particular EntityInstance instance. To be expanded using EntityInstance attributes"""
         return_list = []
         for database in databases:
             return_list += [
                 f"dbLoadRecords({database.__dict__['file']}, {database.__dict__['define_args']})"
             ]
-        print(return_list)
         return return_list
 
 
@@ -61,6 +60,9 @@ class PmacAsynIPPort(EntityInstance):
     script: Sequence[A[str, desc("scripts required for boot script")]] = (
         'pmacAsynIPConfigure({{name}}, {{IP + "" if ":" in IP else IP + ":1025"}})',
     )
+
+    def create_database(self):
+        return super().create_database(databases=[])
 
 
 @dataclass
