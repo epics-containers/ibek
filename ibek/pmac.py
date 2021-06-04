@@ -46,7 +46,7 @@ class EntityInstance:
         return_list = []
         for database in databases:
             return_list += [
-                f"dbLoadRecords({database.__dict__['file']}, {database.__dict__['define_args']})"
+                f"dbLoadRecords(\"{database.__dict__['file']}\", \"{database.__dict__['define_args']}\")"
             ]
         return return_list
 
@@ -104,9 +104,8 @@ class Geobrick(EntityInstance):
         self,
         databases=[
             DatabaseEntry(
-                file='"pmacController.template"',
+                file="pmacController.template",
                 define_args=(
-                    '"'
                     "PORT={{ port }}, "
                     "P={{ P }}, "
                     "TIMEOUT={{ timeout }}, "
@@ -119,21 +118,18 @@ class Geobrick(EntityInstance):
                     "CSG5={{ CSG5 }}, "
                     "CSG6={{ CSG6 }}, "
                     "CSG7={{ CSG7 }}, "
-                    '"'
                 ),
             ),
             DatabaseEntry(
                 file="pmacStatus.template",
                 # define_args="PORT = {{ port }}, P = {{ P }}, Description = {{ }}, ControlIP = {{ ControlIP }}, ControlPort = {{ ControlPort }}, ControlMode = {{ ControlMode }}",
                 define_args=(
-                    '"'
                     "PORT = {{ port }}, "
                     "P = {{ P }}, "
                     "Description = {{ Description }}, "
                     "ControlIP = {{ ControlIP }}, "
                     "ControlPort = {{ ControlPort }}, "
                     "ControlMode = {{ ControlMode }}"
-                    '"'
                 ),
             ),
         ],
@@ -157,7 +153,6 @@ class DlsPmacAsynMotor(EntityInstance):
             DatabaseEntry(
                 file="pmac_asyn_Motor.template",
                 define_args=(
-                    '"'
                     "P={{ P }},"
                     "M = {{ M }},"
                     "PORT={{ PORT }},"
@@ -211,7 +206,6 @@ class DlsPmacAsynMotor(EntityInstance):
                     "HOME={{ HOME }},"
                     "PMAC={{ PMAC }},"
                     "ALLOW_HOMED_SET={{ ALLOW_HOMED_SET }}"
-                    '"',
                 ),
             )
         ],
