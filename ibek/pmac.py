@@ -148,7 +148,64 @@ class DlsPmacAsynMotor(EntityInstance):
     type: Literal["pmac.DlsPmacAsynMotor"] = "pmac.DlsPmacAsynMotor"
     # port should match a Geobrick or Pmac name
     pmac: A[str, desc("pmac controller for this axis")] = ""
-    P: A[str, desc("PV Name for the motor record")] = ""
+
+    P: A[str, desc("Device Prefix")] = ""
+    M: A[str, desc("Device Suffix")] = ""
+    PORT: A[str, desc("Delta tau motor controller")] = ""
+    DESC: A[str, desc("Description, displayed on EDM screen")] = ""
+    MRES: A[int, desc("Motor Step Size (EGU)")] = None
+    VELO: A[float, desc("Velocity (EGU/s)")] = None
+    PREC: A[int, desc("Display Precission")] = None
+    EGU: A[str, desc("Engineering Units")] = ""
+    TWV: A[int, desc("Tweak Step Size (EGU")] = None
+    DTYP: A[str, desc("Datatype of record")] = ""
+    DIR: A[str, desc("User direction")] = ""
+    VBAS: A[float, desc("Base Velocity (EGU/s)")] = None
+    VMAX: A[float, desc("Max Velocity (EGU/s)")] = None
+    ACCL: A[float, desc("Seconds to Velocity")] = None
+    BDST: A[float, desc("BL Distance (EGU)")] = None
+    BVEL: A[float, desc("BL Velocity(EGU/s)")] = None
+    BACC: A[str, desc("BL Seconds to Veloc")] = ""
+    DHLM: A[float, desc("Dial High Limit")] = None
+    DLMM: A[float, desc("Dial low limit")] = None
+    HLM: A[float, desc("User High Limit")] = None
+    LLM: A[float, desc("User Low Limit")] = None
+    HLSV: A[float, desc("HW Lim, Violation Svr")] = None
+    INIT: A[str, desc("Startup commands")] = ""
+    SREV: A[float, desc("Steps per Revolution")] = None
+    RRES: A[float, desc("Readback Step Size (EGU")] = None
+    ERES: A[float, desc("Encoder Step Size (EGU)")] = None
+    JAR: A[float, desc("Jog Acceleration (EGU/s^2)")] = None
+    UEIP: A[bool, desc("Use Encoder If Present")] = False
+    URIP: A[bool, desc("Use RDBL If Present")] = False
+    RDBL: A[str, desc("Readback Location, set URIP =1 if you specify this")] = ""
+    RLNK: A[str, desc("Readback output link")] = ""
+    RTRY: A[float, desc("Max retry count")] = None
+    DLY: A[float, desc("Readback settle time (s)")] = None
+    OFF: A[float, desc("User Offset (EGU)")] = None
+    RDBD: A[float, desc("Retry Deadband (EGU)")] = None
+    FOFF: A[int, desc("Freeze Offset, 0=variable, 1=frozen")] = 0
+    ADEL: A[float, desc("Alarm monitor deadband (EGU)")] = None
+    NTM: A[int, desc("New Target Monitor, only set to 0 for soft motors")] = 0
+    FEHEIGH: A[float, desc("HIGH limit for following error")] = None
+    FEHIHI: A[float, desc("HIHI limit for following error")] = None
+    FEHHSV: A[float, desc("HIHI alarm severity for following error")] = None
+    FEHSV: A[float, desc("HIGH alarm severity for following error")] = None
+    HOMEVIS: A[int, desc("If 1 then home is visible on the gui")] = None
+    name: A[str, desc("Object name and gui association name")] = None
+    alh: A[
+        str,
+        desc("Set this to alh to add the motor to the alarm handler and send emails"),
+    ] = ""
+    gda_name: A[str, desc("Name to export this as to GDA")] = ""
+    gda_desc: A[str, desc("Description to export as to GDA")] = ""
+    SPORT: A[str, desc("Delta tau motor controller comms port")] = ""
+    HOME: A[
+        str, desc("Prefix for autohome instance. Defaults to $(P) If unspecified")
+    ] = ""
+    ALLOW_HOMED_SET: A[
+        str, desc("Set to a blank to allow this axis to have its homed")
+    ] = ""
     axis: A[int, desc("Axis number for this motor")] = 0
 
     def create_database(
