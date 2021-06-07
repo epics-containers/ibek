@@ -1,12 +1,23 @@
+import json
 from pathlib import Path
-from typing import List
+from typing import List, Optional
 
+import typer
+from apischema.json_schema import deserialization_schema
 from jinja2 import Template
 from ruamel.yaml import YAML
 
+from ibek import __version__
 from ibek.pmac import EntityInstance, PmacIOC
 
 yaml = YAML()
+app = typer.Typer()
+
+
+@app.command()
+def create_schema(save_path: str) -> None:
+    with open(save_path, "w") as f:
+        json.dump(deserialization_schema(PmacIOC), f)
 
 
 def render_script_elements(ioc_instance) -> str:
@@ -25,6 +36,7 @@ def create_database_elements(ioc_instance) -> str:
     return databases
 
 
+@app.command()
 def create_boot_script(ioc_instance_yaml_path):
     with open(ioc_instance_yaml_path, "r") as f:
         ioc_instance = PmacIOC.deserialize(yaml.load(f))
@@ -36,16 +48,39 @@ def create_boot_script(ioc_instance_yaml_path):
         script_elements=render_script_elements(ioc_instance),
         database_elements=create_database_elements(ioc_instance),
     )
+    print(template)
     return template
 
 
+def version_callback(value: bool):
+    if value:
+        typer.echo(__version__)
+        raise typer.Exit()
+
+
+@app.callback()
 def main(
-    ioc_instance_yaml_path: str = (Path(__file__).parent / "bl45p-mo-ioc-02.pmac.yaml"),
+    version: Optional[bool] = typer.Option(
+        None,
+        "--version",
+        callback=version_callback,
+        is_eager=True,
+        help="Print the version of ibek and exit",
+    )
 ):
+    """Do 3 things..."""
 
-    boot_script = create_boot_script(ioc_instance_yaml_path)
-    print(boot_script)
 
+# def main(
+#     ioc_instance_yaml_path: str = (Path(__file__).parent / "bl45p-mo-ioc-02.pmac.yaml"),
+# ):
+
+#     boot_script = create_boot_script(ioc_instance_yaml_path)
+#     print(boot_script)
+
+
+# if __name__ == "__main__":
+#     main()
 
 if __name__ == "__main__":
-    main()
+    app()

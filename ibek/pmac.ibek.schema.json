@@ -1,0 +1,368 @@
+{
+    "type": "object",
+    "properties": {
+        "ioc_name": {
+            "type": "string",
+            "description": "Name of the IOC"
+        },
+        "instances": {
+            "type": "array",
+            "items": {
+                "anyOf": [
+                    {
+                        "type": "object",
+                        "properties": {
+                            "name": {
+                                "type": "string",
+                                "description": "Name of the entity instance we are creating"
+                            },
+                            "script": {
+                                "type": "array",
+                                "items": {
+                                    "type": "string",
+                                    "description": "scripts required for boot script"
+                                }
+                            },
+                            "type": {
+                                "type": "string",
+                                "const": "pmac.PmacAsynIPPort"
+                            },
+                            "IP": {
+                                "type": "string",
+                                "description": "IP address of the pmac to be connected to"
+                            }
+                        },
+                        "required": [
+                            "name"
+                        ],
+                        "additionalProperties": false
+                    },
+                    {
+                        "type": "object",
+                        "properties": {
+                            "name": {
+                                "type": "string",
+                                "description": "Name of the entity instance we are creating"
+                            },
+                            "script": {
+                                "type": "array",
+                                "items": {
+                                    "type": "string",
+                                    "description": "scripts required for the boot script"
+                                }
+                            },
+                            "type": {
+                                "type": "string",
+                                "const": "pmac.Geobrick"
+                            },
+                            "port": {
+                                "type": "string",
+                                "description": "Asyn port name for PmacAsynIPPort to connect to"
+                            },
+                            "P": {
+                                "type": "string",
+                                "description": "PV Prefix for all pmac db templates"
+                            },
+                            "idlePoll": {
+                                "type": "integer",
+                                "description": "Idle Poll Period in ms"
+                            },
+                            "movingPoll": {
+                                "type": "integer",
+                                "description": "Moving Poll Period in ms"
+                            },
+                            "timeout": {
+                                "type": "integer",
+                                "description": "timeout time"
+                            },
+                            "feedrate": {
+                                "type": "integer",
+                                "description": "feedrate"
+                            },
+                            "ControlIP": {
+                                "type": "string",
+                                "description": "dls-pmac-control.py IP or Hostname"
+                            },
+                            "ControlPort": {
+                                "type": "string",
+                                "description": "dls-pmac-control.py Port"
+                            },
+                            "ControlMode": {
+                                "type": "string",
+                                "description": "dls-pmac-control.py Mode (tcp.ip or terminal server"
+                            },
+                            "Description": {
+                                "type": "string",
+                                "description": "geobrick description"
+                            },
+                            "CSG0": {
+                                "type": "string",
+                                "description": "Name for Coordinate System Group 0"
+                            },
+                            "CSG1": {
+                                "type": "string",
+                                "description": "Name for Coordinate System Group 1"
+                            },
+                            "CSG2": {
+                                "type": "string",
+                                "description": "Name for Coordinate System Group 2"
+                            },
+                            "CSG3": {
+                                "type": "string",
+                                "description": "Name for Coordinate System Group 3"
+                            },
+                            "CSG4": {
+                                "type": "string",
+                                "description": "Name for Coordinate System Group 4"
+                            },
+                            "CSG5": {
+                                "type": "string",
+                                "description": "Name for Coordinate System Group 5"
+                            },
+                            "CSG6": {
+                                "type": "string",
+                                "description": "Name for Coordinate System Group 6"
+                            },
+                            "CSG7": {
+                                "type": "string",
+                                "description": "Name for Coordinate System Group 7"
+                            }
+                        },
+                        "required": [
+                            "name"
+                        ],
+                        "additionalProperties": false
+                    },
+                    {
+                        "type": "object",
+                        "properties": {
+                            "name": {
+                                "type": "string",
+                                "description": "Object name and gui association name"
+                            },
+                            "script": {
+                                "type": "array",
+                                "items": {
+                                    "type": "string",
+                                    "description": "scripts required for boot script"
+                                }
+                            },
+                            "type": {
+                                "type": "string",
+                                "const": "pmac.DlsPmacAsynMotor"
+                            },
+                            "P": {
+                                "type": "string",
+                                "description": "Device Prefix"
+                            },
+                            "M": {
+                                "type": "string",
+                                "description": "Device Suffix"
+                            },
+                            "PORT": {
+                                "type": "string",
+                                "description": "Delta tau motor controller"
+                            },
+                            "DESC": {
+                                "type": "string",
+                                "description": "Description, displayed on EDM screen"
+                            },
+                            "MRES": {
+                                "type": "integer",
+                                "description": "Motor Step Size (EGU)"
+                            },
+                            "VELO": {
+                                "type": "number",
+                                "description": "Velocity (EGU/s)"
+                            },
+                            "PREC": {
+                                "type": "number",
+                                "description": "Display Precission"
+                            },
+                            "EGU": {
+                                "type": "string",
+                                "description": "Engineering Units"
+                            },
+                            "TWV": {
+                                "type": "integer",
+                                "description": "Tweak Step Size (EGU"
+                            },
+                            "DTYP": {
+                                "type": "string",
+                                "description": "Datatype of record"
+                            },
+                            "DIR": {
+                                "type": "integer",
+                                "description": "User direction"
+                            },
+                            "VBAS": {
+                                "type": "number",
+                                "description": "Base Velocity (EGU/s)"
+                            },
+                            "VMAX": {
+                                "type": "number",
+                                "description": "Max Velocity (EGU/s)"
+                            },
+                            "ACCL": {
+                                "type": "number",
+                                "description": "Seconds to Velocity"
+                            },
+                            "BDST": {
+                                "type": "number",
+                                "description": "BL Distance (EGU)"
+                            },
+                            "BVEL": {
+                                "type": "number",
+                                "description": "BL Velocity(EGU/s)"
+                            },
+                            "BACC": {
+                                "type": "string",
+                                "description": "BL Seconds to Veloc"
+                            },
+                            "DHLM": {
+                                "type": "number",
+                                "description": "Dial High Limit"
+                            },
+                            "DLMM": {
+                                "type": "number",
+                                "description": "Dial low limit"
+                            },
+                            "HLM": {
+                                "type": "number",
+                                "description": "User High Limit"
+                            },
+                            "LLM": {
+                                "type": "number",
+                                "description": "User Low Limit"
+                            },
+                            "HLSV": {
+                                "type": "number",
+                                "description": "HW Lim, Violation Svr"
+                            },
+                            "INIT": {
+                                "type": "string",
+                                "description": "Startup commands"
+                            },
+                            "SREV": {
+                                "type": "number",
+                                "description": "Steps per Revolution"
+                            },
+                            "RRES": {
+                                "type": "number",
+                                "description": "Readback Step Size (EGU"
+                            },
+                            "ERES": {
+                                "type": "number",
+                                "description": "Encoder Step Size (EGU)"
+                            },
+                            "JAR": {
+                                "type": "number",
+                                "description": "Jog Acceleration (EGU/s^2)"
+                            },
+                            "UEIP": {
+                                "type": "boolean",
+                                "description": "Use Encoder If Present"
+                            },
+                            "URIP": {
+                                "type": "boolean",
+                                "description": "Use RDBL If Present"
+                            },
+                            "RDBL": {
+                                "type": "string",
+                                "description": "Readback Location, set URIP =1 if you specify this"
+                            },
+                            "RLNK": {
+                                "type": "string",
+                                "description": "Readback output link"
+                            },
+                            "RTRY": {
+                                "type": "number",
+                                "description": "Max retry count"
+                            },
+                            "DLY": {
+                                "type": "number",
+                                "description": "Readback settle time (s)"
+                            },
+                            "OFF": {
+                                "type": "number",
+                                "description": "User Offset (EGU)"
+                            },
+                            "RDBD": {
+                                "type": "number",
+                                "description": "Retry Deadband (EGU)"
+                            },
+                            "FOFF": {
+                                "type": "integer",
+                                "description": "Freeze Offset, 0=variable, 1=frozen"
+                            },
+                            "ADEL": {
+                                "type": "number",
+                                "description": "Alarm monitor deadband (EGU)"
+                            },
+                            "NTM": {
+                                "type": "integer",
+                                "description": "New Target Monitor, only set to 0 for soft motors"
+                            },
+                            "FEHEIGH": {
+                                "type": "number",
+                                "description": "HIGH limit for following error"
+                            },
+                            "FEHIHI": {
+                                "type": "number",
+                                "description": "HIHI limit for following error"
+                            },
+                            "FEHHSV": {
+                                "type": "number",
+                                "description": "HIHI alarm severity for following error"
+                            },
+                            "FEHSV": {
+                                "type": "number",
+                                "description": "HIGH alarm severity for following error"
+                            },
+                            "HOMEVIS": {
+                                "type": "integer",
+                                "description": "If 1 then home is visible on the gui"
+                            },
+                            "alh": {
+                                "type": "string",
+                                "description": "Set this to alh to add the motor to the alarm handler and send emails"
+                            },
+                            "gda_name": {
+                                "type": "string",
+                                "description": "Name to export this as to GDA"
+                            },
+                            "gda_desc": {
+                                "type": "string",
+                                "description": "Description to export as to GDA"
+                            },
+                            "SPORT": {
+                                "type": "string",
+                                "description": "Delta tau motor controller comms port"
+                            },
+                            "HOME": {
+                                "type": "string",
+                                "description": "Prefix for autohome instance. Defaults to $(P) If unspecified"
+                            },
+                            "ALLOW_HOMED_SET": {
+                                "type": "string",
+                                "description": "Set to a blank to allow this axis to have its homed"
+                            },
+                            "axis": {
+                                "type": "integer",
+                                "description": "Axis number for this motor"
+                            }
+                        },
+                        "additionalProperties": false
+                    }
+                ]
+            },
+            "description": "List of entity instances of the IOCs"
+        }
+    },
+    "required": [
+        "ioc_name",
+        "instances"
+    ],
+    "additionalProperties": false,
+    "$schema": "http://json-schema.org/draft/2019-09/schema#"
+}

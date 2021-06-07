@@ -24,7 +24,8 @@ class DatabaseEntry:
 
 @dataclass
 class EntityInstance:
-    name: A[str, desc("Name of the entity instance we are creating"), identity]
+    type: A[str, desc("type of the entity instance we are creating")] = ""
+    name: A[str, desc("Name of the entity instance we are creating"), identity] = ""
     script: Sequence[A[str, desc("scripts required for boot script")]] = ()
 
     # https://wyfo.github.io/apischema/examples/subclasses_union/
@@ -143,8 +144,66 @@ class DlsPmacAsynMotor(EntityInstance):
 
     type: Literal["pmac.DlsPmacAsynMotor"] = "pmac.DlsPmacAsynMotor"
     # port should match a Geobrick or Pmac name
-    pmac: A[str, desc("pmac controller for this axis")] = ""
-    P: A[str, desc("PV Name for the motor record")] = ""
+    P: A[str, desc("Device Prefix")] = ""
+    M: A[str, desc("Device Suffix")] = ""
+    PORT: A[str, desc("Delta tau motor controller")] = ""
+    ADDR: A[int, desc("Address on controller")] = 0
+    DESC: A[str, desc("Description, displayed on EDM screen")] = ""
+    MRES: A[float, desc("Motor Step Size (EGU)")] = 0.001
+    VELO: A[float, desc("Velocity (EGU/s)")] = 20
+    PREC: A[float, desc("Display Precission")] = 3
+    EGU: A[str, desc("Engineering Units")] = "mm"
+    TWV: A[int, desc("Tweak Step Size (EGU")] = 1
+    DTYP: A[str, desc("Datatype of record")] = "pmac.DlsPmacAsynMotor"
+    DIR: A[int, desc("User direction")] = 0
+    VBAS: A[float, desc("Base Velocity (EGU/s)")] = 0
+    VMAX: A[float, desc("Max Velocity (EGU/s)")] = 20  # VELO
+    ACCL: A[float, desc("Seconds to Velocity")] = 0.5
+    BDST: A[float, desc("BL Distance (EGU)")] = 0
+    BVEL: A[float, desc("BL Velocity(EGU/s)")] = 0
+    BACC: A[str, desc("BL Seconds to Veloc")] = ""
+    DHLM: A[float, desc("Dial High Limit")] = 10000
+    DLMM: A[float, desc("Dial low limit")] = -10000
+    HLM: A[float, desc("User High Limit")] = None
+    LLM: A[float, desc("User Low Limit")] = None
+    HLSV: A[str, desc("HW Lim, Violation Svr")] = "MAJOR"
+    INIT: A[str, desc("Startup commands")] = ""
+    SREV: A[float, desc("Steps per Revolution")] = 1000
+    RRES: A[float, desc("Readback Step Size (EGU")] = None
+    ERES: A[float, desc("Encoder Step Size (EGU)")] = None
+    JAR: A[float, desc("Jog Acceleration (EGU/s^2)")] = None
+    UEIP: A[int, desc("Use Encoder If Present")] = 0
+    URIP: A[int, desc("Use RDBL If Present")] = 0
+    RDBL: A[str, desc("Readback Location, set URIP =1 if you specify this")] = ""
+    RLNK: A[str, desc("Readback output link")] = ""
+    RTRY: A[int, desc("Max retry count")] = 0
+    DLY: A[float, desc("Readback settle time (s)")] = 0
+    OFF: A[float, desc("User Offset (EGU)")] = 0
+    RDBD: A[float, desc("Retry Deadband (EGU)")] = None
+    FOFF: A[int, desc("Freeze Offset, 0=variable, 1=frozen")] = 0
+    ADEL: A[float, desc("Alarm monitor deadband (EGU)")] = 0
+    NTM: A[int, desc("New Target Monitor, only set to 0 for soft motors")] = 1
+    FEHEIGH: A[float, desc("HIGH limit for following error")] = 0
+    FEHIHI: A[float, desc("HIHI limit for following error")] = 0
+    FEHHSV: A[str, desc("HIHI alarm severity for following error")] = "NO_ALARM"
+    FEHSV: A[str, desc("HIGH alarm severity for following error")] = "NO_ALARM"
+    SCALE: A[int, desc("")] = 1
+    HOMEVIS: A[int, desc("If 1 then home is visible on the gui")] = 1
+    HOMEVISSTR: A[str, desc("")] = "Use motor summary screen"
+    name: A[str, desc("Object name and gui association name")] = ""
+    alh: A[
+        float,
+        desc("Set this to alh to add the motor to the alarm handler and send emails"),
+    ] = None
+    gda_name: A[str, desc("Name to export this as to GDA")] = ""
+    gda_desc: A[str, desc("Description to export as to GDA")] = ""
+    SPORT: A[str, desc("Delta tau motor controller comms port")] = ""
+    HOME: A[
+        str, desc("Prefix for autohome instance. Defaults to $(P) If unspecified")
+    ] = ""
+    ALLOW_HOMED_SET: A[
+        str, desc("Set to a blank to allow this axis to have its homed")
+    ] = ""
     axis: A[int, desc("Axis number for this motor")] = 0
 
     def create_database(
