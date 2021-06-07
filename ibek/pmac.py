@@ -74,17 +74,17 @@ class Geobrick(EntityInstance):
     # port should match a PmacAsynIPPort name
     # (we dont have a way for schema to verify this at present -
     # TODO I've looked at this with Tom and it may not be possible)
-    port: A[str, desc("Asyn port name for PmacAsynIPPort to connect to")] = ""
+    PORT: A[str, desc("Asyn port name for PmacAsynIPPort to connect to")] = ""
     P: A[str, desc("PV Prefix for all pmac db templates")] = ""
-    idlePoll: A[int, desc("Idle Poll Period in ms")] = 100
+    IdlePoll: A[int, desc("Idle Poll Period in ms")] = 100
     movingPoll: A[int, desc("Moving Poll Period in ms")] = 500
     script: Sequence[A[str, desc("scripts required for the boot script")]] = (
         "pmacCreateController({{name}}, {{port}}, 0, 8, {{movingPoll}}, {{idlePoll}})",
         "pmacCreateAxes({{name}}, 8)",
     )
 
-    timeout: A[int, desc("timeout time")] = 200
-    feedrate: A[int, desc("feedrate")] = 150
+    TIMEOUT: A[int, desc("timeout time")] = 200
+    FEEDRATE: A[int, desc("feedrate")] = 150
     ControlIP: A[str, desc("dls-pmac-control.py IP or Hostname")] = ""
     ControlPort: A[str, desc("dls-pmac-control.py Port")] = ""
     ControlMode: A[
@@ -107,10 +107,10 @@ class Geobrick(EntityInstance):
             DatabaseEntry(
                 file="pmacController.template",
                 define_args=(
-                    "PORT={{ port }}, "
+                    "PORT={{ PORT }}, "
                     "P={{ P }}, "
-                    "TIMEOUT={{ timeout }}, "
-                    "FEEDRATE={{ feedrate}}, "
+                    "TIMEOUT={{ TIMEOUT }}, "
+                    "FEEDRATE={{ FEEDRATE}}, "
                     "CSG0={{ CSG0 }}, "
                     "CSG1={{ CSG1 }}, "
                     "CSG2={{ CSG2 }}, "
@@ -125,7 +125,7 @@ class Geobrick(EntityInstance):
                 file="pmacStatus.template",
                 # define_args="PORT = {{ port }}, P = {{ P }}, Description = {{ }}, ControlIP = {{ ControlIP }}, ControlPort = {{ ControlPort }}, ControlMode = {{ ControlMode }}",
                 define_args=(
-                    "PORT = {{ port }}, "
+                    "PORT = {{ PORT }}, "
                     "P = {{ P }}, "
                     "Description = {{ Description }}, "
                     "ControlIP = {{ ControlIP }}, "
@@ -157,7 +157,7 @@ class DlsPmacAsynMotor(EntityInstance):
     DTYP: A[str, desc("Datatype of record")] = "pmac.DlsPmacAsynMotor"
     DIR: A[int, desc("User direction")] = 0
     VBAS: A[float, desc("Base Velocity (EGU/s)")] = 0
-    VMAX: A[float, desc("Max Velocity (EGU/s)")] = 20  # VELO
+    VMAX: A[float, desc("Max Velocity (EGU/s)")] = VELO
     ACCL: A[float, desc("Seconds to Velocity")] = 0.5
     BDST: A[float, desc("BL Distance (EGU)")] = 0
     BVEL: A[float, desc("BL Velocity(EGU/s)")] = 0
@@ -189,21 +189,21 @@ class DlsPmacAsynMotor(EntityInstance):
     FEHSV: A[str, desc("HIGH alarm severity for following error")] = "NO_ALARM"
     SCALE: A[int, desc("")] = 1
     HOMEVIS: A[int, desc("If 1 then home is visible on the gui")] = 1
-    HOMEVISSTR: A[str, desc("")] = "Use motor summary screen"
-    name: A[str, desc("Object name and gui association name")] = ""
+    HOMEVISSTR: A[str, desc("")] = '"Use motor summary screen"'
+    name: A[str, desc("Object name and gui association name")] = '""'
     alh: A[
         float,
         desc("Set this to alh to add the motor to the alarm handler and send emails"),
     ] = None
-    gda_name: A[str, desc("Name to export this as to GDA")] = ""
-    gda_desc: A[str, desc("Description to export as to GDA")] = ""
-    SPORT: A[str, desc("Delta tau motor controller comms port")] = ""
+    gda_name: A[str, desc("Name to export this as to GDA")] = '""'
+    gda_desc: A[str, desc("Description to export as to GDA")] = '""'
+    SPORT: A[str, desc("Delta tau motor controller comms port")] = '""'
     HOME: A[
         str, desc("Prefix for autohome instance. Defaults to $(P) If unspecified")
-    ] = ""
+    ] = '""'
     ALLOW_HOMED_SET: A[
         str, desc("Set to a blank to allow this axis to have its homed")
-    ] = ""
+    ] = '""'
     axis: A[int, desc("Axis number for this motor")] = 0
 
     def create_database(
@@ -256,7 +256,7 @@ class DlsPmacAsynMotor(EntityInstance):
                     "FEHSV={{ FEHSV }},"
                     "SCALE={{ SCALE }},"
                     "HOMEVIS={{ HOMEVIS }},"
-                    "HOMEVISSTR={{ HOMEVISSTR }},"
+                    "HOMEVISSTR={{  HOMEVISSTR  }},"
                     "name={{ name }},"
                     "alh={{ alh }},"
                     "gda_name={{ gda_name }},"

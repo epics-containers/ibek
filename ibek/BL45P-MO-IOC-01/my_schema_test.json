@@ -52,7 +52,7 @@
                                     "description": "scripts required for the boot script"
                                 }
                             },
-                            "port": {
+                            "PORT": {
                                 "type": "string",
                                 "description": "Asyn port name for PmacAsynIPPort to connect to"
                             },
@@ -60,7 +60,7 @@
                                 "type": "string",
                                 "description": "PV Prefix for all pmac db templates"
                             },
-                            "idlePoll": {
+                            "IdlePoll": {
                                 "type": "integer",
                                 "description": "Idle Poll Period in ms"
                             },
@@ -68,11 +68,11 @@
                                 "type": "integer",
                                 "description": "Moving Poll Period in ms"
                             },
-                            "timeout": {
+                            "TIMEOUT": {
                                 "type": "integer",
                                 "description": "timeout time"
                             },
-                            "feedrate": {
+                            "FEEDRATE": {
                                 "type": "integer",
                                 "description": "feedrate"
                             },

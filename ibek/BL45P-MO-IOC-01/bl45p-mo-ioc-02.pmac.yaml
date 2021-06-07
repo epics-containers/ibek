@@ -2,14 +2,11 @@ ioc_name: my_ioc
 instances:
   - type: pmac.PmacAsynIPPort
     IP: 111.111.111.111:8888
-    name: BRICKPORT1
+    name: BRICK1port
 
   - type: pmac.Geobrick
     name: BRICK1
-    port: BRICKPORT1
-
-  - type: pmac.DlsPmacAsynMotor
-    P: PMAC_BRICK_TEST
-    M: :Motor1
-    PORT: BRICK1
-    ADDR: 1
+    PORT: BRICK1port
+    P: BRICK1
+    IdlePoll: 200
+    movingPoll: 100
