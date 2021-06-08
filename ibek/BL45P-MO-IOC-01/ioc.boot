@@ -4,18 +4,20 @@ epicsEnvSet "EPICS_TS_MIN_WEST", '0'
 cd "$(TOP)"
 dbLoadDatabase "dbd/ioc.dbd"
 ioc_registerRecordDeviceDriver(pdbbase)
-pmacAsynIPConfigure(BRICK1port, 192.168.0.12:1112)
-pmacAsynIPConfigure(BRICK2port, 192.168.0.12:1112)
-pmacAsynIPConfigure(BRICK3port, 192.168.0.12:1113)
-pmacAsynIPConfigure(BRICK4port, 192.168.0.12:1114)
-pmacAsynIPConfigure(BRICK5port, 192.168.0.12:1025)
-pmacAsynIPConfigure(BRICK6port, 192.168.0.13:1025)
-pmacCreateController(BL45P-MO-BRICK-01, BRICK1port, 0, 8, 500, 100)
-pmacCreateAxes(BL45P-MO-BRICK-01, 8)
+pmacAsynIPConfigure(BRICK1port, 111.111.111.111:8888)
+pmacCreateController(BRICK1, , 0, 8, 100, )
+pmacCreateAxes(BRICK1, 8)
 
-dbLoadRecords("pmacController.template", "PMAC = BL45P-MO-STEP-01:")
-dbLoadRecords("pmacStatus.template", "PMAC = BL45P-MO-STEP-01:")
-dbLoadRecords("pmac_asyn_Motor.template", "PMAC=BL45P-MO-MIRR-01:X1")
+dbLoadRecords("pmacController.template", "PORT=BRICK1port, P=BRICK1, TIMEOUT=200, FEEDRATE=150, CSG0=, CSG1=, CSG2=, CSG3=, CSG4=, CSG5=, CSG6=, CSG7=, ")
+dbLoadRecords("pmacStatus.template", "PORT = BRICK1port, P = BRICK1, Description = , ControlIP = , ControlPort = , ControlMode = ")
+dbLoadRecords("pmac_asyn_Motor.template", "P=MOTORBRICK1,M = :motor1,PORT=BRICK1,ADDR=1,DESC=motor1,MRES=0.0001,VELO=20.0,PREC=,EGU=mm,TWV=1,DTYP=pmac.DlsPmacAsynMotor,DIR=0,VBAS=0,VMAX=20,ACCL=0.5,BDST=0,BVEL=0,BACC=,DHLM=10000,DLLM=,HLM=None,LLM=None,HLSV=MAJOR,INIT=,SREV=1000,RRES=None,ERES=None,JAR=None,UEIP=0,RDBL=,RLINK=,RTRY=0,DLY=0,OFF=0,RDBD=None,FOFF=0,ADEL=0,NTM=1,FEHIGH=0,FEHIHI=0,FEHHSV=NO_ALARM,FEHSV=NO_ALARM,SCALE=1,HOMEVIS=1,HOMEVISSTR="Use motor summary screen",name="",alh=None,gda_name="",gda_desc="",SPORT="",HOME="",PMAC=,ALLOW_HOMED_SET=""")
+dbLoadRecords("pmac_asyn_Motor.template", "P=MOTORBRICK1,M = :motor2,PORT=BRICK1,ADDR=2,DESC=motor2,MRES=0.0001,VELO=20.0,PREC=,EGU=mm,TWV=1,DTYP=pmac.DlsPmacAsynMotor,DIR=0,VBAS=0,VMAX=20,ACCL=0.5,BDST=0,BVEL=0,BACC=,DHLM=10000,DLLM=,HLM=None,LLM=None,HLSV=MAJOR,INIT=,SREV=1000,RRES=None,ERES=None,JAR=None,UEIP=0,RDBL=,RLINK=,RTRY=0,DLY=0,OFF=0,RDBD=None,FOFF=0,ADEL=0,NTM=1,FEHIGH=0,FEHIHI=0,FEHHSV=NO_ALARM,FEHSV=NO_ALARM,SCALE=1,HOMEVIS=1,HOMEVISSTR="Use motor summary screen",name="",alh=None,gda_name="",gda_desc="",SPORT="",HOME="",PMAC=,ALLOW_HOMED_SET=""")
+dbLoadRecords("pmac_asyn_Motor.template", "P=MOTORBRICK1,M = :motor3,PORT=BRICK1,ADDR=3,DESC=motor3,MRES=0.0001,VELO=20.0,PREC=,EGU=mm,TWV=1,DTYP=pmac.DlsPmacAsynMotor,DIR=0,VBAS=0,VMAX=20,ACCL=0.5,BDST=0,BVEL=0,BACC=,DHLM=10000,DLLM=,HLM=None,LLM=None,HLSV=MAJOR,INIT=,SREV=1000,RRES=None,ERES=None,JAR=None,UEIP=0,RDBL=,RLINK=,RTRY=0,DLY=0,OFF=0,RDBD=None,FOFF=0,ADEL=0,NTM=1,FEHIGH=0,FEHIHI=0,FEHHSV=NO_ALARM,FEHSV=NO_ALARM,SCALE=1,HOMEVIS=1,HOMEVISSTR="Use motor summary screen",name="",alh=None,gda_name="",gda_desc="",SPORT="",HOME="",PMAC=,ALLOW_HOMED_SET=""")
+dbLoadRecords("pmac_asyn_Motor.template", "P=MOTORBRICK1,M = :motor4,PORT=BRICK1,ADDR=4,DESC=motor4,MRES=0.0001,VELO=20.0,PREC=,EGU=mm,TWV=1,DTYP=pmac.DlsPmacAsynMotor,DIR=0,VBAS=0,VMAX=20,ACCL=0.5,BDST=0,BVEL=0,BACC=,DHLM=10000,DLLM=,HLM=None,LLM=None,HLSV=MAJOR,INIT=,SREV=1000,RRES=None,ERES=None,JAR=None,UEIP=0,RDBL=,RLINK=,RTRY=0,DLY=0,OFF=0,RDBD=None,FOFF=0,ADEL=0,NTM=1,FEHIGH=0,FEHIHI=0,FEHHSV=NO_ALARM,FEHSV=NO_ALARM,SCALE=1,HOMEVIS=1,HOMEVISSTR="Use motor summary screen",name="",alh=None,gda_name="",gda_desc="",SPORT="",HOME="",PMAC=,ALLOW_HOMED_SET=""")
+dbLoadRecords("pmac_asyn_Motor.template", "P=MOTORBRICK1,M = :motor5,PORT=BRICK1,ADDR=5,DESC=motor5,MRES=0.0001,VELO=20.0,PREC=,EGU=mm,TWV=1,DTYP=pmac.DlsPmacAsynMotor,DIR=0,VBAS=0,VMAX=20,ACCL=0.5,BDST=0,BVEL=0,BACC=,DHLM=10000,DLLM=,HLM=None,LLM=None,HLSV=MAJOR,INIT=,SREV=1000,RRES=None,ERES=None,JAR=None,UEIP=0,RDBL=,RLINK=,RTRY=0,DLY=0,OFF=0,RDBD=None,FOFF=0,ADEL=0,NTM=1,FEHIGH=0,FEHIHI=0,FEHHSV=NO_ALARM,FEHSV=NO_ALARM,SCALE=1,HOMEVIS=1,HOMEVISSTR="Use motor summary screen",name="",alh=None,gda_name="",gda_desc="",SPORT="",HOME="",PMAC=,ALLOW_HOMED_SET=""")
+dbLoadRecords("pmac_asyn_Motor.template", "P=MOTORBRICK1,M = :motor6,PORT=BRICK1,ADDR=6,DESC=motor6,MRES=0.0001,VELO=20.0,PREC=,EGU=mm,TWV=1,DTYP=pmac.DlsPmacAsynMotor,DIR=0,VBAS=0,VMAX=20,ACCL=0.5,BDST=0,BVEL=0,BACC=,DHLM=10000,DLLM=,HLM=None,LLM=None,HLSV=MAJOR,INIT=,SREV=1000,RRES=None,ERES=None,JAR=None,UEIP=0,RDBL=,RLINK=,RTRY=0,DLY=0,OFF=0,RDBD=None,FOFF=0,ADEL=0,NTM=1,FEHIGH=0,FEHIHI=0,FEHHSV=NO_ALARM,FEHSV=NO_ALARM,SCALE=1,HOMEVIS=1,HOMEVISSTR="Use motor summary screen",name="",alh=None,gda_name="",gda_desc="",SPORT="",HOME="",PMAC=,ALLOW_HOMED_SET=""")
+dbLoadRecords("pmac_asyn_Motor.template", "P=MOTORBRICK1,M = :motor7,PORT=BRICK1,ADDR=7,DESC=motor7,MRES=0.0001,VELO=20.0,PREC=,EGU=mm,TWV=1,DTYP=pmac.DlsPmacAsynMotor,DIR=0,VBAS=0,VMAX=20,ACCL=0.5,BDST=0,BVEL=0,BACC=,DHLM=10000,DLLM=,HLM=None,LLM=None,HLSV=MAJOR,INIT=,SREV=1000,RRES=None,ERES=None,JAR=None,UEIP=0,RDBL=,RLINK=,RTRY=0,DLY=0,OFF=0,RDBD=None,FOFF=0,ADEL=0,NTM=1,FEHIGH=0,FEHIHI=0,FEHHSV=NO_ALARM,FEHSV=NO_ALARM,SCALE=1,HOMEVIS=1,HOMEVISSTR="Use motor summary screen",name="",alh=None,gda_name="",gda_desc="",SPORT="",HOME="",PMAC=,ALLOW_HOMED_SET=""")
+dbLoadRecords("pmac_asyn_Motor.template", "P=MOTORBRICK1,M = :motor8,PORT=BRICK1,ADDR=8,DESC=motor8,MRES=0.0001,VELO=20.0,PREC=,EGU=mm,TWV=1,DTYP=pmac.DlsPmacAsynMotor,DIR=0,VBAS=0,VMAX=20,ACCL=0.5,BDST=0,BVEL=0,BACC=,DHLM=10000,DLLM=,HLM=None,LLM=None,HLSV=MAJOR,INIT=,SREV=1000,RRES=None,ERES=None,JAR=None,UEIP=0,RDBL=,RLINK=,RTRY=0,DLY=0,OFF=0,RDBD=None,FOFF=0,ADEL=0,NTM=1,FEHIGH=0,FEHIHI=0,FEHHSV=NO_ALARM,FEHSV=NO_ALARM,SCALE=1,HOMEVIS=1,HOMEVISSTR="Use motor summary screen",name="",alh=None,gda_name="",gda_desc="",SPORT="",HOME="",PMAC=,ALLOW_HOMED_SET=""")
 
 cd "$(TOP)"
 iocInit
