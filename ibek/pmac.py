@@ -79,7 +79,7 @@ class Geobrick(EntityInstance):
     IdlePoll: A[int, desc("Idle Poll Period in ms")] = 100
     movingPoll: A[int, desc("Moving Poll Period in ms")] = 500
     script: Sequence[A[str, desc("scripts required for the boot script")]] = (
-        "pmacCreateController({{name}}, {{port}}, 0, 8, {{movingPoll}}, {{idlePoll}})",
+        "pmacCreateController({{name}}, {{PORT}}, 0, 8, {{movingPoll}}, {{IdlePoll}})",
         "pmacCreateAxes({{name}}, 8)",
     )
 
@@ -125,12 +125,12 @@ class Geobrick(EntityInstance):
                 file="pmacStatus.template",
                 # define_args="PORT = {{ port }}, P = {{ P }}, Description = {{ }}, ControlIP = {{ ControlIP }}, ControlPort = {{ ControlPort }}, ControlMode = {{ ControlMode }}",
                 define_args=(
-                    "PORT = {{ PORT }}, "
-                    "P = {{ P }}, "
-                    "Description = {{ Description }}, "
-                    "ControlIP = {{ ControlIP }}, "
-                    "ControlPort = {{ ControlPort }}, "
-                    "ControlMode = {{ ControlMode }}"
+                    "PORT={{ PORT }}, "
+                    "P={{ P }}, "
+                    "Description={{ Description }}, "
+                    "ControlIP={{ ControlIP }}, "
+                    "ControlPort={{ ControlPort }}, "
+                    "ControlMode={{ ControlMode }}"
                 ),
             ),
         ],
@@ -213,7 +213,7 @@ class DlsPmacAsynMotor(EntityInstance):
                 file="pmac_asyn_Motor.template",
                 define_args=(
                     "P={{ P }},"
-                    "M = {{ M }},"
+                    "M={{ M }},"
                     "PORT={{ PORT }},"
                     "ADDR={{ ADDR }},"
                     "DESC={{ DESC }},"
