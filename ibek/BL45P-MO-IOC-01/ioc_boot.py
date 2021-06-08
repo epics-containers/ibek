@@ -1,6 +1,7 @@
 import json
+import shutil
 from pathlib import Path
-from typing import Optional
+from typing import Dict, Optional
 
 import typer
 from apischema.json_schema import deserialization_schema
@@ -9,6 +10,8 @@ from ruamel.yaml import YAML
 
 from ibek import __version__
 from ibek.pmac import PmacIOC
+
+THIS_FOLDER = Path(__file__).parent
 
 yaml = YAML()
 app = typer.Typer()
@@ -59,10 +62,10 @@ def ioc_schema(save_path: str) -> None:
 
 
 def create_boot_script(ioc_yaml: Path, save_file: Path):
-    with open(ioc_yaml, "r") as f:
+    with ioc_yaml.open("r") as f:
         ioc_instance = PmacIOC.deserialize(yaml.load(f))
 
-    with open(Path(__file__).parent / "startup_script.txt", "r") as f:
+    with open(THIS_FOLDER / "startup_script.txt", "r") as f:
         template = Template(f.read())
 
     boot_script = template.render(
@@ -74,8 +77,32 @@ def create_boot_script(ioc_yaml: Path, save_file: Path):
         f.write(boot_script)
 
 
-def create_helm():
-    pass
+def render_file(file_template: Path, **kwargs):
+    template = file_template.read_text()
+    text = Template(template).render(kwargs)
+    file = Path(str(file_template).replace(".jinja", ""))
+    file.write_text(text)
+    file_template.unlink()
+
+
+def create_helm(ioc_yaml: Path):
+    ioc_name = str(ioc_yaml.stem).split(".")[0]
+    helm_folder = Path("ioc") / ioc_name
+    print(f"helm will be {helm_folder}")
+
+    shutil.rmtree(helm_folder)
+    shutil.copytree(THIS_FOLDER.parent.parent / "helm-template", helm_folder)
+    # TODO description should come from the ioc yaml
+    render_file(
+        helm_folder / "Chart.yaml.jinja", ioc_name=ioc_name, description="an ioc"
+    )
+    render_file(
+        helm_folder / "values.yaml.jinja",
+        base_image="gcr.io/diamond-pubreg/controls/prod/ioc/ioc-pmac:2.5.3",
+    )
+
+    boot_script_file = helm_folder / "config" / "ioc.boot"
+    return boot_script_file
 
 
 @app.command()
@@ -83,11 +110,10 @@ def build_ioc(
     ioc_yaml: Path = typer.Argument(
         ..., help="The yaml file describing this IOC instance"
     ),
-    boot_script: Path = typer.Argument(..., help="Full path to save boot script to"),
 ):
     """Build a startup script and Helm chart from <ioc>.yaml """
+    boot_script = create_helm(ioc_yaml=ioc_yaml)
     create_boot_script(ioc_yaml=ioc_yaml, save_file=boot_script)
-    create_helm()
 
 
 if __name__ == "__main__":

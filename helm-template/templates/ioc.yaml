@@ -1,0 +1,11 @@
+{{ include "ioc-chart.ioc" . }}
+
+{{- /*
+  add the contents of every file in the files folder of this IOC helm chart
+  into the config map - this must include <iocname>.boot startup script
+*/ -}}
+
+{{ (.Files.Glob "files/*").AsConfig | indent 2 }}
+
+  version.txt: |
+    IOC {{ .Release.Name }} version {{ .Chart.AppVersion }}

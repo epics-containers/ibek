@@ -1,0 +1,16 @@
+apiVersion: v2
+name: {{ ioc_name }}
+description: |
+    {{ description }}
+
+type: application
+
+# Version (chart version) to track changes in ioc-chart
+version: will_update_on_deploy
+# appVersion tracks changes in the IOC itself (specifically the boot file)
+appVersion: will_update_on_deploy
+
+dependencies:
+  - name: ioc-chart
+    version: 0.2.2
+    repository: "oci://europe-docker.pkg.dev/diamond-privreg/controls/"
