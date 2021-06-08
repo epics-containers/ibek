@@ -1,7 +1,7 @@
 ioc_name: my_ioc
 instances:
   - type: pmac.PmacAsynIPPort
-    IP: 111.111.111.111:8888
+    IP: 172.23.240.97
     name: BRICK1port
 
   - type: pmac.Geobrick

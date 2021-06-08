@@ -34,7 +34,7 @@ class EntityInstance:
         deserializer(Conversion(identity, source=cls, target=EntityInstance))
 
     def create_scripts(self) -> List[str]:
-        """returns a list of jinja templates representing startup script elements 
+        """returns a list of jinja templates representing startup script elements
         for a particular EntityInstance instance. To be expanded using EntityInstance attributes"""
         return_list = []
         for script in self.script:
@@ -210,7 +210,7 @@ class DlsPmacAsynMotor(EntityInstance):
         self,
         databases=[
             DatabaseEntry(
-                file="pmac_asyn_Motor.template",
+                file="$(PMAC)/db/dls_pmac_asyn_motor.template",
                 define_args=(
                     "P={{ P }},"
                     "M={{ M }},"
