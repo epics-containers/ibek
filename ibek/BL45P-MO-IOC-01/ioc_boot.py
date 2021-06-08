@@ -13,6 +13,8 @@ from ibek.pmac import PmacIOC
 yaml = YAML()
 app = typer.Typer()
 
+# Have a dummy function return PmacIOC to simulate building class from yaml
+
 
 def render_script_elements(ioc_instance: PmacIOC) -> str:
     scripts = ""
