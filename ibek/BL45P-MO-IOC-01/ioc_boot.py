@@ -1,7 +1,7 @@
 import json
 import shutil
 from pathlib import Path
-from typing import Dict, Optional
+from typing import Optional
 
 import typer
 from apischema.json_schema import deserialization_schema
@@ -17,6 +17,13 @@ yaml = YAML()
 app = typer.Typer()
 
 # Have a dummy function return PmacIOC to simulate building class from yaml
+
+
+def generate_instance_datamodel(ioc_class_ibek_yaml: Path):
+    # This function currently returns PmacIOC for demonstration purposes and will do so for any path given
+    # This should be replaced by a function that uses the Support module to dynamically create a datamodel
+    # in memory from the <ioc_class>.ibek.yaml file
+    return PmacIOC
 
 
 def render_script_elements(ioc_instance: PmacIOC) -> str:
@@ -55,15 +62,23 @@ def main(
 
 
 @app.command()
-def ioc_schema(save_path: str) -> None:
+def ioc_schema(save_path: Path, ioc_class_ibek_yaml: Path) -> None:
     """ Produce the JSON schema from inside an IOC container """
     with open(save_path, "w") as f:
-        json.dump(deserialization_schema(PmacIOC), f, indent=2)
+        json.dump(
+            deserialization_schema(generate_instance_datamodel(ioc_class_ibek_yaml)),
+            f,
+            indent=2,
+        )
 
 
-def create_boot_script(ioc_yaml: Path, save_file: Path):
+def create_boot_script(ioc_yaml: Path, save_file: Path, ioc_class_ibek_yaml: Path):
     with ioc_yaml.open("r") as f:
-        ioc_instance = PmacIOC.deserialize(yaml.load(f))
+
+        # Dynamically generate a class for this class of ioc from its <ioc_class>.ibek.yaml
+        ioc_instance = generate_instance_datamodel(ioc_class_ibek_yaml).deserialize(
+            yaml.load(f)
+        )
 
     with open(THIS_FOLDER / "startup_script.txt", "r") as f:
         template = Template(f.read())
