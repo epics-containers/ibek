@@ -29,6 +29,7 @@ sphinx-rtd-theme = "*"
 ibek = {editable = true,path = "."}
 typer = "*"
 ipykernel = "*"
+bash-kernel = "*"
 
 [scripts]
 tests = "python -m pytest"
