@@ -28,8 +28,12 @@ sphinx-rtd-theme = "*"
 # All other package requirements from setup.cfg
 ibek = {editable = true,path = "."}
 typer = "*"
+
+apischema = "==0.14.7"
+
 ipykernel = "*"
 bash-kernel = "*"
+
 
 [scripts]
 tests = "python -m pytest"

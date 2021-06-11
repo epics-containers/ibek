@@ -102,10 +102,11 @@ def render_file(file_template: Path, **kwargs):
 
 def create_helm(ioc_yaml: Path):
     ioc_name = str(ioc_yaml.stem).split(".")[0]
-    helm_folder = Path("ioc") / ioc_name
+    helm_folder = Path("iocs") / ioc_name
     print(f"helm will be {helm_folder}")
 
-    shutil.rmtree(helm_folder)
+    if helm_folder.exists():
+        shutil.rmtree(helm_folder)
     shutil.copytree(THIS_FOLDER.parent.parent / "helm-template", helm_folder)
     # TODO description should come from the ioc yaml
     render_file(

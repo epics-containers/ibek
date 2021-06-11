@@ -28,15 +28,14 @@ BL45P_MO_IOC_02 = PmacIOC(
         Geobrick(
             name="BL45P-MO-BRICK-01",
             type="pmac.Geobrick",
-            port="BRICK1port",
+            PORT="BRICK1port",
             P="BL45P-MO-STEP-01:",
-            idlePoll=100,
+            IdlePoll=100,
             movingPoll=500,
         ),
         DlsPmacAsynMotor(
             name="AxisOne",
             type="pmac.DlsPmacAsynMotor",
-            pmac="BL45P-MO-BRICK-01port",
             P="BL45P-MO-MIRR-01:X1",
             axis=1,
         ),

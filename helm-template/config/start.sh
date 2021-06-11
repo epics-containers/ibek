@@ -3,6 +3,7 @@
 #
 # generic kubernetes IOC startup script
 #
+source ${SUPPORT}/configure/RELEASE.shell
 
 this_dir=$(realpath $(dirname $0))
 TOP=$(realpath ${this_dir}/..)
