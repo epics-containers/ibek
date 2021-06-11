@@ -58,7 +58,8 @@ SUPPORT = Support(
                 ),
             ),
             script=(
-                "pmacCreateController({{name}}, {{port}}, 0, 8, {{movingPoll}}, {{idlePoll}})",
+                "pmacCreateController({{name}}, {{port}}, 0, 8, {{movingPoll}}, "
+                "{{idlePoll}})",
                 "pmacCreateAxes({{name}}, 8)",
             ),
         ),
