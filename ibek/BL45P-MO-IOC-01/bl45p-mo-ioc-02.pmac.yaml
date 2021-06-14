@@ -12,6 +12,7 @@ instances:
     movingPoll: 100
 
   - type: pmac.DlsPmacAsynMotor
+    PMAC: BRICK1
     P: MOTORBRICK1
     M: :motor1
     PORT: BRICK1
@@ -24,6 +25,7 @@ instances:
     TWV: 1
 
   - type: pmac.DlsPmacAsynMotor
+    PMAC: BRICK1
     P: MOTORBRICK1
     M: :motor2
     PORT: BRICK1
@@ -36,6 +38,7 @@ instances:
     TWV: 1
 
   - type: pmac.DlsPmacAsynMotor
+    PMAC: BRICK1
     P: MOTORBRICK1
     M: :motor3
     PORT: BRICK1
@@ -48,6 +51,7 @@ instances:
     TWV: 1
 
   - type: pmac.DlsPmacAsynMotor
+    PMAC: BRICK1
     P: MOTORBRICK1
     M: :motor4
     PORT: BRICK1
@@ -60,6 +64,7 @@ instances:
     TWV: 1
 
   - type: pmac.DlsPmacAsynMotor
+    PMAC: BRICK1
     P: MOTORBRICK1
     M: :motor5
     PORT: BRICK1
@@ -72,6 +77,7 @@ instances:
     TWV: 1
 
   - type: pmac.DlsPmacAsynMotor
+    PMAC: BRICK1
     P: MOTORBRICK1
     M: :motor6
     PORT: BRICK1
@@ -84,6 +90,7 @@ instances:
     TWV: 1
 
   - type: pmac.DlsPmacAsynMotor
+    PMAC: BRICK1
     P: MOTORBRICK1
     M: :motor7
     PORT: BRICK1
@@ -96,6 +103,7 @@ instances:
     TWV: 1
 
   - type: pmac.DlsPmacAsynMotor
+    PMAC: BRICK1
     P: MOTORBRICK1
     M: :motor8
     PORT: BRICK1

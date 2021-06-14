@@ -146,6 +146,7 @@ class DlsPmacAsynMotor(EntityInstance):
     # port should match a Geobrick or Pmac name
     P: A[str, desc("Device Prefix")] = ""
     M: A[str, desc("Device Suffix")] = ""
+    PMAC: A[str, desc("Prefix of controler's PVs")] = ""
     PORT: A[str, desc("Delta tau motor controller")] = ""
     ADDR: A[int, desc("Address on controller")] = 0
     DESC: A[str, desc("Description, displayed on EDM screen")] = ""
@@ -154,7 +155,7 @@ class DlsPmacAsynMotor(EntityInstance):
     PREC: A[float, desc("Display Precission")] = 3
     EGU: A[str, desc("Engineering Units")] = "mm"
     TWV: A[int, desc("Tweak Step Size (EGU")] = 1
-    DTYP: A[str, desc("Datatype of record")] = "pmac.DlsPmacAsynMotor"
+    DTYP: A[str, desc("Datatype of record")] = "asynMotor"
     DIR: A[int, desc("User direction")] = 0
     VBAS: A[float, desc("Base Velocity (EGU/s)")] = 0
     VMAX: A[float, desc("Max Velocity (EGU/s)")] = VELO
@@ -189,21 +190,21 @@ class DlsPmacAsynMotor(EntityInstance):
     FEHSV: A[str, desc("HIGH alarm severity for following error")] = "NO_ALARM"
     SCALE: A[int, desc("")] = 1
     HOMEVIS: A[int, desc("If 1 then home is visible on the gui")] = 1
-    HOMEVISSTR: A[str, desc("")] = '"Use motor summary screen"'
-    name: A[str, desc("Object name and gui association name")] = '""'
+    HOMEVISSTR: A[str, desc("")] = "Use motor summary screen"
+    name: A[str, desc("Object name and gui association name")] = ""
     alh: A[
         float,
         desc("Set this to alh to add the motor to the alarm handler and send emails"),
     ] = None
-    gda_name: A[str, desc("Name to export this as to GDA")] = '""'
-    gda_desc: A[str, desc("Description to export as to GDA")] = '""'
-    SPORT: A[str, desc("Delta tau motor controller comms port")] = '""'
+    gda_name: A[str, desc("Name to export this as to GDA")] = ""
+    gda_desc: A[str, desc("Description to export as to GDA")] = ""
+    SPORT: A[str, desc("Delta tau motor controller comms port")] = ""
     HOME: A[
         str, desc("Prefix for autohome instance. Defaults to $(P) If unspecified")
-    ] = '""'
+    ] = ""
     ALLOW_HOMED_SET: A[
         str, desc("Set to a blank to allow this axis to have its homed")
-    ] = '""'
+    ] = ""
     axis: A[int, desc("Axis number for this motor")] = 0
 
     def create_database(
