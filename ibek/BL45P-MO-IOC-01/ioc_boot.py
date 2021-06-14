@@ -87,7 +87,7 @@ def create_boot_script(ioc_yaml: Path, save_file: Path, ioc_class_ibek_yaml: Pat
         script_elements=render_script_elements(ioc_instance),
         database_elements=create_database_elements(ioc_instance),
     )
-    print(boot_script)
+    # print(boot_script)
     with open(save_file, "w") as f:
         f.write(boot_script)
 
@@ -103,7 +103,7 @@ def render_file(file_template: Path, **kwargs):
 def create_helm(ioc_yaml: Path):
     ioc_name = str(ioc_yaml.stem).split(".")[0]
     helm_folder = Path("iocs") / ioc_name
-    print(f"helm will be {helm_folder}")
+    # print(f"helm will be {helm_folder}")
 
     if helm_folder.exists():
         shutil.rmtree(helm_folder)
@@ -135,6 +135,8 @@ def build_ioc(
     create_boot_script(
         ioc_yaml=ioc_yaml, save_file=boot_script, ioc_class_ibek_yaml=ioc_class
     )
+
+    print(boot_script)
 
 
 if __name__ == "__main__":
