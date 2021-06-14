@@ -126,10 +126,15 @@ def build_ioc(
     ioc_yaml: Path = typer.Argument(
         ..., help="The yaml file describing this IOC instance"
     ),
+    ioc_class: Path = typer.Argument(
+        ..., help="The yaml file describing this class of IOC"
+    ),
 ):
     """Build a startup script and Helm chart from <ioc>.yaml """
     boot_script = create_helm(ioc_yaml=ioc_yaml)
-    create_boot_script(ioc_yaml=ioc_yaml, save_file=boot_script)
+    create_boot_script(
+        ioc_yaml=ioc_yaml, save_file=boot_script, ioc_class_ibek_yaml=ioc_class
+    )
 
 
 if __name__ == "__main__":
