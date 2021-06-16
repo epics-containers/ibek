@@ -1,4 +1,4 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, make_dataclass
 from typing import Any, Mapping, Optional, Sequence, Type, TypeVar, Union
 
 from apischema import Undefined, UndefinedType, deserialize, deserializer, schema
@@ -103,6 +103,9 @@ class Support:
     entities: A[
         Sequence[Entity], desc("The entities an IOC can create using this module")
     ]
+
+    def get_support_dataclass(self):
+        return make_dataclass(self.module, [("ioc_name", str), ("instances", list)])
 
     @classmethod
     def deserialize(cls: Type[T], d: Mapping[str, Any]) -> T:
