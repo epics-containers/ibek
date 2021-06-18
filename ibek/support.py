@@ -1,8 +1,11 @@
-from dataclasses import dataclass, make_dataclass
+import builtins
+from builtins import getattr
+from dataclasses import dataclass, field, make_dataclass
 from typing import Any, Mapping, Optional, Sequence, Type, TypeVar, Union
 
 from apischema import Undefined, UndefinedType, deserialize, deserializer, schema
 from apischema.conversions import Conversion, identity
+from apischema.json_schema import deserialization_schema
 from jinja2 import Template
 from typing_extensions import Annotated as A
 from typing_extensions import Literal
@@ -94,6 +97,18 @@ class Entity:
         result = template.render(**kwargs)
         return result
 
+    def get_entity_instances(self, EntityInstance, namespace):
+        name = self.name
+        fields = []
+        for arg in self.args:
+            if arg.description:
+                fields += [
+                    (arg.name, A[getattr(builtins, arg.type), desc(arg.description)])
+                ]
+            else:
+                fields += [(arg.name, getattr(builtins, arg.type))]
+        namespace[name] = make_dataclass(name, fields, bases=(EntityInstance,))
+
 
 @dataclass
 class Support:
@@ -104,8 +119,38 @@ class Support:
         Sequence[Entity], desc("The entities an IOC can create using this module")
     ]
 
-    def get_support_dataclass(self):
-        return make_dataclass(self.module, [("ioc_name", str), ("instances", list)])
+    @dataclass
+    class EntityInstance:
+        """ Entity instance superclass to inherit from """
+
+        def __init_subclass__(cls):
+            # Deserializers stack directly as a Union
+            deserializer(
+                Conversion(identity, source=cls, target=Support.EntityInstance)
+            )
+
+    def get_module(self):
+        namespace = locals()
+        print(namespace)
+
+        for entity in self.entities:
+            entity.get_entity_instances(self.EntityInstance, namespace)
+
+        namespace[self.module] = make_dataclass(
+            self.module,
+            [
+                ("ioc_name", A[str, desc("Name of IOC")]),
+                (
+                    "instances",
+                    A[
+                        Sequence[self.EntityInstance],
+                        desc("List of entity instances of the IOCs"),
+                    ],
+                ),
+            ],
+        )
+
+        return namespace[self.module]
 
     @classmethod
     def deserialize(cls: Type[T], d: Mapping[str, Any]) -> T:
