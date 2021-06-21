@@ -1,4 +1,5 @@
 import builtins
+import uuid
 from builtins import getattr
 from dataclasses import dataclass, field, make_dataclass
 from typing import Any, Mapping, Optional, Sequence, Type, TypeVar, Union
@@ -119,22 +120,20 @@ class Support:
         Sequence[Entity], desc("The entities an IOC can create using this module")
     ]
 
-    @dataclass
-    class EntityInstance:
-        """ Entity instance superclass to inherit from """
-
-        def __init_subclass__(cls):
-            # Deserializers stack directly as a Union
-            deserializer(
-                Conversion(identity, source=cls, target=Support.EntityInstance)
-            )
-
     def get_module(self):
-        namespace = locals()
-        print(namespace)
+        # define an EntityInstance base class that is created every time this method is called
+        # if this is called in the scope of the Support class or the top level of the module
+        # subclasses can persist with each call of self.get_module causing conflics
+        @dataclass
+        class EntityInstance:
+            def __init_subclass__(cls) -> None:
+                deserializer(Conversion(identity, source=cls, target=EntityInstance))
+
+        namespace = {}
+        namespace["entityinstance"] = EntityInstance
 
         for entity in self.entities:
-            entity.get_entity_instances(self.EntityInstance, namespace)
+            entity.get_entity_instances(namespace["entityinstance"], namespace)
 
         namespace[self.module] = make_dataclass(
             self.module,
@@ -143,13 +142,13 @@ class Support:
                 (
                     "instances",
                     A[
-                        Sequence[self.EntityInstance],
+                        Sequence[namespace["entityinstance"]],
                         desc("List of entity instances of the IOCs"),
                     ],
                 ),
             ],
         )
-
+        print(namespace["entityinstance"].__subclasses__())
         return namespace[self.module]
 
     @classmethod
