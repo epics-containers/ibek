@@ -23,9 +23,8 @@ def generate_instance_datamodel(ioc_class_ibek_yaml: Path):
     # This function currently returns PmacIOC for demonstration purposes and will do so for any path given
     # This should be replaced by a function that uses the Support module to dynamically create a datamodel
     # in memory from the <ioc_class>.ibek.yaml file
-    
-    #
 
+    # An example of how to implement this is shown in the dataclass_from_yaml branch in ibek/ibek/BL45P-MO-IOC-01/dataclass_from_yaml
     return PmacIOC
 
 
@@ -83,6 +82,7 @@ def create_boot_script(ioc_yaml: Path, save_file: Path, ioc_class_ibek_yaml: Pat
             yaml.load(f)
         )
 
+        # Opens jinja template for startup script and fills it in with script elements and database elements parsed from the <ioc_name>.yaml file
     with open(THIS_FOLDER / "startup_script.txt", "r") as f:
         template = Template(f.read())
 
@@ -90,7 +90,7 @@ def create_boot_script(ioc_yaml: Path, save_file: Path, ioc_class_ibek_yaml: Pat
         script_elements=render_script_elements(ioc_instance),
         database_elements=create_database_elements(ioc_instance),
     )
-    # print(boot_script)
+    # Saves rendered boot script
     with open(save_file, "w") as f:
         f.write(boot_script)
 
