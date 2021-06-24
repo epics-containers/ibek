@@ -23,6 +23,9 @@ def generate_instance_datamodel(ioc_class_ibek_yaml: Path):
     # This function currently returns PmacIOC for demonstration purposes and will do so for any path given
     # This should be replaced by a function that uses the Support module to dynamically create a datamodel
     # in memory from the <ioc_class>.ibek.yaml file
+    
+    #
+
     return PmacIOC
 
 
@@ -135,8 +138,6 @@ def build_ioc(
     create_boot_script(
         ioc_yaml=ioc_yaml, save_file=boot_script, ioc_class_ibek_yaml=ioc_class
     )
-
-    print(boot_script)
 
 
 if __name__ == "__main__":
