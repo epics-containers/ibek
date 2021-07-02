@@ -16,15 +16,3 @@ entities:
         description: IP address of the pmac to be connected to
     script:
       - pmacAsynIPConfigure({{ name }}, {{IP + "" if ":" in IP else IP + "1025"}})
-
-  - name: TESTy
-    args:
-      - type: str
-        name: type
-        default: pmac.TESTy
-        description: test entry
-        is_id: true
-
-      - type: str
-        name: notIP
-        description: not an IP, just a test

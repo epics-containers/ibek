@@ -1,0 +1,5 @@
+ioc_name: richards_asynport
+instances:
+  - name: my_first_asym
+    type: PmacAsynIPPort
+    IP: 111.111.111.111:8080

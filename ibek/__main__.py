@@ -4,11 +4,15 @@ from typing import Optional
 
 import typer
 from apischema.json_schema import deserialization_schema
+from ruamel.yaml import YAML
+from ruamel.yaml.main import YAML
 
 from ibek import __version__
+from ibek.dataclass_from_yaml import yaml_to_dataclass
 from ibek.support import Support
 
 app = typer.Typer()
+yaml = YAML()
 
 
 def version_callback(value: bool):
@@ -41,20 +45,28 @@ def ibek_schema(
 
 
 @app.command()
-def ioc_schema():
-    """Produce the JSON schema from inside an IOC container"""
-    # This involves programmatically making dataclasses using apischema.
-    # Ask Tom about this.
+def ioc_schema(
+    description: Path = typer.Argument(
+        ..., help="The filepath to read the IOC class description from"
+    ),
+    output: Path = typer.Argument(..., help="The filename to write the schema to"),
+):
+
+    """ Create a json schema from a <support_module>.ibek.yaml file """
+    ioc_class = yaml_to_dataclass(description).get_module_dataclass()
+
+    schema = json.dumps(deserialization_schema(ioc_class), indent=2)
+    with open(output, "w") as f:
+        f.write(schema)
 
 
 @app.command()
-def build_ioc():
+def build_ioc(
+    description: Path = typer.Argument(
+        ..., help="The filepath to read the IOC class description from"
+    )
+):
     """Build a startup script, database and Helm chart from <ioc>.yaml"""
-    # Deserialize all the ibek yaml files into Support instances
-    # Read the ioc yaml file into dictionaries
-    # Read the type of each instance, and get the correct Entity
-    # Call format_script on the entity with the rest of the args from the dict
-    # Write out the script
 
 
 # test with:

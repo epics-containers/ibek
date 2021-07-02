@@ -124,6 +124,13 @@ class Support:
         # define an EntityInstance base class that is created every time this method is called
         # if this is called in the scope of the Support class or the top level of the module
         # subclasses can persist with each call of self.get_module causing conflics
+
+        @dataclass
+        class ModuleSuperclass:
+            @classmethod
+            def deserialize(cls: Type[T], d: Mapping[str, Any]) -> T:
+                return deserialize(cls, d)
+
         @dataclass
         class EntityInstance:
             def __init_subclass__(cls) -> None:
@@ -147,6 +154,7 @@ class Support:
                     ],
                 ),
             ],
+            bases=(ModuleSuperclass,),
         )
         print(namespace["entityinstance"].__subclasses__())
         return namespace[self.module]
