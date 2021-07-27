@@ -20,11 +20,14 @@ app = typer.Typer()
 
 
 def generate_instance_datamodel(ioc_class_ibek_yaml: Path):
-    # This function currently returns PmacIOC for demonstration purposes and will do so for any path given
-    # This should be replaced by a function that uses the Support module to dynamically create a datamodel
-    # in memory from the <ioc_class>.ibek.yaml file
-
-    # An example of how to implement this is shown in the dataclass_from_yaml branch in ibek/ibek/BL45P-MO-IOC-01/dataclass_from_yaml
+    """
+    This function currently returns PmacIOC for demonstration purposes and will
+    do so for any path given.
+    This should be replaced by a function that uses the Support module to
+    dynamically create a datamodel in memory from the <ioc_class>.ibek.yaml file
+    An example of how to implement this is shown in the dataclass_from_yaml
+    branch in ibek/ibek/BL45P-MO-IOC-01/dataclass_from_yaml
+    """
     return PmacIOC
 
 
@@ -39,7 +42,7 @@ def render_script_elements(ioc_instance: PmacIOC) -> str:
 def create_database_elements(ioc_instance: PmacIOC) -> str:
     databases = ""
     for instance in ioc_instance.instances:
-        for database in instance.create_database():
+        for database in instance.create_database([]):
             databases += Template(database).render(instance.__dict__) + "\n"
     return databases
 
@@ -77,12 +80,14 @@ def ioc_schema(save_path: Path, ioc_class_ibek_yaml: Path) -> None:
 def create_boot_script(ioc_yaml: Path, save_file: Path, ioc_class_ibek_yaml: Path):
     with ioc_yaml.open("r") as f:
 
-        # Dynamically generate a class for this class of ioc from its <ioc_class>.ibek.yaml
+        # Dynamically generate a class for this class of ioc
+        # from its <ioc_class>.ibek.yaml
         ioc_instance = generate_instance_datamodel(ioc_class_ibek_yaml).deserialize(
             yaml.load(f)
         )
 
-        # Opens jinja template for startup script and fills it in with script elements and database elements parsed from the <ioc_name>.yaml file
+        # Opens jinja template for startup script and fills it in with script
+        # elements and database elements parsed from the <ioc_name>.yaml file
     with open(THIS_FOLDER / "startup_script.txt", "r") as f:
         template = Template(f.read())
 

@@ -1,7 +1,5 @@
-import json
 from dataclasses import dataclass
 
-from apischema.json_schema import deserialization_schema
 from ruamel.yaml import YAML
 
 from ibek.support import Support

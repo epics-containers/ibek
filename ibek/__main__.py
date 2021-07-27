@@ -53,7 +53,7 @@ def ioc_schema(
 ):
 
     """ Create a json schema from a <support_module>.ibek.yaml file """
-    ioc_class = yaml_to_dataclass(description).get_module_dataclass()
+    ioc_class = yaml_to_dataclass(str(description)).get_module_dataclass()
 
     schema = json.dumps(deserialization_schema(ioc_class), indent=2)
     with open(output, "w") as f:

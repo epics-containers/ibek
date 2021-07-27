@@ -3,15 +3,11 @@ from typing import Any, List, Literal, Mapping, Sequence, Type, TypeVar
 
 from apischema.conversions import Conversion, deserializer, identity
 from apischema.deserialization import deserialize
-from jinja2 import Template
 from typing_extensions import Annotated as A
 
 from ibek.support import desc
 
 T = TypeVar("T")
-
-# /scratch/work/pmac/iocs/lab path on pc0116 for pmac
-# /scratch/work/pmac/iocs/lab/labApp/Db/lab_expanded.substitutions contains all substitutions
 
 
 @dataclass
@@ -30,24 +26,31 @@ class EntityInstance:
 
     # https://wyfo.github.io/apischema/examples/subclasses_union/
     def __init_subclass__(cls):
-        # Deserializers stack directly as a Union
+        # Deserializes stack directly as a Union
         deserializer(Conversion(identity, source=cls, target=EntityInstance))
 
     def create_scripts(self) -> List[str]:
-        """returns a list of jinja templates representing startup script elements
-        for a particular EntityInstance instance. To be expanded using EntityInstance attributes"""
+        """
+        returns a list of jinja templates representing startup script elements
+        for a particular EntityInstance instance. To be expanded using EntityInstance
+        attributes
+        """
         return_list = []
         for script in self.script:
             return_list += [script]
         return return_list
 
     def create_database(self, databases: list) -> List[str]:
-        """returns a list of jinja templates representing startup dbLoadRecords lines
-        for a particular EntityInstance instance. To be expanded using EntityInstance attributes"""
+        """
+        returns a list of jinja templates representing startup dbLoadRecords lines
+        for a particular EntityInstance instance. To be expanded using EntityInstance
+        attributes
+        """
         return_list = []
         for database in databases:
             return_list += [
-                f"dbLoadRecords(\"{database.__dict__['file']}\", \"{database.__dict__['define_args']}\")"
+                f"dbLoadRecords(\"{database.__dict__['file']}\", "
+                f"\"{database.__dict__['define_args']}\")"
             ]
         return return_list
 
@@ -72,7 +75,7 @@ class Geobrick(EntityInstance):
 
     type: Literal["pmac.Geobrick"] = "pmac.Geobrick"
     # port should match a PmacAsynIPPort name
-    # (we dont have a way for schema to verify this at present -
+    # (we don't have a way for schema to verify this at present -
     # TODO I've looked at this with Tom and it may not be possible)
     PORT: A[str, desc("Asyn port name for PmacAsynIPPort to connect to")] = ""
     P: A[str, desc("PV Prefix for all pmac db templates")] = ""
@@ -84,7 +87,7 @@ class Geobrick(EntityInstance):
     )
 
     TIMEOUT: A[int, desc("timeout time")] = 200
-    FEEDRATE: A[int, desc("feedrate")] = 150
+    FEEDRATE: A[int, desc("axis feedrate")] = 150
     ControlIP: A[str, desc("dls-pmac-control.py IP or Hostname")] = ""
     ControlPort: A[str, desc("dls-pmac-control.py Port")] = ""
     ControlMode: A[
@@ -123,7 +126,9 @@ class Geobrick(EntityInstance):
             ),
             DatabaseEntry(
                 file="pmacStatus.template",
-                # define_args="PORT = {{ port }}, P = {{ P }}, Description = {{ }}, ControlIP = {{ ControlIP }}, ControlPort = {{ ControlPort }}, ControlMode = {{ ControlMode }}",
+                # define_args="PORT = {{ port }}, P = {{ P }}, Description = {{ }},
+                # ControlIP = {{ ControlIP }}, ControlPort = {{ ControlPort }},
+                # ControlMode = {{ ControlMode }}",
                 define_args=(
                     "PORT={{ PORT }}, "
                     "P={{ P }}, "
@@ -151,7 +156,7 @@ class DlsPmacAsynMotor(EntityInstance):
     ADDR: A[int, desc("Address on controller")] = 0
     DESC: A[str, desc("Description, displayed on EDM screen")] = ""
     MRES: A[float, desc("Motor Step Size (EGU)")] = 0.001
-    VELO: A[float, desc("Velocity (EGU/s)")] = 20
+    VELO: A[float, desc("axis Velocity (EGU/s)")] = 20
     PREC: A[float, desc("Display Precission")] = 3
     EGU: A[str, desc("Engineering Units")] = "mm"
     TWV: A[int, desc("Tweak Step Size (EGU")] = 1
@@ -165,14 +170,14 @@ class DlsPmacAsynMotor(EntityInstance):
     BACC: A[str, desc("BL Seconds to Veloc")] = ""
     DHLM: A[float, desc("Dial High Limit")] = 10000
     DLMM: A[float, desc("Dial low limit")] = -10000
-    HLM: A[float, desc("User High Limit")] = None
-    LLM: A[float, desc("User Low Limit")] = None
+    HLM: A[float, desc("User High Limit")] = 10000
+    LLM: A[float, desc("User Low Limit")] = -10000
     HLSV: A[str, desc("HW Lim, Violation Svr")] = "MAJOR"
     INIT: A[str, desc("Startup commands")] = ""
     SREV: A[float, desc("Steps per Revolution")] = 1000
-    RRES: A[float, desc("Readback Step Size (EGU")] = None
-    ERES: A[float, desc("Encoder Step Size (EGU)")] = None
-    JAR: A[float, desc("Jog Acceleration (EGU/s^2)")] = None
+    RRES: A[float, desc("Readback Step Size (EGU")] = 0
+    ERES: A[float, desc("Encoder Step Size (EGU)")] = 0
+    JAR: A[float, desc("Jog Acceleration (EGU/s^2)")] = 1
     UEIP: A[int, desc("Use Encoder If Present")] = 0
     URIP: A[int, desc("Use RDBL If Present")] = 0
     RDBL: A[str, desc("Readback Location, set URIP =1 if you specify this")] = ""
@@ -180,7 +185,7 @@ class DlsPmacAsynMotor(EntityInstance):
     RTRY: A[int, desc("Max retry count")] = 0
     DLY: A[float, desc("Readback settle time (s)")] = 0
     OFF: A[float, desc("User Offset (EGU)")] = 0
-    RDBD: A[float, desc("Retry Deadband (EGU)")] = None
+    RDBD: A[float, desc("Retry Deadband (EGU)")] = 0
     FOFF: A[int, desc("Freeze Offset, 0=variable, 1=frozen")] = 0
     ADEL: A[float, desc("Alarm monitor deadband (EGU)")] = 0
     NTM: A[int, desc("New Target Monitor, only set to 0 for soft motors")] = 1
@@ -195,7 +200,7 @@ class DlsPmacAsynMotor(EntityInstance):
     alh: A[
         float,
         desc("Set this to alh to add the motor to the alarm handler and send emails"),
-    ] = None
+    ] = 0
     gda_name: A[str, desc("Name to export this as to GDA")] = ""
     gda_desc: A[str, desc("Description to export as to GDA")] = ""
     SPORT: A[str, desc("Delta tau motor controller comms port")] = ""

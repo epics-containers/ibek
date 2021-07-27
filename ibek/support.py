@@ -1,12 +1,10 @@
 import builtins
-import uuid
 from builtins import getattr
-from dataclasses import dataclass, field, make_dataclass
+from dataclasses import dataclass, make_dataclass
 from typing import Any, Mapping, Optional, Sequence, Type, TypeVar, Union
 
 from apischema import Undefined, UndefinedType, deserialize, deserializer, schema
 from apischema.conversions import Conversion, identity
-from apischema.json_schema import deserialization_schema
 from jinja2 import Template
 from typing_extensions import Annotated as A
 from typing_extensions import Literal
@@ -121,9 +119,12 @@ class Support:
     ]
 
     def get_module(self):
-        # define an EntityInstance base class that is created every time this method is called
-        # if this is called in the scope of the Support class or the top level of the module
-        # subclasses can persist with each call of self.get_module causing conflics
+        """
+        define an EntityInstance base class that is created every time this method
+        is called if this is called in the scope of the Support class or the top
+        level of the module subclasses can persist with each call of
+        self.get_module causing conflicts
+        """
 
         @dataclass
         class ModuleSuperclass:
@@ -149,7 +150,7 @@ class Support:
                 (
                     "instances",
                     A[
-                        Sequence[namespace["entityinstance"]],
+                        Sequence[EntityInstance],
                         desc("List of entity instances of the IOCs"),
                     ],
                 ),

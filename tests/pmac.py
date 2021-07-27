@@ -1,9 +1,8 @@
 from dataclasses import dataclass
-from typing import Any, List, Literal, Mapping, Sequence, Type, TypeVar
+from typing import Any, List, Mapping, Sequence, Type, TypeVar
 
 from apischema.conversions import Conversion, deserializer, identity
 from apischema.deserialization import deserialize
-from jinja2 import Template
 from typing_extensions import Annotated as A
 
 from ibek.support import desc
@@ -27,24 +26,31 @@ class EntityInstance:
 
     # https://wyfo.github.io/apischema/examples/subclasses_union/
     def __init_subclass__(cls):
-        # Deserializers stack directly as a Union
+        # Deserializes stack directly as a Union
         deserializer(Conversion(identity, source=cls, target=EntityInstance))
 
     def create_scripts(self) -> List[str]:
-        """returns a list of jinja templates representing startup script elements
-        for a particular EntityInstance instance. To be expanded using EntityInstance attributes"""
+        """
+        returns a list of jinja templates representing startup script elements
+        for a particular EntityInstance instance. To be expanded using
+        EntityInstance attributes
+        """
         return_list = []
         for script in self.script:
             return_list += [script]
         return return_list
 
     def create_database(self, databases: list) -> List[str]:
-        """returns a list of jinja templates representing startup dbLoadRecords lines
-        for a particular EntityInstance instance. To be expanded using EntityInstance attributes"""
+        """
+        returns a list of jinja templates representing startup dbLoadRecords lines
+        for a particular EntityInstance instance. To be expanded using EntityInstance
+        attributes
+        """
         return_list = []
         for database in databases:
             return_list += [
-                f"dbLoadRecords(\"{database.__dict__['file']}\", \"{database.__dict__['define_args']}\")"
+                f"dbLoadRecords(\"{database.__dict__['file']}\", "
+                "\"{database.__dict__['define_args']}\")"
             ]
         return return_list
 

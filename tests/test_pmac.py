@@ -52,11 +52,12 @@ def test_geobrick_database():
     db_script_entries = (
         pmac_geobrick_instance.create_database()
     )  # returns a list of jinja templates
-    assert (
-        Template(db_script_entries[0]).render(pmac_geobrick_instance.__dict__)
-        == 'dbLoadRecords("pmacController.template", "PORT=my_asyn_port, P=geobrick_one, TIMEOUT=200, FEEDRATE=150, CSG0=, CSG1=, CSG2=, CSG3=, CSG4=, CSG5=, CSG6=, CSG7=, ")'
+    assert Template(db_script_entries[0]).render(pmac_geobrick_instance.__dict__) == (
+        'dbLoadRecords("pmacController.template", "PORT=my_asyn_port, '
+        "P=geobrick_one, TIMEOUT=200, FEEDRATE=150, CSG0=, CSG1=, CSG2=, "
+        'CSG3=, CSG4=, CSG5=, CSG6=, CSG7=, ")'
     )
-    assert (
-        Template(db_script_entries[1]).render(pmac_geobrick_instance.__dict__)
-        == 'dbLoadRecords("pmacStatus.template", "PORT=my_asyn_port, P=geobrick_one, Description=, ControlIP=, ControlPort=, ControlMode=")'
+    assert Template(db_script_entries[1]).render(pmac_geobrick_instance.__dict__) == (
+        'dbLoadRecords("pmacStatus.template", "PORT=my_asyn_port, '
+        'P=geobrick_one, Description=, ControlIP=, ControlPort=, ControlMode=")'
     )
