@@ -1,9 +1,10 @@
 from dataclasses import dataclass
-from typing import Any, List, Literal, Mapping, Sequence, Type, TypeVar
+from typing import Any, List, Mapping, Sequence, Type, TypeVar
 
 from apischema.conversions import Conversion, deserializer, identity
 from apischema.deserialization import deserialize
 from typing_extensions import Annotated as A
+from typing_extensions import Literal
 
 from ibek.support import desc
 
