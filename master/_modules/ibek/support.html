@@ -1,6 +1,5 @@
 
 
-
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
@@ -8,12 +7,14 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>ibek.support &mdash; ibek 0.0+untagged.gc021ccb documentation</title>
+  <title>ibek.support &mdash; ibek 0.2 documentation</title>
   
 
   
   <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../../_static/graphviz.css" type="text/css" />
   <link rel="stylesheet" href="../../_static/theme_overrides.css" type="text/css" />
 
@@ -34,6 +35,7 @@
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
         <script src="../../_static/jquery.js"></script>
         <script src="../../_static/underscore.js"></script>
         <script src="../../_static/doctools.js"></script>
@@ -69,7 +71,7 @@
             
             
               <div class="version">
-                master
+                0.2
               </div>
             
           
@@ -89,31 +91,35 @@
         
         <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
           
-  <style>
+<style>
     /* style mobile top nav to look like main nav */
     .wy-nav-top {
-        background: rgb(7, 43, 93)
+        background: {
+                {
+                theme_style_nav_header_background
+            }
+        }
     }
-  </style>
-  
+</style>
+
             
             
               
             
             
-              <p class="caption"><span class="caption-text">Tutorials</span></p>
+              <p class="caption" role="heading"><span class="caption-text">Tutorials</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../tutorials/installation.html">Installation Tutorial</a></li>
 </ul>
-<p class="caption"><span class="caption-text">How-to Guides</span></p>
+<p class="caption" role="heading"><span class="caption-text">How-to Guides</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../how-to/accomplish-a-task.html">How to accomplish a task</a></li>
 </ul>
-<p class="caption"><span class="caption-text">Explanations</span></p>
+<p class="caption" role="heading"><span class="caption-text">Explanations</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../explanations/why-is-something-so.html">Why is something the way it is</a></li>
 </ul>
-<p class="caption"><span class="caption-text">Reference</span></p>
+<p class="caption" role="heading"><span class="caption-text">Reference</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../reference/api.html">API</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../reference/contributing.html">Contributing</a></li>
@@ -121,18 +127,42 @@
 
             
           
-  <!-- Include Index in the sidebar -->
-  <!-- https://stackoverflow.com/a/37843854 -->
-  <a href="../../genindex.html">Index</a>
-  <!-- Include all versions of the docs -->
-  <!-- https://holzhaus.github.io/sphinx-multiversion/master/templates.html -->
-  
-  <p class="caption"><span class="caption-text">Versions</span></p>
-  <ul>
-    <li><a href="support.html">master</a></li>
-    <li><a href="../../../0.1/index.html">0.1</a></li>
-  </ul>
-  
+<!-- Include Index in the sidebar -->
+<!-- https://stackoverflow.com/a/37843854 -->
+<a href="../../genindex.html">Index</a>
+<!-- Add versions for selected branches + tags -->
+<p class="caption"><span class="caption-text">Versions</span></p>
+<ul id="versions" />
+<script>
+    // Add any branches to appear in the side pane here, tags will be added below
+    // Will only appear if docs are built and pushed in gh-pages
+    var versions = ['master', 'main'];
+    var dirs = new Set();
+    function addVersion(name) {
+        if (dirs.has(name)) {
+            var li = document.createElement("li");
+            var a = document.createElement("a");
+            a.href = 'https://dls-controls.github.io/ibek/' + name;
+            a.innerText = name;
+            li.appendChild(a)
+            document.getElementById('versions').appendChild(li);
+        }
+    }
+    Promise.all([
+        // Find gh-pages directories and populate `dirs`
+        fetch("https://api.github.com/repos/dls-controls/ibek/contents?ref=gh-pages")
+            .then(response => response.json())
+            .then(data => data.forEach(function (e) {
+                if (e.type == "dir") dirs.add(e.name);
+            })),
+        // Add tags to `versions`
+        fetch('https://api.github.com/repos/dls-controls/ibek/tags')
+            .then(response => response.json())
+            .then(data => data.forEach(function (e) {
+                versions.push(e.name);
+            }))
+    ]).then(_ => versions.forEach(addVersion))
+</script>
 
         </div>
         
@@ -196,7 +226,9 @@
            <div itemprop="articleBody">
             
   <h1>Source code for ibek.support</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">dataclasses</span> <span class="kn">import</span> <span class="n">dataclass</span>
+<span></span><span class="kn">import</span> <span class="nn">builtins</span>
+<span class="kn">from</span> <span class="nn">builtins</span> <span class="kn">import</span> <span class="nb">getattr</span>
+<span class="kn">from</span> <span class="nn">dataclasses</span> <span class="kn">import</span> <span class="n">dataclass</span><span class="p">,</span> <span class="n">make_dataclass</span>
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Mapping</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">,</span> <span class="n">Type</span><span class="p">,</span> <span class="n">TypeVar</span><span class="p">,</span> <span class="n">Union</span>
 
 <span class="kn">from</span> <span class="nn">apischema</span> <span class="kn">import</span> <span class="n">Undefined</span><span class="p">,</span> <span class="n">UndefinedType</span><span class="p">,</span> <span class="n">deserialize</span><span class="p">,</span> <span class="n">deserializer</span><span class="p">,</span> <span class="n">schema</span>
@@ -282,11 +314,27 @@
     <span class="n">name</span><span class="p">:</span> <span class="n">A</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">desc</span><span class="p">(</span><span class="s2">&quot;Publish Entity as type &lt;module&gt;.&lt;name&gt; for IOC instances&quot;</span><span class="p">)]</span>
     <span class="n">args</span><span class="p">:</span> <span class="n">A</span><span class="p">[</span><span class="n">Sequence</span><span class="p">[</span><span class="n">Arg</span><span class="p">],</span> <span class="n">desc</span><span class="p">(</span><span class="s2">&quot;The arguments IOC instance should supply&quot;</span><span class="p">)]</span> <span class="o">=</span> <span class="p">()</span>
     <span class="n">databases</span><span class="p">:</span> <span class="n">A</span><span class="p">[</span><span class="n">Sequence</span><span class="p">[</span><span class="n">Database</span><span class="p">],</span> <span class="n">desc</span><span class="p">(</span><span class="s2">&quot;Databases to instantiate&quot;</span><span class="p">)]</span> <span class="o">=</span> <span class="p">()</span>
-    <span class="n">script</span><span class="p">:</span> <span class="n">A</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">desc</span><span class="p">(</span><span class="s2">&quot;Startup script snippet defined as Jinja template&quot;</span><span class="p">)]</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+    <span class="n">script</span><span class="p">:</span> <span class="n">A</span><span class="p">[</span>
+        <span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">desc</span><span class="p">(</span><span class="s2">&quot;Startup script snippet defined as Jinja template&quot;</span><span class="p">)</span>
+    <span class="p">]</span> <span class="o">=</span> <span class="p">()</span>
 
-    <span class="k">def</span> <span class="nf">format_script</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-        <span class="n">template</span> <span class="o">=</span> <span class="n">Template</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">script</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">template</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+    <span class="k">def</span> <span class="nf">format_script</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="n">all_lines</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">script</span><span class="p">)</span>
+        <span class="n">template</span> <span class="o">=</span> <span class="n">Template</span><span class="p">(</span><span class="n">all_lines</span><span class="p">)</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">template</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">result</span>
+
+    <span class="k">def</span> <span class="nf">get_entity_instances</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">EntityInstance</span><span class="p">,</span> <span class="n">namespace</span><span class="p">):</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span>
+        <span class="n">fields</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">arg</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">args</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">arg</span><span class="o">.</span><span class="n">description</span><span class="p">:</span>
+                <span class="n">fields</span> <span class="o">+=</span> <span class="p">[</span>
+                    <span class="p">(</span><span class="n">arg</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">A</span><span class="p">[</span><span class="nb">getattr</span><span class="p">(</span><span class="n">builtins</span><span class="p">,</span> <span class="n">arg</span><span class="o">.</span><span class="n">type</span><span class="p">),</span> <span class="n">desc</span><span class="p">(</span><span class="n">arg</span><span class="o">.</span><span class="n">description</span><span class="p">)])</span>
+                <span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">fields</span> <span class="o">+=</span> <span class="p">[(</span><span class="n">arg</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">builtins</span><span class="p">,</span> <span class="n">arg</span><span class="o">.</span><span class="n">type</span><span class="p">))]</span>
+        <span class="n">namespace</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">make_dataclass</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">fields</span><span class="p">,</span> <span class="n">bases</span><span class="o">=</span><span class="p">(</span><span class="n">EntityInstance</span><span class="p">,))</span></div>
 
 
 <div class="viewcode-block" id="Support"><a class="viewcode-back" href="../../reference/api.html#ibek.support.Support">[docs]</a><span class="nd">@dataclass</span>
@@ -297,6 +345,48 @@
     <span class="n">entities</span><span class="p">:</span> <span class="n">A</span><span class="p">[</span>
         <span class="n">Sequence</span><span class="p">[</span><span class="n">Entity</span><span class="p">],</span> <span class="n">desc</span><span class="p">(</span><span class="s2">&quot;The entities an IOC can create using this module&quot;</span><span class="p">)</span>
     <span class="p">]</span>
+
+<div class="viewcode-block" id="Support.get_module"><a class="viewcode-back" href="../../reference/api.html#ibek.support.Support.get_module">[docs]</a>    <span class="k">def</span> <span class="nf">get_module</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        define an EntityInstance base class that is created every time this method</span>
+<span class="sd">        is called if this is called in the scope of the Support class or the top</span>
+<span class="sd">        level of the module subclasses can persist with each call of</span>
+<span class="sd">        self.get_module causing conflicts</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="nd">@dataclass</span>
+        <span class="k">class</span> <span class="nc">ModuleSuperclass</span><span class="p">:</span>
+            <span class="nd">@classmethod</span>
+            <span class="k">def</span> <span class="nf">deserialize</span><span class="p">(</span><span class="bp">cls</span><span class="p">:</span> <span class="n">Type</span><span class="p">[</span><span class="n">T</span><span class="p">],</span> <span class="n">d</span><span class="p">:</span> <span class="n">Mapping</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">T</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">deserialize</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">d</span><span class="p">)</span>
+
+        <span class="nd">@dataclass</span>
+        <span class="k">class</span> <span class="nc">EntityInstance</span><span class="p">:</span>
+            <span class="k">def</span> <span class="nf">__init_subclass__</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">deserializer</span><span class="p">(</span><span class="n">Conversion</span><span class="p">(</span><span class="n">identity</span><span class="p">,</span> <span class="n">source</span><span class="o">=</span><span class="bp">cls</span><span class="p">,</span> <span class="n">target</span><span class="o">=</span><span class="n">EntityInstance</span><span class="p">))</span>
+
+        <span class="n">namespace</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">namespace</span><span class="p">[</span><span class="s2">&quot;entityinstance&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">EntityInstance</span>
+
+        <span class="k">for</span> <span class="n">entity</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">entities</span><span class="p">:</span>
+            <span class="n">entity</span><span class="o">.</span><span class="n">get_entity_instances</span><span class="p">(</span><span class="n">namespace</span><span class="p">[</span><span class="s2">&quot;entityinstance&quot;</span><span class="p">],</span> <span class="n">namespace</span><span class="p">)</span>
+
+        <span class="n">namespace</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">module</span><span class="p">]</span> <span class="o">=</span> <span class="n">make_dataclass</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">module</span><span class="p">,</span>
+            <span class="p">[</span>
+                <span class="p">(</span><span class="s2">&quot;ioc_name&quot;</span><span class="p">,</span> <span class="n">A</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">desc</span><span class="p">(</span><span class="s2">&quot;Name of IOC&quot;</span><span class="p">)]),</span>
+                <span class="p">(</span>
+                    <span class="s2">&quot;instances&quot;</span><span class="p">,</span>
+                    <span class="n">A</span><span class="p">[</span>
+                        <span class="n">Sequence</span><span class="p">[</span><span class="n">EntityInstance</span><span class="p">],</span>
+                        <span class="n">desc</span><span class="p">(</span><span class="s2">&quot;List of entity instances of the IOCs&quot;</span><span class="p">),</span>
+                    <span class="p">],</span>
+                <span class="p">),</span>
+            <span class="p">],</span>
+            <span class="n">bases</span><span class="o">=</span><span class="p">(</span><span class="n">ModuleSuperclass</span><span class="p">,),</span>
+        <span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">namespace</span><span class="p">[</span><span class="s2">&quot;entityinstance&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">__subclasses__</span><span class="p">())</span>
+        <span class="k">return</span> <span class="n">namespace</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">module</span><span class="p">]</span></div>
 
     <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">deserialize</span><span class="p">(</span><span class="bp">cls</span><span class="p">:</span> <span class="n">Type</span><span class="p">[</span><span class="n">T</span><span class="p">],</span> <span class="n">d</span><span class="p">:</span> <span class="n">Mapping</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">T</span><span class="p">:</span>
