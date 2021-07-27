@@ -1,3 +1,4 @@
+ioc_name: BL45P_MO_IOC_02
 instances:
   - type: pmac.PmacAsynIPPort
     name: BRICK1port
@@ -25,13 +26,13 @@ instances:
 
   - type: pmac.Geobrick
     name: BL45P-MO-BRICK-01
-    port: BRICK1port
+    PORT: BRICK1port
     P: "BL45P-MO-STEP-01:"
+    idlePoll: 100
+    movingPoll: 500
 
   - type: pmac.DlsPmacAsynMotor
     name: AxisOne
-    pmac: BL45P-MO-BRICK-01port
+    PMAC: BL45P-MO-BRICK-01
     axis: 1
     P: "BL45P-MO-MIRR-01:X1"
-
-ioc_name: BL45P_MO_IOC_02

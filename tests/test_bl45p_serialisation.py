@@ -30,11 +30,12 @@ BL45P_MO_IOC_02 = PmacIOC(
             type="pmac.Geobrick",
             PORT="BRICK1port",
             P="BL45P-MO-STEP-01:",
-            IdlePoll=100,
+            idlePoll=100,
             movingPoll=500,
         ),
         DlsPmacAsynMotor(
             name="AxisOne",
+            PMAC="BL45P-MO-BRICK-01",
             type="pmac.DlsPmacAsynMotor",
             P="BL45P-MO-MIRR-01:X1",
             axis=1,
@@ -45,5 +46,6 @@ BL45P_MO_IOC_02 = PmacIOC(
 
 def test_deserialize_bl45p() -> None:
     with open(Path(__file__).parent / "bl45p-mo-ioc-02.pmac.yaml") as f:
-        actual = PmacIOC.deserialize(YAML().load(f))
+        d = YAML().load(f)
+        actual = PmacIOC.deserialize(d)
     assert actual == BL45P_MO_IOC_02

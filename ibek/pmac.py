@@ -76,7 +76,7 @@ class Geobrick(EntityInstance):
     # TODO I've looked at this with Tom and it may not be possible)
     PORT: A[str, desc("Asyn port name for PmacAsynIPPort to connect to")] = ""
     P: A[str, desc("PV Prefix for all pmac db templates")] = ""
-    IdlePoll: A[int, desc("Idle Poll Period in ms")] = 100
+    idlePoll: A[int, desc("Idle Poll Period in ms")] = 100
     movingPoll: A[int, desc("Moving Poll Period in ms")] = 500
     script: Sequence[A[str, desc("scripts required for the boot script")]] = (
         "pmacCreateController({{name}}, {{PORT}}, 0, 8, {{movingPoll}}, {{IdlePoll}})",
