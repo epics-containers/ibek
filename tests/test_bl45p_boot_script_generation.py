@@ -13,4 +13,3 @@ def test_script_entries() -> None:
 
 def test_correct_script_rendered() -> None:
     pass
-

@@ -22,4 +22,3 @@ class yaml_to_dataclass:
         # support_instance = self._get_support_instance()
         # module_dataclass = support_instance.get_module()
         return self._get_support_instance().get_module()
-
