@@ -3,45 +3,22 @@
     "properties": {
         "ioc_name": {
             "type": "string",
-            "description": "Name of the IOC"
+            "description": "Name of IOC"
         },
         "instances": {
             "type": "array",
             "items": {
                 "anyOf": [
                     {
-                        "type": "object",
                         "properties": {
-                            "name": {
-                                "type": "string",
-                                "description": "Name of the entity instance we are creating"
-                            },
                             "type": {
-                                "type": "string",
-                                "const": "pmac.PmacAsynIPPort"
-                            },
-                            "IP": {
-                                "type": "string",
-                                "description": "IP address of the pmac to be connected to"
-                            }
-                        },
-                        "required": [
-                            "name"
-                        ],
-                        "additionalProperties": false
-                    },
-                    {
-                        "type": "object",
-                        "properties": {
-                            "name": {
-                                "type": "string",
-                                "description": "Name of the entity instance we are creating"
-                            },
-                            "type": {
-                                "type": "string",
                                 "const": "pmac.Geobrick"
                             },
-                            "port": {
+                            "name": {
+                                "type": "string",
+                                "description": "Name to use for the geobrick's asyn port"
+                            },
+                            "PORT": {
                                 "type": "string",
                                 "description": "Asyn port name for PmacAsynIPPort to connect to"
                             },
@@ -59,36 +36,56 @@
                             }
                         },
                         "required": [
-                            "name"
+                            "name",
+                            "PORT",
+                            "P",
+                            "idlePoll",
+                            "movingPoll"
                         ],
                         "additionalProperties": false
                     },
                     {
-                        "type": "object",
                         "properties": {
+                            "type": {
+                                "const": "pmac.PmacAsynIPPort"
+                            },
                             "name": {
                                 "type": "string",
-                                "description": "Name of the entity instance we are creating"
+                                "description": "Asyn port name"
                             },
-                            "type": {
+                            "IP": {
                                 "type": "string",
-                                "const": "pmac.DlsPmacAsynMotor"
-                            },
-                            "pmac": {
-                                "type": "string",
-                                "description": "pmac controlelr for this axis"
-                            },
-                            "P": {
-                                "type": "string",
-                                "description": "PV Name for the motor record"
-                            },
-                            "axis": {
-                                "type": "integer",
-                                "description": "Axis number for this motor"
+                                "description": "IP address of pmac"
                             }
                         },
                         "required": [
-                            "name"
+                            "name",
+                            "IP"
+                        ],
+                        "additionalProperties": false
+                    },
+                    {
+                        "properties": {
+                            "type": {
+                                "const": "pmac.DlsPmacAsynMotor"
+                            },
+                            "PMAC": {
+                                "type": "string",
+                                "description": "PMAC to attach to"
+                            },
+                            "axis": {
+                                "type": "integer",
+                                "description": "which axis number this motor drives"
+                            },
+                            "P": {
+                                "type": "string",
+                                "description": "PV name for the motor"
+                            }
+                        },
+                        "required": [
+                            "PMAC",
+                            "P",
+                            "axis"
                         ],
                         "additionalProperties": false
                     }

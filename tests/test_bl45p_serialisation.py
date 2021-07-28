@@ -34,7 +34,6 @@ BL45P_MO_IOC_02 = PmacIOC(
             movingPoll=500,
         ),
         DlsPmacAsynMotor(
-            name="AxisOne",
             PMAC="BL45P-MO-BRICK-01",
             type="pmac.DlsPmacAsynMotor",
             P="BL45P-MO-MIRR-01:X1",

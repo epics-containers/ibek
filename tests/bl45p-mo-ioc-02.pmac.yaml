@@ -32,7 +32,6 @@ instances:
     movingPoll: 500
 
   - type: pmac.DlsPmacAsynMotor
-    name: AxisOne
     PMAC: BL45P-MO-BRICK-01
     axis: 1
     P: "BL45P-MO-MIRR-01:X1"
