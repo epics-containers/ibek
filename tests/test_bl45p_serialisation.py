@@ -10,33 +10,18 @@ BL45P_MO_IOC_02 = PmacIOC(
         PmacAsynIPPort(
             name="BRICK1port", type="pmac.PmacAsynIPPort", IP="192.168.0.12:1112"
         ),
-        PmacAsynIPPort(
-            name="BRICK2port", type="pmac.PmacAsynIPPort", IP="192.168.0.12:1112"
-        ),
-        PmacAsynIPPort(
-            name="BRICK3port", type="pmac.PmacAsynIPPort", IP="192.168.0.12:1113"
-        ),
-        PmacAsynIPPort(
-            name="BRICK4port", type="pmac.PmacAsynIPPort", IP="192.168.0.12:1114"
-        ),
-        PmacAsynIPPort(
-            name="BRICK5port", type="pmac.PmacAsynIPPort", IP="192.168.0.12"
-        ),
-        PmacAsynIPPort(
-            name="BRICK6port", type="pmac.PmacAsynIPPort", IP="192.168.0.13"
-        ),
         Geobrick(
             name="BL45P-MO-BRICK-01",
             type="pmac.Geobrick",
-            PORT="BRICK1port",
+            port="BRICK1port",
             P="BL45P-MO-STEP-01:",
             idlePoll=100,
             movingPoll=500,
         ),
         DlsPmacAsynMotor(
-            PMAC="BL45P-MO-BRICK-01",
+            pmac="BL45P-MO-BRICK-01",
             type="pmac.DlsPmacAsynMotor",
-            P="BL45P-MO-MIRR-01:X1",
+            P="BL45P-MO-THIN-01:X1",
             axis=1,
         ),
     ),

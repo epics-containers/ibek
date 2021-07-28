@@ -4,34 +4,14 @@ instances:
     name: BRICK1port
     IP: 192.168.0.12:1112
 
-  - type: pmac.PmacAsynIPPort
-    name: BRICK2port
-    IP: 192.168.0.12:1112
-
-  - type: pmac.PmacAsynIPPort
-    name: BRICK3port
-    IP: 192.168.0.12:1113
-
-  - type: pmac.PmacAsynIPPort
-    name: BRICK4port
-    IP: 192.168.0.12:1114
-
-  - type: pmac.PmacAsynIPPort
-    name: BRICK5port
-    IP: 192.168.0.12
-
-  - type: pmac.PmacAsynIPPort
-    name: BRICK6port
-    IP: 192.168.0.13
-
   - type: pmac.Geobrick
     name: BL45P-MO-BRICK-01
-    PORT: BRICK1port
+    port: BRICK1port
     P: "BL45P-MO-STEP-01:"
     idlePoll: 100
     movingPoll: 500
 
   - type: pmac.DlsPmacAsynMotor
-    PMAC: BL45P-MO-BRICK-01
+    pmac: BL45P-MO-BRICK-01
     axis: 1
-    P: "BL45P-MO-MIRR-01:X1"
+    P: "BL45P-MO-THIN-01:X1"

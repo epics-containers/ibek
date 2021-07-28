@@ -78,7 +78,7 @@ class Geobrick(EntityInstance):
     # port should match a PmacAsynIPPort name
     # (we don't have a way for schema to verify this at present -
     # TODO I've looked at this with Tom and it may not be possible)
-    PORT: A[str, desc("Asyn port name for PmacAsynIPPort to connect to")] = ""
+    port: A[str, desc("Asyn port name for PmacAsynIPPort to connect to")] = ""
     P: A[str, desc("PV Prefix for all pmac db templates")] = ""
     idlePoll: A[int, desc("Idle Poll Period in ms")] = 100
     movingPoll: A[int, desc("Moving Poll Period in ms")] = 500
@@ -111,7 +111,7 @@ class Geobrick(EntityInstance):
             DatabaseEntry(
                 file="pmacController.template",
                 define_args=(
-                    "PORT={{ PORT }}, "
+                    "port={{ port }}, "
                     "P={{ P }}, "
                     "TIMEOUT={{ TIMEOUT }}, "
                     "FEEDRATE={{ FEEDRATE}}, "
@@ -131,7 +131,7 @@ class Geobrick(EntityInstance):
                 # ControlIP = {{ ControlIP }}, ControlPort = {{ ControlPort }},
                 # ControlMode = {{ ControlMode }}",
                 define_args=(
-                    "PORT={{ PORT }}, "
+                    "port={{ port }}, "
                     "P={{ P }}, "
                     "Description={{ Description }}, "
                     "ControlIP={{ ControlIP }}, "
@@ -152,7 +152,7 @@ class DlsPmacAsynMotor(EntityInstance):
     # port should match a Geobrick or Pmac name
     P: A[str, desc("Device Prefix")] = ""
     M: A[str, desc("Device Suffix")] = ""
-    PMAC: A[str, desc("Prefix of controler's PVs")] = ""
+    pmac: A[str, desc("Prefix of controler's PVs")] = ""
     PORT: A[str, desc("Delta tau motor controller")] = ""
     ADDR: A[int, desc("Address on controller")] = 0
     DESC: A[str, desc("Description, displayed on EDM screen")] = ""

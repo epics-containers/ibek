@@ -96,9 +96,10 @@ class Entity:
         result = template.render(**kwargs)
         return result
 
-    def get_entity_instances(self, EntityInstance, namespace):
-        name = self.name
-        fields = []
+    def get_entity_instances(self, EntityInstance, namespace, module_name):
+        name = f"{module_name}.{self.name}"
+
+        fields = [(str("type"), Literal[name])]
         for arg in self.args:
             if arg.description:
                 fields += [
@@ -106,6 +107,7 @@ class Entity:
                 ]
             else:
                 fields += [(arg.name, getattr(builtins, arg.type))]
+
         namespace[name] = make_dataclass(name, fields, bases=(EntityInstance,))
 
 
@@ -141,7 +143,9 @@ class Support:
         namespace["entityinstance"] = EntityInstance
 
         for entity in self.entities:
-            entity.get_entity_instances(namespace["entityinstance"], namespace)
+            entity.get_entity_instances(
+                namespace["entityinstance"], namespace, self.module
+            )
 
         namespace[self.module] = make_dataclass(
             self.module,

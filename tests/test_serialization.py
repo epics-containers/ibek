@@ -67,18 +67,16 @@ SUPPORT = Support(
             name="PmacAsynIPPort",
             args=(
                 StrArg(
-                    name="port",
+                    name="name",
                     description="Asyn port name",
                     type="str",
                     default=Undefined,
-                    is_id=True,
                 ),
                 StrArg(
                     name="IP",
                     description="IP address of pmac",
                     type="str",
                     default=Undefined,
-                    is_id=False,
                 ),
             ),
             databases=(),
@@ -100,6 +98,12 @@ SUPPORT = Support(
                     name="axis",
                     description="which axis number this motor drives",
                     type="int",
+                    default=Undefined,
+                ),
+                StrArg(
+                    name="P",
+                    description="PV name for this motor",
+                    type="str",
                     default=Undefined,
                 ),
             ),

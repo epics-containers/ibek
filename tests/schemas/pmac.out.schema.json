@@ -14,7 +14,8 @@
             "properties": {
               "type": {
                 "type": "string",
-                "const": "pmac.Geobrick"
+                "const": "pmac.Geobrick",
+                "description": "_test"
               },
               "name": {
                 "type": "string",
@@ -52,9 +53,10 @@
             "properties": {
               "type": {
                 "type": "string",
-                "const": "pmac.PmacAsynIPPort"
+                "const": "pmac.PmacAsynIPPort",
+                "description": "_test"
               },
-              "name": {
+              "port": {
                 "type": "string",
                 "description": "Asyn port name"
               },
@@ -65,7 +67,7 @@
             },
             "required": [
               "type",
-              "name",
+              "port",
               "IP"
             ],
             "additionalProperties": false
@@ -75,7 +77,8 @@
             "properties": {
               "type": {
                 "type": "string",
-                "const": "pmac.DlsPmacAsynMotor"
+                "const": "pmac.DlsPmacAsynMotor",
+                "description": "_test"
               },
               "pmac": {
                 "type": "string",
@@ -84,17 +87,12 @@
               "axis": {
                 "type": "integer",
                 "description": "which axis number this motor drives"
-              },
-              "P": {
-                "type": "string",
-                "description": "PV name for this motor"
               }
             },
             "required": [
               "type",
               "pmac",
-              "axis",
-              "P"
+              "axis"
             ],
             "additionalProperties": false
           }

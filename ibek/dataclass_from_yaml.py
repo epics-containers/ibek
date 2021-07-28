@@ -17,6 +17,4 @@ class yaml_to_dataclass:
 
     def get_module_dataclass(self) -> type:
         """ Creates a dataclass as described in self.yaml_file """
-        # support_instance = self._get_support_instance()
-        # module_dataclass = support_instance.get_module()
         return self._get_support_instance().get_module()

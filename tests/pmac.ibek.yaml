@@ -38,9 +38,8 @@ entities:
   - name: PmacAsynIPPort
     args:
       - type: str
-        name: port
+        name: name
         description: Asyn port name
-        is_id: true
 
       - type: str
         name: IP
@@ -58,6 +57,10 @@ entities:
       - type: int
         name: axis
         description: which axis number this motor drives
+
+      - type: str
+        name: P
+        description: PV name for this motor
 
     databases:
       # TODO more parameters required for pmac_asyn_Motor.template
