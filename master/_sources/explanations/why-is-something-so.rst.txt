@@ -1,7 +1,7 @@
 Why is something the way it is
 ==============================
 
-Often, reading the code will not explain *why* it is written that way. These
-explanations should be grouped together in articles here. They might include
-history of ibek, architectural decisions, or the
-real world tests that influenced the design of ibek.
+useful discussion of yaml schema
+--------------------------------
+
+https://dev.to/brpaz/how-to-create-your-own-auto-completion-for-json-and-yaml-files-on-vs-code-with-the-help-of-json-schema-k1i
