@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>ibek.support &mdash; ibek 0.2+5.g7107162 documentation</title>
+  <title>ibek.support &mdash; ibek 0.2+6.g914da15 documentation</title>
   
 
   
@@ -242,12 +242,15 @@
     <span class="n">cast</span><span class="p">,</span>
 <span class="p">)</span>
 
-<span class="kn">from</span> <span class="nn">apischema</span> <span class="kn">import</span> <span class="n">Undefined</span><span class="p">,</span> <span class="n">UndefinedType</span><span class="p">,</span> <span class="n">deserialize</span><span class="p">,</span> <span class="n">deserializer</span>
+<span class="kn">from</span> <span class="nn">apischema</span> <span class="kn">import</span> <span class="n">Undefined</span><span class="p">,</span> <span class="n">UndefinedType</span><span class="p">,</span> <span class="n">deserialize</span><span class="p">,</span> <span class="n">deserializer</span><span class="p">,</span> <span class="n">schema</span>
 <span class="kn">from</span> <span class="nn">apischema.conversions</span> <span class="kn">import</span> <span class="n">Conversion</span><span class="p">,</span> <span class="n">identity</span>
 <span class="kn">from</span> <span class="nn">typing_extensions</span> <span class="kn">import</span> <span class="n">Annotated</span> <span class="k">as</span> <span class="n">A</span>
 <span class="kn">from</span> <span class="nn">typing_extensions</span> <span class="kn">import</span> <span class="n">Literal</span>
 
-<span class="kn">from</span> <span class="nn">ibek.description</span> <span class="kn">import</span> <span class="n">desc</span>
+
+<span class="k">def</span> <span class="nf">desc</span><span class="p">(</span><span class="n">description</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">schema</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="n">description</span><span class="p">)</span>
+
 
 <span class="n">T</span> <span class="o">=</span> <span class="n">TypeVar</span><span class="p">(</span><span class="s2">&quot;T&quot;</span><span class="p">)</span>
 
