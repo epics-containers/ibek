@@ -14,12 +14,15 @@ from typing import (
     cast,
 )
 
-from apischema import Undefined, UndefinedType, deserialize, deserializer
+from apischema import Undefined, UndefinedType, deserialize, deserializer, schema
 from apischema.conversions import Conversion, identity
 from typing_extensions import Annotated as A
 from typing_extensions import Literal
 
-from ibek.description import desc
+
+def desc(description: str):
+    return schema(description=description)
+
 
 T = TypeVar("T")
 
