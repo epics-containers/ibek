@@ -109,7 +109,7 @@ class Entity:
         """
         We can get a set of Entities by deserializing an ibek support module
         YAML file. This  function creates an EntityInstance class from
-        an Entity. See `../docs/explanations/entities`
+        an Entity. See :ref:`entities`
         """
         # we need to qualify the name with the module so as to avoid cross
         # module name clashes

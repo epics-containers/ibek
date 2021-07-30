@@ -1,9 +1,24 @@
+"""
+Tests for the deserializing of support module yaml files and the rendering
+of scripts and database entries from the in-memory generated
+EntityInstance classes
+"""
 from pathlib import Path
+
+from ruamel.yaml import YAML
 
 from ibek.dataclass_from_yaml import yaml_to_dataclass
 from ibek.render import create_database, make_script
+from ibek.support import Support
+from tests.samples.classes.pmac_support import SUPPORT
 
 sample_yaml = Path(__file__).parent / "samples" / "yaml"
+
+
+def test_deserialize_support() -> None:
+    with open(sample_yaml / "pmac.ibek.yaml") as f:
+        actual = Support.deserialize(YAML().load(f))
+    assert actual == SUPPORT
 
 
 def generate_pmac_classes():

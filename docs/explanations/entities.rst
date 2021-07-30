@@ -1,26 +1,66 @@
+.. _entities:
+
 Entity and Entity Instance
 ==========================
 
 An Entity represents any piece of functionality of an IOC that can be
 configured through database and/or startup script.
 
-Declaring entities and how to configure them is the job of the
-**ibek support module yaml file**. The schema for this file is provided
-by ibek with the command ``ibek ibek-schema``
+Declaring entities and how to configure those Entities is the job of the
+**ibek support module yaml file**. The global schema for this file is provided
+by ibek with the command ``ibek ibek-schema``.
 
-TODO link the test example
+Expand below for the global schema and an example support module YAML file:
+
+    .. raw:: html
+
+        <details>
+        <summary><a>ibek.schema.json</a></summary>
+
+    .. include:: ../../tests/samples/schemas/ibek.schema.json
+        :literal:
+
+    .. raw:: html
+
+        </details>
+
+    .. raw:: html
+
+        <details>
+        <summary><a>pmac.ibek.yaml</a></summary>
+
+    .. include:: ../../tests/samples/yaml/pmac.ibek.yaml
+        :literal:
+
+    .. raw:: html
+
+        </details>
 
 Making use of these entities to describe an IOC instance is the job
 of an **ibek ioc description YAML file**. The schema for this file is
 extracted with the command ``ibek ioc-schema <IBEK_SUPPORT_MODULE_YAML> <OUTPUT_SCHEMA_JSON>``.
 
-TODO link the test example
+Expand below for example ioc description YAML:
+
+    .. raw:: html
+
+        <details>
+        <summary><a>bl45p-mo-ioc-02.pmac.yaml</a></summary>
+
+    .. include:: ../../tests/samples/yaml/bl45p-mo-ioc-02.pmac.yaml
+        :literal:
+
+    .. raw:: html
+
+        </details>
 
 Once you have an **ibek ioc description YAML file** you can generate ioc
 code in the form of a helm chart with the command
 ``ibek build-ioc <IBEK_IOC_DESCRIPTION_YAML>``
 
-It is important to understand the relationship between the classes and instances
+
+To understand the code behind these steps it is
+important to understand the relationship between the classes and instances
 of Entity and EntityInstance subclasses.
 
 - The Entity Class (plus its members' classes: Database, Arg and arg types)
