@@ -1,36 +1,41 @@
-from jinja2 import Template
+from pathlib import Path
 
-from ibek.pmac import DatabaseEntry, EntityInstance, Geobrick, PmacAsynIPPort
+from ibek.dataclass_from_yaml import yaml_to_dataclass
+from ibek.render import create_database, make_script
+
+sample_yaml = Path(__file__).parent / "samples" / "yaml"
 
 
-def test_create_database():
-    """ creates a simple instance of a database and checks that a startup
-    script entry of the correct form is returned """
-    ei = EntityInstance(name="Test Entity", script=["my name is: {{ name }}"])
-    db = [
-        DatabaseEntry(
-            file="database_entry_one.template", define_args="name = {{ name }}"
-        )
-    ]
-    assert (
-        Template(ei.create_database(db)[0]).render(ei.__dict__)
-        == 'dbLoadRecords("database_entry_one.template", "name = Test Entity")'
+def generate_pmac_classes():
+    # create a support object from YAML
+    support = yaml_to_dataclass(str(sample_yaml / "pmac.ibek.yaml"))
+
+    # populate its dataclass namespace
+    support.get_module_dataclass()
+
+    # return the namespace so that callers have access to all of the
+    # generated dataclasses
+    return support.namespace
+
+
+def test_pmac_asyn_ip_port_script():
+    namespace = generate_pmac_classes()
+
+    generated_class = namespace["pmac.PmacAsynIPPort"]
+    pmac_asyn_ip = generated_class(
+        generated_class, name="my_pmac_instance", IP="111.111.111.111"
     )
 
-
-def test_pmac_asyn_ipport_script():
-    pmac_asyn_ipport_instance = PmacAsynIPPort(
-        name="my_pmac_instance", IP="111.111.111.111"
-    )
-    script_templates = pmac_asyn_ipport_instance.create_scripts()
-    assert (
-        Template(script_templates[0]).render(pmac_asyn_ipport_instance.__dict__)
-        == "pmacAsynIPConfigure(my_pmac_instance, 111.111.111.111:1025)"
-    )
+    script_txt = make_script(pmac_asyn_ip)
+    assert script_txt == "pmacAsynIPConfigure(my_pmac_instance, 111.111.111.111:1025)"
 
 
 def test_geobrick_script():
-    pmac_geobrick_instance = Geobrick(
+    namespace = generate_pmac_classes()
+
+    generated_class = namespace["pmac.Geobrick"]
+    pmac_geobrick_instance = generated_class(
+        generated_class,
         name="test_geobrick",
         port="my_asyn_port",
         P="geobrick_one",
@@ -38,26 +43,30 @@ def test_geobrick_script():
         movingPoll=800,
     )
 
-    print(pmac_geobrick_instance.create_scripts())
+    script_txt = make_script(pmac_geobrick_instance)
+
+    assert script_txt == (
+        "pmacCreateController(test_geobrick, my_asyn_port, 0, 8, 800, 200)\n"
+        "pmacCreateAxes(test_geobrick, 8)"
+    )
 
 
 def test_geobrick_database():
-    pmac_geobrick_instance = Geobrick(
+    namespace = generate_pmac_classes()
+
+    generated_class = namespace["pmac.Geobrick"]
+    pmac_geobrick_instance = generated_class(
+        generated_class,
         name="test_geobrick",
         port="my_asyn_port",
         P="geobrick_one",
         idlePoll=200,
         movingPoll=800,
     )
-    db_script_entries = (
-        pmac_geobrick_instance.create_database()
-    )  # returns a list of jinja templates
-    assert Template(db_script_entries[0]).render(pmac_geobrick_instance.__dict__) == (
-        'dbLoadRecords("pmacController.template", "port=my_asyn_port, '
-        "P=geobrick_one, TIMEOUT=200, FEEDRATE=150, CSG0=, CSG1=, CSG2=, "
-        'CSG3=, CSG4=, CSG5=, CSG6=, CSG7=, ")'
-    )
-    assert Template(db_script_entries[1]).render(pmac_geobrick_instance.__dict__) == (
-        'dbLoadRecords("pmacStatus.template", "port=my_asyn_port, '
-        'P=geobrick_one, Description=, ControlIP=, ControlPort=, ControlMode=")'
+
+    db_txt = create_database(pmac_geobrick_instance)
+
+    assert db_txt == (
+        'dbLoadRecords("pmacController.template", "PMAC=geobrick_one")\n'
+        'dbLoadRecords("pmacStatus.template", "PMAC=geobrick_one")'
     )

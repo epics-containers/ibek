@@ -4,6 +4,8 @@ from ruamel.yaml import YAML
 
 from ibek.pmac import DlsPmacAsynMotor, Geobrick, PmacAsynIPPort, PmacIOC
 
+sample_yaml = Path(__file__).parent / "samples" / "yaml"
+
 BL45P_MO_IOC_02 = PmacIOC(
     ioc_name="BL45P_MO_IOC_02",
     instances=(
@@ -29,7 +31,7 @@ BL45P_MO_IOC_02 = PmacIOC(
 
 
 def test_deserialize_bl45p() -> None:
-    with open(Path(__file__).parent / "bl45p-mo-ioc-02.pmac.yaml") as f:
+    with open(sample_yaml / "bl45p-mo-ioc-02.pmac.yaml") as f:
         d = YAML().load(f)
         actual = PmacIOC.deserialize(d)
     assert actual == BL45P_MO_IOC_02

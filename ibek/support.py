@@ -1,25 +1,34 @@
 import builtins
 from builtins import getattr
 from dataclasses import dataclass, make_dataclass
-from typing import Any, Mapping, Optional, Sequence, Type, TypeVar, Union
+from typing import (
+    Any,
+    ClassVar,
+    Dict,
+    Mapping,
+    Optional,
+    Sequence,
+    Type,
+    TypeVar,
+    Union,
+    cast,
+)
 
-from apischema import Undefined, UndefinedType, deserialize, deserializer, schema
+from apischema import Undefined, UndefinedType, deserialize, deserializer
 from apischema.conversions import Conversion, identity
-from jinja2 import Template
 from typing_extensions import Annotated as A
 from typing_extensions import Literal
 
+from ibek.description import desc
+
 T = TypeVar("T")
-
-
-def desc(description: str):
-    return schema(description=description)
 
 
 @dataclass
 class Arg:
     name: A[str, desc("Name of the argument that the IOC instance should pass")]
     description: A[str, desc("Description of what the argument will be used for")]
+    type: str
 
     # https://wyfo.github.io/apischema/examples/subclasses_union/
     def __init_subclass__(cls):
@@ -90,16 +99,27 @@ class Entity:
         Sequence[str], desc("Startup script snippet defined as Jinja template")
     ] = ()
 
-    def format_script(self, **kwargs: Any) -> str:
-        all_lines = "\n".join(self.script)
-        template = Template(all_lines)
-        result = template.render(**kwargs)
-        return result
-
-    def get_entity_instances(self, EntityInstance, namespace, module_name):
+    def get_entity_instances(
+        self,
+        baseclass: Any,
+        namespace: Dict[str, Any],
+        module_name: str,
+        entity: "Entity",
+    ):
+        """
+        We can get a set of Entities by deserializing an ibek support module
+        YAML file. This  function creates an EntityInstance class from
+        an Entity. See `../docs/explanations/entities`
+        """
+        # we need to qualify the name with the module so as to avoid cross
+        # module name clashes
         name = f"{module_name}.{self.name}"
 
+        # put the literal name in as 'type' for this Entity this gives us
+        # a unique key for each of the entity types we may instantiate
         fields = [(str("type"), Literal[name])]
+
+        # add in each of the arguments
         for arg in self.args:
             if arg.description:
                 fields += [
@@ -108,7 +128,24 @@ class Entity:
             else:
                 fields += [(arg.name, getattr(builtins, arg.type))]
 
-        namespace[name] = make_dataclass(name, fields, bases=(EntityInstance,))
+        # make the EntityInstance derived dataclass for this EntityClass
+        entity_instance_cls: EntityInstance = cast(
+            EntityInstance, make_dataclass(name, fields, bases=(baseclass,))
+        )
+
+        # add a reference to the entity class for this entity instance class
+        # (oh boy, that sounds confusing: see `explanations/entities`)
+        setattr(entity_instance_cls, "entity", entity)
+
+        namespace[name] = entity_instance_cls
+
+
+@dataclass
+class EntityInstance:
+    entity: ClassVar[Entity]
+
+    def __init_subclass__(cls) -> None:
+        deserializer(Conversion(identity, source=cls, target=EntityInstance))
 
 
 @dataclass
@@ -120,12 +157,24 @@ class Support:
         Sequence[Entity], desc("The entities an IOC can create using this module")
     ]
 
+    # a global namespace for holding all generated classes
+    namespace: ClassVar[Dict[str, Any]] = {}
+
     def get_module(self):
         """
-        define an EntityInstance base class that is created every time this method
-        is called if this is called in the scope of the Support class or the top
+        define a new EntityInstance base class every time this method is called.
+
+        If this is created in the scope of the Support class or the top
         level of the module subclasses can persist with each call of
         self.get_module causing conflicts
+
+        # TODO is this needed if we fully qualify entity instance types
+        e.g. pmac.PmacAsynIPPort? could we therefore define EntityInstance
+        globally?
+
+        # TODO - moving entity instance out for a moment ...
+        # TODO - also made namespace a CLASS variable of Support - meaning there
+        # is only one and all generated classes must have unique names
         """
 
         @dataclass
@@ -134,20 +183,14 @@ class Support:
             def deserialize(cls: Type[T], d: Mapping[str, Any]) -> T:
                 return deserialize(cls, d)
 
-        @dataclass
-        class EntityInstance:
-            def __init_subclass__(cls) -> None:
-                deserializer(Conversion(identity, source=cls, target=EntityInstance))
-
-        namespace = {}
-        namespace["entityinstance"] = EntityInstance
+        self.namespace["entityinstance"] = EntityInstance
 
         for entity in self.entities:
             entity.get_entity_instances(
-                namespace["entityinstance"], namespace, self.module
+                self.namespace["entityinstance"], self.namespace, self.module, entity,
             )
 
-        namespace[self.module] = make_dataclass(
+        self.namespace[self.module] = make_dataclass(
             self.module,
             [
                 ("ioc_name", A[str, desc("Name of IOC")]),
@@ -161,8 +204,8 @@ class Support:
             ],
             bases=(ModuleSuperclass,),
         )
-        print(namespace["entityinstance"].__subclasses__())
-        return namespace[self.module]
+        print(self.namespace["entityinstance"].__subclasses__())
+        return self.namespace[self.module]
 
     @classmethod
     def deserialize(cls: Type[T], d: Mapping[str, Any]) -> T:

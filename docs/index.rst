@@ -53,14 +53,14 @@ About the documentation
     :name: how-to
     :maxdepth: 1
 
-    how-to/accomplish-a-task
+    how-to/edit_yaml
 
 .. toctree::
     :caption: Explanations
     :name: explanations
     :maxdepth: 1
 
-    explanations/why-is-something-so
+    explanations/entities
 
 .. rst-class:: no-margin-after-ul
 
