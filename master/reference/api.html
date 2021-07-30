@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>API &mdash; ibek 0.2+2.gc8d096e documentation</title>
+  <title>API &mdash; ibek 0.2+4.g6a0030b documentation</title>
   
 
   
@@ -46,7 +46,7 @@
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Contributing" href="contributing.html" />
-    <link rel="prev" title="Why is something the way it is" href="../explanations/why-is-something-so.html" /> 
+    <link rel="prev" title="Entity and Entity Instance" href="../explanations/entities.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -115,11 +115,11 @@
 </ul>
 <p class="caption" role="heading"><span class="caption-text">How-to Guides</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../how-to/accomplish-a-task.html">How to accomplish a task</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../how-to/edit_yaml.html">YAML schema</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Explanations</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../explanations/why-is-something-so.html">Why is something the way it is</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../explanations/entities.html">Entity and Entity Instance</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Reference</span></p>
 <ul class="current">
@@ -253,12 +253,13 @@ using <code class="docutils literal notranslate"><span class="pre">autoclass</sp
 <h3><code class="docutils literal notranslate"><span class="pre">ibek.support</span></code><a class="headerlink" href="#ibek-support" title="Permalink to this headline">¶</a></h3>
 <dl class="py class">
 <dt class="sig sig-object py" id="ibek.support.Arg">
-<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">ibek.support.</span></span><span class="sig-name descname"><span class="pre">Arg</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">description</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ibek/support.html#Arg"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ibek.support.Arg" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">ibek.support.</span></span><span class="sig-name descname"><span class="pre">Arg</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">description</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ibek/support.html#Arg"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ibek.support.Arg" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – Name of the argument that the IOC instance should pass</p></li>
 <li><p><strong>description</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – Description of what the argument will be used for</p></li>
+<li><p><strong>type</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – </p></li>
 </ul>
 </dd>
 </dl>
@@ -358,7 +359,30 @@ using <code class="docutils literal notranslate"><span class="pre">autoclass</sp
 </ul>
 </dd>
 </dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="ibek.support.Entity.get_entity_instances">
+<span class="sig-name descname"><span class="pre">get_entity_instances</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">baseclass</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Any</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">namespace</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">module_name</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">entity</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="#ibek.support.Entity" title="ibek.support.Entity"><span class="pre">ibek.support.Entity</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ibek/support.html#Entity.get_entity_instances"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ibek.support.Entity.get_entity_instances" title="Permalink to this definition">¶</a></dt>
+<dd><p>We can get a set of Entities by deserializing an ibek support module
+YAML file. This  function creates an EntityInstance class from
+an Entity. See <a class="reference internal" href="../explanations/entities.html#entities"><span class="std std-ref">Entity and Entity Instance</span></a></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>baseclass</strong> (<em>typing.Any</em>) – </p></li>
+<li><p><strong>namespace</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.9)"><em>typing.Dict</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em>,</em><em>typing.Any</em><em>]</em>) – </p></li>
+<li><p><strong>module_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – </p></li>
+<li><p><strong>entity</strong> (<a class="reference internal" href="#ibek.support.Entity" title="ibek.support.Entity"><em>Entity</em></a>) – </p></li>
+</ul>
+</dd>
+</dl>
 </dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ibek.support.EntityInstance">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">ibek.support.</span></span><span class="sig-name descname"><span class="pre">EntityInstance</span></span><a class="reference internal" href="../_modules/ibek/support.html#EntityInstance"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ibek.support.EntityInstance" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="ibek.support.Support">
@@ -375,10 +399,16 @@ using <code class="docutils literal notranslate"><span class="pre">autoclass</sp
 <dl class="py method">
 <dt class="sig sig-object py" id="ibek.support.Support.get_module">
 <span class="sig-name descname"><span class="pre">get_module</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ibek/support.html#Support.get_module"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ibek.support.Support.get_module" title="Permalink to this definition">¶</a></dt>
-<dd><p>define an EntityInstance base class that is created every time this method
-is called if this is called in the scope of the Support class or the top
+<dd><p>define a new EntityInstance base class every time this method is called.</p>
+<p>If this is created in the scope of the Support class or the top
 level of the module subclasses can persist with each call of
 self.get_module causing conflicts</p>
+<p># TODO is this needed if we fully qualify entity instance types
+e.g. pmac.PmacAsynIPPort? could we therefore define EntityInstance
+globally?</p>
+<p># TODO - moving entity instance out for a moment …
+# TODO - also made namespace a CLASS variable of Support - meaning there
+# is only one and all generated classes must have unique names</p>
 </dd></dl>
 
 </dd></dl>
@@ -394,7 +424,7 @@ self.get_module causing conflicts</p>
           <footer>
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
         <a href="contributing.html" class="btn btn-neutral float-right" title="Contributing" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
-        <a href="../explanations/why-is-something-so.html" class="btn btn-neutral float-left" title="Why is something the way it is" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../explanations/entities.html" class="btn btn-neutral float-left" title="Entity and Entity Instance" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
     </div>
 
   <hr/>

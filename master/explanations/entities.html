@@ -1,0 +1,620 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>Entity and Entity Instance &mdash; ibek 0.2+4.g6a0030b documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/graphviz.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/theme_overrides.css" type="text/css" />
+
+  
+  
+    <link rel="shortcut icon" href="../_static/ibek-favicon.ico"/>
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="API" href="../reference/api.html" />
+    <link rel="prev" title="YAML schema" href="../how-to/edit_yaml.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: rgb(7, 43, 93)" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> ibek
+          
+
+          
+            
+            <img src="../_static/ibek-logo.svg" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                master
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+<style>
+    /* style mobile top nav to look like main nav */
+    .wy-nav-top {
+        background: {
+                {
+                theme_style_nav_header_background
+            }
+        }
+    }
+</style>
+
+            
+            
+              
+            
+            
+              <p class="caption" role="heading"><span class="caption-text">Tutorials</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/installation.html">Installation Tutorial</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">How-to Guides</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../how-to/edit_yaml.html">YAML schema</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Explanations</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Entity and Entity Instance</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../reference/api.html">API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference/contributing.html">Contributing</a></li>
+</ul>
+
+            
+          
+<!-- Include Index in the sidebar -->
+<!-- https://stackoverflow.com/a/37843854 -->
+<a href="../genindex.html">Index</a>
+<!-- Add versions for selected branches + tags -->
+<p class="caption"><span class="caption-text">Versions</span></p>
+<ul id="versions" />
+<script>
+    // Add any branches to appear in the side pane here, tags will be added below
+    // Will only appear if docs are built and pushed in gh-pages
+    var versions = ['master', 'main'];
+    var dirs = new Set();
+    function addVersion(name) {
+        if (dirs.has(name)) {
+            var li = document.createElement("li");
+            var a = document.createElement("a");
+            a.href = 'https://dls-controls.github.io/ibek/' + name;
+            a.innerText = name;
+            li.appendChild(a)
+            document.getElementById('versions').appendChild(li);
+        }
+    }
+    Promise.all([
+        // Find gh-pages directories and populate `dirs`
+        fetch("https://api.github.com/repos/dls-controls/ibek/contents?ref=gh-pages")
+            .then(response => response.json())
+            .then(data => data.forEach(function (e) {
+                if (e.type == "dir") dirs.add(e.name);
+            })),
+        // Add tags to `versions`
+        fetch('https://api.github.com/repos/dls-controls/ibek/tags')
+            .then(response => response.json())
+            .then(data => data.forEach(function (e) {
+                versions.push(e.name);
+            }))
+    ]).then(_ => versions.forEach(addVersion))
+</script>
+
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">ibek</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Entity and Entity Instance</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="../_sources/explanations/entities.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="entity-and-entity-instance">
+<span id="entities"></span><h1>Entity and Entity Instance<a class="headerlink" href="#entity-and-entity-instance" title="Permalink to this headline">¶</a></h1>
+<p>An Entity represents any piece of functionality of an IOC that can be
+configured through database and/or startup script.</p>
+<p>Declaring entities and how to configure those Entities is the job of the
+<strong>ibek support module yaml file</strong>. The global schema for this file is provided
+by ibek with the command <code class="docutils literal notranslate"><span class="pre">ibek</span> <span class="pre">ibek-schema</span></code>.</p>
+<p>Expand below for the global schema and an example support module YAML file:</p>
+<blockquote>
+<div><details>
+<summary><a>ibek.schema.json</a></summary><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+  <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span>
+  <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="s2">&quot;module&quot;</span><span class="p">:</span> <span class="p">{</span>
+      <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Support module name, normally the repo name&quot;</span>
+    <span class="p">},</span>
+    <span class="s2">&quot;entities&quot;</span><span class="p">:</span> <span class="p">{</span>
+      <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;array&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;items&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span>
+          <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Publish Entity as type &lt;module&gt;.&lt;name&gt; for IOC instances&quot;</span>
+          <span class="p">},</span>
+          <span class="s2">&quot;args&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;array&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;items&quot;</span><span class="p">:</span> <span class="p">{</span>
+              <span class="s2">&quot;anyOf&quot;</span><span class="p">:</span> <span class="p">[</span>
+                <span class="p">{</span>
+                  <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span>
+                  <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="p">{</span>
+                      <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+                      <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Name of the argument that the IOC instance should pass&quot;</span>
+                    <span class="p">},</span>
+                    <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="p">{</span>
+                      <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+                      <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Description of what the argument will be used for&quot;</span>
+                    <span class="p">},</span>
+                    <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="p">{</span>
+                      <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+                      <span class="s2">&quot;const&quot;</span><span class="p">:</span> <span class="s2">&quot;str&quot;</span>
+                    <span class="p">},</span>
+                    <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="p">{</span>
+                      <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="p">[</span>
+                        <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;null&quot;</span>
+                      <span class="p">],</span>
+                      <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;If given, and instance doesn&#39;t supply argument, what value should be used&quot;</span>
+                    <span class="p">},</span>
+                    <span class="s2">&quot;is_id&quot;</span><span class="p">:</span> <span class="p">{</span>
+                      <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;boolean&quot;</span><span class="p">,</span>
+                      <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;If true, instances may refer to this instance by this arg&quot;</span>
+                    <span class="p">}</span>
+                  <span class="p">},</span>
+                  <span class="s2">&quot;required&quot;</span><span class="p">:</span> <span class="p">[</span>
+                    <span class="s2">&quot;name&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;description&quot;</span>
+                  <span class="p">],</span>
+                  <span class="s2">&quot;additionalProperties&quot;</span><span class="p">:</span> <span class="n">false</span>
+                <span class="p">},</span>
+                <span class="p">{</span>
+                  <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span>
+                  <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="p">{</span>
+                      <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+                      <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Name of the argument that the IOC instance should pass&quot;</span>
+                    <span class="p">},</span>
+                    <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="p">{</span>
+                      <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+                      <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Description of what the argument will be used for&quot;</span>
+                    <span class="p">},</span>
+                    <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="p">{</span>
+                      <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+                      <span class="s2">&quot;const&quot;</span><span class="p">:</span> <span class="s2">&quot;int&quot;</span>
+                    <span class="p">},</span>
+                    <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="p">{</span>
+                      <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="p">[</span>
+                        <span class="s2">&quot;integer&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;null&quot;</span>
+                      <span class="p">],</span>
+                      <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;If given, and instance doesn&#39;t supply argument, what value should be used&quot;</span>
+                    <span class="p">}</span>
+                  <span class="p">},</span>
+                  <span class="s2">&quot;required&quot;</span><span class="p">:</span> <span class="p">[</span>
+                    <span class="s2">&quot;name&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;description&quot;</span>
+                  <span class="p">],</span>
+                  <span class="s2">&quot;additionalProperties&quot;</span><span class="p">:</span> <span class="n">false</span>
+                <span class="p">},</span>
+                <span class="p">{</span>
+                  <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span>
+                  <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="p">{</span>
+                      <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+                      <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Name of the argument that the IOC instance should pass&quot;</span>
+                    <span class="p">},</span>
+                    <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="p">{</span>
+                      <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+                      <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Description of what the argument will be used for&quot;</span>
+                    <span class="p">},</span>
+                    <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="p">{</span>
+                      <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+                      <span class="s2">&quot;const&quot;</span><span class="p">:</span> <span class="s2">&quot;float&quot;</span>
+                    <span class="p">},</span>
+                    <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="p">{</span>
+                      <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="p">[</span>
+                        <span class="s2">&quot;number&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;null&quot;</span>
+                      <span class="p">],</span>
+                      <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;If given, and instance doesn&#39;t supply argument, what value should be used&quot;</span>
+                    <span class="p">}</span>
+                  <span class="p">},</span>
+                  <span class="s2">&quot;required&quot;</span><span class="p">:</span> <span class="p">[</span>
+                    <span class="s2">&quot;name&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;description&quot;</span>
+                  <span class="p">],</span>
+                  <span class="s2">&quot;additionalProperties&quot;</span><span class="p">:</span> <span class="n">false</span>
+                <span class="p">},</span>
+                <span class="p">{</span>
+                  <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span>
+                  <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="p">{</span>
+                      <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+                      <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Name of the argument that the IOC instance should pass&quot;</span>
+                    <span class="p">},</span>
+                    <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="p">{</span>
+                      <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+                      <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Description of what the argument will be used for&quot;</span>
+                    <span class="p">},</span>
+                    <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="p">{</span>
+                      <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+                      <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Entity class, &lt;module&gt;.&lt;entity_name&gt;&quot;</span>
+                    <span class="p">},</span>
+                    <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="p">{</span>
+                      <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="p">[</span>
+                        <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;null&quot;</span>
+                      <span class="p">],</span>
+                      <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;If given, and instance doesn&#39;t supply argument, what value should be used&quot;</span>
+                    <span class="p">}</span>
+                  <span class="p">},</span>
+                  <span class="s2">&quot;required&quot;</span><span class="p">:</span> <span class="p">[</span>
+                    <span class="s2">&quot;name&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;description&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;type&quot;</span>
+                  <span class="p">],</span>
+                  <span class="s2">&quot;additionalProperties&quot;</span><span class="p">:</span> <span class="n">false</span>
+                <span class="p">}</span>
+              <span class="p">]</span>
+            <span class="p">},</span>
+            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;The arguments IOC instance should supply&quot;</span>
+          <span class="p">},</span>
+          <span class="s2">&quot;databases&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;array&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;items&quot;</span><span class="p">:</span> <span class="p">{</span>
+              <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span>
+              <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;file&quot;</span><span class="p">:</span> <span class="p">{</span>
+                  <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+                  <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Filename of the database template in &lt;module_root&gt;/db&quot;</span>
+                <span class="p">},</span>
+                <span class="s2">&quot;include_args&quot;</span><span class="p">:</span> <span class="p">{</span>
+                  <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;array&quot;</span><span class="p">,</span>
+                  <span class="s2">&quot;items&quot;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
+                  <span class="p">},</span>
+                  <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;List of args to pass through to database&quot;</span>
+                <span class="p">},</span>
+                <span class="s2">&quot;define_args&quot;</span><span class="p">:</span> <span class="p">{</span>
+                  <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+                  <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Arg string list to be generated as Jinja template&quot;</span>
+                <span class="p">}</span>
+              <span class="p">},</span>
+              <span class="s2">&quot;required&quot;</span><span class="p">:</span> <span class="p">[</span>
+                <span class="s2">&quot;file&quot;</span>
+              <span class="p">],</span>
+              <span class="s2">&quot;additionalProperties&quot;</span><span class="p">:</span> <span class="n">false</span>
+            <span class="p">},</span>
+            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Databases to instantiate&quot;</span>
+          <span class="p">},</span>
+          <span class="s2">&quot;script&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;array&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;items&quot;</span><span class="p">:</span> <span class="p">{</span>
+              <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
+            <span class="p">},</span>
+            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Startup script snippet defined as Jinja template&quot;</span>
+          <span class="p">}</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;required&quot;</span><span class="p">:</span> <span class="p">[</span>
+          <span class="s2">&quot;name&quot;</span>
+        <span class="p">],</span>
+        <span class="s2">&quot;additionalProperties&quot;</span><span class="p">:</span> <span class="n">false</span>
+      <span class="p">},</span>
+      <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;The entities an IOC can create using this module&quot;</span>
+    <span class="p">}</span>
+  <span class="p">},</span>
+  <span class="s2">&quot;required&quot;</span><span class="p">:</span> <span class="p">[</span>
+    <span class="s2">&quot;module&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;entities&quot;</span>
+  <span class="p">],</span>
+  <span class="s2">&quot;additionalProperties&quot;</span><span class="p">:</span> <span class="n">false</span><span class="p">,</span>
+  <span class="s2">&quot;$schema&quot;</span><span class="p">:</span> <span class="s2">&quot;http://json-schema.org/draft/2019-09/schema#&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</details><details>
+<summary><a>pmac.ibek.yaml</a></summary><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">module</span><span class="p">:</span> <span class="n">pmac</span>
+<span class="n">entities</span><span class="p">:</span>
+  <span class="o">-</span> <span class="n">name</span><span class="p">:</span> <span class="n">Geobrick</span>
+    <span class="n">args</span><span class="p">:</span>
+      <span class="o">-</span> <span class="nb">type</span><span class="p">:</span> <span class="nb">str</span>
+        <span class="n">name</span><span class="p">:</span> <span class="n">name</span>
+        <span class="n">description</span><span class="p">:</span> <span class="n">Name</span> <span class="n">to</span> <span class="n">use</span> <span class="k">for</span> <span class="n">the</span> <span class="n">geobrick</span><span class="s1">&#39;s asyn port</span>
+        <span class="n">is_id</span><span class="p">:</span> <span class="n">true</span>
+
+      <span class="o">-</span> <span class="nb">type</span><span class="p">:</span> <span class="nb">str</span> <span class="c1"># pmac.PmacAsynIPPort</span>
+        <span class="n">name</span><span class="p">:</span> <span class="n">port</span>
+        <span class="n">description</span><span class="p">:</span> <span class="n">Asyn</span> <span class="n">port</span> <span class="n">name</span> <span class="k">for</span> <span class="n">PmacAsynIPPort</span> <span class="n">to</span> <span class="n">connect</span> <span class="n">to</span>
+
+      <span class="o">-</span> <span class="nb">type</span><span class="p">:</span> <span class="nb">str</span>
+        <span class="n">name</span><span class="p">:</span> <span class="n">P</span>
+        <span class="n">description</span><span class="p">:</span> <span class="n">PV</span> <span class="n">Prefix</span> <span class="k">for</span> <span class="nb">all</span> <span class="n">pmac</span> <span class="n">db</span> <span class="n">templates</span>
+
+      <span class="o">-</span> <span class="nb">type</span><span class="p">:</span> <span class="nb">int</span>
+        <span class="n">name</span><span class="p">:</span> <span class="n">idlePoll</span>
+        <span class="n">description</span><span class="p">:</span> <span class="n">Idle</span> <span class="n">Poll</span> <span class="n">Period</span> <span class="ow">in</span> <span class="n">ms</span>
+
+      <span class="o">-</span> <span class="nb">type</span><span class="p">:</span> <span class="nb">int</span>
+        <span class="n">name</span><span class="p">:</span> <span class="n">movingPoll</span>
+        <span class="n">description</span><span class="p">:</span> <span class="n">Moving</span> <span class="n">Poll</span> <span class="n">Period</span> <span class="ow">in</span> <span class="n">ms</span>
+
+    <span class="c1"># axes hard coded to 8 for geobrick (builder.py counted the axes created)</span>
+    <span class="c1"># TODO is num_axes is an example of something hard to do in this new approach?</span>
+    <span class="n">script</span><span class="p">:</span>
+      <span class="o">-</span> <span class="n">pmacCreateController</span><span class="p">({{</span><span class="n">name</span><span class="p">}},</span> <span class="p">{{</span><span class="n">port</span><span class="p">}},</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="p">{{</span><span class="n">movingPoll</span><span class="p">}},</span> <span class="p">{{</span><span class="n">idlePoll</span><span class="p">}})</span>
+      <span class="o">-</span> <span class="n">pmacCreateAxes</span><span class="p">({{</span><span class="n">name</span><span class="p">}},</span> <span class="mi">8</span><span class="p">)</span>
+
+    <span class="n">databases</span><span class="p">:</span>
+      <span class="o">-</span> <span class="n">file</span><span class="p">:</span> <span class="n">pmacController</span><span class="o">.</span><span class="n">template</span>
+        <span class="n">define_args</span><span class="p">:</span> <span class="n">PMAC</span><span class="o">=</span><span class="p">{{</span> <span class="n">P</span> <span class="p">}}</span>
+      <span class="o">-</span> <span class="n">file</span><span class="p">:</span> <span class="n">pmacStatus</span><span class="o">.</span><span class="n">template</span>
+        <span class="n">define_args</span><span class="p">:</span> <span class="n">PMAC</span><span class="o">=</span><span class="p">{{</span> <span class="n">P</span> <span class="p">}}</span>
+
+  <span class="o">-</span> <span class="n">name</span><span class="p">:</span> <span class="n">PmacAsynIPPort</span>
+    <span class="n">args</span><span class="p">:</span>
+      <span class="o">-</span> <span class="nb">type</span><span class="p">:</span> <span class="nb">str</span>
+        <span class="n">name</span><span class="p">:</span> <span class="n">name</span>
+        <span class="n">description</span><span class="p">:</span> <span class="n">Asyn</span> <span class="n">port</span> <span class="n">name</span>
+
+      <span class="o">-</span> <span class="nb">type</span><span class="p">:</span> <span class="nb">str</span>
+        <span class="n">name</span><span class="p">:</span> <span class="n">IP</span>
+        <span class="n">description</span><span class="p">:</span> <span class="n">IP</span> <span class="n">address</span> <span class="n">of</span> <span class="n">pmac</span>
+
+    <span class="n">script</span><span class="p">:</span>
+      <span class="o">-</span> <span class="n">pmacAsynIPConfigure</span><span class="p">({{</span><span class="n">name</span><span class="p">}},</span> <span class="p">{{</span><span class="n">IP</span> <span class="o">+</span> <span class="s2">&quot;&quot;</span> <span class="k">if</span> <span class="s2">&quot;:&quot;</span> <span class="ow">in</span> <span class="n">IP</span> <span class="k">else</span> <span class="n">IP</span> <span class="o">+</span> <span class="s2">&quot;:1025&quot;</span><span class="p">}})</span>
+
+  <span class="o">-</span> <span class="n">name</span><span class="p">:</span> <span class="n">DlsPmacAsynMotor</span>
+    <span class="n">args</span><span class="p">:</span>
+      <span class="o">-</span> <span class="nb">type</span><span class="p">:</span> <span class="nb">str</span> <span class="c1"># pmac.Geobrick</span>
+        <span class="n">name</span><span class="p">:</span> <span class="n">pmac</span>
+        <span class="n">description</span><span class="p">:</span> <span class="n">PMAC</span> <span class="n">to</span> <span class="n">attach</span> <span class="n">to</span>
+
+      <span class="o">-</span> <span class="nb">type</span><span class="p">:</span> <span class="nb">int</span>
+        <span class="n">name</span><span class="p">:</span> <span class="n">axis</span>
+        <span class="n">description</span><span class="p">:</span> <span class="n">which</span> <span class="n">axis</span> <span class="n">number</span> <span class="n">this</span> <span class="n">motor</span> <span class="n">drives</span>
+
+      <span class="o">-</span> <span class="nb">type</span><span class="p">:</span> <span class="nb">str</span>
+        <span class="n">name</span><span class="p">:</span> <span class="n">P</span>
+        <span class="n">description</span><span class="p">:</span> <span class="n">PV</span> <span class="n">name</span> <span class="k">for</span> <span class="n">this</span> <span class="n">motor</span>
+
+    <span class="n">databases</span><span class="p">:</span>
+      <span class="c1"># TODO more parameters required for pmac_asyn_Motor.template</span>
+      <span class="o">-</span> <span class="n">file</span><span class="p">:</span> <span class="n">pmac_asyn_Motor</span><span class="o">.</span><span class="n">template</span>
+        <span class="n">define_args</span><span class="p">:</span> <span class="n">PMAC</span><span class="o">=</span><span class="p">{{</span> <span class="n">pmac</span><span class="o">.</span><span class="n">P</span> <span class="p">}}</span>
+</pre></div>
+</div>
+</details></div></blockquote>
+<p>Making use of these entities to describe an IOC instance is the job
+of an <strong>ibek ioc description YAML file</strong>. The schema for this file is
+extracted with the command <code class="docutils literal notranslate"><span class="pre">ibek</span> <span class="pre">ioc-schema</span> <span class="pre">&lt;IBEK_SUPPORT_MODULE_YAML&gt;</span> <span class="pre">&lt;OUTPUT_SCHEMA_JSON&gt;</span></code>.</p>
+<p>Expand below for example ioc description YAML:</p>
+<blockquote>
+<div><details>
+<summary><a>bl45p-mo-ioc-02.pmac.yaml</a></summary><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ioc_name</span><span class="p">:</span> <span class="n">BL45P_MO_IOC_02</span>
+<span class="n">instances</span><span class="p">:</span>
+  <span class="o">-</span> <span class="nb">type</span><span class="p">:</span> <span class="n">pmac</span><span class="o">.</span><span class="n">PmacAsynIPPort</span>
+    <span class="n">name</span><span class="p">:</span> <span class="n">BRICK1port</span>
+    <span class="n">IP</span><span class="p">:</span> <span class="mf">192.168.0.12</span><span class="p">:</span><span class="mi">1112</span>
+
+  <span class="o">-</span> <span class="nb">type</span><span class="p">:</span> <span class="n">pmac</span><span class="o">.</span><span class="n">Geobrick</span>
+    <span class="n">name</span><span class="p">:</span> <span class="n">BL45P</span><span class="o">-</span><span class="n">MO</span><span class="o">-</span><span class="n">BRICK</span><span class="o">-</span><span class="mi">01</span>
+    <span class="n">port</span><span class="p">:</span> <span class="n">BRICK1port</span>
+    <span class="n">P</span><span class="p">:</span> <span class="s2">&quot;BL45P-MO-STEP-01:&quot;</span>
+    <span class="n">idlePoll</span><span class="p">:</span> <span class="mi">100</span>
+    <span class="n">movingPoll</span><span class="p">:</span> <span class="mi">500</span>
+
+  <span class="o">-</span> <span class="nb">type</span><span class="p">:</span> <span class="n">pmac</span><span class="o">.</span><span class="n">DlsPmacAsynMotor</span>
+    <span class="n">pmac</span><span class="p">:</span> <span class="n">BL45P</span><span class="o">-</span><span class="n">MO</span><span class="o">-</span><span class="n">BRICK</span><span class="o">-</span><span class="mi">01</span>
+    <span class="n">axis</span><span class="p">:</span> <span class="mi">1</span>
+    <span class="n">P</span><span class="p">:</span> <span class="s2">&quot;BL45P-MO-THIN-01:X1&quot;</span>
+</pre></div>
+</div>
+</details></div></blockquote>
+<p>Once you have an <strong>ibek ioc description YAML file</strong> you can generate ioc
+code in the form of a helm chart with the command
+<code class="docutils literal notranslate"><span class="pre">ibek</span> <span class="pre">build-ioc</span> <span class="pre">&lt;IBEK_IOC_DESCRIPTION_YAML&gt;</span></code></p>
+<p>To understand the code behind these steps it is
+important to understand the relationship between the classes and instances
+of Entity and EntityInstance subclasses.</p>
+<ul class="simple">
+<li><p>The Entity Class (plus its members’ classes: Database, Arg and arg types)</p>
+<ul>
+<li><p>generates the global schema file <strong>ibek.schema.json</strong></p></li>
+<li><p>determines what a <strong>support module YAML file</strong> may look like</p></li>
+</ul>
+</li>
+<li><p>Entity Class instances</p>
+<ul>
+<li><p>defined by deserialising a <strong>support module YAML file</strong>.</p></li>
+<li><p>generate a <strong>support module schema JSON file</strong></p></li>
+<li><p>generate a set of in memory EntityInstance Classes</p></li>
+</ul>
+</li>
+<li><p>EntityInstance Classes</p>
+<ul>
+<li><p>generated by the previous step</p></li>
+<li><p>determine what an <strong>IOC definition YAML file</strong> may look like</p></li>
+<li><p>each hold a reference to the Entity Class instance that generated them</p></li>
+</ul>
+</li>
+<li><p>EntityInstance class instances</p>
+<ul>
+<li><p>defined in an <strong>IOC definition YAML file</strong></p></li>
+<li><p>hold a values for each of the args</p></li>
+<li><p>generate the ioc helm chart by combining</p>
+<ul>
+<li><p>the arg values</p></li>
+<li><p>the database and script templates from their Entity Class instance</p></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="../reference/api.html" class="btn btn-neutral float-right" title="API" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="../how-to/edit_yaml.html" class="btn btn-neutral float-left" title="YAML schema" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2021, Diamond Light Source.
+
+    </p>
+  </div> 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
