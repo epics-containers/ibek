@@ -1,8 +1,14 @@
+# noqa: E501
+
 from apischema.utils import Undefined
 
 from ibek.support import Database, Entity, FloatArg, IntArg, StrArg, Support
 
 # this represents the generated class resulting from deserializing pmac.ibek.yaml
+# NOTE when the schema changes slightly you can re-create this file by breaking
+# into the test_deserialize_support and pasting the value of 'actual' here
+# afterward run:
+#    pipenv run black --experimental-string-processing .
 
 SUPPORT = Support(
     module="pmac",
@@ -57,7 +63,8 @@ SUPPORT = Support(
                 ),
             ),
             script=(
-                "pmacCreateController({{name}}, {{port}}, 0, 8, {{movingPoll}}, {{idlePoll}})",
+                "pmacCreateController({{name}}, {{PORT}}, 0, 8, {{movingPoll}},"
+                " {{idlePoll}})",
                 "pmacCreateAxes({{name}}, 8)",
             ),
         ),
@@ -81,7 +88,8 @@ SUPPORT = Support(
             ),
             databases=(),
             script=(
-                'pmacAsynIPConfigure({{name}}, {{IP + "" if ":" in IP else IP + ":1025"}})',
+                'pmacAsynIPConfigure({{name}}, {{IP + "" if ":" in IP else IP +'
+                ' ":1025"}})',
             ),
         ),
         Entity(
@@ -391,7 +399,10 @@ SUPPORT = Support(
                 ),
                 StrArg(
                     name="alh",
-                    description="Set this to alh to add the motor to the alarm handler and send emails",
+                    description=(
+                        "Set this to alh to add the motor to the alarm handler and send"
+                        " emails"
+                    ),
                     type="str",
                     default=" ",
                     is_id=False,
@@ -412,7 +423,9 @@ SUPPORT = Support(
                 ),
                 StrArg(
                     name="HOME",
-                    description="Prefix for autohome instance. Defaults to $(P) If unspecified",
+                    description=(
+                        "Prefix for autohome instance. Defaults to $(P) If unspecified"
+                    ),
                     type="str",
                     default="$(P)",
                     is_id=False,
@@ -429,7 +442,27 @@ SUPPORT = Support(
                 Database(
                     file="$(PMAC)/db/dls_pmac_asyn_motor.template",
                     include_args=(),
-                    define_args="P={{ P }},\nM={{ M }},\nPORT={{ PORT }},\nADDR={{ ADDR }},\nDESC={{ DESC }},\nMRES={{ MRES }},\nVELO={{ VELO }},\nPREC={{ PREV }},\nEGU={{ EGU }},\nTWV={{ TWV }},\nDTYP={{ DTYP }},\nDIR={{ DIR }},\nVBAS={{ VBAS }},\nVMAX={{ VMAX }},\nACCL={{ ACCL }},\nBDST={{ BDST }},\nBVEL={{ BVEL }},\nBACC={{ BACC }},\nDHLM={{ DHLM }},\nDLLM={{ DLLM }},\nHLM={{ HLM }},\nLLM={{ LLM }},\nHLSV={{ HLSV }},\nINIT={{ INIT }},\nSREV={{ SREV }},\nRRES={{ RRES }},\nERES={{ ERES }},\nJAR={{ JAR }},\nUEIP={{ UEIP }},\nRDBL={{ RDBL }},\nRLINK={{ RLINK }},\nRTRY={{ RTRY }},\nDLY={{ DLY }},\nOFF={{ OFF }},\nRDBD={{ RDBD }},\nFOFF={{ FOFF }},\nADEL={{ ADEL }},\nNTM={{ NTM }},\nFEHIGH={{ FEHEIGH }},\nFEHIHI={{ FEHIHI }},\nFEHHSV={{ FEHHSV }},\nFEHSV={{ FEHSV }},\nSCALE={{ SCALE }},\nHOMEVIS={{ HOMEVIS }},\nHOMEVISSTR={{  HOMEVISSTR  }},\nname={{ name }},\nalh={{ alh }},\ngda_name={{ gda_name }},\ngda_desc={{ gda_desc }},\nSPORT={{ SPORT }},\nHOME={{ HOME }},\nPMAC={{ PMAC }},\nALLOW_HOMED_SET={{ ALLOW_HOMED_SET }}\n",
+                    define_args=(
+                        "P={{ P }},\nM={{ M }},\nPORT={{ PORT }},\nADDR={{ ADDR"
+                        " }},\nDESC={{ DESC }},\nMRES={{ MRES }},\nVELO={{ VELO"
+                        " }},\nPREC={{ PREV }},\nEGU={{ EGU }},\nTWV={{ TWV"
+                        " }},\nDTYP={{ DTYP }},\nDIR={{ DIR }},\nVBAS={{ VBAS"
+                        " }},\nVMAX={{ VMAX }},\nACCL={{ ACCL }},\nBDST={{ BDST"
+                        " }},\nBVEL={{ BVEL }},\nBACC={{ BACC }},\nDHLM={{ DHLM"
+                        " }},\nDLLM={{ DLLM }},\nHLM={{ HLM }},\nLLM={{ LLM"
+                        " }},\nHLSV={{ HLSV }},\nINIT={{ INIT }},\nSREV={{ SREV"
+                        " }},\nRRES={{ RRES }},\nERES={{ ERES }},\nJAR={{ JAR"
+                        " }},\nUEIP={{ UEIP }},\nRDBL={{ RDBL }},\nRLINK={{ RLINK"
+                        " }},\nRTRY={{ RTRY }},\nDLY={{ DLY }},\nOFF={{ OFF"
+                        " }},\nRDBD={{ RDBD }},\nFOFF={{ FOFF }},\nADEL={{ ADEL"
+                        " }},\nNTM={{ NTM }},\nFEHIGH={{ FEHEIGH }},\nFEHIHI={{ FEHIHI"
+                        " }},\nFEHHSV={{ FEHHSV }},\nFEHSV={{ FEHSV }},\nSCALE={{ SCALE"
+                        " }},\nHOMEVIS={{ HOMEVIS }},\nHOMEVISSTR={{  HOMEVISSTR "
+                        " }},\nname={{ name }},\nalh={{ alh }},\ngda_name={{ gda_name"
+                        " }},\ngda_desc={{ gda_desc }},\nSPORT={{ SPORT }},\nHOME={{"
+                        " HOME }},\nPMAC={{ PMAC }},\nALLOW_HOMED_SET={{"
+                        " ALLOW_HOMED_SET }}\n"
+                    ),
                 ),
             ),
             script=(),

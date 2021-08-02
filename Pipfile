@@ -5,7 +5,7 @@ verify_ssl = true
 
 [dev-packages]
 # Pinning black stops us having to allow pre-releases globally
-black = "==19.10b0"
+black = "*"
 # Pins to make lockfile usable on multiple Python versions and platforms
 mypy = "*"
 atomicwrites = "*"
@@ -28,6 +28,7 @@ ibek = {editable = true,path = "."}
 typer = "*"
 apischema = "==0.14.7"
 autopep8 = "*"
+black = "*"
 
 [scripts]
 tests = "python -m pytest"
@@ -35,3 +36,6 @@ docs = "sphinx-build -EWT --keep-going docs build/html"
 build = "python setup.py sdist bdist_wheel"
 # Delete any files that git ignore hides from us
 gitclean = "git clean -fdX"
+
+[pipenv]
+allow_prereleases = true

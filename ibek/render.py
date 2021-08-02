@@ -10,7 +10,7 @@ T = TypeVar("T")
 
 @dataclass
 class DatabaseEntry:
-    """ Wrapper for database entries. """
+    """Wrapper for database entries."""
 
     file: str
     define_args: str

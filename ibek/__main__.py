@@ -52,7 +52,7 @@ def ioc_schema(
     output: Path = typer.Argument(..., help="The filename to write the schema to"),
 ):
 
-    """ Create a json schema from a <support_module>.ibek.yaml file """
+    """Create a json schema from a <support_module>.ibek.yaml file"""
     ioc_class = yaml_to_dataclass(str(description)).get_module_dataclass()
 
     schema = json.dumps(deserialization_schema(ioc_class), indent=2)

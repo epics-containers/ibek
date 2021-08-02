@@ -26,7 +26,7 @@ entities:
     # axes hard coded to 8 for geobrick (builder.py counted the axes created)
     # TODO is num_axes is an example of something hard to do in this new approach?
     script:
-      - pmacCreateController({{name}}, {{port}}, 0, 8, {{movingPoll}}, {{idlePoll}})
+      - pmacCreateController({{name}}, {{PORT}}, 0, 8, {{movingPoll}}, {{idlePoll}})
       - pmacCreateAxes({{name}}, 8)
 
     databases:

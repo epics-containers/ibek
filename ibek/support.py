@@ -5,7 +5,6 @@ from typing import (
     Any,
     ClassVar,
     Dict,
-    Iterable,
     List,
     Mapping,
     Optional,
@@ -39,7 +38,7 @@ are worked around here but I need to understand properly what is happening:
 
 - str default "" == no default
     - using " " for now
-- int default 0 == no default
+- int default 0 or null == no default
     - using "0" and added str type to IntArg
 - float values in json have a trailing 'f' and this comes back as str on deserialize
     - added str type to FloatArg
@@ -89,7 +88,9 @@ class FloatArg(Arg):
     """An argument with a float value"""
 
     type: Literal["float"] = "float"
-    default: Default[str] = Undefined
+    # FloatArg defaults always look like str of the form "0.5f"
+    # TODO is it a bug in apischema deserialize
+    default: Default[Union[float, str]] = Undefined
 
 
 @dataclass
@@ -140,23 +141,24 @@ class Entity:
 
         # put the literal name in as 'type' for this Entity this gives us
         # a unique key for each of the entity types we may instantiate
-        fields: Iterable[
-            Union[Tuple[str], Tuple[str, type], Tuple[str, type, Field[Any]]]
-        ] = [(str("type"), Literal[name])]
+        fields: List[Any] = [(str("type"), Literal[name])]
 
         # add in each of the arguments
 
         for arg in self.args:
-            this_field: Union[
-                Tuple[str], Tuple[str, type], Tuple[str, type, Field[Any]]
-            ] = (arg.name,)
+            this_field: Union[str, Tuple[str, type], Tuple[str, type, Field[Any]]] = ""
 
             if arg.description:
-                this_field += (A[getattr(builtins, arg.type), desc(arg.description)],)
+                this_field = (
+                    arg.name,
+                    A[getattr(builtins, arg.type), desc(arg.description)],
+                )
             else:
-                this_field += (getattr(builtins, arg.type),)
+                this_field = (arg.name, getattr(builtins, arg.type))
             if arg.default:
-                this_field += (field(default=arg.default),)
+                default: Field[Any] = field(default=arg.default)
+                this_field += (default,)
+
             fields.append(this_field)
 
         # make the EntityInstance derived dataclass for this EntityClass
@@ -218,7 +220,10 @@ class Support:
 
         for entity in self.entities:
             entity.get_entity_instances(
-                self.namespace["entityinstance"], self.namespace, self.module, entity,
+                self.namespace["entityinstance"],
+                self.namespace,
+                self.module,
+                entity,
             )
 
         self.namespace[self.module] = make_dataclass(

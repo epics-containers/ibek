@@ -18,5 +18,5 @@ def test_ioc_schema():
 
 
 def test_deserialization():
-    """ test that given an schema-adherant yaml file that this
+    """test that given an schema-adherant yaml file that this
     is deserialized without error to an object of the correct form"""

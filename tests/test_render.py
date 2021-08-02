@@ -52,7 +52,7 @@ def test_geobrick_script():
     pmac_geobrick_instance = generated_class(
         generated_class,
         name="test_geobrick",
-        port="my_asyn_port",
+        PORT="my_asyn_port",
         P="geobrick_one",
         idlePoll=200,
         movingPoll=800,
@@ -60,8 +60,9 @@ def test_geobrick_script():
 
     script_txt = make_script(pmac_geobrick_instance)
 
-    assert script_txt == (
-        "pmacCreateController(test_geobrick, my_asyn_port, 0, 8, 800, 200)\n"
+    assert (
+        script_txt
+        == "pmacCreateController(test_geobrick, my_asyn_port, 0, 8, 800, 200)\n"
         "pmacCreateAxes(test_geobrick, 8)"
     )
 
@@ -73,7 +74,7 @@ def test_geobrick_database():
     pmac_geobrick_instance = generated_class(
         generated_class,
         name="test_geobrick",
-        port="my_asyn_port",
+        PORT="my_asyn_port",
         P="geobrick_one",
         idlePoll=200,
         movingPoll=800,
@@ -81,7 +82,7 @@ def test_geobrick_database():
 
     db_txt = create_database(pmac_geobrick_instance)
 
-    assert db_txt == (
-        'dbLoadRecords("pmacController.template", "PMAC=geobrick_one")\n'
+    assert (
+        db_txt == 'dbLoadRecords("pmacController.template", "PMAC=geobrick_one")\n'
         'dbLoadRecords("pmacStatus.template", "PMAC=geobrick_one")'
     )

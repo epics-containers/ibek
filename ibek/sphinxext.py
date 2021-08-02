@@ -56,7 +56,8 @@ def process_docstring(app, what, name, obj, options, lines):
                 description = ""
             type_name = getattr(typ, "__name__", str(typ)).replace(" ", "")
             lines.insert(
-                index, f":param {type_name} {name}: {description}",
+                index,
+                f":param {type_name} {name}: {description}",
             )
             index += 1
         lines.insert(index, "")
