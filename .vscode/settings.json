@@ -15,9 +15,11 @@
         "source.organizeImports": true
     },
     "yaml.schemas": {
-        "tests/ibek.schema.json": [
+        "tests/samples/schemas/ibek.schema.json": [
             "*.ibek.yaml"
+        ],
+        "tests/samples/schemas/pmac.schema.json": [
+            "*.pmac.yaml"
         ]
     },
-    "python.pythonPath": "/Users/richardparke/.local/share/virtualenvs/ibek-6J3sZR5W/bin/python"
 }

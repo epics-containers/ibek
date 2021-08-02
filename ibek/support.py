@@ -1,13 +1,16 @@
 import builtins
 from builtins import getattr
-from dataclasses import dataclass, make_dataclass
+from dataclasses import Field, dataclass, field, make_dataclass
 from typing import (
     Any,
     ClassVar,
     Dict,
+    Iterable,
+    List,
     Mapping,
     Optional,
     Sequence,
+    Tuple,
     Type,
     TypeVar,
     Union,
@@ -32,6 +35,7 @@ class Arg:
     name: A[str, desc("Name of the argument that the IOC instance should pass")]
     description: A[str, desc("Description of what the argument will be used for")]
     type: str
+    default: Any
 
     # https://wyfo.github.io/apischema/examples/subclasses_union/
     def __init_subclass__(cls):
@@ -120,16 +124,24 @@ class Entity:
 
         # put the literal name in as 'type' for this Entity this gives us
         # a unique key for each of the entity types we may instantiate
-        fields = [(str("type"), Literal[name])]
+        fields: Iterable[
+            Union[Tuple[str], Tuple[str, type], Tuple[str, type, Field[Any]]]
+        ] = [(str("type"), Literal[name])]
 
         # add in each of the arguments
+
         for arg in self.args:
+            this_field: Union[
+                Tuple[str], Tuple[str, type], Tuple[str, type, Field[Any]]
+            ] = (arg.name,)
+
             if arg.description:
-                fields += [
-                    (arg.name, A[getattr(builtins, arg.type), desc(arg.description)])
-                ]
+                this_field += (A[getattr(builtins, arg.type), desc(arg.description)],)
             else:
-                fields += [(arg.name, getattr(builtins, arg.type))]
+                this_field += (getattr(builtins, arg.type),)
+            if arg.default:
+                this_field += (field(default=arg.default),)
+            fields.append(this_field)
 
         # make the EntityInstance derived dataclass for this EntityClass
         entity_instance_cls: EntityInstance = cast(

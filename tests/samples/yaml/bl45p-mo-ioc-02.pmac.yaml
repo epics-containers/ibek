@@ -6,12 +6,19 @@ instances:
 
   - type: pmac.Geobrick
     name: BL45P-MO-BRICK-01
-    port: BRICK1port
+    PORT: BRICK1port
     P: "BL45P-MO-STEP-01:"
     idlePoll: 100
     movingPoll: 500
 
   - type: pmac.DlsPmacAsynMotor
-    pmac: BL45P-MO-BRICK-01
+    name: X1 motor
+    # TODO previously would have been an object pointing to a pmac.Geobrick
+    PMAC: BL45P-MO-BRICK-01
+    # TODO Previously would have used pmac.PORT, pmac.SPORT
+    PORT: BL45P-MO-BRICK-01
+    SPORT: BRICK1port
     axis: 1
-    P: "BL45P-MO-THIN-01:X1"
+    P: "BL45P-MO-THIN-01"
+    M: ":X1"
+    MRES: 0.001

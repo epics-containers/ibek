@@ -1,14 +1,14 @@
 module: pmac
 entities:
+  # TODO - basic Geobrick support only. Does not do CS groups
   - name: Geobrick
     args:
       - type: str
         name: name
         description: Name to use for the geobrick's asyn port
-        is_id: true
 
       - type: str # pmac.PmacAsynIPPort
-        name: port
+        name: PORT
         description: Asyn port name for PmacAsynIPPort to connect to
 
       - type: str
@@ -50,8 +50,10 @@ entities:
 
   - name: DlsPmacAsynMotor
     args:
+      # IMPORTANT: all non-defaulted args must come first
+
       - type: str # pmac.Geobrick
-        name: pmac
+        name: PMAC
         description: PMAC to attach to
 
       - type: int
@@ -60,9 +62,319 @@ entities:
 
       - type: str
         name: P
-        description: PV name for this motor
+        description: PV prefix name for this motor
+
+      - type: str
+        name: M
+        description: PV motor name for this motor
+
+      - type: str
+        name: PORT
+        description: Delta tau motor controller
+
+      - type: str
+        name: SPORT
+        description: Delta tau motor controller comms port
+
+      - type: str
+        name: name
+        description: Object name and gui association name
+
+      - type: int
+        name: ADDR
+        description: Address on controller
+        default: "0"
+
+      - type: str
+        name: DESC
+        description: Description, displayed on EDM screen
+        default: " "
+
+      - type: float
+        name: MRES
+        description: Motor Step Size (EGU)
+        default: 0.0001f
+
+      - type: float
+        name: VELO
+        description: axis Velocity (EGU/s)
+        default: 1.0f
+
+      - type: float
+        name: PREC
+        description: Display Precision
+        default: 3f
+
+      - type: str
+        name: EGU
+        description: Engineering Units
+        default: mm
+
+      - type: int
+        name: TWV
+        description: Tweak Step Size (EGU)
+        default: 1
+
+      - type: str
+        name: DTYP
+        description: Datatype of record
+        default: asynMotor
+
+      - type: int
+        name: DIR
+        description: User direction
+        # quotes zero provides a default whereas 0 is seen as no default
+        default: "0"
+
+      - type: float
+        name: VBAS
+        description: Base Velocity (EGU/s)
+        default: 1.0f
+
+      - type: float
+        name: VMAX
+        description: Max Velocity (EGU/s)
+        # default: $(VELO)
+        default: 1f
+
+      - type: float
+        name: ACCL
+        description: Seconds to Velocity
+        default: 0.5f
+
+      - type: float
+        name: BDST
+        description: BL Distance (EGU)
+        default: 0f
+
+      - type: float
+        name: BVEL
+        description: BL Velocity(EGU/s)
+        default: 0f
+
+      - type: float
+        name: BACC
+        description: BL Seconds to Veloc
+        default: 0f
+
+      - type: float
+        name: DHLM
+        description: Dial High Limit
+        default: 10000f
+
+      - type: float
+        name: DLMM
+        description: Dial low limit
+        default: -10000f
+
+      - type: float
+        name: HLM
+        description: User High Limit
+        default: 0f
+
+      - type: float
+        name: LLM
+        description: User Low Limit
+        default: 0f
+
+      - type: str
+        name: HLSV
+        description: HW Lim, Violation Svr
+        default: MAJOR
+
+      - type: str
+        name: INIT
+        description: Startup commands
+        default: " "
+
+      - type: float
+        name: SREV
+        description: Steps per Revolution
+        default: 1000f
+
+      - type: float
+        name: RRES
+        description: Readback Step Size (EGU
+        default: 0f
+
+      - type: float
+        name: ERES
+        description: Encoder Step Size (EGU)
+        default: 0f
+
+      - type: float
+        name: JAR
+        description: Jog Acceleration (EGU/s^2)
+        default: 0f
+
+      - type: int
+        name: UEIP
+        description: Use Encoder If Present
+        default: "0"
+
+      - type: int
+        name: URIP
+        description: Use RDBL If Present
+        default: "0"
+
+      - type: str
+        name: RDBL
+        description: Readback Location, set URIP =1 if you specify this
+        default: "0"
+
+      - type: str
+        name: RLNK
+        description: Readback output link
+        default: " "
+
+      - type: int
+        name: RTRY
+        description: Max retry count
+        default: "0"
+
+      - type: float
+        name: DLY
+        description: Readback settle time (s)
+        default: 0f
+
+      - type: float
+        name: OFF
+        description: User Offset (EGU)
+        default: 0f
+
+      - type: float
+        name: RDBD
+        description: Retry Deadband (EGU)
+        default: 0f
+
+      - type: int
+        name: FOFF
+        description: Freeze Offset, 0=variable, 1=frozen
+        default: "0"
+
+      - type: float
+        name: ADEL
+        description: Alarm monitor deadband (EGU)
+        default: 0f
+
+      - type: int
+        name: NTM
+        description: New Target Monitor, only set to 0 for soft motors
+        default: 1
+
+      - type: float
+        name: FEHEIGH
+        description: HIGH limit for following error
+        default: 0f
+
+      - type: float
+        name: FEHIHI
+        description: HIHI limit for following error
+        default: 0f
+
+      - type: str
+        name: FEHHSV
+        description: HIHI alarm severity for following error
+        default: NO_ALARM
+
+      - type: str
+        name: FEHSV
+        description: HIGH alarm severity for following error
+        default: NO_ALARM
+
+      - type: int
+        name: SCALE
+        description: ""
+        default: 1
+
+      - type: int
+        name: HOMEVIS
+        description: If 1 then home is visible on the gui
+        default: 1
+
+      - type: str
+        name: HOMEVISST
+        description: ""
+        default: Use motor summary screen
+
+      - type: str
+        name: alh
+        description: Set this to alh to add the motor to the alarm handler and send emails
+        default: " "
+
+      - type: str
+        name: gda_name
+        description: Name to export this as to GDA
+        default: none
+
+      - type: str
+        name: gda_desc
+        description: Description to export as to GDA
+        default: $(DESC)
+
+      - type: str
+        name: HOME
+        description: Prefix for autohome instance. Defaults to $(P) If unspecified
+        default: $(P)
+
+      - type: str
+        name: ALLOW_HOMED_SET
+        description: Set to a blank to allow this axis to have its homed
+        default: "#"
 
     databases:
-      # TODO more parameters required for pmac_asyn_Motor.template
-      - file: pmac_asyn_Motor.template
-        define_args: PMAC={{ pmac.P }}
+      - file: $(PMAC)/db/dls_pmac_asyn_motor.template
+        define_args: |
+          P={{ P }},
+          M={{ M }},
+          PORT={{ PORT }},
+          ADDR={{ ADDR }},
+          DESC={{ DESC }},
+          MRES={{ MRES }},
+          VELO={{ VELO }},
+          PREC={{ PREV }},
+          EGU={{ EGU }},
+          TWV={{ TWV }},
+          DTYP={{ DTYP }},
+          DIR={{ DIR }},
+          VBAS={{ VBAS }},
+          VMAX={{ VMAX }},
+          ACCL={{ ACCL }},
+          BDST={{ BDST }},
+          BVEL={{ BVEL }},
+          BACC={{ BACC }},
+          DHLM={{ DHLM }},
+          DLLM={{ DLLM }},
+          HLM={{ HLM }},
+          LLM={{ LLM }},
+          HLSV={{ HLSV }},
+          INIT={{ INIT }},
+          SREV={{ SREV }},
+          RRES={{ RRES }},
+          ERES={{ ERES }},
+          JAR={{ JAR }},
+          UEIP={{ UEIP }},
+          RDBL={{ RDBL }},
+          RLINK={{ RLINK }},
+          RTRY={{ RTRY }},
+          DLY={{ DLY }},
+          OFF={{ OFF }},
+          RDBD={{ RDBD }},
+          FOFF={{ FOFF }},
+          ADEL={{ ADEL }},
+          NTM={{ NTM }},
+          FEHIGH={{ FEHEIGH }},
+          FEHIHI={{ FEHIHI }},
+          FEHHSV={{ FEHHSV }},
+          FEHSV={{ FEHSV }},
+          SCALE={{ SCALE }},
+          HOMEVIS={{ HOMEVIS }},
+          HOMEVISSTR={{  HOMEVISSTR  }},
+          name={{ name }},
+          alh={{ alh }},
+          gda_name={{ gda_name }},
+          gda_desc={{ gda_desc }},
+          SPORT={{ SPORT }},
+          HOME={{ HOME }},
+          PMAC={{ PMAC }},
+          ALLOW_HOMED_SET={{ ALLOW_HOMED_SET }}
