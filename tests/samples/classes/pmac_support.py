@@ -1,5 +1,3 @@
-# noqa: E501
-
 from apischema.utils import Undefined
 
 from ibek.support import Database, Entity, FloatArg, IntArg, StrArg, Support
