@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>Entity and Entity Instance &mdash; ibek 0.2+6.g914da15 documentation</title>
+  <title>Entity and Entity Instance &mdash; ibek 0.2+9.g4cc0e21 documentation</title>
   
 
   
@@ -310,6 +310,7 @@ by ibek with the command <code class="docutils literal notranslate"><span class=
                     <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="p">{</span>
                       <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="p">[</span>
                         <span class="s2">&quot;integer&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;string&quot;</span><span class="p">,</span>
                         <span class="s2">&quot;null&quot;</span>
                       <span class="p">],</span>
                       <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;If given, and instance doesn&#39;t supply argument, what value should be used&quot;</span>
@@ -339,6 +340,7 @@ by ibek with the command <code class="docutils literal notranslate"><span class=
                     <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="p">{</span>
                       <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="p">[</span>
                         <span class="s2">&quot;number&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;string&quot;</span><span class="p">,</span>
                         <span class="s2">&quot;null&quot;</span>
                       <span class="p">],</span>
                       <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;If given, and instance doesn&#39;t supply argument, what value should be used&quot;</span>
@@ -438,74 +440,386 @@ by ibek with the command <code class="docutils literal notranslate"><span class=
 </pre></div>
 </div>
 </details><details>
-<summary><a>pmac.ibek.yaml</a></summary><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">module</span><span class="p">:</span> <span class="n">pmac</span>
-<span class="n">entities</span><span class="p">:</span>
-  <span class="o">-</span> <span class="n">name</span><span class="p">:</span> <span class="n">Geobrick</span>
-    <span class="n">args</span><span class="p">:</span>
-      <span class="o">-</span> <span class="nb">type</span><span class="p">:</span> <span class="nb">str</span>
-        <span class="n">name</span><span class="p">:</span> <span class="n">name</span>
-        <span class="n">description</span><span class="p">:</span> <span class="n">Name</span> <span class="n">to</span> <span class="n">use</span> <span class="k">for</span> <span class="n">the</span> <span class="n">geobrick</span><span class="s1">&#39;s asyn port</span>
-        <span class="n">is_id</span><span class="p">:</span> <span class="n">true</span>
+<summary><a>pmac.ibek.yaml</a></summary><div class="highlight-default notranslate"><div class="highlight"><pre><span></span>module: pmac
+entities:
+  # TODO - basic Geobrick support only. Does not do CS groups
+  - name: Geobrick
+    args:
+      - type: str
+        name: name
+        description: Name to use for the geobrick&#39;s asyn port
 
-      <span class="o">-</span> <span class="nb">type</span><span class="p">:</span> <span class="nb">str</span> <span class="c1"># pmac.PmacAsynIPPort</span>
-        <span class="n">name</span><span class="p">:</span> <span class="n">port</span>
-        <span class="n">description</span><span class="p">:</span> <span class="n">Asyn</span> <span class="n">port</span> <span class="n">name</span> <span class="k">for</span> <span class="n">PmacAsynIPPort</span> <span class="n">to</span> <span class="n">connect</span> <span class="n">to</span>
+      - type: str # pmac.PmacAsynIPPort
+        name: PORT
+        description: Asyn port name for PmacAsynIPPort to connect to
 
-      <span class="o">-</span> <span class="nb">type</span><span class="p">:</span> <span class="nb">str</span>
-        <span class="n">name</span><span class="p">:</span> <span class="n">P</span>
-        <span class="n">description</span><span class="p">:</span> <span class="n">PV</span> <span class="n">Prefix</span> <span class="k">for</span> <span class="nb">all</span> <span class="n">pmac</span> <span class="n">db</span> <span class="n">templates</span>
+      - type: str
+        name: P
+        description: PV Prefix for all pmac db templates
 
-      <span class="o">-</span> <span class="nb">type</span><span class="p">:</span> <span class="nb">int</span>
-        <span class="n">name</span><span class="p">:</span> <span class="n">idlePoll</span>
-        <span class="n">description</span><span class="p">:</span> <span class="n">Idle</span> <span class="n">Poll</span> <span class="n">Period</span> <span class="ow">in</span> <span class="n">ms</span>
+      - type: int
+        name: idlePoll
+        description: Idle Poll Period in ms
 
-      <span class="o">-</span> <span class="nb">type</span><span class="p">:</span> <span class="nb">int</span>
-        <span class="n">name</span><span class="p">:</span> <span class="n">movingPoll</span>
-        <span class="n">description</span><span class="p">:</span> <span class="n">Moving</span> <span class="n">Poll</span> <span class="n">Period</span> <span class="ow">in</span> <span class="n">ms</span>
+      - type: int
+        name: movingPoll
+        description: Moving Poll Period in ms
 
-    <span class="c1"># axes hard coded to 8 for geobrick (builder.py counted the axes created)</span>
-    <span class="c1"># TODO is num_axes is an example of something hard to do in this new approach?</span>
-    <span class="n">script</span><span class="p">:</span>
-      <span class="o">-</span> <span class="n">pmacCreateController</span><span class="p">({{</span><span class="n">name</span><span class="p">}},</span> <span class="p">{{</span><span class="n">port</span><span class="p">}},</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="p">{{</span><span class="n">movingPoll</span><span class="p">}},</span> <span class="p">{{</span><span class="n">idlePoll</span><span class="p">}})</span>
-      <span class="o">-</span> <span class="n">pmacCreateAxes</span><span class="p">({{</span><span class="n">name</span><span class="p">}},</span> <span class="mi">8</span><span class="p">)</span>
+    # axes hard coded to 8 for geobrick (builder.py counted the axes created)
+    # TODO is num_axes is an example of something hard to do in this new approach?
+    script:
+      - pmacCreateController({{name}}, {{PORT}}, 0, 8, {{movingPoll}}, {{idlePoll}})
+      - pmacCreateAxes({{name}}, 8)
 
-    <span class="n">databases</span><span class="p">:</span>
-      <span class="o">-</span> <span class="n">file</span><span class="p">:</span> <span class="n">pmacController</span><span class="o">.</span><span class="n">template</span>
-        <span class="n">define_args</span><span class="p">:</span> <span class="n">PMAC</span><span class="o">=</span><span class="p">{{</span> <span class="n">P</span> <span class="p">}}</span>
-      <span class="o">-</span> <span class="n">file</span><span class="p">:</span> <span class="n">pmacStatus</span><span class="o">.</span><span class="n">template</span>
-        <span class="n">define_args</span><span class="p">:</span> <span class="n">PMAC</span><span class="o">=</span><span class="p">{{</span> <span class="n">P</span> <span class="p">}}</span>
+    databases:
+      - file: pmacController.template
+        define_args: PMAC={{ P }}
+      - file: pmacStatus.template
+        define_args: PMAC={{ P }}
 
-  <span class="o">-</span> <span class="n">name</span><span class="p">:</span> <span class="n">PmacAsynIPPort</span>
-    <span class="n">args</span><span class="p">:</span>
-      <span class="o">-</span> <span class="nb">type</span><span class="p">:</span> <span class="nb">str</span>
-        <span class="n">name</span><span class="p">:</span> <span class="n">name</span>
-        <span class="n">description</span><span class="p">:</span> <span class="n">Asyn</span> <span class="n">port</span> <span class="n">name</span>
+  - name: PmacAsynIPPort
+    args:
+      - type: str
+        name: name
+        description: Asyn port name
 
-      <span class="o">-</span> <span class="nb">type</span><span class="p">:</span> <span class="nb">str</span>
-        <span class="n">name</span><span class="p">:</span> <span class="n">IP</span>
-        <span class="n">description</span><span class="p">:</span> <span class="n">IP</span> <span class="n">address</span> <span class="n">of</span> <span class="n">pmac</span>
+      - type: str
+        name: IP
+        description: IP address of pmac
 
-    <span class="n">script</span><span class="p">:</span>
-      <span class="o">-</span> <span class="n">pmacAsynIPConfigure</span><span class="p">({{</span><span class="n">name</span><span class="p">}},</span> <span class="p">{{</span><span class="n">IP</span> <span class="o">+</span> <span class="s2">&quot;&quot;</span> <span class="k">if</span> <span class="s2">&quot;:&quot;</span> <span class="ow">in</span> <span class="n">IP</span> <span class="k">else</span> <span class="n">IP</span> <span class="o">+</span> <span class="s2">&quot;:1025&quot;</span><span class="p">}})</span>
+    script:
+      - pmacAsynIPConfigure({{name}}, {{IP + &quot;&quot; if &quot;:&quot; in IP else IP + &quot;:1025&quot;}})
 
-  <span class="o">-</span> <span class="n">name</span><span class="p">:</span> <span class="n">DlsPmacAsynMotor</span>
-    <span class="n">args</span><span class="p">:</span>
-      <span class="o">-</span> <span class="nb">type</span><span class="p">:</span> <span class="nb">str</span> <span class="c1"># pmac.Geobrick</span>
-        <span class="n">name</span><span class="p">:</span> <span class="n">pmac</span>
-        <span class="n">description</span><span class="p">:</span> <span class="n">PMAC</span> <span class="n">to</span> <span class="n">attach</span> <span class="n">to</span>
+  - name: DlsPmacAsynMotor
+    args:
+      # IMPORTANT: all non-defaulted args must come first
 
-      <span class="o">-</span> <span class="nb">type</span><span class="p">:</span> <span class="nb">int</span>
-        <span class="n">name</span><span class="p">:</span> <span class="n">axis</span>
-        <span class="n">description</span><span class="p">:</span> <span class="n">which</span> <span class="n">axis</span> <span class="n">number</span> <span class="n">this</span> <span class="n">motor</span> <span class="n">drives</span>
+      - type: str # pmac.Geobrick
+        name: PMAC
+        description: PMAC to attach to
 
-      <span class="o">-</span> <span class="nb">type</span><span class="p">:</span> <span class="nb">str</span>
-        <span class="n">name</span><span class="p">:</span> <span class="n">P</span>
-        <span class="n">description</span><span class="p">:</span> <span class="n">PV</span> <span class="n">name</span> <span class="k">for</span> <span class="n">this</span> <span class="n">motor</span>
+      - type: int
+        name: axis
+        description: which axis number this motor drives
 
-    <span class="n">databases</span><span class="p">:</span>
-      <span class="c1"># TODO more parameters required for pmac_asyn_Motor.template</span>
-      <span class="o">-</span> <span class="n">file</span><span class="p">:</span> <span class="n">pmac_asyn_Motor</span><span class="o">.</span><span class="n">template</span>
-        <span class="n">define_args</span><span class="p">:</span> <span class="n">PMAC</span><span class="o">=</span><span class="p">{{</span> <span class="n">pmac</span><span class="o">.</span><span class="n">P</span> <span class="p">}}</span>
+      - type: str
+        name: P
+        description: PV prefix name for this motor
+
+      - type: str
+        name: M
+        description: PV motor name for this motor
+
+      - type: str
+        name: PORT
+        description: Delta tau motor controller
+
+      - type: str
+        name: SPORT
+        description: Delta tau motor controller comms port
+
+      - type: str
+        name: name
+        description: Object name and gui association name
+
+      - type: int
+        name: ADDR
+        description: Address on controller
+        default: &quot;0&quot;
+
+      - type: str
+        name: DESC
+        description: Description, displayed on EDM screen
+        default: &quot; &quot;
+
+      - type: float
+        name: MRES
+        description: Motor Step Size (EGU)
+        default: 0.0001f
+
+      - type: float
+        name: VELO
+        description: axis Velocity (EGU/s)
+        default: 1.0f
+
+      - type: float
+        name: PREC
+        description: Display Precision
+        default: 3f
+
+      - type: str
+        name: EGU
+        description: Engineering Units
+        default: mm
+
+      - type: int
+        name: TWV
+        description: Tweak Step Size (EGU)
+        default: 1
+
+      - type: str
+        name: DTYP
+        description: Datatype of record
+        default: asynMotor
+
+      - type: int
+        name: DIR
+        description: User direction
+        # quotes zero provides a default whereas 0 is seen as no default
+        default: &quot;0&quot;
+
+      - type: float
+        name: VBAS
+        description: Base Velocity (EGU/s)
+        default: 1.0f
+
+      - type: float
+        name: VMAX
+        description: Max Velocity (EGU/s)
+        # default: $(VELO)
+        default: 1f
+
+      - type: float
+        name: ACCL
+        description: Seconds to Velocity
+        default: 0.5f
+
+      - type: float
+        name: BDST
+        description: BL Distance (EGU)
+        default: 0f
+
+      - type: float
+        name: BVEL
+        description: BL Velocity(EGU/s)
+        default: 0f
+
+      - type: float
+        name: BACC
+        description: BL Seconds to Veloc
+        default: 0f
+
+      - type: float
+        name: DHLM
+        description: Dial High Limit
+        default: 10000f
+
+      - type: float
+        name: DLMM
+        description: Dial low limit
+        default: -10000f
+
+      - type: float
+        name: HLM
+        description: User High Limit
+        default: 0f
+
+      - type: float
+        name: LLM
+        description: User Low Limit
+        default: 0f
+
+      - type: str
+        name: HLSV
+        description: HW Lim, Violation Svr
+        default: MAJOR
+
+      - type: str
+        name: INIT
+        description: Startup commands
+        default: &quot; &quot;
+
+      - type: float
+        name: SREV
+        description: Steps per Revolution
+        default: 1000f
+
+      - type: float
+        name: RRES
+        description: Readback Step Size (EGU
+        default: 0f
+
+      - type: float
+        name: ERES
+        description: Encoder Step Size (EGU)
+        default: 0f
+
+      - type: float
+        name: JAR
+        description: Jog Acceleration (EGU/s^2)
+        default: 0f
+
+      - type: int
+        name: UEIP
+        description: Use Encoder If Present
+        default: &quot;0&quot;
+
+      - type: int
+        name: URIP
+        description: Use RDBL If Present
+        default: &quot;0&quot;
+
+      - type: str
+        name: RDBL
+        description: Readback Location, set URIP =1 if you specify this
+        default: &quot;0&quot;
+
+      - type: str
+        name: RLNK
+        description: Readback output link
+        default: &quot; &quot;
+
+      - type: int
+        name: RTRY
+        description: Max retry count
+        default: &quot;0&quot;
+
+      - type: float
+        name: DLY
+        description: Readback settle time (s)
+        default: 0f
+
+      - type: float
+        name: OFF
+        description: User Offset (EGU)
+        default: 0f
+
+      - type: float
+        name: RDBD
+        description: Retry Deadband (EGU)
+        default: 0f
+
+      - type: int
+        name: FOFF
+        description: Freeze Offset, 0=variable, 1=frozen
+        default: &quot;0&quot;
+
+      - type: float
+        name: ADEL
+        description: Alarm monitor deadband (EGU)
+        default: 0f
+
+      - type: int
+        name: NTM
+        description: New Target Monitor, only set to 0 for soft motors
+        default: 1
+
+      - type: float
+        name: FEHEIGH
+        description: HIGH limit for following error
+        default: 0f
+
+      - type: float
+        name: FEHIHI
+        description: HIHI limit for following error
+        default: 0f
+
+      - type: str
+        name: FEHHSV
+        description: HIHI alarm severity for following error
+        default: NO_ALARM
+
+      - type: str
+        name: FEHSV
+        description: HIGH alarm severity for following error
+        default: NO_ALARM
+
+      - type: int
+        name: SCALE
+        description: &quot;&quot;
+        default: 1
+
+      - type: int
+        name: HOMEVIS
+        description: If 1 then home is visible on the gui
+        default: 1
+
+      - type: str
+        name: HOMEVISST
+        description: &quot;&quot;
+        default: Use motor summary screen
+
+      - type: str
+        name: alh
+        description: Set this to alh to add the motor to the alarm handler and send emails
+        default: &quot; &quot;
+
+      - type: str
+        name: gda_name
+        description: Name to export this as to GDA
+        default: none
+
+      - type: str
+        name: gda_desc
+        description: Description to export as to GDA
+        default: $(DESC)
+
+      - type: str
+        name: HOME
+        description: Prefix for autohome instance. Defaults to $(P) If unspecified
+        default: $(P)
+
+      - type: str
+        name: ALLOW_HOMED_SET
+        description: Set to a blank to allow this axis to have its homed
+        default: &quot;#&quot;
+
+    databases:
+      - file: $(PMAC)/db/dls_pmac_asyn_motor.template
+        define_args: |
+          P={{ P }},
+          M={{ M }},
+          PORT={{ PORT }},
+          ADDR={{ ADDR }},
+          DESC={{ DESC }},
+          MRES={{ MRES }},
+          VELO={{ VELO }},
+          PREC={{ PREV }},
+          EGU={{ EGU }},
+          TWV={{ TWV }},
+          DTYP={{ DTYP }},
+          DIR={{ DIR }},
+          VBAS={{ VBAS }},
+          VMAX={{ VMAX }},
+          ACCL={{ ACCL }},
+          BDST={{ BDST }},
+          BVEL={{ BVEL }},
+          BACC={{ BACC }},
+          DHLM={{ DHLM }},
+          DLLM={{ DLLM }},
+          HLM={{ HLM }},
+          LLM={{ LLM }},
+          HLSV={{ HLSV }},
+          INIT={{ INIT }},
+          SREV={{ SREV }},
+          RRES={{ RRES }},
+          ERES={{ ERES }},
+          JAR={{ JAR }},
+          UEIP={{ UEIP }},
+          RDBL={{ RDBL }},
+          RLINK={{ RLINK }},
+          RTRY={{ RTRY }},
+          DLY={{ DLY }},
+          OFF={{ OFF }},
+          RDBD={{ RDBD }},
+          FOFF={{ FOFF }},
+          ADEL={{ ADEL }},
+          NTM={{ NTM }},
+          FEHIGH={{ FEHEIGH }},
+          FEHIHI={{ FEHIHI }},
+          FEHHSV={{ FEHHSV }},
+          FEHSV={{ FEHSV }},
+          SCALE={{ SCALE }},
+          HOMEVIS={{ HOMEVIS }},
+          HOMEVISSTR={{  HOMEVISSTR  }},
+          name={{ name }},
+          alh={{ alh }},
+          gda_name={{ gda_name }},
+          gda_desc={{ gda_desc }},
+          SPORT={{ SPORT }},
+          HOME={{ HOME }},
+          PMAC={{ PMAC }},
+          ALLOW_HOMED_SET={{ ALLOW_HOMED_SET }}
 </pre></div>
 </div>
 </details></div></blockquote>
@@ -523,15 +837,22 @@ extracted with the command <code class="docutils literal notranslate"><span clas
 
   <span class="o">-</span> <span class="nb">type</span><span class="p">:</span> <span class="n">pmac</span><span class="o">.</span><span class="n">Geobrick</span>
     <span class="n">name</span><span class="p">:</span> <span class="n">BL45P</span><span class="o">-</span><span class="n">MO</span><span class="o">-</span><span class="n">BRICK</span><span class="o">-</span><span class="mi">01</span>
-    <span class="n">port</span><span class="p">:</span> <span class="n">BRICK1port</span>
+    <span class="n">PORT</span><span class="p">:</span> <span class="n">BRICK1port</span>
     <span class="n">P</span><span class="p">:</span> <span class="s2">&quot;BL45P-MO-STEP-01:&quot;</span>
     <span class="n">idlePoll</span><span class="p">:</span> <span class="mi">100</span>
     <span class="n">movingPoll</span><span class="p">:</span> <span class="mi">500</span>
 
   <span class="o">-</span> <span class="nb">type</span><span class="p">:</span> <span class="n">pmac</span><span class="o">.</span><span class="n">DlsPmacAsynMotor</span>
-    <span class="n">pmac</span><span class="p">:</span> <span class="n">BL45P</span><span class="o">-</span><span class="n">MO</span><span class="o">-</span><span class="n">BRICK</span><span class="o">-</span><span class="mi">01</span>
+    <span class="n">name</span><span class="p">:</span> <span class="n">X1</span> <span class="n">motor</span>
+    <span class="c1"># TODO previously would have been an object pointing to a pmac.Geobrick</span>
+    <span class="n">PMAC</span><span class="p">:</span> <span class="n">BL45P</span><span class="o">-</span><span class="n">MO</span><span class="o">-</span><span class="n">BRICK</span><span class="o">-</span><span class="mi">01</span>
+    <span class="c1"># TODO Previously would have used pmac.PORT, pmac.SPORT</span>
+    <span class="n">PORT</span><span class="p">:</span> <span class="n">BL45P</span><span class="o">-</span><span class="n">MO</span><span class="o">-</span><span class="n">BRICK</span><span class="o">-</span><span class="mi">01</span>
+    <span class="n">SPORT</span><span class="p">:</span> <span class="n">BRICK1port</span>
     <span class="n">axis</span><span class="p">:</span> <span class="mi">1</span>
-    <span class="n">P</span><span class="p">:</span> <span class="s2">&quot;BL45P-MO-THIN-01:X1&quot;</span>
+    <span class="n">P</span><span class="p">:</span> <span class="s2">&quot;BL45P-MO-THIN-01&quot;</span>
+    <span class="n">M</span><span class="p">:</span> <span class="s2">&quot;:X1&quot;</span>
+    <span class="n">MRES</span><span class="p">:</span> <span class="mf">0.001</span>
 </pre></div>
 </div>
 </details></div></blockquote>
