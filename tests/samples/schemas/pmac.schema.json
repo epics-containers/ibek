@@ -20,7 +20,7 @@
                 "type": "string",
                 "description": "Name to use for the geobrick's asyn port"
               },
-              "port": {
+              "PORT": {
                 "type": "string",
                 "description": "Asyn port name for PmacAsynIPPort to connect to"
               },
@@ -40,7 +40,7 @@
             "required": [
               "type",
               "name",
-              "port",
+              "PORT",
               "P",
               "idlePoll",
               "movingPoll"
@@ -77,7 +77,7 @@
                 "type": "string",
                 "const": "pmac.DlsPmacAsynMotor"
               },
-              "pmac": {
+              "PMAC": {
                 "type": "string",
                 "description": "PMAC to attach to"
               },
@@ -87,14 +87,224 @@
               },
               "P": {
                 "type": "string",
-                "description": "PV name for this motor"
+                "description": "PV prefix name for this motor"
+              },
+              "M": {
+                "type": "string",
+                "description": "PV motor name for this motor"
+              },
+              "PORT": {
+                "type": "string",
+                "description": "Delta tau motor controller"
+              },
+              "SPORT": {
+                "type": "string",
+                "description": "Delta tau motor controller comms port"
+              },
+              "name": {
+                "type": "string",
+                "description": "Object name and gui association name"
+              },
+              "ADDR": {
+                "type": "integer",
+                "description": "Address on controller"
+              },
+              "DESC": {
+                "type": "string",
+                "description": "Description, displayed on EDM screen"
+              },
+              "MRES": {
+                "type": "number",
+                "description": "Motor Step Size (EGU)"
+              },
+              "VELO": {
+                "type": "number",
+                "description": "axis Velocity (EGU/s)"
+              },
+              "PREC": {
+                "type": "number",
+                "description": "Display Precision"
+              },
+              "EGU": {
+                "type": "string",
+                "description": "Engineering Units"
+              },
+              "TWV": {
+                "type": "integer",
+                "description": "Tweak Step Size (EGU)"
+              },
+              "DTYP": {
+                "type": "string",
+                "description": "Datatype of record"
+              },
+              "DIR": {
+                "type": "integer",
+                "description": "User direction"
+              },
+              "VBAS": {
+                "type": "number",
+                "description": "Base Velocity (EGU/s)"
+              },
+              "VMAX": {
+                "type": "number",
+                "description": "Max Velocity (EGU/s)"
+              },
+              "ACCL": {
+                "type": "number",
+                "description": "Seconds to Velocity"
+              },
+              "BDST": {
+                "type": "number",
+                "description": "BL Distance (EGU)"
+              },
+              "BVEL": {
+                "type": "number",
+                "description": "BL Velocity(EGU/s)"
+              },
+              "BACC": {
+                "type": "number",
+                "description": "BL Seconds to Veloc"
+              },
+              "DHLM": {
+                "type": "number",
+                "description": "Dial High Limit"
+              },
+              "DLMM": {
+                "type": "number",
+                "description": "Dial low limit"
+              },
+              "HLM": {
+                "type": "number",
+                "description": "User High Limit"
+              },
+              "LLM": {
+                "type": "number",
+                "description": "User Low Limit"
+              },
+              "HLSV": {
+                "type": "string",
+                "description": "HW Lim, Violation Svr"
+              },
+              "INIT": {
+                "type": "string",
+                "description": "Startup commands"
+              },
+              "SREV": {
+                "type": "number",
+                "description": "Steps per Revolution"
+              },
+              "RRES": {
+                "type": "number",
+                "description": "Readback Step Size (EGU"
+              },
+              "ERES": {
+                "type": "number",
+                "description": "Encoder Step Size (EGU)"
+              },
+              "JAR": {
+                "type": "number",
+                "description": "Jog Acceleration (EGU/s^2)"
+              },
+              "UEIP": {
+                "type": "integer",
+                "description": "Use Encoder If Present"
+              },
+              "URIP": {
+                "type": "integer",
+                "description": "Use RDBL If Present"
+              },
+              "RDBL": {
+                "type": "string",
+                "description": "Readback Location, set URIP =1 if you specify this"
+              },
+              "RLNK": {
+                "type": "string",
+                "description": "Readback output link"
+              },
+              "RTRY": {
+                "type": "integer",
+                "description": "Max retry count"
+              },
+              "DLY": {
+                "type": "number",
+                "description": "Readback settle time (s)"
+              },
+              "OFF": {
+                "type": "number",
+                "description": "User Offset (EGU)"
+              },
+              "RDBD": {
+                "type": "number",
+                "description": "Retry Deadband (EGU)"
+              },
+              "FOFF": {
+                "type": "integer",
+                "description": "Freeze Offset, 0=variable, 1=frozen"
+              },
+              "ADEL": {
+                "type": "number",
+                "description": "Alarm monitor deadband (EGU)"
+              },
+              "NTM": {
+                "type": "integer",
+                "description": "New Target Monitor, only set to 0 for soft motors"
+              },
+              "FEHEIGH": {
+                "type": "number",
+                "description": "HIGH limit for following error"
+              },
+              "FEHIHI": {
+                "type": "number",
+                "description": "HIHI limit for following error"
+              },
+              "FEHHSV": {
+                "type": "string",
+                "description": "HIHI alarm severity for following error"
+              },
+              "FEHSV": {
+                "type": "string",
+                "description": "HIGH alarm severity for following error"
+              },
+              "SCALE": {
+                "type": "integer"
+              },
+              "HOMEVIS": {
+                "type": "integer",
+                "description": "If 1 then home is visible on the gui"
+              },
+              "HOMEVISST": {
+                "type": "string"
+              },
+              "alh": {
+                "type": "string",
+                "description": "Set this to alh to add the motor to the alarm handler and send emails"
+              },
+              "gda_name": {
+                "type": "string",
+                "description": "Name to export this as to GDA"
+              },
+              "gda_desc": {
+                "type": "string",
+                "description": "Description to export as to GDA"
+              },
+              "HOME": {
+                "type": "string",
+                "description": "Prefix for autohome instance. Defaults to $(P) If unspecified"
+              },
+              "ALLOW_HOMED_SET": {
+                "type": "string",
+                "description": "Set to a blank to allow this axis to have its homed"
               }
             },
             "required": [
               "type",
-              "pmac",
+              "PMAC",
               "axis",
-              "P"
+              "P",
+              "M",
+              "PORT",
+              "SPORT",
+              "name"
             ],
             "additionalProperties": false
           }

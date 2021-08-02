@@ -29,6 +29,22 @@ def desc(description: str):
 
 T = TypeVar("T")
 
+"""
+The Support Class represents a deserialized <MODULE_NAME>.ibek.yaml file.
+It is a hierarchy of dataclasses. This module also defines all of the
+dataclasses that can appear as children of Support in the object graph.
+
+TODO: There are a couple of problems with deserialize and defaults. These
+are worked around here but I need to understand properly what is happening:
+
+- str default "" == no default
+    - using " " for now
+- int default 0 == no default
+    - using "0" and added str type to IntArg
+- float values in json have a trailing 'f' and this comes back as str on deserialize
+    - added str type to FloatArg
+"""
+
 
 @dataclass
 class Arg:
@@ -65,7 +81,7 @@ class IntArg(Arg):
     """An argument with an int value"""
 
     type: Literal["int"] = "int"
-    default: Default[int] = Undefined
+    default: Default[Union[int, str]] = Undefined
 
 
 @dataclass
@@ -73,7 +89,7 @@ class FloatArg(Arg):
     """An argument with a float value"""
 
     type: Literal["float"] = "float"
-    default: Default[float] = Undefined
+    default: Default[str] = Undefined
 
 
 @dataclass

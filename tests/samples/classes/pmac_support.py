@@ -1,6 +1,8 @@
 from apischema.utils import Undefined
 
-from ibek.support import Database, Entity, IntArg, StrArg, Support
+from ibek.support import Database, Entity, FloatArg, IntArg, StrArg, Support
+
+# this represents the generated class resulting from deserializing pmac.ibek.yaml
 
 SUPPORT = Support(
     module="pmac",
@@ -13,10 +15,10 @@ SUPPORT = Support(
                     description="Name to use for the geobrick's asyn port",
                     type="str",
                     default=Undefined,
-                    is_id=True,
+                    is_id=False,
                 ),
                 StrArg(
-                    name="port",
+                    name="PORT",
                     description="Asyn port name for PmacAsynIPPort to connect to",
                     type="str",
                     default=Undefined,
@@ -55,8 +57,7 @@ SUPPORT = Support(
                 ),
             ),
             script=(
-                "pmacCreateController({{name}}, {{port}}, 0, 8, "
-                "{{movingPoll}}, {{idlePoll}})",
+                "pmacCreateController({{name}}, {{port}}, 0, 8, {{movingPoll}}, {{idlePoll}})",
                 "pmacCreateAxes({{name}}, 8)",
             ),
         ),
@@ -80,15 +81,14 @@ SUPPORT = Support(
             ),
             databases=(),
             script=(
-                'pmacAsynIPConfigure({{name}}, {{IP + "" if ":" in '
-                'IP else IP + ":1025"}})',
+                'pmacAsynIPConfigure({{name}}, {{IP + "" if ":" in IP else IP + ":1025"}})',
             ),
         ),
         Entity(
             name="DlsPmacAsynMotor",
             args=(
                 StrArg(
-                    name="pmac",
+                    name="PMAC",
                     description="PMAC to attach to",
                     type="str",
                     default=Undefined,
@@ -102,17 +102,334 @@ SUPPORT = Support(
                 ),
                 StrArg(
                     name="P",
-                    description="PV name for this motor",
+                    description="PV prefix name for this motor",
                     type="str",
                     default=Undefined,
+                    is_id=False,
+                ),
+                StrArg(
+                    name="M",
+                    description="PV motor name for this motor",
+                    type="str",
+                    default=Undefined,
+                    is_id=False,
+                ),
+                StrArg(
+                    name="PORT",
+                    description="Delta tau motor controller",
+                    type="str",
+                    default=Undefined,
+                    is_id=False,
+                ),
+                StrArg(
+                    name="SPORT",
+                    description="Delta tau motor controller comms port",
+                    type="str",
+                    default=Undefined,
+                    is_id=False,
+                ),
+                StrArg(
+                    name="name",
+                    description="Object name and gui association name",
+                    type="str",
+                    default=Undefined,
+                    is_id=False,
+                ),
+                IntArg(
+                    name="ADDR",
+                    description="Address on controller",
+                    type="int",
+                    default="0",
+                ),
+                StrArg(
+                    name="DESC",
+                    description="Description, displayed on EDM screen",
+                    type="str",
+                    default=" ",
+                    is_id=False,
+                ),
+                FloatArg(
+                    name="MRES",
+                    description="Motor Step Size (EGU)",
+                    type="float",
+                    default="0.0001f",
+                ),
+                FloatArg(
+                    name="VELO",
+                    description="axis Velocity (EGU/s)",
+                    type="float",
+                    default="1.0f",
+                ),
+                FloatArg(
+                    name="PREC",
+                    description="Display Precision",
+                    type="float",
+                    default="3f",
+                ),
+                StrArg(
+                    name="EGU",
+                    description="Engineering Units",
+                    type="str",
+                    default="mm",
+                    is_id=False,
+                ),
+                IntArg(
+                    name="TWV",
+                    description="Tweak Step Size (EGU)",
+                    type="int",
+                    default=1,
+                ),
+                StrArg(
+                    name="DTYP",
+                    description="Datatype of record",
+                    type="str",
+                    default="asynMotor",
+                    is_id=False,
+                ),
+                IntArg(
+                    name="DIR", description="User direction", type="int", default="0"
+                ),
+                FloatArg(
+                    name="VBAS",
+                    description="Base Velocity (EGU/s)",
+                    type="float",
+                    default="1.0f",
+                ),
+                FloatArg(
+                    name="VMAX",
+                    description="Max Velocity (EGU/s)",
+                    type="float",
+                    default="1f",
+                ),
+                FloatArg(
+                    name="ACCL",
+                    description="Seconds to Velocity",
+                    type="float",
+                    default="0.5f",
+                ),
+                FloatArg(
+                    name="BDST",
+                    description="BL Distance (EGU)",
+                    type="float",
+                    default="0f",
+                ),
+                FloatArg(
+                    name="BVEL",
+                    description="BL Velocity(EGU/s)",
+                    type="float",
+                    default="0f",
+                ),
+                FloatArg(
+                    name="BACC",
+                    description="BL Seconds to Veloc",
+                    type="float",
+                    default="0f",
+                ),
+                FloatArg(
+                    name="DHLM",
+                    description="Dial High Limit",
+                    type="float",
+                    default="10000f",
+                ),
+                FloatArg(
+                    name="DLMM",
+                    description="Dial low limit",
+                    type="float",
+                    default="-10000f",
+                ),
+                FloatArg(
+                    name="HLM",
+                    description="User High Limit",
+                    type="float",
+                    default="0f",
+                ),
+                FloatArg(
+                    name="LLM", description="User Low Limit", type="float", default="0f"
+                ),
+                StrArg(
+                    name="HLSV",
+                    description="HW Lim, Violation Svr",
+                    type="str",
+                    default="MAJOR",
+                    is_id=False,
+                ),
+                StrArg(
+                    name="INIT",
+                    description="Startup commands",
+                    type="str",
+                    default=" ",
+                    is_id=False,
+                ),
+                FloatArg(
+                    name="SREV",
+                    description="Steps per Revolution",
+                    type="float",
+                    default="1000f",
+                ),
+                FloatArg(
+                    name="RRES",
+                    description="Readback Step Size (EGU",
+                    type="float",
+                    default="0f",
+                ),
+                FloatArg(
+                    name="ERES",
+                    description="Encoder Step Size (EGU)",
+                    type="float",
+                    default="0f",
+                ),
+                FloatArg(
+                    name="JAR",
+                    description="Jog Acceleration (EGU/s^2)",
+                    type="float",
+                    default="0f",
+                ),
+                IntArg(
+                    name="UEIP",
+                    description="Use Encoder If Present",
+                    type="int",
+                    default="0",
+                ),
+                IntArg(
+                    name="URIP",
+                    description="Use RDBL If Present",
+                    type="int",
+                    default="0",
+                ),
+                StrArg(
+                    name="RDBL",
+                    description="Readback Location, set URIP =1 if you specify this",
+                    type="str",
+                    default="0",
+                    is_id=False,
+                ),
+                StrArg(
+                    name="RLNK",
+                    description="Readback output link",
+                    type="str",
+                    default=" ",
+                    is_id=False,
+                ),
+                IntArg(
+                    name="RTRY", description="Max retry count", type="int", default="0"
+                ),
+                FloatArg(
+                    name="DLY",
+                    description="Readback settle time (s)",
+                    type="float",
+                    default="0f",
+                ),
+                FloatArg(
+                    name="OFF",
+                    description="User Offset (EGU)",
+                    type="float",
+                    default="0f",
+                ),
+                FloatArg(
+                    name="RDBD",
+                    description="Retry Deadband (EGU)",
+                    type="float",
+                    default="0f",
+                ),
+                IntArg(
+                    name="FOFF",
+                    description="Freeze Offset, 0=variable, 1=frozen",
+                    type="int",
+                    default="0",
+                ),
+                FloatArg(
+                    name="ADEL",
+                    description="Alarm monitor deadband (EGU)",
+                    type="float",
+                    default="0f",
+                ),
+                IntArg(
+                    name="NTM",
+                    description="New Target Monitor, only set to 0 for soft motors",
+                    type="int",
+                    default=1,
+                ),
+                FloatArg(
+                    name="FEHEIGH",
+                    description="HIGH limit for following error",
+                    type="float",
+                    default="0f",
+                ),
+                FloatArg(
+                    name="FEHIHI",
+                    description="HIHI limit for following error",
+                    type="float",
+                    default="0f",
+                ),
+                StrArg(
+                    name="FEHHSV",
+                    description="HIHI alarm severity for following error",
+                    type="str",
+                    default="NO_ALARM",
+                    is_id=False,
+                ),
+                StrArg(
+                    name="FEHSV",
+                    description="HIGH alarm severity for following error",
+                    type="str",
+                    default="NO_ALARM",
+                    is_id=False,
+                ),
+                IntArg(name="SCALE", description="", type="int", default=1),
+                IntArg(
+                    name="HOMEVIS",
+                    description="If 1 then home is visible on the gui",
+                    type="int",
+                    default=1,
+                ),
+                StrArg(
+                    name="HOMEVISST",
+                    description="",
+                    type="str",
+                    default="Use motor summary screen",
+                    is_id=False,
+                ),
+                StrArg(
+                    name="alh",
+                    description="Set this to alh to add the motor to the alarm handler and send emails",
+                    type="str",
+                    default=" ",
+                    is_id=False,
+                ),
+                StrArg(
+                    name="gda_name",
+                    description="Name to export this as to GDA",
+                    type="str",
+                    default="none",
+                    is_id=False,
+                ),
+                StrArg(
+                    name="gda_desc",
+                    description="Description to export as to GDA",
+                    type="str",
+                    default="$(DESC)",
+                    is_id=False,
+                ),
+                StrArg(
+                    name="HOME",
+                    description="Prefix for autohome instance. Defaults to $(P) If unspecified",
+                    type="str",
+                    default="$(P)",
+                    is_id=False,
+                ),
+                StrArg(
+                    name="ALLOW_HOMED_SET",
+                    description="Set to a blank to allow this axis to have its homed",
+                    type="str",
+                    default="#",
                     is_id=False,
                 ),
             ),
             databases=(
                 Database(
-                    file="pmac_asyn_Motor.template",
+                    file="$(PMAC)/db/dls_pmac_asyn_motor.template",
                     include_args=(),
-                    define_args="PMAC={{ pmac.P }}",
+                    define_args="P={{ P }},\nM={{ M }},\nPORT={{ PORT }},\nADDR={{ ADDR }},\nDESC={{ DESC }},\nMRES={{ MRES }},\nVELO={{ VELO }},\nPREC={{ PREV }},\nEGU={{ EGU }},\nTWV={{ TWV }},\nDTYP={{ DTYP }},\nDIR={{ DIR }},\nVBAS={{ VBAS }},\nVMAX={{ VMAX }},\nACCL={{ ACCL }},\nBDST={{ BDST }},\nBVEL={{ BVEL }},\nBACC={{ BACC }},\nDHLM={{ DHLM }},\nDLLM={{ DLLM }},\nHLM={{ HLM }},\nLLM={{ LLM }},\nHLSV={{ HLSV }},\nINIT={{ INIT }},\nSREV={{ SREV }},\nRRES={{ RRES }},\nERES={{ ERES }},\nJAR={{ JAR }},\nUEIP={{ UEIP }},\nRDBL={{ RDBL }},\nRLINK={{ RLINK }},\nRTRY={{ RTRY }},\nDLY={{ DLY }},\nOFF={{ OFF }},\nRDBD={{ RDBD }},\nFOFF={{ FOFF }},\nADEL={{ ADEL }},\nNTM={{ NTM }},\nFEHIGH={{ FEHEIGH }},\nFEHIHI={{ FEHIHI }},\nFEHHSV={{ FEHHSV }},\nFEHSV={{ FEHSV }},\nSCALE={{ SCALE }},\nHOMEVIS={{ HOMEVIS }},\nHOMEVISSTR={{  HOMEVISSTR  }},\nname={{ name }},\nalh={{ alh }},\ngda_name={{ gda_name }},\ngda_desc={{ gda_desc }},\nSPORT={{ SPORT }},\nHOME={{ HOME }},\nPMAC={{ PMAC }},\nALLOW_HOMED_SET={{ ALLOW_HOMED_SET }}\n",
                 ),
             ),
             script=(),
