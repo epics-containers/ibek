@@ -220,10 +220,7 @@ class Support:
 
         for entity in self.entities:
             entity.get_entity_instances(
-                self.namespace["entityinstance"],
-                self.namespace,
-                self.module,
-                entity,
+                self.namespace["entityinstance"], self.namespace, self.module, entity,
             )
 
         self.namespace[self.module] = make_dataclass(
