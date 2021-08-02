@@ -6,7 +6,7 @@ from ibek.support import Database, Entity, FloatArg, IntArg, StrArg, Support
 # NOTE when the schema changes slightly you can re-create this file by breaking
 # into the test_deserialize_support and pasting the value of 'actual' here
 # afterward run:
-#    pipenv run black --experimental-string-processing .
+#    pipenv run black --experimental-string-processing ./tests/samples/classes
 
 SUPPORT = Support(
     module="pmac",
