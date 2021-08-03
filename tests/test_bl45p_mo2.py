@@ -4,7 +4,9 @@ from pathlib import Path
 from autopep8 import fix_code
 from ruamel.yaml import YAML
 
-from ibek.dataclass_from_yaml import yaml_to_dataclass
+from tests.test_render import (  # noqa: F401; pylint: disable=unused-variable
+    pmac_classes,
+)
 
 sample_yaml = Path(__file__).parent / "samples" / "yaml"
 
@@ -86,25 +88,23 @@ BL45P_MO_IOC_02 = fix_code(
 )
 
 
-def generate_pmac_classes():
-    # create a support object from YAML
-    support = yaml_to_dataclass(str(sample_yaml / "pmac.ibek.yaml"))
-
-    # populate its dataclass namespace
-    support.get_module_dataclass()
-
-    # return the namespace so that callers have access to all of the
-    # generated dataclasses
-    return support.namespace
-
-
-def test_deserialize_bl45p() -> None:
-    namespace = generate_pmac_classes()
-
-    pmac_ioc_cls = namespace["pmac"]
+def test_deserialize_bl45p(pmac_classes) -> None:
+    pmac_ioc_cls = pmac_classes["pmac"]
 
     with open(sample_yaml / "bl45p-mo-ioc-02.pmac.yaml") as f:
         d = YAML().load(f)
         code = pmac_ioc_cls.deserialize(d)
         actual = fix_code(str(code), options={"aggressive": 1})
     assert actual == BL45P_MO_IOC_02
+
+
+def test_database_entries() -> None:
+    pass
+
+
+def test_script_entries() -> None:
+    pass
+
+
+def test_correct_script_rendered() -> None:
+    pass

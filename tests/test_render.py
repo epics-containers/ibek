@@ -1,10 +1,10 @@
 """
-Tests for the deserializing of support module yaml files and the rendering
-of scripts and database entries from the in-memory generated
+Tests for the rendering of scripts and database entries from generated
 EntityInstance classes
 """
 from pathlib import Path
 
+from pytest import fixture
 from ruamel.yaml import YAML
 
 from ibek.dataclass_from_yaml import yaml_to_dataclass
@@ -15,13 +15,8 @@ from tests.samples.classes.pmac_support import SUPPORT
 sample_yaml = Path(__file__).parent / "samples" / "yaml"
 
 
-def test_deserialize_support() -> None:
-    with open(sample_yaml / "pmac.ibek.yaml") as f:
-        actual = Support.deserialize(YAML().load(f))
-    assert actual == SUPPORT
-
-
-def generate_pmac_classes():
+@fixture
+def pmac_classes():
     # create a support object from YAML
     support = yaml_to_dataclass(str(sample_yaml / "pmac.ibek.yaml"))
 
@@ -33,10 +28,14 @@ def generate_pmac_classes():
     return support.namespace
 
 
-def test_pmac_asyn_ip_port_script():
-    namespace = generate_pmac_classes()
+def test_deserialize_support() -> None:
+    with open(sample_yaml / "pmac.ibek.yaml") as f:
+        actual = Support.deserialize(YAML().load(f))
+    assert actual == SUPPORT
 
-    generated_class = namespace["pmac.PmacAsynIPPort"]
+
+def test_pmac_asyn_ip_port_script(pmac_classes):
+    generated_class = pmac_classes["pmac.PmacAsynIPPort"]
     pmac_asyn_ip = generated_class(
         generated_class, name="my_pmac_instance", IP="111.111.111.111"
     )
@@ -45,10 +44,8 @@ def test_pmac_asyn_ip_port_script():
     assert script_txt == "pmacAsynIPConfigure(my_pmac_instance, 111.111.111.111:1025)"
 
 
-def test_geobrick_script():
-    namespace = generate_pmac_classes()
-
-    generated_class = namespace["pmac.Geobrick"]
+def test_geobrick_script(pmac_classes):
+    generated_class = pmac_classes["pmac.Geobrick"]
     pmac_geobrick_instance = generated_class(
         generated_class,
         name="test_geobrick",
@@ -67,10 +64,8 @@ def test_geobrick_script():
     )
 
 
-def test_geobrick_database():
-    namespace = generate_pmac_classes()
-
-    generated_class = namespace["pmac.Geobrick"]
+def test_geobrick_database(pmac_classes):
+    generated_class = pmac_classes["pmac.Geobrick"]
     pmac_geobrick_instance = generated_class(
         generated_class,
         name="test_geobrick",

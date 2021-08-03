@@ -34,7 +34,8 @@ It is a hierarchy of dataclasses. This module also defines all of the
 dataclasses that can appear as children of Support in the object graph.
 
 TODO: There are a couple of problems with deserialize and defaults. These
-are worked around here but I need to understand properly what is happening:
+are worked around as follows. I need to verify that this is the best
+approach to dealing with this.
 
 - str default "" == no default
     - using " " for now
@@ -138,6 +139,9 @@ class Entity:
         # we need to qualify the name with the module so as to avoid cross
         # module name clashes
         name = f"{module_name}.{self.name}"
+
+        if name in namespace:
+            return
 
         # put the literal name in as 'type' for this Entity this gives us
         # a unique key for each of the entity types we may instantiate
