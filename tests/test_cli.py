@@ -1,12 +1,12 @@
 import json
-from gc import collect
 from pathlib import Path
 
+from apischema.json_schema import deserialization_schema
 from typer.testing import CliRunner
 
 from ibek import __version__
 from ibek.__main__ import app
-from ibek.support import Support
+from ibek.dataclass_from_yaml import yaml_to_dataclass
 
 runner = CliRunner()
 
@@ -33,14 +33,6 @@ def test_builder_schema(tmp_path: Path):
 
 
 def test_pmac_schema(tmp_path: Path):
-    # When we deserialize the same yaml twice as we do in the full test suite
-    # we may get clashes in the namespace of generated EntityInstance classes
-    # It causes errors like this:
-    #   <Result ValueError("Types <class 'types.pmac.Geobrick'> and
-    #     <class 'types.pmac.Geobrick'> share same reference 'pmac.Geobrick'")>
-
-    Support.namespace.clear()
-    collect()
 
     schema_path = tmp_path / "pmac.ibek.schema.json"
     yaml_path = sample_yaml / "pmac.ibek.yaml"
@@ -50,3 +42,28 @@ def test_pmac_schema(tmp_path: Path):
 
     actual = json.loads(open(schema_path).read())
     assert expected == actual
+
+
+def test_may_fail(tmp_path: Path):
+    # When we deserialize the same yaml twice as we do in the full test suite
+    # we may get clashes in the namespace of generated EntityInstance classes
+    # It causes errors like this:
+    #   <Result ValueError("Types <class 'types.pmac.Geobrick'> and
+    #     <class 'types.pmac.Geobrick'> share same reference 'pmac.Geobrick'")>
+    # I was getting this error in the above test test_pmac_schema when I ran
+    # the test suite but not when I ran it standalone.
+    #
+    # This test is a standalone attempt to reproduce the error but while
+    # working on it the error has gone away and I don't understand whats up.
+    description = sample_yaml / "pmac.ibek.yaml"
+
+    support1 = yaml_to_dataclass(str(description))
+    ioc_class1 = support1.get_module_dataclass()
+    schema1 = json.dumps(deserialization_schema(ioc_class1), indent=2)
+    with open(tmp_path / "schema1", "w") as f:
+        f.write(schema1)
+
+    ioc_class2 = yaml_to_dataclass(str(description)).get_module_dataclass()
+    schema2 = json.dumps(deserialization_schema(ioc_class2), indent=2)
+    with open(tmp_path / "schema2", "w") as f:
+        f.write(schema2)
