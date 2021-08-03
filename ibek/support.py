@@ -43,6 +43,7 @@ approach to dealing with this.
     - using "0" and added str type to IntArg
 - float values in json have a trailing 'f' and this comes back as str on deserialize
     - added str type to FloatArg
+    - TODO this is not enough since the generated IOC script retains these trailing 'f'
 """
 
 
@@ -185,6 +186,8 @@ class ModuleSuperclass:
     entry point only
     """
 
+    ioc_name: str
+
     @classmethod
     def deserialize(cls: Type[T], d: Mapping[str, Any]) -> T:
         return deserialize(cls, d)
@@ -217,19 +220,10 @@ class Support:
 
     def get_module(self) -> ModuleSuperclass:
         """
-        define a new EntityInstance base class every time this method is called.
+        Generate an in memory module class with a set of EntityInstance classes.
 
-        If this is created in the scope of the Support class or the top
-        level of the module subclasses can persist with each call of
-        self.get_module causing conflicts
-
-        # TODO is this needed if we fully qualify entity instance types
-        e.g. pmac.PmacAsynIPPort? could we therefore define EntityInstance
-        globally?
-
-        # TODO - moving entity instance out for a moment ...
-        # TODO - also made namespace a CLASS variable of Support - meaning there
-        # is only one and all generated classes must have unique names
+        Instances of this module are used to represent individual instances of
+        IOCs.
         """
 
         self.namespace["entityinstance"] = EntityInstance

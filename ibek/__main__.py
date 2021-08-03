@@ -78,11 +78,12 @@ def build_ioc(
     ),
 ):
     """Build a startup script, database and Helm chart from <ioc>.yaml"""
-    boot_script_path = create_helm(name="TODO_Dummy", path=out)
 
-    create_boot_script(
-        ioc_yaml=definition, save_file=boot_script_path, ioc_class_ibek_yaml=description
+    ioc_name, script_txt = create_boot_script(
+        ioc_yaml=definition, ioc_class_ibek_yaml=description
     )
+
+    create_helm(name=ioc_name, script_txt=script_txt, path=out)
 
 
 # test with:

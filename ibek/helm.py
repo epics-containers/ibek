@@ -15,7 +15,11 @@ HELM_TEMPLATE = Path(__file__).parent.parent / "helm-template"
 TEMPLATES = Path(__file__).parent / "templates"
 
 
-def create_boot_script(ioc_yaml: Path, save_file: Path, ioc_class_ibek_yaml: Path):
+def create_boot_script(ioc_yaml: Path, ioc_class_ibek_yaml: Path):
+    """
+    Create the boot script for an IOCs helm chart
+    """
+
     # Dynamically generate a Support object graph for this class of ioc
     support = yaml_to_dataclass(str(ioc_class_ibek_yaml))
 
@@ -33,13 +37,12 @@ def create_boot_script(ioc_yaml: Path, save_file: Path, ioc_class_ibek_yaml: Pat
     # use the
     entity_instances = support_entities.deserialize(entity_instance_dict)
 
-    boot_script = template.render(
+    script_txt = template.render(
         script_elements=render_script_elements(entity_instances),
         database_elements=render_database_elements(entity_instances),
     )
-    # Saves rendered boot script
-    with open(save_file, "w") as f:
-        f.write(boot_script)
+
+    return entity_instances.ioc_name, script_txt
 
 
 def render_file(file_template: Path, **kwargs):
@@ -55,9 +58,11 @@ def render_file(file_template: Path, **kwargs):
     file_template.unlink()
 
 
-def create_helm(name: str, path: Path):
+def create_helm(name: str, script_txt: str, path: Path):
     """
     create a boilerplate helm chart with name str in folder path
+
+    update the values.yml and Chart.yml by rendering their jinja templates
     """
     helm_folder = path / name
 
@@ -78,4 +83,7 @@ def create_helm(name: str, path: Path):
     )
 
     boot_script_path = helm_folder / "config" / "ioc.boot"
-    return boot_script_path
+
+    # Saves rendered boot script
+    with open(boot_script_path, "w") as f:
+        f.write(script_txt)

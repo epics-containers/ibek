@@ -12,6 +12,7 @@ runner = CliRunner()
 
 sample_schemas = Path(__file__).parent / "samples" / "schemas"
 sample_yaml = Path(__file__).parent / "samples" / "yaml"
+sample_helm = Path(__file__).parent / "samples" / "helm"
 
 
 def test_version():
@@ -47,12 +48,19 @@ def test_pmac_schema(tmp_path: Path):
 def test_build_ioc(tmp_path: Path):
     description = sample_yaml / "pmac.ibek.yaml"
     definition = sample_yaml / "bl45p-mo-ioc-02.pmac.yaml"
-    # TODO this should be tmp_path but using /tmp for checking the test
-    tmp_path = Path("/tmp/iocs")
+
     result = runner.invoke(
         app, ["build-ioc", str(description), str(definition), str(tmp_path)]
     )
     assert result.exit_code == 0
+
+    example_boot = (sample_helm / "ioc.boot").read_text()
+    actual_file = tmp_path / "bl45p-mo-ioc-02" / "config" / "ioc.boot"
+    actual_boot = actual_file.read_text()
+
+    assert example_boot == actual_boot
+
+    # TODO check chart and values yaml files too
 
 
 def test_may_fail(tmp_path: Path):

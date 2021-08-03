@@ -325,7 +325,7 @@ entities:
 
     databases:
       - file: $(PMAC)/db/dls_pmac_asyn_motor.template
-        define_args: |
+        define_args: >
           P={{ P }},
           M={{ M }},
           PORT={{ PORT }},

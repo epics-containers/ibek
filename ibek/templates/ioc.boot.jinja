@@ -4,7 +4,9 @@ epicsEnvSet "EPICS_TS_MIN_WEST", '0'
 cd "$(TOP)"
 dbLoadDatabase "dbd/ioc.dbd"
 ioc_registerRecordDeviceDriver(pdbbase)
-{{  script_elements  }}
-{{ database_elements }}
+{{-  script_elements }}
+{{- database_elements }}
 cd "$(TOP)"
-iocInit
+iocInit()
+
+

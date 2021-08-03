@@ -19,7 +19,7 @@ sample_yaml = Path(__file__).parent / "samples" / "yaml"
 
 BL45P_MO_IOC_02 = fix_code(
     """pmac(
-    ioc_name='BL45P_MO_IOC_02',
+    ioc_name='bl45p-mo-ioc-02',
     instances=(
         pmac.PmacAsynIPPort(
             type='pmac.PmacAsynIPPort',
