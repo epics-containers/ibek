@@ -8,7 +8,7 @@ from pytest import fixture
 from ruamel.yaml import YAML
 
 from ibek.dataclass_from_yaml import yaml_to_dataclass
-from ibek.render import create_database, make_script
+from ibek.render import render_database, render_script
 from ibek.support import Support
 from tests.samples.classes.pmac_support import SUPPORT
 
@@ -40,7 +40,7 @@ def test_pmac_asyn_ip_port_script(pmac_classes):
         generated_class, name="my_pmac_instance", IP="111.111.111.111"
     )
 
-    script_txt = make_script(pmac_asyn_ip)
+    script_txt = render_script(pmac_asyn_ip)
     assert script_txt == "pmacAsynIPConfigure(my_pmac_instance, 111.111.111.111:1025)"
 
 
@@ -55,7 +55,7 @@ def test_geobrick_script(pmac_classes):
         movingPoll=800,
     )
 
-    script_txt = make_script(pmac_geobrick_instance)
+    script_txt = render_script(pmac_geobrick_instance)
 
     assert (
         script_txt
@@ -75,7 +75,7 @@ def test_geobrick_database(pmac_classes):
         movingPoll=800,
     )
 
-    db_txt = create_database(pmac_geobrick_instance)
+    db_txt = render_database(pmac_geobrick_instance)
 
     assert (
         db_txt == 'dbLoadRecords("pmacController.template", "PMAC=geobrick_one")\n'

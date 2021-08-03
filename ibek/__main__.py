@@ -9,6 +9,7 @@ from ruamel.yaml.main import YAML
 
 from ibek import __version__
 from ibek.dataclass_from_yaml import yaml_to_dataclass
+from ibek.helm import create_boot_script, create_helm
 from ibek.support import Support
 
 app = typer.Typer()
@@ -68,9 +69,20 @@ def ioc_schema(
 def build_ioc(
     description: Path = typer.Argument(
         ..., help="The filepath to read the IOC class description from"
-    )
+    ),
+    definition: Path = typer.Argument(
+        ..., help="The filepath to read the IOC instance definition from"
+    ),
+    out: Path = typer.Argument(
+        default="iocs", help="Path in which to build the helm chart"
+    ),
 ):
     """Build a startup script, database and Helm chart from <ioc>.yaml"""
+    boot_script_path = create_helm(name="TODO_Dummy", path=out)
+
+    create_boot_script(
+        ioc_yaml=definition, save_file=boot_script_path, ioc_class_ibek_yaml=description
+    )
 
 
 # test with:

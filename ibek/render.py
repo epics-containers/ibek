@@ -8,7 +8,7 @@ from ibek.support import EntityInstance
 T = TypeVar("T")
 
 
-def make_script(instance: EntityInstance) -> str:
+def render_script(instance: EntityInstance) -> str:
     """
     render the startup script by combining the jinja template from
     an entity with the arguments from and EntityInstance
@@ -19,7 +19,7 @@ def make_script(instance: EntityInstance) -> str:
     return result
 
 
-def create_database(instance: EntityInstance) -> str:
+def render_database(instance: EntityInstance) -> str:
     """
     render the lines required to instantiate database by combining the
     templates from the Entity's database list with the arguments from
@@ -38,3 +38,17 @@ def create_database(instance: EntityInstance) -> str:
     db_txt = jinja_template.render(asdict(instance))
 
     return db_txt
+
+
+def render_script_elements(entity_instances) -> str:
+    scripts = ""
+    for instance in entity_instances.instances:
+        scripts += render_script(instance) + "\n"
+    return scripts
+
+
+def render_database_elements(entity_instances) -> str:
+    databases = ""
+    for instance in entity_instances.instances:
+        databases += render_database(instance) + "\n"
+    return databases
