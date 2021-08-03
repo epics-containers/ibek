@@ -65,7 +65,8 @@ def create_helm(name: str, path: Path):
         if helm_folder.exists():
             shutil.rmtree(helm_folder)
     else:
-        path.mkdir(parents=True)
+        # fail if parent does not exist (usually the iocs folder)
+        path.mkdir()
 
     shutil.copytree(HELM_TEMPLATE, helm_folder)
 

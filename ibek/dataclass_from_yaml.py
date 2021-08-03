@@ -3,7 +3,7 @@ from typing import Any, Mapping
 
 from ruamel.yaml import YAML
 
-from ibek.support import Support
+from ibek.support import ModuleSuperclass, Support
 
 
 @dataclass
@@ -17,7 +17,7 @@ class yaml_to_dataclass:
         with open(self.yaml_file, "r") as f:
             return Support.deserialize(yaml.load(f))
 
-    def get_module_dataclass(self) -> type:
+    def get_module_dataclass(self) -> ModuleSuperclass:
         """Creates a dataclass as described in self.yaml_file"""
         support = self._get_support_instance()
         module_dataclass = support.get_module()

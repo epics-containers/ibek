@@ -179,7 +179,24 @@ class Entity:
 
 
 @dataclass
+class ModuleSuperclass:
+    """
+    A base class for all generated module classes. Provides the deserialize
+    entry point only
+    """
+
+    @classmethod
+    def deserialize(cls: Type[T], d: Mapping[str, Any]) -> T:
+        return deserialize(cls, d)
+
+
+@dataclass
 class EntityInstance:
+    """
+    A baseclass for all generated Entity classes. Provides the deserialize
+    entry point only
+    """
+
     entity: ClassVar[Entity]
 
     def __init_subclass__(cls) -> None:
@@ -198,7 +215,7 @@ class Support:
     # a global namespace for holding all generated classes
     namespace: ClassVar[Dict[str, Any]] = {}
 
-    def get_module(self):
+    def get_module(self) -> ModuleSuperclass:
         """
         define a new EntityInstance base class every time this method is called.
 
@@ -214,12 +231,6 @@ class Support:
         # TODO - also made namespace a CLASS variable of Support - meaning there
         # is only one and all generated classes must have unique names
         """
-
-        @dataclass
-        class ModuleSuperclass:
-            @classmethod
-            def deserialize(cls: Type[T], d: Mapping[str, Any]) -> T:
-                return deserialize(cls, d)
 
         self.namespace["entityinstance"] = EntityInstance
 
