@@ -1,4 +1,4 @@
-from dataclasses import asdict, dataclass
+from dataclasses import asdict
 from typing import TypeVar
 
 from jinja2 import Template
@@ -6,14 +6,6 @@ from jinja2 import Template
 from ibek.support import EntityInstance
 
 T = TypeVar("T")
-
-
-@dataclass
-class DatabaseEntry:
-    """Wrapper for database entries."""
-
-    file: str
-    define_args: str
 
 
 def make_script(instance: EntityInstance) -> str:
@@ -30,7 +22,7 @@ def make_script(instance: EntityInstance) -> str:
 def create_database(instance: EntityInstance) -> str:
     """
     render the lines required to instantiate database by combining the
-    templates from the entity's database list with the arguments from
+    templates from the Entity's database list with the arguments from
     an EntityInstance
     """
     templates = instance.entity.databases

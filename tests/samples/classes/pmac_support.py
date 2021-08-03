@@ -2,7 +2,12 @@ from apischema.utils import Undefined
 
 from ibek.support import Database, Entity, FloatArg, IntArg, StrArg, Support
 
-# this represents the generated class resulting from deserializing pmac.ibek.yaml
+"""
+This represents the generated instance of a Support Object which is an
+object graph of Entity instandes. It is the product of deserializing
+pmac.ibek.yaml
+"""
+
 # NOTE when the schema changes slightly you can re-create this file by breaking
 # into the test_deserialize_support and pasting the value of 'actual' here
 # afterward run:

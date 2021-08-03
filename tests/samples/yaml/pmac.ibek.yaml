@@ -1,6 +1,7 @@
 module: pmac
 entities:
-  # TODO - basic Geobrick support only. Does not do CS groups
+  # TODO - this is basic Geobrick support only. Does not do CS groups or
+  # status screen PVs
   - name: Geobrick
     args:
       - type: str
@@ -238,7 +239,7 @@ entities:
         default: 0f
 
       - type: float
-        name: OFF
+        name: "OFF"
         description: User Offset (EGU)
         default: 0f
 

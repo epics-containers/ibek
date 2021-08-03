@@ -149,9 +149,10 @@ class Entity:
             this_field: Union[str, Tuple[str, type], Tuple[str, type, Field[Any]]] = ""
 
             if arg.description:
+                arg_type = getattr(builtins, arg.type)
                 this_field = (
                     arg.name,
-                    A[getattr(builtins, arg.type), desc(arg.description)],
+                    A[arg_type, desc(arg.description)],
                 )
             else:
                 this_field = (arg.name, getattr(builtins, arg.type))
