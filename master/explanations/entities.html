@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>Entity and Entity Instance &mdash; ibek 0.2+14.g0724ac2 documentation</title>
+  <title>Entity and Entity Instance &mdash; ibek 0.2+15.g8bac1c9 documentation</title>
   
 
   
@@ -442,7 +442,8 @@ by ibek with the command <code class="docutils literal notranslate"><span class=
 </details><details>
 <summary><a>pmac.ibek.yaml</a></summary><div class="highlight-default notranslate"><div class="highlight"><pre><span></span>module: pmac
 entities:
-  # TODO - basic Geobrick support only. Does not do CS groups
+  # TODO - this is basic Geobrick support only. Does not do CS groups or
+  # status screen PVs
   - name: Geobrick
     args:
       - type: str
@@ -680,7 +681,7 @@ entities:
         default: 0f
 
       - type: float
-        name: OFF
+        name: &quot;OFF&quot;
         description: User Offset (EGU)
         default: 0f
 
