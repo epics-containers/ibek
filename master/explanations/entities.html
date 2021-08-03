@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>Entity and Entity Instance &mdash; ibek 0.2+17.g635d060 documentation</title>
+  <title>Entity and Entity Instance &mdash; ibek 0.2+20.g58738dc documentation</title>
   
 
   
@@ -767,7 +767,7 @@ entities:
 
     databases:
       - file: $(PMAC)/db/dls_pmac_asyn_motor.template
-        define_args: |
+        define_args: &gt;
           P={{ P }},
           M={{ M }},
           PORT={{ PORT }},
@@ -830,7 +830,7 @@ extracted with the command <code class="docutils literal notranslate"><span clas
 <p>Expand below for example ioc description YAML:</p>
 <blockquote>
 <div><details>
-<summary><a>bl45p-mo-ioc-02.pmac.yaml</a></summary><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ioc_name</span><span class="p">:</span> <span class="n">BL45P_MO_IOC_02</span>
+<summary><a>bl45p-mo-ioc-02.pmac.yaml</a></summary><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ioc_name</span><span class="p">:</span> <span class="n">bl45p</span><span class="o">-</span><span class="n">mo</span><span class="o">-</span><span class="n">ioc</span><span class="o">-</span><span class="mi">02</span>
 <span class="n">instances</span><span class="p">:</span>
   <span class="o">-</span> <span class="nb">type</span><span class="p">:</span> <span class="n">pmac</span><span class="o">.</span><span class="n">PmacAsynIPPort</span>
     <span class="n">name</span><span class="p">:</span> <span class="n">BRICK1port</span>

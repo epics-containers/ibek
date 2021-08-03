@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>API &mdash; ibek 0.2+17.g635d060 documentation</title>
+  <title>API &mdash; ibek 0.2+20.g58738dc documentation</title>
   
 
   
@@ -278,6 +278,7 @@ approach to dealing with this.</p>
 <li><dl class="simple">
 <dt>float values in json have a trailing ‘f’ and this comes back as str on deserialize</dt><dd><ul>
 <li><p>added str type to FloatArg</p></li>
+<li><p>TODO this is not enough since the generated IOC script retains these trailing ‘f’</p></li>
 </ul>
 </dd>
 </dl>
@@ -416,9 +417,23 @@ an Entity. See <a class="reference internal" href="../explanations/entities.html
 </dd></dl>
 
 <dl class="py class">
+<dt class="sig sig-object py" id="ibek.support.ModuleSuperclass">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">ibek.support.</span></span><span class="sig-name descname"><span class="pre">ModuleSuperclass</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ioc_name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ibek/support.html#ModuleSuperclass"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ibek.support.ModuleSuperclass" title="Permalink to this definition">¶</a></dt>
+<dd><p>A base class for all generated module classes. Provides the deserialize
+entry point only</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>ioc_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
 <dt class="sig sig-object py" id="ibek.support.EntityInstance">
 <em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">ibek.support.</span></span><span class="sig-name descname"><span class="pre">EntityInstance</span></span><a class="reference internal" href="../_modules/ibek/support.html#EntityInstance"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ibek.support.EntityInstance" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>A baseclass for all generated Entity classes. Provides the deserialize
+entry point only</p>
+</dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="ibek.support.Support">
@@ -434,17 +449,10 @@ an Entity. See <a class="reference internal" href="../explanations/entities.html
 </dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="ibek.support.Support.get_module">
-<span class="sig-name descname"><span class="pre">get_module</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ibek/support.html#Support.get_module"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ibek.support.Support.get_module" title="Permalink to this definition">¶</a></dt>
-<dd><p>define a new EntityInstance base class every time this method is called.</p>
-<p>If this is created in the scope of the Support class or the top
-level of the module subclasses can persist with each call of
-self.get_module causing conflicts</p>
-<p># TODO is this needed if we fully qualify entity instance types
-e.g. pmac.PmacAsynIPPort? could we therefore define EntityInstance
-globally?</p>
-<p># TODO - moving entity instance out for a moment …
-# TODO - also made namespace a CLASS variable of Support - meaning there
-# is only one and all generated classes must have unique names</p>
+<span class="sig-name descname"><span class="pre">get_module</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#ibek.support.ModuleSuperclass" title="ibek.support.ModuleSuperclass"><span class="pre">ibek.support.ModuleSuperclass</span></a></span></span><a class="reference internal" href="../_modules/ibek/support.html#Support.get_module"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ibek.support.Support.get_module" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generate an in memory module class with a set of EntityInstance classes.</p>
+<p>Instances of this module are used to represent individual instances of
+IOCs.</p>
 </dd></dl>
 
 </dd></dl>

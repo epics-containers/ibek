@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>ibek.support &mdash; ibek 0.2+17.g635d060 documentation</title>
+  <title>ibek.support &mdash; ibek 0.2+20.g58738dc documentation</title>
   
 
   
@@ -271,6 +271,7 @@
 <span class="sd">    - using &quot;0&quot; and added str type to IntArg</span>
 <span class="sd">- float values in json have a trailing &#39;f&#39; and this comes back as str on deserialize</span>
 <span class="sd">    - added str type to FloatArg</span>
+<span class="sd">    - TODO this is not enough since the generated IOC script retains these trailing &#39;f&#39;</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
 
@@ -406,8 +407,27 @@
         <span class="n">namespace</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">entity_instance_cls</span></div></div>
 
 
+<div class="viewcode-block" id="ModuleSuperclass"><a class="viewcode-back" href="../../reference/api.html#ibek.support.ModuleSuperclass">[docs]</a><span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">ModuleSuperclass</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A base class for all generated module classes. Provides the deserialize</span>
+<span class="sd">    entry point only</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">ioc_name</span><span class="p">:</span> <span class="nb">str</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">deserialize</span><span class="p">(</span><span class="bp">cls</span><span class="p">:</span> <span class="n">Type</span><span class="p">[</span><span class="n">T</span><span class="p">],</span> <span class="n">d</span><span class="p">:</span> <span class="n">Mapping</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">T</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">deserialize</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">d</span><span class="p">)</span></div>
+
+
 <div class="viewcode-block" id="EntityInstance"><a class="viewcode-back" href="../../reference/api.html#ibek.support.EntityInstance">[docs]</a><span class="nd">@dataclass</span>
 <span class="k">class</span> <span class="nc">EntityInstance</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A baseclass for all generated Entity classes. Provides the deserialize</span>
+<span class="sd">    entry point only</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
     <span class="n">entity</span><span class="p">:</span> <span class="n">ClassVar</span><span class="p">[</span><span class="n">Entity</span><span class="p">]</span>
 
     <span class="k">def</span> <span class="nf">__init_subclass__</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
@@ -426,28 +446,13 @@
     <span class="c1"># a global namespace for holding all generated classes</span>
     <span class="n">namespace</span><span class="p">:</span> <span class="n">ClassVar</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span> <span class="o">=</span> <span class="p">{}</span>
 
-<div class="viewcode-block" id="Support.get_module"><a class="viewcode-back" href="../../reference/api.html#ibek.support.Support.get_module">[docs]</a>    <span class="k">def</span> <span class="nf">get_module</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Support.get_module"><a class="viewcode-back" href="../../reference/api.html#ibek.support.Support.get_module">[docs]</a>    <span class="k">def</span> <span class="nf">get_module</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ModuleSuperclass</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        define a new EntityInstance base class every time this method is called.</span>
+<span class="sd">        Generate an in memory module class with a set of EntityInstance classes.</span>
 
-<span class="sd">        If this is created in the scope of the Support class or the top</span>
-<span class="sd">        level of the module subclasses can persist with each call of</span>
-<span class="sd">        self.get_module causing conflicts</span>
-
-<span class="sd">        # TODO is this needed if we fully qualify entity instance types</span>
-<span class="sd">        e.g. pmac.PmacAsynIPPort? could we therefore define EntityInstance</span>
-<span class="sd">        globally?</span>
-
-<span class="sd">        # TODO - moving entity instance out for a moment ...</span>
-<span class="sd">        # TODO - also made namespace a CLASS variable of Support - meaning there</span>
-<span class="sd">        # is only one and all generated classes must have unique names</span>
+<span class="sd">        Instances of this module are used to represent individual instances of</span>
+<span class="sd">        IOCs.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-
-        <span class="nd">@dataclass</span>
-        <span class="k">class</span> <span class="nc">ModuleSuperclass</span><span class="p">:</span>
-            <span class="nd">@classmethod</span>
-            <span class="k">def</span> <span class="nf">deserialize</span><span class="p">(</span><span class="bp">cls</span><span class="p">:</span> <span class="n">Type</span><span class="p">[</span><span class="n">T</span><span class="p">],</span> <span class="n">d</span><span class="p">:</span> <span class="n">Mapping</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">T</span><span class="p">:</span>
-                <span class="k">return</span> <span class="n">deserialize</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">d</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">namespace</span><span class="p">[</span><span class="s2">&quot;entityinstance&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">EntityInstance</span>
 
