@@ -146,12 +146,6 @@ SUPPORT = Support(
                     default=Undefined,
                     is_id=False,
                 ),
-                IntArg(
-                    name="ADDR",
-                    description="Address on controller",
-                    type="int",
-                    default="0",
-                ),
                 StrArg(
                     name="DESC",
                     description="Description, displayed on EDM screen",
@@ -446,7 +440,7 @@ SUPPORT = Support(
                     file="$(PMAC)/db/dls_pmac_asyn_motor.template",
                     include_args=(),
                     define_args=(
-                        "P={{ P }}, M={{ M }}, PORT={{ PORT }}, ADDR={{ ADDR"
+                        "P={{ P }}, M={{ M }}, PORT={{ PORT }}, ADDR={{ axis"
                         " }}, DESC={{ DESC }}, MRES={{ MRES }}, VELO={{ VELO"
                         " }}, PREC={{ PREV }}, EGU={{ EGU }}, TWV={{ TWV"
                         " }}, DTYP={{ DTYP }}, DIR={{ DIR }}, VBAS={{ VBAS"
