@@ -3,7 +3,8 @@ epicsEnvSet "EPICS_CA_MAX_ARRAY_BYTES", '6000000'
 epicsEnvSet "EPICS_TS_MIN_WEST", '0'
 cd "$(TOP)"
 dbLoadDatabase "dbd/ioc.dbd"
-ioc_registerRecordDeviceDriver(pdbbase)pmacAsynIPConfigure(BRICK1port, 192.168.0.12:1112)
+ioc_registerRecordDeviceDriver(pdbbase)
+pmacAsynIPConfigure(BRICK1port, 192.168.0.12:1112)
 pmacCreateController(BL45P-MO-BRICK-01, BRICK1port, 0, 8, 500, 100)
 pmacCreateAxes(BL45P-MO-BRICK-01, 8)
 
