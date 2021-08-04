@@ -29,10 +29,9 @@ def render_database(instance: EntityInstance) -> str:
     jinja_txt = ""
 
     for template in templates:
-        jinja_txt += (
-            f"dbLoadRecords(\"{template.__dict__['file']}\", "
-            f"\"{template.__dict__['define_args']}\")\n"
-        )
+        db_file = template.file.strip("\n")
+        db_args = template.define_args.strip("\n")
+        jinja_txt += f'dbLoadRecords("{db_file}", ' f'"{db_args}")\n'
 
     jinja_template = Template(jinja_txt)
     db_txt = jinja_template.render(asdict(instance))

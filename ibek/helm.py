@@ -63,6 +63,7 @@ def create_helm(name: str, script_txt: str, path: Path):
     create a boilerplate helm chart with name str in folder path
 
     update the values.yml and Chart.yml by rendering their jinja templates
+    and insert the boot script whose text is supplied in script_txt
     """
     helm_folder = path / name
 

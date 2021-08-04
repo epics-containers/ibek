@@ -10,8 +10,7 @@ pmacCreateAxes(BL45P-MO-BRICK-01, 8)
 
 dbLoadRecords("pmacController.template", "PMAC=BL45P-MO-STEP-01:")
 dbLoadRecords("pmacStatus.template", "PMAC=BL45P-MO-STEP-01:")
-dbLoadRecords("$(PMAC)/db/dls_pmac_asyn_motor.template", "P=BL45P-MO-THIN-01, M=:X1, PORT=BL45P-MO-BRICK-01, ADDR=0, DESC= , MRES=0.001, VELO=1.0f, PREC=, EGU=mm, TWV=1, DTYP=asynMotor, DIR=0, VBAS=1.0f, VMAX=1f, ACCL=0.5f, BDST=0f, BVEL=0f, BACC=0f, DHLM=10000f, DLLM=, HLM=0f, LLM=0f, HLSV=MAJOR, INIT= , SREV=1000f, RRES=0f, ERES=0f, JAR=0f, UEIP=0, RDBL=0, RLINK=, RTRY=0, DLY=0f, OFF=0f, RDBD=0f, FOFF=0, ADEL=0f, NTM=1, FEHIGH=0f, FEHIHI=0f, FEHHSV=NO_ALARM, FEHSV=NO_ALARM, SCALE=1, HOMEVIS=1, HOMEVISSTR=, name=X1 motor, alh= , gda_name=none, gda_desc=$(DESC), SPORT=BRICK1port, HOME=$(P), PMAC=BL45P-MO-BRICK-01, ALLOW_HOMED_SET=#
-")
+dbLoadRecords("$(PMAC)/db/dls_pmac_asyn_motor.template", "P=BL45P-MO-THIN-01, M=:X1, PORT=BL45P-MO-BRICK-01, ADDR=0, DESC= , MRES=0.001, VELO=1.0, PREC=, EGU=mm, TWV=1, DTYP=asynMotor, DIR=0, VBAS=1.0, VMAX=1, ACCL=0.5, BDST=0, BVEL=0, BACC=0, DHLM=10000, DLLM=, HLM=0, LLM=0, HLSV=MAJOR, INIT= , SREV=1000, RRES=0, ERES=0, JAR=0, UEIP=0, RDBL=0, RLINK=, RTRY=0, DLY=0, OFF=0, RDBD=0, FOFF=0, ADEL=0, NTM=1, FEHIGH=0, FEHIHI=0, FEHHSV=NO_ALARM, FEHSV=NO_ALARM, SCALE=1, HOMEVIS=1, HOMEVISSTR=, name=X1 motor, alh= , gda_name=none, gda_desc=$(DESC), SPORT=BRICK1port, HOME=$(P), PMAC=BL45P-MO-BRICK-01, ALLOW_HOMED_SET=#")
 
 cd "$(TOP)"
 iocInit()

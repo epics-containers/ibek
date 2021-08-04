@@ -38,12 +38,12 @@ are worked around as follows. I need to verify that this is the best
 approach to dealing with this.
 
 - str default "" == no default
-    - using " " for now
+    - using " " for now (I'm not sure I'm happy with this)
 - int default 0 or null == no default
     - using "0" and added str type to IntArg
 - float values in json have a trailing 'f' and this comes back as str on deserialize
     - added str type to FloatArg
-    - TODO this is not enough since the generated IOC script retains these trailing 'f'
+    - added __post_init__ to FloatArg to strip the 'f'
 """
 
 
@@ -91,8 +91,13 @@ class FloatArg(Arg):
 
     type: Literal["float"] = "float"
     # FloatArg defaults always look like str of the form "0.5f"
-    # TODO is it a bug in apischema deserialize
     default: Default[Union[float, str]] = Undefined
+
+    # Strip the trailing f so that the string resolves to a float for EPICS
+    def __post_init__(self):
+        if isinstance(self.default, str):
+            if self.default.endswith("f"):
+                self.default = self.default[:-1]
 
 
 @dataclass
