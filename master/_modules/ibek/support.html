@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>ibek.support &mdash; ibek 0.2+20.g58738dc documentation</title>
+  <title>ibek.support &mdash; ibek 0.2+25.gbae686b documentation</title>
   
 
   
@@ -117,7 +117,7 @@
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Explanations</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../explanations/entities.html">Entity and Entity Instance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../explanations/entities.html">Entities, Definitions and Modules</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Reference</span></p>
 <ul>
@@ -266,12 +266,12 @@
 <span class="sd">approach to dealing with this.</span>
 
 <span class="sd">- str default &quot;&quot; == no default</span>
-<span class="sd">    - using &quot; &quot; for now</span>
+<span class="sd">    - using &quot; &quot; for now (I&#39;m not sure I&#39;m happy with this)</span>
 <span class="sd">- int default 0 or null == no default</span>
 <span class="sd">    - using &quot;0&quot; and added str type to IntArg</span>
 <span class="sd">- float values in json have a trailing &#39;f&#39; and this comes back as str on deserialize</span>
 <span class="sd">    - added str type to FloatArg</span>
-<span class="sd">    - TODO this is not enough since the generated IOC script retains these trailing &#39;f&#39;</span>
+<span class="sd">    - added __post_init__ to FloatArg to strip the &#39;f&#39;</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
 
@@ -319,8 +319,13 @@
 
     <span class="nb">type</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;float&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;float&quot;</span>
     <span class="c1"># FloatArg defaults always look like str of the form &quot;0.5f&quot;</span>
-    <span class="c1"># TODO is it a bug in apischema deserialize</span>
-    <span class="n">default</span><span class="p">:</span> <span class="n">Default</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="n">Undefined</span></div>
+    <span class="n">default</span><span class="p">:</span> <span class="n">Default</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="n">Undefined</span>
+
+    <span class="c1"># Strip the trailing f so that the string resolves to a float for EPICS</span>
+    <span class="k">def</span> <span class="nf">__post_init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">default</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">default</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;f&quot;</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">default</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">default</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span></div>
 
 
 <div class="viewcode-block" id="ObjectArg"><a class="viewcode-back" href="../../reference/api.html#ibek.support.ObjectArg">[docs]</a><span class="nd">@dataclass</span>

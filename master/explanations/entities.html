@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>Entity and Entity Instance &mdash; ibek 0.2+20.g58738dc documentation</title>
+  <title>Entities, Definitions and Modules &mdash; ibek 0.2+25.gbae686b documentation</title>
   
 
   
@@ -119,7 +119,14 @@
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Explanations</span></p>
 <ul class="current">
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Entity and Entity Instance</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Entities, Definitions and Modules</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#entity">Entity</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#definition">Definition</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#modules">Modules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#schemas">Schemas</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#commands">Commands</a></li>
+</ul>
+</li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Reference</span></p>
 <ul>
@@ -210,7 +217,7 @@
     
       <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
         
-      <li>Entity and Entity Instance</li>
+      <li>Entities, Definitions and Modules</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -229,217 +236,161 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="entity-and-entity-instance">
-<span id="entities"></span><h1>Entity and Entity Instance<a class="headerlink" href="#entity-and-entity-instance" title="Permalink to this headline">¶</a></h1>
-<p>An Entity represents any piece of functionality of an IOC that can be
-configured through database and/or startup script.</p>
-<p>Declaring entities and how to configure those Entities is the job of the
-<strong>ibek support module yaml file</strong>. The global schema for this file is provided
-by ibek with the command <code class="docutils literal notranslate"><span class="pre">ibek</span> <span class="pre">ibek-schema</span></code>.</p>
-<p>Expand below for the global schema and an example support module YAML file:</p>
+  <div class="section" id="entities-definitions-and-modules">
+<span id="entities"></span><h1>Entities, Definitions and Modules<a class="headerlink" href="#entities-definitions-and-modules" title="Permalink to this headline">¶</a></h1>
+<p>This is an explanation of the above key terms by referencing the
+example IOC instance bl45p-mo-ioc-02 used in the system tests for this
+project.</p>
+<p>The explanations rely on an understanding of the difference between
+generic IOCs and IOC instances. See <a class="reference external" href="https://epics-containers.github.io/main/explanations/introduction.html#generic-iocs-and-instances">Generic IOCs and instances</a>.</p>
+<div class="section" id="entity">
+<h2>Entity<a class="headerlink" href="#entity" title="Permalink to this headline">¶</a></h2>
+<p>An Entity represents any piece of functionality of an IOC that is
+configured through EPICS database and/or startup script.</p>
+<p>Declaring an Entity
+for an IOC instance will cause ibek to generate lines in the startup script.
+The generated startup script will also supply the EPICS database
+entries using dbLoadRecords and database templates.</p>
+<p>The example motion IOC instance bl45p-mo-ioc-02 has the following entities:</p>
+<blockquote>
+<div><ul>
+<li><p>DlsPmacAsynIPPort (one instance)</p>
+<ul class="simple">
+<li><p>represents a connection to a motion controller</p></li>
+<li><p>configured via</p>
+<ul>
+<li><p>pmacAsynIPConfigure in the boot script</p></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>Geobrick (one instance)</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>represents the motion controller itself</p></li>
+<li><p>configured via</p>
+<ul>
+<li><p>pmacCreateController in boot script</p></li>
+<li><p>dbLoadRecords of pmacController.template and pmacStatus.template</p></li>
+</ul>
+</li>
+</ul>
+</div></blockquote>
+</li>
+<li><p>DlsPmacAsynMotor (two instances)</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>represents a single motor connected to the controller</p></li>
+<li><p>configured via:</p>
+<ul>
+<li><p>dbLoadRecords of dls_pmac_asyn_motor.template</p></li>
+</ul>
+</li>
+</ul>
+</div></blockquote>
+</li>
+</ul>
+</div></blockquote>
+<p>To declare the entities for an IOC instance requires an
+<strong>IOC instance entity file</strong>. This is
+a YAML file with name of the form <em>&lt;ioc_name&gt;.&lt;container&gt;.yaml</em>.</p>
+<p>The example IOC instance entity file is shown below along with the ioc.boot
+file that ibek will generate from it.</p>
+<p>Click the arrows to reveal the files.</p>
 <blockquote>
 <div><details>
-<summary><a>ibek.schema.json</a></summary><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
-  <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span>
-  <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span>
-    <span class="s2">&quot;module&quot;</span><span class="p">:</span> <span class="p">{</span>
-      <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
-      <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Support module name, normally the repo name&quot;</span>
-    <span class="p">},</span>
-    <span class="s2">&quot;entities&quot;</span><span class="p">:</span> <span class="p">{</span>
-      <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;array&quot;</span><span class="p">,</span>
-      <span class="s2">&quot;items&quot;</span><span class="p">:</span> <span class="p">{</span>
-        <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span>
-          <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Publish Entity as type &lt;module&gt;.&lt;name&gt; for IOC instances&quot;</span>
-          <span class="p">},</span>
-          <span class="s2">&quot;args&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;array&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;items&quot;</span><span class="p">:</span> <span class="p">{</span>
-              <span class="s2">&quot;anyOf&quot;</span><span class="p">:</span> <span class="p">[</span>
-                <span class="p">{</span>
-                  <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span>
-                  <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span>
-                    <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="p">{</span>
-                      <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
-                      <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Name of the argument that the IOC instance should pass&quot;</span>
-                    <span class="p">},</span>
-                    <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="p">{</span>
-                      <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
-                      <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Description of what the argument will be used for&quot;</span>
-                    <span class="p">},</span>
-                    <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="p">{</span>
-                      <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
-                      <span class="s2">&quot;const&quot;</span><span class="p">:</span> <span class="s2">&quot;str&quot;</span>
-                    <span class="p">},</span>
-                    <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="p">{</span>
-                      <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="p">[</span>
-                        <span class="s2">&quot;string&quot;</span><span class="p">,</span>
-                        <span class="s2">&quot;null&quot;</span>
-                      <span class="p">],</span>
-                      <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;If given, and instance doesn&#39;t supply argument, what value should be used&quot;</span>
-                    <span class="p">},</span>
-                    <span class="s2">&quot;is_id&quot;</span><span class="p">:</span> <span class="p">{</span>
-                      <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;boolean&quot;</span><span class="p">,</span>
-                      <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;If true, instances may refer to this instance by this arg&quot;</span>
-                    <span class="p">}</span>
-                  <span class="p">},</span>
-                  <span class="s2">&quot;required&quot;</span><span class="p">:</span> <span class="p">[</span>
-                    <span class="s2">&quot;name&quot;</span><span class="p">,</span>
-                    <span class="s2">&quot;description&quot;</span>
-                  <span class="p">],</span>
-                  <span class="s2">&quot;additionalProperties&quot;</span><span class="p">:</span> <span class="n">false</span>
-                <span class="p">},</span>
-                <span class="p">{</span>
-                  <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span>
-                  <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span>
-                    <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="p">{</span>
-                      <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
-                      <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Name of the argument that the IOC instance should pass&quot;</span>
-                    <span class="p">},</span>
-                    <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="p">{</span>
-                      <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
-                      <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Description of what the argument will be used for&quot;</span>
-                    <span class="p">},</span>
-                    <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="p">{</span>
-                      <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
-                      <span class="s2">&quot;const&quot;</span><span class="p">:</span> <span class="s2">&quot;int&quot;</span>
-                    <span class="p">},</span>
-                    <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="p">{</span>
-                      <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="p">[</span>
-                        <span class="s2">&quot;integer&quot;</span><span class="p">,</span>
-                        <span class="s2">&quot;string&quot;</span><span class="p">,</span>
-                        <span class="s2">&quot;null&quot;</span>
-                      <span class="p">],</span>
-                      <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;If given, and instance doesn&#39;t supply argument, what value should be used&quot;</span>
-                    <span class="p">}</span>
-                  <span class="p">},</span>
-                  <span class="s2">&quot;required&quot;</span><span class="p">:</span> <span class="p">[</span>
-                    <span class="s2">&quot;name&quot;</span><span class="p">,</span>
-                    <span class="s2">&quot;description&quot;</span>
-                  <span class="p">],</span>
-                  <span class="s2">&quot;additionalProperties&quot;</span><span class="p">:</span> <span class="n">false</span>
-                <span class="p">},</span>
-                <span class="p">{</span>
-                  <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span>
-                  <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span>
-                    <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="p">{</span>
-                      <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
-                      <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Name of the argument that the IOC instance should pass&quot;</span>
-                    <span class="p">},</span>
-                    <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="p">{</span>
-                      <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
-                      <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Description of what the argument will be used for&quot;</span>
-                    <span class="p">},</span>
-                    <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="p">{</span>
-                      <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
-                      <span class="s2">&quot;const&quot;</span><span class="p">:</span> <span class="s2">&quot;float&quot;</span>
-                    <span class="p">},</span>
-                    <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="p">{</span>
-                      <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="p">[</span>
-                        <span class="s2">&quot;number&quot;</span><span class="p">,</span>
-                        <span class="s2">&quot;string&quot;</span><span class="p">,</span>
-                        <span class="s2">&quot;null&quot;</span>
-                      <span class="p">],</span>
-                      <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;If given, and instance doesn&#39;t supply argument, what value should be used&quot;</span>
-                    <span class="p">}</span>
-                  <span class="p">},</span>
-                  <span class="s2">&quot;required&quot;</span><span class="p">:</span> <span class="p">[</span>
-                    <span class="s2">&quot;name&quot;</span><span class="p">,</span>
-                    <span class="s2">&quot;description&quot;</span>
-                  <span class="p">],</span>
-                  <span class="s2">&quot;additionalProperties&quot;</span><span class="p">:</span> <span class="n">false</span>
-                <span class="p">},</span>
-                <span class="p">{</span>
-                  <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span>
-                  <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span>
-                    <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="p">{</span>
-                      <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
-                      <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Name of the argument that the IOC instance should pass&quot;</span>
-                    <span class="p">},</span>
-                    <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="p">{</span>
-                      <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
-                      <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Description of what the argument will be used for&quot;</span>
-                    <span class="p">},</span>
-                    <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="p">{</span>
-                      <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
-                      <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Entity class, &lt;module&gt;.&lt;entity_name&gt;&quot;</span>
-                    <span class="p">},</span>
-                    <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="p">{</span>
-                      <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="p">[</span>
-                        <span class="s2">&quot;string&quot;</span><span class="p">,</span>
-                        <span class="s2">&quot;null&quot;</span>
-                      <span class="p">],</span>
-                      <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;If given, and instance doesn&#39;t supply argument, what value should be used&quot;</span>
-                    <span class="p">}</span>
-                  <span class="p">},</span>
-                  <span class="s2">&quot;required&quot;</span><span class="p">:</span> <span class="p">[</span>
-                    <span class="s2">&quot;name&quot;</span><span class="p">,</span>
-                    <span class="s2">&quot;description&quot;</span><span class="p">,</span>
-                    <span class="s2">&quot;type&quot;</span>
-                  <span class="p">],</span>
-                  <span class="s2">&quot;additionalProperties&quot;</span><span class="p">:</span> <span class="n">false</span>
-                <span class="p">}</span>
-              <span class="p">]</span>
-            <span class="p">},</span>
-            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;The arguments IOC instance should supply&quot;</span>
-          <span class="p">},</span>
-          <span class="s2">&quot;databases&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;array&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;items&quot;</span><span class="p">:</span> <span class="p">{</span>
-              <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span>
-              <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span>
-                <span class="s2">&quot;file&quot;</span><span class="p">:</span> <span class="p">{</span>
-                  <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
-                  <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Filename of the database template in &lt;module_root&gt;/db&quot;</span>
-                <span class="p">},</span>
-                <span class="s2">&quot;include_args&quot;</span><span class="p">:</span> <span class="p">{</span>
-                  <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;array&quot;</span><span class="p">,</span>
-                  <span class="s2">&quot;items&quot;</span><span class="p">:</span> <span class="p">{</span>
-                    <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
-                  <span class="p">},</span>
-                  <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;List of args to pass through to database&quot;</span>
-                <span class="p">},</span>
-                <span class="s2">&quot;define_args&quot;</span><span class="p">:</span> <span class="p">{</span>
-                  <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
-                  <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Arg string list to be generated as Jinja template&quot;</span>
-                <span class="p">}</span>
-              <span class="p">},</span>
-              <span class="s2">&quot;required&quot;</span><span class="p">:</span> <span class="p">[</span>
-                <span class="s2">&quot;file&quot;</span>
-              <span class="p">],</span>
-              <span class="s2">&quot;additionalProperties&quot;</span><span class="p">:</span> <span class="n">false</span>
-            <span class="p">},</span>
-            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Databases to instantiate&quot;</span>
-          <span class="p">},</span>
-          <span class="s2">&quot;script&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;array&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;items&quot;</span><span class="p">:</span> <span class="p">{</span>
-              <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
-            <span class="p">},</span>
-            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Startup script snippet defined as Jinja template&quot;</span>
-          <span class="p">}</span>
-        <span class="p">},</span>
-        <span class="s2">&quot;required&quot;</span><span class="p">:</span> <span class="p">[</span>
-          <span class="s2">&quot;name&quot;</span>
-        <span class="p">],</span>
-        <span class="s2">&quot;additionalProperties&quot;</span><span class="p">:</span> <span class="n">false</span>
-      <span class="p">},</span>
-      <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;The entities an IOC can create using this module&quot;</span>
-    <span class="p">}</span>
-  <span class="p">},</span>
-  <span class="s2">&quot;required&quot;</span><span class="p">:</span> <span class="p">[</span>
-    <span class="s2">&quot;module&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;entities&quot;</span>
-  <span class="p">],</span>
-  <span class="s2">&quot;additionalProperties&quot;</span><span class="p">:</span> <span class="n">false</span><span class="p">,</span>
-  <span class="s2">&quot;$schema&quot;</span><span class="p">:</span> <span class="s2">&quot;http://json-schema.org/draft/2019-09/schema#&quot;</span>
-<span class="p">}</span>
+<summary><a>bl45p-mo-ioc-02.pmac.yaml</a></summary><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ioc_name</span><span class="p">:</span> <span class="n">bl45p</span><span class="o">-</span><span class="n">mo</span><span class="o">-</span><span class="n">ioc</span><span class="o">-</span><span class="mi">02</span>
+<span class="n">instances</span><span class="p">:</span>
+  <span class="o">-</span> <span class="nb">type</span><span class="p">:</span> <span class="n">pmac</span><span class="o">.</span><span class="n">PmacAsynIPPort</span>
+    <span class="n">name</span><span class="p">:</span> <span class="n">BRICK1port</span>
+    <span class="n">IP</span><span class="p">:</span> <span class="mf">192.168.0.12</span><span class="p">:</span><span class="mi">1112</span>
+
+  <span class="o">-</span> <span class="nb">type</span><span class="p">:</span> <span class="n">pmac</span><span class="o">.</span><span class="n">Geobrick</span>
+    <span class="n">name</span><span class="p">:</span> <span class="n">BL45P</span><span class="o">-</span><span class="n">MO</span><span class="o">-</span><span class="n">BRICK</span><span class="o">-</span><span class="mi">01</span>
+    <span class="n">PORT</span><span class="p">:</span> <span class="n">BRICK1port</span>
+    <span class="n">P</span><span class="p">:</span> <span class="s2">&quot;BL45P-MO-STEP-01:&quot;</span>
+    <span class="n">idlePoll</span><span class="p">:</span> <span class="mi">100</span>
+    <span class="n">movingPoll</span><span class="p">:</span> <span class="mi">500</span>
+
+  <span class="o">-</span> <span class="nb">type</span><span class="p">:</span> <span class="n">pmac</span><span class="o">.</span><span class="n">DlsPmacAsynMotor</span>
+    <span class="n">name</span><span class="p">:</span> <span class="n">X1</span> <span class="n">motor</span>
+    <span class="c1"># TODO previously would have been an object pointing to a pmac.Geobrick</span>
+    <span class="n">PMAC</span><span class="p">:</span> <span class="n">BL45P</span><span class="o">-</span><span class="n">MO</span><span class="o">-</span><span class="n">BRICK</span><span class="o">-</span><span class="mi">01</span>
+    <span class="c1"># TODO Previously would have used pmac.PORT, pmac.SPORT</span>
+    <span class="n">PORT</span><span class="p">:</span> <span class="n">BL45P</span><span class="o">-</span><span class="n">MO</span><span class="o">-</span><span class="n">BRICK</span><span class="o">-</span><span class="mi">01</span>
+    <span class="n">SPORT</span><span class="p">:</span> <span class="n">BRICK1port</span>
+    <span class="n">axis</span><span class="p">:</span> <span class="mi">1</span>
+    <span class="n">P</span><span class="p">:</span> <span class="s2">&quot;BL45P-MO-THIN-01&quot;</span>
+    <span class="n">M</span><span class="p">:</span> <span class="s2">&quot;:X1&quot;</span>
+    <span class="n">MRES</span><span class="p">:</span> <span class="mf">0.001</span>
+
+  <span class="o">-</span> <span class="nb">type</span><span class="p">:</span> <span class="n">pmac</span><span class="o">.</span><span class="n">DlsPmacAsynMotor</span>
+    <span class="n">name</span><span class="p">:</span> <span class="n">Y1</span> <span class="n">motor</span>
+    <span class="n">PMAC</span><span class="p">:</span> <span class="n">BL45P</span><span class="o">-</span><span class="n">MO</span><span class="o">-</span><span class="n">BRICK</span><span class="o">-</span><span class="mi">01</span>
+    <span class="n">PORT</span><span class="p">:</span> <span class="n">BL45P</span><span class="o">-</span><span class="n">MO</span><span class="o">-</span><span class="n">BRICK</span><span class="o">-</span><span class="mi">01</span>
+    <span class="n">SPORT</span><span class="p">:</span> <span class="n">BRICK1port</span>
+    <span class="n">axis</span><span class="p">:</span> <span class="mi">2</span>
+    <span class="n">P</span><span class="p">:</span> <span class="s2">&quot;BL45P-MO-THIN-01&quot;</span>
+    <span class="n">M</span><span class="p">:</span> <span class="s2">&quot;:Y1&quot;</span>
+    <span class="n">MRES</span><span class="p">:</span> <span class="mf">0.001</span>
 </pre></div>
 </div>
-</details><details>
+</details>
+<details>
+<summary><a>ioc.boot</a></summary><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cd</span> <span class="s2">&quot;$(TOP)&quot;</span>
+<span class="n">epicsEnvSet</span> <span class="s2">&quot;EPICS_CA_MAX_ARRAY_BYTES&quot;</span><span class="p">,</span> <span class="s1">&#39;6000000&#39;</span>
+<span class="n">epicsEnvSet</span> <span class="s2">&quot;EPICS_TS_MIN_WEST&quot;</span><span class="p">,</span> <span class="s1">&#39;0&#39;</span>
+<span class="n">cd</span> <span class="s2">&quot;$(TOP)&quot;</span>
+<span class="n">dbLoadDatabase</span> <span class="s2">&quot;dbd/ioc.dbd&quot;</span>
+<span class="n">ioc_registerRecordDeviceDriver</span><span class="p">(</span><span class="n">pdbbase</span><span class="p">)</span>
+<span class="n">pmacAsynIPConfigure</span><span class="p">(</span><span class="n">BRICK1port</span><span class="p">,</span> <span class="mf">192.168.0.12</span><span class="p">:</span><span class="mi">1112</span><span class="p">)</span>
+<span class="n">pmacCreateController</span><span class="p">(</span><span class="n">BL45P</span><span class="o">-</span><span class="n">MO</span><span class="o">-</span><span class="n">BRICK</span><span class="o">-</span><span class="mi">01</span><span class="p">,</span> <span class="n">BRICK1port</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">500</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
+<span class="n">pmacCreateAxes</span><span class="p">(</span><span class="n">BL45P</span><span class="o">-</span><span class="n">MO</span><span class="o">-</span><span class="n">BRICK</span><span class="o">-</span><span class="mi">01</span><span class="p">,</span> <span class="mi">8</span><span class="p">)</span>
+
+
+
+<span class="n">dbLoadRecords</span><span class="p">(</span><span class="s2">&quot;pmacController.template&quot;</span><span class="p">,</span> <span class="s2">&quot;PMAC=BL45P-MO-STEP-01:&quot;</span><span class="p">)</span>
+<span class="n">dbLoadRecords</span><span class="p">(</span><span class="s2">&quot;pmacStatus.template&quot;</span><span class="p">,</span> <span class="s2">&quot;PMAC=BL45P-MO-STEP-01:&quot;</span><span class="p">)</span>
+<span class="n">dbLoadRecords</span><span class="p">(</span><span class="s2">&quot;$(PMAC)/db/dls_pmac_asyn_motor.template&quot;</span><span class="p">,</span> <span class="s2">&quot;P=BL45P-MO-THIN-01, M=:X1, PORT=BL45P-MO-BRICK-01, ADDR=1, DESC= , MRES=0.001, VELO=1.0, PREC=, EGU=mm, TWV=1, DTYP=asynMotor, DIR=0, VBAS=1.0, VMAX=1, ACCL=0.5, BDST=0, BVEL=0, BACC=0, DHLM=10000, DLLM=, HLM=0, LLM=0, HLSV=MAJOR, INIT= , SREV=1000, RRES=0, ERES=0, JAR=0, UEIP=0, RDBL=0, RLINK=, RTRY=0, DLY=0, OFF=0, RDBD=0, FOFF=0, ADEL=0, NTM=1, FEHIGH=0, FEHIHI=0, FEHHSV=NO_ALARM, FEHSV=NO_ALARM, SCALE=1, HOMEVIS=1, HOMEVISSTR=, name=X1 motor, alh= , gda_name=none, gda_desc=$(DESC), SPORT=BRICK1port, HOME=$(P), PMAC=BL45P-MO-BRICK-01, ALLOW_HOMED_SET=#&quot;</span><span class="p">)</span>
+<span class="n">dbLoadRecords</span><span class="p">(</span><span class="s2">&quot;$(PMAC)/db/dls_pmac_asyn_motor.template&quot;</span><span class="p">,</span> <span class="s2">&quot;P=BL45P-MO-THIN-01, M=:Y1, PORT=BL45P-MO-BRICK-01, ADDR=2, DESC= , MRES=0.001, VELO=1.0, PREC=, EGU=mm, TWV=1, DTYP=asynMotor, DIR=0, VBAS=1.0, VMAX=1, ACCL=0.5, BDST=0, BVEL=0, BACC=0, DHLM=10000, DLLM=, HLM=0, LLM=0, HLSV=MAJOR, INIT= , SREV=1000, RRES=0, ERES=0, JAR=0, UEIP=0, RDBL=0, RLINK=, RTRY=0, DLY=0, OFF=0, RDBD=0, FOFF=0, ADEL=0, NTM=1, FEHIGH=0, FEHIHI=0, FEHHSV=NO_ALARM, FEHSV=NO_ALARM, SCALE=1, HOMEVIS=1, HOMEVISSTR=, name=Y1 motor, alh= , gda_name=none, gda_desc=$(DESC), SPORT=BRICK1port, HOME=$(P), PMAC=BL45P-MO-BRICK-01, ALLOW_HOMED_SET=#&quot;</span><span class="p">)</span>
+
+<span class="n">cd</span> <span class="s2">&quot;$(TOP)&quot;</span>
+<span class="n">iocInit</span><span class="p">()</span>
+
+</pre></div>
+</div>
+</details></div></blockquote>
+</div>
+<div class="section" id="definition">
+<h2>Definition<a class="headerlink" href="#definition" title="Permalink to this headline">¶</a></h2>
+<p>A given support module will implement a number of classes of Entity.</p>
+<p>For example the pmac support module provides the following classes of
+Entity (currently - the full implementation would have more):</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>DlsPmacAsynIPPort</p></li>
+<li><p>Geobrick</p></li>
+<li><p>DlsPmacAsynMotor</p></li>
+</ul>
+</div></blockquote>
+<p>Each support module must provide ibek with details its classes of Entity.
+This is done in a <strong>support module definition file</strong> with name of the
+form <em>&lt;support_module&gt;.ibek.yaml</em>.</p>
+<p>The file contains a list of Definitions. Each Definition describes a class of
+Entity by providing:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>Entity class name</p></li>
+<li><p>a list of arguments to supply when declaring an Entity</p></li>
+<li><p>boot script entries to add for the Entity in the form of a jinja
+template that may refer to the above arguments</p></li>
+<li><p>database templates to instantiate for the Entity with macro values from
+the above arguments</p></li>
+</ul>
+</div></blockquote>
+<p>Expand below for the example pmac support module definition file:</p>
+<blockquote>
+<div><details>
 <summary><a>pmac.ibek.yaml</a></summary><div class="highlight-default notranslate"><div class="highlight"><pre><span></span>module: pmac
 entities:
   # TODO - this is basic Geobrick support only. Does not do CS groups or
@@ -522,11 +473,6 @@ entities:
       - type: str
         name: name
         description: Object name and gui association name
-
-      - type: int
-        name: ADDR
-        description: Address on controller
-        default: &quot;0&quot;
 
       - type: str
         name: DESC
@@ -771,7 +717,7 @@ entities:
           P={{ P }},
           M={{ M }},
           PORT={{ PORT }},
-          ADDR={{ ADDR }},
+          ADDR={{ axis }},
           DESC={{ DESC }},
           MRES={{ MRES }},
           VELO={{ VELO }},
@@ -824,79 +770,646 @@ entities:
 </pre></div>
 </div>
 </details></div></blockquote>
-<p>Making use of these entities to describe an IOC instance is the job
-of an <strong>ibek ioc description YAML file</strong>. The schema for this file is
-extracted with the command <code class="docutils literal notranslate"><span class="pre">ibek</span> <span class="pre">ioc-schema</span> <span class="pre">&lt;IBEK_SUPPORT_MODULE_YAML&gt;</span> <span class="pre">&lt;OUTPUT_SCHEMA_JSON&gt;</span></code>.</p>
-<p>Expand below for example ioc description YAML:</p>
+</div>
+<div class="section" id="modules">
+<h2>Modules<a class="headerlink" href="#modules" title="Permalink to this headline">¶</a></h2>
+<p>Every generic IOC image will include a number of EPICS support modules.</p>
+<p>Each IOC instance will mount such an image and therefore be able to make
+use of the functionality in any of those support modules.</p>
+<p>This implies that there is a collection of <strong>support module definition files</strong>
+for each generic IOC.</p>
+<p>Thus the full set of classes of Entity that the IOC supports is a union of the
+Entity classes supplied by the definition files of all the support modules in
+a given generic IOC.</p>
+</div>
+<div class="section" id="schemas">
+<h2>Schemas<a class="headerlink" href="#schemas" title="Permalink to this headline">¶</a></h2>
+<p>The YAML files described above are constrained by schemas. These schemas are
+available to the developer and may be used to assist in generating the YAML.</p>
+<p>Thus, the sequence of files is as follows:</p>
+<table class="colwidths-given docutils align-default" id="id1">
+<caption><span class="caption-text">Summary of ibek files sequence</span><a class="headerlink" href="#id1" title="Permalink to this table">¶</a></caption>
+<colgroup>
+<col style="width: 4%" />
+<col style="width: 35%" />
+<col style="width: 61%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>num</p></th>
+<th class="head"><p>Name</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>1</p></td>
+<td><p>ibek.schema.json</p></td>
+<td><p>Global Schema for <strong>2</strong></p></td>
+</tr>
+<tr class="row-odd"><td><p>2</p></td>
+<td><p>&lt;support_module&gt;.ibek.yaml</p></td>
+<td><p>Definition file for a support module. Generates part of <strong>3</strong></p></td>
+</tr>
+<tr class="row-even"><td><p>3</p></td>
+<td><p>&lt;container&gt;.schema.json</p></td>
+<td><p>Schema for <strong>4</strong>. Generated by combining all of <strong>2</strong> from a container</p></td>
+</tr>
+<tr class="row-odd"><td><p>4</p></td>
+<td><p>&lt;ioc_name&gt;.&lt;container&gt;.yaml</p></td>
+<td><p>Description of Entities for an IOC instance.</p></td>
+</tr>
+<tr class="row-even"><td><p>5</p></td>
+<td><p>Helm Chart files</p></td>
+<td><p>The generated files for deploying the described IOC instance</p></td>
+</tr>
+</tbody>
+</table>
+<p>The Global Schema and example IOC instance schema are below:</p>
 <blockquote>
 <div><details>
-<summary><a>bl45p-mo-ioc-02.pmac.yaml</a></summary><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ioc_name</span><span class="p">:</span> <span class="n">bl45p</span><span class="o">-</span><span class="n">mo</span><span class="o">-</span><span class="n">ioc</span><span class="o">-</span><span class="mi">02</span>
-<span class="n">instances</span><span class="p">:</span>
-  <span class="o">-</span> <span class="nb">type</span><span class="p">:</span> <span class="n">pmac</span><span class="o">.</span><span class="n">PmacAsynIPPort</span>
-    <span class="n">name</span><span class="p">:</span> <span class="n">BRICK1port</span>
-    <span class="n">IP</span><span class="p">:</span> <span class="mf">192.168.0.12</span><span class="p">:</span><span class="mi">1112</span>
-
-  <span class="o">-</span> <span class="nb">type</span><span class="p">:</span> <span class="n">pmac</span><span class="o">.</span><span class="n">Geobrick</span>
-    <span class="n">name</span><span class="p">:</span> <span class="n">BL45P</span><span class="o">-</span><span class="n">MO</span><span class="o">-</span><span class="n">BRICK</span><span class="o">-</span><span class="mi">01</span>
-    <span class="n">PORT</span><span class="p">:</span> <span class="n">BRICK1port</span>
-    <span class="n">P</span><span class="p">:</span> <span class="s2">&quot;BL45P-MO-STEP-01:&quot;</span>
-    <span class="n">idlePoll</span><span class="p">:</span> <span class="mi">100</span>
-    <span class="n">movingPoll</span><span class="p">:</span> <span class="mi">500</span>
-
-  <span class="o">-</span> <span class="nb">type</span><span class="p">:</span> <span class="n">pmac</span><span class="o">.</span><span class="n">DlsPmacAsynMotor</span>
-    <span class="n">name</span><span class="p">:</span> <span class="n">X1</span> <span class="n">motor</span>
-    <span class="c1"># TODO previously would have been an object pointing to a pmac.Geobrick</span>
-    <span class="n">PMAC</span><span class="p">:</span> <span class="n">BL45P</span><span class="o">-</span><span class="n">MO</span><span class="o">-</span><span class="n">BRICK</span><span class="o">-</span><span class="mi">01</span>
-    <span class="c1"># TODO Previously would have used pmac.PORT, pmac.SPORT</span>
-    <span class="n">PORT</span><span class="p">:</span> <span class="n">BL45P</span><span class="o">-</span><span class="n">MO</span><span class="o">-</span><span class="n">BRICK</span><span class="o">-</span><span class="mi">01</span>
-    <span class="n">SPORT</span><span class="p">:</span> <span class="n">BRICK1port</span>
-    <span class="n">axis</span><span class="p">:</span> <span class="mi">1</span>
-    <span class="n">P</span><span class="p">:</span> <span class="s2">&quot;BL45P-MO-THIN-01&quot;</span>
-    <span class="n">M</span><span class="p">:</span> <span class="s2">&quot;:X1&quot;</span>
-    <span class="n">MRES</span><span class="p">:</span> <span class="mf">0.001</span>
+<summary><a>ibek.schema.json</a></summary><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+  <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span>
+  <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="s2">&quot;module&quot;</span><span class="p">:</span> <span class="p">{</span>
+      <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Support module name, normally the repo name&quot;</span>
+    <span class="p">},</span>
+    <span class="s2">&quot;entities&quot;</span><span class="p">:</span> <span class="p">{</span>
+      <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;array&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;items&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span>
+          <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Publish Entity as type &lt;module&gt;.&lt;name&gt; for IOC instances&quot;</span>
+          <span class="p">},</span>
+          <span class="s2">&quot;args&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;array&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;items&quot;</span><span class="p">:</span> <span class="p">{</span>
+              <span class="s2">&quot;anyOf&quot;</span><span class="p">:</span> <span class="p">[</span>
+                <span class="p">{</span>
+                  <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span>
+                  <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="p">{</span>
+                      <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+                      <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Name of the argument that the IOC instance should pass&quot;</span>
+                    <span class="p">},</span>
+                    <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="p">{</span>
+                      <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+                      <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Description of what the argument will be used for&quot;</span>
+                    <span class="p">},</span>
+                    <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="p">{</span>
+                      <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+                      <span class="s2">&quot;const&quot;</span><span class="p">:</span> <span class="s2">&quot;str&quot;</span>
+                    <span class="p">},</span>
+                    <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="p">{</span>
+                      <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="p">[</span>
+                        <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;null&quot;</span>
+                      <span class="p">],</span>
+                      <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;If given, and instance doesn&#39;t supply argument, what value should be used&quot;</span>
+                    <span class="p">},</span>
+                    <span class="s2">&quot;is_id&quot;</span><span class="p">:</span> <span class="p">{</span>
+                      <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;boolean&quot;</span><span class="p">,</span>
+                      <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;If true, instances may refer to this instance by this arg&quot;</span>
+                    <span class="p">}</span>
+                  <span class="p">},</span>
+                  <span class="s2">&quot;required&quot;</span><span class="p">:</span> <span class="p">[</span>
+                    <span class="s2">&quot;name&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;description&quot;</span>
+                  <span class="p">],</span>
+                  <span class="s2">&quot;additionalProperties&quot;</span><span class="p">:</span> <span class="n">false</span>
+                <span class="p">},</span>
+                <span class="p">{</span>
+                  <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span>
+                  <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="p">{</span>
+                      <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+                      <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Name of the argument that the IOC instance should pass&quot;</span>
+                    <span class="p">},</span>
+                    <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="p">{</span>
+                      <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+                      <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Description of what the argument will be used for&quot;</span>
+                    <span class="p">},</span>
+                    <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="p">{</span>
+                      <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+                      <span class="s2">&quot;const&quot;</span><span class="p">:</span> <span class="s2">&quot;int&quot;</span>
+                    <span class="p">},</span>
+                    <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="p">{</span>
+                      <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="p">[</span>
+                        <span class="s2">&quot;integer&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;null&quot;</span>
+                      <span class="p">],</span>
+                      <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;If given, and instance doesn&#39;t supply argument, what value should be used&quot;</span>
+                    <span class="p">}</span>
+                  <span class="p">},</span>
+                  <span class="s2">&quot;required&quot;</span><span class="p">:</span> <span class="p">[</span>
+                    <span class="s2">&quot;name&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;description&quot;</span>
+                  <span class="p">],</span>
+                  <span class="s2">&quot;additionalProperties&quot;</span><span class="p">:</span> <span class="n">false</span>
+                <span class="p">},</span>
+                <span class="p">{</span>
+                  <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span>
+                  <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="p">{</span>
+                      <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+                      <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Name of the argument that the IOC instance should pass&quot;</span>
+                    <span class="p">},</span>
+                    <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="p">{</span>
+                      <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+                      <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Description of what the argument will be used for&quot;</span>
+                    <span class="p">},</span>
+                    <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="p">{</span>
+                      <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+                      <span class="s2">&quot;const&quot;</span><span class="p">:</span> <span class="s2">&quot;float&quot;</span>
+                    <span class="p">},</span>
+                    <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="p">{</span>
+                      <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="p">[</span>
+                        <span class="s2">&quot;number&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;null&quot;</span>
+                      <span class="p">],</span>
+                      <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;If given, and instance doesn&#39;t supply argument, what value should be used&quot;</span>
+                    <span class="p">}</span>
+                  <span class="p">},</span>
+                  <span class="s2">&quot;required&quot;</span><span class="p">:</span> <span class="p">[</span>
+                    <span class="s2">&quot;name&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;description&quot;</span>
+                  <span class="p">],</span>
+                  <span class="s2">&quot;additionalProperties&quot;</span><span class="p">:</span> <span class="n">false</span>
+                <span class="p">},</span>
+                <span class="p">{</span>
+                  <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span>
+                  <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="p">{</span>
+                      <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+                      <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Name of the argument that the IOC instance should pass&quot;</span>
+                    <span class="p">},</span>
+                    <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="p">{</span>
+                      <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+                      <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Description of what the argument will be used for&quot;</span>
+                    <span class="p">},</span>
+                    <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="p">{</span>
+                      <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+                      <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Entity class, &lt;module&gt;.&lt;entity_name&gt;&quot;</span>
+                    <span class="p">},</span>
+                    <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="p">{</span>
+                      <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="p">[</span>
+                        <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;null&quot;</span>
+                      <span class="p">],</span>
+                      <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;If given, and instance doesn&#39;t supply argument, what value should be used&quot;</span>
+                    <span class="p">}</span>
+                  <span class="p">},</span>
+                  <span class="s2">&quot;required&quot;</span><span class="p">:</span> <span class="p">[</span>
+                    <span class="s2">&quot;name&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;description&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;type&quot;</span>
+                  <span class="p">],</span>
+                  <span class="s2">&quot;additionalProperties&quot;</span><span class="p">:</span> <span class="n">false</span>
+                <span class="p">}</span>
+              <span class="p">]</span>
+            <span class="p">},</span>
+            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;The arguments IOC instance should supply&quot;</span>
+          <span class="p">},</span>
+          <span class="s2">&quot;databases&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;array&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;items&quot;</span><span class="p">:</span> <span class="p">{</span>
+              <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span>
+              <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;file&quot;</span><span class="p">:</span> <span class="p">{</span>
+                  <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+                  <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Filename of the database template in &lt;module_root&gt;/db&quot;</span>
+                <span class="p">},</span>
+                <span class="s2">&quot;include_args&quot;</span><span class="p">:</span> <span class="p">{</span>
+                  <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;array&quot;</span><span class="p">,</span>
+                  <span class="s2">&quot;items&quot;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
+                  <span class="p">},</span>
+                  <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;List of args to pass through to database&quot;</span>
+                <span class="p">},</span>
+                <span class="s2">&quot;define_args&quot;</span><span class="p">:</span> <span class="p">{</span>
+                  <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+                  <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Arg string list to be generated as Jinja template&quot;</span>
+                <span class="p">}</span>
+              <span class="p">},</span>
+              <span class="s2">&quot;required&quot;</span><span class="p">:</span> <span class="p">[</span>
+                <span class="s2">&quot;file&quot;</span>
+              <span class="p">],</span>
+              <span class="s2">&quot;additionalProperties&quot;</span><span class="p">:</span> <span class="n">false</span>
+            <span class="p">},</span>
+            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Databases to instantiate&quot;</span>
+          <span class="p">},</span>
+          <span class="s2">&quot;script&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;array&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;items&quot;</span><span class="p">:</span> <span class="p">{</span>
+              <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
+            <span class="p">},</span>
+            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Startup script snippet defined as Jinja template&quot;</span>
+          <span class="p">}</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;required&quot;</span><span class="p">:</span> <span class="p">[</span>
+          <span class="s2">&quot;name&quot;</span>
+        <span class="p">],</span>
+        <span class="s2">&quot;additionalProperties&quot;</span><span class="p">:</span> <span class="n">false</span>
+      <span class="p">},</span>
+      <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;The entities an IOC can create using this module&quot;</span>
+    <span class="p">}</span>
+  <span class="p">},</span>
+  <span class="s2">&quot;required&quot;</span><span class="p">:</span> <span class="p">[</span>
+    <span class="s2">&quot;module&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;entities&quot;</span>
+  <span class="p">],</span>
+  <span class="s2">&quot;additionalProperties&quot;</span><span class="p">:</span> <span class="n">false</span><span class="p">,</span>
+  <span class="s2">&quot;$schema&quot;</span><span class="p">:</span> <span class="s2">&quot;http://json-schema.org/draft/2019-09/schema#&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</details>
+<details>
+<summary><a>ibek.pmac.json</a></summary><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;ioc_name&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Name of IOC&quot;</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;instances&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;array&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;items&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;anyOf&quot;</span><span class="p">:</span> <span class="p">[</span>
+                    <span class="p">{</span>
+                        <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span>
+                            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="p">{</span>
+                                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+                                <span class="s2">&quot;const&quot;</span><span class="p">:</span> <span class="s2">&quot;pmac.Geobrick&quot;</span>
+                            <span class="p">},</span>
+                            <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="p">{</span>
+                                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+                                <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Name to use for the geobrick&#39;s asyn port&quot;</span>
+                            <span class="p">},</span>
+                            <span class="s2">&quot;PORT&quot;</span><span class="p">:</span> <span class="p">{</span>
+                                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+                                <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Asyn port name for PmacAsynIPPort to connect to&quot;</span>
+                            <span class="p">},</span>
+                            <span class="s2">&quot;P&quot;</span><span class="p">:</span> <span class="p">{</span>
+                                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+                                <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;PV Prefix for all pmac db templates&quot;</span>
+                            <span class="p">},</span>
+                            <span class="s2">&quot;idlePoll&quot;</span><span class="p">:</span> <span class="p">{</span>
+                                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;integer&quot;</span><span class="p">,</span>
+                                <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Idle Poll Period in ms&quot;</span>
+                            <span class="p">},</span>
+                            <span class="s2">&quot;movingPoll&quot;</span><span class="p">:</span> <span class="p">{</span>
+                                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;integer&quot;</span><span class="p">,</span>
+                                <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Moving Poll Period in ms&quot;</span>
+                            <span class="p">}</span>
+                        <span class="p">},</span>
+                        <span class="s2">&quot;required&quot;</span><span class="p">:</span> <span class="p">[</span>
+                            <span class="s2">&quot;type&quot;</span><span class="p">,</span>
+                            <span class="s2">&quot;name&quot;</span><span class="p">,</span>
+                            <span class="s2">&quot;PORT&quot;</span><span class="p">,</span>
+                            <span class="s2">&quot;P&quot;</span><span class="p">,</span>
+                            <span class="s2">&quot;idlePoll&quot;</span><span class="p">,</span>
+                            <span class="s2">&quot;movingPoll&quot;</span>
+                        <span class="p">],</span>
+                        <span class="s2">&quot;additionalProperties&quot;</span><span class="p">:</span> <span class="n">false</span>
+                    <span class="p">},</span>
+                    <span class="p">{</span>
+                        <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span>
+                            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="p">{</span>
+                                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+                                <span class="s2">&quot;const&quot;</span><span class="p">:</span> <span class="s2">&quot;pmac.PmacAsynIPPort&quot;</span>
+                            <span class="p">},</span>
+                            <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="p">{</span>
+                                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+                                <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Asyn port name&quot;</span>
+                            <span class="p">},</span>
+                            <span class="s2">&quot;IP&quot;</span><span class="p">:</span> <span class="p">{</span>
+                                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+                                <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;IP address of pmac&quot;</span>
+                            <span class="p">}</span>
+                        <span class="p">},</span>
+                        <span class="s2">&quot;required&quot;</span><span class="p">:</span> <span class="p">[</span>
+                            <span class="s2">&quot;type&quot;</span><span class="p">,</span>
+                            <span class="s2">&quot;name&quot;</span><span class="p">,</span>
+                            <span class="s2">&quot;IP&quot;</span>
+                        <span class="p">],</span>
+                        <span class="s2">&quot;additionalProperties&quot;</span><span class="p">:</span> <span class="n">false</span>
+                    <span class="p">},</span>
+                    <span class="p">{</span>
+                        <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span>
+                            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="p">{</span>
+                                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+                                <span class="s2">&quot;const&quot;</span><span class="p">:</span> <span class="s2">&quot;pmac.DlsPmacAsynMotor&quot;</span>
+                            <span class="p">},</span>
+                            <span class="s2">&quot;PMAC&quot;</span><span class="p">:</span> <span class="p">{</span>
+                                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+                                <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;PMAC to attach to&quot;</span>
+                            <span class="p">},</span>
+                            <span class="s2">&quot;axis&quot;</span><span class="p">:</span> <span class="p">{</span>
+                                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;integer&quot;</span><span class="p">,</span>
+                                <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;which axis number this motor drives&quot;</span>
+                            <span class="p">},</span>
+                            <span class="s2">&quot;P&quot;</span><span class="p">:</span> <span class="p">{</span>
+                                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+                                <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;PV prefix name for this motor&quot;</span>
+                            <span class="p">},</span>
+                            <span class="s2">&quot;M&quot;</span><span class="p">:</span> <span class="p">{</span>
+                                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+                                <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;PV motor name for this motor&quot;</span>
+                            <span class="p">},</span>
+                            <span class="s2">&quot;PORT&quot;</span><span class="p">:</span> <span class="p">{</span>
+                                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+                                <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Delta tau motor controller&quot;</span>
+                            <span class="p">},</span>
+                            <span class="s2">&quot;SPORT&quot;</span><span class="p">:</span> <span class="p">{</span>
+                                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+                                <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Delta tau motor controller comms port&quot;</span>
+                            <span class="p">},</span>
+                            <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="p">{</span>
+                                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+                                <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Object name and gui association name&quot;</span>
+                            <span class="p">},</span>
+                            <span class="s2">&quot;DESC&quot;</span><span class="p">:</span> <span class="p">{</span>
+                                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+                                <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Description, displayed on EDM screen&quot;</span>
+                            <span class="p">},</span>
+                            <span class="s2">&quot;MRES&quot;</span><span class="p">:</span> <span class="p">{</span>
+                                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;number&quot;</span><span class="p">,</span>
+                                <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Motor Step Size (EGU)&quot;</span>
+                            <span class="p">},</span>
+                            <span class="s2">&quot;VELO&quot;</span><span class="p">:</span> <span class="p">{</span>
+                                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;number&quot;</span><span class="p">,</span>
+                                <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;axis Velocity (EGU/s)&quot;</span>
+                            <span class="p">},</span>
+                            <span class="s2">&quot;PREC&quot;</span><span class="p">:</span> <span class="p">{</span>
+                                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;number&quot;</span><span class="p">,</span>
+                                <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Display Precision&quot;</span>
+                            <span class="p">},</span>
+                            <span class="s2">&quot;EGU&quot;</span><span class="p">:</span> <span class="p">{</span>
+                                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+                                <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Engineering Units&quot;</span>
+                            <span class="p">},</span>
+                            <span class="s2">&quot;TWV&quot;</span><span class="p">:</span> <span class="p">{</span>
+                                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;integer&quot;</span><span class="p">,</span>
+                                <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Tweak Step Size (EGU)&quot;</span>
+                            <span class="p">},</span>
+                            <span class="s2">&quot;DTYP&quot;</span><span class="p">:</span> <span class="p">{</span>
+                                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+                                <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Datatype of record&quot;</span>
+                            <span class="p">},</span>
+                            <span class="s2">&quot;DIR&quot;</span><span class="p">:</span> <span class="p">{</span>
+                                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;integer&quot;</span><span class="p">,</span>
+                                <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;User direction&quot;</span>
+                            <span class="p">},</span>
+                            <span class="s2">&quot;VBAS&quot;</span><span class="p">:</span> <span class="p">{</span>
+                                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;number&quot;</span><span class="p">,</span>
+                                <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Base Velocity (EGU/s)&quot;</span>
+                            <span class="p">},</span>
+                            <span class="s2">&quot;VMAX&quot;</span><span class="p">:</span> <span class="p">{</span>
+                                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;number&quot;</span><span class="p">,</span>
+                                <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Max Velocity (EGU/s)&quot;</span>
+                            <span class="p">},</span>
+                            <span class="s2">&quot;ACCL&quot;</span><span class="p">:</span> <span class="p">{</span>
+                                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;number&quot;</span><span class="p">,</span>
+                                <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Seconds to Velocity&quot;</span>
+                            <span class="p">},</span>
+                            <span class="s2">&quot;BDST&quot;</span><span class="p">:</span> <span class="p">{</span>
+                                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;number&quot;</span><span class="p">,</span>
+                                <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;BL Distance (EGU)&quot;</span>
+                            <span class="p">},</span>
+                            <span class="s2">&quot;BVEL&quot;</span><span class="p">:</span> <span class="p">{</span>
+                                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;number&quot;</span><span class="p">,</span>
+                                <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;BL Velocity(EGU/s)&quot;</span>
+                            <span class="p">},</span>
+                            <span class="s2">&quot;BACC&quot;</span><span class="p">:</span> <span class="p">{</span>
+                                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;number&quot;</span><span class="p">,</span>
+                                <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;BL Seconds to Veloc&quot;</span>
+                            <span class="p">},</span>
+                            <span class="s2">&quot;DHLM&quot;</span><span class="p">:</span> <span class="p">{</span>
+                                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;number&quot;</span><span class="p">,</span>
+                                <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Dial High Limit&quot;</span>
+                            <span class="p">},</span>
+                            <span class="s2">&quot;DLMM&quot;</span><span class="p">:</span> <span class="p">{</span>
+                                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;number&quot;</span><span class="p">,</span>
+                                <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Dial low limit&quot;</span>
+                            <span class="p">},</span>
+                            <span class="s2">&quot;HLM&quot;</span><span class="p">:</span> <span class="p">{</span>
+                                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;number&quot;</span><span class="p">,</span>
+                                <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;User High Limit&quot;</span>
+                            <span class="p">},</span>
+                            <span class="s2">&quot;LLM&quot;</span><span class="p">:</span> <span class="p">{</span>
+                                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;number&quot;</span><span class="p">,</span>
+                                <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;User Low Limit&quot;</span>
+                            <span class="p">},</span>
+                            <span class="s2">&quot;HLSV&quot;</span><span class="p">:</span> <span class="p">{</span>
+                                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+                                <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;HW Lim, Violation Svr&quot;</span>
+                            <span class="p">},</span>
+                            <span class="s2">&quot;INIT&quot;</span><span class="p">:</span> <span class="p">{</span>
+                                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+                                <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Startup commands&quot;</span>
+                            <span class="p">},</span>
+                            <span class="s2">&quot;SREV&quot;</span><span class="p">:</span> <span class="p">{</span>
+                                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;number&quot;</span><span class="p">,</span>
+                                <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Steps per Revolution&quot;</span>
+                            <span class="p">},</span>
+                            <span class="s2">&quot;RRES&quot;</span><span class="p">:</span> <span class="p">{</span>
+                                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;number&quot;</span><span class="p">,</span>
+                                <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Readback Step Size (EGU&quot;</span>
+                            <span class="p">},</span>
+                            <span class="s2">&quot;ERES&quot;</span><span class="p">:</span> <span class="p">{</span>
+                                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;number&quot;</span><span class="p">,</span>
+                                <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Encoder Step Size (EGU)&quot;</span>
+                            <span class="p">},</span>
+                            <span class="s2">&quot;JAR&quot;</span><span class="p">:</span> <span class="p">{</span>
+                                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;number&quot;</span><span class="p">,</span>
+                                <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Jog Acceleration (EGU/s^2)&quot;</span>
+                            <span class="p">},</span>
+                            <span class="s2">&quot;UEIP&quot;</span><span class="p">:</span> <span class="p">{</span>
+                                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;integer&quot;</span><span class="p">,</span>
+                                <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Use Encoder If Present&quot;</span>
+                            <span class="p">},</span>
+                            <span class="s2">&quot;URIP&quot;</span><span class="p">:</span> <span class="p">{</span>
+                                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;integer&quot;</span><span class="p">,</span>
+                                <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Use RDBL If Present&quot;</span>
+                            <span class="p">},</span>
+                            <span class="s2">&quot;RDBL&quot;</span><span class="p">:</span> <span class="p">{</span>
+                                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+                                <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Readback Location, set URIP =1 if you specify this&quot;</span>
+                            <span class="p">},</span>
+                            <span class="s2">&quot;RLNK&quot;</span><span class="p">:</span> <span class="p">{</span>
+                                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+                                <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Readback output link&quot;</span>
+                            <span class="p">},</span>
+                            <span class="s2">&quot;RTRY&quot;</span><span class="p">:</span> <span class="p">{</span>
+                                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;integer&quot;</span><span class="p">,</span>
+                                <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Max retry count&quot;</span>
+                            <span class="p">},</span>
+                            <span class="s2">&quot;DLY&quot;</span><span class="p">:</span> <span class="p">{</span>
+                                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;number&quot;</span><span class="p">,</span>
+                                <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Readback settle time (s)&quot;</span>
+                            <span class="p">},</span>
+                            <span class="s2">&quot;OFF&quot;</span><span class="p">:</span> <span class="p">{</span>
+                                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;number&quot;</span><span class="p">,</span>
+                                <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;User Offset (EGU)&quot;</span>
+                            <span class="p">},</span>
+                            <span class="s2">&quot;RDBD&quot;</span><span class="p">:</span> <span class="p">{</span>
+                                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;number&quot;</span><span class="p">,</span>
+                                <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Retry Deadband (EGU)&quot;</span>
+                            <span class="p">},</span>
+                            <span class="s2">&quot;FOFF&quot;</span><span class="p">:</span> <span class="p">{</span>
+                                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;integer&quot;</span><span class="p">,</span>
+                                <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Freeze Offset, 0=variable, 1=frozen&quot;</span>
+                            <span class="p">},</span>
+                            <span class="s2">&quot;ADEL&quot;</span><span class="p">:</span> <span class="p">{</span>
+                                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;number&quot;</span><span class="p">,</span>
+                                <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Alarm monitor deadband (EGU)&quot;</span>
+                            <span class="p">},</span>
+                            <span class="s2">&quot;NTM&quot;</span><span class="p">:</span> <span class="p">{</span>
+                                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;integer&quot;</span><span class="p">,</span>
+                                <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;New Target Monitor, only set to 0 for soft motors&quot;</span>
+                            <span class="p">},</span>
+                            <span class="s2">&quot;FEHEIGH&quot;</span><span class="p">:</span> <span class="p">{</span>
+                                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;number&quot;</span><span class="p">,</span>
+                                <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;HIGH limit for following error&quot;</span>
+                            <span class="p">},</span>
+                            <span class="s2">&quot;FEHIHI&quot;</span><span class="p">:</span> <span class="p">{</span>
+                                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;number&quot;</span><span class="p">,</span>
+                                <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;HIHI limit for following error&quot;</span>
+                            <span class="p">},</span>
+                            <span class="s2">&quot;FEHHSV&quot;</span><span class="p">:</span> <span class="p">{</span>
+                                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+                                <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;HIHI alarm severity for following error&quot;</span>
+                            <span class="p">},</span>
+                            <span class="s2">&quot;FEHSV&quot;</span><span class="p">:</span> <span class="p">{</span>
+                                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+                                <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;HIGH alarm severity for following error&quot;</span>
+                            <span class="p">},</span>
+                            <span class="s2">&quot;SCALE&quot;</span><span class="p">:</span> <span class="p">{</span>
+                                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;integer&quot;</span>
+                            <span class="p">},</span>
+                            <span class="s2">&quot;HOMEVIS&quot;</span><span class="p">:</span> <span class="p">{</span>
+                                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;integer&quot;</span><span class="p">,</span>
+                                <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;If 1 then home is visible on the gui&quot;</span>
+                            <span class="p">},</span>
+                            <span class="s2">&quot;HOMEVISST&quot;</span><span class="p">:</span> <span class="p">{</span>
+                                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
+                            <span class="p">},</span>
+                            <span class="s2">&quot;alh&quot;</span><span class="p">:</span> <span class="p">{</span>
+                                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+                                <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Set this to alh to add the motor to the alarm handler and send emails&quot;</span>
+                            <span class="p">},</span>
+                            <span class="s2">&quot;gda_name&quot;</span><span class="p">:</span> <span class="p">{</span>
+                                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+                                <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Name to export this as to GDA&quot;</span>
+                            <span class="p">},</span>
+                            <span class="s2">&quot;gda_desc&quot;</span><span class="p">:</span> <span class="p">{</span>
+                                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+                                <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Description to export as to GDA&quot;</span>
+                            <span class="p">},</span>
+                            <span class="s2">&quot;HOME&quot;</span><span class="p">:</span> <span class="p">{</span>
+                                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+                                <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Prefix for autohome instance. Defaults to $(P) If unspecified&quot;</span>
+                            <span class="p">},</span>
+                            <span class="s2">&quot;ALLOW_HOMED_SET&quot;</span><span class="p">:</span> <span class="p">{</span>
+                                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+                                <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Set to a blank to allow this axis to have its homed&quot;</span>
+                            <span class="p">}</span>
+                        <span class="p">},</span>
+                        <span class="s2">&quot;required&quot;</span><span class="p">:</span> <span class="p">[</span>
+                            <span class="s2">&quot;type&quot;</span><span class="p">,</span>
+                            <span class="s2">&quot;PMAC&quot;</span><span class="p">,</span>
+                            <span class="s2">&quot;axis&quot;</span><span class="p">,</span>
+                            <span class="s2">&quot;P&quot;</span><span class="p">,</span>
+                            <span class="s2">&quot;M&quot;</span><span class="p">,</span>
+                            <span class="s2">&quot;PORT&quot;</span><span class="p">,</span>
+                            <span class="s2">&quot;SPORT&quot;</span><span class="p">,</span>
+                            <span class="s2">&quot;name&quot;</span>
+                        <span class="p">],</span>
+                        <span class="s2">&quot;additionalProperties&quot;</span><span class="p">:</span> <span class="n">false</span>
+                    <span class="p">}</span>
+                <span class="p">]</span>
+            <span class="p">},</span>
+            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;List of entity instances of the IOCs&quot;</span>
+        <span class="p">}</span>
+    <span class="p">},</span>
+    <span class="s2">&quot;required&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="s2">&quot;ioc_name&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;instances&quot;</span>
+    <span class="p">],</span>
+    <span class="s2">&quot;additionalProperties&quot;</span><span class="p">:</span> <span class="n">false</span><span class="p">,</span>
+    <span class="s2">&quot;$schema&quot;</span><span class="p">:</span> <span class="s2">&quot;http://json-schema.org/draft/2019-09/schema#&quot;</span>
+<span class="p">}</span>
 </pre></div>
 </div>
 </details></div></blockquote>
-<p>Once you have an <strong>ibek ioc description YAML file</strong> you can generate ioc
-code in the form of a helm chart with the command
-<code class="docutils literal notranslate"><span class="pre">ibek</span> <span class="pre">build-ioc</span> <span class="pre">&lt;IBEK_IOC_DESCRIPTION_YAML&gt;</span></code></p>
-<p>To understand the code behind these steps it is
-important to understand the relationship between the classes and instances
-of Entity and EntityInstance subclasses.</p>
-<ul class="simple">
-<li><p>The Entity Class (plus its members’ classes: Database, Arg and arg types)</p>
-<ul>
-<li><p>generates the global schema file <strong>ibek.schema.json</strong></p></li>
-<li><p>determines what a <strong>support module YAML file</strong> may look like</p></li>
+</div>
+<div class="section" id="commands">
+<h2>Commands<a class="headerlink" href="#commands" title="Permalink to this headline">¶</a></h2>
+<p>The ibek commands to progress through the file sequence above are as follows</p>
+<table class="colwidths-given docutils align-default" id="id2">
+<caption><span class="caption-text">Summary of ibek stages</span><a class="headerlink" href="#id2" title="Permalink to this table">¶</a></caption>
+<colgroup>
+<col style="width: 4%" />
+<col style="width: 35%" />
+<col style="width: 61%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>num</p></th>
+<th class="head"><p>Name</p></th>
+<th class="head"><p>Command</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>1</p></td>
+<td><p>ibek.schema.json</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">ibek</span> <span class="pre">ibek-schema</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>2</p></td>
+<td><p>&lt;support_module&gt;.ibek.yaml</p></td>
+<td><p>Hand crafted by the container developer. Held in the container.</p></td>
+</tr>
+<tr class="row-even"><td><p>3</p></td>
+<td><p>&lt;container&gt;.schema.json</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">ibek</span> <span class="pre">ibek-schema</span> <span class="pre">...</span></code> run at container build time against all &lt;support_module&gt;.ibek.yaml.</p></td>
+</tr>
+<tr class="row-odd"><td><p>4</p></td>
+<td><p>&lt;ioc_name&gt;.&lt;container&gt;.yaml</p></td>
+<td><p>Hand crafted at IOC instance design time</p></td>
+</tr>
+<tr class="row-even"><td><p>5</p></td>
+<td><p>Helm Chart files</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">ibek</span> <span class="pre">build-ioc</span>&#160; <span class="pre">&lt;ioc_name&gt;.&lt;container&gt;.yaml</span> <span class="pre">...</span></code> run at IOC deploy time
+against all &lt;support_module&gt;.ibek.yaml</p></td>
+</tr>
+</tbody>
+</table>
+<p>TODO: currently the code only handles a single &lt;support&gt;.ibek.yaml for the ibek-schema
+and build-ioc commands.</p>
+<p>TODO: we need a way for the container to publish &lt;container&gt;.schema.json.</p>
+<p>TODO: we also need do one of:</p>
+<blockquote>
+<div><ul>
+<li><p>publish all of &lt;support_module&gt;.ibek.yaml from the container</p></li>
+<li><p>generate the boot script at launch time inside the container.</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>this breaks making a helm chart with ibek though, the helm chart would have
+to become generic and have no boot script.</p></li>
+<li><p>this is a bit of a shame because ibek also does minor tweaks to the helm
+Chart.yaml and values.yaml so we would need a new mechanism for those files.</p></li>
 </ul>
+</div></blockquote>
 </li>
-<li><p>Entity Class instances</p>
-<ul>
-<li><p>defined by deserialising a <strong>support module YAML file</strong>.</p></li>
-<li><p>generate a <strong>support module schema JSON file</strong></p></li>
-<li><p>generate a set of in memory EntityInstance Classes</p></li>
 </ul>
-</li>
-<li><p>EntityInstance Classes</p>
-<ul>
-<li><p>generated by the previous step</p></li>
-<li><p>determine what an <strong>IOC definition YAML file</strong> may look like</p></li>
-<li><p>each hold a reference to the Entity Class instance that generated them</p></li>
-</ul>
-</li>
-<li><p>EntityInstance class instances</p>
-<ul>
-<li><p>defined in an <strong>IOC definition YAML file</strong></p></li>
-<li><p>hold a values for each of the args</p></li>
-<li><p>generate the ioc helm chart by combining</p>
-<ul>
-<li><p>the arg values</p></li>
-<li><p>the database and script templates from their Entity Class instance</p></li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
+</div></blockquote>
+</div>
 </div>
 
 
