@@ -81,11 +81,6 @@ entities:
         name: name
         description: Object name and gui association name
 
-      - type: int
-        name: ADDR
-        description: Address on controller
-        default: "0"
-
       - type: str
         name: DESC
         description: Description, displayed on EDM screen
@@ -329,7 +324,7 @@ entities:
           P={{ P }},
           M={{ M }},
           PORT={{ PORT }},
-          ADDR={{ ADDR }},
+          ADDR={{ axis }},
           DESC={{ DESC }},
           MRES={{ MRES }},
           VELO={{ VELO }},
