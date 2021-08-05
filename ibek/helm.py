@@ -1,41 +1,41 @@
 """
-functions for building the helm chart
+Functions for building the helm chart
 """
 
 import shutil
 from pathlib import Path
+from typing import Tuple
 
 from jinja2 import Template
 from ruamel.yaml.main import YAML
 
-from ibek.dataclass_from_yaml import yaml_to_dataclass
+from ibek.generator import from_yaml
 from ibek.render import render_database_elements, render_script_elements
 
 HELM_TEMPLATE = Path(__file__).parent.parent / "helm-template"
 TEMPLATES = Path(__file__).parent / "templates"
 
 
-def create_boot_script(ioc_yaml: Path, ioc_class_ibek_yaml: Path):
+def create_boot_script(
+    ioc_instance_yaml: Path, definition_yaml: Path
+) -> Tuple[str, str]:
     """
     Create the boot script for an IOCs helm chart
     """
 
-    # Dynamically generate a Support object graph for this class of ioc
-    support = yaml_to_dataclass(str(ioc_class_ibek_yaml))
+    # Dynamically generate dataclasses from the support module defintion file
+    support_definition = from_yaml(definition_yaml)
 
-    # populate its dataclass namespace
-    support_entities = support.get_module_dataclass()
-
-    # Opens jinja template for startup script and fills it in with script
-    # elements and database elements parsed from the <ioc_name>.yaml file
-
+    # Open jinja template for startup script and fill it in with script
+    # elements and database elements parsed from the defintion file
     with open(TEMPLATES / "ioc.boot.jinja", "r") as f:
         template = Template(f.read())
 
-    # read the ioc instance definition into a dictionary
-    entity_instance_dict = YAML().load(ioc_yaml)
-    # use the
-    entity_instances = support_entities.deserialize(entity_instance_dict)
+    # read the ioc instance entities into a dictionary
+    entity_instance_dict = YAML().load(ioc_instance_yaml)
+
+    # Use the support defintion classes to deserialize the ioc instance entities
+    entity_instances = support_definition.deserialize(entity_instance_dict)
 
     script_txt = template.render(
         script_elements=render_script_elements(entity_instances),
@@ -47,7 +47,7 @@ def create_boot_script(ioc_yaml: Path, ioc_class_ibek_yaml: Path):
 
 def render_file(file_template: Path, **kwargs):
     """
-    replace a jinja templated file with its rendered equivalent by using
+    replace a jinja templated file with its rendered equivalent by passing
     kwargs parameters to jinja
     """
     template = file_template.read_text()

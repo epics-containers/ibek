@@ -1,6 +1,7 @@
 from apischema.utils import Undefined
 
-from ibek.support import Database, Entity, FloatArg, IntArg, StrArg, Support
+from ibek.argument import FloatArg, IntArg, StrArg
+from ibek.support import Database, Entity, Support
 
 """
 This represents the generated instance of a Support Object which is an

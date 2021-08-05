@@ -8,7 +8,7 @@ from ruamel.yaml import YAML
 from ruamel.yaml.main import YAML
 
 from ibek import __version__
-from ibek.dataclass_from_yaml import yaml_to_dataclass
+from ibek.generator import from_yaml
 from ibek.helm import create_boot_script, create_helm
 from ibek.support import Support
 
@@ -53,12 +53,7 @@ def ioc_schema(
     output: Path = typer.Argument(..., help="The filename to write the schema to"),
 ):
     """Create a json schema from a <support_module>.ibek.yaml file"""
-
-    # create a support object graph from YAML
-    support = yaml_to_dataclass(str(str(description)))
-
-    # populate its dataclass namespace
-    ioc_class = support.get_module_dataclass()
+    ioc_class = from_yaml(description)
 
     schema = json.dumps(deserialization_schema(ioc_class), indent=2)
     with open(output, "w") as f:
@@ -67,12 +62,10 @@ def ioc_schema(
 
 @app.command()
 def build_ioc(
-    description: Path = typer.Argument(
-        ..., help="The filepath to read the IOC class description from"
-    ),
     definition: Path = typer.Argument(
-        ..., help="The filepath to read the IOC instance definition from"
+        ..., help="The filepath to the ioc definition file"
     ),
+    instance: Path = typer.Argument(..., help="The filepath to the ioc instance file"),
     out: Path = typer.Argument(
         default="iocs", help="Path in which to build the helm chart"
     ),
@@ -80,7 +73,7 @@ def build_ioc(
     """Build a startup script, database and Helm chart from <ioc>.yaml"""
 
     ioc_name, script_txt = create_boot_script(
-        ioc_yaml=definition, ioc_class_ibek_yaml=description
+        ioc_instance_yaml=instance, definition_yaml=definition
     )
 
     create_helm(name=ioc_name, script_txt=script_txt, path=out)

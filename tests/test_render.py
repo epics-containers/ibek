@@ -7,7 +7,8 @@ from pathlib import Path
 from pytest import fixture
 from ruamel.yaml import YAML
 
-from ibek.dataclass_from_yaml import yaml_to_dataclass
+from ibek.generator import from_yaml
+from ibek.globals import namespace
 from ibek.render import render_database, render_script
 from ibek.support import Support
 from tests.samples.classes.pmac_support import SUPPORT
@@ -17,15 +18,14 @@ sample_yaml = Path(__file__).parent / "samples" / "yaml"
 
 @fixture
 def pmac_classes():
-    # create a support object from YAML
-    support = yaml_to_dataclass(str(sample_yaml / "pmac.ibek.yaml"))
-
-    # populate its dataclass namespace
-    support.get_module_dataclass()
+    # TODO better wording and naming
+    # create a support object from YAML - this has the side effect of
+    # populating namespace with all of the generated classes
+    from_yaml(sample_yaml / "pmac.ibek.yaml")
 
     # return the namespace so that callers have access to all of the
     # generated dataclasses
-    return support.namespace
+    return namespace
 
 
 def test_deserialize_support() -> None:

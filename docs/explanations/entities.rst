@@ -40,6 +40,8 @@ The example motion IOC instance bl45p-mo-ioc-02 has the following entities:
 
         - pmacCreateController in boot script
 
+        - pmacCreateAxes in the boot script
+
         - dbLoadRecords of pmacController.template and pmacStatus.template
 
   - DlsPmacAsynMotor (two instances)

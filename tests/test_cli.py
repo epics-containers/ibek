@@ -6,7 +6,7 @@ from typer.testing import CliRunner
 
 from ibek import __version__
 from ibek.__main__ import app
-from ibek.dataclass_from_yaml import yaml_to_dataclass
+from ibek.generator import from_yaml
 
 runner = CliRunner()
 
@@ -79,15 +79,15 @@ def test_may_fail(tmp_path: Path):
     # I believe that this is the issue that Richard originally solved by
     # defining the EntityInstance base class in the scope of Support.
     # (I gave it global scope because I want to)
-    description = sample_yaml / "pmac.ibek.yaml"
+    definition_file = sample_yaml / "pmac.ibek.yaml"
 
-    support1 = yaml_to_dataclass(str(description))
-    ioc_class1 = support1.get_module_dataclass()
+    ioc_class1 = from_yaml(definition_file)
+
     schema1 = json.dumps(deserialization_schema(ioc_class1), indent=2)
     with open(tmp_path / "schema1", "w") as f:
         f.write(schema1)
 
-    ioc_class2 = yaml_to_dataclass(str(description)).get_module_dataclass()
+    ioc_class2 = from_yaml(definition_file)
     schema2 = json.dumps(deserialization_schema(ioc_class2), indent=2)
     with open(tmp_path / "schema2", "w") as f:
         f.write(schema2)
