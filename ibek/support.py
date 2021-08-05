@@ -1,6 +1,7 @@
 import builtins
 from builtins import getattr
 from dataclasses import Field, dataclass, field, make_dataclass
+from pathlib import Path
 from typing import (
     Any,
     ClassVar,
@@ -18,6 +19,7 @@ from typing import (
 
 from apischema import Undefined, UndefinedType, deserialize, deserializer, schema
 from apischema.conversions import Conversion, identity
+from ruamel.yaml import YAML
 from typing_extensions import Annotated as A
 from typing_extensions import Literal
 
@@ -192,7 +194,8 @@ class EntityInstance:
     """
 
     # a link back to the Entity Object that generated this EntityInstance
-    entity: ClassVar[Entity]
+    # TODO this is an Entity
+    entity: ClassVar[Type]
 
     #
     def __init_subclass__(cls) -> None:
@@ -213,6 +216,23 @@ class IocInstance:
     def deserialize(cls: Type[T], d: Mapping[str, Any]) -> T:
         return deserialize(cls, d)
 
+    @classmethod
+    def from_yaml(cls, definition_file: Path) -> "IocInstance":
+        """
+        A class factory method to read in a support module definition file and
+        generate an IocInstance class
+        """
+
+        # Deserialize the Support Module Definition yaml file into an
+        # instance of the Support class
+        yaml = YAML()
+        with open(definition_file, "r") as f:
+            support = Support.deserialize(yaml.load(f))
+
+        # Create dataclasses from the Support Module Definition
+        module_dataclass = support.get_module()
+        return module_dataclass
+
 
 @dataclass
 class Support:
@@ -228,10 +248,7 @@ class Support:
 
     def get_module(self) -> IocInstance:
         """
-        Generate an in memory module class with a set of EntityInstance classes.
-
-        Instances of this module are used to represent individual instances of
-        IOCs.
+        Generate an IocInstance derived class with its a set of EntityInstance classes.
         """
 
         self.namespace["entityinstance"] = EntityInstance
