@@ -5,10 +5,11 @@ EntityInstance classes from support module definition YAML
 import builtins
 from dataclasses import Field, field, make_dataclass
 from pathlib import Path
-from typing import Any, Dict, List, Literal, Sequence, Tuple, Type, Union, cast
+from typing import Any, Dict, List, Sequence, Tuple, Type, Union, cast
 
 from ruamel.yaml import YAML
 from typing_extensions import Annotated as A
+from typing_extensions import Literal
 
 from ibek.globals import desc, namespace
 from ibek.support import Entity, EntityInstance, IocInstance, Support
