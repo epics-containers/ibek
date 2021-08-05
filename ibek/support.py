@@ -185,30 +185,33 @@ class Entity:
 
 
 @dataclass
-class ModuleSuperclass:
+class EntityInstance:
+    """
+    A baseclass for all generated EntityInstance classes. Provides the
+    deserialize entry point.
+    """
+
+    # a link back to the Entity Object that generated this EntityInstance
+    entity: ClassVar[Entity]
+
+    #
+    def __init_subclass__(cls) -> None:
+        deserializer(Conversion(identity, source=cls, target=EntityInstance))
+
+
+@dataclass
+class IocInstance:
     """
     A base class for all generated module classes. Provides the deserialize
-    entry point only
+    entry point.
     """
 
     ioc_name: str
+    instances: Sequence[EntityInstance]
 
     @classmethod
     def deserialize(cls: Type[T], d: Mapping[str, Any]) -> T:
         return deserialize(cls, d)
-
-
-@dataclass
-class EntityInstance:
-    """
-    A baseclass for all generated Entity classes. Provides the deserialize
-    entry point only
-    """
-
-    entity: ClassVar[Entity]
-
-    def __init_subclass__(cls) -> None:
-        deserializer(Conversion(identity, source=cls, target=EntityInstance))
 
 
 @dataclass
@@ -223,7 +226,7 @@ class Support:
     # a global namespace for holding all generated classes
     namespace: ClassVar[Dict[str, Any]] = {}
 
-    def get_module(self) -> ModuleSuperclass:
+    def get_module(self) -> IocInstance:
         """
         Generate an in memory module class with a set of EntityInstance classes.
 
@@ -250,7 +253,7 @@ class Support:
                     ],
                 ),
             ],
-            bases=(ModuleSuperclass,),
+            bases=(IocInstance,),
         )
         print(self.namespace["entityinstance"].__subclasses__())
         return self.namespace[self.module]
