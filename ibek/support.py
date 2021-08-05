@@ -1,34 +1,26 @@
 import builtins
 from builtins import getattr
 from dataclasses import Field, dataclass, field, make_dataclass
-from pathlib import Path
 from typing import (
     Any,
     ClassVar,
     Dict,
     List,
     Mapping,
-    Optional,
     Sequence,
     Tuple,
     Type,
-    TypeVar,
     Union,
     cast,
 )
 
-from apischema import Undefined, UndefinedType, deserialize, deserializer, schema
+from apischema import deserialize, deserializer
 from apischema.conversions import Conversion, identity
-from ruamel.yaml import YAML
 from typing_extensions import Annotated as A
 from typing_extensions import Literal
 
-
-def desc(description: str):
-    return schema(description=description)
-
-
-T = TypeVar("T")
+from ibek.argument import Arg
+from ibek.globals import T, desc
 
 """
 The Support Class represents a deserialized <MODULE_NAME>.ibek.yaml file.
@@ -47,67 +39,6 @@ approach to dealing with this.
     - added str type to FloatArg
     - added __post_init__ to FloatArg to strip the 'f'
 """
-
-
-@dataclass
-class Arg:
-    name: A[str, desc("Name of the argument that the IOC instance should pass")]
-    description: A[str, desc("Description of what the argument will be used for")]
-    type: str
-    default: Any
-
-    # https://wyfo.github.io/apischema/examples/subclasses_union/
-    def __init_subclass__(cls):
-        # Deserializers stack directly as a Union
-        deserializer(Conversion(identity, source=cls, target=Arg))
-
-
-Default = A[
-    Union[Optional[T], UndefinedType],
-    desc("If given, and instance doesn't supply argument, what value should be used"),
-]
-
-
-@dataclass
-class StrArg(Arg):
-    """An argument with a str value"""
-
-    type: Literal["str"] = "str"
-    default: Default[str] = Undefined
-    is_id: A[
-        bool, desc("If true, instances may refer to this instance by this arg")
-    ] = False
-
-
-@dataclass
-class IntArg(Arg):
-    """An argument with an int value"""
-
-    type: Literal["int"] = "int"
-    default: Default[Union[int, str]] = Undefined
-
-
-@dataclass
-class FloatArg(Arg):
-    """An argument with a float value"""
-
-    type: Literal["float"] = "float"
-    # FloatArg defaults always look like str of the form "0.5f"
-    default: Default[Union[float, str]] = Undefined
-
-    # Strip the trailing f so that the string resolves to a float for EPICS
-    def __post_init__(self):
-        if isinstance(self.default, str):
-            if self.default.endswith("f"):
-                self.default = self.default[:-1]
-
-
-@dataclass
-class ObjectArg(Arg):
-    """A reference to another entity defined in this IOC"""
-
-    type: A[str, desc("Entity class, <module>.<entity_name>")]
-    default: Default[str] = Undefined
 
 
 @dataclass
@@ -131,59 +62,6 @@ class Entity:
     script: A[
         Sequence[str], desc("Startup script snippet defined as Jinja template")
     ] = ()
-
-    def get_entity_instances(
-        self,
-        baseclass: Any,
-        namespace: Dict[str, Any],
-        module_name: str,
-        entity: "Entity",
-    ):
-        """
-        We can get a set of Entities by deserializing an ibek support module
-        YAML file. This  function creates an EntityInstance class from
-        an Entity. See :ref:`entities`
-        """
-        # we need to qualify the name with the module so as to avoid cross
-        # module name clashes
-        name = f"{module_name}.{self.name}"
-
-        if name in namespace:
-            return
-
-        # put the literal name in as 'type' for this Entity this gives us
-        # a unique key for each of the entity types we may instantiate
-        fields: List[Any] = [(str("type"), Literal[name])]
-
-        # add in each of the arguments
-
-        for arg in self.args:
-            this_field: Union[str, Tuple[str, type], Tuple[str, type, Field[Any]]] = ""
-
-            if arg.description:
-                arg_type = getattr(builtins, arg.type)
-                this_field = (
-                    arg.name,
-                    A[arg_type, desc(arg.description)],
-                )
-            else:
-                this_field = (arg.name, getattr(builtins, arg.type))
-            if arg.default:
-                default: Field[Any] = field(default=arg.default)
-                this_field += (default,)
-
-            fields.append(this_field)
-
-        # make the EntityInstance derived dataclass for this EntityClass
-        entity_instance_cls: EntityInstance = cast(
-            EntityInstance, make_dataclass(name, fields, bases=(baseclass,))
-        )
-
-        # add a reference to the entity class for this entity instance class
-        # (oh boy, that sounds confusing: see `explanations/entities`)
-        setattr(entity_instance_cls, "entity", entity)
-
-        namespace[name] = entity_instance_cls
 
 
 @dataclass
@@ -216,23 +94,6 @@ class IocInstance:
     def deserialize(cls: Type[T], d: Mapping[str, Any]) -> T:
         return deserialize(cls, d)
 
-    @classmethod
-    def from_yaml(cls, definition_file: Path) -> "IocInstance":
-        """
-        A class factory method to read in a support module definition file and
-        generate an IocInstance class
-        """
-
-        # Deserialize the Support Module Definition yaml file into an
-        # instance of the Support class
-        yaml = YAML()
-        with open(definition_file, "r") as f:
-            support = Support.deserialize(yaml.load(f))
-
-        # Create dataclasses from the Support Module Definition
-        module_dataclass = support.get_module()
-        return module_dataclass
-
 
 @dataclass
 class Support:
@@ -242,38 +103,6 @@ class Support:
     entities: A[
         Sequence[Entity], desc("The entities an IOC can create using this module")
     ]
-
-    # a global namespace for holding all generated classes
-    namespace: ClassVar[Dict[str, Any]] = {}
-
-    def get_module(self) -> IocInstance:
-        """
-        Generate an IocInstance derived class with its a set of EntityInstance classes.
-        """
-
-        self.namespace["entityinstance"] = EntityInstance
-
-        for entity in self.entities:
-            entity.get_entity_instances(
-                self.namespace["entityinstance"], self.namespace, self.module, entity,
-            )
-
-        self.namespace[self.module] = make_dataclass(
-            self.module,
-            [
-                ("ioc_name", A[str, desc("Name of IOC")]),
-                (
-                    "instances",
-                    A[
-                        Sequence[EntityInstance],
-                        desc("List of entity instances of the IOCs"),
-                    ],
-                ),
-            ],
-            bases=(IocInstance,),
-        )
-        print(self.namespace["entityinstance"].__subclasses__())
-        return self.namespace[self.module]
 
     @classmethod
     def deserialize(cls: Type[T], d: Mapping[str, Any]) -> T:

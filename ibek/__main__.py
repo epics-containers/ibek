@@ -8,8 +8,9 @@ from ruamel.yaml import YAML
 from ruamel.yaml.main import YAML
 
 from ibek import __version__
+from ibek.generator import from_yaml
 from ibek.helm import create_boot_script, create_helm
-from ibek.support import EntityInstance, IocInstance, Support
+from ibek.support import Support
 
 app = typer.Typer()
 yaml = YAML()
@@ -52,7 +53,7 @@ def ioc_schema(
     output: Path = typer.Argument(..., help="The filename to write the schema to"),
 ):
     """Create a json schema from a <support_module>.ibek.yaml file"""
-    ioc_class = IocInstance.from_yaml(description)
+    ioc_class = from_yaml(description)
 
     schema = json.dumps(deserialization_schema(ioc_class), indent=2)
     with open(output, "w") as f:

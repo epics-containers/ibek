@@ -6,7 +6,7 @@ from typer.testing import CliRunner
 
 from ibek import __version__
 from ibek.__main__ import app
-from ibek.support import IocInstance
+from ibek.generator import from_yaml
 
 runner = CliRunner()
 
@@ -81,13 +81,13 @@ def test_may_fail(tmp_path: Path):
     # (I gave it global scope because I want to)
     definition_file = sample_yaml / "pmac.ibek.yaml"
 
-    ioc_class1 = IocInstance.from_yaml(definition_file)
+    ioc_class1 = from_yaml(definition_file)
 
     schema1 = json.dumps(deserialization_schema(ioc_class1), indent=2)
     with open(tmp_path / "schema1", "w") as f:
         f.write(schema1)
 
-    ioc_class2 = IocInstance.from_yaml(definition_file)
+    ioc_class2 = from_yaml(definition_file)
     schema2 = json.dumps(deserialization_schema(ioc_class2), indent=2)
     with open(tmp_path / "schema2", "w") as f:
         f.write(schema2)
