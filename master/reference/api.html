@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>API &mdash; ibek 0.2+25.gbae686b documentation</title>
+  <title>API &mdash; ibek 0.2+33.gfad9c41 documentation</title>
   
 
   
@@ -125,7 +125,12 @@
 <ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="#">API</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#ibek"><code class="docutils literal notranslate"><span class="pre">ibek</span></code></a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#ibek-support"><code class="docutils literal notranslate"><span class="pre">ibek.support</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-ibek.support"><code class="docutils literal notranslate"><span class="pre">ibek.support</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-ibek.argument"><code class="docutils literal notranslate"><span class="pre">ibek.argument</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-ibek.generator"><code class="docutils literal notranslate"><span class="pre">ibek.generator</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-ibek.globals"><code class="docutils literal notranslate"><span class="pre">ibek.globals</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-ibek.helm"><code class="docutils literal notranslate"><span class="pre">ibek.helm</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-ibek.render"><code class="docutils literal notranslate"><span class="pre">ibek.render</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -238,9 +243,6 @@
   <div class="section" id="api">
 <h1>API<a class="headerlink" href="#api" title="Permalink to this headline">¶</a></h1>
 <p>This is the internal API reference for ibek</p>
-<p>You can mix verbose text with docstring and signature extraction by
-using <code class="docutils literal notranslate"><span class="pre">autoclass</span></code> and <code class="docutils literal notranslate"><span class="pre">autofunction</span></code> directives instead of
-<code class="docutils literal notranslate"><span class="pre">automodule</span></code> below.</p>
 <div class="section" id="ibek">
 <h2><code class="docutils literal notranslate"><span class="pre">ibek</span></code><a class="headerlink" href="#ibek" title="Permalink to this headline">¶</a></h2>
 <dl class="py data">
@@ -249,124 +251,10 @@ using <code class="docutils literal notranslate"><span class="pre">autoclass</sp
 <dd><p>Version number as calculated by <a class="reference external" href="https://github.com/dls-controls/versiongit">https://github.com/dls-controls/versiongit</a></p>
 </dd></dl>
 
-<span class="target" id="module-ibek.support"></span><div class="section" id="ibek-support">
-<h3><code class="docutils literal notranslate"><span class="pre">ibek.support</span></code><a class="headerlink" href="#ibek-support" title="Permalink to this headline">¶</a></h3>
-<dl class="py data">
-<dt class="sig sig-object py" id="ibek.support.T">
-<span class="sig-prename descclassname"><span class="pre">ibek.support.</span></span><span class="sig-name descname"><span class="pre">T</span></span><a class="headerlink" href="#ibek.support.T" title="Permalink to this definition">¶</a></dt>
-<dd><p>The Support Class represents a deserialized &lt;MODULE_NAME&gt;.ibek.yaml file.
-It is a hierarchy of dataclasses. This module also defines all of the
-dataclasses that can appear as children of Support in the object graph.</p>
-<p>TODO: There are a couple of problems with deserialize and defaults. These
-are worked around as follows. I need to verify that this is the best
-approach to dealing with this.</p>
-<ul class="simple">
-<li><dl class="simple">
-<dt>str default “” == no default</dt><dd><ul>
-<li><p>using ” ” for now (I’m not sure I’m happy with this)</p></li>
-</ul>
-</dd>
-</dl>
-</li>
-<li><dl class="simple">
-<dt>int default 0 or null == no default</dt><dd><ul>
-<li><p>using “0” and added str type to IntArg</p></li>
-</ul>
-</dd>
-</dl>
-</li>
-<li><dl class="simple">
-<dt>float values in json have a trailing ‘f’ and this comes back as str on deserialize</dt><dd><ul>
-<li><p>added str type to FloatArg</p></li>
-<li><p>added __post_init__ to FloatArg to strip the ‘f’</p></li>
-</ul>
-</dd>
-</dl>
-</li>
-</ul>
-<p>alias of TypeVar(‘T’)</p>
-</dd></dl>
-
-<dl class="py class">
-<dt class="sig sig-object py" id="ibek.support.Arg">
-<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">ibek.support.</span></span><span class="sig-name descname"><span class="pre">Arg</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">description</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">default</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ibek/support.html#Arg"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ibek.support.Arg" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – Name of the argument that the IOC instance should pass</p></li>
-<li><p><strong>description</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – Description of what the argument will be used for</p></li>
-<li><p><strong>type</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – </p></li>
-<li><p><strong>default</strong> (<em>typing.Any</em>) – </p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py class">
-<dt class="sig sig-object py" id="ibek.support.StrArg">
-<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">ibek.support.</span></span><span class="sig-name descname"><span class="pre">StrArg</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">description</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'str'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">default</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">Undefined</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">is_id</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ibek/support.html#StrArg"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ibek.support.StrArg" title="Permalink to this definition">¶</a></dt>
-<dd><p>An argument with a str value</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – Name of the argument that the IOC instance should pass</p></li>
-<li><p><strong>description</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – Description of what the argument will be used for</p></li>
-<li><p><strong>type</strong> (<em>typing_extensions.Literal</em><em>[</em><em>'str'</em><em>]</em>) – </p></li>
-<li><p><strong>default</strong> (<em>typing.Union</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em>,</em><em>NoneType</em><em>,</em><em>apischema.utils.UndefinedType</em><em>]</em>) – If given, and instance doesn’t supply argument, what value should be used</p></li>
-<li><p><strong>is_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a>) – If true, instances may refer to this instance by this arg</p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py class">
-<dt class="sig sig-object py" id="ibek.support.IntArg">
-<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">ibek.support.</span></span><span class="sig-name descname"><span class="pre">IntArg</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">description</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'int'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">default</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">Undefined</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ibek/support.html#IntArg"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ibek.support.IntArg" title="Permalink to this definition">¶</a></dt>
-<dd><p>An argument with an int value</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – Name of the argument that the IOC instance should pass</p></li>
-<li><p><strong>description</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – Description of what the argument will be used for</p></li>
-<li><p><strong>type</strong> (<em>typing_extensions.Literal</em><em>[</em><em>'int'</em><em>]</em>) – </p></li>
-<li><p><strong>default</strong> (<em>typing.Union</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em>,</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em>,</em><em>NoneType</em><em>,</em><em>apischema.utils.UndefinedType</em><em>]</em>) – If given, and instance doesn’t supply argument, what value should be used</p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py class">
-<dt class="sig sig-object py" id="ibek.support.FloatArg">
-<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">ibek.support.</span></span><span class="sig-name descname"><span class="pre">FloatArg</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">description</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'float'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">default</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">Undefined</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ibek/support.html#FloatArg"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ibek.support.FloatArg" title="Permalink to this definition">¶</a></dt>
-<dd><p>An argument with a float value</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – Name of the argument that the IOC instance should pass</p></li>
-<li><p><strong>description</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – Description of what the argument will be used for</p></li>
-<li><p><strong>type</strong> (<em>typing_extensions.Literal</em><em>[</em><em>'float'</em><em>]</em>) – </p></li>
-<li><p><strong>default</strong> (<em>typing.Union</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a><em>,</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em>,</em><em>NoneType</em><em>,</em><em>apischema.utils.UndefinedType</em><em>]</em>) – If given, and instance doesn’t supply argument, what value should be used</p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py class">
-<dt class="sig sig-object py" id="ibek.support.ObjectArg">
-<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">ibek.support.</span></span><span class="sig-name descname"><span class="pre">ObjectArg</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">description</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">default</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">Undefined</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ibek/support.html#ObjectArg"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ibek.support.ObjectArg" title="Permalink to this definition">¶</a></dt>
-<dd><p>A reference to another entity defined in this IOC</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – Name of the argument that the IOC instance should pass</p></li>
-<li><p><strong>description</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – Description of what the argument will be used for</p></li>
-<li><p><strong>type</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – Entity class, &lt;module&gt;.&lt;entity_name&gt;</p></li>
-<li><p><strong>default</strong> (<em>typing.Union</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em>,</em><em>NoneType</em><em>,</em><em>apischema.utils.UndefinedType</em><em>]</em>) – If given, and instance doesn’t supply argument, what value should be used</p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
+<div class="section" id="module-ibek.support">
+<span id="ibek-support"></span><h3><code class="docutils literal notranslate"><span class="pre">ibek.support</span></code><a class="headerlink" href="#module-ibek.support" title="Permalink to this headline">¶</a></h3>
+<p>The Support Class represents a deserialized &lt;MODULE_NAME&gt;.ibek.yaml file.
+It contains a hierarchy of Entity dataclasses.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="ibek.support.Database">
 <em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">ibek.support.</span></span><span class="sig-name descname"><span class="pre">Database</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">include_args</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">()</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">define_args</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ibek/support.html#Database"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ibek.support.Database" title="Permalink to this definition">¶</a></dt>
@@ -390,40 +278,10 @@ approach to dealing with this.</p>
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – Publish Entity as type &lt;module&gt;.&lt;name&gt; for IOC instances</p></li>
-<li><p><strong>args</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Sequence" title="(in Python v3.9)"><em>typing.Sequence</em></a><em>[</em><a class="reference internal" href="#ibek.support.Arg" title="ibek.support.Arg"><em>ibek.support.Arg</em></a><em>]</em>) – The arguments IOC instance should supply</p></li>
+<li><p><strong>args</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Sequence" title="(in Python v3.9)"><em>typing.Sequence</em></a><em>[</em><a class="reference internal" href="#ibek.argument.Arg" title="ibek.argument.Arg"><em>ibek.argument.Arg</em></a><em>]</em>) – The arguments IOC instance should supply</p></li>
 <li><p><strong>databases</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Sequence" title="(in Python v3.9)"><em>typing.Sequence</em></a><em>[</em><a class="reference internal" href="#ibek.support.Database" title="ibek.support.Database"><em>ibek.support.Database</em></a><em>]</em>) – Databases to instantiate</p></li>
 <li><p><strong>script</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Sequence" title="(in Python v3.9)"><em>typing.Sequence</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em>]</em>) – Startup script snippet defined as Jinja template</p></li>
 </ul>
-</dd>
-</dl>
-<dl class="py method">
-<dt class="sig sig-object py" id="ibek.support.Entity.get_entity_instances">
-<span class="sig-name descname"><span class="pre">get_entity_instances</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">baseclass</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Any</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">namespace</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">module_name</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">entity</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="#ibek.support.Entity" title="ibek.support.Entity"><span class="pre">ibek.support.Entity</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ibek/support.html#Entity.get_entity_instances"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ibek.support.Entity.get_entity_instances" title="Permalink to this definition">¶</a></dt>
-<dd><p>We can get a set of Entities by deserializing an ibek support module
-YAML file. This  function creates an EntityInstance class from
-an Entity. See <a class="reference internal" href="../explanations/entities.html#entities"><span class="std std-ref">Entities, Definitions and Modules</span></a></p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>baseclass</strong> (<em>typing.Any</em>) – </p></li>
-<li><p><strong>namespace</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.9)"><em>typing.Dict</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em>,</em><em>typing.Any</em><em>]</em>) – </p></li>
-<li><p><strong>module_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – </p></li>
-<li><p><strong>entity</strong> (<a class="reference internal" href="#ibek.support.Entity" title="ibek.support.Entity"><em>Entity</em></a>) – </p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="py class">
-<dt class="sig sig-object py" id="ibek.support.ModuleSuperclass">
-<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">ibek.support.</span></span><span class="sig-name descname"><span class="pre">ModuleSuperclass</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ioc_name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ibek/support.html#ModuleSuperclass"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ibek.support.ModuleSuperclass" title="Permalink to this definition">¶</a></dt>
-<dd><p>A base class for all generated module classes. Provides the deserialize
-entry point only</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>ioc_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – </p>
 </dd>
 </dl>
 </dd></dl>
@@ -431,8 +289,23 @@ entry point only</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="ibek.support.EntityInstance">
 <em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">ibek.support.</span></span><span class="sig-name descname"><span class="pre">EntityInstance</span></span><a class="reference internal" href="../_modules/ibek/support.html#EntityInstance"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ibek.support.EntityInstance" title="Permalink to this definition">¶</a></dt>
-<dd><p>A baseclass for all generated Entity classes. Provides the deserialize
-entry point only</p>
+<dd><p>A baseclass for all generated EntityInstance classes. Provides the
+deserialize entry point.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ibek.support.IocInstance">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">ibek.support.</span></span><span class="sig-name descname"><span class="pre">IocInstance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ioc_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">instances</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ibek/support.html#IocInstance"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ibek.support.IocInstance" title="Permalink to this definition">¶</a></dt>
+<dd><p>A base class for all generated module classes. Provides the deserialize
+entry point.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ioc_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – </p></li>
+<li><p><strong>instances</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Sequence" title="(in Python v3.9)"><em>typing.Sequence</em></a><em>[</em><a class="reference internal" href="#ibek.support.EntityInstance" title="ibek.support.EntityInstance"><em>ibek.support.EntityInstance</em></a><em>]</em>) – </p></li>
+</ul>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py class">
@@ -447,14 +320,185 @@ entry point only</p>
 </ul>
 </dd>
 </dl>
-<dl class="py method">
-<dt class="sig sig-object py" id="ibek.support.Support.get_module">
-<span class="sig-name descname"><span class="pre">get_module</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#ibek.support.ModuleSuperclass" title="ibek.support.ModuleSuperclass"><span class="pre">ibek.support.ModuleSuperclass</span></a></span></span><a class="reference internal" href="../_modules/ibek/support.html#Support.get_module"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ibek.support.Support.get_module" title="Permalink to this definition">¶</a></dt>
-<dd><p>Generate an in memory module class with a set of EntityInstance classes.</p>
-<p>Instances of this module are used to represent individual instances of
-IOCs.</p>
 </dd></dl>
 
+</div>
+<div class="section" id="module-ibek.argument">
+<span id="ibek-argument"></span><h3><code class="docutils literal notranslate"><span class="pre">ibek.argument</span></code><a class="headerlink" href="#module-ibek.argument" title="Permalink to this headline">¶</a></h3>
+<p>Classes used to define the arguments available to Entities in ioc instance
+entity files</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="ibek.argument.Arg">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">ibek.argument.</span></span><span class="sig-name descname"><span class="pre">Arg</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">description</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">default</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ibek/argument.html#Arg"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ibek.argument.Arg" title="Permalink to this definition">¶</a></dt>
+<dd><p>Base class for all Argument Types</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – Name of the argument that the IOC instance should pass</p></li>
+<li><p><strong>description</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – Description of what the argument will be used for</p></li>
+<li><p><strong>type</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – </p></li>
+<li><p><strong>default</strong> (<em>typing.Any</em>) – </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ibek.argument.StrArg">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">ibek.argument.</span></span><span class="sig-name descname"><span class="pre">StrArg</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">description</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'str'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">default</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">Undefined</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">is_id</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ibek/argument.html#StrArg"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ibek.argument.StrArg" title="Permalink to this definition">¶</a></dt>
+<dd><p>An argument with a str value</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – Name of the argument that the IOC instance should pass</p></li>
+<li><p><strong>description</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – Description of what the argument will be used for</p></li>
+<li><p><strong>type</strong> (<em>typing_extensions.Literal</em><em>[</em><em>'str'</em><em>]</em>) – </p></li>
+<li><p><strong>default</strong> (<em>typing.Union</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em>,</em><em>NoneType</em><em>,</em><em>apischema.utils.UndefinedType</em><em>]</em>) – If given, and instance doesn’t supply argument, what value should be used</p></li>
+<li><p><strong>is_id</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.9)"><em>bool</em></a>) – If true, instances may refer to this instance by this arg</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ibek.argument.IntArg">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">ibek.argument.</span></span><span class="sig-name descname"><span class="pre">IntArg</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">description</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'int'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">default</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">Undefined</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ibek/argument.html#IntArg"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ibek.argument.IntArg" title="Permalink to this definition">¶</a></dt>
+<dd><p>An argument with an int value</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – Name of the argument that the IOC instance should pass</p></li>
+<li><p><strong>description</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – Description of what the argument will be used for</p></li>
+<li><p><strong>type</strong> (<em>typing_extensions.Literal</em><em>[</em><em>'int'</em><em>]</em>) – </p></li>
+<li><p><strong>default</strong> (<em>typing.Union</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.9)"><em>int</em></a><em>,</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em>,</em><em>NoneType</em><em>,</em><em>apischema.utils.UndefinedType</em><em>]</em>) – If given, and instance doesn’t supply argument, what value should be used</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ibek.argument.FloatArg">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">ibek.argument.</span></span><span class="sig-name descname"><span class="pre">FloatArg</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">description</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'float'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">default</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">Undefined</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ibek/argument.html#FloatArg"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ibek.argument.FloatArg" title="Permalink to this definition">¶</a></dt>
+<dd><p>An argument with a float value</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – Name of the argument that the IOC instance should pass</p></li>
+<li><p><strong>description</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – Description of what the argument will be used for</p></li>
+<li><p><strong>type</strong> (<em>typing_extensions.Literal</em><em>[</em><em>'float'</em><em>]</em>) – </p></li>
+<li><p><strong>default</strong> (<em>typing.Union</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.9)"><em>float</em></a><em>,</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em>,</em><em>NoneType</em><em>,</em><em>apischema.utils.UndefinedType</em><em>]</em>) – If given, and instance doesn’t supply argument, what value should be used</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ibek.argument.ObjectArg">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">ibek.argument.</span></span><span class="sig-name descname"><span class="pre">ObjectArg</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">description</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">default</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">Undefined</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ibek/argument.html#ObjectArg"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ibek.argument.ObjectArg" title="Permalink to this definition">¶</a></dt>
+<dd><p>A reference to another entity defined in this IOC</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – Name of the argument that the IOC instance should pass</p></li>
+<li><p><strong>description</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – Description of what the argument will be used for</p></li>
+<li><p><strong>type</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a>) – Entity class, &lt;module&gt;.&lt;entity_name&gt;</p></li>
+<li><p><strong>default</strong> (<em>typing.Union</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><em>str</em></a><em>,</em><em>NoneType</em><em>,</em><em>apischema.utils.UndefinedType</em><em>]</em>) – If given, and instance doesn’t supply argument, what value should be used</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="module-ibek.generator">
+<span id="ibek-generator"></span><h3><code class="docutils literal notranslate"><span class="pre">ibek.generator</span></code><a class="headerlink" href="#module-ibek.generator" title="Permalink to this headline">¶</a></h3>
+<p>Functions for generating an IocInstance class with and list of
+EntityInstance classes from support module definition YAML</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="ibek.generator.get_module">
+<span class="sig-prename descclassname"><span class="pre">ibek.generator.</span></span><span class="sig-name descname"><span class="pre">get_module</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">support</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="#ibek.support.Support" title="ibek.support.Support"><span class="pre">ibek.support.Support</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Type</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#ibek.support.IocInstance" title="ibek.support.IocInstance"><span class="pre">ibek.support.IocInstance</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/ibek/generator.html#get_module"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ibek.generator.get_module" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generate an IocInstance derived class with its a set of EntityInstance classes,
+from a support module definition</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ibek.generator.from_yaml">
+<span class="sig-prename descclassname"><span class="pre">ibek.generator.</span></span><span class="sig-name descname"><span class="pre">from_yaml</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">definition_file</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.9)"><span class="pre">pathlib.Path</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Type</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#ibek.support.IocInstance" title="ibek.support.IocInstance"><span class="pre">ibek.support.IocInstance</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/ibek/generator.html#from_yaml"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ibek.generator.from_yaml" title="Permalink to this definition">¶</a></dt>
+<dd><p>A class factory method to read in a support module definition file and
+generate an IocInstance derived class</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ibek.generator.get_entity_instances">
+<span class="sig-prename descclassname"><span class="pre">ibek.generator.</span></span><span class="sig-name descname"><span class="pre">get_entity_instances</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">entity</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="#ibek.support.Entity" title="ibek.support.Entity"><span class="pre">ibek.support.Entity</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">baseclass</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Any</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">namespace</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">module_name</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ibek/generator.html#get_entity_instances"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ibek.generator.get_entity_instances" title="Permalink to this definition">¶</a></dt>
+<dd><p>We can get a set of Entities by deserializing an ibek support module
+YAML file. This  function creates an EntityInstance class from
+an Entity. See <a class="reference internal" href="../explanations/entities.html#entities"><span class="std std-ref">Entities, Definitions and Modules</span></a></p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-ibek.globals">
+<span id="ibek-globals"></span><h3><code class="docutils literal notranslate"><span class="pre">ibek.globals</span></code><a class="headerlink" href="#module-ibek.globals" title="Permalink to this headline">¶</a></h3>
+<p>A few global definitions</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="ibek.globals.desc">
+<span class="sig-prename descclassname"><span class="pre">ibek.globals.</span></span><span class="sig-name descname"><span class="pre">desc</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">description</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ibek/globals.html#desc"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ibek.globals.desc" title="Permalink to this definition">¶</a></dt>
+<dd><p>a description Annotation to add to our Entity derived Types</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-ibek.helm">
+<span id="ibek-helm"></span><h3><code class="docutils literal notranslate"><span class="pre">ibek.helm</span></code><a class="headerlink" href="#module-ibek.helm" title="Permalink to this headline">¶</a></h3>
+<p>Functions for building the helm chart</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="ibek.helm.create_boot_script">
+<span class="sig-prename descclassname"><span class="pre">ibek.helm.</span></span><span class="sig-name descname"><span class="pre">create_boot_script</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ioc_instance_yaml</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.9)"><span class="pre">pathlib.Path</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">definition_yaml</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.9)"><span class="pre">pathlib.Path</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/ibek/helm.html#create_boot_script"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ibek.helm.create_boot_script" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create the boot script for an IOCs helm chart</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ibek.helm.render_file">
+<span class="sig-prename descclassname"><span class="pre">ibek.helm.</span></span><span class="sig-name descname"><span class="pre">render_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_template</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.9)"><span class="pre">pathlib.Path</span></a></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ibek/helm.html#render_file"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ibek.helm.render_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>replace a jinja templated file with its rendered equivalent by passing
+kwargs parameters to jinja</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ibek.helm.create_helm">
+<span class="sig-prename descclassname"><span class="pre">ibek.helm.</span></span><span class="sig-name descname"><span class="pre">create_helm</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">script_txt</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.9)"><span class="pre">pathlib.Path</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ibek/helm.html#create_helm"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ibek.helm.create_helm" title="Permalink to this definition">¶</a></dt>
+<dd><p>create a boilerplate helm chart with name str in folder path</p>
+<p>update the values.yml and Chart.yml by rendering their jinja templates
+and insert the boot script whose text is supplied in script_txt</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-ibek.render">
+<span id="ibek-render"></span><h3><code class="docutils literal notranslate"><span class="pre">ibek.render</span></code><a class="headerlink" href="#module-ibek.render" title="Permalink to this headline">¶</a></h3>
+<p>Functions for rendering lines in the boot script using Jinja2</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="ibek.render.render_script">
+<span class="sig-prename descclassname"><span class="pre">ibek.render.</span></span><span class="sig-name descname"><span class="pre">render_script</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">instance</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="#ibek.support.EntityInstance" title="ibek.support.EntityInstance"><span class="pre">ibek.support.EntityInstance</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><span class="pre">str</span></a></span></span><a class="reference internal" href="../_modules/ibek/render.html#render_script"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ibek.render.render_script" title="Permalink to this definition">¶</a></dt>
+<dd><p>render the startup script by combining the jinja template from
+an entity with the arguments from and EntityInstance</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ibek.render.render_database">
+<span class="sig-prename descclassname"><span class="pre">ibek.render.</span></span><span class="sig-name descname"><span class="pre">render_database</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">instance</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="#ibek.support.EntityInstance" title="ibek.support.EntityInstance"><span class="pre">ibek.support.EntityInstance</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><span class="pre">str</span></a></span></span><a class="reference internal" href="../_modules/ibek/render.html#render_database"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ibek.render.render_database" title="Permalink to this definition">¶</a></dt>
+<dd><p>render the lines required to instantiate database by combining the
+templates from the Entity’s database list with the arguments from
+an EntityInstance</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ibek.render.render_script_elements">
+<span class="sig-prename descclassname"><span class="pre">ibek.render.</span></span><span class="sig-name descname"><span class="pre">render_script_elements</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">entity_instances</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="#ibek.support.IocInstance" title="ibek.support.IocInstance"><span class="pre">ibek.support.IocInstance</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><span class="pre">str</span></a></span></span><a class="reference internal" href="../_modules/ibek/render.html#render_script_elements"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ibek.render.render_script_elements" title="Permalink to this definition">¶</a></dt>
+<dd><p>Render all of the startup script entries for a given IOC instance</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ibek.render.render_database_elements">
+<span class="sig-prename descclassname"><span class="pre">ibek.render.</span></span><span class="sig-name descname"><span class="pre">render_database_elements</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">entity_instances</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><a class="reference internal" href="#ibek.support.IocInstance" title="ibek.support.IocInstance"><span class="pre">ibek.support.IocInstance</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.9)"><span class="pre">str</span></a></span></span><a class="reference internal" href="../_modules/ibek/render.html#render_database_elements"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ibek.render.render_database_elements" title="Permalink to this definition">¶</a></dt>
+<dd><p>Render all of the DBLoadRecords entries for a given IOC instance</p>
 </dd></dl>
 
 </div>
