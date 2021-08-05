@@ -46,7 +46,7 @@ class Entity:
     A single entity that an IOC can instantiate
     """
 
-    name: A[str, desc("Publish Entity as type module.name for IOC instances")]
+    name: A[str, desc("Publish Entity as type <module>.<name> for IOC instances")]
     args: A[Sequence[Arg], desc("The arguments IOC instance should supply")] = ()
     databases: A[Sequence[Database], desc("Databases to instantiate")] = ()
     script: A[
