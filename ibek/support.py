@@ -1,3 +1,9 @@
+"""
+The Support Class represents a deserialized <MODULE_NAME>.ibek.yaml file.
+It contains a hierarchy of Entity dataclasses.
+
+"""
+
 from dataclasses import dataclass
 from typing import Any, ClassVar, Mapping, Sequence, Type
 
@@ -9,10 +15,6 @@ from ibek.argument import Arg
 from ibek.globals import T, desc
 
 """
-The Support Class represents a deserialized <MODULE_NAME>.ibek.yaml file.
-It is a hierarchy of dataclasses. This module also defines all of the
-dataclasses that can appear as children of Support in the object graph.
-
 TODO: There are a couple of problems with deserialize and defaults. These
 are worked around as follows. I need to verify that this is the best
 approach to dealing with this.

@@ -5,12 +5,12 @@ from typing import Any, Dict, TypeVar
 
 from apischema import schema
 
-# A generic Type for use in type hints
+""" A generic Type for use in type hints """
 T = TypeVar("T")
 
 
-# a description Annotation to add to our Entity derived Types
 def desc(description: str):
+    """ a description Annotation to add to our Entity derived Types """
     return schema(description=description)
 
 

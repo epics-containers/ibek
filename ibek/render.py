@@ -1,3 +1,7 @@
+"""
+Functions for rendering lines in the boot script using Jinja2
+"""
+
 from dataclasses import asdict
 from typing import TypeVar
 

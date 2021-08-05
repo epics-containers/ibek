@@ -2,6 +2,7 @@
 Functions for generating an IocInstance class with and list of
 EntityInstance classes from support module definition YAML
 """
+
 import builtins
 from dataclasses import Field, field, make_dataclass
 from pathlib import Path

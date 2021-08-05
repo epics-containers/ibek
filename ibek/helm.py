@@ -1,5 +1,5 @@
 """
-functions for building the helm chart
+Functions for building the helm chart
 """
 
 import shutil
