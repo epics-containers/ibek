@@ -1,23 +1,9 @@
-import builtins
-from builtins import getattr
-from dataclasses import Field, dataclass, field, make_dataclass
-from typing import (
-    Any,
-    ClassVar,
-    Dict,
-    List,
-    Mapping,
-    Sequence,
-    Tuple,
-    Type,
-    Union,
-    cast,
-)
+from dataclasses import dataclass
+from typing import Any, ClassVar, Mapping, Sequence, Type
 
 from apischema import deserialize, deserializer
 from apischema.conversions import Conversion, identity
 from typing_extensions import Annotated as A
-from typing_extensions import Literal
 
 from ibek.argument import Arg
 from ibek.globals import T, desc
@@ -43,7 +29,9 @@ approach to dealing with this.
 
 @dataclass
 class Database:
-    """A database file that should be loaded by the startup script and its args"""
+    """
+    A database file that should be loaded by the startup script and its args
+    """
 
     file: A[str, desc("Filename of the database template in <module_root>/db")]
     include_args: A[
@@ -54,9 +42,11 @@ class Database:
 
 @dataclass
 class Entity:
-    """A single entity that an IOC can instantiate"""
+    """
+    A single entity that an IOC can instantiate
+    """
 
-    name: A[str, desc("Publish Entity as type <module>.<name> for IOC instances")]
+    name: A[str, desc("Publish Entity as type module.name for IOC instances")]
     args: A[Sequence[Arg], desc("The arguments IOC instance should supply")] = ()
     databases: A[Sequence[Database], desc("Databases to instantiate")] = ()
     script: A[
@@ -72,10 +62,8 @@ class EntityInstance:
     """
 
     # a link back to the Entity Object that generated this EntityInstance
-    # TODO this is an Entity
-    entity: ClassVar[Type]
+    entity: ClassVar[Entity]
 
-    #
     def __init_subclass__(cls) -> None:
         deserializer(Conversion(identity, source=cls, target=EntityInstance))
 

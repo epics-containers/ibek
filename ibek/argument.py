@@ -19,6 +19,8 @@ def desc(description: str):
 
 @dataclass
 class Arg:
+    """Base class for all Argument Types"""
+
     name: A[str, desc("Name of the argument that the IOC instance should pass")]
     description: A[str, desc("Description of what the argument will be used for")]
     type: str
