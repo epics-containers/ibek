@@ -1,3 +1,10 @@
+"""
+The folder test/samples/black is used for formatting generated code for
+and generating the files in test/samples/classes
+
+This preamble file is added to the head of the generated class
+"""
+
 from apischema.utils import Undefined
 
 from ibek.argument import FloatArg, IntArg, StrArg
@@ -191,9 +198,7 @@ SUPPORT = Support(
                     default="asynMotor",
                     is_id=False,
                 ),
-                IntArg(
-                    name="DIR", description="User direction", type="int", default="0"
-                ),
+                IntArg(name="DIR", description="User direction", type="int", default=0),
                 FloatArg(
                     name="VBAS",
                     description="Base Velocity (EGU/s)",
@@ -216,19 +221,19 @@ SUPPORT = Support(
                     name="BDST",
                     description="BL Distance (EGU)",
                     type="float",
-                    default="0",
+                    default=0.0,
                 ),
                 FloatArg(
                     name="BVEL",
                     description="BL Velocity(EGU/s)",
                     type="float",
-                    default="0",
+                    default=0.0,
                 ),
                 FloatArg(
                     name="BACC",
                     description="BL Seconds to Veloc",
                     type="float",
-                    default="0",
+                    default=0.0,
                 ),
                 FloatArg(
                     name="DHLM",
@@ -243,10 +248,10 @@ SUPPORT = Support(
                     default=-10000.0,
                 ),
                 FloatArg(
-                    name="HLM", description="User High Limit", type="float", default="0"
+                    name="HLM", description="User High Limit", type="float", default=0.0
                 ),
                 FloatArg(
-                    name="LLM", description="User Low Limit", type="float", default="0"
+                    name="LLM", description="User Low Limit", type="float", default=0.0
                 ),
                 StrArg(
                     name="HLSV",
@@ -272,31 +277,31 @@ SUPPORT = Support(
                     name="RRES",
                     description="Readback Step Size (EGU",
                     type="float",
-                    default="0",
+                    default=0.0,
                 ),
                 FloatArg(
                     name="ERES",
                     description="Encoder Step Size (EGU)",
                     type="float",
-                    default="0",
+                    default=0.0,
                 ),
                 FloatArg(
                     name="JAR",
                     description="Jog Acceleration (EGU/s^2)",
                     type="float",
-                    default="0",
+                    default=0.0,
                 ),
                 IntArg(
                     name="UEIP",
                     description="Use Encoder If Present",
                     type="int",
-                    default="0",
+                    default=0,
                 ),
                 IntArg(
                     name="URIP",
                     description="Use RDBL If Present",
                     type="int",
-                    default="0",
+                    default=0,
                 ),
                 StrArg(
                     name="RDBL",
@@ -313,37 +318,37 @@ SUPPORT = Support(
                     is_id=False,
                 ),
                 IntArg(
-                    name="RTRY", description="Max retry count", type="int", default="0"
+                    name="RTRY", description="Max retry count", type="int", default=0
                 ),
                 FloatArg(
                     name="DLY",
                     description="Readback settle time (s)",
                     type="float",
-                    default="0",
+                    default=0.0,
                 ),
                 FloatArg(
                     name="OFF",
                     description="User Offset (EGU)",
                     type="float",
-                    default="0",
+                    default=0.0,
                 ),
                 FloatArg(
                     name="RDBD",
                     description="Retry Deadband (EGU)",
                     type="float",
-                    default="0",
+                    default=0.0,
                 ),
                 IntArg(
                     name="FOFF",
                     description="Freeze Offset, 0=variable, 1=frozen",
                     type="int",
-                    default="0",
+                    default=0,
                 ),
                 FloatArg(
                     name="ADEL",
                     description="Alarm monitor deadband (EGU)",
                     type="float",
-                    default="0",
+                    default=0.0,
                 ),
                 IntArg(
                     name="NTM",
@@ -355,13 +360,13 @@ SUPPORT = Support(
                     name="FEHEIGH",
                     description="HIGH limit for following error",
                     type="float",
-                    default="0",
+                    default=0.0,
                 ),
                 FloatArg(
                     name="FEHIHI",
                     description="HIHI limit for following error",
                     type="float",
-                    default="0",
+                    default=0.0,
                 ),
                 StrArg(
                     name="FEHHSV",
