@@ -3,6 +3,60 @@
 
 .. |logo| image:: images/ibek-logo.svg
 
+TODO
+----
+
+This project is incomplete. The following items are still to do:
+
+    - Modify the documentation explanations/entities, invert the explanation
+      so that it is in the same order as the tables at the end.
+
+    - rename theses classes and update all comments accordingly (I still would
+      like to have a think about better naming?)
+
+        - Entity becomes Definition
+        - EntityInstance becomes Entity
+
+    - Complete documentation in general
+
+    - Add a param no_axes to pmac.Geobrick instead of hardcoding 8
+
+    - update the database entry generation in jinja to make use of the property
+      include_args. This should automatically add macro substitutions for
+      macros with the same name as the argument (and greatly reduce the length
+      of the jinja template for DlsPmacAsynMotor)
+
+    - Break out Helm Chart generation and boot script generation into two
+      separate commands:
+
+      - make-helm will make a helm chart which just has the ioc instance yaml
+        in its config folder. This is to be run outside of the container to
+        make the helm chart
+
+      - make-script will generate an ioc.boot from an instance yaml and this
+        will run inside the container at ioc startup and hence have access to
+        all the needed <support>.ibek.yaml definition files.
+
+      - this will require changes to start.sh to support converting yaml to
+        ioc.boot but should also continue to support a native ioc.boot for
+        non ibek users.
+
+      - The CI will be responsible for making a schema file from all of the
+        <support>.ibek.yaml definition files and publishing it as a repository
+        artifact on github. This means that editors will be able to make use
+        of the schema for preparing IOC instance entity files.
+
+    - finally support for multiple support definition files is required at
+      present the cli only takes a single support definition file. All these
+      commands need to support multiple definition files for the whole container.
+
+        - make-script
+        - make-helm
+        - ioc-schema
+
+    - this will require an additional class to represent a container as a set
+      of support modules.
+
 How the documentation is structured
 -----------------------------------
 
