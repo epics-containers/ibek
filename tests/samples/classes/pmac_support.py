@@ -92,7 +92,7 @@ SUPPORT = Support(
             ),
             databases=(),
             script=(
-                'pmacAsynIPConfigure({{name}}, {{IP + "" if ":" in IP else IP +'
+                'pmacAsynIPConfigure({{name}}, {{IP if ":" in IP else IP +'
                 ' ":1025"}})',
             ),
         ),

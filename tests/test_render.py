@@ -18,7 +18,6 @@ sample_yaml = Path(__file__).parent / "samples" / "yaml"
 
 @fixture
 def pmac_classes():
-    # TODO better wording and naming
     # create a support object from YAML - this has the side effect of
     # populating namespace with all of the generated classes
     from_yaml(sample_yaml / "pmac.ibek.yaml")
@@ -30,7 +29,8 @@ def pmac_classes():
 
 def test_deserialize_support() -> None:
     with open(sample_yaml / "pmac.ibek.yaml") as f:
-        actual = Support.deserialize(YAML().load(f))
+        yaml_dict = YAML().load(f)
+        actual = Support.deserialize(yaml_dict)
     assert actual == SUPPORT
 
 

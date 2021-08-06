@@ -47,7 +47,7 @@ entities:
         description: IP address of pmac
 
     script:
-      - pmacAsynIPConfigure({{name}}, {{IP + "" if ":" in IP else IP + ":1025"}})
+      - pmacAsynIPConfigure({{name}}, {{IP if ":" in IP else IP + ":1025"}})
 
   - name: DlsPmacAsynMotor
     args:
