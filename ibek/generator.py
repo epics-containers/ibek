@@ -43,7 +43,6 @@ def get_module(support: Support) -> Type[IocInstance]:
         ],
         bases=(IocInstance,),
     )
-    print(namespace["entityinstance"].__subclasses__())
     return namespace[support.module]
 
 

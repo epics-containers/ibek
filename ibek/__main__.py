@@ -12,7 +12,7 @@ from ibek.generator import from_yaml
 from ibek.helm import create_boot_script, create_helm
 from ibek.support import Support
 
-app = typer.Typer()
+cli = typer.Typer()
 yaml = YAML()
 
 
@@ -22,7 +22,7 @@ def version_callback(value: bool):
         raise typer.Exit()
 
 
-@app.callback()
+@cli.callback()
 def main(
     version: Optional[bool] = typer.Option(
         None,
@@ -35,7 +35,7 @@ def main(
     """Do 3 things..."""
 
 
-@app.command()
+@cli.command()
 def ibek_schema(
     output: Path = typer.Argument(..., help="The filename to write the schema to")
 ):
@@ -45,7 +45,7 @@ def ibek_schema(
         f.write(schema)
 
 
-@app.command()
+@cli.command()
 def ioc_schema(
     description: Path = typer.Argument(
         ..., help="The filepath to read the IOC class description from"
@@ -60,7 +60,7 @@ def ioc_schema(
         f.write(schema)
 
 
-@app.command()
+@cli.command()
 def build_ioc(
     definition: Path = typer.Argument(
         ..., help="The filepath to the ioc definition file"
@@ -72,14 +72,14 @@ def build_ioc(
 ):
     """Build a startup script, database and Helm chart from <ioc>.yaml"""
 
-    ioc_name, script_txt = create_boot_script(
+    ioc_instance, script_txt = create_boot_script(
         ioc_instance_yaml=instance, definition_yaml=definition
     )
 
-    create_helm(name=ioc_name, script_txt=script_txt, path=out)
+    create_helm(instance=ioc_instance, script_txt=script_txt, path=out)
 
 
 # test with:
 #     pipenv run python -m ibek
 if __name__ == "__main__":
-    app()
+    cli()

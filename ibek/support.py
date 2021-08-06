@@ -78,6 +78,7 @@ class IocInstance:
     """
 
     ioc_name: str
+    description: str
     instances: Sequence[EntityInstance]
 
     @classmethod

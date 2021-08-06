@@ -31,6 +31,36 @@
                     },
                     "type": {
                       "type": "string",
+                      "const": "float"
+                    },
+                    "default": {
+                      "type": [
+                        "number",
+                        "string",
+                        "null"
+                      ],
+                      "description": "If given, and instance doesn't supply argument, what value should be used"
+                    }
+                  },
+                  "required": [
+                    "name",
+                    "description"
+                  ],
+                  "additionalProperties": false
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "name": {
+                      "type": "string",
+                      "description": "Name of the argument that the IOC instance should pass"
+                    },
+                    "description": {
+                      "type": "string",
+                      "description": "Description of what the argument will be used for"
+                    },
+                    "type": {
+                      "type": "string",
                       "const": "str"
                     },
                     "default": {
@@ -69,36 +99,6 @@
                     "default": {
                       "type": [
                         "integer",
-                        "string",
-                        "null"
-                      ],
-                      "description": "If given, and instance doesn't supply argument, what value should be used"
-                    }
-                  },
-                  "required": [
-                    "name",
-                    "description"
-                  ],
-                  "additionalProperties": false
-                },
-                {
-                  "type": "object",
-                  "properties": {
-                    "name": {
-                      "type": "string",
-                      "description": "Name of the argument that the IOC instance should pass"
-                    },
-                    "description": {
-                      "type": "string",
-                      "description": "Description of what the argument will be used for"
-                    },
-                    "type": {
-                      "type": "string",
-                      "const": "float"
-                    },
-                    "default": {
-                      "type": [
-                        "number",
                         "string",
                         "null"
                       ],

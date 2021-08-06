@@ -10,5 +10,5 @@ after regeneration is done even if the output is badly broken.
 
 | file | for | regenerate with |
 |------|-----|------------------|
-|ibek.schema.json|global schema for all <SUPPORT_MODULE>.ibek.schema|pipenv run python ibek ibek-schema tests/samples/schemas/ibek.schema.json|
-|pmac.schema.json|schema for pmac support module|pipenv run python ibek ioc-schema tests/samples/yaml/pmac.ibek.yaml tests/samples/schemas/pmac.schema.json|
+|ibek.schema.json|global schema for all <SUPPORT_MODULE>.ibek.schema|pipenv run ibek ibek-schema tests/samples/schemas/ibek.schema.json|
+|pmac.schema.json|schema for pmac support module|pipenv run ibek ioc-schema tests/samples/yaml/pmac.ibek.yaml tests/samples/schemas/pmac.schema.json|
