@@ -1,3 +1,10 @@
+"""
+The folder test/samples/black is used for formatting generated code for
+and generating the files in test/samples/classes
+
+This preamble file is added to the head of the generated class
+"""
+
 from apischema.utils import Undefined
 
 from ibek.argument import FloatArg, IntArg, StrArg

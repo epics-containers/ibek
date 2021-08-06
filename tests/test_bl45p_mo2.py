@@ -146,7 +146,7 @@ BL45P_MO_IOC_02 = fix_code(
             HOME='$(P)',
             ALLOW_HOMED_SET='#')))
 """,
-    options={"aggressive": 1},
+    options={"aggressive": 3},
 )
 
 

@@ -10,9 +10,11 @@ from ibek.generator import from_yaml
 
 runner = CliRunner()
 
-sample_schemas = Path(__file__).parent / "samples" / "schemas"
-sample_yaml = Path(__file__).parent / "samples" / "yaml"
-sample_helm = Path(__file__).parent / "samples" / "helm"
+samples = Path(__file__).parent / "samples"
+sample_schemas = samples / "schemas"
+sample_yaml = samples / "yaml"
+sample_helm = samples / "helm"
+sample_classes = samples / "classes"
 
 
 def test_version():

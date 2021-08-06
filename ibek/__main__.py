@@ -5,7 +5,6 @@ from typing import Optional
 import typer
 from apischema.json_schema import deserialization_schema
 from ruamel.yaml import YAML
-from ruamel.yaml.main import YAML
 
 from ibek import __version__
 from ibek.generator import from_yaml
@@ -77,6 +76,22 @@ def build_ioc(
     )
 
     create_helm(instance=ioc_instance, script_txt=script_txt, path=out)
+
+
+@cli.command(hidden=True, help=None)
+def dump_support(
+    definition: Path = typer.Argument(
+        ..., help="The filepath to the ioc definition file"
+    ),
+    out: Path = typer.Argument(
+        default="/tmp/support.py", help="Path in which save the Support instance code"
+    ),
+):
+    """Dump the Support instance code (for debug/test)"""
+    yaml_dict = YAML().load(definition)
+    support_definition = Support.deserialize(yaml_dict)
+
+    out.write_text(str(support_definition))
 
 
 # test with:
