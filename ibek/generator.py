@@ -8,6 +8,7 @@ from dataclasses import Field, field, make_dataclass
 from pathlib import Path
 from typing import Any, Dict, List, Sequence, Tuple, Type, Union, cast
 
+from apischema.utils import Undefined
 from ruamel.yaml import YAML
 from typing_extensions import Annotated as A
 from typing_extensions import Literal
@@ -95,7 +96,7 @@ def get_entity_instances(
             )
         else:
             this_field = (arg.name, getattr(builtins, arg.type))
-        if arg.default:
+        if arg.default is not Undefined:
             default: Field[Any] = field(default=arg.default)
             this_field += (default,)
 

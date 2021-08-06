@@ -120,7 +120,7 @@ entities:
         name: DIR
         description: User direction
         # quotes zero provides a default whereas 0 is seen as no default
-        default: "0"
+        default: 0
 
       - type: float
         name: VBAS
@@ -141,17 +141,17 @@ entities:
       - type: float
         name: BDST
         description: BL Distance (EGU)
-        default: "0"
+        default: 0
 
       - type: float
         name: BVEL
         description: BL Velocity(EGU/s)
-        default: "0"
+        default: 0
 
       - type: float
         name: BACC
         description: BL Seconds to Veloc
-        default: "0"
+        default: 0
 
       - type: float
         name: DHLM
@@ -166,12 +166,12 @@ entities:
       - type: float
         name: HLM
         description: User High Limit
-        default: "0"
+        default: 0
 
       - type: float
         name: LLM
         description: User Low Limit
-        default: "0"
+        default: 0
 
       - type: str
         name: HLSV
@@ -191,27 +191,27 @@ entities:
       - type: float
         name: RRES
         description: Readback Step Size (EGU
-        default: "0"
+        default: 0
 
       - type: float
         name: ERES
         description: Encoder Step Size (EGU)
-        default: "0"
+        default: 0
 
       - type: float
         name: JAR
         description: Jog Acceleration (EGU/s^2)
-        default: "0"
+        default: 0
 
       - type: int
         name: UEIP
         description: Use Encoder If Present
-        default: "0"
+        default: 0
 
       - type: int
         name: URIP
         description: Use RDBL If Present
-        default: "0"
+        default: 0
 
       - type: str
         name: RDBL
@@ -226,32 +226,32 @@ entities:
       - type: int
         name: RTRY
         description: Max retry count
-        default: "0"
+        default: 0
 
       - type: float
         name: DLY
         description: Readback settle time (s)
-        default: "0"
+        default: 0
 
       - type: float
         name: "OFF"
         description: User Offset (EGU)
-        default: "0"
+        default: 0
 
       - type: float
         name: RDBD
         description: Retry Deadband (EGU)
-        default: "0"
+        default: 0
 
       - type: int
         name: FOFF
         description: Freeze Offset, 0=variable, 1=frozen
-        default: "0"
+        default: 0
 
       - type: float
         name: ADEL
         description: Alarm monitor deadband (EGU)
-        default: "0"
+        default: 0
 
       - type: int
         name: NTM
@@ -261,12 +261,12 @@ entities:
       - type: float
         name: FEHEIGH
         description: HIGH limit for following error
-        default: "0"
+        default: 0
 
       - type: float
         name: FEHIHI
         description: HIHI limit for following error
-        default: "0"
+        default: 0
 
       - type: str
         name: FEHHSV

@@ -49,36 +49,36 @@ BL45P_MO_IOC_02 = fix_code(
             EGU='mm',
             TWV=1,
             DTYP='asynMotor',
-            DIR='0',
+            DIR=0,
             VBAS=1.0,
             VMAX=1.0,
             ACCL=0.5,
-            BDST='0',
-            BVEL='0',
-            BACC='0',
+            BDST=0.0,
+            BVEL=0.0,
+            BACC=0.0,
             DHLM=10000.0,
             DLMM=-10000.0,
-            HLM='0',
-            LLM='0',
+            HLM=0.0,
+            LLM=0.0,
             HLSV='MAJOR',
             INIT=' ',
             SREV=1000.0,
-            RRES='0',
-            ERES='0',
-            JAR='0',
-            UEIP='0',
-            URIP='0',
+            RRES=0.0,
+            ERES=0.0,
+            JAR=0.0,
+            UEIP=0,
+            URIP=0,
             RDBL='0',
             RLNK=' ',
-            RTRY='0',
-            DLY='0',
-            OFF='0',
-            RDBD='0',
-            FOFF='0',
-            ADEL='0',
+            RTRY=0,
+            DLY=0.0,
+            OFF=0.0,
+            RDBD=0.0,
+            FOFF=0,
+            ADEL=0.0,
             NTM=1,
-            FEHEIGH='0',
-            FEHIHI='0',
+            FEHEIGH=0.0,
+            FEHIHI=0.0,
             FEHHSV='NO_ALARM',
             FEHSV='NO_ALARM',
             SCALE=1,
@@ -105,36 +105,36 @@ BL45P_MO_IOC_02 = fix_code(
             EGU='mm',
             TWV=1,
             DTYP='asynMotor',
-            DIR='0',
+            DIR=0,
             VBAS=1.0,
             VMAX=1.0,
             ACCL=0.5,
-            BDST='0',
-            BVEL='0',
-            BACC='0',
+            BDST=0.0,
+            BVEL=0.0,
+            BACC=0.0,
             DHLM=10000.0,
             DLMM=-10000.0,
-            HLM='0',
-            LLM='0',
+            HLM=0.0,
+            LLM=0.0,
             HLSV='MAJOR',
             INIT=' ',
             SREV=1000.0,
-            RRES='0',
-            ERES='0',
-            JAR='0',
-            UEIP='0',
-            URIP='0',
+            RRES=0.0,
+            ERES=0.0,
+            JAR=0.0,
+            UEIP=0,
+            URIP=0,
             RDBL='0',
             RLNK=' ',
-            RTRY='0',
-            DLY='0',
-            OFF='0',
-            RDBD='0',
-            FOFF='0',
-            ADEL='0',
+            RTRY=0,
+            DLY=0.0,
+            OFF=0.0,
+            RDBD=0.0,
+            FOFF=0,
+            ADEL=0.0,
             NTM=1,
-            FEHEIGH='0',
-            FEHIHI='0',
+            FEHEIGH=0.0,
+            FEHIHI=0.0,
             FEHHSV='NO_ALARM',
             FEHSV='NO_ALARM',
             SCALE=1,
@@ -161,27 +161,3 @@ def test_deserialize_bl45p(pmac_classes) -> None:
         code = pmac_ioc_cls.deserialize(d)
         actual = fix_code(str(code), options={"aggressive": 1})
     assert actual == BL45P_MO_IOC_02
-
-
-def test_database_entries() -> None:
-    """
-    generate the DB entries for bl45p-mo-ioc-02
-    """
-
-    # TODO - like test_geobrick_database
-    pass
-
-
-def test_script_entries() -> None:
-    """
-    generate the startup script lines for bl45p-mo-ioc-02
-    """
-    # TODO - like test_geobrick_script
-    pass
-
-
-def test_correct_script_rendered() -> None:
-    """
-    generate the full startup script for bl45p-mo-ioc-02
-    """
-    pass

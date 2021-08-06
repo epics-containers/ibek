@@ -39,7 +39,7 @@ class FloatArg(Arg):
     """An argument with a float value"""
 
     type: Literal["float"] = "float"
-    default: Default[Union[float, str]] = Undefined
+    default: Default[float] = Undefined
 
 
 @dataclass
@@ -58,7 +58,7 @@ class IntArg(Arg):
     """An argument with an int value"""
 
     type: Literal["int"] = "int"
-    default: Default[Union[int, str]] = Undefined
+    default: Default[int] = Undefined
 
 
 @dataclass
