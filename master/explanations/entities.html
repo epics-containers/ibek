@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>Entities, Definitions and Modules &mdash; ibek 0.2+33.gfad9c41 documentation</title>
+  <title>Entities, Definitions and Modules &mdash; ibek 0.2+39.gfd237e0 documentation</title>
   
 
   
@@ -301,6 +301,7 @@ file that ibek will generate from it.</p>
 <blockquote>
 <div><details>
 <summary><a>bl45p-mo-ioc-02.pmac.yaml</a></summary><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ioc_name</span><span class="p">:</span> <span class="n">bl45p</span><span class="o">-</span><span class="n">mo</span><span class="o">-</span><span class="n">ioc</span><span class="o">-</span><span class="mi">02</span>
+<span class="n">description</span><span class="p">:</span> <span class="n">an</span> <span class="n">example</span> <span class="n">motion</span> <span class="n">ioc</span> <span class="k">for</span> <span class="n">ibek</span> <span class="n">testing</span>
 <span class="n">instances</span><span class="p">:</span>
   <span class="o">-</span> <span class="nb">type</span><span class="p">:</span> <span class="n">pmac</span><span class="o">.</span><span class="n">PmacAsynIPPort</span>
     <span class="n">name</span><span class="p">:</span> <span class="n">BRICK1port</span>
@@ -352,8 +353,8 @@ file that ibek will generate from it.</p>
 
 <span class="n">dbLoadRecords</span><span class="p">(</span><span class="s2">&quot;pmacController.template&quot;</span><span class="p">,</span> <span class="s2">&quot;PMAC=BL45P-MO-STEP-01:&quot;</span><span class="p">)</span>
 <span class="n">dbLoadRecords</span><span class="p">(</span><span class="s2">&quot;pmacStatus.template&quot;</span><span class="p">,</span> <span class="s2">&quot;PMAC=BL45P-MO-STEP-01:&quot;</span><span class="p">)</span>
-<span class="n">dbLoadRecords</span><span class="p">(</span><span class="s2">&quot;$(PMAC)/db/dls_pmac_asyn_motor.template&quot;</span><span class="p">,</span> <span class="s2">&quot;P=BL45P-MO-THIN-01, M=:X1, PORT=BL45P-MO-BRICK-01, ADDR=1, DESC= , MRES=0.001, VELO=1.0, PREC=, EGU=mm, TWV=1, DTYP=asynMotor, DIR=0, VBAS=1.0, VMAX=1, ACCL=0.5, BDST=0, BVEL=0, BACC=0, DHLM=10000, DLLM=, HLM=0, LLM=0, HLSV=MAJOR, INIT= , SREV=1000, RRES=0, ERES=0, JAR=0, UEIP=0, RDBL=0, RLINK=, RTRY=0, DLY=0, OFF=0, RDBD=0, FOFF=0, ADEL=0, NTM=1, FEHIGH=0, FEHIHI=0, FEHHSV=NO_ALARM, FEHSV=NO_ALARM, SCALE=1, HOMEVIS=1, HOMEVISSTR=, name=X1 motor, alh= , gda_name=none, gda_desc=$(DESC), SPORT=BRICK1port, HOME=$(P), PMAC=BL45P-MO-BRICK-01, ALLOW_HOMED_SET=#&quot;</span><span class="p">)</span>
-<span class="n">dbLoadRecords</span><span class="p">(</span><span class="s2">&quot;$(PMAC)/db/dls_pmac_asyn_motor.template&quot;</span><span class="p">,</span> <span class="s2">&quot;P=BL45P-MO-THIN-01, M=:Y1, PORT=BL45P-MO-BRICK-01, ADDR=2, DESC= , MRES=0.001, VELO=1.0, PREC=, EGU=mm, TWV=1, DTYP=asynMotor, DIR=0, VBAS=1.0, VMAX=1, ACCL=0.5, BDST=0, BVEL=0, BACC=0, DHLM=10000, DLLM=, HLM=0, LLM=0, HLSV=MAJOR, INIT= , SREV=1000, RRES=0, ERES=0, JAR=0, UEIP=0, RDBL=0, RLINK=, RTRY=0, DLY=0, OFF=0, RDBD=0, FOFF=0, ADEL=0, NTM=1, FEHIGH=0, FEHIHI=0, FEHHSV=NO_ALARM, FEHSV=NO_ALARM, SCALE=1, HOMEVIS=1, HOMEVISSTR=, name=Y1 motor, alh= , gda_name=none, gda_desc=$(DESC), SPORT=BRICK1port, HOME=$(P), PMAC=BL45P-MO-BRICK-01, ALLOW_HOMED_SET=#&quot;</span><span class="p">)</span>
+<span class="n">dbLoadRecords</span><span class="p">(</span><span class="s2">&quot;$(PMAC)/db/dls_pmac_asyn_motor.template&quot;</span><span class="p">,</span> <span class="s2">&quot;P=BL45P-MO-THIN-01, M=:X1, PORT=BL45P-MO-BRICK-01, ADDR=1, DESC= , MRES=0.001, VELO=1.0, PREC=, EGU=mm, TWV=1, DTYP=asynMotor, DIR=0, VBAS=1.0, VMAX=1.0, ACCL=0.5, BDST=0, BVEL=0, BACC=0, DHLM=10000.0, DLLM=, HLM=0, LLM=0, HLSV=MAJOR, INIT= , SREV=1000.0, RRES=0, ERES=0, JAR=0, UEIP=0, RDBL=0, RLINK=, RTRY=0, DLY=0, OFF=0, RDBD=0, FOFF=0, ADEL=0, NTM=1, FEHIGH=0, FEHIHI=0, FEHHSV=NO_ALARM, FEHSV=NO_ALARM, SCALE=1, HOMEVIS=1, HOMEVISSTR=, name=X1 motor, alh= , gda_name=none, gda_desc=$(DESC), SPORT=BRICK1port, HOME=$(P), PMAC=BL45P-MO-BRICK-01, ALLOW_HOMED_SET=#&quot;</span><span class="p">)</span>
+<span class="n">dbLoadRecords</span><span class="p">(</span><span class="s2">&quot;$(PMAC)/db/dls_pmac_asyn_motor.template&quot;</span><span class="p">,</span> <span class="s2">&quot;P=BL45P-MO-THIN-01, M=:Y1, PORT=BL45P-MO-BRICK-01, ADDR=2, DESC= , MRES=0.001, VELO=1.0, PREC=, EGU=mm, TWV=1, DTYP=asynMotor, DIR=0, VBAS=1.0, VMAX=1.0, ACCL=0.5, BDST=0, BVEL=0, BACC=0, DHLM=10000.0, DLLM=, HLM=0, LLM=0, HLSV=MAJOR, INIT= , SREV=1000.0, RRES=0, ERES=0, JAR=0, UEIP=0, RDBL=0, RLINK=, RTRY=0, DLY=0, OFF=0, RDBD=0, FOFF=0, ADEL=0, NTM=1, FEHIGH=0, FEHIHI=0, FEHHSV=NO_ALARM, FEHSV=NO_ALARM, SCALE=1, HOMEVIS=1, HOMEVISSTR=, name=Y1 motor, alh= , gda_name=none, gda_desc=$(DESC), SPORT=BRICK1port, HOME=$(P), PMAC=BL45P-MO-BRICK-01, ALLOW_HOMED_SET=#&quot;</span><span class="p">)</span>
 
 <span class="n">cd</span> <span class="s2">&quot;$(TOP)&quot;</span>
 <span class="n">iocInit</span><span class="p">()</span>
@@ -441,7 +442,7 @@ entities:
         description: IP address of pmac
 
     script:
-      - pmacAsynIPConfigure({{name}}, {{IP + &quot;&quot; if &quot;:&quot; in IP else IP + &quot;:1025&quot;}})
+      - pmacAsynIPConfigure({{name}}, {{IP if &quot;:&quot; in IP else IP + &quot;:1025&quot;}})
 
   - name: DlsPmacAsynMotor
     args:
@@ -483,17 +484,17 @@ entities:
       - type: float
         name: MRES
         description: Motor Step Size (EGU)
-        default: 0.0001f
+        default: 0.0001
 
       - type: float
         name: VELO
         description: axis Velocity (EGU/s)
-        default: 1.0f
+        default: 1.0
 
       - type: float
         name: PREC
         description: Display Precision
-        default: 3f
+        default: 3
 
       - type: str
         name: EGU
@@ -519,53 +520,53 @@ entities:
       - type: float
         name: VBAS
         description: Base Velocity (EGU/s)
-        default: 1.0f
+        default: 1.0
 
       - type: float
         name: VMAX
         description: Max Velocity (EGU/s)
         # default: $(VELO)
-        default: 1f
+        default: 1
 
       - type: float
         name: ACCL
         description: Seconds to Velocity
-        default: 0.5f
+        default: 0.5
 
       - type: float
         name: BDST
         description: BL Distance (EGU)
-        default: 0f
+        default: &quot;0&quot;
 
       - type: float
         name: BVEL
         description: BL Velocity(EGU/s)
-        default: 0f
+        default: &quot;0&quot;
 
       - type: float
         name: BACC
         description: BL Seconds to Veloc
-        default: 0f
+        default: &quot;0&quot;
 
       - type: float
         name: DHLM
         description: Dial High Limit
-        default: 10000f
+        default: 10000
 
       - type: float
         name: DLMM
         description: Dial low limit
-        default: -10000f
+        default: -10000
 
       - type: float
         name: HLM
         description: User High Limit
-        default: 0f
+        default: &quot;0&quot;
 
       - type: float
         name: LLM
         description: User Low Limit
-        default: 0f
+        default: &quot;0&quot;
 
       - type: str
         name: HLSV
@@ -580,22 +581,22 @@ entities:
       - type: float
         name: SREV
         description: Steps per Revolution
-        default: 1000f
+        default: 1000
 
       - type: float
         name: RRES
         description: Readback Step Size (EGU
-        default: 0f
+        default: &quot;0&quot;
 
       - type: float
         name: ERES
         description: Encoder Step Size (EGU)
-        default: 0f
+        default: &quot;0&quot;
 
       - type: float
         name: JAR
         description: Jog Acceleration (EGU/s^2)
-        default: 0f
+        default: &quot;0&quot;
 
       - type: int
         name: UEIP
@@ -625,17 +626,17 @@ entities:
       - type: float
         name: DLY
         description: Readback settle time (s)
-        default: 0f
+        default: &quot;0&quot;
 
       - type: float
         name: &quot;OFF&quot;
         description: User Offset (EGU)
-        default: 0f
+        default: &quot;0&quot;
 
       - type: float
         name: RDBD
         description: Retry Deadband (EGU)
-        default: 0f
+        default: &quot;0&quot;
 
       - type: int
         name: FOFF
@@ -645,7 +646,7 @@ entities:
       - type: float
         name: ADEL
         description: Alarm monitor deadband (EGU)
-        default: 0f
+        default: &quot;0&quot;
 
       - type: int
         name: NTM
@@ -655,12 +656,12 @@ entities:
       - type: float
         name: FEHEIGH
         description: HIGH limit for following error
-        default: 0f
+        default: &quot;0&quot;
 
       - type: float
         name: FEHIHI
         description: HIHI limit for following error
-        default: 0f
+        default: &quot;0&quot;
 
       - type: str
         name: FEHHSV
@@ -860,6 +861,36 @@ available to the developer and may be used to assist in generating the YAML.</p>
                     <span class="p">},</span>
                     <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="p">{</span>
                       <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+                      <span class="s2">&quot;const&quot;</span><span class="p">:</span> <span class="s2">&quot;float&quot;</span>
+                    <span class="p">},</span>
+                    <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="p">{</span>
+                      <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="p">[</span>
+                        <span class="s2">&quot;number&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;null&quot;</span>
+                      <span class="p">],</span>
+                      <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;If given, and instance doesn&#39;t supply argument, what value should be used&quot;</span>
+                    <span class="p">}</span>
+                  <span class="p">},</span>
+                  <span class="s2">&quot;required&quot;</span><span class="p">:</span> <span class="p">[</span>
+                    <span class="s2">&quot;name&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;description&quot;</span>
+                  <span class="p">],</span>
+                  <span class="s2">&quot;additionalProperties&quot;</span><span class="p">:</span> <span class="n">false</span>
+                <span class="p">},</span>
+                <span class="p">{</span>
+                  <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span>
+                  <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="p">{</span>
+                      <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+                      <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Name of the argument that the IOC instance should pass&quot;</span>
+                    <span class="p">},</span>
+                    <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="p">{</span>
+                      <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+                      <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Description of what the argument will be used for&quot;</span>
+                    <span class="p">},</span>
+                    <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="p">{</span>
+                      <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
                       <span class="s2">&quot;const&quot;</span><span class="p">:</span> <span class="s2">&quot;str&quot;</span>
                     <span class="p">},</span>
                     <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="p">{</span>
@@ -898,36 +929,6 @@ available to the developer and may be used to assist in generating the YAML.</p>
                     <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="p">{</span>
                       <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="p">[</span>
                         <span class="s2">&quot;integer&quot;</span><span class="p">,</span>
-                        <span class="s2">&quot;string&quot;</span><span class="p">,</span>
-                        <span class="s2">&quot;null&quot;</span>
-                      <span class="p">],</span>
-                      <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;If given, and instance doesn&#39;t supply argument, what value should be used&quot;</span>
-                    <span class="p">}</span>
-                  <span class="p">},</span>
-                  <span class="s2">&quot;required&quot;</span><span class="p">:</span> <span class="p">[</span>
-                    <span class="s2">&quot;name&quot;</span><span class="p">,</span>
-                    <span class="s2">&quot;description&quot;</span>
-                  <span class="p">],</span>
-                  <span class="s2">&quot;additionalProperties&quot;</span><span class="p">:</span> <span class="n">false</span>
-                <span class="p">},</span>
-                <span class="p">{</span>
-                  <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span>
-                  <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span>
-                    <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="p">{</span>
-                      <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
-                      <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Name of the argument that the IOC instance should pass&quot;</span>
-                    <span class="p">},</span>
-                    <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="p">{</span>
-                      <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
-                      <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Description of what the argument will be used for&quot;</span>
-                    <span class="p">},</span>
-                    <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="p">{</span>
-                      <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
-                      <span class="s2">&quot;const&quot;</span><span class="p">:</span> <span class="s2">&quot;float&quot;</span>
-                    <span class="p">},</span>
-                    <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="p">{</span>
-                      <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="p">[</span>
-                        <span class="s2">&quot;number&quot;</span><span class="p">,</span>
                         <span class="s2">&quot;string&quot;</span><span class="p">,</span>
                         <span class="s2">&quot;null&quot;</span>
                       <span class="p">],</span>
@@ -1030,322 +1031,326 @@ available to the developer and may be used to assist in generating the YAML.</p>
 </details>
 <details>
 <summary><a>ibek.pmac.json</a></summary><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
-    <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span>
-        <span class="s2">&quot;ioc_name&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Name of IOC&quot;</span>
-        <span class="p">},</span>
-        <span class="s2">&quot;instances&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;array&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;items&quot;</span><span class="p">:</span> <span class="p">{</span>
-                <span class="s2">&quot;anyOf&quot;</span><span class="p">:</span> <span class="p">[</span>
-                    <span class="p">{</span>
-                        <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span>
-                        <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span>
-                            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="p">{</span>
-                                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
-                                <span class="s2">&quot;const&quot;</span><span class="p">:</span> <span class="s2">&quot;pmac.Geobrick&quot;</span>
-                            <span class="p">},</span>
-                            <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="p">{</span>
-                                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
-                                <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Name to use for the geobrick&#39;s asyn port&quot;</span>
-                            <span class="p">},</span>
-                            <span class="s2">&quot;PORT&quot;</span><span class="p">:</span> <span class="p">{</span>
-                                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
-                                <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Asyn port name for PmacAsynIPPort to connect to&quot;</span>
-                            <span class="p">},</span>
-                            <span class="s2">&quot;P&quot;</span><span class="p">:</span> <span class="p">{</span>
-                                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
-                                <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;PV Prefix for all pmac db templates&quot;</span>
-                            <span class="p">},</span>
-                            <span class="s2">&quot;idlePoll&quot;</span><span class="p">:</span> <span class="p">{</span>
-                                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;integer&quot;</span><span class="p">,</span>
-                                <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Idle Poll Period in ms&quot;</span>
-                            <span class="p">},</span>
-                            <span class="s2">&quot;movingPoll&quot;</span><span class="p">:</span> <span class="p">{</span>
-                                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;integer&quot;</span><span class="p">,</span>
-                                <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Moving Poll Period in ms&quot;</span>
-                            <span class="p">}</span>
-                        <span class="p">},</span>
-                        <span class="s2">&quot;required&quot;</span><span class="p">:</span> <span class="p">[</span>
-                            <span class="s2">&quot;type&quot;</span><span class="p">,</span>
-                            <span class="s2">&quot;name&quot;</span><span class="p">,</span>
-                            <span class="s2">&quot;PORT&quot;</span><span class="p">,</span>
-                            <span class="s2">&quot;P&quot;</span><span class="p">,</span>
-                            <span class="s2">&quot;idlePoll&quot;</span><span class="p">,</span>
-                            <span class="s2">&quot;movingPoll&quot;</span>
-                        <span class="p">],</span>
-                        <span class="s2">&quot;additionalProperties&quot;</span><span class="p">:</span> <span class="n">false</span>
-                    <span class="p">},</span>
-                    <span class="p">{</span>
-                        <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span>
-                        <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span>
-                            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="p">{</span>
-                                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
-                                <span class="s2">&quot;const&quot;</span><span class="p">:</span> <span class="s2">&quot;pmac.PmacAsynIPPort&quot;</span>
-                            <span class="p">},</span>
-                            <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="p">{</span>
-                                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
-                                <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Asyn port name&quot;</span>
-                            <span class="p">},</span>
-                            <span class="s2">&quot;IP&quot;</span><span class="p">:</span> <span class="p">{</span>
-                                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
-                                <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;IP address of pmac&quot;</span>
-                            <span class="p">}</span>
-                        <span class="p">},</span>
-                        <span class="s2">&quot;required&quot;</span><span class="p">:</span> <span class="p">[</span>
-                            <span class="s2">&quot;type&quot;</span><span class="p">,</span>
-                            <span class="s2">&quot;name&quot;</span><span class="p">,</span>
-                            <span class="s2">&quot;IP&quot;</span>
-                        <span class="p">],</span>
-                        <span class="s2">&quot;additionalProperties&quot;</span><span class="p">:</span> <span class="n">false</span>
-                    <span class="p">},</span>
-                    <span class="p">{</span>
-                        <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span>
-                        <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span>
-                            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="p">{</span>
-                                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
-                                <span class="s2">&quot;const&quot;</span><span class="p">:</span> <span class="s2">&quot;pmac.DlsPmacAsynMotor&quot;</span>
-                            <span class="p">},</span>
-                            <span class="s2">&quot;PMAC&quot;</span><span class="p">:</span> <span class="p">{</span>
-                                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
-                                <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;PMAC to attach to&quot;</span>
-                            <span class="p">},</span>
-                            <span class="s2">&quot;axis&quot;</span><span class="p">:</span> <span class="p">{</span>
-                                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;integer&quot;</span><span class="p">,</span>
-                                <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;which axis number this motor drives&quot;</span>
-                            <span class="p">},</span>
-                            <span class="s2">&quot;P&quot;</span><span class="p">:</span> <span class="p">{</span>
-                                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
-                                <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;PV prefix name for this motor&quot;</span>
-                            <span class="p">},</span>
-                            <span class="s2">&quot;M&quot;</span><span class="p">:</span> <span class="p">{</span>
-                                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
-                                <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;PV motor name for this motor&quot;</span>
-                            <span class="p">},</span>
-                            <span class="s2">&quot;PORT&quot;</span><span class="p">:</span> <span class="p">{</span>
-                                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
-                                <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Delta tau motor controller&quot;</span>
-                            <span class="p">},</span>
-                            <span class="s2">&quot;SPORT&quot;</span><span class="p">:</span> <span class="p">{</span>
-                                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
-                                <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Delta tau motor controller comms port&quot;</span>
-                            <span class="p">},</span>
-                            <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="p">{</span>
-                                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
-                                <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Object name and gui association name&quot;</span>
-                            <span class="p">},</span>
-                            <span class="s2">&quot;DESC&quot;</span><span class="p">:</span> <span class="p">{</span>
-                                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
-                                <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Description, displayed on EDM screen&quot;</span>
-                            <span class="p">},</span>
-                            <span class="s2">&quot;MRES&quot;</span><span class="p">:</span> <span class="p">{</span>
-                                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;number&quot;</span><span class="p">,</span>
-                                <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Motor Step Size (EGU)&quot;</span>
-                            <span class="p">},</span>
-                            <span class="s2">&quot;VELO&quot;</span><span class="p">:</span> <span class="p">{</span>
-                                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;number&quot;</span><span class="p">,</span>
-                                <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;axis Velocity (EGU/s)&quot;</span>
-                            <span class="p">},</span>
-                            <span class="s2">&quot;PREC&quot;</span><span class="p">:</span> <span class="p">{</span>
-                                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;number&quot;</span><span class="p">,</span>
-                                <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Display Precision&quot;</span>
-                            <span class="p">},</span>
-                            <span class="s2">&quot;EGU&quot;</span><span class="p">:</span> <span class="p">{</span>
-                                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
-                                <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Engineering Units&quot;</span>
-                            <span class="p">},</span>
-                            <span class="s2">&quot;TWV&quot;</span><span class="p">:</span> <span class="p">{</span>
-                                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;integer&quot;</span><span class="p">,</span>
-                                <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Tweak Step Size (EGU)&quot;</span>
-                            <span class="p">},</span>
-                            <span class="s2">&quot;DTYP&quot;</span><span class="p">:</span> <span class="p">{</span>
-                                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
-                                <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Datatype of record&quot;</span>
-                            <span class="p">},</span>
-                            <span class="s2">&quot;DIR&quot;</span><span class="p">:</span> <span class="p">{</span>
-                                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;integer&quot;</span><span class="p">,</span>
-                                <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;User direction&quot;</span>
-                            <span class="p">},</span>
-                            <span class="s2">&quot;VBAS&quot;</span><span class="p">:</span> <span class="p">{</span>
-                                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;number&quot;</span><span class="p">,</span>
-                                <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Base Velocity (EGU/s)&quot;</span>
-                            <span class="p">},</span>
-                            <span class="s2">&quot;VMAX&quot;</span><span class="p">:</span> <span class="p">{</span>
-                                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;number&quot;</span><span class="p">,</span>
-                                <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Max Velocity (EGU/s)&quot;</span>
-                            <span class="p">},</span>
-                            <span class="s2">&quot;ACCL&quot;</span><span class="p">:</span> <span class="p">{</span>
-                                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;number&quot;</span><span class="p">,</span>
-                                <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Seconds to Velocity&quot;</span>
-                            <span class="p">},</span>
-                            <span class="s2">&quot;BDST&quot;</span><span class="p">:</span> <span class="p">{</span>
-                                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;number&quot;</span><span class="p">,</span>
-                                <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;BL Distance (EGU)&quot;</span>
-                            <span class="p">},</span>
-                            <span class="s2">&quot;BVEL&quot;</span><span class="p">:</span> <span class="p">{</span>
-                                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;number&quot;</span><span class="p">,</span>
-                                <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;BL Velocity(EGU/s)&quot;</span>
-                            <span class="p">},</span>
-                            <span class="s2">&quot;BACC&quot;</span><span class="p">:</span> <span class="p">{</span>
-                                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;number&quot;</span><span class="p">,</span>
-                                <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;BL Seconds to Veloc&quot;</span>
-                            <span class="p">},</span>
-                            <span class="s2">&quot;DHLM&quot;</span><span class="p">:</span> <span class="p">{</span>
-                                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;number&quot;</span><span class="p">,</span>
-                                <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Dial High Limit&quot;</span>
-                            <span class="p">},</span>
-                            <span class="s2">&quot;DLMM&quot;</span><span class="p">:</span> <span class="p">{</span>
-                                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;number&quot;</span><span class="p">,</span>
-                                <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Dial low limit&quot;</span>
-                            <span class="p">},</span>
-                            <span class="s2">&quot;HLM&quot;</span><span class="p">:</span> <span class="p">{</span>
-                                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;number&quot;</span><span class="p">,</span>
-                                <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;User High Limit&quot;</span>
-                            <span class="p">},</span>
-                            <span class="s2">&quot;LLM&quot;</span><span class="p">:</span> <span class="p">{</span>
-                                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;number&quot;</span><span class="p">,</span>
-                                <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;User Low Limit&quot;</span>
-                            <span class="p">},</span>
-                            <span class="s2">&quot;HLSV&quot;</span><span class="p">:</span> <span class="p">{</span>
-                                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
-                                <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;HW Lim, Violation Svr&quot;</span>
-                            <span class="p">},</span>
-                            <span class="s2">&quot;INIT&quot;</span><span class="p">:</span> <span class="p">{</span>
-                                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
-                                <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Startup commands&quot;</span>
-                            <span class="p">},</span>
-                            <span class="s2">&quot;SREV&quot;</span><span class="p">:</span> <span class="p">{</span>
-                                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;number&quot;</span><span class="p">,</span>
-                                <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Steps per Revolution&quot;</span>
-                            <span class="p">},</span>
-                            <span class="s2">&quot;RRES&quot;</span><span class="p">:</span> <span class="p">{</span>
-                                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;number&quot;</span><span class="p">,</span>
-                                <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Readback Step Size (EGU&quot;</span>
-                            <span class="p">},</span>
-                            <span class="s2">&quot;ERES&quot;</span><span class="p">:</span> <span class="p">{</span>
-                                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;number&quot;</span><span class="p">,</span>
-                                <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Encoder Step Size (EGU)&quot;</span>
-                            <span class="p">},</span>
-                            <span class="s2">&quot;JAR&quot;</span><span class="p">:</span> <span class="p">{</span>
-                                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;number&quot;</span><span class="p">,</span>
-                                <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Jog Acceleration (EGU/s^2)&quot;</span>
-                            <span class="p">},</span>
-                            <span class="s2">&quot;UEIP&quot;</span><span class="p">:</span> <span class="p">{</span>
-                                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;integer&quot;</span><span class="p">,</span>
-                                <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Use Encoder If Present&quot;</span>
-                            <span class="p">},</span>
-                            <span class="s2">&quot;URIP&quot;</span><span class="p">:</span> <span class="p">{</span>
-                                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;integer&quot;</span><span class="p">,</span>
-                                <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Use RDBL If Present&quot;</span>
-                            <span class="p">},</span>
-                            <span class="s2">&quot;RDBL&quot;</span><span class="p">:</span> <span class="p">{</span>
-                                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
-                                <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Readback Location, set URIP =1 if you specify this&quot;</span>
-                            <span class="p">},</span>
-                            <span class="s2">&quot;RLNK&quot;</span><span class="p">:</span> <span class="p">{</span>
-                                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
-                                <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Readback output link&quot;</span>
-                            <span class="p">},</span>
-                            <span class="s2">&quot;RTRY&quot;</span><span class="p">:</span> <span class="p">{</span>
-                                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;integer&quot;</span><span class="p">,</span>
-                                <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Max retry count&quot;</span>
-                            <span class="p">},</span>
-                            <span class="s2">&quot;DLY&quot;</span><span class="p">:</span> <span class="p">{</span>
-                                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;number&quot;</span><span class="p">,</span>
-                                <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Readback settle time (s)&quot;</span>
-                            <span class="p">},</span>
-                            <span class="s2">&quot;OFF&quot;</span><span class="p">:</span> <span class="p">{</span>
-                                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;number&quot;</span><span class="p">,</span>
-                                <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;User Offset (EGU)&quot;</span>
-                            <span class="p">},</span>
-                            <span class="s2">&quot;RDBD&quot;</span><span class="p">:</span> <span class="p">{</span>
-                                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;number&quot;</span><span class="p">,</span>
-                                <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Retry Deadband (EGU)&quot;</span>
-                            <span class="p">},</span>
-                            <span class="s2">&quot;FOFF&quot;</span><span class="p">:</span> <span class="p">{</span>
-                                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;integer&quot;</span><span class="p">,</span>
-                                <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Freeze Offset, 0=variable, 1=frozen&quot;</span>
-                            <span class="p">},</span>
-                            <span class="s2">&quot;ADEL&quot;</span><span class="p">:</span> <span class="p">{</span>
-                                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;number&quot;</span><span class="p">,</span>
-                                <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Alarm monitor deadband (EGU)&quot;</span>
-                            <span class="p">},</span>
-                            <span class="s2">&quot;NTM&quot;</span><span class="p">:</span> <span class="p">{</span>
-                                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;integer&quot;</span><span class="p">,</span>
-                                <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;New Target Monitor, only set to 0 for soft motors&quot;</span>
-                            <span class="p">},</span>
-                            <span class="s2">&quot;FEHEIGH&quot;</span><span class="p">:</span> <span class="p">{</span>
-                                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;number&quot;</span><span class="p">,</span>
-                                <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;HIGH limit for following error&quot;</span>
-                            <span class="p">},</span>
-                            <span class="s2">&quot;FEHIHI&quot;</span><span class="p">:</span> <span class="p">{</span>
-                                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;number&quot;</span><span class="p">,</span>
-                                <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;HIHI limit for following error&quot;</span>
-                            <span class="p">},</span>
-                            <span class="s2">&quot;FEHHSV&quot;</span><span class="p">:</span> <span class="p">{</span>
-                                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
-                                <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;HIHI alarm severity for following error&quot;</span>
-                            <span class="p">},</span>
-                            <span class="s2">&quot;FEHSV&quot;</span><span class="p">:</span> <span class="p">{</span>
-                                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
-                                <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;HIGH alarm severity for following error&quot;</span>
-                            <span class="p">},</span>
-                            <span class="s2">&quot;SCALE&quot;</span><span class="p">:</span> <span class="p">{</span>
-                                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;integer&quot;</span>
-                            <span class="p">},</span>
-                            <span class="s2">&quot;HOMEVIS&quot;</span><span class="p">:</span> <span class="p">{</span>
-                                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;integer&quot;</span><span class="p">,</span>
-                                <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;If 1 then home is visible on the gui&quot;</span>
-                            <span class="p">},</span>
-                            <span class="s2">&quot;HOMEVISST&quot;</span><span class="p">:</span> <span class="p">{</span>
-                                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
-                            <span class="p">},</span>
-                            <span class="s2">&quot;alh&quot;</span><span class="p">:</span> <span class="p">{</span>
-                                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
-                                <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Set this to alh to add the motor to the alarm handler and send emails&quot;</span>
-                            <span class="p">},</span>
-                            <span class="s2">&quot;gda_name&quot;</span><span class="p">:</span> <span class="p">{</span>
-                                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
-                                <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Name to export this as to GDA&quot;</span>
-                            <span class="p">},</span>
-                            <span class="s2">&quot;gda_desc&quot;</span><span class="p">:</span> <span class="p">{</span>
-                                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
-                                <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Description to export as to GDA&quot;</span>
-                            <span class="p">},</span>
-                            <span class="s2">&quot;HOME&quot;</span><span class="p">:</span> <span class="p">{</span>
-                                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
-                                <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Prefix for autohome instance. Defaults to $(P) If unspecified&quot;</span>
-                            <span class="p">},</span>
-                            <span class="s2">&quot;ALLOW_HOMED_SET&quot;</span><span class="p">:</span> <span class="p">{</span>
-                                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
-                                <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Set to a blank to allow this axis to have its homed&quot;</span>
-                            <span class="p">}</span>
-                        <span class="p">},</span>
-                        <span class="s2">&quot;required&quot;</span><span class="p">:</span> <span class="p">[</span>
-                            <span class="s2">&quot;type&quot;</span><span class="p">,</span>
-                            <span class="s2">&quot;PMAC&quot;</span><span class="p">,</span>
-                            <span class="s2">&quot;axis&quot;</span><span class="p">,</span>
-                            <span class="s2">&quot;P&quot;</span><span class="p">,</span>
-                            <span class="s2">&quot;M&quot;</span><span class="p">,</span>
-                            <span class="s2">&quot;PORT&quot;</span><span class="p">,</span>
-                            <span class="s2">&quot;SPORT&quot;</span><span class="p">,</span>
-                            <span class="s2">&quot;name&quot;</span>
-                        <span class="p">],</span>
-                        <span class="s2">&quot;additionalProperties&quot;</span><span class="p">:</span> <span class="n">false</span>
-                    <span class="p">}</span>
-                <span class="p">]</span>
-            <span class="p">},</span>
-            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;List of entity instances of the IOCs&quot;</span>
-        <span class="p">}</span>
+  <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span>
+  <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="s2">&quot;ioc_name&quot;</span><span class="p">:</span> <span class="p">{</span>
+      <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Name of IOC&quot;</span>
     <span class="p">},</span>
-    <span class="s2">&quot;required&quot;</span><span class="p">:</span> <span class="p">[</span>
-        <span class="s2">&quot;ioc_name&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;instances&quot;</span>
-    <span class="p">],</span>
-    <span class="s2">&quot;additionalProperties&quot;</span><span class="p">:</span> <span class="n">false</span><span class="p">,</span>
-    <span class="s2">&quot;$schema&quot;</span><span class="p">:</span> <span class="s2">&quot;http://json-schema.org/draft/2019-09/schema#&quot;</span>
+    <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="p">{</span>
+      <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
+    <span class="p">},</span>
+    <span class="s2">&quot;instances&quot;</span><span class="p">:</span> <span class="p">{</span>
+      <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;array&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;items&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;anyOf&quot;</span><span class="p">:</span> <span class="p">[</span>
+          <span class="p">{</span>
+            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span>
+              <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;const&quot;</span><span class="p">:</span> <span class="s2">&quot;pmac.Geobrick&quot;</span>
+              <span class="p">},</span>
+              <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Name to use for the geobrick&#39;s asyn port&quot;</span>
+              <span class="p">},</span>
+              <span class="s2">&quot;PORT&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Asyn port name for PmacAsynIPPort to connect to&quot;</span>
+              <span class="p">},</span>
+              <span class="s2">&quot;P&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;PV Prefix for all pmac db templates&quot;</span>
+              <span class="p">},</span>
+              <span class="s2">&quot;idlePoll&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;integer&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Idle Poll Period in ms&quot;</span>
+              <span class="p">},</span>
+              <span class="s2">&quot;movingPoll&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;integer&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Moving Poll Period in ms&quot;</span>
+              <span class="p">}</span>
+            <span class="p">},</span>
+            <span class="s2">&quot;required&quot;</span><span class="p">:</span> <span class="p">[</span>
+              <span class="s2">&quot;type&quot;</span><span class="p">,</span>
+              <span class="s2">&quot;name&quot;</span><span class="p">,</span>
+              <span class="s2">&quot;PORT&quot;</span><span class="p">,</span>
+              <span class="s2">&quot;P&quot;</span><span class="p">,</span>
+              <span class="s2">&quot;idlePoll&quot;</span><span class="p">,</span>
+              <span class="s2">&quot;movingPoll&quot;</span>
+            <span class="p">],</span>
+            <span class="s2">&quot;additionalProperties&quot;</span><span class="p">:</span> <span class="n">false</span>
+          <span class="p">},</span>
+          <span class="p">{</span>
+            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span>
+              <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;const&quot;</span><span class="p">:</span> <span class="s2">&quot;pmac.PmacAsynIPPort&quot;</span>
+              <span class="p">},</span>
+              <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Asyn port name&quot;</span>
+              <span class="p">},</span>
+              <span class="s2">&quot;IP&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;IP address of pmac&quot;</span>
+              <span class="p">}</span>
+            <span class="p">},</span>
+            <span class="s2">&quot;required&quot;</span><span class="p">:</span> <span class="p">[</span>
+              <span class="s2">&quot;type&quot;</span><span class="p">,</span>
+              <span class="s2">&quot;name&quot;</span><span class="p">,</span>
+              <span class="s2">&quot;IP&quot;</span>
+            <span class="p">],</span>
+            <span class="s2">&quot;additionalProperties&quot;</span><span class="p">:</span> <span class="n">false</span>
+          <span class="p">},</span>
+          <span class="p">{</span>
+            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span>
+              <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;const&quot;</span><span class="p">:</span> <span class="s2">&quot;pmac.DlsPmacAsynMotor&quot;</span>
+              <span class="p">},</span>
+              <span class="s2">&quot;PMAC&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;PMAC to attach to&quot;</span>
+              <span class="p">},</span>
+              <span class="s2">&quot;axis&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;integer&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;which axis number this motor drives&quot;</span>
+              <span class="p">},</span>
+              <span class="s2">&quot;P&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;PV prefix name for this motor&quot;</span>
+              <span class="p">},</span>
+              <span class="s2">&quot;M&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;PV motor name for this motor&quot;</span>
+              <span class="p">},</span>
+              <span class="s2">&quot;PORT&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Delta tau motor controller&quot;</span>
+              <span class="p">},</span>
+              <span class="s2">&quot;SPORT&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Delta tau motor controller comms port&quot;</span>
+              <span class="p">},</span>
+              <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Object name and gui association name&quot;</span>
+              <span class="p">},</span>
+              <span class="s2">&quot;DESC&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Description, displayed on EDM screen&quot;</span>
+              <span class="p">},</span>
+              <span class="s2">&quot;MRES&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;number&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Motor Step Size (EGU)&quot;</span>
+              <span class="p">},</span>
+              <span class="s2">&quot;VELO&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;number&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;axis Velocity (EGU/s)&quot;</span>
+              <span class="p">},</span>
+              <span class="s2">&quot;PREC&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;number&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Display Precision&quot;</span>
+              <span class="p">},</span>
+              <span class="s2">&quot;EGU&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Engineering Units&quot;</span>
+              <span class="p">},</span>
+              <span class="s2">&quot;TWV&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;integer&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Tweak Step Size (EGU)&quot;</span>
+              <span class="p">},</span>
+              <span class="s2">&quot;DTYP&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Datatype of record&quot;</span>
+              <span class="p">},</span>
+              <span class="s2">&quot;DIR&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;integer&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;User direction&quot;</span>
+              <span class="p">},</span>
+              <span class="s2">&quot;VBAS&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;number&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Base Velocity (EGU/s)&quot;</span>
+              <span class="p">},</span>
+              <span class="s2">&quot;VMAX&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;number&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Max Velocity (EGU/s)&quot;</span>
+              <span class="p">},</span>
+              <span class="s2">&quot;ACCL&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;number&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Seconds to Velocity&quot;</span>
+              <span class="p">},</span>
+              <span class="s2">&quot;BDST&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;number&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;BL Distance (EGU)&quot;</span>
+              <span class="p">},</span>
+              <span class="s2">&quot;BVEL&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;number&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;BL Velocity(EGU/s)&quot;</span>
+              <span class="p">},</span>
+              <span class="s2">&quot;BACC&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;number&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;BL Seconds to Veloc&quot;</span>
+              <span class="p">},</span>
+              <span class="s2">&quot;DHLM&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;number&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Dial High Limit&quot;</span>
+              <span class="p">},</span>
+              <span class="s2">&quot;DLMM&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;number&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Dial low limit&quot;</span>
+              <span class="p">},</span>
+              <span class="s2">&quot;HLM&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;number&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;User High Limit&quot;</span>
+              <span class="p">},</span>
+              <span class="s2">&quot;LLM&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;number&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;User Low Limit&quot;</span>
+              <span class="p">},</span>
+              <span class="s2">&quot;HLSV&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;HW Lim, Violation Svr&quot;</span>
+              <span class="p">},</span>
+              <span class="s2">&quot;INIT&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Startup commands&quot;</span>
+              <span class="p">},</span>
+              <span class="s2">&quot;SREV&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;number&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Steps per Revolution&quot;</span>
+              <span class="p">},</span>
+              <span class="s2">&quot;RRES&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;number&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Readback Step Size (EGU&quot;</span>
+              <span class="p">},</span>
+              <span class="s2">&quot;ERES&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;number&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Encoder Step Size (EGU)&quot;</span>
+              <span class="p">},</span>
+              <span class="s2">&quot;JAR&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;number&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Jog Acceleration (EGU/s^2)&quot;</span>
+              <span class="p">},</span>
+              <span class="s2">&quot;UEIP&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;integer&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Use Encoder If Present&quot;</span>
+              <span class="p">},</span>
+              <span class="s2">&quot;URIP&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;integer&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Use RDBL If Present&quot;</span>
+              <span class="p">},</span>
+              <span class="s2">&quot;RDBL&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Readback Location, set URIP =1 if you specify this&quot;</span>
+              <span class="p">},</span>
+              <span class="s2">&quot;RLNK&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Readback output link&quot;</span>
+              <span class="p">},</span>
+              <span class="s2">&quot;RTRY&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;integer&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Max retry count&quot;</span>
+              <span class="p">},</span>
+              <span class="s2">&quot;DLY&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;number&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Readback settle time (s)&quot;</span>
+              <span class="p">},</span>
+              <span class="s2">&quot;OFF&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;number&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;User Offset (EGU)&quot;</span>
+              <span class="p">},</span>
+              <span class="s2">&quot;RDBD&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;number&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Retry Deadband (EGU)&quot;</span>
+              <span class="p">},</span>
+              <span class="s2">&quot;FOFF&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;integer&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Freeze Offset, 0=variable, 1=frozen&quot;</span>
+              <span class="p">},</span>
+              <span class="s2">&quot;ADEL&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;number&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Alarm monitor deadband (EGU)&quot;</span>
+              <span class="p">},</span>
+              <span class="s2">&quot;NTM&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;integer&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;New Target Monitor, only set to 0 for soft motors&quot;</span>
+              <span class="p">},</span>
+              <span class="s2">&quot;FEHEIGH&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;number&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;HIGH limit for following error&quot;</span>
+              <span class="p">},</span>
+              <span class="s2">&quot;FEHIHI&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;number&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;HIHI limit for following error&quot;</span>
+              <span class="p">},</span>
+              <span class="s2">&quot;FEHHSV&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;HIHI alarm severity for following error&quot;</span>
+              <span class="p">},</span>
+              <span class="s2">&quot;FEHSV&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;HIGH alarm severity for following error&quot;</span>
+              <span class="p">},</span>
+              <span class="s2">&quot;SCALE&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;integer&quot;</span>
+              <span class="p">},</span>
+              <span class="s2">&quot;HOMEVIS&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;integer&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;If 1 then home is visible on the gui&quot;</span>
+              <span class="p">},</span>
+              <span class="s2">&quot;HOMEVISST&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
+              <span class="p">},</span>
+              <span class="s2">&quot;alh&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Set this to alh to add the motor to the alarm handler and send emails&quot;</span>
+              <span class="p">},</span>
+              <span class="s2">&quot;gda_name&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Name to export this as to GDA&quot;</span>
+              <span class="p">},</span>
+              <span class="s2">&quot;gda_desc&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Description to export as to GDA&quot;</span>
+              <span class="p">},</span>
+              <span class="s2">&quot;HOME&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Prefix for autohome instance. Defaults to $(P) If unspecified&quot;</span>
+              <span class="p">},</span>
+              <span class="s2">&quot;ALLOW_HOMED_SET&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Set to a blank to allow this axis to have its homed&quot;</span>
+              <span class="p">}</span>
+            <span class="p">},</span>
+            <span class="s2">&quot;required&quot;</span><span class="p">:</span> <span class="p">[</span>
+              <span class="s2">&quot;type&quot;</span><span class="p">,</span>
+              <span class="s2">&quot;PMAC&quot;</span><span class="p">,</span>
+              <span class="s2">&quot;axis&quot;</span><span class="p">,</span>
+              <span class="s2">&quot;P&quot;</span><span class="p">,</span>
+              <span class="s2">&quot;M&quot;</span><span class="p">,</span>
+              <span class="s2">&quot;PORT&quot;</span><span class="p">,</span>
+              <span class="s2">&quot;SPORT&quot;</span><span class="p">,</span>
+              <span class="s2">&quot;name&quot;</span>
+            <span class="p">],</span>
+            <span class="s2">&quot;additionalProperties&quot;</span><span class="p">:</span> <span class="n">false</span>
+          <span class="p">}</span>
+        <span class="p">]</span>
+      <span class="p">},</span>
+      <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;List of entity instances of the IOCs&quot;</span>
+    <span class="p">}</span>
+  <span class="p">},</span>
+  <span class="s2">&quot;required&quot;</span><span class="p">:</span> <span class="p">[</span>
+    <span class="s2">&quot;ioc_name&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;description&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;instances&quot;</span>
+  <span class="p">],</span>
+  <span class="s2">&quot;additionalProperties&quot;</span><span class="p">:</span> <span class="n">false</span><span class="p">,</span>
+  <span class="s2">&quot;$schema&quot;</span><span class="p">:</span> <span class="s2">&quot;http://json-schema.org/draft/2019-09/schema#&quot;</span>
 <span class="p">}</span>
 </pre></div>
 </div>
@@ -1378,7 +1383,7 @@ available to the developer and may be used to assist in generating the YAML.</p>
 </tr>
 <tr class="row-even"><td><p>3</p></td>
 <td><p>&lt;container&gt;.schema.json</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">ibek</span> <span class="pre">ibek-schema</span> <span class="pre">...</span></code> run at container build time against all &lt;support_module&gt;.ibek.yaml.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">ibek</span> <span class="pre">ioc-schema</span> <span class="pre">...</span></code> run at container build time against all &lt;support_module&gt;.ibek.yaml.</p></td>
 </tr>
 <tr class="row-odd"><td><p>4</p></td>
 <td><p>&lt;ioc_name&gt;.&lt;container&gt;.yaml</p></td>

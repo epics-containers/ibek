@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>ibek.helm &mdash; ibek 0.2+33.gfad9c41 documentation</title>
+  <title>ibek.helm &mdash; ibek 0.2+39.gfd237e0 documentation</title>
   
 
   
@@ -239,6 +239,7 @@
 
 <span class="kn">from</span> <span class="nn">ibek.generator</span> <span class="kn">import</span> <span class="n">from_yaml</span>
 <span class="kn">from</span> <span class="nn">ibek.render</span> <span class="kn">import</span> <span class="n">render_database_elements</span><span class="p">,</span> <span class="n">render_script_elements</span>
+<span class="kn">from</span> <span class="nn">ibek.support</span> <span class="kn">import</span> <span class="n">IocInstance</span>
 
 <span class="n">HELM_TEMPLATE</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">parent</span> <span class="o">/</span> <span class="s2">&quot;helm-template&quot;</span>
 <span class="n">TEMPLATES</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span><span class="o">.</span><span class="n">parent</span> <span class="o">/</span> <span class="s2">&quot;templates&quot;</span>
@@ -246,7 +247,7 @@
 
 <div class="viewcode-block" id="create_boot_script"><a class="viewcode-back" href="../../reference/api.html#ibek.helm.create_boot_script">[docs]</a><span class="k">def</span> <span class="nf">create_boot_script</span><span class="p">(</span>
     <span class="n">ioc_instance_yaml</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span> <span class="n">definition_yaml</span><span class="p">:</span> <span class="n">Path</span>
-<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]:</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">IocInstance</span><span class="p">,</span> <span class="nb">str</span><span class="p">]:</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Create the boot script for an IOCs helm chart</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -263,14 +264,14 @@
     <span class="n">entity_instance_dict</span> <span class="o">=</span> <span class="n">YAML</span><span class="p">()</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">ioc_instance_yaml</span><span class="p">)</span>
 
     <span class="c1"># Use the support defintion classes to deserialize the ioc instance entities</span>
-    <span class="n">entity_instances</span> <span class="o">=</span> <span class="n">support_definition</span><span class="o">.</span><span class="n">deserialize</span><span class="p">(</span><span class="n">entity_instance_dict</span><span class="p">)</span>
+    <span class="n">ioc_instance</span> <span class="o">=</span> <span class="n">support_definition</span><span class="o">.</span><span class="n">deserialize</span><span class="p">(</span><span class="n">entity_instance_dict</span><span class="p">)</span>
 
     <span class="n">script_txt</span> <span class="o">=</span> <span class="n">template</span><span class="o">.</span><span class="n">render</span><span class="p">(</span>
-        <span class="n">script_elements</span><span class="o">=</span><span class="n">render_script_elements</span><span class="p">(</span><span class="n">entity_instances</span><span class="p">),</span>
-        <span class="n">database_elements</span><span class="o">=</span><span class="n">render_database_elements</span><span class="p">(</span><span class="n">entity_instances</span><span class="p">),</span>
+        <span class="n">script_elements</span><span class="o">=</span><span class="n">render_script_elements</span><span class="p">(</span><span class="n">ioc_instance</span><span class="p">),</span>
+        <span class="n">database_elements</span><span class="o">=</span><span class="n">render_database_elements</span><span class="p">(</span><span class="n">ioc_instance</span><span class="p">),</span>
     <span class="p">)</span>
 
-    <span class="k">return</span> <span class="n">entity_instances</span><span class="o">.</span><span class="n">ioc_name</span><span class="p">,</span> <span class="n">script_txt</span></div>
+    <span class="k">return</span> <span class="n">ioc_instance</span><span class="p">,</span> <span class="n">script_txt</span></div>
 
 
 <div class="viewcode-block" id="render_file"><a class="viewcode-back" href="../../reference/api.html#ibek.helm.render_file">[docs]</a><span class="k">def</span> <span class="nf">render_file</span><span class="p">(</span><span class="n">file_template</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
@@ -286,14 +287,14 @@
     <span class="n">file_template</span><span class="o">.</span><span class="n">unlink</span><span class="p">()</span></div>
 
 
-<div class="viewcode-block" id="create_helm"><a class="viewcode-back" href="../../reference/api.html#ibek.helm.create_helm">[docs]</a><span class="k">def</span> <span class="nf">create_helm</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">script_txt</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="n">Path</span><span class="p">):</span>
+<div class="viewcode-block" id="create_helm"><a class="viewcode-back" href="../../reference/api.html#ibek.helm.create_helm">[docs]</a><span class="k">def</span> <span class="nf">create_helm</span><span class="p">(</span><span class="n">instance</span><span class="p">:</span> <span class="n">IocInstance</span><span class="p">,</span> <span class="n">script_txt</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="n">Path</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    create a boilerplate helm chart with name str in folder path</span>
 
 <span class="sd">    update the values.yml and Chart.yml by rendering their jinja templates</span>
 <span class="sd">    and insert the boot script whose text is supplied in script_txt</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">helm_folder</span> <span class="o">=</span> <span class="n">path</span> <span class="o">/</span> <span class="n">name</span>
+    <span class="n">helm_folder</span> <span class="o">=</span> <span class="n">path</span> <span class="o">/</span> <span class="n">instance</span><span class="o">.</span><span class="n">ioc_name</span>
 
     <span class="k">if</span> <span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
         <span class="k">if</span> <span class="n">helm_folder</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
@@ -304,8 +305,11 @@
 
     <span class="n">shutil</span><span class="o">.</span><span class="n">copytree</span><span class="p">(</span><span class="n">HELM_TEMPLATE</span><span class="p">,</span> <span class="n">helm_folder</span><span class="p">)</span>
 
-    <span class="c1"># TODO description should come from the ioc yaml</span>
-    <span class="n">render_file</span><span class="p">(</span><span class="n">helm_folder</span> <span class="o">/</span> <span class="s2">&quot;Chart.yaml.jinja&quot;</span><span class="p">,</span> <span class="n">ioc_name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;an ioc&quot;</span><span class="p">)</span>
+    <span class="n">render_file</span><span class="p">(</span>
+        <span class="n">helm_folder</span> <span class="o">/</span> <span class="s2">&quot;Chart.yaml.jinja&quot;</span><span class="p">,</span>
+        <span class="n">ioc_name</span><span class="o">=</span><span class="n">instance</span><span class="o">.</span><span class="n">ioc_name</span><span class="p">,</span>
+        <span class="n">description</span><span class="o">=</span><span class="n">instance</span><span class="o">.</span><span class="n">description</span><span class="p">,</span>
+    <span class="p">)</span>
     <span class="n">render_file</span><span class="p">(</span>
         <span class="n">helm_folder</span> <span class="o">/</span> <span class="s2">&quot;values.yaml.jinja&quot;</span><span class="p">,</span>
         <span class="n">base_image</span><span class="o">=</span><span class="s2">&quot;gcr.io/diamond-pubreg/controls/prod/ioc/ioc-pmac:2.5.3&quot;</span><span class="p">,</span>
