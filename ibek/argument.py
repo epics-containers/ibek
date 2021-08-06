@@ -26,7 +26,7 @@ class Arg:
     type: str
     default: Any
 
-    # https://wyfo.github.io/apischema/examples/subclasses_union/
+    # https://wyfo.github.io/apischema/examples/subclass_union/
     def __init_subclass__(cls):
         # Deserializers stack directly as a Union
         deserializer(Conversion(identity, source=cls, target=Arg))
