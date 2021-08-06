@@ -5,101 +5,62 @@ Fail: TypeError: Invalid JSON type <class 'ruamel.yaml.scalarfloat.ScalarFloat'>
 
 During Support.deserialize,
 when default float values in pmac.ibek.yaml do not have a trailing 'f'
+
+RESULT: it is due to the order of declaration of subclasses of Arg. When StrArg
+is before FloatArg, apischema attempts to deserialize as a string first. The
+coercion from str to number requires a trailing f if there is a decimal.
 """
 
 from dataclasses import dataclass
 from io import StringIO
-from typing import Any, Literal, Mapping, Optional, Sequence, Type, TypeVar, Union
+from typing import Any, Literal, Mapping, Sequence, Type, TypeVar
 
-from apischema import deserialize, schema
+from apischema import deserialize
 from apischema.conversions.conversions import Conversion
 from apischema.conversions.converters import deserializer
 from apischema.conversions.utils import identity
-from apischema.utils import Undefined, UndefinedType
 from ruamel.yaml import YAML
-from typing_extensions import Annotated as A
-
-# from ibek.argument import Arg
 
 """ A generic Type for use in type hints """
 T = TypeVar("T")
 
 
-def desc(description: str):
-    """ a description Annotation to add to our Entity derived Types """
-    return schema(description=description)
-
-
-Default = A[
-    Union[Optional[T], UndefinedType],
-    desc("If given, and instance doesn't supply argument, what value should be used"),
-]
-
-
 @dataclass
-class Arg2:
-    """Base class for all Argument Types"""
-
-    name: A[str, desc("Name of the argument that the IOC instance should pass")]
-    description: A[str, desc("Description of what the argument will be used for")]
+class Arg:
     type: str
     default: Any
 
-    # https://wyfo.github.io/apischema/examples/subclass_union/
     def __init_subclass__(cls):
-        # Deserializers stack directly as a Union
-        deserializer(Conversion(identity, source=cls, target=Arg2))
+        deserializer(Conversion(identity, source=cls, target=Arg))
 
 
+# Invert the order of the following two dataclasses to demo the Error
 @dataclass
-class FloatArg(Arg2):
+class FloatArg(Arg):
     type: Literal["float"] = "float"
-    default: Default[Union[float, str]] = Undefined
+    default: float = 0.0
 
 
 @dataclass
-class IntArg(Arg2):
-    """An argument with an int value"""
-
-    type: Literal["int"] = "int"
-    default: Default[Union[int, str]] = Undefined
-
-
-@dataclass
-class StrArg(Arg2):
-    """An argument with a str value"""
-
+class StrArg(Arg):
     type: Literal["str"] = "str"
-    default: Default[str] = Undefined
-    is_id: A[
-        bool, desc("If true, instances may refer to this instance by this arg")
-    ] = False
-
-
-@dataclass
-class SomeArgs:
-    args: Sequence[Arg2]
-
-    @classmethod
-    def deserialize(cls: Type[T], d: Mapping[str, Any]) -> T:
-        return deserialize(cls, d)
-
-
-@dataclass
-class ObjectArg(Arg2):
-    """A reference to another entity defined in this IOC"""
-
-    type: A[str, desc("Entity class, <module>.<entity_name>")]
-    default: Default[str] = Undefined
+    default: str = ""
 
 
 yaml = """
 args:
   - type: float
-    name: MRES
-    description: Motor Step Size (EGU)
     default: 0.1
 """
+
+
+@dataclass
+class SomeArgs:
+    args: Sequence[Arg]
+
+    @classmethod
+    def deserialize(cls: Type[T], d: Mapping[str, Any]) -> T:
+        return deserialize(cls, d)
 
 
 def test_deserialize_floatarg() -> None:

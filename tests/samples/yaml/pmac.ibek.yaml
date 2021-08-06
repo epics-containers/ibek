@@ -89,17 +89,17 @@ entities:
       - type: float
         name: MRES
         description: Motor Step Size (EGU)
-        default: 0.0001f
+        default: 0.0001
 
       - type: float
         name: VELO
         description: axis Velocity (EGU/s)
-        default: 1.0f
+        default: 1.0
 
       - type: float
         name: PREC
         description: Display Precision
-        default: 3f
+        default: 3
 
       - type: str
         name: EGU
@@ -125,53 +125,53 @@ entities:
       - type: float
         name: VBAS
         description: Base Velocity (EGU/s)
-        default: 1.0f
+        default: 1.0
 
       - type: float
         name: VMAX
         description: Max Velocity (EGU/s)
         # default: $(VELO)
-        default: 1f
+        default: 1
 
       - type: float
         name: ACCL
         description: Seconds to Velocity
-        default: 0.5f
+        default: 0.5
 
       - type: float
         name: BDST
         description: BL Distance (EGU)
-        default: 0f
+        default: "0"
 
       - type: float
         name: BVEL
         description: BL Velocity(EGU/s)
-        default: 0f
+        default: "0"
 
       - type: float
         name: BACC
         description: BL Seconds to Veloc
-        default: 0f
+        default: "0"
 
       - type: float
         name: DHLM
         description: Dial High Limit
-        default: 10000f
+        default: 10000
 
       - type: float
         name: DLMM
         description: Dial low limit
-        default: -10000f
+        default: -10000
 
       - type: float
         name: HLM
         description: User High Limit
-        default: 0f
+        default: "0"
 
       - type: float
         name: LLM
         description: User Low Limit
-        default: 0f
+        default: "0"
 
       - type: str
         name: HLSV
@@ -186,22 +186,22 @@ entities:
       - type: float
         name: SREV
         description: Steps per Revolution
-        default: 1000f
+        default: 1000
 
       - type: float
         name: RRES
         description: Readback Step Size (EGU
-        default: 0f
+        default: "0"
 
       - type: float
         name: ERES
         description: Encoder Step Size (EGU)
-        default: 0f
+        default: "0"
 
       - type: float
         name: JAR
         description: Jog Acceleration (EGU/s^2)
-        default: 0f
+        default: "0"
 
       - type: int
         name: UEIP
@@ -231,17 +231,17 @@ entities:
       - type: float
         name: DLY
         description: Readback settle time (s)
-        default: 0f
+        default: "0"
 
       - type: float
         name: "OFF"
         description: User Offset (EGU)
-        default: 0f
+        default: "0"
 
       - type: float
         name: RDBD
         description: Retry Deadband (EGU)
-        default: 0f
+        default: "0"
 
       - type: int
         name: FOFF
@@ -251,7 +251,7 @@ entities:
       - type: float
         name: ADEL
         description: Alarm monitor deadband (EGU)
-        default: 0f
+        default: "0"
 
       - type: int
         name: NTM
@@ -261,12 +261,12 @@ entities:
       - type: float
         name: FEHEIGH
         description: HIGH limit for following error
-        default: 0f
+        default: "0"
 
       - type: float
         name: FEHIHI
         description: HIHI limit for following error
-        default: 0f
+        default: "0"
 
       - type: str
         name: FEHHSV

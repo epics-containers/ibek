@@ -11,8 +11,8 @@ pmac.ibek.yaml
 
 # NOTE when the schema changes slightly you can re-create this file by breaking
 # into the test_deserialize_support and pasting the value of 'actual' here
-# afterward run:
-#    pipenv run black --experimental-string-processing ./tests/samples/classes
+# afterward run (I did this from a peer dir with latest black in its pipenv):
+#    pipenv run black --experimental-string-processing ../ibek/tests/samples/classes
 
 SUPPORT = Support(
     module="pmac",
@@ -92,8 +92,7 @@ SUPPORT = Support(
             ),
             databases=(),
             script=(
-                'pmacAsynIPConfigure({{name}}, {{IP if ":" in IP else IP +'
-                ' ":1025"}})',
+                'pmacAsynIPConfigure({{name}}, {{IP if ":" in IP else IP + ":1025"}})',
             ),
         ),
         Entity(
@@ -158,19 +157,19 @@ SUPPORT = Support(
                     name="MRES",
                     description="Motor Step Size (EGU)",
                     type="float",
-                    default="0.0001f",
+                    default=0.0001,
                 ),
                 FloatArg(
                     name="VELO",
                     description="axis Velocity (EGU/s)",
                     type="float",
-                    default="1.0f",
+                    default=1.0,
                 ),
                 FloatArg(
                     name="PREC",
                     description="Display Precision",
                     type="float",
-                    default="3f",
+                    default=3.0,
                 ),
                 StrArg(
                     name="EGU",
@@ -199,58 +198,55 @@ SUPPORT = Support(
                     name="VBAS",
                     description="Base Velocity (EGU/s)",
                     type="float",
-                    default="1.0f",
+                    default=1.0,
                 ),
                 FloatArg(
                     name="VMAX",
                     description="Max Velocity (EGU/s)",
                     type="float",
-                    default="1f",
+                    default=1.0,
                 ),
                 FloatArg(
                     name="ACCL",
                     description="Seconds to Velocity",
                     type="float",
-                    default="0.5f",
+                    default=0.5,
                 ),
                 FloatArg(
                     name="BDST",
                     description="BL Distance (EGU)",
                     type="float",
-                    default="0f",
+                    default="0",
                 ),
                 FloatArg(
                     name="BVEL",
                     description="BL Velocity(EGU/s)",
                     type="float",
-                    default="0f",
+                    default="0",
                 ),
                 FloatArg(
                     name="BACC",
                     description="BL Seconds to Veloc",
                     type="float",
-                    default="0f",
+                    default="0",
                 ),
                 FloatArg(
                     name="DHLM",
                     description="Dial High Limit",
                     type="float",
-                    default="10000f",
+                    default=10000.0,
                 ),
                 FloatArg(
                     name="DLMM",
                     description="Dial low limit",
                     type="float",
-                    default="-10000f",
+                    default=-10000.0,
                 ),
                 FloatArg(
-                    name="HLM",
-                    description="User High Limit",
-                    type="float",
-                    default="0f",
+                    name="HLM", description="User High Limit", type="float", default="0"
                 ),
                 FloatArg(
-                    name="LLM", description="User Low Limit", type="float", default="0f"
+                    name="LLM", description="User Low Limit", type="float", default="0"
                 ),
                 StrArg(
                     name="HLSV",
@@ -270,25 +266,25 @@ SUPPORT = Support(
                     name="SREV",
                     description="Steps per Revolution",
                     type="float",
-                    default="1000f",
+                    default=1000.0,
                 ),
                 FloatArg(
                     name="RRES",
                     description="Readback Step Size (EGU",
                     type="float",
-                    default="0f",
+                    default="0",
                 ),
                 FloatArg(
                     name="ERES",
                     description="Encoder Step Size (EGU)",
                     type="float",
-                    default="0f",
+                    default="0",
                 ),
                 FloatArg(
                     name="JAR",
                     description="Jog Acceleration (EGU/s^2)",
                     type="float",
-                    default="0f",
+                    default="0",
                 ),
                 IntArg(
                     name="UEIP",
@@ -323,19 +319,19 @@ SUPPORT = Support(
                     name="DLY",
                     description="Readback settle time (s)",
                     type="float",
-                    default="0f",
+                    default="0",
                 ),
                 FloatArg(
                     name="OFF",
                     description="User Offset (EGU)",
                     type="float",
-                    default="0f",
+                    default="0",
                 ),
                 FloatArg(
                     name="RDBD",
                     description="Retry Deadband (EGU)",
                     type="float",
-                    default="0f",
+                    default="0",
                 ),
                 IntArg(
                     name="FOFF",
@@ -347,7 +343,7 @@ SUPPORT = Support(
                     name="ADEL",
                     description="Alarm monitor deadband (EGU)",
                     type="float",
-                    default="0f",
+                    default="0",
                 ),
                 IntArg(
                     name="NTM",
@@ -359,13 +355,13 @@ SUPPORT = Support(
                     name="FEHEIGH",
                     description="HIGH limit for following error",
                     type="float",
-                    default="0f",
+                    default="0",
                 ),
                 FloatArg(
                     name="FEHIHI",
                     description="HIHI limit for following error",
                     type="float",
-                    default="0f",
+                    default="0",
                 ),
                 StrArg(
                     name="FEHHSV",
@@ -441,24 +437,22 @@ SUPPORT = Support(
                     file="$(PMAC)/db/dls_pmac_asyn_motor.template",
                     include_args=(),
                     define_args=(
-                        "P={{ P }}, M={{ M }}, PORT={{ PORT }}, ADDR={{ axis"
-                        " }}, DESC={{ DESC }}, MRES={{ MRES }}, VELO={{ VELO"
-                        " }}, PREC={{ PREV }}, EGU={{ EGU }}, TWV={{ TWV"
-                        " }}, DTYP={{ DTYP }}, DIR={{ DIR }}, VBAS={{ VBAS"
-                        " }}, VMAX={{ VMAX }}, ACCL={{ ACCL }}, BDST={{ BDST"
-                        " }}, BVEL={{ BVEL }}, BACC={{ BACC }}, DHLM={{ DHLM"
-                        " }}, DLLM={{ DLLM }}, HLM={{ HLM }}, LLM={{ LLM"
-                        " }}, HLSV={{ HLSV }}, INIT={{ INIT }}, SREV={{ SREV"
-                        " }}, RRES={{ RRES }}, ERES={{ ERES }}, JAR={{ JAR"
-                        " }}, UEIP={{ UEIP }}, RDBL={{ RDBL }}, RLINK={{ RLINK"
-                        " }}, RTRY={{ RTRY }}, DLY={{ DLY }}, OFF={{ OFF"
-                        " }}, RDBD={{ RDBD }}, FOFF={{ FOFF }}, ADEL={{ ADEL"
-                        " }}, NTM={{ NTM }}, FEHIGH={{ FEHEIGH }}, FEHIHI={{ FEHIHI"
-                        " }}, FEHHSV={{ FEHHSV }}, FEHSV={{ FEHSV }}, SCALE={{ SCALE"
-                        " }}, HOMEVIS={{ HOMEVIS }}, HOMEVISSTR={{  HOMEVISSTR "
-                        " }}, name={{ name }}, alh={{ alh }}, gda_name={{ gda_name"
-                        " }}, gda_desc={{ gda_desc }}, SPORT={{ SPORT }}, HOME={{"
-                        " HOME }}, PMAC={{ PMAC }}, ALLOW_HOMED_SET={{"
+                        "P={{ P }}, M={{ M }}, PORT={{ PORT }}, ADDR={{ axis }},"
+                        " DESC={{ DESC }}, MRES={{ MRES }}, VELO={{ VELO }}, PREC={{"
+                        " PREV }}, EGU={{ EGU }}, TWV={{ TWV }}, DTYP={{ DTYP }},"
+                        " DIR={{ DIR }}, VBAS={{ VBAS }}, VMAX={{ VMAX }}, ACCL={{ ACCL"
+                        " }}, BDST={{ BDST }}, BVEL={{ BVEL }}, BACC={{ BACC }},"
+                        " DHLM={{ DHLM }}, DLLM={{ DLLM }}, HLM={{ HLM }}, LLM={{ LLM"
+                        " }}, HLSV={{ HLSV }}, INIT={{ INIT }}, SREV={{ SREV }},"
+                        " RRES={{ RRES }}, ERES={{ ERES }}, JAR={{ JAR }}, UEIP={{ UEIP"
+                        " }}, RDBL={{ RDBL }}, RLINK={{ RLINK }}, RTRY={{ RTRY }},"
+                        " DLY={{ DLY }}, OFF={{ OFF }}, RDBD={{ RDBD }}, FOFF={{ FOFF"
+                        " }}, ADEL={{ ADEL }}, NTM={{ NTM }}, FEHIGH={{ FEHEIGH }},"
+                        " FEHIHI={{ FEHIHI }}, FEHHSV={{ FEHHSV }}, FEHSV={{ FEHSV }},"
+                        " SCALE={{ SCALE }}, HOMEVIS={{ HOMEVIS }}, HOMEVISSTR={{ "
+                        " HOMEVISSTR  }}, name={{ name }}, alh={{ alh }}, gda_name={{"
+                        " gda_name }}, gda_desc={{ gda_desc }}, SPORT={{ SPORT }},"
+                        " HOME={{ HOME }}, PMAC={{ PMAC }}, ALLOW_HOMED_SET={{"
                         " ALLOW_HOMED_SET }}\n"
                     ),
                 ),
