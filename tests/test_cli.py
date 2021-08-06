@@ -5,7 +5,7 @@ from apischema.json_schema import deserialization_schema
 from typer.testing import CliRunner
 
 from ibek import __version__
-from ibek.__main__ import app
+from ibek.__main__ import cli
 from ibek.generator import from_yaml
 
 runner = CliRunner()
@@ -16,15 +16,15 @@ sample_helm = Path(__file__).parent / "samples" / "helm"
 
 
 def test_version():
-    result = runner.invoke(app, ["--version"])
-    assert result.exit_code == 0
+    result = runner.invoke(cli, ["--version"])
+    assert result.exit_code == 0, f"ibek --version failed with: {result}"
     assert result.stdout == __version__ + "\n"
 
 
 def test_builder_schema(tmp_path: Path):
     schema_path = tmp_path / "schema.json"
-    result = runner.invoke(app, ["ibek-schema", str(schema_path)])
-    assert result.exit_code == 0
+    result = runner.invoke(cli, ["ibek-schema", str(schema_path)])
+    assert result.exit_code == 0, f"ibek-schema failed with: {result}"
     expected = json.loads(open(sample_schemas / "ibek.schema.json").read())
     # Don't care if version number didn't update to match if the rest is the same
     # expected["title"] = mock.ANY
@@ -37,8 +37,9 @@ def test_pmac_schema(tmp_path: Path):
 
     schema_path = tmp_path / "pmac.ibek.schema.json"
     yaml_path = sample_yaml / "pmac.ibek.yaml"
-    result = runner.invoke(app, ["ioc-schema", str(yaml_path), str(schema_path)])
-    assert result.exit_code == 0
+    result = runner.invoke(cli, ["ioc-schema", str(yaml_path), str(schema_path)])
+    assert result.exit_code == 0, f"ioc-schema failed with: {result}"
+
     expected = json.loads(open(sample_schemas / "pmac.schema.json").read())
 
     actual = json.loads(open(schema_path).read())
@@ -50,9 +51,9 @@ def test_build_ioc(tmp_path: Path):
     definition = sample_yaml / "bl45p-mo-ioc-02.pmac.yaml"
 
     result = runner.invoke(
-        app, ["build-ioc", str(description), str(definition), str(tmp_path)]
+        cli, ["build-ioc", str(description), str(definition), str(tmp_path)]
     )
-    assert result.exit_code == 0
+    assert result.exit_code == 0, f"build-ioc failed with: {result}"
 
     example_boot = (sample_helm / "ioc.boot").read_text()
     actual_file = tmp_path / "bl45p-mo-ioc-02" / "config" / "ioc.boot"

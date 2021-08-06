@@ -11,6 +11,7 @@ from ruamel.yaml.main import YAML
 
 from ibek.generator import from_yaml
 from ibek.render import render_database_elements, render_script_elements
+from ibek.support import IocInstance
 
 HELM_TEMPLATE = Path(__file__).parent.parent / "helm-template"
 TEMPLATES = Path(__file__).parent / "templates"
@@ -18,7 +19,7 @@ TEMPLATES = Path(__file__).parent / "templates"
 
 def create_boot_script(
     ioc_instance_yaml: Path, definition_yaml: Path
-) -> Tuple[str, str]:
+) -> Tuple[IocInstance, str]:
     """
     Create the boot script for an IOCs helm chart
     """
@@ -35,14 +36,14 @@ def create_boot_script(
     entity_instance_dict = YAML().load(ioc_instance_yaml)
 
     # Use the support defintion classes to deserialize the ioc instance entities
-    entity_instances = support_definition.deserialize(entity_instance_dict)
+    ioc_instance = support_definition.deserialize(entity_instance_dict)
 
     script_txt = template.render(
-        script_elements=render_script_elements(entity_instances),
-        database_elements=render_database_elements(entity_instances),
+        script_elements=render_script_elements(ioc_instance),
+        database_elements=render_database_elements(ioc_instance),
     )
 
-    return entity_instances.ioc_name, script_txt
+    return ioc_instance, script_txt
 
 
 def render_file(file_template: Path, **kwargs):
@@ -58,14 +59,14 @@ def render_file(file_template: Path, **kwargs):
     file_template.unlink()
 
 
-def create_helm(name: str, script_txt: str, path: Path):
+def create_helm(instance: IocInstance, script_txt: str, path: Path):
     """
     create a boilerplate helm chart with name str in folder path
 
     update the values.yml and Chart.yml by rendering their jinja templates
     and insert the boot script whose text is supplied in script_txt
     """
-    helm_folder = path / name
+    helm_folder = path / instance.ioc_name
 
     if path.exists():
         if helm_folder.exists():
@@ -76,8 +77,11 @@ def create_helm(name: str, script_txt: str, path: Path):
 
     shutil.copytree(HELM_TEMPLATE, helm_folder)
 
-    # TODO description should come from the ioc yaml
-    render_file(helm_folder / "Chart.yaml.jinja", ioc_name=name, description="an ioc")
+    render_file(
+        helm_folder / "Chart.yaml.jinja",
+        ioc_name=instance.ioc_name,
+        description=instance.description,
+    )
     render_file(
         helm_folder / "values.yaml.jinja",
         base_image="gcr.io/diamond-pubreg/controls/prod/ioc/ioc-pmac:2.5.3",

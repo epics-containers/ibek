@@ -20,6 +20,7 @@ sample_yaml = Path(__file__).parent / "samples" / "yaml"
 BL45P_MO_IOC_02 = fix_code(
     """pmac(
     ioc_name='bl45p-mo-ioc-02',
+    description='an example motion ioc for ibek testing',
     instances=(
         pmac.PmacAsynIPPort(
             type='pmac.PmacAsynIPPort',

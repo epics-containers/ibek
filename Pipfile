@@ -21,13 +21,13 @@ pytest-black = "*"
 flake8-isort = "*"
 isort = ">5.0"
 sphinx-rtd-theme = "*"
+autopep8 = "*"
 
 [packages]
 # All other package requirements from setup.cfg
-ibek = {editable = true,path = "."}
+ibek = {editable = true, path = "."}
 typer = "*"
 apischema = "==0.14.7"
-autopep8 = "*"
 
 [scripts]
 tests = "python -m pytest"
@@ -35,4 +35,3 @@ docs = "sphinx-build -EWT --keep-going docs build/html"
 build = "python setup.py sdist bdist_wheel"
 # Delete any files that git ignore hides from us
 gitclean = "git clean -fdX"
-
