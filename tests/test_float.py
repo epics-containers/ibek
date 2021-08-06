@@ -13,13 +13,14 @@ coercion from str to number requires a trailing f if there is a decimal.
 
 from dataclasses import dataclass
 from io import StringIO
-from typing import Any, Literal, Mapping, Sequence, Type, TypeVar
+from typing import Any, Mapping, Sequence, Type, TypeVar
 
 from apischema import deserialize
 from apischema.conversions.conversions import Conversion
 from apischema.conversions.converters import deserializer
 from apischema.conversions.utils import identity
 from ruamel.yaml import YAML
+from typing_extensions import Literal
 
 """ A generic Type for use in type hints """
 T = TypeVar("T")

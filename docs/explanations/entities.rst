@@ -221,7 +221,7 @@ The ibek commands to progress through the file sequence above are as follows
         - Hand crafted by the container developer. Held in the container.
     *   - 3
         - <container>.schema.json
-        - ``ibek ibek-schema ...`` run at container build time against all <support_module>.ibek.yaml.
+        - ``ibek ioc-schema ...`` run at container build time against all <support_module>.ibek.yaml.
     *   - 4
         - <ioc_name>.<container>.yaml
         - Hand crafted at IOC instance design time
