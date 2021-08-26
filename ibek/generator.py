@@ -1,6 +1,8 @@
 """
-Functions for generating an IocInstance class with and list of
-EntityInstance classes from support module definition YAML
+Functions for generating an IocInstance class with
+
+and list of
+Entity classes from support module definition YAML
 """
 
 import builtins
@@ -14,20 +16,21 @@ from typing_extensions import Annotated as A
 from typing_extensions import Literal
 
 from ibek.globals import desc, namespace
-from ibek.support import Entity, EntityInstance, IocInstance, Support
+from ibek.support import Definition, Entity, IocInstance, Support
 
 
 def get_module(support: Support) -> Type[IocInstance]:
     """
-    Generate an IocInstance derived class with its a set of EntityInstance classes,
+    Generate an IocInstance derived class with its a set of Entity classes,
     from a support module definition
     """
 
-    namespace["entityinstance"] = EntityInstance
+    # place the Entity base class in the dynamic classes global namespace
+    namespace["Entity"] = Entity
 
     for entity in support.entities:
         get_entity_instances(
-            entity, namespace["entityinstance"], namespace, support.module,
+            entity, namespace["Entity"], namespace, support.module,
         )
 
     namespace[support.module] = make_dataclass(
@@ -36,10 +39,7 @@ def get_module(support: Support) -> Type[IocInstance]:
             ("ioc_name", A[str, desc("Name of IOC")]),
             (
                 "instances",
-                A[
-                    Sequence[EntityInstance],
-                    desc("List of entity instances of the IOCs"),
-                ],
+                A[Sequence[Entity], desc("List of entity instances of the IOCs")],
             ),
         ],
         bases=(IocInstance,),
@@ -65,11 +65,11 @@ def from_yaml(definition_file: Path) -> Type["IocInstance"]:
 
 
 def get_entity_instances(
-    entity: Entity, baseclass: Any, namespace: Dict[str, Any], module_name: str,
+    entity: Definition, baseclass: Any, namespace: Dict[str, Any], module_name: str,
 ):
     """
     We can get a set of Entities by deserializing an ibek support module
-    YAML file. This  function creates an EntityInstance class from
+    YAML file. This  function creates an Entity class from
     an Entity. See :ref:`entities`
     """
     # we need to qualify the name with the module so as to avoid cross
@@ -102,9 +102,9 @@ def get_entity_instances(
 
         fields.append(this_field)
 
-    # make the EntityInstance derived dataclass for this EntityClass
-    entity_instance_cls: EntityInstance = cast(
-        EntityInstance, make_dataclass(name, fields, bases=(baseclass,))
+    # make the Entity derived dataclass for this EntityClass
+    entity_instance_cls: Entity = cast(
+        Entity, make_dataclass(name, fields, bases=(baseclass,))
     )
 
     # add a reference to the entity class for this entity instance class

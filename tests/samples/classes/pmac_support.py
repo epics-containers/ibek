@@ -8,11 +8,11 @@ This preamble file is added to the head of the generated class
 from apischema.utils import Undefined
 
 from ibek.argument import FloatArg, IntArg, StrArg
-from ibek.support import Database, Entity, Support
+from ibek.support import Database, Definition, Support
 
 """
 This represents the generated instance of a Support Object which is an
-object graph of Entity instandes. It is the product of deserializing
+object graph of Definition instandes. It is the product of deserializing
 pmac.ibek.yaml
 """
 
@@ -24,7 +24,7 @@ pmac.ibek.yaml
 SUPPORT = Support(
     module="pmac",
     entities=(
-        Entity(
+        Definition(
             name="Geobrick",
             args=(
                 StrArg(
@@ -79,7 +79,7 @@ SUPPORT = Support(
                 "pmacCreateAxes({{name}}, 8)",
             ),
         ),
-        Entity(
+        Definition(
             name="PmacAsynIPPort",
             args=(
                 StrArg(
@@ -102,7 +102,7 @@ SUPPORT = Support(
                 'pmacAsynIPConfigure({{name}}, {{IP if ":" in IP else IP + ":1025"}})',
             ),
         ),
-        Entity(
+        Definition(
             name="DlsPmacAsynMotor",
             args=(
                 StrArg(

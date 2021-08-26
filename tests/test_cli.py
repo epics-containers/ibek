@@ -68,7 +68,7 @@ def test_build_ioc(tmp_path: Path):
 
 def test_may_fail(tmp_path: Path):
     # When we deserialize the same yaml twice as we do in the full test suite
-    # we may get clashes in the namespace of generated EntityInstance classes.
+    # we may get clashes in the namespace of generated Entity classes.
     #
     # I have seen errors like this:
     #   <Result ValueError("Types <class 'types.pmac.Geobrick'> and
@@ -80,7 +80,7 @@ def test_may_fail(tmp_path: Path):
     # working on it the error has gone away and I don't understand whats up.
     #
     # I believe that this is the issue that Richard originally solved by
-    # defining the EntityInstance base class in the scope of Support.
+    # defining the Entity base class in the scope of Support.
     # (I gave it global scope because I want to)
     definition_file = sample_yaml / "pmac.ibek.yaml"
 

@@ -13,7 +13,7 @@ generic IOCs and IOC instances. See
 
 TODO: this document should also reference the classes in the code that
 implement these concepts: (But at present Definition == class Entity
-and Entity == class EntityInstance and there is no class to represent
+and Entity == class Entity and there is no class to represent
 Containers as groups of Modules as yet)
 
 Modules

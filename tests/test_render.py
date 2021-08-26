@@ -1,6 +1,6 @@
 """
 Tests for the rendering of scripts and database entries from generated
-EntityInstance classes
+Entity classes
 """
 from pathlib import Path
 

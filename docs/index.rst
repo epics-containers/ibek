@@ -10,13 +10,6 @@ This project is incomplete. The following items are still to do:
 
     - Modify the documentation explanations/entities, invert the explanation
       so that it is in the same order as the tables at the end.
-
-    - rename theses classes and update all comments accordingly (I still would
-      like to have a think about better naming?)
-
-        - Entity becomes Definition
-        - EntityInstance becomes Entity
-
     - Complete documentation in general
 
     - Add a param no_axes to pmac.Geobrick instead of hardcoding 8
