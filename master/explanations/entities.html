@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>Entities, Definitions and Modules &mdash; ibek 0.2+43.g9873606 documentation</title>
+  <title>Modules, Definitions and Entities &mdash; ibek 0.2+45.g6e7a8e8 documentation</title>
   
 
   
@@ -119,10 +119,10 @@
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Explanations</span></p>
 <ul class="current">
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Entities, Definitions and Modules</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#entity">Entity</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#definition">Definition</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Modules, Definitions and Entities</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#modules">Modules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#definition">Definition</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#entity">Entity</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#schemas">Schemas</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#commands">Commands</a></li>
 </ul>
@@ -217,7 +217,7 @@
     
       <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
         
-      <li>Entities, Definitions and Modules</li>
+      <li>Modules, Definitions and Entities</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -236,150 +236,53 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="entities-definitions-and-modules">
-<span id="entities"></span><h1>Entities, Definitions and Modules<a class="headerlink" href="#entities-definitions-and-modules" title="Permalink to this headline">¶</a></h1>
-<p>This is an explanation of the above key terms by referencing the
+  <div class="section" id="modules-definitions-and-entities">
+<span id="entities"></span><h1>Modules, Definitions and Entities<a class="headerlink" href="#modules-definitions-and-entities" title="Permalink to this headline">¶</a></h1>
+<p>This page is a top down explanation of the above key terms by referencing the
 example IOC instance bl45p-mo-ioc-02 used in the system tests for this
 project.</p>
 <p>The explanations rely on an understanding of the difference between
-generic IOCs and IOC instances. See <a class="reference external" href="https://epics-containers.github.io/main/explanations/introduction.html#generic-iocs-and-instances">Generic IOCs and instances</a>.</p>
-<div class="section" id="entity">
-<h2>Entity<a class="headerlink" href="#entity" title="Permalink to this headline">¶</a></h2>
-<p>An Entity represents any piece of functionality of an IOC that is
-configured through EPICS database and/or startup script.</p>
-<p>Declaring an Entity
-for an IOC instance will cause ibek to generate lines in the startup script.
-The generated startup script will also supply the EPICS database
-entries using dbLoadRecords and database templates.</p>
-<p>The example motion IOC instance bl45p-mo-ioc-02 has the following entities:</p>
-<blockquote>
-<div><ul>
-<li><p>DlsPmacAsynIPPort (one instance)</p>
-<ul class="simple">
-<li><p>represents a connection to a motion controller</p></li>
-<li><p>configured via</p>
-<ul>
-<li><p>pmacAsynIPConfigure in the boot script</p></li>
-</ul>
-</li>
-</ul>
-</li>
-<li><p>Geobrick (one instance)</p>
-<blockquote>
-<div><ul class="simple">
-<li><p>represents the motion controller itself</p></li>
-<li><p>configured via</p>
-<ul>
-<li><p>pmacCreateController in boot script</p></li>
-<li><p>pmacCreateAxes in the boot script</p></li>
-<li><p>dbLoadRecords of pmacController.template and pmacStatus.template</p></li>
-</ul>
-</li>
-</ul>
-</div></blockquote>
-</li>
-<li><p>DlsPmacAsynMotor (two instances)</p>
-<blockquote>
-<div><ul class="simple">
-<li><p>represents a single motor connected to the controller</p></li>
-<li><p>configured via:</p>
-<ul>
-<li><p>dbLoadRecords of dls_pmac_asyn_motor.template</p></li>
-</ul>
-</li>
-</ul>
-</div></blockquote>
-</li>
-</ul>
-</div></blockquote>
-<p>To declare the entities for an IOC instance requires an
-<strong>IOC instance entity file</strong>. This is
-a YAML file with name of the form <em>&lt;ioc_name&gt;.&lt;container&gt;.yaml</em>.</p>
-<p>The example IOC instance entity file is shown below along with the ioc.boot
-file that ibek will generate from it.</p>
-<p>Click the arrows to reveal the files.</p>
-<blockquote>
-<div><details>
-<summary><a>bl45p-mo-ioc-02.pmac.yaml</a></summary><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ioc_name</span><span class="p">:</span> <span class="n">bl45p</span><span class="o">-</span><span class="n">mo</span><span class="o">-</span><span class="n">ioc</span><span class="o">-</span><span class="mi">02</span>
-<span class="n">description</span><span class="p">:</span> <span class="n">an</span> <span class="n">example</span> <span class="n">motion</span> <span class="n">ioc</span> <span class="k">for</span> <span class="n">ibek</span> <span class="n">testing</span>
-<span class="n">instances</span><span class="p">:</span>
-  <span class="o">-</span> <span class="nb">type</span><span class="p">:</span> <span class="n">pmac</span><span class="o">.</span><span class="n">PmacAsynIPPort</span>
-    <span class="n">name</span><span class="p">:</span> <span class="n">BRICK1port</span>
-    <span class="n">IP</span><span class="p">:</span> <span class="mf">192.168.0.12</span><span class="p">:</span><span class="mi">1112</span>
-
-  <span class="o">-</span> <span class="nb">type</span><span class="p">:</span> <span class="n">pmac</span><span class="o">.</span><span class="n">Geobrick</span>
-    <span class="n">name</span><span class="p">:</span> <span class="n">BL45P</span><span class="o">-</span><span class="n">MO</span><span class="o">-</span><span class="n">BRICK</span><span class="o">-</span><span class="mi">01</span>
-    <span class="n">PORT</span><span class="p">:</span> <span class="n">BRICK1port</span>
-    <span class="n">P</span><span class="p">:</span> <span class="s2">&quot;BL45P-MO-STEP-01:&quot;</span>
-    <span class="n">idlePoll</span><span class="p">:</span> <span class="mi">100</span>
-    <span class="n">movingPoll</span><span class="p">:</span> <span class="mi">500</span>
-
-  <span class="o">-</span> <span class="nb">type</span><span class="p">:</span> <span class="n">pmac</span><span class="o">.</span><span class="n">DlsPmacAsynMotor</span>
-    <span class="n">name</span><span class="p">:</span> <span class="n">X1</span> <span class="n">motor</span>
-    <span class="c1"># TODO previously would have been an object pointing to a pmac.Geobrick</span>
-    <span class="n">PMAC</span><span class="p">:</span> <span class="n">BL45P</span><span class="o">-</span><span class="n">MO</span><span class="o">-</span><span class="n">BRICK</span><span class="o">-</span><span class="mi">01</span>
-    <span class="c1"># TODO Previously would have used pmac.PORT, pmac.SPORT</span>
-    <span class="n">PORT</span><span class="p">:</span> <span class="n">BL45P</span><span class="o">-</span><span class="n">MO</span><span class="o">-</span><span class="n">BRICK</span><span class="o">-</span><span class="mi">01</span>
-    <span class="n">SPORT</span><span class="p">:</span> <span class="n">BRICK1port</span>
-    <span class="n">axis</span><span class="p">:</span> <span class="mi">1</span>
-    <span class="n">P</span><span class="p">:</span> <span class="s2">&quot;BL45P-MO-THIN-01&quot;</span>
-    <span class="n">M</span><span class="p">:</span> <span class="s2">&quot;:X1&quot;</span>
-    <span class="n">MRES</span><span class="p">:</span> <span class="mf">0.001</span>
-
-  <span class="o">-</span> <span class="nb">type</span><span class="p">:</span> <span class="n">pmac</span><span class="o">.</span><span class="n">DlsPmacAsynMotor</span>
-    <span class="n">name</span><span class="p">:</span> <span class="n">Y1</span> <span class="n">motor</span>
-    <span class="n">PMAC</span><span class="p">:</span> <span class="n">BL45P</span><span class="o">-</span><span class="n">MO</span><span class="o">-</span><span class="n">BRICK</span><span class="o">-</span><span class="mi">01</span>
-    <span class="n">PORT</span><span class="p">:</span> <span class="n">BL45P</span><span class="o">-</span><span class="n">MO</span><span class="o">-</span><span class="n">BRICK</span><span class="o">-</span><span class="mi">01</span>
-    <span class="n">SPORT</span><span class="p">:</span> <span class="n">BRICK1port</span>
-    <span class="n">axis</span><span class="p">:</span> <span class="mi">2</span>
-    <span class="n">P</span><span class="p">:</span> <span class="s2">&quot;BL45P-MO-THIN-01&quot;</span>
-    <span class="n">M</span><span class="p">:</span> <span class="s2">&quot;:Y1&quot;</span>
-    <span class="n">MRES</span><span class="p">:</span> <span class="mf">0.001</span>
-</pre></div>
-</div>
-</details>
-<details>
-<summary><a>ioc.boot</a></summary><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cd</span> <span class="s2">&quot;$(TOP)&quot;</span>
-<span class="n">epicsEnvSet</span> <span class="s2">&quot;EPICS_CA_MAX_ARRAY_BYTES&quot;</span><span class="p">,</span> <span class="s1">&#39;6000000&#39;</span>
-<span class="n">epicsEnvSet</span> <span class="s2">&quot;EPICS_TS_MIN_WEST&quot;</span><span class="p">,</span> <span class="s1">&#39;0&#39;</span>
-<span class="n">cd</span> <span class="s2">&quot;$(TOP)&quot;</span>
-<span class="n">dbLoadDatabase</span> <span class="s2">&quot;dbd/ioc.dbd&quot;</span>
-<span class="n">ioc_registerRecordDeviceDriver</span><span class="p">(</span><span class="n">pdbbase</span><span class="p">)</span>
-<span class="n">pmacAsynIPConfigure</span><span class="p">(</span><span class="n">BRICK1port</span><span class="p">,</span> <span class="mf">192.168.0.12</span><span class="p">:</span><span class="mi">1112</span><span class="p">)</span>
-<span class="n">pmacCreateController</span><span class="p">(</span><span class="n">BL45P</span><span class="o">-</span><span class="n">MO</span><span class="o">-</span><span class="n">BRICK</span><span class="o">-</span><span class="mi">01</span><span class="p">,</span> <span class="n">BRICK1port</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">500</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
-<span class="n">pmacCreateAxes</span><span class="p">(</span><span class="n">BL45P</span><span class="o">-</span><span class="n">MO</span><span class="o">-</span><span class="n">BRICK</span><span class="o">-</span><span class="mi">01</span><span class="p">,</span> <span class="mi">8</span><span class="p">)</span>
-
-
-
-<span class="n">dbLoadRecords</span><span class="p">(</span><span class="s2">&quot;pmacController.template&quot;</span><span class="p">,</span> <span class="s2">&quot;PMAC=BL45P-MO-STEP-01:&quot;</span><span class="p">)</span>
-<span class="n">dbLoadRecords</span><span class="p">(</span><span class="s2">&quot;pmacStatus.template&quot;</span><span class="p">,</span> <span class="s2">&quot;PMAC=BL45P-MO-STEP-01:&quot;</span><span class="p">)</span>
-<span class="n">dbLoadRecords</span><span class="p">(</span><span class="s2">&quot;$(PMAC)/db/dls_pmac_asyn_motor.template&quot;</span><span class="p">,</span> <span class="s2">&quot;P=BL45P-MO-THIN-01, M=:X1, PORT=BL45P-MO-BRICK-01, ADDR=1, DESC= , MRES=0.001, VELO=1.0, PREC=, EGU=mm, TWV=1, DTYP=asynMotor, DIR=0, VBAS=1.0, VMAX=1.0, ACCL=0.5, BDST=0.0, BVEL=0.0, BACC=0.0, DHLM=10000.0, DLLM=, HLM=0.0, LLM=0.0, HLSV=MAJOR, INIT= , SREV=1000.0, RRES=0.0, ERES=0.0, JAR=0.0, UEIP=0, RDBL=0, RLINK=, RTRY=0, DLY=0.0, OFF=0.0, RDBD=0.0, FOFF=0, ADEL=0.0, NTM=1, FEHIGH=0.0, FEHIHI=0.0, FEHHSV=NO_ALARM, FEHSV=NO_ALARM, SCALE=1, HOMEVIS=1, HOMEVISSTR=, name=X1 motor, alh= , gda_name=none, gda_desc=$(DESC), SPORT=BRICK1port, HOME=$(P), PMAC=BL45P-MO-BRICK-01, ALLOW_HOMED_SET=#&quot;</span><span class="p">)</span>
-<span class="n">dbLoadRecords</span><span class="p">(</span><span class="s2">&quot;$(PMAC)/db/dls_pmac_asyn_motor.template&quot;</span><span class="p">,</span> <span class="s2">&quot;P=BL45P-MO-THIN-01, M=:Y1, PORT=BL45P-MO-BRICK-01, ADDR=2, DESC= , MRES=0.001, VELO=1.0, PREC=, EGU=mm, TWV=1, DTYP=asynMotor, DIR=0, VBAS=1.0, VMAX=1.0, ACCL=0.5, BDST=0.0, BVEL=0.0, BACC=0.0, DHLM=10000.0, DLLM=, HLM=0.0, LLM=0.0, HLSV=MAJOR, INIT= , SREV=1000.0, RRES=0.0, ERES=0.0, JAR=0.0, UEIP=0, RDBL=0, RLINK=, RTRY=0, DLY=0.0, OFF=0.0, RDBD=0.0, FOFF=0, ADEL=0.0, NTM=1, FEHIGH=0.0, FEHIHI=0.0, FEHHSV=NO_ALARM, FEHSV=NO_ALARM, SCALE=1, HOMEVIS=1, HOMEVISSTR=, name=Y1 motor, alh= , gda_name=none, gda_desc=$(DESC), SPORT=BRICK1port, HOME=$(P), PMAC=BL45P-MO-BRICK-01, ALLOW_HOMED_SET=#&quot;</span><span class="p">)</span>
-
-<span class="n">cd</span> <span class="s2">&quot;$(TOP)&quot;</span>
-<span class="n">iocInit</span><span class="p">()</span>
-
-</pre></div>
-</div>
-</details></div></blockquote>
+generic IOCs and IOC instances. See
+<a class="reference external" href="https://epics-containers.github.io/main/explanations/introduction.html#generic-iocs-and-instances">Generic IOCs and instances</a>.</p>
+<p>TODO: this document should also reference the classes in the code that
+implement these concepts: (But at present Definition == class Entity
+and Entity == class EntityInstance and there is no class to represent
+Containers as groups of Modules as yet)</p>
+<div class="section" id="modules">
+<h2>Modules<a class="headerlink" href="#modules" title="Permalink to this headline">¶</a></h2>
+<p>Every generic IOC image will include a number of EPICS support modules.</p>
+<p>The bl45p-mo-ioc-02 ioc instance example uses the generic IOC container image
+<a class="reference external" href="https://github.com/epics-containers/ioc-pmac">ioc-pmac</a> . This image
+contains the support modules pmac and motor plus the common support modules
+from <a class="reference external" href="https://github.com/epics-containers/epics-modules">epics-modules</a></p>
+<p>Each IOC instance will mount a generic IOC image and therefore be able to make
+use of the libraries and DB templates in any of those support modules.</p>
+<p>The goal of ibek is to allow a developer to define an instance of an IOC and
+make use of functions of its support modules.</p>
+<p>ibek uses a <strong>support module definition file</strong> to determine what
+features of a support module may be instantiated.</p>
+<p>Hence there is a collection of <strong>support module definition files</strong>
+inside of each generic IOC.</p>
 </div>
 <div class="section" id="definition">
 <h2>Definition<a class="headerlink" href="#definition" title="Permalink to this headline">¶</a></h2>
-<p>A given support module will implement a number of classes of Entity.</p>
-<p>For example the pmac support module provides the following classes of
-Entity (currently - the full implementation would have more):</p>
+<p>Each support module has its own <strong>support module definition file</strong> . This
+is a YAML file whose name is by convention <code class="docutils literal notranslate"><span class="pre">&lt;support_module&gt;.ibek.yaml</span></code></p>
+<p>At present these will all reside in a folder called /ibek in the container
+image. In future each support module could have its own /ibek folder.</p>
+<p>The <strong>support module definition file</strong> contains <strong>Definitions</strong> which
+determine what <strong>Entities</strong> an IOC instance may instantiate.</p>
+<p>For example the pmac support module declares the following <strong>Definitions</strong>
+in <code class="docutils literal notranslate"><span class="pre">pmac.ibek.yaml</span></code>
+(currently this is limited to 3 - the full implementation would have more):</p>
 <blockquote>
 <div><ul class="simple">
-<li><p>DlsPmacAsynIPPort</p></li>
 <li><p>Geobrick</p></li>
+<li><p>DlsPmacAsynIPPort</p></li>
 <li><p>DlsPmacAsynMotor</p></li>
 </ul>
 </div></blockquote>
-<p>Each support module must provide ibek with details its classes of Entity.
-This is done in a <strong>support module definition file</strong> with name of the
-form <em>&lt;support_module&gt;.ibek.yaml</em>.</p>
-<p>The file contains a list of Definitions. Each Definition describes a class of
-Entity by providing:</p>
+<p>Each Definition describes a class of Entity by providing:</p>
 <blockquote>
 <div><ul class="simple">
 <li><p>Entity class name</p></li>
@@ -390,7 +293,7 @@ template that may refer to the above arguments</p></li>
 the above arguments</p></li>
 </ul>
 </div></blockquote>
-<p>Expand below for the example pmac support module definition file:</p>
+<p>Expand below for the example pmac <strong>support module definition file</strong>:</p>
 <blockquote>
 <div><details>
 <summary><a>pmac.ibek.yaml</a></summary><div class="highlight-default notranslate"><div class="highlight"><pre><span></span>module: pmac
@@ -773,16 +676,129 @@ entities:
 </div>
 </details></div></blockquote>
 </div>
-<div class="section" id="modules">
-<h2>Modules<a class="headerlink" href="#modules" title="Permalink to this headline">¶</a></h2>
-<p>Every generic IOC image will include a number of EPICS support modules.</p>
-<p>Each IOC instance will mount such an image and therefore be able to make
-use of the functionality in any of those support modules.</p>
-<p>This implies that there is a collection of <strong>support module definition files</strong>
-for each generic IOC.</p>
-<p>Thus the full set of classes of Entity that the IOC supports is a union of the
-Entity classes supplied by the definition files of all the support modules in
-a given generic IOC.</p>
+<div class="section" id="entity">
+<h2>Entity<a class="headerlink" href="#entity" title="Permalink to this headline">¶</a></h2>
+<p>ibek can generate an IOC instance using an
+<strong>IOC instance entity file</strong>. This is
+a YAML file with name of the form <code class="docutils literal notranslate"><span class="pre">&lt;ioc_name&gt;.&lt;container&gt;.yaml</span></code>.</p>
+<p>The <strong>IOC instance entity file</strong> declares the Entities that the IOC
+instance requires.</p>
+<p>An Entity represents any piece of functionality of an IOC that is
+configured through EPICS database and/or startup script.</p>
+<p>The classes of Entity that can be instantiated for a given generic IOC are
+declared in the Definitions files described above.</p>
+<p>Declaring an Entity
+for an IOC instance will cause ibek to generate lines in the startup script.
+The generated startup script will also supply the EPICS database
+entries using dbLoadRecords and database templates.</p>
+<p>The example motion IOC instance bl45p-mo-ioc-02 has the following entities:</p>
+<blockquote>
+<div><ul>
+<li><p>DlsPmacAsynIPPort (one instance)</p>
+<ul class="simple">
+<li><p>represents a connection to a motion controller</p></li>
+<li><p>configured via</p>
+<ul>
+<li><p>pmacAsynIPConfigure in the boot script</p></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>Geobrick (one instance)</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>represents the motion controller itself</p></li>
+<li><p>configured via</p>
+<ul>
+<li><p>pmacCreateController in boot script</p></li>
+<li><p>pmacCreateAxes in the boot script</p></li>
+<li><p>dbLoadRecords of pmacController.template and pmacStatus.template</p></li>
+</ul>
+</li>
+</ul>
+</div></blockquote>
+</li>
+<li><p>DlsPmacAsynMotor (two instances)</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>represents a single motor connected to the controller</p></li>
+<li><p>configured via:</p>
+<ul>
+<li><p>dbLoadRecords of dls_pmac_asyn_motor.template</p></li>
+</ul>
+</li>
+</ul>
+</div></blockquote>
+</li>
+</ul>
+</div></blockquote>
+<p>The example <strong>IOC instance entity file</strong> is shown below along with the ioc.boot
+file that ibek will generate from it.</p>
+<p>Click the arrows to reveal the files.</p>
+<blockquote>
+<div><details>
+<summary><a>bl45p-mo-ioc-02.pmac.yaml</a></summary><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ioc_name</span><span class="p">:</span> <span class="n">bl45p</span><span class="o">-</span><span class="n">mo</span><span class="o">-</span><span class="n">ioc</span><span class="o">-</span><span class="mi">02</span>
+<span class="n">description</span><span class="p">:</span> <span class="n">an</span> <span class="n">example</span> <span class="n">motion</span> <span class="n">ioc</span> <span class="k">for</span> <span class="n">ibek</span> <span class="n">testing</span>
+<span class="n">instances</span><span class="p">:</span>
+  <span class="o">-</span> <span class="nb">type</span><span class="p">:</span> <span class="n">pmac</span><span class="o">.</span><span class="n">PmacAsynIPPort</span>
+    <span class="n">name</span><span class="p">:</span> <span class="n">BRICK1port</span>
+    <span class="n">IP</span><span class="p">:</span> <span class="mf">192.168.0.12</span><span class="p">:</span><span class="mi">1112</span>
+
+  <span class="o">-</span> <span class="nb">type</span><span class="p">:</span> <span class="n">pmac</span><span class="o">.</span><span class="n">Geobrick</span>
+    <span class="n">name</span><span class="p">:</span> <span class="n">BL45P</span><span class="o">-</span><span class="n">MO</span><span class="o">-</span><span class="n">BRICK</span><span class="o">-</span><span class="mi">01</span>
+    <span class="n">PORT</span><span class="p">:</span> <span class="n">BRICK1port</span>
+    <span class="n">P</span><span class="p">:</span> <span class="s2">&quot;BL45P-MO-STEP-01:&quot;</span>
+    <span class="n">idlePoll</span><span class="p">:</span> <span class="mi">100</span>
+    <span class="n">movingPoll</span><span class="p">:</span> <span class="mi">500</span>
+
+  <span class="o">-</span> <span class="nb">type</span><span class="p">:</span> <span class="n">pmac</span><span class="o">.</span><span class="n">DlsPmacAsynMotor</span>
+    <span class="n">name</span><span class="p">:</span> <span class="n">X1</span> <span class="n">motor</span>
+    <span class="c1"># TODO previously would have been an object pointing to a pmac.Geobrick</span>
+    <span class="n">PMAC</span><span class="p">:</span> <span class="n">BL45P</span><span class="o">-</span><span class="n">MO</span><span class="o">-</span><span class="n">BRICK</span><span class="o">-</span><span class="mi">01</span>
+    <span class="c1"># TODO Previously would have used pmac.PORT, pmac.SPORT</span>
+    <span class="n">PORT</span><span class="p">:</span> <span class="n">BL45P</span><span class="o">-</span><span class="n">MO</span><span class="o">-</span><span class="n">BRICK</span><span class="o">-</span><span class="mi">01</span>
+    <span class="n">SPORT</span><span class="p">:</span> <span class="n">BRICK1port</span>
+    <span class="n">axis</span><span class="p">:</span> <span class="mi">1</span>
+    <span class="n">P</span><span class="p">:</span> <span class="s2">&quot;BL45P-MO-THIN-01&quot;</span>
+    <span class="n">M</span><span class="p">:</span> <span class="s2">&quot;:X1&quot;</span>
+    <span class="n">MRES</span><span class="p">:</span> <span class="mf">0.001</span>
+
+  <span class="o">-</span> <span class="nb">type</span><span class="p">:</span> <span class="n">pmac</span><span class="o">.</span><span class="n">DlsPmacAsynMotor</span>
+    <span class="n">name</span><span class="p">:</span> <span class="n">Y1</span> <span class="n">motor</span>
+    <span class="n">PMAC</span><span class="p">:</span> <span class="n">BL45P</span><span class="o">-</span><span class="n">MO</span><span class="o">-</span><span class="n">BRICK</span><span class="o">-</span><span class="mi">01</span>
+    <span class="n">PORT</span><span class="p">:</span> <span class="n">BL45P</span><span class="o">-</span><span class="n">MO</span><span class="o">-</span><span class="n">BRICK</span><span class="o">-</span><span class="mi">01</span>
+    <span class="n">SPORT</span><span class="p">:</span> <span class="n">BRICK1port</span>
+    <span class="n">axis</span><span class="p">:</span> <span class="mi">2</span>
+    <span class="n">P</span><span class="p">:</span> <span class="s2">&quot;BL45P-MO-THIN-01&quot;</span>
+    <span class="n">M</span><span class="p">:</span> <span class="s2">&quot;:Y1&quot;</span>
+    <span class="n">MRES</span><span class="p">:</span> <span class="mf">0.001</span>
+</pre></div>
+</div>
+</details>
+<details>
+<summary><a>ioc.boot</a></summary><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cd</span> <span class="s2">&quot;$(TOP)&quot;</span>
+<span class="n">epicsEnvSet</span> <span class="s2">&quot;EPICS_CA_MAX_ARRAY_BYTES&quot;</span><span class="p">,</span> <span class="s1">&#39;6000000&#39;</span>
+<span class="n">epicsEnvSet</span> <span class="s2">&quot;EPICS_TS_MIN_WEST&quot;</span><span class="p">,</span> <span class="s1">&#39;0&#39;</span>
+<span class="n">cd</span> <span class="s2">&quot;$(TOP)&quot;</span>
+<span class="n">dbLoadDatabase</span> <span class="s2">&quot;dbd/ioc.dbd&quot;</span>
+<span class="n">ioc_registerRecordDeviceDriver</span><span class="p">(</span><span class="n">pdbbase</span><span class="p">)</span>
+<span class="n">pmacAsynIPConfigure</span><span class="p">(</span><span class="n">BRICK1port</span><span class="p">,</span> <span class="mf">192.168.0.12</span><span class="p">:</span><span class="mi">1112</span><span class="p">)</span>
+<span class="n">pmacCreateController</span><span class="p">(</span><span class="n">BL45P</span><span class="o">-</span><span class="n">MO</span><span class="o">-</span><span class="n">BRICK</span><span class="o">-</span><span class="mi">01</span><span class="p">,</span> <span class="n">BRICK1port</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">500</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
+<span class="n">pmacCreateAxes</span><span class="p">(</span><span class="n">BL45P</span><span class="o">-</span><span class="n">MO</span><span class="o">-</span><span class="n">BRICK</span><span class="o">-</span><span class="mi">01</span><span class="p">,</span> <span class="mi">8</span><span class="p">)</span>
+
+
+
+<span class="n">dbLoadRecords</span><span class="p">(</span><span class="s2">&quot;pmacController.template&quot;</span><span class="p">,</span> <span class="s2">&quot;PMAC=BL45P-MO-STEP-01:&quot;</span><span class="p">)</span>
+<span class="n">dbLoadRecords</span><span class="p">(</span><span class="s2">&quot;pmacStatus.template&quot;</span><span class="p">,</span> <span class="s2">&quot;PMAC=BL45P-MO-STEP-01:&quot;</span><span class="p">)</span>
+<span class="n">dbLoadRecords</span><span class="p">(</span><span class="s2">&quot;$(PMAC)/db/dls_pmac_asyn_motor.template&quot;</span><span class="p">,</span> <span class="s2">&quot;P=BL45P-MO-THIN-01, M=:X1, PORT=BL45P-MO-BRICK-01, ADDR=1, DESC= , MRES=0.001, VELO=1.0, PREC=, EGU=mm, TWV=1, DTYP=asynMotor, DIR=0, VBAS=1.0, VMAX=1.0, ACCL=0.5, BDST=0.0, BVEL=0.0, BACC=0.0, DHLM=10000.0, DLLM=, HLM=0.0, LLM=0.0, HLSV=MAJOR, INIT= , SREV=1000.0, RRES=0.0, ERES=0.0, JAR=0.0, UEIP=0, RDBL=0, RLINK=, RTRY=0, DLY=0.0, OFF=0.0, RDBD=0.0, FOFF=0, ADEL=0.0, NTM=1, FEHIGH=0.0, FEHIHI=0.0, FEHHSV=NO_ALARM, FEHSV=NO_ALARM, SCALE=1, HOMEVIS=1, HOMEVISSTR=, name=X1 motor, alh= , gda_name=none, gda_desc=$(DESC), SPORT=BRICK1port, HOME=$(P), PMAC=BL45P-MO-BRICK-01, ALLOW_HOMED_SET=#&quot;</span><span class="p">)</span>
+<span class="n">dbLoadRecords</span><span class="p">(</span><span class="s2">&quot;$(PMAC)/db/dls_pmac_asyn_motor.template&quot;</span><span class="p">,</span> <span class="s2">&quot;P=BL45P-MO-THIN-01, M=:Y1, PORT=BL45P-MO-BRICK-01, ADDR=2, DESC= , MRES=0.001, VELO=1.0, PREC=, EGU=mm, TWV=1, DTYP=asynMotor, DIR=0, VBAS=1.0, VMAX=1.0, ACCL=0.5, BDST=0.0, BVEL=0.0, BACC=0.0, DHLM=10000.0, DLLM=, HLM=0.0, LLM=0.0, HLSV=MAJOR, INIT= , SREV=1000.0, RRES=0.0, ERES=0.0, JAR=0.0, UEIP=0, RDBL=0, RLINK=, RTRY=0, DLY=0.0, OFF=0.0, RDBD=0.0, FOFF=0, ADEL=0.0, NTM=1, FEHIGH=0.0, FEHIHI=0.0, FEHHSV=NO_ALARM, FEHSV=NO_ALARM, SCALE=1, HOMEVIS=1, HOMEVISSTR=, name=Y1 motor, alh= , gda_name=none, gda_desc=$(DESC), SPORT=BRICK1port, HOME=$(P), PMAC=BL45P-MO-BRICK-01, ALLOW_HOMED_SET=#&quot;</span><span class="p">)</span>
+
+<span class="n">cd</span> <span class="s2">&quot;$(TOP)&quot;</span>
+<span class="n">iocInit</span><span class="p">()</span>
+
+</pre></div>
+</div>
+</details></div></blockquote>
 </div>
 <div class="section" id="schemas">
 <h2>Schemas<a class="headerlink" href="#schemas" title="Permalink to this headline">¶</a></h2>
@@ -1394,25 +1410,6 @@ against all &lt;support_module&gt;.ibek.yaml</p></td>
 </tr>
 </tbody>
 </table>
-<p>TODO: currently the code only handles a single &lt;support&gt;.ibek.yaml for the ibek-schema
-and build-ioc commands.</p>
-<p>TODO: we need a way for the container to publish &lt;container&gt;.schema.json.</p>
-<p>TODO: we also need do one of:</p>
-<blockquote>
-<div><ul>
-<li><p>publish all of &lt;support_module&gt;.ibek.yaml from the container</p></li>
-<li><p>generate the boot script at launch time inside the container.</p>
-<blockquote>
-<div><ul class="simple">
-<li><p>this breaks making a helm chart with ibek though, the helm chart would have
-to become generic and have no boot script.</p></li>
-<li><p>this is a bit of a shame because ibek also does minor tweaks to the helm
-Chart.yaml and values.yaml so we would need a new mechanism for those files.</p></li>
-</ul>
-</div></blockquote>
-</li>
-</ul>
-</div></blockquote>
 </div>
 </div>
 
