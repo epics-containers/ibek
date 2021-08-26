@@ -59,7 +59,10 @@ def get_module(support: Support) -> Type[IocInstance]:
             ("ioc_name", A[str, desc("Name of IOC")]),
             (
                 "entities",
-                A[Sequence[Entity], desc("List of entity instances of the IOCs")],
+                A[
+                    Sequence[Entity],
+                    desc("List of classes of Entity this IOC supports"),
+                ],
             ),
         ],
         bases=(IocInstance,),
@@ -75,6 +78,7 @@ def get_entity_classes(
     support module definition YAML file.
 
     This function then creates an Entity derived class from each Definition.
+
     See :ref:`entities`
     """
     # we need to qualify the name with the module so as to avoid cross

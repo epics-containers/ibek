@@ -93,8 +93,7 @@ class IocInstance:
 @dataclass
 class Support:
     """
-    Lists the definitions for a support module,
-    this defines what Entities it supports
+    Lists the definitions for a support module, this defines what Entities it supports
 
     Provides the deserialize entry point.
     """
