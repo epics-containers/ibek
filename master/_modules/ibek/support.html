@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>ibek.support &mdash; ibek 0.2+45.g6e7a8e8 documentation</title>
+  <title>ibek.support &mdash; ibek 0.2+50.ge14f320 documentation</title>
   
 
   
@@ -229,7 +229,6 @@
 <span></span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">The Support Class represents a deserialized &lt;MODULE_NAME&gt;.ibek.yaml file.</span>
 <span class="sd">It contains a hierarchy of Entity dataclasses.</span>
-
 <span class="sd">&quot;&quot;&quot;</span>
 
 <span class="kn">from</span> <span class="nn">dataclasses</span> <span class="kn">import</span> <span class="n">dataclass</span>
@@ -270,13 +269,13 @@
     <span class="n">define_args</span><span class="p">:</span> <span class="n">A</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">desc</span><span class="p">(</span><span class="s2">&quot;Arg string list to be generated as Jinja template&quot;</span><span class="p">)]</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span></div>
 
 
-<div class="viewcode-block" id="Entity"><a class="viewcode-back" href="../../reference/api.html#ibek.support.Entity">[docs]</a><span class="nd">@dataclass</span>
-<span class="k">class</span> <span class="nc">Entity</span><span class="p">:</span>
+<div class="viewcode-block" id="Definition"><a class="viewcode-back" href="../../reference/api.html#ibek.support.Definition">[docs]</a><span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">Definition</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    A single entity that an IOC can instantiate</span>
+<span class="sd">    A single definition of a class of Entity that an IOC instance may instantiate</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="n">name</span><span class="p">:</span> <span class="n">A</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">desc</span><span class="p">(</span><span class="s2">&quot;Publish Entity as type &lt;module&gt;.&lt;name&gt; for IOC instances&quot;</span><span class="p">)]</span>
+    <span class="n">name</span><span class="p">:</span> <span class="n">A</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">desc</span><span class="p">(</span><span class="s2">&quot;Publish Definition as type &lt;module&gt;.&lt;name&gt; for IOC instances&quot;</span><span class="p">)]</span>
     <span class="n">args</span><span class="p">:</span> <span class="n">A</span><span class="p">[</span><span class="n">Sequence</span><span class="p">[</span><span class="n">Arg</span><span class="p">],</span> <span class="n">desc</span><span class="p">(</span><span class="s2">&quot;The arguments IOC instance should supply&quot;</span><span class="p">)]</span> <span class="o">=</span> <span class="p">()</span>
     <span class="n">databases</span><span class="p">:</span> <span class="n">A</span><span class="p">[</span><span class="n">Sequence</span><span class="p">[</span><span class="n">Database</span><span class="p">],</span> <span class="n">desc</span><span class="p">(</span><span class="s2">&quot;Databases to instantiate&quot;</span><span class="p">)]</span> <span class="o">=</span> <span class="p">()</span>
     <span class="n">script</span><span class="p">:</span> <span class="n">A</span><span class="p">[</span>
@@ -284,30 +283,35 @@
     <span class="p">]</span> <span class="o">=</span> <span class="p">()</span></div>
 
 
-<div class="viewcode-block" id="EntityInstance"><a class="viewcode-back" href="../../reference/api.html#ibek.support.EntityInstance">[docs]</a><span class="nd">@dataclass</span>
-<span class="k">class</span> <span class="nc">EntityInstance</span><span class="p">:</span>
+<div class="viewcode-block" id="Entity"><a class="viewcode-back" href="../../reference/api.html#ibek.support.Entity">[docs]</a><span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">Entity</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    A baseclass for all generated EntityInstance classes. Provides the</span>
+<span class="sd">    A baseclass for all generated Entity classes. Provides the</span>
 <span class="sd">    deserialize entry point.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="c1"># a link back to the Entity Object that generated this EntityInstance</span>
-    <span class="n">entity</span><span class="p">:</span> <span class="n">ClassVar</span><span class="p">[</span><span class="n">Entity</span><span class="p">]</span>
+    <span class="c1"># a link back to the Entity Object that generated this Entity</span>
+    <span class="n">entity</span><span class="p">:</span> <span class="n">ClassVar</span><span class="p">[</span><span class="n">Definition</span><span class="p">]</span>
 
     <span class="k">def</span> <span class="nf">__init_subclass__</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">deserializer</span><span class="p">(</span><span class="n">Conversion</span><span class="p">(</span><span class="n">identity</span><span class="p">,</span> <span class="n">source</span><span class="o">=</span><span class="bp">cls</span><span class="p">,</span> <span class="n">target</span><span class="o">=</span><span class="n">EntityInstance</span><span class="p">))</span></div>
+        <span class="n">deserializer</span><span class="p">(</span><span class="n">Conversion</span><span class="p">(</span><span class="n">identity</span><span class="p">,</span> <span class="n">source</span><span class="o">=</span><span class="bp">cls</span><span class="p">,</span> <span class="n">target</span><span class="o">=</span><span class="n">Entity</span><span class="p">))</span></div>
 
 
 <div class="viewcode-block" id="IocInstance"><a class="viewcode-back" href="../../reference/api.html#ibek.support.IocInstance">[docs]</a><span class="nd">@dataclass</span>
 <span class="k">class</span> <span class="nc">IocInstance</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    A base class for all generated module classes. Provides the deserialize</span>
-<span class="sd">    entry point.</span>
+<span class="sd">    A base class for all generated support module classes.</span>
+
+<span class="sd">    This lists all the entities a generic IOC is capable of instantiating.</span>
+<span class="sd">    It may include Entity classes defined in multiple support modules that</span>
+<span class="sd">    exist within a given generic IOC container</span>
+
+<span class="sd">    Provides the deserialize entry point.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">ioc_name</span><span class="p">:</span> <span class="nb">str</span>
     <span class="n">description</span><span class="p">:</span> <span class="nb">str</span>
-    <span class="n">instances</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">EntityInstance</span><span class="p">]</span>
+    <span class="n">entities</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Entity</span><span class="p">]</span>
 
     <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">deserialize</span><span class="p">(</span><span class="bp">cls</span><span class="p">:</span> <span class="n">Type</span><span class="p">[</span><span class="n">T</span><span class="p">],</span> <span class="n">d</span><span class="p">:</span> <span class="n">Mapping</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">T</span><span class="p">:</span>
@@ -316,11 +320,16 @@
 
 <div class="viewcode-block" id="Support"><a class="viewcode-back" href="../../reference/api.html#ibek.support.Support">[docs]</a><span class="nd">@dataclass</span>
 <span class="k">class</span> <span class="nc">Support</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;Lists the entities a support module can build&quot;&quot;&quot;</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Lists the definitions for a support module, this defines what Entities it supports</span>
+
+<span class="sd">    Provides the deserialize entry point.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">module</span><span class="p">:</span> <span class="n">A</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">desc</span><span class="p">(</span><span class="s2">&quot;Support module name, normally the repo name&quot;</span><span class="p">)]</span>
-    <span class="n">entities</span><span class="p">:</span> <span class="n">A</span><span class="p">[</span>
-        <span class="n">Sequence</span><span class="p">[</span><span class="n">Entity</span><span class="p">],</span> <span class="n">desc</span><span class="p">(</span><span class="s2">&quot;The entities an IOC can create using this module&quot;</span><span class="p">)</span>
+    <span class="n">definitions</span><span class="p">:</span> <span class="n">A</span><span class="p">[</span>
+        <span class="n">Sequence</span><span class="p">[</span><span class="n">Definition</span><span class="p">],</span>
+        <span class="n">desc</span><span class="p">(</span><span class="s2">&quot;The definitions an IOC can create using this module&quot;</span><span class="p">),</span>
     <span class="p">]</span>
 
     <span class="nd">@classmethod</span>

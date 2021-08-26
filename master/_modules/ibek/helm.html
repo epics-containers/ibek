@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>ibek.helm &mdash; ibek 0.2+45.g6e7a8e8 documentation</title>
+  <title>ibek.helm &mdash; ibek 0.2+50.ge14f320 documentation</title>
   
 
   
@@ -237,7 +237,7 @@
 <span class="kn">from</span> <span class="nn">jinja2</span> <span class="kn">import</span> <span class="n">Template</span>
 <span class="kn">from</span> <span class="nn">ruamel.yaml.main</span> <span class="kn">import</span> <span class="n">YAML</span>
 
-<span class="kn">from</span> <span class="nn">ibek.generator</span> <span class="kn">import</span> <span class="n">from_yaml</span>
+<span class="kn">from</span> <span class="nn">ibek.generator</span> <span class="kn">import</span> <span class="n">from_support_module_definition</span>
 <span class="kn">from</span> <span class="nn">ibek.render</span> <span class="kn">import</span> <span class="n">render_database_elements</span><span class="p">,</span> <span class="n">render_script_elements</span>
 <span class="kn">from</span> <span class="nn">ibek.support</span> <span class="kn">import</span> <span class="n">IocInstance</span>
 
@@ -253,7 +253,7 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="c1"># Dynamically generate dataclasses from the support module defintion file</span>
-    <span class="n">support_definition</span> <span class="o">=</span> <span class="n">from_yaml</span><span class="p">(</span><span class="n">definition_yaml</span><span class="p">)</span>
+    <span class="n">support_definition</span> <span class="o">=</span> <span class="n">from_support_module_definition</span><span class="p">(</span><span class="n">definition_yaml</span><span class="p">)</span>
 
     <span class="c1"># Open jinja template for startup script and fill it in with script</span>
     <span class="c1"># elements and database elements parsed from the defintion file</span>
