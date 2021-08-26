@@ -1,21 +1,110 @@
 .. _entities:
 
-Entities, Definitions and Modules
+Modules, Definitions and Entities
 =================================
 
-This is an explanation of the above key terms by referencing the
+This page is a top down explanation of the above key terms by referencing the
 example IOC instance bl45p-mo-ioc-02 used in the system tests for this
 project.
 
 The explanations rely on an understanding of the difference between
-generic IOCs and IOC instances. See `Generic IOCs and instances <https://epics-containers.github.io/main/explanations/introduction.html#generic-iocs-and-instances>`_.
+generic IOCs and IOC instances. See
+`Generic IOCs and instances <https://epics-containers.github.io/main/explanations/introduction.html#generic-iocs-and-instances>`_.
+
+TODO: this document should also reference the classes in the code that
+implement these concepts: (But at present Definition == class Entity
+and Entity == class EntityInstance and there is no class to represent
+Containers as groups of Modules as yet)
+
+Modules
+-------
+
+Every generic IOC image will include a number of EPICS support modules.
+
+The bl45p-mo-ioc-02 ioc instance example uses the generic IOC container image
+`ioc-pmac <https://github.com/epics-containers/ioc-pmac>`_ . This image
+contains the support modules pmac and motor plus the common support modules
+from `epics-modules <https://github.com/epics-containers/epics-modules>`_
+
+Each IOC instance will mount a generic IOC image and therefore be able to make
+use of the libraries and DB templates in any of those support modules.
+
+The goal of ibek is to allow a developer to define an instance of an IOC and
+make use of functions of its support modules.
+
+ibek uses a **support module definition file** to determine what
+features of a support module may be instantiated.
+
+Hence there is a collection of **support module definition files**
+inside of each generic IOC.
+
+
+Definition
+----------
+
+Each support module has its own **support module definition file** . This
+is a YAML file whose name is by convention ``<support_module>.ibek.yaml``
+
+At present these will all reside in a folder called /ibek in the container
+image. In future each support module could have its own /ibek folder.
+
+The **support module definition file** contains **Definitions** which
+determine what **Entities** an IOC instance may instantiate.
+
+For example the pmac support module declares the following **Definitions**
+in ``pmac.ibek.yaml``
+(currently this is limited to 3 - the full implementation would have more):
+
+  - Geobrick
+
+  - DlsPmacAsynIPPort
+
+  - DlsPmacAsynMotor
+
+Each Definition describes a class of Entity by providing:
+
+  - Entity class name
+
+  - a list of arguments to supply when declaring an Entity
+
+  - boot script entries to add for the Entity in the form of a jinja
+    template that may refer to the above arguments
+
+  - database templates to instantiate for the Entity with macro values from
+    the above arguments
+
+
+Expand below for the example pmac **support module definition file**:
+
+    .. raw:: html
+
+        <details>
+        <summary><a>pmac.ibek.yaml</a></summary>
+
+    .. include:: ../../tests/samples/yaml/pmac.ibek.yaml
+        :literal:
+
+    .. raw:: html
+
+        </details>
+
 
 
 Entity
 ------
 
+ibek can generate an IOC instance using an
+**IOC instance entity file**. This is
+a YAML file with name of the form ``<ioc_name>.<container>.yaml``.
+
+The **IOC instance entity file** declares the Entities that the IOC
+instance requires.
+
 An Entity represents any piece of functionality of an IOC that is
 configured through EPICS database and/or startup script.
+
+The classes of Entity that can be instantiated for a given generic IOC are
+declared in the Definitions files described above.
 
 Declaring an Entity
 for an IOC instance will cause ibek to generate lines in the startup script.
@@ -52,11 +141,7 @@ The example motion IOC instance bl45p-mo-ioc-02 has the following entities:
 
         - dbLoadRecords of dls_pmac_asyn_motor.template
 
-To declare the entities for an IOC instance requires an
-**IOC instance entity file**. This is
-a YAML file with name of the form *<ioc_name>.<container>.yaml*.
-
-The example IOC instance entity file is shown below along with the ioc.boot
+The example **IOC instance entity file** is shown below along with the ioc.boot
 file that ibek will generate from it.
 
 Click the arrows to reveal the files.
@@ -81,70 +166,6 @@ Click the arrows to reveal the files.
     .. raw:: html
 
         </details>
-
-Definition
-----------
-
-A given support module will implement a number of classes of Entity.
-
-For example the pmac support module provides the following classes of
-Entity (currently - the full implementation would have more):
-
-  - DlsPmacAsynIPPort
-
-  - Geobrick
-
-  - DlsPmacAsynMotor
-
-Each support module must provide ibek with details its classes of Entity.
-This is done in a **support module definition file** with name of the
-form *<support_module>.ibek.yaml*.
-
-The file contains a list of Definitions. Each Definition describes a class of
-Entity by providing:
-
-  - Entity class name
-
-  - a list of arguments to supply when declaring an Entity
-
-  - boot script entries to add for the Entity in the form of a jinja
-    template that may refer to the above arguments
-
-  - database templates to instantiate for the Entity with macro values from
-    the above arguments
-
-
-
-Expand below for the example pmac support module definition file:
-
-    .. raw:: html
-
-        <details>
-        <summary><a>pmac.ibek.yaml</a></summary>
-
-    .. include:: ../../tests/samples/yaml/pmac.ibek.yaml
-        :literal:
-
-    .. raw:: html
-
-        </details>
-
-
-Modules
--------
-
-Every generic IOC image will include a number of EPICS support modules.
-
-Each IOC instance will mount such an image and therefore be able to make
-use of the functionality in any of those support modules.
-
-This implies that there is a collection of **support module definition files**
-for each generic IOC.
-
-Thus the full set of classes of Entity that the IOC supports is a union of the
-Entity classes supplied by the definition files of all the support modules in
-a given generic IOC.
-
 
 Schemas
 -------
@@ -230,19 +251,3 @@ The ibek commands to progress through the file sequence above are as follows
         - ``ibek build-ioc  <ioc_name>.<container>.yaml ...`` run at IOC deploy time
           against all <support_module>.ibek.yaml
 
-TODO: currently the code only handles a single <support>.ibek.yaml for the ibek-schema
-and build-ioc commands.
-
-TODO: we need a way for the container to publish <container>.schema.json.
-
-TODO: we also need do one of:
-
-  - publish all of <support_module>.ibek.yaml from the container
-
-  - generate the boot script at launch time inside the container.
-
-      - this breaks making a helm chart with ibek though, the helm chart would have
-        to become generic and have no boot script.
-
-      - this is a bit of a shame because ibek also does minor tweaks to the helm
-        Chart.yaml and values.yaml so we would need a new mechanism for those files.
