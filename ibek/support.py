@@ -1,7 +1,6 @@
 """
 The Support Class represents a deserialized <MODULE_NAME>.ibek.yaml file.
 It contains a hierarchy of Entity dataclasses.
-
 """
 
 from dataclasses import dataclass
@@ -43,12 +42,12 @@ class Database:
 
 
 @dataclass
-class Entity:
+class Definition:
     """
-    A single entity that an IOC can instantiate
+    A single definition of a class of Entity that an IOC instance may instantiate
     """
 
-    name: A[str, desc("Publish Entity as type <module>.<name> for IOC instances")]
+    name: A[str, desc("Publish Definition as type <module>.<name> for IOC instances")]
     args: A[Sequence[Arg], desc("The arguments IOC instance should supply")] = ()
     databases: A[Sequence[Database], desc("Databases to instantiate")] = ()
     script: A[
@@ -57,29 +56,34 @@ class Entity:
 
 
 @dataclass
-class EntityInstance:
+class Entity:
     """
-    A baseclass for all generated EntityInstance classes. Provides the
+    A baseclass for all generated Entity classes. Provides the
     deserialize entry point.
     """
 
-    # a link back to the Entity Object that generated this EntityInstance
-    entity: ClassVar[Entity]
+    # a link back to the Entity Object that generated this Entity
+    entity: ClassVar[Definition]
 
     def __init_subclass__(cls) -> None:
-        deserializer(Conversion(identity, source=cls, target=EntityInstance))
+        deserializer(Conversion(identity, source=cls, target=Entity))
 
 
 @dataclass
 class IocInstance:
     """
-    A base class for all generated module classes. Provides the deserialize
-    entry point.
+    A base class for all generated support module classes.
+
+    This lists all the entities a generic IOC is capable of instantiating.
+    It may include Entity classes defined in multiple support modules that
+    exist within a given generic IOC container
+
+    Provides the deserialize entry point.
     """
 
     ioc_name: str
     description: str
-    instances: Sequence[EntityInstance]
+    entities: Sequence[Entity]
 
     @classmethod
     def deserialize(cls: Type[T], d: Mapping[str, Any]) -> T:
@@ -88,11 +92,16 @@ class IocInstance:
 
 @dataclass
 class Support:
-    """Lists the entities a support module can build"""
+    """
+    Lists the definitions for a support module, this defines what Entities it supports
+
+    Provides the deserialize entry point.
+    """
 
     module: A[str, desc("Support module name, normally the repo name")]
-    entities: A[
-        Sequence[Entity], desc("The entities an IOC can create using this module")
+    definitions: A[
+        Sequence[Definition],
+        desc("The definitions an IOC can create using this module"),
     ]
 
     @classmethod

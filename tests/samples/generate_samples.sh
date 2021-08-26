@@ -7,7 +7,7 @@
 # verifiction of the files in the samples folders after running.
 #
 
-export SAMPLES_DIR=$(dirname "${BASH_SOURCE[0]}")
+export SAMPLES_DIR=$(realpath $(dirname "${BASH_SOURCE[0]}"))
 
 echo making the global schema
 pipenv run ibek ibek-schema ${SAMPLES_DIR}/schemas/ibek.schema.json
@@ -22,7 +22,9 @@ cp /tmp/ioc/bl45p-mo-ioc-02/values.yaml ${SAMPLES_DIR}/helm/
 cp /tmp/ioc/bl45p-mo-ioc-02/Chart.yaml ${SAMPLES_DIR}/helm/
 
 echo making sample pmac defintiion object
-pipenv run ibek dump-support tests/samples/yaml/pmac.ibek.yaml
+pipenv run ibek dump-support ${SAMPLES_DIR}/yaml/pmac.ibek.yaml
 cat ${SAMPLES_DIR}/black/preamble /tmp/support.py > ${SAMPLES_DIR}/classes/pmac_support.py
 cd ${SAMPLES_DIR}/black
 pipenv run black --experimental-string-processing ${SAMPLES_DIR}/classes
+cd -
+

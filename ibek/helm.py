@@ -9,7 +9,7 @@ from typing import Tuple
 from jinja2 import Template
 from ruamel.yaml.main import YAML
 
-from ibek.generator import from_yaml
+from ibek.generator import from_support_module_definition
 from ibek.render import render_database_elements, render_script_elements
 from ibek.support import IocInstance
 
@@ -25,7 +25,7 @@ def create_boot_script(
     """
 
     # Dynamically generate dataclasses from the support module defintion file
-    support_definition = from_yaml(definition_yaml)
+    support_definition = from_support_module_definition(definition_yaml)
 
     # Open jinja template for startup script and fill it in with script
     # elements and database elements parsed from the defintion file

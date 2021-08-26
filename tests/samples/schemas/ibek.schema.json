@@ -5,14 +5,14 @@
       "type": "string",
       "description": "Support module name, normally the repo name"
     },
-    "entities": {
+    "definitions": {
       "type": "array",
       "items": {
         "type": "object",
         "properties": {
           "name": {
             "type": "string",
-            "description": "Publish Entity as type <module>.<name> for IOC instances"
+            "description": "Publish Definition as type <module>.<name> for IOC instances"
           },
           "args": {
             "type": "array",
@@ -184,12 +184,12 @@
         ],
         "additionalProperties": false
       },
-      "description": "The entities an IOC can create using this module"
+      "description": "The definitions an IOC can create using this module"
     }
   },
   "required": [
     "module",
-    "entities"
+    "definitions"
   ],
   "additionalProperties": false,
   "$schema": "http://json-schema.org/draft/2019-09/schema#"

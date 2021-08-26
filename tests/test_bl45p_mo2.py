@@ -21,7 +21,7 @@ BL45P_MO_IOC_02 = fix_code(
     """pmac(
     ioc_name='bl45p-mo-ioc-02',
     description='an example motion ioc for ibek testing',
-    instances=(
+    entities=(
         pmac.PmacAsynIPPort(
             type='pmac.PmacAsynIPPort',
             name='BRICK1port',

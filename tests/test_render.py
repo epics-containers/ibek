@@ -1,13 +1,13 @@
 """
 Tests for the rendering of scripts and database entries from generated
-EntityInstance classes
+Entity classes
 """
 from pathlib import Path
 
 from pytest import fixture
 from ruamel.yaml import YAML
 
-from ibek.generator import from_yaml
+from ibek.generator import from_support_module_definition
 from ibek.globals import namespace
 from ibek.render import render_database, render_script
 from ibek.support import Support
@@ -20,7 +20,7 @@ sample_yaml = Path(__file__).parent / "samples" / "yaml"
 def pmac_classes():
     # create a support object from YAML - this has the side effect of
     # populating namespace with all of the generated classes
-    from_yaml(sample_yaml / "pmac.ibek.yaml")
+    from_support_module_definition(sample_yaml / "pmac.ibek.yaml")
 
     # return the namespace so that callers have access to all of the
     # generated dataclasses

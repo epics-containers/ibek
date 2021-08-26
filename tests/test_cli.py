@@ -6,7 +6,7 @@ from typer.testing import CliRunner
 
 from ibek import __version__
 from ibek.__main__ import cli
-from ibek.generator import from_yaml
+from ibek.generator import from_support_module_definition
 
 runner = CliRunner()
 
@@ -68,7 +68,7 @@ def test_build_ioc(tmp_path: Path):
 
 def test_may_fail(tmp_path: Path):
     # When we deserialize the same yaml twice as we do in the full test suite
-    # we may get clashes in the namespace of generated EntityInstance classes.
+    # we may get clashes in the namespace of generated Entity classes.
     #
     # I have seen errors like this:
     #   <Result ValueError("Types <class 'types.pmac.Geobrick'> and
@@ -80,17 +80,17 @@ def test_may_fail(tmp_path: Path):
     # working on it the error has gone away and I don't understand whats up.
     #
     # I believe that this is the issue that Richard originally solved by
-    # defining the EntityInstance base class in the scope of Support.
+    # defining the Entity base class in the scope of Support.
     # (I gave it global scope because I want to)
     definition_file = sample_yaml / "pmac.ibek.yaml"
 
-    ioc_class1 = from_yaml(definition_file)
+    ioc_class1 = from_support_module_definition(definition_file)
 
     schema1 = json.dumps(deserialization_schema(ioc_class1), indent=2)
     with open(tmp_path / "schema1", "w") as f:
         f.write(schema1)
 
-    ioc_class2 = from_yaml(definition_file)
+    ioc_class2 = from_support_module_definition(definition_file)
     schema2 = json.dumps(deserialization_schema(ioc_class2), indent=2)
     with open(tmp_path / "schema2", "w") as f:
         f.write(schema2)

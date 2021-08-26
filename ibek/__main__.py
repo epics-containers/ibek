@@ -7,7 +7,7 @@ from apischema.json_schema import deserialization_schema
 from ruamel.yaml import YAML
 
 from ibek import __version__
-from ibek.generator import from_yaml
+from ibek.generator import from_support_module_definition
 from ibek.helm import create_boot_script, create_helm
 from ibek.support import Support
 
@@ -38,7 +38,7 @@ def main(
 def ibek_schema(
     output: Path = typer.Argument(..., help="The filename to write the schema to")
 ):
-    """Produce the JSON schema for a <support_module>.ibek.yaml file"""
+    """Produce the JSON global schema for all <support_module>.ibek.yaml files"""
     schema = json.dumps(deserialization_schema(Support), indent=2)
     with open(output, "w") as f:
         f.write(schema)
@@ -47,12 +47,15 @@ def ibek_schema(
 @cli.command()
 def ioc_schema(
     description: Path = typer.Argument(
-        ..., help="The filepath to read the IOC class description from"
+        ..., help="The filepath to a support module definition file"
     ),
     output: Path = typer.Argument(..., help="The filename to write the schema to"),
 ):
-    """Create a json schema from a <support_module>.ibek.yaml file"""
-    ioc_class = from_yaml(description)
+    """
+    Create a json schema from a <support_module>.ibek.yaml file
+    TODO: update to take multiple definition files from a container
+    """
+    ioc_class = from_support_module_definition(description)
 
     schema = json.dumps(deserialization_schema(ioc_class), indent=2)
     with open(output, "w") as f:
@@ -62,14 +65,23 @@ def ioc_schema(
 @cli.command()
 def build_ioc(
     definition: Path = typer.Argument(
-        ..., help="The filepath to the ioc definition file"
+        ..., help="The filepath to a support module definition file"
     ),
-    instance: Path = typer.Argument(..., help="The filepath to the ioc instance file"),
+    instance: Path = typer.Argument(
+        ..., help="The filepath to the ioc instance entity file"
+    ),
     out: Path = typer.Argument(
         default="iocs", help="Path in which to build the helm chart"
     ),
 ):
-    """Build a startup script, database and Helm chart from <ioc>.yaml"""
+    """
+    Build a startup script, database and Helm chart from <ioc>.yaml
+    TODO: update to take multiple definition files from a container
+    TODO: needs to be split into build_ioc:
+            makes a generic helm chart including <ioc>.yaml
+          and make_startup:
+            makes a startup script for the ioc from <ioc>.yaml
+    """
 
     ioc_instance, script_txt = create_boot_script(
         ioc_instance_yaml=instance, definition_yaml=definition

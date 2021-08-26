@@ -8,7 +8,7 @@
     "description": {
       "type": "string"
     },
-    "instances": {
+    "entities": {
       "type": "array",
       "items": {
         "anyOf": [
@@ -309,13 +309,13 @@
           }
         ]
       },
-      "description": "List of entity instances of the IOCs"
+      "description": "List of classes of Entity this IOC supports"
     }
   },
   "required": [
     "ioc_name",
     "description",
-    "instances"
+    "entities"
   ],
   "additionalProperties": false,
   "$schema": "http://json-schema.org/draft/2019-09/schema#"

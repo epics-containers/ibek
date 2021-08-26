@@ -8,7 +8,7 @@ This preamble file is added to the head of the generated class
 from apischema.utils import Undefined
 
 from ibek.argument import FloatArg, IntArg, StrArg
-from ibek.support import Database, Entity, Support
+from ibek.support import Database, Definition, Support
 
 """
 This represents the generated instance of a Support Object which is an
