@@ -1,6 +1,6 @@
 ioc_name: bl45p-mo-ioc-02
 description: an example motion ioc for ibek testing
-instances:
+entities:
   - type: pmac.PmacAsynIPPort
     name: BRICK1port
     IP: 192.168.0.12:1112

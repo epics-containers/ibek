@@ -1,7 +1,6 @@
 """
 The Support Class represents a deserialized <MODULE_NAME>.ibek.yaml file.
 It contains a hierarchy of Entity dataclasses.
-
 """
 
 from dataclasses import dataclass
@@ -73,13 +72,18 @@ class Entity:
 @dataclass
 class IocInstance:
     """
-    A base class for all generated module classes. Provides the deserialize
-    entry point.
+    A base class for all generated support module classes.
+
+    This lists all the entities a generic IOC is capable of instantiating.
+    It may include Entity classes defined in multiple support modules that
+    exist within a given generic IOC container
+
+    Provides the deserialize entry point.
     """
 
     ioc_name: str
     description: str
-    instances: Sequence[Entity]
+    entities: Sequence[Entity]
 
     @classmethod
     def deserialize(cls: Type[T], d: Mapping[str, Any]) -> T:
@@ -88,11 +92,17 @@ class IocInstance:
 
 @dataclass
 class Support:
-    """Lists the entities a support module can build"""
+    """
+    Lists the definitions for a support module,
+    this defines what Entities it supports
+
+    Provides the deserialize entry point.
+    """
 
     module: A[str, desc("Support module name, normally the repo name")]
-    entities: A[
-        Sequence[Definition], desc("The entities an IOC can create using this module")
+    definitions: A[
+        Sequence[Definition],
+        desc("The definitions an IOC can create using this module"),
     ]
 
     @classmethod

@@ -1,8 +1,6 @@
 """
-Functions for generating an IocInstance class with
-
-and list of
-Entity classes from support module definition YAML
+Functions for generating an IocInstance derived class from a
+support module definition YAML file
 """
 
 import builtins
@@ -19,37 +17,9 @@ from ibek.globals import desc, namespace
 from ibek.support import Definition, Entity, IocInstance, Support
 
 
-def get_module(support: Support) -> Type[IocInstance]:
+def from_support_module_definition(definition_file: Path) -> Type["IocInstance"]:
     """
-    Generate an IocInstance derived class with its a set of Entity classes,
-    from a support module definition
-    """
-
-    # place the Entity base class in the dynamic classes global namespace
-    namespace["Entity"] = Entity
-
-    for entity in support.entities:
-        get_entity_instances(
-            entity, namespace["Entity"], namespace, support.module,
-        )
-
-    namespace[support.module] = make_dataclass(
-        support.module,
-        [
-            ("ioc_name", A[str, desc("Name of IOC")]),
-            (
-                "instances",
-                A[Sequence[Entity], desc("List of entity instances of the IOCs")],
-            ),
-        ],
-        bases=(IocInstance,),
-    )
-    return namespace[support.module]
-
-
-def from_yaml(definition_file: Path) -> Type["IocInstance"]:
-    """
-    A class factory method to read in a support module definition file and
+    Read in a support module definition file and
     generate an IocInstance derived class
     """
 
@@ -64,13 +34,48 @@ def from_yaml(definition_file: Path) -> Type["IocInstance"]:
     return module_dataclass
 
 
-def get_entity_instances(
+def get_module(support: Support) -> Type[IocInstance]:
+    """
+    Generate an IocInstance derived class with its a set of Entity classes,
+
+    from a support module definition.
+
+    TODO: this function needs to be able to agreggate multiple Support module
+    definition files and hence list the Entity classes from all of the
+    Support modules within a given Generic IOC Container
+    """
+
+    # place the Entity base class in the dynamic classes global namespace
+    namespace["Entity"] = Entity
+
+    for entity in support.definitions:
+        get_entity_classes(
+            entity, namespace["Entity"], namespace, support.module,
+        )
+
+    namespace[support.module] = make_dataclass(
+        support.module,
+        [
+            ("ioc_name", A[str, desc("Name of IOC")]),
+            (
+                "entities",
+                A[Sequence[Entity], desc("List of entity instances of the IOCs")],
+            ),
+        ],
+        bases=(IocInstance,),
+    )
+    return namespace[support.module]
+
+
+def get_entity_classes(
     entity: Definition, baseclass: Any, namespace: Dict[str, Any], module_name: str,
 ):
     """
-    We can get a set of Entities by deserializing an ibek support module
-    YAML file. This  function creates an Entity class from
-    an Entity. See :ref:`entities`
+    We can get a set of Definitions by deserializing an ibek
+    support module definition YAML file.
+
+    This function then creates an Entity derived class from each Definition.
+    See :ref:`entities`
     """
     # we need to qualify the name with the module so as to avoid cross
     # module name clashes
@@ -103,12 +108,10 @@ def get_entity_instances(
         fields.append(this_field)
 
     # make the Entity derived dataclass for this EntityClass
-    entity_instance_cls: Entity = cast(
-        Entity, make_dataclass(name, fields, bases=(baseclass,))
-    )
+    entity_cls: Entity = cast(Entity, make_dataclass(name, fields, bases=(baseclass,)))
 
     # add a reference to the entity class for this entity instance class
     # (oh boy, that sounds confusing: see `explanations/entities`)
-    setattr(entity_instance_cls, "entity", entity)
+    setattr(entity_cls, "entity", entity)
 
-    namespace[name] = entity_instance_cls
+    namespace[name] = entity_cls

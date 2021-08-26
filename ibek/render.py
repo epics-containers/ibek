@@ -48,7 +48,7 @@ def render_script_elements(entity_instances: IocInstance) -> str:
     Render all of the startup script entries for a given IOC instance
     """
     scripts = ""
-    for instance in entity_instances.instances:
+    for instance in entity_instances.entities:
         scripts += render_script(instance) + "\n"
     return scripts
 
@@ -58,6 +58,6 @@ def render_database_elements(entity_instances: IocInstance) -> str:
     Render all of the DBLoadRecords entries for a given IOC instance
     """
     databases = ""
-    for instance in entity_instances.instances:
+    for instance in entity_instances.entities:
         databases += render_database(instance) + "\n"
     return databases

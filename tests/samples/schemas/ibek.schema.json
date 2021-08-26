@@ -5,7 +5,7 @@
       "type": "string",
       "description": "Support module name, normally the repo name"
     },
-    "entities": {
+    "definitions": {
       "type": "array",
       "items": {
         "type": "object",
@@ -184,12 +184,12 @@
         ],
         "additionalProperties": false
       },
-      "description": "The entities an IOC can create using this module"
+      "description": "The definitions an IOC can create using this module"
     }
   },
   "required": [
     "module",
-    "entities"
+    "definitions"
   ],
   "additionalProperties": false,
   "$schema": "http://json-schema.org/draft/2019-09/schema#"

@@ -8,7 +8,7 @@
     "description": {
       "type": "string"
     },
-    "instances": {
+    "entities": {
       "type": "array",
       "items": {
         "anyOf": [
@@ -315,7 +315,7 @@
   "required": [
     "ioc_name",
     "description",
-    "instances"
+    "entities"
   ],
   "additionalProperties": false,
   "$schema": "http://json-schema.org/draft/2019-09/schema#"

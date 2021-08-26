@@ -12,7 +12,7 @@ from ibek.support import Database, Definition, Support
 
 """
 This represents the generated instance of a Support Object which is an
-object graph of Definition instandes. It is the product of deserializing
+object graph of Entity instandes. It is the product of deserializing
 pmac.ibek.yaml
 """
 
@@ -23,7 +23,7 @@ pmac.ibek.yaml
 
 SUPPORT = Support(
     module="pmac",
-    entities=(
+    definitions=(
         Definition(
             name="Geobrick",
             args=(
