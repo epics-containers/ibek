@@ -7,7 +7,7 @@ from typing import TypeVar
 
 from jinja2 import Template
 
-from ibek.support import Entity, IocInstance
+from ibek.support import Entity, GenericIoc
 
 T = TypeVar("T")
 
@@ -43,7 +43,7 @@ def render_database(instance: Entity) -> str:
     return db_txt
 
 
-def render_script_elements(ioc: IocInstance) -> str:
+def render_script_elements(ioc: GenericIoc) -> str:
     """
     Render all of the startup script entries for a given IOC instance
     """
@@ -53,7 +53,7 @@ def render_script_elements(ioc: IocInstance) -> str:
     return scripts
 
 
-def render_database_elements(ioc: IocInstance) -> str:
+def render_database_elements(ioc: GenericIoc) -> str:
     """
     Render all of the DBLoadRecords entries for a given IOC instance
     """

@@ -11,7 +11,7 @@ from ruamel.yaml.main import YAML
 
 from ibek.generator import from_support_module_definition
 from ibek.render import render_database_elements, render_script_elements
-from ibek.support import IocInstance
+from ibek.support import GenericIoc
 
 HELM_TEMPLATE = Path(__file__).parent.parent / "helm-template"
 TEMPLATES = Path(__file__).parent / "templates"
@@ -19,7 +19,7 @@ TEMPLATES = Path(__file__).parent / "templates"
 
 def create_boot_script(
     ioc_instance_yaml: Path, definition_yaml: Path
-) -> Tuple[IocInstance, str]:
+) -> Tuple[GenericIoc, str]:
     """
     Create the boot script for an IOCs helm chart
     """
@@ -59,7 +59,7 @@ def render_file(file_template: Path, **kwargs):
     file_template.unlink()
 
 
-def create_helm(instance: IocInstance, script_txt: str, path: Path):
+def create_helm(instance: GenericIoc, script_txt: str, path: Path):
     """
     create a boilerplate helm chart with name str in folder path
 
