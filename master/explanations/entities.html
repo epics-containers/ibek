@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>Modules, Definitions and Entities &mdash; ibek 0.2+53.gfe85798 documentation</title>
+  <title>Modules, Definitions and Entities &mdash; ibek 0.2+56.gcedf422 documentation</title>
   
 
   
@@ -313,6 +313,10 @@ definitions:
         description: PV Prefix for all pmac db templates
 
       - type: int
+        name: numAxes
+        description: number of axes to initialize for the controller
+
+      - type: int
         name: idlePoll
         description: Idle Poll Period in ms
 
@@ -323,8 +327,8 @@ definitions:
     # axes hard coded to 8 for geobrick (builder.py counted the axes created)
     # TODO is num_axes is an example of something hard to do in this new approach?
     script:
-      - pmacCreateController({{name}}, {{PORT}}, 0, 8, {{movingPoll}}, {{idlePoll}})
-      - pmacCreateAxes({{name}}, 8)
+      - pmacCreateController({{name}}, {{PORT}}, 0, {{numAxes}}, {{movingPoll}}, {{idlePoll}})
+      - pmacCreateAxes({{name}}, {{numAxes}})
 
     databases:
       - file: pmacController.template
@@ -617,59 +621,60 @@ definitions:
     databases:
       - file: $(PMAC)/db/dls_pmac_asyn_motor.template
         define_args: &gt;
-          P={{ P }},
-          M={{ M }},
-          PORT={{ PORT }},
-          ADDR={{ axis }},
-          DESC={{ DESC }},
-          MRES={{ MRES }},
-          VELO={{ VELO }},
-          PREC={{ PREV }},
-          EGU={{ EGU }},
-          TWV={{ TWV }},
-          DTYP={{ DTYP }},
-          DIR={{ DIR }},
-          VBAS={{ VBAS }},
-          VMAX={{ VMAX }},
-          ACCL={{ ACCL }},
-          BDST={{ BDST }},
-          BVEL={{ BVEL }},
-          BACC={{ BACC }},
-          DHLM={{ DHLM }},
-          DLLM={{ DLLM }},
-          HLM={{ HLM }},
-          LLM={{ LLM }},
-          HLSV={{ HLSV }},
-          INIT={{ INIT }},
-          SREV={{ SREV }},
-          RRES={{ RRES }},
-          ERES={{ ERES }},
-          JAR={{ JAR }},
-          UEIP={{ UEIP }},
-          RDBL={{ RDBL }},
-          RLINK={{ RLINK }},
-          RTRY={{ RTRY }},
-          DLY={{ DLY }},
-          OFF={{ OFF }},
-          RDBD={{ RDBD }},
-          FOFF={{ FOFF }},
-          ADEL={{ ADEL }},
-          NTM={{ NTM }},
-          FEHIGH={{ FEHEIGH }},
-          FEHIHI={{ FEHIHI }},
-          FEHHSV={{ FEHHSV }},
-          FEHSV={{ FEHSV }},
-          SCALE={{ SCALE }},
-          HOMEVIS={{ HOMEVIS }},
-          HOMEVISSTR={{  HOMEVISSTR  }},
-          name={{ name }},
-          alh={{ alh }},
-          gda_name={{ gda_name }},
-          gda_desc={{ gda_desc }},
-          SPORT={{ SPORT }},
-          HOME={{ HOME }},
-          PMAC={{ PMAC }},
-          ALLOW_HOMED_SET={{ ALLOW_HOMED_SET }}
+          ADDR={{ axis }}
+        include_args:
+          - P
+          - M
+          - PORT
+          - DESC
+          - MRES
+          - VELO
+          - PREC
+          - EGU
+          - TWV
+          - DTYP
+          - DIR
+          - VBAS
+          - VMAX
+          - ACCL
+          - BDST
+          - BVEL
+          - BACC
+          - DHLM
+          - DLLM
+          - HLM
+          - LLM
+          - HLSV
+          - INIT
+          - SREV
+          - RRES
+          - ERES
+          - JAR
+          - UEIP
+          - RDBL
+          - RLINK
+          - RTRY
+          - DLY
+          - OFF
+          - RDBD
+          - FOFF
+          - ADEL
+          - NTM
+          - FEHIGH
+          - FEHIHI
+          - FEHHSV
+          - FEHSV
+          - SCALE
+          - HOMEVIS
+          - HOMEVISSTR
+          - name
+          - alh
+          - gda_name
+          - gda_desc
+          - SPORT
+          - HOME
+          - PMAC
+          - ALLOW_HOMED_SET
 </pre></div>
 </div>
 </details></div></blockquote>
@@ -747,6 +752,7 @@ file that ibek will generate from it.</p>
     <span class="n">name</span><span class="p">:</span> <span class="n">BL45P</span><span class="o">-</span><span class="n">MO</span><span class="o">-</span><span class="n">BRICK</span><span class="o">-</span><span class="mi">01</span>
     <span class="n">PORT</span><span class="p">:</span> <span class="n">BRICK1port</span>
     <span class="n">P</span><span class="p">:</span> <span class="s2">&quot;BL45P-MO-STEP-01:&quot;</span>
+    <span class="n">numAxes</span><span class="p">:</span> <span class="mi">8</span>
     <span class="n">idlePoll</span><span class="p">:</span> <span class="mi">100</span>
     <span class="n">movingPoll</span><span class="p">:</span> <span class="mi">500</span>
 
@@ -789,8 +795,8 @@ file that ibek will generate from it.</p>
 
 <span class="n">dbLoadRecords</span><span class="p">(</span><span class="s2">&quot;pmacController.template&quot;</span><span class="p">,</span> <span class="s2">&quot;PMAC=BL45P-MO-STEP-01:&quot;</span><span class="p">)</span>
 <span class="n">dbLoadRecords</span><span class="p">(</span><span class="s2">&quot;pmacStatus.template&quot;</span><span class="p">,</span> <span class="s2">&quot;PMAC=BL45P-MO-STEP-01:&quot;</span><span class="p">)</span>
-<span class="n">dbLoadRecords</span><span class="p">(</span><span class="s2">&quot;$(PMAC)/db/dls_pmac_asyn_motor.template&quot;</span><span class="p">,</span> <span class="s2">&quot;P=BL45P-MO-THIN-01, M=:X1, PORT=BL45P-MO-BRICK-01, ADDR=1, DESC= , MRES=0.001, VELO=1.0, PREC=, EGU=mm, TWV=1, DTYP=asynMotor, DIR=0, VBAS=1.0, VMAX=1.0, ACCL=0.5, BDST=0.0, BVEL=0.0, BACC=0.0, DHLM=10000.0, DLLM=, HLM=0.0, LLM=0.0, HLSV=MAJOR, INIT= , SREV=1000.0, RRES=0.0, ERES=0.0, JAR=0.0, UEIP=0, RDBL=0, RLINK=, RTRY=0, DLY=0.0, OFF=0.0, RDBD=0.0, FOFF=0, ADEL=0.0, NTM=1, FEHIGH=0.0, FEHIHI=0.0, FEHHSV=NO_ALARM, FEHSV=NO_ALARM, SCALE=1, HOMEVIS=1, HOMEVISSTR=, name=X1 motor, alh= , gda_name=none, gda_desc=$(DESC), SPORT=BRICK1port, HOME=$(P), PMAC=BL45P-MO-BRICK-01, ALLOW_HOMED_SET=#&quot;</span><span class="p">)</span>
-<span class="n">dbLoadRecords</span><span class="p">(</span><span class="s2">&quot;$(PMAC)/db/dls_pmac_asyn_motor.template&quot;</span><span class="p">,</span> <span class="s2">&quot;P=BL45P-MO-THIN-01, M=:Y1, PORT=BL45P-MO-BRICK-01, ADDR=2, DESC= , MRES=0.001, VELO=1.0, PREC=, EGU=mm, TWV=1, DTYP=asynMotor, DIR=0, VBAS=1.0, VMAX=1.0, ACCL=0.5, BDST=0.0, BVEL=0.0, BACC=0.0, DHLM=10000.0, DLLM=, HLM=0.0, LLM=0.0, HLSV=MAJOR, INIT= , SREV=1000.0, RRES=0.0, ERES=0.0, JAR=0.0, UEIP=0, RDBL=0, RLINK=, RTRY=0, DLY=0.0, OFF=0.0, RDBD=0.0, FOFF=0, ADEL=0.0, NTM=1, FEHIGH=0.0, FEHIHI=0.0, FEHHSV=NO_ALARM, FEHSV=NO_ALARM, SCALE=1, HOMEVIS=1, HOMEVISSTR=, name=Y1 motor, alh= , gda_name=none, gda_desc=$(DESC), SPORT=BRICK1port, HOME=$(P), PMAC=BL45P-MO-BRICK-01, ALLOW_HOMED_SET=#&quot;</span><span class="p">)</span>
+<span class="n">dbLoadRecords</span><span class="p">(</span><span class="s2">&quot;$(PMAC)/db/dls_pmac_asyn_motor.template&quot;</span><span class="p">,</span> <span class="s2">&quot;ADDR=1, P=BL45P-MO-THIN-01, M=:X1, PORT=BL45P-MO-BRICK-01, DESC= , MRES=0.001, VELO=1.0, PREC=3.0, EGU=mm, TWV=1, DTYP=asynMotor, DIR=0, VBAS=1.0, VMAX=1.0, ACCL=0.5, BDST=0.0, BVEL=0.0, BACC=0.0, DHLM=10000.0, DLLM=, HLM=0.0, LLM=0.0, HLSV=MAJOR, INIT= , SREV=1000.0, RRES=0.0, ERES=0.0, JAR=0.0, UEIP=0, RDBL=0, RLINK=, RTRY=0, DLY=0.0, OFF=0.0, RDBD=0.0, FOFF=0, ADEL=0.0, NTM=1, FEHIGH=, FEHIHI=0.0, FEHHSV=NO_ALARM, FEHSV=NO_ALARM, SCALE=1, HOMEVIS=1, HOMEVISSTR=, name=X1 motor, alh= , gda_name=none, gda_desc=$(DESC), SPORT=BRICK1port, HOME=$(P), PMAC=BL45P-MO-BRICK-01, ALLOW_HOMED_SET=#&quot;</span><span class="p">)</span>
+<span class="n">dbLoadRecords</span><span class="p">(</span><span class="s2">&quot;$(PMAC)/db/dls_pmac_asyn_motor.template&quot;</span><span class="p">,</span> <span class="s2">&quot;ADDR=2, P=BL45P-MO-THIN-01, M=:Y1, PORT=BL45P-MO-BRICK-01, DESC= , MRES=0.001, VELO=1.0, PREC=3.0, EGU=mm, TWV=1, DTYP=asynMotor, DIR=0, VBAS=1.0, VMAX=1.0, ACCL=0.5, BDST=0.0, BVEL=0.0, BACC=0.0, DHLM=10000.0, DLLM=, HLM=0.0, LLM=0.0, HLSV=MAJOR, INIT= , SREV=1000.0, RRES=0.0, ERES=0.0, JAR=0.0, UEIP=0, RDBL=0, RLINK=, RTRY=0, DLY=0.0, OFF=0.0, RDBD=0.0, FOFF=0, ADEL=0.0, NTM=1, FEHIGH=, FEHIHI=0.0, FEHHSV=NO_ALARM, FEHSV=NO_ALARM, SCALE=1, HOMEVIS=1, HOMEVISSTR=, name=Y1 motor, alh= , gda_name=none, gda_desc=$(DESC), SPORT=BRICK1port, HOME=$(P), PMAC=BL45P-MO-BRICK-01, ALLOW_HOMED_SET=#&quot;</span><span class="p">)</span>
 
 <span class="n">cd</span> <span class="s2">&quot;$(TOP)&quot;</span>
 <span class="n">iocInit</span><span class="p">()</span>
@@ -1086,6 +1092,10 @@ the container or during container development.</p>
                 <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
                 <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;PV Prefix for all pmac db templates&quot;</span>
               <span class="p">},</span>
+              <span class="s2">&quot;numAxes&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;integer&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;number of axes to initialize for the controller&quot;</span>
+              <span class="p">},</span>
               <span class="s2">&quot;idlePoll&quot;</span><span class="p">:</span> <span class="p">{</span>
                 <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;integer&quot;</span><span class="p">,</span>
                 <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Idle Poll Period in ms&quot;</span>
@@ -1100,6 +1110,7 @@ the container or during container development.</p>
               <span class="s2">&quot;name&quot;</span><span class="p">,</span>
               <span class="s2">&quot;PORT&quot;</span><span class="p">,</span>
               <span class="s2">&quot;P&quot;</span><span class="p">,</span>
+              <span class="s2">&quot;numAxes&quot;</span><span class="p">,</span>
               <span class="s2">&quot;idlePoll&quot;</span><span class="p">,</span>
               <span class="s2">&quot;movingPoll&quot;</span>
             <span class="p">],</span>

@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>ibek.render &mdash; ibek 0.2+53.gfe85798 documentation</title>
+  <title>ibek.render &mdash; ibek 0.2+56.gcedf422 documentation</title>
   
 
   
@@ -259,11 +259,19 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">templates</span> <span class="o">=</span> <span class="n">instance</span><span class="o">.</span><span class="n">entity</span><span class="o">.</span><span class="n">databases</span>
     <span class="n">jinja_txt</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+    <span class="c1"># include list entries expand to e.g. P={{ P }}</span>
+    <span class="n">jinja_arg</span> <span class="o">=</span> <span class="n">Template</span><span class="p">(</span><span class="s1">&#39;{{ arg }}={{ &quot;{{&quot; + arg + &quot;}}&quot; }}&#39;</span><span class="p">)</span>
 
     <span class="k">for</span> <span class="n">template</span> <span class="ow">in</span> <span class="n">templates</span><span class="p">:</span>
         <span class="n">db_file</span> <span class="o">=</span> <span class="n">template</span><span class="o">.</span><span class="n">file</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
         <span class="n">db_args</span> <span class="o">=</span> <span class="n">template</span><span class="o">.</span><span class="n">define_args</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
-        <span class="n">jinja_txt</span> <span class="o">+=</span> <span class="sa">f</span><span class="s1">&#39;dbLoadRecords(&quot;</span><span class="si">{</span><span class="n">db_file</span><span class="si">}</span><span class="s1">&quot;, &#39;</span> <span class="sa">f</span><span class="s1">&#39;&quot;</span><span class="si">{</span><span class="n">db_args</span><span class="si">}</span><span class="s1">&quot;)</span><span class="se">\n</span><span class="s1">&#39;</span>
+        <span class="k">if</span> <span class="n">template</span><span class="o">.</span><span class="n">include_args</span><span class="p">:</span>
+            <span class="n">include_list</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="n">jinja_arg</span><span class="o">.</span><span class="n">render</span><span class="p">({</span><span class="s2">&quot;arg&quot;</span><span class="p">:</span> <span class="n">arg</span><span class="p">})</span> <span class="k">for</span> <span class="n">arg</span> <span class="ow">in</span> <span class="n">template</span><span class="o">.</span><span class="n">include_args</span>
+            <span class="p">]</span>
+            <span class="n">db_args</span> <span class="o">+=</span> <span class="s2">&quot;, &quot;</span> <span class="o">+</span> <span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">include_list</span><span class="p">)</span>
+
+        <span class="n">jinja_txt</span> <span class="o">+=</span> <span class="sa">f</span><span class="s1">&#39;dbLoadRecords(&quot;</span><span class="si">{</span><span class="n">db_file</span><span class="si">}</span><span class="s1">&quot;, &#39;</span> <span class="sa">f</span><span class="s1">&#39;&quot;</span><span class="si">{</span><span class="n">db_args</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">)</span><span class="si">}</span><span class="s1">&quot;)</span><span class="se">\n</span><span class="s1">&#39;</span>
 
     <span class="n">jinja_template</span> <span class="o">=</span> <span class="n">Template</span><span class="p">(</span><span class="n">jinja_txt</span><span class="p">)</span>
     <span class="n">db_txt</span> <span class="o">=</span> <span class="n">jinja_template</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="n">asdict</span><span class="p">(</span><span class="n">instance</span><span class="p">))</span>

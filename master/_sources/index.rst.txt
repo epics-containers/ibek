@@ -10,13 +10,6 @@ This project is incomplete. The following items are still to do:
 
     - Complete documentation in general
 
-    - Add a param no_axes to pmac.Geobrick instead of hardcoding 8
-
-    - update the database entry generation in jinja to make use of the property
-      include_args. This should automatically add macro substitutions for
-      macros with the same name as the argument (and greatly reduce the length
-      of the jinja template for DlsPmacAsynMotor)
-
     - Break out Helm Chart generation and boot script generation into two
       separate commands:
 
