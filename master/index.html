@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>ibek &mdash; ibek 0.2+50.ge14f320 documentation</title>
+  <title>ibek &mdash; ibek 0.2+53.gfe85798 documentation</title>
   
 
   
@@ -267,8 +267,6 @@ up the IOC contained in the image with them</p></li>
 <p>This project is incomplete. The following items are still to do:</p>
 <blockquote>
 <div><ul>
-<li><p>Modify the documentation explanations/entities, invert the explanation
-so that it is in the same order as the tables at the end.</p></li>
 <li><p>Complete documentation in general</p></li>
 <li><p>Add a param no_axes to pmac.Geobrick instead of hardcoding 8</p></li>
 <li><p>update the database entry generation in jinja to make use of the property
@@ -278,10 +276,10 @@ of the jinja template for DlsPmacAsynMotor)</p></li>
 <li><p>Break out Helm Chart generation and boot script generation into two
 separate commands:</p>
 <ul class="simple">
-<li><p>make-helm will make a helm chart which just has the ioc instance yaml
+<li><p>build-helm will make a helm chart which just has the ioc instance yaml
 in its config folder. This is to be run outside of the container to
 make the helm chart</p></li>
-<li><p>make-script will generate an ioc.boot from an instance yaml and this
+<li><p>make-boot will generate an ioc.boot from an instance yaml and this
 will run inside the container at ioc startup and hence have access to
 all the needed &lt;support&gt;.ibek.yaml definition files.</p></li>
 <li><p>this will require changes to start.sh to support converting yaml to

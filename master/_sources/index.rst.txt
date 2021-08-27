@@ -8,8 +8,6 @@ TODO
 
 This project is incomplete. The following items are still to do:
 
-    - Modify the documentation explanations/entities, invert the explanation
-      so that it is in the same order as the tables at the end.
     - Complete documentation in general
 
     - Add a param no_axes to pmac.Geobrick instead of hardcoding 8
@@ -22,11 +20,11 @@ This project is incomplete. The following items are still to do:
     - Break out Helm Chart generation and boot script generation into two
       separate commands:
 
-      - make-helm will make a helm chart which just has the ioc instance yaml
+      - build-helm will make a helm chart which just has the ioc instance yaml
         in its config folder. This is to be run outside of the container to
         make the helm chart
 
-      - make-script will generate an ioc.boot from an instance yaml and this
+      - make-boot will generate an ioc.boot from an instance yaml and this
         will run inside the container at ioc startup and hence have access to
         all the needed <support>.ibek.yaml definition files.
 

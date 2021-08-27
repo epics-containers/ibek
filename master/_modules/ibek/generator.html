@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>ibek.generator &mdash; ibek 0.2+50.ge14f320 documentation</title>
+  <title>ibek.generator &mdash; ibek 0.2+53.gfe85798 documentation</title>
   
 
   
@@ -242,10 +242,10 @@
 <span class="kn">from</span> <span class="nn">typing_extensions</span> <span class="kn">import</span> <span class="n">Literal</span>
 
 <span class="kn">from</span> <span class="nn">ibek.globals</span> <span class="kn">import</span> <span class="n">desc</span><span class="p">,</span> <span class="n">namespace</span>
-<span class="kn">from</span> <span class="nn">ibek.support</span> <span class="kn">import</span> <span class="n">Definition</span><span class="p">,</span> <span class="n">Entity</span><span class="p">,</span> <span class="n">IocInstance</span><span class="p">,</span> <span class="n">Support</span>
+<span class="kn">from</span> <span class="nn">ibek.support</span> <span class="kn">import</span> <span class="n">Definition</span><span class="p">,</span> <span class="n">Entity</span><span class="p">,</span> <span class="n">GenericIoc</span><span class="p">,</span> <span class="n">Support</span>
 
 
-<div class="viewcode-block" id="from_support_module_definition"><a class="viewcode-back" href="../../reference/api.html#ibek.generator.from_support_module_definition">[docs]</a><span class="k">def</span> <span class="nf">from_support_module_definition</span><span class="p">(</span><span class="n">definition_file</span><span class="p">:</span> <span class="n">Path</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Type</span><span class="p">[</span><span class="s2">&quot;IocInstance&quot;</span><span class="p">]:</span>
+<div class="viewcode-block" id="from_support_module_definition"><a class="viewcode-back" href="../../reference/api.html#ibek.generator.from_support_module_definition">[docs]</a><span class="k">def</span> <span class="nf">from_support_module_definition</span><span class="p">(</span><span class="n">definition_file</span><span class="p">:</span> <span class="n">Path</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Type</span><span class="p">[</span><span class="s2">&quot;GenericIoc&quot;</span><span class="p">]:</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Read in a support module definition file and</span>
 <span class="sd">    generate an IocInstance derived class</span>
@@ -262,9 +262,9 @@
     <span class="k">return</span> <span class="n">module_dataclass</span></div>
 
 
-<div class="viewcode-block" id="get_module"><a class="viewcode-back" href="../../reference/api.html#ibek.generator.get_module">[docs]</a><span class="k">def</span> <span class="nf">get_module</span><span class="p">(</span><span class="n">support</span><span class="p">:</span> <span class="n">Support</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Type</span><span class="p">[</span><span class="n">IocInstance</span><span class="p">]:</span>
+<div class="viewcode-block" id="get_module"><a class="viewcode-back" href="../../reference/api.html#ibek.generator.get_module">[docs]</a><span class="k">def</span> <span class="nf">get_module</span><span class="p">(</span><span class="n">support</span><span class="p">:</span> <span class="n">Support</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Type</span><span class="p">[</span><span class="n">GenericIoc</span><span class="p">]:</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Generate an IocInstance derived class with its a set of Entity classes,</span>
+<span class="sd">    Generate an GenericIoc derived class and its a set of Entity classes,</span>
 
 <span class="sd">    from a support module definition.</span>
 
@@ -293,7 +293,7 @@
                 <span class="p">],</span>
             <span class="p">),</span>
         <span class="p">],</span>
-        <span class="n">bases</span><span class="o">=</span><span class="p">(</span><span class="n">IocInstance</span><span class="p">,),</span>
+        <span class="n">bases</span><span class="o">=</span><span class="p">(</span><span class="n">GenericIoc</span><span class="p">,),</span>
     <span class="p">)</span>
     <span class="k">return</span> <span class="n">namespace</span><span class="p">[</span><span class="n">support</span><span class="o">.</span><span class="n">module</span><span class="p">]</span></div>
 

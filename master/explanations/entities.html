@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>Modules, Definitions and Entities &mdash; ibek 0.2+50.ge14f320 documentation</title>
+  <title>Modules, Definitions and Entities &mdash; ibek 0.2+53.gfe85798 documentation</title>
   
 
   
@@ -244,10 +244,6 @@ project.</p>
 <p>The explanations rely on an understanding of the difference between
 generic IOCs and IOC instances. See
 <a class="reference external" href="https://epics-containers.github.io/main/explanations/introduction.html#generic-iocs-and-instances">Generic IOCs and instances</a>.</p>
-<p>TODO: this document should also reference the classes in the code that
-implement these concepts: (But at present Definition == class Entity
-and Entity == class Entity and there is no class to represent
-Containers as groups of Modules as yet)</p>
 <div class="section" id="modules">
 <h2>Modules<a class="headerlink" href="#modules" title="Permalink to this headline">¶</a></h2>
 <p>Every generic IOC image will include a number of EPICS support modules.</p>
@@ -263,6 +259,8 @@ make use of functions of its support modules.</p>
 features of a support module may be instantiated.</p>
 <p>Hence there is a collection of <strong>support module definition files</strong>
 inside of each generic IOC.</p>
+<p>In the code the class GenericIoc is used to represent a generic IOC and an
+instance of that class represent an IOC instance.</p>
 </div>
 <div class="section" id="definition">
 <h2>Definition<a class="headerlink" href="#definition" title="Permalink to this headline">¶</a></h2>
@@ -675,6 +673,7 @@ definitions:
 </pre></div>
 </div>
 </details></div></blockquote>
+<p>Definition is implemented in the code using a class of the same name.</p>
 </div>
 <div class="section" id="entity">
 <h2>Entity<a class="headerlink" href="#entity" title="Permalink to this headline">¶</a></h2>
@@ -799,6 +798,7 @@ file that ibek will generate from it.</p>
 </pre></div>
 </div>
 </details></div></blockquote>
+<p>Entity is implemented in the code using a class of the same name.</p>
 </div>
 <div class="section" id="schemas">
 <h2>Schemas<a class="headerlink" href="#schemas" title="Permalink to this headline">¶</a></h2>
