@@ -49,6 +49,12 @@ SUPPORT = Support(
                     is_id=False,
                 ),
                 IntArg(
+                    name="numAxes",
+                    description="number of axes to initialize for the controller",
+                    type="int",
+                    default=Undefined,
+                ),
+                IntArg(
                     name="idlePoll",
                     description="Idle Poll Period in ms",
                     type="int",
@@ -74,9 +80,9 @@ SUPPORT = Support(
                 ),
             ),
             script=(
-                "pmacCreateController({{name}}, {{PORT}}, 0, 8, {{movingPoll}},"
-                " {{idlePoll}})",
-                "pmacCreateAxes({{name}}, 8)",
+                "pmacCreateController({{name}}, {{PORT}}, 0, {{numAxes}},"
+                " {{movingPoll}}, {{idlePoll}})",
+                "pmacCreateAxes({{name}}, {{numAxes}})",
             ),
         ),
         Definition(
@@ -440,26 +446,61 @@ SUPPORT = Support(
             databases=(
                 Database(
                     file="$(PMAC)/db/dls_pmac_asyn_motor.template",
-                    include_args=(),
-                    define_args=(
-                        "P={{ P }}, M={{ M }}, PORT={{ PORT }}, ADDR={{ axis }},"
-                        " DESC={{ DESC }}, MRES={{ MRES }}, VELO={{ VELO }}, PREC={{"
-                        " PREV }}, EGU={{ EGU }}, TWV={{ TWV }}, DTYP={{ DTYP }},"
-                        " DIR={{ DIR }}, VBAS={{ VBAS }}, VMAX={{ VMAX }}, ACCL={{ ACCL"
-                        " }}, BDST={{ BDST }}, BVEL={{ BVEL }}, BACC={{ BACC }},"
-                        " DHLM={{ DHLM }}, DLLM={{ DLLM }}, HLM={{ HLM }}, LLM={{ LLM"
-                        " }}, HLSV={{ HLSV }}, INIT={{ INIT }}, SREV={{ SREV }},"
-                        " RRES={{ RRES }}, ERES={{ ERES }}, JAR={{ JAR }}, UEIP={{ UEIP"
-                        " }}, RDBL={{ RDBL }}, RLINK={{ RLINK }}, RTRY={{ RTRY }},"
-                        " DLY={{ DLY }}, OFF={{ OFF }}, RDBD={{ RDBD }}, FOFF={{ FOFF"
-                        " }}, ADEL={{ ADEL }}, NTM={{ NTM }}, FEHIGH={{ FEHEIGH }},"
-                        " FEHIHI={{ FEHIHI }}, FEHHSV={{ FEHHSV }}, FEHSV={{ FEHSV }},"
-                        " SCALE={{ SCALE }}, HOMEVIS={{ HOMEVIS }}, HOMEVISSTR={{ "
-                        " HOMEVISSTR  }}, name={{ name }}, alh={{ alh }}, gda_name={{"
-                        " gda_name }}, gda_desc={{ gda_desc }}, SPORT={{ SPORT }},"
-                        " HOME={{ HOME }}, PMAC={{ PMAC }}, ALLOW_HOMED_SET={{"
-                        " ALLOW_HOMED_SET }}\n"
+                    include_args=(
+                        "P",
+                        "M",
+                        "PORT",
+                        "DESC",
+                        "MRES",
+                        "VELO",
+                        "PREC",
+                        "EGU",
+                        "TWV",
+                        "DTYP",
+                        "DIR",
+                        "VBAS",
+                        "VMAX",
+                        "ACCL",
+                        "BDST",
+                        "BVEL",
+                        "BACC",
+                        "DHLM",
+                        "DLLM",
+                        "HLM",
+                        "LLM",
+                        "HLSV",
+                        "INIT",
+                        "SREV",
+                        "RRES",
+                        "ERES",
+                        "JAR",
+                        "UEIP",
+                        "RDBL",
+                        "RLINK",
+                        "RTRY",
+                        "DLY",
+                        "OFF",
+                        "RDBD",
+                        "FOFF",
+                        "ADEL",
+                        "NTM",
+                        "FEHIGH",
+                        "FEHIHI",
+                        "FEHHSV",
+                        "FEHSV",
+                        "SCALE",
+                        "HOMEVIS",
+                        "HOMEVISSTR",
+                        "name",
+                        "alh",
+                        "gda_name",
+                        "gda_desc",
+                        "SPORT",
+                        "HOME",
+                        "PMAC",
+                        "ALLOW_HOMED_SET",
                     ),
+                    define_args="ADDR={{ axis }}\n",
                 ),
             ),
             script=(),

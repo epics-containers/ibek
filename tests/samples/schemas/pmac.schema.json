@@ -31,6 +31,10 @@
                 "type": "string",
                 "description": "PV Prefix for all pmac db templates"
               },
+              "numAxes": {
+                "type": "integer",
+                "description": "number of axes to initialize for the controller"
+              },
               "idlePoll": {
                 "type": "integer",
                 "description": "Idle Poll Period in ms"
@@ -45,6 +49,7 @@
               "name",
               "PORT",
               "P",
+              "numAxes",
               "idlePoll",
               "movingPoll"
             ],

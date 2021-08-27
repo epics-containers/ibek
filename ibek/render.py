@@ -31,11 +31,19 @@ def render_database(instance: Entity) -> str:
     """
     templates = instance.entity.databases
     jinja_txt = ""
+    # include list entries expand to e.g. P={{ P }}
+    jinja_arg = Template('{{ arg }}={{ "{{" + arg + "}}" }}')
 
     for template in templates:
         db_file = template.file.strip("\n")
         db_args = template.define_args.strip("\n")
-        jinja_txt += f'dbLoadRecords("{db_file}", ' f'"{db_args}")\n'
+        if template.include_args:
+            include_list = [
+                jinja_arg.render({"arg": arg}) for arg in template.include_args
+            ]
+            db_args += ", " + ", ".join(include_list)
+
+        jinja_txt += f'dbLoadRecords("{db_file}", ' f'"{db_args.strip(",")}")\n'
 
     jinja_template = Template(jinja_txt)
     db_txt = jinja_template.render(asdict(instance))
