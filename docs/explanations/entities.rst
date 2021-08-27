@@ -11,9 +11,6 @@ The explanations rely on an understanding of the difference between
 generic IOCs and IOC instances. See
 `Generic IOCs and instances <https://epics-containers.github.io/main/explanations/introduction.html#generic-iocs-and-instances>`_.
 
-TODO: there are no classes in the code to represent Containers as groups of Modules as yet.
-(so presently ioc_schema, build_ioc only take a single support module definition file)
-
 Modules
 -------
 
@@ -36,6 +33,8 @@ features of a support module may be instantiated.
 Hence there is a collection of **support module definition files**
 inside of each generic IOC.
 
+In the code the class GenericIoc is used to represent a generic IOC and an
+instance of that class represent an IOC instance.
 
 Definition
 ----------
