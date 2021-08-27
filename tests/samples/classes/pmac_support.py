@@ -49,6 +49,12 @@ SUPPORT = Support(
                     is_id=False,
                 ),
                 IntArg(
+                    name="numAxes",
+                    description="number of axes to initialize for the controller",
+                    type="int",
+                    default=Undefined,
+                ),
+                IntArg(
                     name="idlePoll",
                     description="Idle Poll Period in ms",
                     type="int",
@@ -74,9 +80,9 @@ SUPPORT = Support(
                 ),
             ),
             script=(
-                "pmacCreateController({{name}}, {{PORT}}, 0, 8, {{movingPoll}},"
-                " {{idlePoll}})",
-                "pmacCreateAxes({{name}}, 8)",
+                "pmacCreateController({{name}}, {{PORT}}, 0, {{numAxes}},"
+                " {{movingPoll}}, {{idlePoll}})",
+                "pmacCreateAxes({{name}}, {{numAxes}})",
             ),
         ),
         Definition(

@@ -31,6 +31,7 @@ BL45P_MO_IOC_02 = fix_code(
             name='BL45P-MO-BRICK-01',
             PORT='BRICK1port',
             P='BL45P-MO-STEP-01:',
+            numAxes=8,
             idlePoll=100,
             movingPoll=500),
         pmac.DlsPmacAsynMotor(

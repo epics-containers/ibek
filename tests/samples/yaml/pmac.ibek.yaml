@@ -17,6 +17,10 @@ definitions:
         description: PV Prefix for all pmac db templates
 
       - type: int
+        name: numAxes
+        description: number of axes to initialize for the controller
+
+      - type: int
         name: idlePoll
         description: Idle Poll Period in ms
 
@@ -27,8 +31,8 @@ definitions:
     # axes hard coded to 8 for geobrick (builder.py counted the axes created)
     # TODO is num_axes is an example of something hard to do in this new approach?
     script:
-      - pmacCreateController({{name}}, {{PORT}}, 0, 8, {{movingPoll}}, {{idlePoll}})
-      - pmacCreateAxes({{name}}, 8)
+      - pmacCreateController({{name}}, {{PORT}}, 0, {{numAxes}}, {{movingPoll}}, {{idlePoll}})
+      - pmacCreateAxes({{name}}, {{numAxes}})
 
     databases:
       - file: pmacController.template

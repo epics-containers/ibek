@@ -51,6 +51,7 @@ def test_geobrick_script(pmac_classes):
         name="test_geobrick",
         PORT="my_asyn_port",
         P="geobrick_one",
+        numAxes=8,
         idlePoll=200,
         movingPoll=800,
     )
@@ -71,6 +72,7 @@ def test_geobrick_database(pmac_classes):
         name="test_geobrick",
         PORT="my_asyn_port",
         P="geobrick_one",
+        numAxes=8,
         idlePoll=200,
         movingPoll=800,
     )
