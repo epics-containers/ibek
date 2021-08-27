@@ -70,15 +70,34 @@ class Entity:
 
 
 @dataclass
-class IocInstance:
+class GenericIoc:
     """
-    A base class for all generated support module classes.
+    A base class for all generated Generic IOC classes.
 
-    This lists all the entities a generic IOC is capable of instantiating.
-    It may include Entity classes defined in multiple support modules that
-    exist within a given generic IOC container
+    Each class derived from this dataclass represents a Generic IOC and the
+    set of types of Entity it can instantiate. However, note that we
+    hold the Entity types in globals::namespace, see NOTE.
 
-    Provides the deserialize entry point.
+    These classes are generated from the support module definition
+    YAML files in a generic IOC container.
+
+    Each instance of this class represents an IOC instance with its list
+    of instantiated Entities.
+
+    NOTE: because I have made the namespace for generated classes global
+    all GenericIoc are exactly the same - just a list of Entity. This
+    incorrectly implies that instantiating two Generic IOCs in the same
+    session would mean they share all their Entity types.
+
+    I'm not sure this matters, when deserializing any <support>.ibek.yaml
+    you get exactly the same class but as a side effect populate the
+    global namespace with the Entity Types that the file describes. This
+    side effect occurs in the function generator::get_module.
+
+    We don't need to look at two IOCs in the same session, ironically we
+    do need to look at multiple Support modules in a session and this
+    means that we don't need to distinguish between a support module and
+    a set of support modules in an ioc.
     """
 
     ioc_name: str

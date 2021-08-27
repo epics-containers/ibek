@@ -11,11 +11,6 @@ The explanations rely on an understanding of the difference between
 generic IOCs and IOC instances. See
 `Generic IOCs and instances <https://epics-containers.github.io/main/explanations/introduction.html#generic-iocs-and-instances>`_.
 
-TODO: this document should also reference the classes in the code that
-implement these concepts: (But at present Definition == class Entity
-and Entity == class Entity and there is no class to represent
-Containers as groups of Modules as yet)
-
 Modules
 -------
 
@@ -38,6 +33,8 @@ features of a support module may be instantiated.
 Hence there is a collection of **support module definition files**
 inside of each generic IOC.
 
+In the code the class GenericIoc is used to represent a generic IOC and an
+instance of that class represent an IOC instance.
 
 Definition
 ----------
@@ -88,6 +85,7 @@ Expand below for the example pmac **support module definition file**:
 
         </details>
 
+Definition is implemented in the code using a class of the same name.
 
 
 Entity
@@ -166,6 +164,8 @@ Click the arrows to reveal the files.
     .. raw:: html
 
         </details>
+
+Entity is implemented in the code using a class of the same name.
 
 Schemas
 -------

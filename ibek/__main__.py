@@ -77,9 +77,9 @@ def build_ioc(
     """
     Build a startup script, database and Helm chart from <ioc>.yaml
     TODO: update to take multiple definition files from a container
-    TODO: needs to be split into build_ioc:
+    TODO: needs to be split into build_helm:
             makes a generic helm chart including <ioc>.yaml
-          and make_startup:
+          and make_boot:
             makes a startup script for the ioc from <ioc>.yaml
     """
 

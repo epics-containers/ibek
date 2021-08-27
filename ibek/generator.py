@@ -14,10 +14,10 @@ from typing_extensions import Annotated as A
 from typing_extensions import Literal
 
 from ibek.globals import desc, namespace
-from ibek.support import Definition, Entity, IocInstance, Support
+from ibek.support import Definition, Entity, GenericIoc, Support
 
 
-def from_support_module_definition(definition_file: Path) -> Type["IocInstance"]:
+def from_support_module_definition(definition_file: Path) -> Type["GenericIoc"]:
     """
     Read in a support module definition file and
     generate an IocInstance derived class
@@ -34,9 +34,9 @@ def from_support_module_definition(definition_file: Path) -> Type["IocInstance"]
     return module_dataclass
 
 
-def get_module(support: Support) -> Type[IocInstance]:
+def get_module(support: Support) -> Type[GenericIoc]:
     """
-    Generate an IocInstance derived class with its a set of Entity classes,
+    Generate an GenericIoc derived class and its a set of Entity classes,
 
     from a support module definition.
 
@@ -65,7 +65,7 @@ def get_module(support: Support) -> Type[IocInstance]:
                 ],
             ),
         ],
-        bases=(IocInstance,),
+        bases=(GenericIoc,),
     )
     return namespace[support.module]
 
