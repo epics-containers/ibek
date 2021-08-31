@@ -6,11 +6,20 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
+        os: ["ubuntu-latest"] # can add windows-latest, macos-latest
         python: ["3.7", "3.8", "3.9"]
+
+        include:
+          # Tag the Python3.7 runner as the one to publish wheels
+          - os: "ubuntu-latest"
+            python: "3.7"
+            publish: true
+
+    name: build/${{ matrix.python }}/${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
 
     steps:
       - name: Checkout Source
@@ -23,32 +32,58 @@ jobs:
 
       - name: Install Python Dependencies
         run: |
-          pip install pipenv twine
-          pipenv install --dev --deploy --python $(which python) && pipenv graph
-
-      - name: Check wheel version is specified
-        run: grep '"wheel":' Pipfile.lock
+          pip install pipenv build
+          pipenv install --dev --deploy --python $(python -c 'import sys; print(sys.executable)') && pipenv graph
 
       - name: Create Sdist and Wheel
-        # for reproducible builds set SOURCE_DATE_EPOCH to the date of the last commit
-        # See here for more info : https://reproducible-builds.org/
+        if: matrix.publish
+        # Set SOURCE_DATE_EPOCH from git commit for reproducible build
+        # https://reproducible-builds.org/
+        # Set group writable and umask to do the same to match inside DLS
         run: |
-          export SOURCE_DATE_EPOCH=$(git log -1 --pretty=%ct)
-          pipenv run build
+          chmod -R g+w .
+          umask 0002
+          SOURCE_DATE_EPOCH=$(git log -1 --pretty=%ct) python -m build --sdist --wheel
 
       - name: Run Tests
         run: pipenv run tests
 
-      - name: Publish Sdist and Wheel to PyPI
-        # Only once when on a tag
-        if: matrix.python == '3.7' && startsWith(github.ref, 'refs/tags')
-        env:
-          TWINE_USERNAME: __token__
-          TWINE_PASSWORD: ${{ secrets.pypi_token }}
-        run: twine upload dist/*
-
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v1
         with:
-          name: ${{ matrix.python }}
+          name: ${{ matrix.python }}/${{ matrix.os }}
           files: cov.xml
+
+      - name: Upload Wheel and Sdist as artifacts
+        if: matrix.publish
+        uses: actions/upload-artifact@v2
+        with:
+          name: dist
+          path: dist/*
+
+  release:
+    needs: [build]
+    runs-on: ubuntu-latest
+    # upload to PyPI and make a release on every tag
+    if: github.event_name == 'push' && startsWith(github.event.ref, 'refs/tags')
+    steps:
+      - uses: actions/download-artifact@v2
+        with:
+          name: dist
+          path: dist
+
+      - name: Github Release
+        # We pin to the SHA, not the tag, for security reasons.
+        # https://docs.github.com/en/actions/learn-github-actions/security-hardening-for-github-actions#using-third-party-actions
+        uses: softprops/action-gh-release@2d72d869af3bf23602f9593a1e3fd739b80ac1eb # v0.1.12
+        with:
+          files: dist/*
+          body: See [Changelog](CHANGELOG.rst) for more details
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Publish to PyPI
+        env:
+          TWINE_USERNAME: __token__
+          TWINE_PASSWORD: ${{ secrets.pypi_token }}
+        run: pipx run twine upload dist/*

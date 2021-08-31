@@ -8,7 +8,7 @@ from dataclasses import Field, field, make_dataclass
 from pathlib import Path
 from typing import Any, Dict, List, Sequence, Tuple, Type, Union, cast
 
-from apischema.utils import Undefined
+from apischema import Undefined
 from ruamel.yaml import YAML
 from typing_extensions import Annotated as A
 from typing_extensions import Literal

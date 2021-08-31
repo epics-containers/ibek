@@ -6,13 +6,14 @@ verify_ssl = true
 [dev-packages]
 # Pinning black stops us having to allow pre-releases globally
 black = "==19.10b0"
+
 # Pins to make lockfile usable on multiple Python versions and platforms
 mypy = "*"
 atomicwrites = "*"
 typing-extensions = "*"
 importlib-metadata = "*"
-# List wheel here to make sure we make the same version to make wheels on gitlab and github CI
-wheel = "0.33.1"
+typed-ast = "*"
+
 # Test and docs dependencies
 pytest-cov = "*"
 pytest-mypy = "*"
@@ -21,17 +22,15 @@ pytest-black = "*"
 flake8-isort = "*"
 isort = ">5.0"
 sphinx-rtd-theme = "*"
+sphinx-apischema = "*"
 autopep8 = "*"
 
 [packages]
 # All other package requirements from setup.cfg
 ibek = {editable = true, path = "."}
-typer = "*"
-apischema = "==0.14.7"
 
 [scripts]
 tests = "python -m pytest"
 docs = "sphinx-build -EWT --keep-going docs build/html"
-build = "python setup.py sdist bdist_wheel"
 # Delete any files that git ignore hides from us
 gitclean = "git clean -fdX"

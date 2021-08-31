@@ -67,12 +67,13 @@ You can build the docs from the project directory by running::
     $ firefox build/html/index.html
 
 
-Release Checklist
------------------
+Release Process
+---------------
 
-Before a new release, please go through the following checklist:
+To make a new release, please follow this checklist:
 
 - Choose a new PEP440 compliant release number
-- Git tag the version with a message summarizing the changes
+- Add a release note in CHANGELOG.rst
+- Git tag the version
 - Push to github and the actions will make a release on pypi
 - Push to internal gitlab and do a dls-release.py of the tag

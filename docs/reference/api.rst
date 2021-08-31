@@ -50,3 +50,6 @@ This is the internal API reference for ibek
 .. automodule:: ibek.render
     :members:
 
+.. class:: apischema.types.UndefinedType
+
+    A sentinel value that allows detection that a value has not been passed at init

@@ -5,7 +5,7 @@ and generating the files in test/samples/classes
 This preamble file is added to the head of the generated class
 """
 
-from apischema.utils import Undefined
+from apischema import Undefined
 
 from ibek.argument import FloatArg, IntArg, StrArg
 from ibek.support import Database, Definition, Support
