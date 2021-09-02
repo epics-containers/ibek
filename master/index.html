@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>ibek &mdash; ibek 0.2+56.gcedf422 documentation</title>
+  <title>ibek &mdash; ibek 0.2+59.g5e1fafd documentation</title>
   
 
   
@@ -20,7 +20,7 @@
 
   
   
-    <link rel="shortcut icon" href="_static/ibek-favicon.ico"/>
+    <link rel="shortcut icon" href="_static/images/ibek-favicon.ico"/>
   
 
   
@@ -64,7 +64,7 @@
 
           
             
-            <img src="_static/ibek-logo.svg" class="logo" alt="Logo"/>
+            <img src="_static/images/ibek-logo.svg" class="logo" alt="Logo"/>
           
           </a>
 
@@ -92,17 +92,13 @@
         
         <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
           
-<style>
+  <style>
     /* style mobile top nav to look like main nav */
     .wy-nav-top {
-        background: {
-                {
-                theme_style_nav_header_background
-            }
-        }
+        background: rgb(7, 43, 93)
     }
-</style>
-
+  </style>
+  
             
             
               
@@ -114,7 +110,7 @@
 </ul>
 <p class="caption" role="heading"><span class="caption-text">How-to Guides</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="how-to/edit_yaml.html">YAML schema</a></li>
+<li class="toctree-l1"><a class="reference internal" href="how-to/edit-yaml.html">YAML schema</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Explanations</span></p>
 <ul>
@@ -128,42 +124,44 @@
 
             
           
-<!-- Include Index in the sidebar -->
-<!-- https://stackoverflow.com/a/37843854 -->
-<a href="genindex.html">Index</a>
-<!-- Add versions for selected branches + tags -->
-<p class="caption"><span class="caption-text">Versions</span></p>
-<ul id="versions" />
-<script>
+  <!-- Include Index in the sidebar -->
+  <!-- https://stackoverflow.com/a/37843854 -->
+  <a href="genindex.html">Index</a>
+  <!-- Include link to changelog -->
+  <a href="https://github.com/dls-controls/ibek/blob/master/CHANGELOG.rst">Changelog</a>
+  <!-- Add versions for selected branches + tags -->
+  <p class="caption"><span class="caption-text">Versions</span></p>
+  <ul id="versions"/>
+  <script>
     // Add any branches to appear in the side pane here, tags will be added below
     // Will only appear if docs are built and pushed in gh-pages
     var versions = ['master', 'main'];
     var dirs = new Set();
     function addVersion(name) {
-        if (dirs.has(name)) {
-            var li = document.createElement("li");
-            var a = document.createElement("a");
-            a.href = 'https://dls-controls.github.io/ibek/' + name;
-            a.innerText = name;
-            li.appendChild(a)
-            document.getElementById('versions').appendChild(li);
-        }
+      if (dirs.has(name)) {
+        var li = document.createElement("li");
+        var a = document.createElement("a");
+        a.href = 'https://dls-controls.github.io/ibek/' + name;
+        a.innerText = name;
+        li.appendChild(a)
+        document.getElementById('versions').appendChild(li);
+      }
     }
     Promise.all([
-        // Find gh-pages directories and populate `dirs`
-        fetch("https://api.github.com/repos/dls-controls/ibek/contents?ref=gh-pages")
-            .then(response => response.json())
-            .then(data => data.forEach(function (e) {
-                if (e.type == "dir") dirs.add(e.name);
-            })),
-        // Add tags to `versions`
-        fetch('https://api.github.com/repos/dls-controls/ibek/tags')
-            .then(response => response.json())
-            .then(data => data.forEach(function (e) {
-                versions.push(e.name);
-            }))
-    ]).then(_ => versions.forEach(addVersion))
-</script>
+      // Find gh-pages directories and populate `dirs`
+      fetch("https://api.github.com/repos/dls-controls/ibek/contents?ref=gh-pages")
+      .then(response => response.json())
+      .then(data => data.forEach(function(e) {
+        if (e.type == "dir") dirs.add(e.name);
+      })),
+      // Add tags to `versions`
+      fetch('https://api.github.com/repos/dls-controls/ibek/tags')
+        .then(response => response.json())
+        .then(data => data.forEach(function(e) {
+          versions.push(e.name);
+        }))
+      ]).then(_ => versions.forEach(addVersion))
+  </script>
 
         </div>
         
@@ -209,7 +207,7 @@
     
       <li><a href="#" class="icon icon-home"></a> &raquo;</li>
         
-      <li> ibek</li>
+      <li>ibek</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -228,8 +226,8 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="logo-ibek">
-<h1><img alt="logo" src="_images/ibek-logo.svg" /> ibek<a class="headerlink" href="#logo-ibek" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="ibek">
+<h1>ibek<a class="headerlink" href="#ibek" title="Permalink to this headline">¶</a></h1>
 <p><a class="reference external" href="https://github.com/dls-controls/ibek/actions?query=workflow%3A%22Code+CI%22"><img alt="Code CI" src="https://github.com/dls-controls/ibek/workflows/Code%20CI/badge.svg?branch=master" /></a> <a class="reference external" href="https://github.com/dls-controls/ibek/actions?query=workflow%3A%22Docs+CI%22"><img alt="Docs CI" src="https://github.com/dls-controls/ibek/workflows/Docs%20CI/badge.svg?branch=master" /></a> <a class="reference external" href="https://codecov.io/gh/dls-controls/ibek"><img alt="Test Coverage" src="https://codecov.io/gh/dls-controls/ibek/branch/master/graph/badge.svg" /></a> <a class="reference external" href="https://pypi.org/project/ibek"><img alt="Latest PyPI version" src="https://img.shields.io/pypi/v/ibek.svg" /></a> <a class="reference external" href="https://opensource.org/licenses/Apache-2.0"><img alt="Apache License" src="https://img.shields.io/badge/License-Apache%202.0-blue.svg" /></a></p>
 <p>IOC Builder for EPICS and Kubernetes:</p>
 <ul class="simple">
@@ -258,10 +256,11 @@ up the IOC contained in the image with them</p></li>
 <tr class="row-odd"><td><p>Documentation</p></td>
 <td><p><a class="reference external" href="https://dls-controls.github.io/ibek">https://dls-controls.github.io/ibek</a></p></td>
 </tr>
+<tr class="row-even"><td><p>Changelog</p></td>
+<td><p><a class="reference external" href="https://github.com/dls-controls/ibek/blob/master/CHANGELOG.rst">https://github.com/dls-controls/ibek/blob/master/CHANGELOG.rst</a></p></td>
+</tr>
 </tbody>
 </table>
-<p>Add a diagram and more details.</p>
-<p>Use draw.io for image, and save as SVG with source embed in it, save as something.draw.io.svg</p>
 <div class="section" id="todo">
 <h2>TODO<a class="headerlink" href="#todo" title="Permalink to this headline">¶</a></h2>
 <p>This project is incomplete. The following items are still to do:</p>
@@ -299,58 +298,41 @@ commands need to support multiple definition files for the whole container.</p>
 </li>
 <li><p>this will require an additional class to represent a container as a set
 of support modules.</p></li>
+<li><p>Add a diagram and more details. Use draw.io for image, and save as SVG
+with source embed in it, save as something.draw.io.svg</p></li>
 </ul>
 </div></blockquote>
 </div>
 <div class="section" id="how-the-documentation-is-structured">
 <h2>How the documentation is structured<a class="headerlink" href="#how-the-documentation-is-structured" title="Permalink to this headline">¶</a></h2>
+<p>Documentation is split into four categories, accessible from links in the side-bar.</p>
 <div class="columns section" id="tutorials">
-<h3><a class="reference internal" href="#id1"><span class="std std-ref">Tutorials</span></a><a class="headerlink" href="#tutorials" title="Permalink to this headline">¶</a></h3>
+<h3>Tutorials<a class="headerlink" href="#tutorials" title="Permalink to this headline">¶</a></h3>
 <p>Tutorials for installation, library and commandline usage. New users start here.</p>
+<div class="toctree-wrapper compound">
 </div>
-<div class="columns section" id="how-to">
-<h3><a class="reference internal" href="#id2"><span class="std std-ref">How-to Guides</span></a><a class="headerlink" href="#how-to" title="Permalink to this headline">¶</a></h3>
+</div>
+<div class="columns section" id="how-to-guides">
+<h3>How-to Guides<a class="headerlink" href="#how-to-guides" title="Permalink to this headline">¶</a></h3>
 <p>Practical step-by-step guides for the more experienced user.</p>
+<div class="toctree-wrapper compound">
+</div>
 </div>
 <div class="columns section" id="explanations">
-<h3><a class="reference internal" href="#id3"><span class="std std-ref">Explanations</span></a><a class="headerlink" href="#explanations" title="Permalink to this headline">¶</a></h3>
+<h3>Explanations<a class="headerlink" href="#explanations" title="Permalink to this headline">¶</a></h3>
 <p>Explanation of how the library works and why it works that way.</p>
+<div class="toctree-wrapper compound">
+</div>
 </div>
 <div class="columns section" id="reference">
-<h3><a class="reference internal" href="#id4"><span class="std std-ref">Reference</span></a><a class="headerlink" href="#reference" title="Permalink to this headline">¶</a></h3>
+<h3>Reference<a class="headerlink" href="#reference" title="Permalink to this headline">¶</a></h3>
 <p>Technical reference material, for classes, methods, APIs, commands, and contributing to the project.</p>
+<div class="toctree-wrapper compound">
+</div>
 </div>
 <div class="endcolumns section" id="about-the-documentation">
 <h3>About the documentation<a class="headerlink" href="#about-the-documentation" title="Permalink to this headline">¶</a></h3>
 <p><a class="reference external" href="https://documentation.divio.com">Why is the documentation structured this way?</a></p>
-<div class="toctree-wrapper compound" id="id1">
-<p class="caption" role="heading"><span class="caption-text">Tutorials</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="tutorials/installation.html">Installation Tutorial</a></li>
-</ul>
-</div>
-<div class="toctree-wrapper compound" id="id2">
-<p class="caption" role="heading"><span class="caption-text">How-to Guides</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="how-to/edit_yaml.html">YAML schema</a></li>
-</ul>
-</div>
-<div class="toctree-wrapper compound" id="id3">
-<p class="caption" role="heading"><span class="caption-text">Explanations</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="explanations/entities.html">Modules, Definitions and Entities</a></li>
-</ul>
-</div>
-<div class="toctree-wrapper no-margin-after-ul compound" id="id4">
-<p class="caption" role="heading"><span class="caption-text">Reference</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="reference/api.html">API</a></li>
-<li class="toctree-l1"><a class="reference internal" href="reference/contributing.html">Contributing</a></li>
-</ul>
-</div>
-<ul class="simple">
-<li><p><a class="reference internal" href="genindex.html"><span class="std std-ref">Index</span></a></p></li>
-</ul>
 </div>
 </div>
 </div>

@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>ibek.globals &mdash; ibek 0.2+56.gcedf422 documentation</title>
+  <title>ibek.globals &mdash; ibek 0.2+59.g5e1fafd documentation</title>
   
 
   
@@ -20,7 +20,7 @@
 
   
   
-    <link rel="shortcut icon" href="../../_static/ibek-favicon.ico"/>
+    <link rel="shortcut icon" href="../../_static/images/ibek-favicon.ico"/>
   
 
   
@@ -63,7 +63,7 @@
 
           
             
-            <img src="../../_static/ibek-logo.svg" class="logo" alt="Logo"/>
+            <img src="../../_static/images/ibek-logo.svg" class="logo" alt="Logo"/>
           
           </a>
 
@@ -91,17 +91,13 @@
         
         <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
           
-<style>
+  <style>
     /* style mobile top nav to look like main nav */
     .wy-nav-top {
-        background: {
-                {
-                theme_style_nav_header_background
-            }
-        }
+        background: rgb(7, 43, 93)
     }
-</style>
-
+  </style>
+  
             
             
               
@@ -113,7 +109,7 @@
 </ul>
 <p class="caption" role="heading"><span class="caption-text">How-to Guides</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../how-to/edit_yaml.html">YAML schema</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../how-to/edit-yaml.html">YAML schema</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Explanations</span></p>
 <ul>
@@ -127,42 +123,44 @@
 
             
           
-<!-- Include Index in the sidebar -->
-<!-- https://stackoverflow.com/a/37843854 -->
-<a href="../../genindex.html">Index</a>
-<!-- Add versions for selected branches + tags -->
-<p class="caption"><span class="caption-text">Versions</span></p>
-<ul id="versions" />
-<script>
+  <!-- Include Index in the sidebar -->
+  <!-- https://stackoverflow.com/a/37843854 -->
+  <a href="../../genindex.html">Index</a>
+  <!-- Include link to changelog -->
+  <a href="https://github.com/dls-controls/ibek/blob/master/CHANGELOG.rst">Changelog</a>
+  <!-- Add versions for selected branches + tags -->
+  <p class="caption"><span class="caption-text">Versions</span></p>
+  <ul id="versions"/>
+  <script>
     // Add any branches to appear in the side pane here, tags will be added below
     // Will only appear if docs are built and pushed in gh-pages
     var versions = ['master', 'main'];
     var dirs = new Set();
     function addVersion(name) {
-        if (dirs.has(name)) {
-            var li = document.createElement("li");
-            var a = document.createElement("a");
-            a.href = 'https://dls-controls.github.io/ibek/' + name;
-            a.innerText = name;
-            li.appendChild(a)
-            document.getElementById('versions').appendChild(li);
-        }
+      if (dirs.has(name)) {
+        var li = document.createElement("li");
+        var a = document.createElement("a");
+        a.href = 'https://dls-controls.github.io/ibek/' + name;
+        a.innerText = name;
+        li.appendChild(a)
+        document.getElementById('versions').appendChild(li);
+      }
     }
     Promise.all([
-        // Find gh-pages directories and populate `dirs`
-        fetch("https://api.github.com/repos/dls-controls/ibek/contents?ref=gh-pages")
-            .then(response => response.json())
-            .then(data => data.forEach(function (e) {
-                if (e.type == "dir") dirs.add(e.name);
-            })),
-        // Add tags to `versions`
-        fetch('https://api.github.com/repos/dls-controls/ibek/tags')
-            .then(response => response.json())
-            .then(data => data.forEach(function (e) {
-                versions.push(e.name);
-            }))
-    ]).then(_ => versions.forEach(addVersion))
-</script>
+      // Find gh-pages directories and populate `dirs`
+      fetch("https://api.github.com/repos/dls-controls/ibek/contents?ref=gh-pages")
+      .then(response => response.json())
+      .then(data => data.forEach(function(e) {
+        if (e.type == "dir") dirs.add(e.name);
+      })),
+      // Add tags to `versions`
+      fetch('https://api.github.com/repos/dls-controls/ibek/tags')
+        .then(response => response.json())
+        .then(data => data.forEach(function(e) {
+          versions.push(e.name);
+        }))
+      ]).then(_ => versions.forEach(addVersion))
+  </script>
 
         </div>
         
