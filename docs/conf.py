@@ -4,18 +4,7 @@
 # list see the documentation:
 # https://www.sphinx-doc.org/en/master/usage/configuration.html
 
-# -- Path setup --------------------------------------------------------------
-
-# If extensions (or modules to document with autodoc) are in another directory,
-# add these directories to sys.path here. If the directory is relative to the
-# documentation root, use os.path.abspath to make it absolute, like shown here.
-import os
-import sys
-
-import ibek  # noqa
-
-sys.path.insert(0, os.path.abspath(os.path.join(__file__, "..", "..")))
-
+import ibek
 
 # -- General configuration ------------------------------------------------
 
@@ -45,8 +34,8 @@ extensions = [
     "sphinx.ext.viewcode",
     # Adds the inheritance-diagram generation directive
     "sphinx.ext.inheritance_diagram",
-    # Add apischema information to autodoc entries
-    "ibek.sphinxext",
+    # Makes autodoc understand apischema annotated classes/functions
+    "sphinx_apischema",
 ]
 
 # If true, Sphinx will warn about all references where the target cannot

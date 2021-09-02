@@ -123,7 +123,6 @@ definitions:
       - type: int
         name: DIR
         description: User direction
-        # quotes zero provides a default whereas 0 is seen as no default
         default: 0
 
       - type: float
@@ -359,7 +358,7 @@ definitions:
           - RLINK
           - RTRY
           - DLY
-          - OFF
+          - "OFF"
           - RDBD
           - FOFF
           - ADEL

@@ -41,10 +41,9 @@ htmlcov/
 .cache
 nosetests.xml
 coverage.xml
-*,cover
-*.mypy_cache
-*.pytest_cache
 cov.xml
+.pytest_cache/
+.mypy_cache/
 
 # Translations
 *.mo
@@ -64,14 +63,3 @@ target/
 /venv/
 /lightweight-venv/
 /installed.files
-
-#MacOS
-.DS_Store
-
-#ioc helmn chart output
-iocs/
-
-notebook-tutorials/.ipynb_checkpoints/ibek_introduction-checkpoint.ipynb
-notebook-tutorials/.ipynb_checkpoints/creating_ioc_instances-checkpoint.ipynb
-notebook-tutorials/.ipynb_checkpoints/ioc_class_creation-checkpoint.ipynb
-.gitignore

@@ -115,189 +115,236 @@
               },
               "DESC": {
                 "type": "string",
-                "description": "Description, displayed on EDM screen"
+                "description": "Description, displayed on EDM screen",
+                "default": " "
               },
               "MRES": {
                 "type": "number",
-                "description": "Motor Step Size (EGU)"
+                "description": "Motor Step Size (EGU)",
+                "default": 0.0001
               },
               "VELO": {
                 "type": "number",
-                "description": "axis Velocity (EGU/s)"
+                "description": "axis Velocity (EGU/s)",
+                "default": 1.0
               },
               "PREC": {
                 "type": "number",
-                "description": "Display Precision"
+                "description": "Display Precision",
+                "default": 3.0
               },
               "EGU": {
                 "type": "string",
-                "description": "Engineering Units"
+                "description": "Engineering Units",
+                "default": "mm"
               },
               "TWV": {
                 "type": "integer",
-                "description": "Tweak Step Size (EGU)"
+                "description": "Tweak Step Size (EGU)",
+                "default": 1
               },
               "DTYP": {
                 "type": "string",
-                "description": "Datatype of record"
+                "description": "Datatype of record",
+                "default": "asynMotor"
               },
               "DIR": {
                 "type": "integer",
-                "description": "User direction"
+                "description": "User direction",
+                "default": 0
               },
               "VBAS": {
                 "type": "number",
-                "description": "Base Velocity (EGU/s)"
+                "description": "Base Velocity (EGU/s)",
+                "default": 1.0
               },
               "VMAX": {
                 "type": "number",
-                "description": "Max Velocity (EGU/s)"
+                "description": "Max Velocity (EGU/s)",
+                "default": 1.0
               },
               "ACCL": {
                 "type": "number",
-                "description": "Seconds to Velocity"
+                "description": "Seconds to Velocity",
+                "default": 0.5
               },
               "BDST": {
                 "type": "number",
-                "description": "BL Distance (EGU)"
+                "description": "BL Distance (EGU)",
+                "default": 0.0
               },
               "BVEL": {
                 "type": "number",
-                "description": "BL Velocity(EGU/s)"
+                "description": "BL Velocity(EGU/s)",
+                "default": 0.0
               },
               "BACC": {
                 "type": "number",
-                "description": "BL Seconds to Veloc"
+                "description": "BL Seconds to Veloc",
+                "default": 0.0
               },
               "DHLM": {
                 "type": "number",
-                "description": "Dial High Limit"
+                "description": "Dial High Limit",
+                "default": 10000.0
               },
               "DLMM": {
                 "type": "number",
-                "description": "Dial low limit"
+                "description": "Dial low limit",
+                "default": -10000.0
               },
               "HLM": {
                 "type": "number",
-                "description": "User High Limit"
+                "description": "User High Limit",
+                "default": 0.0
               },
               "LLM": {
                 "type": "number",
-                "description": "User Low Limit"
+                "description": "User Low Limit",
+                "default": 0.0
               },
               "HLSV": {
                 "type": "string",
-                "description": "HW Lim, Violation Svr"
+                "description": "HW Lim, Violation Svr",
+                "default": "MAJOR"
               },
               "INIT": {
                 "type": "string",
-                "description": "Startup commands"
+                "description": "Startup commands",
+                "default": " "
               },
               "SREV": {
                 "type": "number",
-                "description": "Steps per Revolution"
+                "description": "Steps per Revolution",
+                "default": 1000.0
               },
               "RRES": {
                 "type": "number",
-                "description": "Readback Step Size (EGU"
+                "description": "Readback Step Size (EGU",
+                "default": 0.0
               },
               "ERES": {
                 "type": "number",
-                "description": "Encoder Step Size (EGU)"
+                "description": "Encoder Step Size (EGU)",
+                "default": 0.0
               },
               "JAR": {
                 "type": "number",
-                "description": "Jog Acceleration (EGU/s^2)"
+                "description": "Jog Acceleration (EGU/s^2)",
+                "default": 0.0
               },
               "UEIP": {
                 "type": "integer",
-                "description": "Use Encoder If Present"
+                "description": "Use Encoder If Present",
+                "default": 0
               },
               "URIP": {
                 "type": "integer",
-                "description": "Use RDBL If Present"
+                "description": "Use RDBL If Present",
+                "default": 0
               },
               "RDBL": {
                 "type": "string",
-                "description": "Readback Location, set URIP =1 if you specify this"
+                "description": "Readback Location, set URIP =1 if you specify this",
+                "default": "0"
               },
               "RLNK": {
                 "type": "string",
-                "description": "Readback output link"
+                "description": "Readback output link",
+                "default": " "
               },
               "RTRY": {
                 "type": "integer",
-                "description": "Max retry count"
+                "description": "Max retry count",
+                "default": 0
               },
               "DLY": {
                 "type": "number",
-                "description": "Readback settle time (s)"
+                "description": "Readback settle time (s)",
+                "default": 0.0
               },
               "OFF": {
                 "type": "number",
-                "description": "User Offset (EGU)"
+                "description": "User Offset (EGU)",
+                "default": 0.0
               },
               "RDBD": {
                 "type": "number",
-                "description": "Retry Deadband (EGU)"
+                "description": "Retry Deadband (EGU)",
+                "default": 0.0
               },
               "FOFF": {
                 "type": "integer",
-                "description": "Freeze Offset, 0=variable, 1=frozen"
+                "description": "Freeze Offset, 0=variable, 1=frozen",
+                "default": 0
               },
               "ADEL": {
                 "type": "number",
-                "description": "Alarm monitor deadband (EGU)"
+                "description": "Alarm monitor deadband (EGU)",
+                "default": 0.0
               },
               "NTM": {
                 "type": "integer",
-                "description": "New Target Monitor, only set to 0 for soft motors"
+                "description": "New Target Monitor, only set to 0 for soft motors",
+                "default": 1
               },
               "FEHEIGH": {
                 "type": "number",
-                "description": "HIGH limit for following error"
+                "description": "HIGH limit for following error",
+                "default": 0.0
               },
               "FEHIHI": {
                 "type": "number",
-                "description": "HIHI limit for following error"
+                "description": "HIHI limit for following error",
+                "default": 0.0
               },
               "FEHHSV": {
                 "type": "string",
-                "description": "HIHI alarm severity for following error"
+                "description": "HIHI alarm severity for following error",
+                "default": "NO_ALARM"
               },
               "FEHSV": {
                 "type": "string",
-                "description": "HIGH alarm severity for following error"
+                "description": "HIGH alarm severity for following error",
+                "default": "NO_ALARM"
               },
               "SCALE": {
-                "type": "integer"
+                "type": "integer",
+                "default": 1
               },
               "HOMEVIS": {
                 "type": "integer",
-                "description": "If 1 then home is visible on the gui"
+                "description": "If 1 then home is visible on the gui",
+                "default": 1
               },
               "HOMEVISST": {
-                "type": "string"
+                "type": "string",
+                "default": "Use motor summary screen"
               },
               "alh": {
                 "type": "string",
-                "description": "Set this to alh to add the motor to the alarm handler and send emails"
+                "description": "Set this to alh to add the motor to the alarm handler and send emails",
+                "default": " "
               },
               "gda_name": {
                 "type": "string",
-                "description": "Name to export this as to GDA"
+                "description": "Name to export this as to GDA",
+                "default": "none"
               },
               "gda_desc": {
                 "type": "string",
-                "description": "Description to export as to GDA"
+                "description": "Description to export as to GDA",
+                "default": "$(DESC)"
               },
               "HOME": {
                 "type": "string",
-                "description": "Prefix for autohome instance. Defaults to $(P) If unspecified"
+                "description": "Prefix for autohome instance. Defaults to $(P) If unspecified",
+                "default": "$(P)"
               },
               "ALLOW_HOMED_SET": {
                 "type": "string",
-                "description": "Set to a blank to allow this axis to have its homed"
+                "description": "Set to a blank to allow this axis to have its homed",
+                "default": "#"
               }
             },
             "required": [
