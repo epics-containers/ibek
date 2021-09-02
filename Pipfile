@@ -6,14 +6,12 @@ verify_ssl = true
 [dev-packages]
 # Pinning black stops us having to allow pre-releases globally
 black = "==19.10b0"
-
 # Pins to make lockfile usable on multiple Python versions and platforms
 mypy = "*"
 atomicwrites = "*"
 typing-extensions = "*"
 importlib-metadata = "*"
 typed-ast = "*"
-
 # Test and docs dependencies
 pytest-cov = "*"
 pytest-mypy = "*"
@@ -26,6 +24,8 @@ sphinx-apischema = "*"
 autopep8 = "*"
 
 [packages]
+# Pins to make lockfile usable on multiple Python versions and platforms
+typing-extensions = "*"
 # All other package requirements from setup.cfg
 ibek = {editable = true, path = "."}
 
