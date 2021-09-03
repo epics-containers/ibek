@@ -6,7 +6,8 @@
       "description": "Name of IOC"
     },
     "description": {
-      "type": "string"
+      "type": "string",
+      "description": "Description of what the IOC does"
     },
     "entities": {
       "type": "array",
@@ -15,10 +16,6 @@
           {
             "type": "object",
             "properties": {
-              "type": {
-                "type": "string",
-                "const": "pmac.Geobrick"
-              },
               "name": {
                 "type": "string",
                 "description": "Name to use for the geobrick's asyn port"
@@ -42,10 +39,14 @@
               "movingPoll": {
                 "type": "integer",
                 "description": "Moving Poll Period in ms"
+              },
+              "type": {
+                "type": "string",
+                "const": "pmac.Geobrick",
+                "default": "pmac.Geobrick"
               }
             },
             "required": [
-              "type",
               "name",
               "PORT",
               "P",
@@ -58,10 +59,6 @@
           {
             "type": "object",
             "properties": {
-              "type": {
-                "type": "string",
-                "const": "pmac.PmacAsynIPPort"
-              },
               "name": {
                 "type": "string",
                 "description": "Asyn port name"
@@ -69,10 +66,14 @@
               "IP": {
                 "type": "string",
                 "description": "IP address of pmac"
+              },
+              "type": {
+                "type": "string",
+                "const": "pmac.PmacAsynIPPort",
+                "default": "pmac.PmacAsynIPPort"
               }
             },
             "required": [
-              "type",
               "name",
               "IP"
             ],
@@ -81,10 +82,6 @@
           {
             "type": "object",
             "properties": {
-              "type": {
-                "type": "string",
-                "const": "pmac.DlsPmacAsynMotor"
-              },
               "PMAC": {
                 "type": "string",
                 "description": "PMAC to attach to"
@@ -116,7 +113,7 @@
               "DESC": {
                 "type": "string",
                 "description": "Description, displayed on EDM screen",
-                "default": " "
+                "default": ""
               },
               "MRES": {
                 "type": "number",
@@ -159,9 +156,9 @@
                 "default": 1.0
               },
               "VMAX": {
-                "type": "number",
+                "type": "string",
                 "description": "Max Velocity (EGU/s)",
-                "default": 1.0
+                "default": "$(VELO)"
               },
               "ACCL": {
                 "type": "number",
@@ -211,7 +208,7 @@
               "INIT": {
                 "type": "string",
                 "description": "Startup commands",
-                "default": " "
+                "default": ""
               },
               "SREV": {
                 "type": "number",
@@ -251,7 +248,7 @@
               "RLNK": {
                 "type": "string",
                 "description": "Readback output link",
-                "default": " "
+                "default": ""
               },
               "RTRY": {
                 "type": "integer",
@@ -324,7 +321,7 @@
               "alh": {
                 "type": "string",
                 "description": "Set this to alh to add the motor to the alarm handler and send emails",
-                "default": " "
+                "default": ""
               },
               "gda_name": {
                 "type": "string",
@@ -345,10 +342,14 @@
                 "type": "string",
                 "description": "Set to a blank to allow this axis to have its homed",
                 "default": "#"
+              },
+              "type": {
+                "type": "string",
+                "const": "pmac.DlsPmacAsynMotor",
+                "default": "pmac.DlsPmacAsynMotor"
               }
             },
             "required": [
-              "type",
               "PMAC",
               "axis",
               "P",

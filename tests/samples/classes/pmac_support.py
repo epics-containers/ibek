@@ -7,8 +7,15 @@ This preamble file is added to the head of the generated class
 
 from apischema import Undefined
 
-from ibek.argument import FloatArg, IntArg, StrArg
-from ibek.support import Database, Definition, Support
+from ibek.support import (
+    Database,
+    Definition,
+    FloatArg,
+    IntArg,
+    ObjectArg,
+    StrArg,
+    Support,
+)
 
 """
 This represents the generated instance of a Support Object which is an
@@ -34,12 +41,11 @@ SUPPORT = Support(
                     default=Undefined,
                     is_id=False,
                 ),
-                StrArg(
+                ObjectArg(
                     name="PORT",
                     description="Asyn port name for PmacAsynIPPort to connect to",
-                    type="str",
+                    type="pmac.PmacAsynIPPort",
                     default=Undefined,
-                    is_id=False,
                 ),
                 StrArg(
                     name="P",
@@ -80,7 +86,7 @@ SUPPORT = Support(
                 ),
             ),
             script=(
-                "pmacCreateController({{name}}, {{PORT}}, 0, {{numAxes}},"
+                "pmacCreateController({{name}}, {{PORT.name}}, 0, {{numAxes}},"
                 " {{movingPoll}}, {{idlePoll}})",
                 "pmacCreateAxes({{name}}, {{numAxes}})",
             ),
@@ -93,7 +99,7 @@ SUPPORT = Support(
                     description="Asyn port name",
                     type="str",
                     default=Undefined,
-                    is_id=False,
+                    is_id=True,
                 ),
                 StrArg(
                     name="IP",
@@ -163,7 +169,7 @@ SUPPORT = Support(
                     name="DESC",
                     description="Description, displayed on EDM screen",
                     type="str",
-                    default=" ",
+                    default="",
                     is_id=False,
                 ),
                 FloatArg(
@@ -211,11 +217,11 @@ SUPPORT = Support(
                     type="float",
                     default=1.0,
                 ),
-                FloatArg(
+                StrArg(
                     name="VMAX",
                     description="Max Velocity (EGU/s)",
-                    type="float",
-                    default=1.0,
+                    type="str",
+                    default="$(VELO)",
                 ),
                 FloatArg(
                     name="ACCL",
@@ -270,7 +276,7 @@ SUPPORT = Support(
                     name="INIT",
                     description="Startup commands",
                     type="str",
-                    default=" ",
+                    default="",
                     is_id=False,
                 ),
                 FloatArg(
@@ -320,7 +326,7 @@ SUPPORT = Support(
                     name="RLNK",
                     description="Readback output link",
                     type="str",
-                    default=" ",
+                    default="",
                     is_id=False,
                 ),
                 IntArg(
@@ -409,7 +415,7 @@ SUPPORT = Support(
                         " emails"
                     ),
                     type="str",
-                    default=" ",
+                    default="",
                     is_id=False,
                 ),
                 StrArg(

@@ -8,7 +8,7 @@ definitions:
         name: name
         description: Name to use for the geobrick's asyn port
 
-      - type: str # pmac.PmacAsynIPPort
+      - type: pmac.PmacAsynIPPort
         name: PORT
         description: Asyn port name for PmacAsynIPPort to connect to
 
@@ -31,7 +31,7 @@ definitions:
     # axes hard coded to 8 for geobrick (builder.py counted the axes created)
     # TODO is num_axes is an example of something hard to do in this new approach?
     script:
-      - pmacCreateController({{name}}, {{PORT}}, 0, {{numAxes}}, {{movingPoll}}, {{idlePoll}})
+      - pmacCreateController({{name}}, {{PORT.name}}, 0, {{numAxes}}, {{movingPoll}}, {{idlePoll}})
       - pmacCreateAxes({{name}}, {{numAxes}})
 
     databases:
@@ -45,6 +45,7 @@ definitions:
       - type: str
         name: name
         description: Asyn port name
+        is_id: true
 
       - type: str
         name: IP
@@ -88,7 +89,7 @@ definitions:
       - type: str
         name: DESC
         description: Description, displayed on EDM screen
-        default: " "
+        default: ""
 
       - type: float
         name: MRES
@@ -130,11 +131,10 @@ definitions:
         description: Base Velocity (EGU/s)
         default: 1.0
 
-      - type: float
+      - type: str
         name: VMAX
         description: Max Velocity (EGU/s)
-        # default: $(VELO)
-        default: 1
+        default: $(VELO)
 
       - type: float
         name: ACCL
@@ -184,7 +184,7 @@ definitions:
       - type: str
         name: INIT
         description: Startup commands
-        default: " "
+        default: ""
 
       - type: float
         name: SREV
@@ -224,7 +224,7 @@ definitions:
       - type: str
         name: RLNK
         description: Readback output link
-        default: " "
+        default: ""
 
       - type: int
         name: RTRY
@@ -299,7 +299,7 @@ definitions:
       - type: str
         name: alh
         description: Set this to alh to add the motor to the alarm handler and send emails
-        default: " "
+        default: ""
 
       - type: str
         name: gda_name

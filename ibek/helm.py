@@ -9,9 +9,9 @@ from typing import Tuple
 from jinja2 import Template
 from ruamel.yaml.main import YAML
 
-from ibek.generator import from_support_module_definition
-from ibek.render import render_database_elements, render_script_elements
-from ibek.support import GenericIoc
+from .ioc import IOC, make_entity_classes
+from .render import render_database_elements, render_script_elements
+from .support import Support
 
 HELM_TEMPLATE = Path(__file__).parent.parent / "helm-template"
 TEMPLATES = Path(__file__).parent / "templates"
@@ -19,24 +19,21 @@ TEMPLATES = Path(__file__).parent / "templates"
 
 def create_boot_script(
     ioc_instance_yaml: Path, definition_yaml: Path
-) -> Tuple[GenericIoc, str]:
+) -> Tuple[IOC, str]:
     """
     Create the boot script for an IOCs helm chart
     """
+    # Read and load the support module definitions
+    support = Support.deserialize(YAML().load(definition_yaml))
+    make_entity_classes(support)
 
-    # Dynamically generate dataclasses from the support module defintion file
-    support_definition = from_support_module_definition(definition_yaml)
+    # Create an IOC instance from it
+    ioc_instance = IOC.deserialize(YAML().load(ioc_instance_yaml))
 
     # Open jinja template for startup script and fill it in with script
     # elements and database elements parsed from the defintion file
     with open(TEMPLATES / "ioc.boot.jinja", "r") as f:
         template = Template(f.read())
-
-    # read the ioc instance entities into a dictionary
-    entity_instance_dict = YAML().load(ioc_instance_yaml)
-
-    # Use the support defintion classes to deserialize the ioc instance entities
-    ioc_instance = support_definition.deserialize(entity_instance_dict)
 
     script_txt = template.render(
         script_elements=render_script_elements(ioc_instance),
@@ -59,7 +56,7 @@ def render_file(file_template: Path, **kwargs):
     file_template.unlink()
 
 
-def create_helm(instance: GenericIoc, script_txt: str, path: Path):
+def create_helm(instance: IOC, script_txt: str, path: Path):
     """
     create a boilerplate helm chart with name str in folder path
 

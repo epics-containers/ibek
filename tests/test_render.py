@@ -3,53 +3,36 @@ Tests for the rendering of scripts and database entries from generated
 Entity classes
 """
 from pathlib import Path
+from unittest.mock import Mock
 
-from pytest import fixture
 from ruamel.yaml import YAML
 
-from ibek.generator import from_support_module_definition
-from ibek.globals import namespace
 from ibek.render import render_database, render_script
 from ibek.support import Support
 from tests.samples.classes.pmac_support import SUPPORT
 
-sample_yaml = Path(__file__).parent / "samples" / "yaml"
 
-
-@fixture
-def pmac_classes():
-    # create a support object from YAML - this has the side effect of
-    # populating namespace with all of the generated classes
-    from_support_module_definition(sample_yaml / "pmac.ibek.yaml")
-
-    # return the namespace so that callers have access to all of the
-    # generated dataclasses
-    return namespace
-
-
-def test_deserialize_support() -> None:
-    with open(sample_yaml / "pmac.ibek.yaml") as f:
-        yaml_dict = YAML().load(f)
-        actual = Support.deserialize(yaml_dict)
+def test_deserialize_support(samples: Path) -> None:
+    yaml_dict = YAML().load(samples / "yaml" / "pmac.ibek.yaml")
+    actual = Support.deserialize(yaml_dict)
     assert actual == SUPPORT
 
 
 def test_pmac_asyn_ip_port_script(pmac_classes):
-    generated_class = pmac_classes["pmac.PmacAsynIPPort"]
-    pmac_asyn_ip = generated_class(
-        generated_class, name="my_pmac_instance", IP="111.111.111.111"
-    )
+    generated_class = pmac_classes.PmacAsynIPPort
+    pmac_asyn_ip = generated_class(name="my_pmac_instance", IP="111.111.111.111")
 
     script_txt = render_script(pmac_asyn_ip)
     assert script_txt == "pmacAsynIPConfigure(my_pmac_instance, 111.111.111.111:1025)"
 
 
 def test_geobrick_script(pmac_classes):
-    generated_class = pmac_classes["pmac.Geobrick"]
+    generated_class = pmac_classes.Geobrick
+    ip_port = Mock()
+    ip_port.name = "my_asyn_port"
     pmac_geobrick_instance = generated_class(
-        generated_class,
         name="test_geobrick",
-        PORT="my_asyn_port",
+        PORT=ip_port,
         P="geobrick_one",
         numAxes=8,
         idlePoll=200,
@@ -66,9 +49,8 @@ def test_geobrick_script(pmac_classes):
 
 
 def test_geobrick_database(pmac_classes):
-    generated_class = pmac_classes["pmac.Geobrick"]
+    generated_class = pmac_classes.Geobrick
     pmac_geobrick_instance = generated_class(
-        generated_class,
         name="test_geobrick",
         PORT="my_asyn_port",
         P="geobrick_one",

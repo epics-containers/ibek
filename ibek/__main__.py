@@ -7,9 +7,10 @@ from apischema.json_schema import deserialization_schema
 from ruamel.yaml import YAML
 
 from ibek import __version__
-from ibek.generator import from_support_module_definition
-from ibek.helm import create_boot_script, create_helm
-from ibek.support import Support
+
+from .helm import create_boot_script, create_helm
+from .ioc import IOC, make_entity_classes
+from .support import Support
 
 cli = typer.Typer()
 yaml = YAML()
@@ -40,8 +41,7 @@ def ibek_schema(
 ):
     """Produce the JSON global schema for all <support_module>.ibek.yaml files"""
     schema = json.dumps(deserialization_schema(Support), indent=2)
-    with open(output, "w") as f:
-        f.write(schema)
+    output.write_text(schema)
 
 
 @cli.command()
@@ -55,11 +55,10 @@ def ioc_schema(
     Create a json schema from a <support_module>.ibek.yaml file
     TODO: update to take multiple definition files from a container
     """
-    ioc_class = from_support_module_definition(description)
-
-    schema = json.dumps(deserialization_schema(ioc_class), indent=2)
-    with open(output, "w") as f:
-        f.write(schema)
+    support = Support.deserialize(YAML().load(description))
+    make_entity_classes(support)
+    schema = json.dumps(deserialization_schema(IOC), indent=2)
+    output.write_text(schema)
 
 
 @cli.command()
@@ -100,10 +99,8 @@ def dump_support(
     ),
 ):
     """Dump the Support instance code (for debug/test)"""
-    yaml_dict = YAML().load(definition)
-    support_definition = Support.deserialize(yaml_dict)
-
-    out.write_text(str(support_definition))
+    support = Support.deserialize(YAML().load(definition))
+    out.write_text(str(support))
 
 
 # test with:
