@@ -113,8 +113,9 @@ def make_entity_class(definition: Definition, support: Support) -> Type[Entity]:
 
 
 def make_entity_classes(support: Support) -> types.SimpleNamespace:
-    """Create `Entity` subclasses for all `Definitions` in the given `Support`
-    instance, put them in a namespace in `ibek.modules` and return it"""
+    """Create `Entity` subclasses for all `Definition` objects in the given
+    `Support` instance, put them in a namespace in `ibek.modules` and return
+    it"""
     module = types.SimpleNamespace()
     assert not hasattr(
         modules, support.module
