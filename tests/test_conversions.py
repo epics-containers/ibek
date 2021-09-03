@@ -12,11 +12,7 @@ def test_conversion_classes():
         ],
     )
     namespace = make_entity_classes(support)
-    assert (
-        str(namespace) == "namespace("
-        "device=<class 'ibek.modules.mymodule.device'>, "
-        "port=<class 'ibek.modules.mymodule.port'>)"
-    )
+    assert {"device", "port"}.issubset(dir(namespace))
     assert namespace.port.__definition__ == support.definitions[0]
     assert namespace.device.__definition__ == support.definitions[1]
     d = dict(
