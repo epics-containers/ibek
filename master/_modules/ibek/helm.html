@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>ibek.helm &mdash; ibek 0.2+59.g5e1fafd documentation</title>
+  <title>ibek.helm &mdash; ibek 0.2+65.gd1f683f documentation</title>
   
 
   
@@ -20,7 +20,7 @@
 
   
   
-    <link rel="shortcut icon" href="../../_static/images/ibek-favicon.ico"/>
+    <link rel="shortcut icon" href="../../_static/ibek-favicon.ico"/>
   
 
   
@@ -63,7 +63,7 @@
 
           
             
-            <img src="../../_static/images/ibek-logo.svg" class="logo" alt="Logo"/>
+            <img src="../../_static/ibek-logo.svg" class="logo" alt="Logo"/>
           
           </a>
 
@@ -235,9 +235,9 @@
 <span class="kn">from</span> <span class="nn">jinja2</span> <span class="kn">import</span> <span class="n">Template</span>
 <span class="kn">from</span> <span class="nn">ruamel.yaml.main</span> <span class="kn">import</span> <span class="n">YAML</span>
 
-<span class="kn">from</span> <span class="nn">ibek.generator</span> <span class="kn">import</span> <span class="n">from_support_module_definition</span>
-<span class="kn">from</span> <span class="nn">ibek.render</span> <span class="kn">import</span> <span class="n">render_database_elements</span><span class="p">,</span> <span class="n">render_script_elements</span>
-<span class="kn">from</span> <span class="nn">ibek.support</span> <span class="kn">import</span> <span class="n">GenericIoc</span>
+<span class="kn">from</span> <span class="nn">.ioc</span> <span class="kn">import</span> <span class="n">IOC</span><span class="p">,</span> <span class="n">make_entity_classes</span>
+<span class="kn">from</span> <span class="nn">.render</span> <span class="kn">import</span> <span class="n">render_database_elements</span><span class="p">,</span> <span class="n">render_script_elements</span>
+<span class="kn">from</span> <span class="nn">.support</span> <span class="kn">import</span> <span class="n">Support</span>
 
 <span class="n">HELM_TEMPLATE</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">parent</span> <span class="o">/</span> <span class="s2">&quot;helm-template&quot;</span>
 <span class="n">TEMPLATES</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span><span class="o">.</span><span class="n">parent</span> <span class="o">/</span> <span class="s2">&quot;templates&quot;</span>
@@ -245,24 +245,21 @@
 
 <div class="viewcode-block" id="create_boot_script"><a class="viewcode-back" href="../../reference/api.html#ibek.helm.create_boot_script">[docs]</a><span class="k">def</span> <span class="nf">create_boot_script</span><span class="p">(</span>
     <span class="n">ioc_instance_yaml</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span> <span class="n">definition_yaml</span><span class="p">:</span> <span class="n">Path</span>
-<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">GenericIoc</span><span class="p">,</span> <span class="nb">str</span><span class="p">]:</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">IOC</span><span class="p">,</span> <span class="nb">str</span><span class="p">]:</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Create the boot script for an IOCs helm chart</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Read and load the support module definitions</span>
+    <span class="n">support</span> <span class="o">=</span> <span class="n">Support</span><span class="o">.</span><span class="n">deserialize</span><span class="p">(</span><span class="n">YAML</span><span class="p">()</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">definition_yaml</span><span class="p">))</span>
+    <span class="n">make_entity_classes</span><span class="p">(</span><span class="n">support</span><span class="p">)</span>
 
-    <span class="c1"># Dynamically generate dataclasses from the support module defintion file</span>
-    <span class="n">support_definition</span> <span class="o">=</span> <span class="n">from_support_module_definition</span><span class="p">(</span><span class="n">definition_yaml</span><span class="p">)</span>
+    <span class="c1"># Create an IOC instance from it</span>
+    <span class="n">ioc_instance</span> <span class="o">=</span> <span class="n">IOC</span><span class="o">.</span><span class="n">deserialize</span><span class="p">(</span><span class="n">YAML</span><span class="p">()</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">ioc_instance_yaml</span><span class="p">))</span>
 
     <span class="c1"># Open jinja template for startup script and fill it in with script</span>
     <span class="c1"># elements and database elements parsed from the defintion file</span>
     <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">TEMPLATES</span> <span class="o">/</span> <span class="s2">&quot;ioc.boot.jinja&quot;</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
         <span class="n">template</span> <span class="o">=</span> <span class="n">Template</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">())</span>
-
-    <span class="c1"># read the ioc instance entities into a dictionary</span>
-    <span class="n">entity_instance_dict</span> <span class="o">=</span> <span class="n">YAML</span><span class="p">()</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">ioc_instance_yaml</span><span class="p">)</span>
-
-    <span class="c1"># Use the support defintion classes to deserialize the ioc instance entities</span>
-    <span class="n">ioc_instance</span> <span class="o">=</span> <span class="n">support_definition</span><span class="o">.</span><span class="n">deserialize</span><span class="p">(</span><span class="n">entity_instance_dict</span><span class="p">)</span>
 
     <span class="n">script_txt</span> <span class="o">=</span> <span class="n">template</span><span class="o">.</span><span class="n">render</span><span class="p">(</span>
         <span class="n">script_elements</span><span class="o">=</span><span class="n">render_script_elements</span><span class="p">(</span><span class="n">ioc_instance</span><span class="p">),</span>
@@ -285,7 +282,7 @@
     <span class="n">file_template</span><span class="o">.</span><span class="n">unlink</span><span class="p">()</span></div>
 
 
-<div class="viewcode-block" id="create_helm"><a class="viewcode-back" href="../../reference/api.html#ibek.helm.create_helm">[docs]</a><span class="k">def</span> <span class="nf">create_helm</span><span class="p">(</span><span class="n">instance</span><span class="p">:</span> <span class="n">GenericIoc</span><span class="p">,</span> <span class="n">script_txt</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="n">Path</span><span class="p">):</span>
+<div class="viewcode-block" id="create_helm"><a class="viewcode-back" href="../../reference/api.html#ibek.helm.create_helm">[docs]</a><span class="k">def</span> <span class="nf">create_helm</span><span class="p">(</span><span class="n">instance</span><span class="p">:</span> <span class="n">IOC</span><span class="p">,</span> <span class="n">script_txt</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="n">Path</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    create a boilerplate helm chart with name str in folder path</span>
 

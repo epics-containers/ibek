@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>ibek.support &mdash; ibek 0.2+59.g5e1fafd documentation</title>
+  <title>ibek.support &mdash; ibek 0.2+65.gd1f683f documentation</title>
   
 
   
@@ -20,7 +20,7 @@
 
   
   
-    <link rel="shortcut icon" href="../../_static/images/ibek-favicon.ico"/>
+    <link rel="shortcut icon" href="../../_static/ibek-favicon.ico"/>
   
 
   
@@ -63,7 +63,7 @@
 
           
             
-            <img src="../../_static/images/ibek-logo.svg" class="logo" alt="Logo"/>
+            <img src="../../_static/ibek-logo.svg" class="logo" alt="Logo"/>
           
           </a>
 
@@ -230,28 +230,79 @@
 <span class="sd">&quot;&quot;&quot;</span>
 
 <span class="kn">from</span> <span class="nn">dataclasses</span> <span class="kn">import</span> <span class="n">dataclass</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">ClassVar</span><span class="p">,</span> <span class="n">Mapping</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">,</span> <span class="n">Type</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Mapping</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">,</span> <span class="n">Type</span><span class="p">,</span> <span class="n">Union</span>
 
-<span class="kn">from</span> <span class="nn">apischema</span> <span class="kn">import</span> <span class="n">deserialize</span><span class="p">,</span> <span class="n">deserializer</span>
+<span class="kn">from</span> <span class="nn">apischema</span> <span class="kn">import</span> <span class="n">Undefined</span><span class="p">,</span> <span class="n">UndefinedType</span><span class="p">,</span> <span class="n">deserialize</span><span class="p">,</span> <span class="n">deserializer</span>
 <span class="kn">from</span> <span class="nn">apischema.conversions</span> <span class="kn">import</span> <span class="n">Conversion</span><span class="p">,</span> <span class="n">identity</span>
 <span class="kn">from</span> <span class="nn">typing_extensions</span> <span class="kn">import</span> <span class="n">Annotated</span> <span class="k">as</span> <span class="n">A</span>
+<span class="kn">from</span> <span class="nn">typing_extensions</span> <span class="kn">import</span> <span class="n">Literal</span>
 
-<span class="kn">from</span> <span class="nn">ibek.argument</span> <span class="kn">import</span> <span class="n">Arg</span>
-<span class="kn">from</span> <span class="nn">ibek.globals</span> <span class="kn">import</span> <span class="n">T</span><span class="p">,</span> <span class="n">desc</span>
+<span class="kn">from</span> <span class="nn">.globals</span> <span class="kn">import</span> <span class="n">T</span><span class="p">,</span> <span class="n">desc</span>
 
-<span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">TODO: There are a couple of problems with deserialize and defaults. These</span>
-<span class="sd">are worked around as follows. I need to verify that this is the best</span>
-<span class="sd">approach to dealing with this.</span>
 
-<span class="sd">- str default &quot;&quot; == no default</span>
-<span class="sd">    - using &quot; &quot; for now (I&#39;m not sure I&#39;m happy with this)</span>
-<span class="sd">- int default 0 or null == no default</span>
-<span class="sd">    - using &quot;0&quot; and added str type to IntArg</span>
-<span class="sd">- float values in json have a trailing &#39;f&#39; and this comes back as str on deserialize</span>
-<span class="sd">    - added str type to FloatArg</span>
-<span class="sd">    - added __post_init__ to FloatArg to strip the &#39;f&#39;</span>
-<span class="sd">&quot;&quot;&quot;</span>
+<div class="viewcode-block" id="Arg"><a class="viewcode-back" href="../../reference/api.html#ibek.support.Arg">[docs]</a><span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">Arg</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Base class for all Argument Types&quot;&quot;&quot;</span>
+
+    <span class="n">name</span><span class="p">:</span> <span class="n">A</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">desc</span><span class="p">(</span><span class="s2">&quot;Name of the argument that the IOC instance should pass&quot;</span><span class="p">)]</span>
+    <span class="n">description</span><span class="p">:</span> <span class="n">A</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">desc</span><span class="p">(</span><span class="s2">&quot;Description of what the argument will be used for&quot;</span><span class="p">)]</span>
+    <span class="nb">type</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">default</span><span class="p">:</span> <span class="n">Any</span>
+
+    <span class="c1"># https://wyfo.github.io/apischema/examples/subclass_union/</span>
+    <span class="k">def</span> <span class="nf">__init_subclass__</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+        <span class="c1"># Deserializers stack directly as a Union</span>
+        <span class="n">deserializer</span><span class="p">(</span><span class="n">Conversion</span><span class="p">(</span><span class="n">identity</span><span class="p">,</span> <span class="n">source</span><span class="o">=</span><span class="bp">cls</span><span class="p">,</span> <span class="n">target</span><span class="o">=</span><span class="n">Arg</span><span class="p">))</span></div>
+
+
+<span class="n">Default</span> <span class="o">=</span> <span class="n">A</span><span class="p">[</span>
+    <span class="n">Union</span><span class="p">[</span><span class="n">Optional</span><span class="p">[</span><span class="n">T</span><span class="p">],</span> <span class="n">UndefinedType</span><span class="p">],</span>
+    <span class="n">desc</span><span class="p">(</span><span class="s2">&quot;If given, and instance doesn&#39;t supply argument, what value should be used&quot;</span><span class="p">),</span>
+<span class="p">]</span>
+
+
+<span class="c1"># FloatArg must be defined before StrArg, otherwise we get:</span>
+<span class="c1">#</span>
+<span class="c1">#    TypeError: Invalid JSON type &lt;class &#39;ruamel.yaml.scalarfloat.ScalarFloat&#39;&gt;</span>
+<span class="c1">#</span>
+<span class="c1"># During Support.deserialize, when default float values in pmac.ibek.yaml do not</span>
+<span class="c1"># have a trailing &#39;f&#39;. It is due to the order of declaration of subclasses of</span>
+<span class="c1"># Arg. When StrArg is before FloatArg, apischema attempts to deserialize as a</span>
+<span class="c1"># string first. The coercion from str to number requires a trailing f if there</span>
+<span class="c1"># is a decimal.</span>
+<div class="viewcode-block" id="FloatArg"><a class="viewcode-back" href="../../reference/api.html#ibek.support.FloatArg">[docs]</a><span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">FloatArg</span><span class="p">(</span><span class="n">Arg</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;An argument with a float value&quot;&quot;&quot;</span>
+
+    <span class="nb">type</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;float&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;float&quot;</span>
+    <span class="n">default</span><span class="p">:</span> <span class="n">Default</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="n">Undefined</span></div>
+
+
+<div class="viewcode-block" id="StrArg"><a class="viewcode-back" href="../../reference/api.html#ibek.support.StrArg">[docs]</a><span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">StrArg</span><span class="p">(</span><span class="n">Arg</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;An argument with a str value&quot;&quot;&quot;</span>
+
+    <span class="nb">type</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;str&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;str&quot;</span>
+    <span class="n">default</span><span class="p">:</span> <span class="n">Default</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">Undefined</span>
+    <span class="n">is_id</span><span class="p">:</span> <span class="n">A</span><span class="p">[</span>
+        <span class="nb">bool</span><span class="p">,</span> <span class="n">desc</span><span class="p">(</span><span class="s2">&quot;If true, instances may refer to this instance by this arg&quot;</span><span class="p">)</span>
+    <span class="p">]</span> <span class="o">=</span> <span class="kc">False</span></div>
+
+
+<div class="viewcode-block" id="IntArg"><a class="viewcode-back" href="../../reference/api.html#ibek.support.IntArg">[docs]</a><span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">IntArg</span><span class="p">(</span><span class="n">Arg</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;An argument with an int value&quot;&quot;&quot;</span>
+
+    <span class="nb">type</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;int&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;int&quot;</span>
+    <span class="n">default</span><span class="p">:</span> <span class="n">Default</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="n">Undefined</span></div>
+
+
+<div class="viewcode-block" id="ObjectArg"><a class="viewcode-back" href="../../reference/api.html#ibek.support.ObjectArg">[docs]</a><span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">ObjectArg</span><span class="p">(</span><span class="n">Arg</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;A reference to another entity defined in this IOC&quot;&quot;&quot;</span>
+
+    <span class="nb">type</span><span class="p">:</span> <span class="n">A</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">desc</span><span class="p">(</span><span class="s2">&quot;Entity class, &lt;module&gt;.&lt;entity_name&gt;&quot;</span><span class="p">)]</span>
+    <span class="n">default</span><span class="p">:</span> <span class="n">Default</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">Undefined</span></div>
 
 
 <div class="viewcode-block" id="Database"><a class="viewcode-back" href="../../reference/api.html#ibek.support.Database">[docs]</a><span class="nd">@dataclass</span>
@@ -279,60 +330,6 @@
     <span class="n">script</span><span class="p">:</span> <span class="n">A</span><span class="p">[</span>
         <span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">desc</span><span class="p">(</span><span class="s2">&quot;Startup script snippet defined as Jinja template&quot;</span><span class="p">)</span>
     <span class="p">]</span> <span class="o">=</span> <span class="p">()</span></div>
-
-
-<div class="viewcode-block" id="Entity"><a class="viewcode-back" href="../../reference/api.html#ibek.support.Entity">[docs]</a><span class="nd">@dataclass</span>
-<span class="k">class</span> <span class="nc">Entity</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    A baseclass for all generated Entity classes. Provides the</span>
-<span class="sd">    deserialize entry point.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-
-    <span class="c1"># a link back to the Entity Object that generated this Entity</span>
-    <span class="n">entity</span><span class="p">:</span> <span class="n">ClassVar</span><span class="p">[</span><span class="n">Definition</span><span class="p">]</span>
-
-    <span class="k">def</span> <span class="nf">__init_subclass__</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">deserializer</span><span class="p">(</span><span class="n">Conversion</span><span class="p">(</span><span class="n">identity</span><span class="p">,</span> <span class="n">source</span><span class="o">=</span><span class="bp">cls</span><span class="p">,</span> <span class="n">target</span><span class="o">=</span><span class="n">Entity</span><span class="p">))</span></div>
-
-
-<div class="viewcode-block" id="GenericIoc"><a class="viewcode-back" href="../../reference/api.html#ibek.support.GenericIoc">[docs]</a><span class="nd">@dataclass</span>
-<span class="k">class</span> <span class="nc">GenericIoc</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    A base class for all generated Generic IOC classes.</span>
-
-<span class="sd">    Each class derived from this dataclass represents a Generic IOC and the</span>
-<span class="sd">    set of types of Entity it can instantiate. However, note that we</span>
-<span class="sd">    hold the Entity types in globals::namespace, see NOTE.</span>
-
-<span class="sd">    These classes are generated from the support module definition</span>
-<span class="sd">    YAML files in a generic IOC container.</span>
-
-<span class="sd">    Each instance of this class represents an IOC instance with its list</span>
-<span class="sd">    of instantiated Entities.</span>
-
-<span class="sd">    NOTE: because I have made the namespace for generated classes global</span>
-<span class="sd">    all GenericIoc are exactly the same - just a list of Entity. This</span>
-<span class="sd">    incorrectly implies that instantiating two Generic IOCs in the same</span>
-<span class="sd">    session would mean they share all their Entity types.</span>
-
-<span class="sd">    I&#39;m not sure this matters, when deserializing any &lt;support&gt;.ibek.yaml</span>
-<span class="sd">    you get exactly the same class but as a side effect populate the</span>
-<span class="sd">    global namespace with the Entity Types that the file describes. This</span>
-<span class="sd">    side effect occurs in the function generator::get_module.</span>
-
-<span class="sd">    We don&#39;t need to look at two IOCs in the same session, ironically we</span>
-<span class="sd">    do need to look at multiple Support modules in a session and this</span>
-<span class="sd">    means that we don&#39;t need to distinguish between a support module and</span>
-<span class="sd">    a set of support modules in an ioc.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-
-    <span class="n">ioc_name</span><span class="p">:</span> <span class="nb">str</span>
-    <span class="n">description</span><span class="p">:</span> <span class="nb">str</span>
-    <span class="n">entities</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Entity</span><span class="p">]</span>
-
-    <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">deserialize</span><span class="p">(</span><span class="bp">cls</span><span class="p">:</span> <span class="n">Type</span><span class="p">[</span><span class="n">T</span><span class="p">],</span> <span class="n">d</span><span class="p">:</span> <span class="n">Mapping</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">T</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">deserialize</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">d</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="Support"><a class="viewcode-back" href="../../reference/api.html#ibek.support.Support">[docs]</a><span class="nd">@dataclass</span>

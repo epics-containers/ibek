@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>Modules, Definitions and Entities &mdash; ibek 0.2+59.g5e1fafd documentation</title>
+  <title>Modules, Definitions and Entities &mdash; ibek 0.2+65.gd1f683f documentation</title>
   
 
   
@@ -20,7 +20,7 @@
 
   
   
-    <link rel="shortcut icon" href="../_static/images/ibek-favicon.ico"/>
+    <link rel="shortcut icon" href="../_static/ibek-favicon.ico"/>
   
 
   
@@ -65,7 +65,7 @@
 
           
             
-            <img src="../_static/images/ibek-logo.svg" class="logo" alt="Logo"/>
+            <img src="../_static/ibek-logo.svg" class="logo" alt="Logo"/>
           
           </a>
 
@@ -302,7 +302,7 @@ definitions:
         name: name
         description: Name to use for the geobrick&#39;s asyn port
 
-      - type: str # pmac.PmacAsynIPPort
+      - type: pmac.PmacAsynIPPort
         name: PORT
         description: Asyn port name for PmacAsynIPPort to connect to
 
@@ -325,7 +325,7 @@ definitions:
     # axes hard coded to 8 for geobrick (builder.py counted the axes created)
     # TODO is num_axes is an example of something hard to do in this new approach?
     script:
-      - pmacCreateController({{name}}, {{PORT}}, 0, {{numAxes}}, {{movingPoll}}, {{idlePoll}})
+      - pmacCreateController({{name}}, {{PORT.name}}, 0, {{numAxes}}, {{movingPoll}}, {{idlePoll}})
       - pmacCreateAxes({{name}}, {{numAxes}})
 
     databases:
@@ -339,6 +339,7 @@ definitions:
       - type: str
         name: name
         description: Asyn port name
+        is_id: true
 
       - type: str
         name: IP
@@ -382,7 +383,7 @@ definitions:
       - type: str
         name: DESC
         description: Description, displayed on EDM screen
-        default: &quot; &quot;
+        default: &quot;&quot;
 
       - type: float
         name: MRES
@@ -424,11 +425,10 @@ definitions:
         description: Base Velocity (EGU/s)
         default: 1.0
 
-      - type: float
+      - type: str
         name: VMAX
         description: Max Velocity (EGU/s)
-        # default: $(VELO)
-        default: 1
+        default: $(VELO)
 
       - type: float
         name: ACCL
@@ -478,7 +478,7 @@ definitions:
       - type: str
         name: INIT
         description: Startup commands
-        default: &quot; &quot;
+        default: &quot;&quot;
 
       - type: float
         name: SREV
@@ -518,7 +518,7 @@ definitions:
       - type: str
         name: RLNK
         description: Readback output link
-        default: &quot; &quot;
+        default: &quot;&quot;
 
       - type: int
         name: RTRY
@@ -593,7 +593,7 @@ definitions:
       - type: str
         name: alh
         description: Set this to alh to add the motor to the alarm handler and send emails
-        default: &quot; &quot;
+        default: &quot;&quot;
 
       - type: str
         name: gda_name
@@ -792,8 +792,8 @@ file that ibek will generate from it.</p>
 
 <span class="n">dbLoadRecords</span><span class="p">(</span><span class="s2">&quot;pmacController.template&quot;</span><span class="p">,</span> <span class="s2">&quot;PMAC=BL45P-MO-STEP-01:&quot;</span><span class="p">)</span>
 <span class="n">dbLoadRecords</span><span class="p">(</span><span class="s2">&quot;pmacStatus.template&quot;</span><span class="p">,</span> <span class="s2">&quot;PMAC=BL45P-MO-STEP-01:&quot;</span><span class="p">)</span>
-<span class="n">dbLoadRecords</span><span class="p">(</span><span class="s2">&quot;$(PMAC)/db/dls_pmac_asyn_motor.template&quot;</span><span class="p">,</span> <span class="s2">&quot;ADDR=1, P=BL45P-MO-THIN-01, M=:X1, PORT=BL45P-MO-BRICK-01, DESC= , MRES=0.001, VELO=1.0, PREC=3.0, EGU=mm, TWV=1, DTYP=asynMotor, DIR=0, VBAS=1.0, VMAX=1.0, ACCL=0.5, BDST=0.0, BVEL=0.0, BACC=0.0, DHLM=10000.0, DLLM=, HLM=0.0, LLM=0.0, HLSV=MAJOR, INIT= , SREV=1000.0, RRES=0.0, ERES=0.0, JAR=0.0, UEIP=0, RDBL=0, RLINK=, RTRY=0, DLY=0.0, OFF=0.0, RDBD=0.0, FOFF=0, ADEL=0.0, NTM=1, FEHIGH=, FEHIHI=0.0, FEHHSV=NO_ALARM, FEHSV=NO_ALARM, SCALE=1, HOMEVIS=1, HOMEVISSTR=, name=X1 motor, alh= , gda_name=none, gda_desc=$(DESC), SPORT=BRICK1port, HOME=$(P), PMAC=BL45P-MO-BRICK-01, ALLOW_HOMED_SET=#&quot;</span><span class="p">)</span>
-<span class="n">dbLoadRecords</span><span class="p">(</span><span class="s2">&quot;$(PMAC)/db/dls_pmac_asyn_motor.template&quot;</span><span class="p">,</span> <span class="s2">&quot;ADDR=2, P=BL45P-MO-THIN-01, M=:Y1, PORT=BL45P-MO-BRICK-01, DESC= , MRES=0.001, VELO=1.0, PREC=3.0, EGU=mm, TWV=1, DTYP=asynMotor, DIR=0, VBAS=1.0, VMAX=1.0, ACCL=0.5, BDST=0.0, BVEL=0.0, BACC=0.0, DHLM=10000.0, DLLM=, HLM=0.0, LLM=0.0, HLSV=MAJOR, INIT= , SREV=1000.0, RRES=0.0, ERES=0.0, JAR=0.0, UEIP=0, RDBL=0, RLINK=, RTRY=0, DLY=0.0, OFF=0.0, RDBD=0.0, FOFF=0, ADEL=0.0, NTM=1, FEHIGH=, FEHIHI=0.0, FEHHSV=NO_ALARM, FEHSV=NO_ALARM, SCALE=1, HOMEVIS=1, HOMEVISSTR=, name=Y1 motor, alh= , gda_name=none, gda_desc=$(DESC), SPORT=BRICK1port, HOME=$(P), PMAC=BL45P-MO-BRICK-01, ALLOW_HOMED_SET=#&quot;</span><span class="p">)</span>
+<span class="n">dbLoadRecords</span><span class="p">(</span><span class="s2">&quot;$(PMAC)/db/dls_pmac_asyn_motor.template&quot;</span><span class="p">,</span> <span class="s2">&quot;ADDR=1, P=BL45P-MO-THIN-01, M=:X1, PORT=BL45P-MO-BRICK-01, DESC=, MRES=0.001, VELO=1.0, PREC=3.0, EGU=mm, TWV=1, DTYP=asynMotor, DIR=0, VBAS=1.0, VMAX=$(VELO), ACCL=0.5, BDST=0.0, BVEL=0.0, BACC=0.0, DHLM=10000.0, DLLM=, HLM=0.0, LLM=0.0, HLSV=MAJOR, INIT=, SREV=1000.0, RRES=0.0, ERES=0.0, JAR=0.0, UEIP=0, RDBL=0, RLINK=, RTRY=0, DLY=0.0, OFF=0.0, RDBD=0.0, FOFF=0, ADEL=0.0, NTM=1, FEHIGH=, FEHIHI=0.0, FEHHSV=NO_ALARM, FEHSV=NO_ALARM, SCALE=1, HOMEVIS=1, HOMEVISSTR=, name=X1 motor, alh=, gda_name=none, gda_desc=$(DESC), SPORT=BRICK1port, HOME=$(P), PMAC=BL45P-MO-BRICK-01, ALLOW_HOMED_SET=#&quot;</span><span class="p">)</span>
+<span class="n">dbLoadRecords</span><span class="p">(</span><span class="s2">&quot;$(PMAC)/db/dls_pmac_asyn_motor.template&quot;</span><span class="p">,</span> <span class="s2">&quot;ADDR=2, P=BL45P-MO-THIN-01, M=:Y1, PORT=BL45P-MO-BRICK-01, DESC=, MRES=0.001, VELO=1.0, PREC=3.0, EGU=mm, TWV=1, DTYP=asynMotor, DIR=0, VBAS=1.0, VMAX=$(VELO), ACCL=0.5, BDST=0.0, BVEL=0.0, BACC=0.0, DHLM=10000.0, DLLM=, HLM=0.0, LLM=0.0, HLSV=MAJOR, INIT=, SREV=1000.0, RRES=0.0, ERES=0.0, JAR=0.0, UEIP=0, RDBL=0, RLINK=, RTRY=0, DLY=0.0, OFF=0.0, RDBD=0.0, FOFF=0, ADEL=0.0, NTM=1, FEHIGH=, FEHIHI=0.0, FEHHSV=NO_ALARM, FEHSV=NO_ALARM, SCALE=1, HOMEVIS=1, HOMEVISSTR=, name=Y1 motor, alh=, gda_name=none, gda_desc=$(DESC), SPORT=BRICK1port, HOME=$(P), PMAC=BL45P-MO-BRICK-01, ALLOW_HOMED_SET=#&quot;</span><span class="p">)</span>
 
 <span class="n">cd</span> <span class="s2">&quot;$(TOP)&quot;</span>
 <span class="n">iocInit</span><span class="p">()</span>
@@ -1073,7 +1073,8 @@ the container or during container development.</p>
       <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Name of IOC&quot;</span>
     <span class="p">},</span>
     <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="p">{</span>
-      <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
+      <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Description of what the IOC does&quot;</span>
     <span class="p">},</span>
     <span class="s2">&quot;entities&quot;</span><span class="p">:</span> <span class="p">{</span>
       <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;array&quot;</span><span class="p">,</span>
@@ -1082,10 +1083,6 @@ the container or during container development.</p>
           <span class="p">{</span>
             <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span>
             <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span>
-              <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="p">{</span>
-                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;const&quot;</span><span class="p">:</span> <span class="s2">&quot;pmac.Geobrick&quot;</span>
-              <span class="p">},</span>
               <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="p">{</span>
                 <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
                 <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Name to use for the geobrick&#39;s asyn port&quot;</span>
@@ -1109,10 +1106,14 @@ the container or during container development.</p>
               <span class="s2">&quot;movingPoll&quot;</span><span class="p">:</span> <span class="p">{</span>
                 <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;integer&quot;</span><span class="p">,</span>
                 <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Moving Poll Period in ms&quot;</span>
+              <span class="p">},</span>
+              <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;const&quot;</span><span class="p">:</span> <span class="s2">&quot;pmac.Geobrick&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="s2">&quot;pmac.Geobrick&quot;</span>
               <span class="p">}</span>
             <span class="p">},</span>
             <span class="s2">&quot;required&quot;</span><span class="p">:</span> <span class="p">[</span>
-              <span class="s2">&quot;type&quot;</span><span class="p">,</span>
               <span class="s2">&quot;name&quot;</span><span class="p">,</span>
               <span class="s2">&quot;PORT&quot;</span><span class="p">,</span>
               <span class="s2">&quot;P&quot;</span><span class="p">,</span>
@@ -1125,10 +1126,6 @@ the container or during container development.</p>
           <span class="p">{</span>
             <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span>
             <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span>
-              <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="p">{</span>
-                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;const&quot;</span><span class="p">:</span> <span class="s2">&quot;pmac.PmacAsynIPPort&quot;</span>
-              <span class="p">},</span>
               <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="p">{</span>
                 <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
                 <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Asyn port name&quot;</span>
@@ -1136,10 +1133,14 @@ the container or during container development.</p>
               <span class="s2">&quot;IP&quot;</span><span class="p">:</span> <span class="p">{</span>
                 <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
                 <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;IP address of pmac&quot;</span>
+              <span class="p">},</span>
+              <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;const&quot;</span><span class="p">:</span> <span class="s2">&quot;pmac.PmacAsynIPPort&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="s2">&quot;pmac.PmacAsynIPPort&quot;</span>
               <span class="p">}</span>
             <span class="p">},</span>
             <span class="s2">&quot;required&quot;</span><span class="p">:</span> <span class="p">[</span>
-              <span class="s2">&quot;type&quot;</span><span class="p">,</span>
               <span class="s2">&quot;name&quot;</span><span class="p">,</span>
               <span class="s2">&quot;IP&quot;</span>
             <span class="p">],</span>
@@ -1148,10 +1149,6 @@ the container or during container development.</p>
           <span class="p">{</span>
             <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span>
             <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span>
-              <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="p">{</span>
-                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;const&quot;</span><span class="p">:</span> <span class="s2">&quot;pmac.DlsPmacAsynMotor&quot;</span>
-              <span class="p">},</span>
               <span class="s2">&quot;PMAC&quot;</span><span class="p">:</span> <span class="p">{</span>
                 <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
                 <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;PMAC to attach to&quot;</span>
@@ -1183,7 +1180,7 @@ the container or during container development.</p>
               <span class="s2">&quot;DESC&quot;</span><span class="p">:</span> <span class="p">{</span>
                 <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
                 <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Description, displayed on EDM screen&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="s2">&quot; &quot;</span>
+                <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span>
               <span class="p">},</span>
               <span class="s2">&quot;MRES&quot;</span><span class="p">:</span> <span class="p">{</span>
                 <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;number&quot;</span><span class="p">,</span>
@@ -1226,9 +1223,9 @@ the container or during container development.</p>
                 <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="mf">1.0</span>
               <span class="p">},</span>
               <span class="s2">&quot;VMAX&quot;</span><span class="p">:</span> <span class="p">{</span>
-                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;number&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
                 <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Max Velocity (EGU/s)&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="mf">1.0</span>
+                <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="s2">&quot;$(VELO)&quot;</span>
               <span class="p">},</span>
               <span class="s2">&quot;ACCL&quot;</span><span class="p">:</span> <span class="p">{</span>
                 <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;number&quot;</span><span class="p">,</span>
@@ -1278,7 +1275,7 @@ the container or during container development.</p>
               <span class="s2">&quot;INIT&quot;</span><span class="p">:</span> <span class="p">{</span>
                 <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
                 <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Startup commands&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="s2">&quot; &quot;</span>
+                <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span>
               <span class="p">},</span>
               <span class="s2">&quot;SREV&quot;</span><span class="p">:</span> <span class="p">{</span>
                 <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;number&quot;</span><span class="p">,</span>
@@ -1318,7 +1315,7 @@ the container or during container development.</p>
               <span class="s2">&quot;RLNK&quot;</span><span class="p">:</span> <span class="p">{</span>
                 <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
                 <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Readback output link&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="s2">&quot; &quot;</span>
+                <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span>
               <span class="p">},</span>
               <span class="s2">&quot;RTRY&quot;</span><span class="p">:</span> <span class="p">{</span>
                 <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;integer&quot;</span><span class="p">,</span>
@@ -1391,7 +1388,7 @@ the container or during container development.</p>
               <span class="s2">&quot;alh&quot;</span><span class="p">:</span> <span class="p">{</span>
                 <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
                 <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Set this to alh to add the motor to the alarm handler and send emails&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="s2">&quot; &quot;</span>
+                <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span>
               <span class="p">},</span>
               <span class="s2">&quot;gda_name&quot;</span><span class="p">:</span> <span class="p">{</span>
                 <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
@@ -1412,10 +1409,14 @@ the container or during container development.</p>
                 <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
                 <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Set to a blank to allow this axis to have its homed&quot;</span><span class="p">,</span>
                 <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="s2">&quot;#&quot;</span>
+              <span class="p">},</span>
+              <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;const&quot;</span><span class="p">:</span> <span class="s2">&quot;pmac.DlsPmacAsynMotor&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="s2">&quot;pmac.DlsPmacAsynMotor&quot;</span>
               <span class="p">}</span>
             <span class="p">},</span>
             <span class="s2">&quot;required&quot;</span><span class="p">:</span> <span class="p">[</span>
-              <span class="s2">&quot;type&quot;</span><span class="p">,</span>
               <span class="s2">&quot;PMAC&quot;</span><span class="p">,</span>
               <span class="s2">&quot;axis&quot;</span><span class="p">,</span>
               <span class="s2">&quot;P&quot;</span><span class="p">,</span>
