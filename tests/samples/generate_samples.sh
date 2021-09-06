@@ -20,11 +20,3 @@ pipenv run ibek build-ioc ${SAMPLES_DIR}/yaml/pmac.ibek.yaml ${SAMPLES_DIR}/yaml
 cp /tmp/ioc/bl45p-mo-ioc-02/config/ioc.boot ${SAMPLES_DIR}/helm/
 cp /tmp/ioc/bl45p-mo-ioc-02/values.yaml ${SAMPLES_DIR}/helm/
 cp /tmp/ioc/bl45p-mo-ioc-02/Chart.yaml ${SAMPLES_DIR}/helm/
-
-echo making sample pmac defintiion object
-pipenv run ibek dump-support ${SAMPLES_DIR}/yaml/pmac.ibek.yaml
-cat ${SAMPLES_DIR}/black/preamble /tmp/support.py > ${SAMPLES_DIR}/classes/pmac_support.py
-cd ${SAMPLES_DIR}/black
-pipenv run black --experimental-string-processing ${SAMPLES_DIR}/classes
-cd -
-

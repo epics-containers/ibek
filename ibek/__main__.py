@@ -89,20 +89,6 @@ def build_ioc(
     create_helm(instance=ioc_instance, script_txt=script_txt, path=out)
 
 
-@cli.command(hidden=True, help=None)
-def dump_support(
-    definition: Path = typer.Argument(
-        ..., help="The filepath to the ioc definition file"
-    ),
-    out: Path = typer.Argument(
-        default="/tmp/support.py", help="Path in which save the Support instance code"
-    ),
-):
-    """Dump the Support instance code (for debug/test)"""
-    support = Support.deserialize(YAML().load(definition))
-    out.write_text(str(support))
-
-
 # test with:
 #     pipenv run python -m ibek
 if __name__ == "__main__":

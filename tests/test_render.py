@@ -2,20 +2,9 @@
 Tests for the rendering of scripts and database entries from generated
 Entity classes
 """
-from pathlib import Path
 from unittest.mock import Mock
 
-from ruamel.yaml import YAML
-
 from ibek.render import render_database, render_script
-from ibek.support import Support
-from tests.samples.classes.pmac_support import SUPPORT
-
-
-def test_deserialize_support(samples: Path) -> None:
-    yaml_dict = YAML().load(samples / "yaml" / "pmac.ibek.yaml")
-    actual = Support.deserialize(yaml_dict)
-    assert actual == SUPPORT
 
 
 def test_pmac_asyn_ip_port_script(pmac_classes):
