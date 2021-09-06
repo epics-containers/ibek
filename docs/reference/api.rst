@@ -14,28 +14,28 @@ This is the internal API reference for ibek
 
     Version number as calculated by https://github.com/dls-controls/versiongit
 
+``ibek.globals``
+----------------
+
+.. automodule:: ibek.globals
+    :members:
+
 ``ibek.support``
 ----------------
 
 .. automodule:: ibek.support
     :members:
 
-``ibek.argument``
------------------
-
-.. automodule:: ibek.argument
-    :members:
-
-``ibek.generator``
+``ibek.ioc``
 ------------------
 
-.. automodule:: ibek.generator
+.. automodule:: ibek.ioc
     :members:
 
-``ibek.globals``
-----------------
+``ibek.modules``
+------------------
 
-.. automodule:: ibek.globals
+.. automodule:: ibek.modules
     :members:
 
 ``ibek.helm``

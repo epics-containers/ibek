@@ -1,20 +1,16 @@
 import json
 from pathlib import Path
 
-from apischema.json_schema import deserialization_schema
+import pytest
+from ruamel.yaml import YAML
 from typer.testing import CliRunner
 
 from ibek import __version__
 from ibek.__main__ import cli
-from ibek.generator import from_support_module_definition
+from ibek.ioc import clear_entity_classes, make_entity_classes
+from ibek.support import Support
 
 runner = CliRunner()
-
-samples = Path(__file__).parent / "samples"
-sample_schemas = samples / "schemas"
-sample_yaml = samples / "yaml"
-sample_helm = samples / "helm"
-sample_classes = samples / "classes"
 
 
 def test_version():
@@ -23,11 +19,11 @@ def test_version():
     assert result.stdout == __version__ + "\n"
 
 
-def test_builder_schema(tmp_path: Path):
+def test_builder_schema(tmp_path: Path, samples: Path):
     schema_path = tmp_path / "schema.json"
     result = runner.invoke(cli, ["ibek-schema", str(schema_path)])
     assert result.exit_code == 0, f"ibek-schema failed with: {result}"
-    expected = json.loads(open(sample_schemas / "ibek.schema.json").read())
+    expected = json.loads(open(samples / "schemas" / "ibek.schema.json").read())
     # Don't care if version number didn't update to match if the rest is the same
     # expected["title"] = mock.ANY
 
@@ -35,29 +31,31 @@ def test_builder_schema(tmp_path: Path):
     assert expected == actual
 
 
-def test_pmac_schema(tmp_path: Path):
+def test_pmac_schema(tmp_path: Path, samples: Path):
+    clear_entity_classes()
 
     schema_path = tmp_path / "pmac.ibek.schema.json"
-    yaml_path = sample_yaml / "pmac.ibek.yaml"
+    yaml_path = samples / "yaml" / "pmac.ibek.yaml"
     result = runner.invoke(cli, ["ioc-schema", str(yaml_path), str(schema_path)])
     assert result.exit_code == 0, f"ioc-schema failed with: {result}"
 
-    expected = json.loads(open(sample_schemas / "pmac.schema.json").read())
+    expected = json.loads(open(samples / "schemas" / "pmac.schema.json").read())
 
     actual = json.loads(open(schema_path).read())
     assert expected == actual
 
 
-def test_build_ioc(tmp_path: Path):
-    description = sample_yaml / "pmac.ibek.yaml"
-    definition = sample_yaml / "bl45p-mo-ioc-02.pmac.yaml"
+def test_build_ioc(tmp_path: Path, samples: Path):
+    clear_entity_classes()
+    description = samples / "yaml" / "pmac.ibek.yaml"
+    definition = samples / "yaml" / "bl45p-mo-ioc-02.pmac.yaml"
 
     result = runner.invoke(
         cli, ["build-ioc", str(description), str(definition), str(tmp_path)]
     )
     assert result.exit_code == 0, f"build-ioc failed with: {result}"
 
-    example_boot = (sample_helm / "ioc.boot").read_text()
+    example_boot = (samples / "helm" / "ioc.boot").read_text()
     actual_file = tmp_path / "bl45p-mo-ioc-02" / "config" / "ioc.boot"
     actual_boot = actual_file.read_text()
 
@@ -66,31 +64,14 @@ def test_build_ioc(tmp_path: Path):
     # TODO check chart and values yaml files too
 
 
-def test_may_fail(tmp_path: Path):
+def test_loading_module_twice(tmp_path: Path, samples: Path):
+    clear_entity_classes()
     # When we deserialize the same yaml twice as we do in the full test suite
     # we may get clashes in the namespace of generated Entity classes.
-    #
-    # I have seen errors like this:
-    #   <Result ValueError("Types <class 'types.pmac.Geobrick'> and
-    #     <class 'types.pmac.Geobrick'> share same reference 'pmac.Geobrick'")>
-    # I was getting this error in the above test test_pmac_schema when I ran
-    # the test suite but not when I ran it standalone.
-    #
-    # This test is a standalone attempt to reproduce the error but while
-    # working on it the error has gone away and I don't understand whats up.
-    #
-    # I believe that this is the issue that Richard originally solved by
-    # defining the Entity base class in the scope of Support.
-    # (I gave it global scope because I want to)
-    definition_file = sample_yaml / "pmac.ibek.yaml"
-
-    ioc_class1 = from_support_module_definition(definition_file)
-
-    schema1 = json.dumps(deserialization_schema(ioc_class1), indent=2)
-    with open(tmp_path / "schema1", "w") as f:
-        f.write(schema1)
-
-    ioc_class2 = from_support_module_definition(definition_file)
-    schema2 = json.dumps(deserialization_schema(ioc_class2), indent=2)
-    with open(tmp_path / "schema2", "w") as f:
-        f.write(schema2)
+    # This tests that we get a sensible error when we do
+    definition_file = samples / "yaml" / "pmac.ibek.yaml"
+    support = Support.deserialize(YAML().load(definition_file))
+    make_entity_classes(support)
+    with pytest.raises(AssertionError) as ctx:
+        make_entity_classes(support)
+    assert str(ctx.value) == "Entity classes already created for pmac"

@@ -3,13 +3,10 @@ Functions for rendering lines in the boot script using Jinja2
 """
 
 from dataclasses import asdict
-from typing import TypeVar
 
 from jinja2 import Template
 
-from ibek.support import Entity, GenericIoc
-
-T = TypeVar("T")
+from .ioc import IOC, Entity
 
 
 def render_script(instance: Entity) -> str:
@@ -17,7 +14,7 @@ def render_script(instance: Entity) -> str:
     render the startup script by combining the jinja template from
     an entity with the arguments from and Entity
     """
-    all_lines = "\n".join(instance.entity.script)
+    all_lines = "\n".join(instance.__definition__.script)
     jinja_template = Template(all_lines)
     result = jinja_template.render(asdict(instance))
     return result
@@ -29,7 +26,7 @@ def render_database(instance: Entity) -> str:
     templates from the Entity's database list with the arguments from
     an Entity
     """
-    templates = instance.entity.databases
+    templates = instance.__definition__.databases
     jinja_txt = ""
     # include list entries expand to e.g. P={{ P }}
     jinja_arg = Template('{{ arg }}={{ "{{" + arg + "}}" }}')
@@ -51,7 +48,7 @@ def render_database(instance: Entity) -> str:
     return db_txt
 
 
-def render_script_elements(ioc: GenericIoc) -> str:
+def render_script_elements(ioc: IOC) -> str:
     """
     Render all of the startup script entries for a given IOC instance
     """
@@ -61,7 +58,7 @@ def render_script_elements(ioc: GenericIoc) -> str:
     return scripts
 
 
-def render_database_elements(ioc: GenericIoc) -> str:
+def render_database_elements(ioc: IOC) -> str:
     """
     Render all of the DBLoadRecords entries for a given IOC instance
     """

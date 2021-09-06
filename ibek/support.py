@@ -4,28 +4,79 @@ It contains a hierarchy of Entity dataclasses.
 """
 
 from dataclasses import dataclass
-from typing import Any, ClassVar, Mapping, Sequence, Type
+from typing import Any, Mapping, Optional, Sequence, Type, Union
 
-from apischema import deserialize, deserializer
+from apischema import Undefined, UndefinedType, deserialize, deserializer
 from apischema.conversions import Conversion, identity
 from typing_extensions import Annotated as A
+from typing_extensions import Literal
 
-from ibek.argument import Arg
-from ibek.globals import T, desc
+from .globals import T, desc
 
-"""
-TODO: There are a couple of problems with deserialize and defaults. These
-are worked around as follows. I need to verify that this is the best
-approach to dealing with this.
 
-- str default "" == no default
-    - using " " for now (I'm not sure I'm happy with this)
-- int default 0 or null == no default
-    - using "0" and added str type to IntArg
-- float values in json have a trailing 'f' and this comes back as str on deserialize
-    - added str type to FloatArg
-    - added __post_init__ to FloatArg to strip the 'f'
-"""
+@dataclass
+class Arg:
+    """Base class for all Argument Types"""
+
+    name: A[str, desc("Name of the argument that the IOC instance should pass")]
+    description: A[str, desc("Description of what the argument will be used for")]
+    type: str
+    default: Any
+
+    # https://wyfo.github.io/apischema/examples/subclass_union/
+    def __init_subclass__(cls):
+        # Deserializers stack directly as a Union
+        deserializer(Conversion(identity, source=cls, target=Arg))
+
+
+Default = A[
+    Union[Optional[T], UndefinedType],
+    desc("If given, and instance doesn't supply argument, what value should be used"),
+]
+
+
+# FloatArg must be defined before StrArg, otherwise we get:
+#
+#    TypeError: Invalid JSON type <class 'ruamel.yaml.scalarfloat.ScalarFloat'>
+#
+# During Support.deserialize, when default float values in pmac.ibek.yaml do not
+# have a trailing 'f'. It is due to the order of declaration of subclasses of
+# Arg. When StrArg is before FloatArg, apischema attempts to deserialize as a
+# string first. The coercion from str to number requires a trailing f if there
+# is a decimal.
+@dataclass
+class FloatArg(Arg):
+    """An argument with a float value"""
+
+    type: Literal["float"] = "float"
+    default: Default[float] = Undefined
+
+
+@dataclass
+class StrArg(Arg):
+    """An argument with a str value"""
+
+    type: Literal["str"] = "str"
+    default: Default[str] = Undefined
+    is_id: A[
+        bool, desc("If true, instances may refer to this instance by this arg")
+    ] = False
+
+
+@dataclass
+class IntArg(Arg):
+    """An argument with an int value"""
+
+    type: Literal["int"] = "int"
+    default: Default[int] = Undefined
+
+
+@dataclass
+class ObjectArg(Arg):
+    """A reference to another entity defined in this IOC"""
+
+    type: A[str, desc("Entity class, <module>.<entity_name>")]
+    default: Default[str] = Undefined
 
 
 @dataclass
@@ -53,60 +104,6 @@ class Definition:
     script: A[
         Sequence[str], desc("Startup script snippet defined as Jinja template")
     ] = ()
-
-
-@dataclass
-class Entity:
-    """
-    A baseclass for all generated Entity classes. Provides the
-    deserialize entry point.
-    """
-
-    # a link back to the Entity Object that generated this Entity
-    entity: ClassVar[Definition]
-
-    def __init_subclass__(cls) -> None:
-        deserializer(Conversion(identity, source=cls, target=Entity))
-
-
-@dataclass
-class GenericIoc:
-    """
-    A base class for all generated Generic IOC classes.
-
-    Each class derived from this dataclass represents a Generic IOC and the
-    set of types of Entity it can instantiate. However, note that we
-    hold the Entity types in globals::namespace, see NOTE.
-
-    These classes are generated from the support module definition
-    YAML files in a generic IOC container.
-
-    Each instance of this class represents an IOC instance with its list
-    of instantiated Entities.
-
-    NOTE: because I have made the namespace for generated classes global
-    all GenericIoc are exactly the same - just a list of Entity. This
-    incorrectly implies that instantiating two Generic IOCs in the same
-    session would mean they share all their Entity types.
-
-    I'm not sure this matters, when deserializing any <support>.ibek.yaml
-    you get exactly the same class but as a side effect populate the
-    global namespace with the Entity Types that the file describes. This
-    side effect occurs in the function generator::get_module.
-
-    We don't need to look at two IOCs in the same session, ironically we
-    do need to look at multiple Support modules in a session and this
-    means that we don't need to distinguish between a support module and
-    a set of support modules in an ioc.
-    """
-
-    ioc_name: str
-    description: str
-    entities: Sequence[Entity]
-
-    @classmethod
-    def deserialize(cls: Type[T], d: Mapping[str, Any]) -> T:
-        return deserialize(cls, d)
 
 
 @dataclass
