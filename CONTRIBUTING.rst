@@ -2,13 +2,13 @@ Contributing
 ============
 
 Contributions and issues are most welcome! All issues and pull requests are
-handled through github on the `dls_controls repository`_. Also, please check for
+handled through github on the `epics-containers repository`_. Also, please check for
 any existing issues before filing a new one. If you have a great idea but it
 involves big changes, please file a ticket before making a pull request! We
 want to make sure you don't spend your time coding something that might not fit
 the scope of the project.
 
-.. _dls_controls repository: https://github.com/epics-containers/ibek/issues
+.. _epics-containers repository: https://github.com/epics-containers/ibek/issues
 
 Running the tests
 -----------------
