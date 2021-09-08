@@ -13,5 +13,5 @@ Unreleased_
 Nothing yet
 
 
-.. _Unreleased: https://github.com/dls-controls/ibek/compare/0.1...HEAD
-.. _0.1: https://github.com/dls-controls/ibek/releases/tag/0.1
+.. _Unreleased: https://github.com/epics-containers/ibek/compare/0.1...HEAD
+.. _0.1: https://github.com/epics-containers/ibek/releases/tag/0.1
