@@ -17,9 +17,9 @@ IOC Builder for EPICS and Kubernetes:
 
 ============== ==============================================================
 PyPI           ``pip install ibek``
-Source code    https://github.com/dls-controls/ibek
-Documentation  https://dls-controls.github.io/ibek
-Changelog      https://github.com/dls-controls/ibek/blob/master/CHANGELOG.rst
+Source code    https://github.com/epics-containers/ibek
+Documentation  https://epics-containers.github.io/ibek
+Changelog      https://github.com/epics-containers/ibek/blob/master/CHANGELOG.rst
 ============== ==============================================================
 
 TODO
@@ -63,16 +63,16 @@ This project is incomplete. The following items are still to do:
     - Add a diagram and more details. Use draw.io for image, and save as SVG
       with source embed in it, save as something.draw.io.svg
 
-.. |code_ci| image:: https://github.com/dls-controls/ibek/workflows/Code%20CI/badge.svg?branch=master
-    :target: https://github.com/dls-controls/ibek/actions?query=workflow%3A%22Code+CI%22
+.. |code_ci| image:: https://github.com/epics-containers/ibek/workflows/Code%20CI/badge.svg?branch=master
+    :target: https://github.com/epics-containers/ibek/actions?query=workflow%3A%22Code+CI%22
     :alt: Code CI
 
-.. |docs_ci| image:: https://github.com/dls-controls/ibek/workflows/Docs%20CI/badge.svg?branch=master
-    :target: https://github.com/dls-controls/ibek/actions?query=workflow%3A%22Docs+CI%22
+.. |docs_ci| image:: https://github.com/epics-containers/ibek/workflows/Docs%20CI/badge.svg?branch=master
+    :target: https://github.com/epics-containers/ibek/actions?query=workflow%3A%22Docs+CI%22
     :alt: Docs CI
 
-.. |coverage| image:: https://codecov.io/gh/dls-controls/ibek/branch/master/graph/badge.svg
-    :target: https://codecov.io/gh/dls-controls/ibek
+.. |coverage| image:: https://codecov.io/gh/epics-containers/ibek/branch/master/graph/badge.svg
+    :target: https://codecov.io/gh/epics-containers/ibek
     :alt: Test Coverage
 
 .. |pypi_version| image:: https://img.shields.io/pypi/v/ibek.svg
@@ -87,4 +87,4 @@ This project is incomplete. The following items are still to do:
     Anything below this line is used when viewing README.rst and will be replaced
     when included in index.rst
 
-See https://dls-controls.github.io/ibek for more detailed documentation.
+See https://epics-containers.github.io/ibek for more detailed documentation.

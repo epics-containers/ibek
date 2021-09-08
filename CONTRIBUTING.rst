@@ -8,14 +8,14 @@ involves big changes, please file a ticket before making a pull request! We
 want to make sure you don't spend your time coding something that might not fit
 the scope of the project.
 
-.. _dls_controls repository: https://github.com/dls-controls/ibek/issues
+.. _dls_controls repository: https://github.com/epics-containers/ibek/issues
 
 Running the tests
 -----------------
 
 To get the source source code and run the unit tests, run::
 
-    $ git clone git://github.com/dls-controls/ibek.git
+    $ git clone git://github.com/epics-containers/ibek.git
     $ cd ibek
     $ pipenv install --dev
     $ pipenv run tests
