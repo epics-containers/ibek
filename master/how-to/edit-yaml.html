@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>YAML schema &mdash; ibek 0.2+65.gd1f683f documentation</title>
+  <title>YAML schema &mdash; ibek 0.2+68.g8397dc9 documentation</title>
   
 
   
@@ -129,7 +129,7 @@
   <!-- https://stackoverflow.com/a/37843854 -->
   <a href="../genindex.html">Index</a>
   <!-- Include link to changelog -->
-  <a href="https://github.com/dls-controls/ibek/blob/master/CHANGELOG.rst">Changelog</a>
+  <a href="https://github.com/epics-containers/ibek/blob/master/CHANGELOG.rst">Changelog</a>
   <!-- Add versions for selected branches + tags -->
   <p class="caption"><span class="caption-text">Versions</span></p>
   <ul id="versions"/>
@@ -142,7 +142,7 @@
       if (dirs.has(name)) {
         var li = document.createElement("li");
         var a = document.createElement("a");
-        a.href = 'https://dls-controls.github.io/ibek/' + name;
+        a.href = 'https://epics-containers.github.io/ibek/' + name;
         a.innerText = name;
         li.appendChild(a)
         document.getElementById('versions').appendChild(li);
@@ -150,13 +150,13 @@
     }
     Promise.all([
       // Find gh-pages directories and populate `dirs`
-      fetch("https://api.github.com/repos/dls-controls/ibek/contents?ref=gh-pages")
+      fetch("https://api.github.com/repos/epics-containers/ibek/contents?ref=gh-pages")
       .then(response => response.json())
       .then(data => data.forEach(function(e) {
         if (e.type == "dir") dirs.add(e.name);
       })),
       // Add tags to `versions`
-      fetch('https://api.github.com/repos/dls-controls/ibek/tags')
+      fetch('https://api.github.com/repos/epics-containers/ibek/tags')
         .then(response => response.json())
         .then(data => data.forEach(function(e) {
           versions.push(e.name);

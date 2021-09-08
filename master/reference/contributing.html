@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>Contributing &mdash; ibek 0.2+65.gd1f683f documentation</title>
+  <title>Contributing &mdash; ibek 0.2+68.g8397dc9 documentation</title>
   
 
   
@@ -134,7 +134,7 @@
   <!-- https://stackoverflow.com/a/37843854 -->
   <a href="../genindex.html">Index</a>
   <!-- Include link to changelog -->
-  <a href="https://github.com/dls-controls/ibek/blob/master/CHANGELOG.rst">Changelog</a>
+  <a href="https://github.com/epics-containers/ibek/blob/master/CHANGELOG.rst">Changelog</a>
   <!-- Add versions for selected branches + tags -->
   <p class="caption"><span class="caption-text">Versions</span></p>
   <ul id="versions"/>
@@ -147,7 +147,7 @@
       if (dirs.has(name)) {
         var li = document.createElement("li");
         var a = document.createElement("a");
-        a.href = 'https://dls-controls.github.io/ibek/' + name;
+        a.href = 'https://epics-containers.github.io/ibek/' + name;
         a.innerText = name;
         li.appendChild(a)
         document.getElementById('versions').appendChild(li);
@@ -155,13 +155,13 @@
     }
     Promise.all([
       // Find gh-pages directories and populate `dirs`
-      fetch("https://api.github.com/repos/dls-controls/ibek/contents?ref=gh-pages")
+      fetch("https://api.github.com/repos/epics-containers/ibek/contents?ref=gh-pages")
       .then(response => response.json())
       .then(data => data.forEach(function(e) {
         if (e.type == "dir") dirs.add(e.name);
       })),
       // Add tags to `versions`
-      fetch('https://api.github.com/repos/dls-controls/ibek/tags')
+      fetch('https://api.github.com/repos/epics-containers/ibek/tags')
         .then(response => response.json())
         .then(data => data.forEach(function(e) {
           versions.push(e.name);
@@ -235,7 +235,7 @@
   <div class="section" id="contributing">
 <h1>Contributing<a class="headerlink" href="#contributing" title="Permalink to this headline">¶</a></h1>
 <p>Contributions and issues are most welcome! All issues and pull requests are
-handled through github on the <a class="reference external" href="https://github.com/dls-controls/ibek/issues">dls_controls repository</a>. Also, please check for
+handled through github on the <a class="reference external" href="https://github.com/epics-containers/ibek/issues">epics-containers repository</a>. Also, please check for
 any existing issues before filing a new one. If you have a great idea but it
 involves big changes, please file a ticket before making a pull request! We
 want to make sure you don’t spend your time coding something that might not fit
@@ -243,7 +243,7 @@ the scope of the project.</p>
 <div class="section" id="running-the-tests">
 <h2>Running the tests<a class="headerlink" href="#running-the-tests" title="Permalink to this headline">¶</a></h2>
 <p>To get the source source code and run the unit tests, run:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ git clone git://github.com/dls-controls/ibek.git
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ git clone git://github.com/epics-containers/ibek.git
 $ cd ibek
 $ pipenv install --dev
 $ pipenv run tests
