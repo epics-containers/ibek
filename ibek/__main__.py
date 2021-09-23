@@ -8,7 +8,7 @@ from ruamel.yaml import YAML
 
 from ibek import __version__
 
-from .helm import create_boot_script, create_helm
+from .helm import create_boot_script, create_helm, load_ioc_yaml
 from .ioc import IOC, make_entity_classes
 from .support import Support
 
@@ -46,7 +46,7 @@ def ibek_schema(
 
 @cli.command()
 def ioc_schema(
-    description: Path = typer.Argument(
+    definition: Path = typer.Argument(
         ..., help="The filepath to a support module definition file"
     ),
     output: Path = typer.Argument(..., help="The filename to write the schema to"),
@@ -55,19 +55,19 @@ def ioc_schema(
     Create a json schema from a <support_module>.ibek.yaml file
     TODO: update to take multiple definition files from a container
     """
-    support = Support.deserialize(YAML().load(description))
+    support = Support.deserialize(YAML().load(definition))
     make_entity_classes(support)
     schema = json.dumps(deserialization_schema(IOC), indent=2)
     output.write_text(schema)
 
 
 @cli.command()
-def build_ioc(
-    definition: Path = typer.Argument(
-        ..., help="The filepath to a support module definition file"
-    ),
-    instance: Path = typer.Argument(
+def build_helm(
+    entity: Path = typer.Argument(
         ..., help="The filepath to the ioc instance entity file"
+    ),
+    container_schema: str = typer.Argument(
+        ..., help="The filepath to a support module definition file"
     ),
     out: Path = typer.Argument(
         default="iocs", help="Path in which to build the helm chart"
@@ -75,18 +75,40 @@ def build_ioc(
 ):
     """
     Build a startup script, database and Helm chart from <ioc>.yaml
-    TODO: update to take multiple definition files from a container
-    TODO: needs to be split into build_helm:
-            makes a generic helm chart including <ioc>.yaml
-          and make_boot:
-            makes a startup script for the ioc from <ioc>.yaml
     """
 
-    ioc_instance, script_txt = create_boot_script(
+    ioc_dict = load_ioc_yaml(
+        ioc_instance_yaml=entity, container_schema=container_schema
+    )
+
+    with entity.open("r") as stream:
+        entity_yaml = stream.read()
+
+    create_helm(ioc_dict=ioc_dict, entity_yaml=entity_yaml, path=out)
+
+
+@cli.command()
+def build_startup(
+    instance: Path = typer.Argument(
+        ..., help="The filepath to the ioc instance entity file"
+    ),
+    definition: Path = typer.Argument(
+        ..., help="The filepath to a support module definition file"
+    ),
+    out: Path = typer.Argument(
+        default="config/ioc.boot", help="Path to output startup script"
+    ),
+):
+    """
+    Build a startup script for an IOC instance
+    TODO: update to take multiple definition files from a container
+    """
+    script_txt = create_boot_script(
         ioc_instance_yaml=instance, definition_yaml=definition
     )
 
-    create_helm(instance=ioc_instance, script_txt=script_txt, path=out)
+    with out.open("w") as stream:
+        stream.write(script_txt)
 
 
 # test with:

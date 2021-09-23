@@ -42,8 +42,8 @@ Definition
 Each support module has its own **support module definition file** . This
 is a YAML file whose name is by convention ``<support_module>.ibek.yaml``
 
-At present these will all reside in a folder called /ibek in the container
-image. In future each support module could have its own /ibek folder.
+These will all reside in a folder called /ibek in the container
+image.
 
 The **support module definition file** contains **Definitions** which
 determine what **Entities** an IOC instance may instantiate.
@@ -258,12 +258,13 @@ The ibek commands to progress through the file sequence above are as follows
         - Hand crafted at IOC instance design time
     *   - 5
         - Helm Chart files
-        - ``ibek build-ioc  <support>.ibek.yaml <ioc>.<container>.yaml``
+        - ``ibek build-helm  <container>.schema.json <ioc>.<container>.yaml``
           run at IOC helm chart generation time. This generates a helm chart
-          with ``<ioc>.<container>.yaml`` in its config folder
+          with ``<ioc>.<container>.yaml`` in its config folder and validates it
+          against ``<container>.schema.json``
     *   - 6
         - IOC startup script
-        - ``ibek make-ioc <ioc>.<container>.yaml ...``. Run at IOC startup time in the
+        - ``ibek make-startup <ioc>.<container>.yaml ...``. Run at IOC startup time in the
           container. ``...`` == all ``<support>.ibek.yaml`` within the container.
 
 

@@ -4,7 +4,7 @@ Functions for building the helm chart
 
 import shutil
 from pathlib import Path
-from typing import Tuple
+from typing import Dict
 
 from jinja2 import Template
 from ruamel.yaml.main import YAML
@@ -17,11 +17,20 @@ HELM_TEMPLATE = Path(__file__).parent.parent / "helm-template"
 TEMPLATES = Path(__file__).parent / "templates"
 
 
-def create_boot_script(
-    ioc_instance_yaml: Path, definition_yaml: Path
-) -> Tuple[IOC, str]:
+def load_ioc_yaml(ioc_instance_yaml: Path, container_schema: str) -> Dict:
     """
-    Create the boot script for an IOCs helm chart
+    Read in an ioc instance entity YAML and deserialize
+    """
+    # TODO load container schema from URL and validate ioc_instance_yaml
+
+    dict = YAML().load(ioc_instance_yaml)
+
+    return dict
+
+
+def create_boot_script(ioc_instance_yaml: Path, definition_yaml: Path) -> str:
+    """
+    Create the boot script for an IOC
     """
     # Read and load the support module definitions
     support = Support.deserialize(YAML().load(definition_yaml))
@@ -31,16 +40,14 @@ def create_boot_script(
     ioc_instance = IOC.deserialize(YAML().load(ioc_instance_yaml))
 
     # Open jinja template for startup script and fill it in with script
-    # elements and database elements parsed from the defintion file
+    # elements and database elements described by IOC Entity objects
     with open(TEMPLATES / "ioc.boot.jinja", "r") as f:
         template = Template(f.read())
 
-    script_txt = template.render(
+    return template.render(
         script_elements=render_script_elements(ioc_instance),
         database_elements=render_database_elements(ioc_instance),
     )
-
-    return ioc_instance, script_txt
 
 
 def render_file(file_template: Path, **kwargs):
@@ -56,14 +63,14 @@ def render_file(file_template: Path, **kwargs):
     file_template.unlink()
 
 
-def create_helm(instance: IOC, script_txt: str, path: Path):
+def create_helm(ioc_dict: Dict, entity_yaml: str, path: Path):
     """
     create a boilerplate helm chart with name str in folder path
 
     update the values.yml and Chart.yml by rendering their jinja templates
     and insert the boot script whose text is supplied in script_txt
     """
-    helm_folder = path / instance.ioc_name
+    helm_folder = path / ioc_dict["ioc_name"]
 
     if path.exists():
         if helm_folder.exists():
@@ -76,16 +83,16 @@ def create_helm(instance: IOC, script_txt: str, path: Path):
 
     render_file(
         helm_folder / "Chart.yaml.jinja",
-        ioc_name=instance.ioc_name,
-        description=instance.description,
+        ioc_name=ioc_dict["ioc_name"],
+        description=ioc_dict["description"],
     )
     render_file(
         helm_folder / "values.yaml.jinja",
         base_image="gcr.io/diamond-pubreg/controls/prod/ioc/ioc-pmac:2.5.3",
     )
 
-    boot_script_path = helm_folder / "config" / "ioc.boot"
+    boot_script_path = helm_folder / "config" / "ioc.boot.yaml"
 
     # Saves rendered boot script
     with open(boot_script_path, "w") as f:
-        f.write(script_txt)
+        f.write(entity_yaml)
