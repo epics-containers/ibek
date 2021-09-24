@@ -1,5 +1,7 @@
+# yaml-language-server: https://raw.githubusercontent.com/epics-containers/ibek/master/tests/samples/schemas/pmac.schema.json
 ioc_name: bl45p-mo-ioc-02
 description: an example motion ioc for ibek testing
+generic_image: ghcr.io/epics-containers/ioc-pmac:main.run
 entities:
   - type: pmac.PmacAsynIPPort
     name: BRICK1port
