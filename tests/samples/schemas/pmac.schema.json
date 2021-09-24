@@ -363,12 +363,17 @@
         ]
       },
       "description": "List of classes of Entity this IOC supports"
+    },
+    "generic_image": {
+      "type": "string",
+      "description": "The generic IOC container image registry URL"
     }
   },
   "required": [
     "ioc_name",
     "description",
-    "entities"
+    "entities",
+    "generic_image"
   ],
   "additionalProperties": false,
   "$schema": "http://json-schema.org/draft/2019-09/schema#"
