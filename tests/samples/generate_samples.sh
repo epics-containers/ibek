@@ -15,8 +15,12 @@ pipenv run ibek ibek-schema ${SAMPLES_DIR}/schemas/ibek.schema.json
 echo making the pmac support module definition schema
 pipenv run ibek ioc-schema ${SAMPLES_DIR}/yaml/pmac.ibek.yaml $SAMPLES_DIR/schemas/pmac.schema.json
 
+# add --no-schema if needed (but above line should ensure that it is correct)
 echo making helm files
-pipenv run ibek build-ioc ${SAMPLES_DIR}/yaml/pmac.ibek.yaml ${SAMPLES_DIR}/yaml/bl45p-mo-ioc-02.pmac.yaml /tmp/ioc
-cp /tmp/ioc/bl45p-mo-ioc-02/config/ioc.boot ${SAMPLES_DIR}/helm/
+pipenv run ibek build-helm ${SAMPLES_DIR}/yaml/bl45p-mo-ioc-02.pmac.yaml /tmp/ioc
 cp /tmp/ioc/bl45p-mo-ioc-02/values.yaml ${SAMPLES_DIR}/helm/
 cp /tmp/ioc/bl45p-mo-ioc-02/Chart.yaml ${SAMPLES_DIR}/helm/
+
+echo making startup script
+pipenv run ibek build-startup ${SAMPLES_DIR}/yaml/bl45p-mo-ioc-02.pmac.yaml ${SAMPLES_DIR}/yaml/pmac.ibek.yaml /tmp/ioc/ioc.boot
+cp /tmp/ioc/ioc.boot ${SAMPLES_DIR}/helm/

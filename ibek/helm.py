@@ -2,30 +2,62 @@
 Functions for building the helm chart
 """
 
+import json
+import logging
+import re
 import shutil
+import urllib.request
 from pathlib import Path
-from typing import Dict
+from typing import Dict, Match, cast
 
 from jinja2 import Template
+from jsonschema import validate
 from ruamel.yaml.main import YAML
 
 from .ioc import IOC, make_entity_classes
 from .render import render_database_elements, render_script_elements
 from .support import Support
 
+log = logging.getLogger(__name__)
+
 HELM_TEMPLATE = Path(__file__).parent.parent / "helm-template"
 TEMPLATES = Path(__file__).parent / "templates"
 
+schema_modeline = re.compile("# *yaml-language-server *: *([^ ]*)")
+url_f = r"file://"
 
-def load_ioc_yaml(ioc_instance_yaml: Path, container_schema: str) -> Dict:
+
+def load_ioc_yaml(ioc_instance_yaml: Path, no_schema: bool = False) -> Dict:
     """
-    Read in an ioc instance entity YAML and deserialize
+    Read in an ioc instance entity YAML and convert to dictionary
+    and validate against its declared schema
     """
-    # TODO load container schema from URL and validate ioc_instance_yaml
+    entity_dict = YAML().load(ioc_instance_yaml)
 
-    dict = YAML().load(ioc_instance_yaml)
+    if not no_schema:
+        try:
+            comment1 = entity_dict.ca.comment[1][0].value
+            matches = schema_modeline.match(comment1)
+            schema_url = cast(Match, matches).group(1)
 
-    return dict
+            # allow relative file paths so that tests can use this
+            parts = schema_url.split(url_f)
+            if len(parts) > 1:
+                schema_url = url_f + str(Path(parts[1]).absolute()).strip()
+
+            with urllib.request.urlopen(schema_url) as url:
+                entity_schema = json.loads(url.read().decode())
+
+        except Exception:
+            log.error(
+                f"Error getting schema for {ioc_instance_yaml}. "
+                "make sure it has '# yaml-language-server:'"
+            )
+            raise
+
+        validate(entity_dict, entity_schema)
+
+    return entity_dict
 
 
 def create_boot_script(ioc_instance_yaml: Path, definition_yaml: Path) -> str:
@@ -87,8 +119,7 @@ def create_helm(ioc_dict: Dict, entity_yaml: str, path: Path):
         description=ioc_dict["description"],
     )
     render_file(
-        helm_folder / "values.yaml.jinja",
-        base_image="gcr.io/diamond-pubreg/controls/prod/ioc/ioc-pmac:2.5.3",
+        helm_folder / "values.yaml.jinja", base_image=ioc_dict["generic_image"],
     )
 
     boot_script_path = helm_folder / "config" / "ioc.boot.yaml"

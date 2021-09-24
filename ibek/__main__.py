@@ -66,20 +66,16 @@ def build_helm(
     entity: Path = typer.Argument(
         ..., help="The filepath to the ioc instance entity file"
     ),
-    container_schema: str = typer.Argument(
-        ..., help="The filepath to a support module definition file"
-    ),
     out: Path = typer.Argument(
         default="iocs", help="Path in which to build the helm chart"
     ),
+    no_schema: bool = typer.Option(False, help="disable schema checking"),
 ):
     """
     Build a startup script, database and Helm chart from <ioc>.yaml
     """
 
-    ioc_dict = load_ioc_yaml(
-        ioc_instance_yaml=entity, container_schema=container_schema
-    )
+    ioc_dict = load_ioc_yaml(ioc_instance_yaml=entity, no_schema=no_schema)
 
     with entity.open("r") as stream:
         entity_yaml = stream.read()

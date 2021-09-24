@@ -1,4 +1,5 @@
 import json
+import os
 from pathlib import Path
 
 import pytest
@@ -49,9 +50,8 @@ def test_build_helm(tmp_path: Path, samples: Path):
     clear_entity_classes()
     entity_file = samples / "yaml" / "bl45p-mo-ioc-02.pmac.yaml"
 
-    result = runner.invoke(
-        cli, ["build-helm", str(entity_file), "schemaUrl", str(tmp_path)]
-    )
+    os.chdir(str(samples))
+    result = runner.invoke(cli, ["build-helm", str(entity_file), str(tmp_path)])
     assert result.exit_code == 0, f"build-ioc failed with: {result}"
 
     example_entity = entity_file.read_text()

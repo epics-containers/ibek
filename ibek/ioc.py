@@ -171,6 +171,7 @@ class IOC:
     ioc_name: A[str, desc("Name of IOC")]
     description: A[str, desc("Description of what the IOC does")]
     entities: A[Sequence[Entity], desc("List of classes of Entity this IOC supports")]
+    generic_image: A[str, desc("The generic IOC container image registry URL")]
 
     @classmethod
     def deserialize(cls: Type[T], d: Mapping[str, Any]) -> T:
