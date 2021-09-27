@@ -17,6 +17,8 @@ pipenv run ibek ibek-schema ${SAMPLES_DIR}/schemas/ibek.schema.json
 
 echo making the pmac support module definition schema
 pipenv run ibek ioc-schema ${SAMPLES_DIR}/yaml/pmac.ibek.yaml $SAMPLES_DIR/schemas/pmac.schema.json
+echo making the asyn support module definition schema
+pipenv run ibek ioc-schema ${SAMPLES_DIR}/yaml/asyn.ibek.yaml $SAMPLES_DIR/schemas/asyn.schema.json
 
 # add --no-schema if needed (but above line should ensure that it is correct)
 echo making helm files

@@ -46,6 +46,20 @@ def test_pmac_schema(tmp_path: Path, samples: Path):
     assert expected == actual
 
 
+def test_asyn_schema(tmp_path: Path, samples: Path):
+    clear_entity_classes()
+
+    schema_path = tmp_path / "asyn.ibek.schema.json"
+    yaml_path = samples / "yaml" / "asyn.ibek.yaml"
+    result = runner.invoke(cli, ["ioc-schema", str(yaml_path), str(schema_path)])
+    assert result.exit_code == 0, f"ioc-schema failed with: {result}"
+
+    expected = json.loads(open(samples / "schemas" / "asyn.schema.json").read())
+
+    actual = json.loads(open(schema_path).read())
+    assert expected == actual
+
+
 def test_build_helm(tmp_path: Path, samples: Path):
     clear_entity_classes()
     entity_file = samples / "yaml" / "bl45p-mo-ioc-02.pmac.yaml"

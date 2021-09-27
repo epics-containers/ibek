@@ -2,6 +2,7 @@ import json
 from pathlib import Path
 from typing import Optional
 
+import jsonschema
 import typer
 from apischema.json_schema import deserialization_schema
 from ruamel.yaml import YAML
@@ -55,7 +56,14 @@ def ioc_schema(
     Create a json schema from a <support_module>.ibek.yaml file
     TODO: update to take multiple definition files from a container
     """
-    support = Support.deserialize(YAML().load(definition))
+
+    # first check the definition file with jsonschema since it has more
+    # legible error messages than apischema
+    support_dict = YAML().load(definition)
+    schema_support = deserialization_schema(Support)
+    jsonschema.validate(support_dict, schema_support)
+
+    support = Support.deserialize(support_dict)
     make_entity_classes(support)
     schema = json.dumps(deserialization_schema(IOC), indent=2)
     output.write_text(schema)
