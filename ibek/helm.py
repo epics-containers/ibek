@@ -23,7 +23,7 @@ log = logging.getLogger(__name__)
 HELM_TEMPLATE = Path(__file__).parent.parent / "helm-template"
 TEMPLATES = Path(__file__).parent / "templates"
 
-schema_modeline = re.compile("# *yaml-language-server *: *([^ ]*)")
+schema_modeline = re.compile(r"# *yaml-language-server *: *\$schema=([^ ]*)")
 url_f = r"file://"
 
 

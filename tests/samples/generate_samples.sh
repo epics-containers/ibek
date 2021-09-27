@@ -9,6 +9,9 @@
 
 export SAMPLES_DIR=$(realpath $(dirname "${BASH_SOURCE[0]}"))
 
+# this is so relative schema mode lines work
+cd $SAMPLES_DIR
+
 echo making the global schema
 pipenv run ibek ibek-schema ${SAMPLES_DIR}/schemas/ibek.schema.json
 

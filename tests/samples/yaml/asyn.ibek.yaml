@@ -1,0 +1,89 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/epics-containers/ibek/master/tests/samples/schemas/ibek.schema.json
+module: asyn
+definitions:
+  - name: AsynSerial
+    args:
+      - type: str
+        name: port
+        description: The port name for this asyn object
+      - type: str
+        name: input_eos
+        description: Input end of string (terminator)
+        default: None
+      - type: str
+        name: output_eos
+        description: Output end of string (terminator)
+        default: None
+      - type: int
+        name: priority
+        description: Priority
+        default: 100
+      - type: bool
+        name: noAutoConnect
+        description: Set to stop auto connect
+        default:
+      - type: bool
+        name: noProcessEos
+        description: Set to avoid processing end of string
+        default: None
+      - type: str
+        name: simulation
+        description: IP port to connect to if in simulation mode
+        default: None
+      - type: int
+        name: baud
+        description: Baud Rate
+        default: None
+      - type: int
+        name: bits
+        # TODO we should add enums to ibek's allowed data types
+        # TODO this would require we define the enum values int 'type:' too
+        description: Bits [8,7,6,5]
+        default: None
+      - type: str
+        name: parity
+        description: Parity [none,even,odd]
+        default: None
+      - type: int
+        name: stop
+        description: Stop Bits [1,2]
+        default: None
+        # note the Asyn API uses Y, N but we will tidy anomalies like this and
+        # hide them in the Jinja instead
+      - type: bool
+        name: crtscts
+        description: Set hardware flow control on
+        default: None
+
+  # TODO potentially we could break out the arguments into another object
+  # TODO like AsynPort in builder.py. This would require a change that allows
+  # TODO us to embed definition of one object within another
+  - name: AsynIP
+    args:
+      - name: port
+        description: The port name for this asyn object
+        default: None
+      - type: str
+        name: input_eos
+        description: Input end of string (terminator)
+        default: None
+      - type: str
+        name: output_eos
+        description: Output end of string (terminator)
+        default: None
+      - type: int
+        name: priority
+        description: Priority
+        default: 100
+      - type: bool
+        name: noAutoConnect
+        description: Set to stop auto connect
+        default:
+      - type: bool
+        name: noProcessEos
+        description: Set to avoid processing end of string
+        default: None
+      - type: str
+        name: simulation
+        description: IP port to connect to if in simulation mode
+        default: None
