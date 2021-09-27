@@ -1,6 +1,6 @@
 import json
 from pathlib import Path
-from typing import Optional
+from typing import List, Optional
 
 import jsonschema
 import typer
@@ -47,24 +47,27 @@ def ibek_schema(
 
 @cli.command()
 def ioc_schema(
-    definition: Path = typer.Argument(
+    definitions: List[Path] = typer.Argument(
         ..., help="The filepath to a support module definition file"
     ),
     output: Path = typer.Argument(..., help="The filename to write the schema to"),
+    no_schema: bool = typer.Option(False, help="disable schema checking"),
 ):
     """
     Create a json schema from a <support_module>.ibek.yaml file
-    TODO: update to take multiple definition files from a container
     """
 
     # first check the definition file with jsonschema since it has more
     # legible error messages than apischema
-    support_dict = YAML().load(definition)
-    schema_support = deserialization_schema(Support)
-    jsonschema.validate(support_dict, schema_support)
+    for definition in definitions:
+        support_dict = YAML().load(definition)
+        if not no_schema:
+            schema_support = deserialization_schema(Support)
+            jsonschema.validate(support_dict, schema_support)
 
-    support = Support.deserialize(support_dict)
-    make_entity_classes(support)
+        support = Support.deserialize(support_dict)
+        make_entity_classes(support)
+
     schema = json.dumps(deserialization_schema(IOC), indent=2)
     output.write_text(schema)
 
@@ -96,7 +99,7 @@ def build_startup(
     instance: Path = typer.Argument(
         ..., help="The filepath to the ioc instance entity file"
     ),
-    definition: Path = typer.Argument(
+    definitions: List[Path] = typer.Argument(
         ..., help="The filepath to a support module definition file"
     ),
     out: Path = typer.Argument(
@@ -105,10 +108,9 @@ def build_startup(
 ):
     """
     Build a startup script for an IOC instance
-    TODO: update to take multiple definition files from a container
     """
     script_txt = create_boot_script(
-        ioc_instance_yaml=instance, definition_yaml=definition
+        ioc_instance_yaml=instance, definition_yaml=definitions
     )
 
     with out.open("w") as stream:

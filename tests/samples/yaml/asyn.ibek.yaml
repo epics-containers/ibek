@@ -55,7 +55,9 @@ definitions:
         description: Set hardware flow control on
         default: null
     script:
-      - testing
+      - TODO provide Jinja to generate Startup Entries
+      - note this is interesting because builder.py has a few if clauses
+      - for generating the necessary script
 
   # TODO potentially we could break out the common arguments into another object
   # TODO like AsynPort in builder.py. This would require a change that allows
@@ -64,7 +66,10 @@ definitions:
     args:
       - type: str
         name: port
-        description: The port name for this asyn object
+        description: Serial port tty name / IP address optionally followed by protocol
+      - type: str
+        name: name
+        description: Name for the Asyn Port
       - type: str
         name: input_eos
         description: Input end of string (terminator)
@@ -90,4 +95,6 @@ definitions:
         description: IP port to connect to if in simulation mode
         default: null
     script:
-      - testing
+      - TODO provide Jinja to generate Startup Entries
+      - note this is interesting because builder.py has a few if clauses
+      - for generating the necessary script

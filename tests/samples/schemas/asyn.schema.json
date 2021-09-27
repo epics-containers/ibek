@@ -81,7 +81,11 @@
             "properties": {
               "port": {
                 "type": "string",
-                "description": "The port name for this asyn object"
+                "description": "Serial port tty name / IP address optionally followed by protocol"
+              },
+              "name": {
+                "type": "string",
+                "description": "Name for the Asyn Port"
               },
               "input_eos": {
                 "type": "string",
@@ -115,7 +119,8 @@
               }
             },
             "required": [
-              "port"
+              "port",
+              "name"
             ],
             "additionalProperties": false
           }

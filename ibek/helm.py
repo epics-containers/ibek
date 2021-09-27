@@ -8,7 +8,7 @@ import re
 import shutil
 import urllib.request
 from pathlib import Path
-from typing import Dict, Match, cast
+from typing import Dict, List, Match, cast
 
 from jinja2 import Template
 from jsonschema import validate
@@ -60,13 +60,14 @@ def load_ioc_yaml(ioc_instance_yaml: Path, no_schema: bool = False) -> Dict:
     return entity_dict
 
 
-def create_boot_script(ioc_instance_yaml: Path, definition_yaml: Path) -> str:
+def create_boot_script(ioc_instance_yaml: Path, definition_yaml: List[Path]) -> str:
     """
     Create the boot script for an IOC
     """
     # Read and load the support module definitions
-    support = Support.deserialize(YAML().load(definition_yaml))
-    make_entity_classes(support)
+    for yaml in definition_yaml:
+        support = Support.deserialize(YAML().load(yaml))
+        make_entity_classes(support)
 
     # Create an IOC instance from it
     ioc_instance = IOC.deserialize(YAML().load(ioc_instance_yaml))

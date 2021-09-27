@@ -73,7 +73,7 @@ class IntArg(Arg):
 
 @dataclass
 class BoolArg(Arg):
-    """An argument with an int value"""
+    """An argument with an bool value"""
 
     type: Literal["bool"] = "bool"
     default: Default[bool] = Undefined

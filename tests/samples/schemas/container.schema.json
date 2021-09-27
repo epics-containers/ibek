@@ -1,0 +1,491 @@
+{
+  "type": "object",
+  "properties": {
+    "ioc_name": {
+      "type": "string",
+      "description": "Name of IOC"
+    },
+    "description": {
+      "type": "string",
+      "description": "Description of what the IOC does"
+    },
+    "entities": {
+      "type": "array",
+      "items": {
+        "anyOf": [
+          {
+            "type": "object",
+            "properties": {
+              "port": {
+                "type": "string",
+                "description": "The port name for this asyn object"
+              },
+              "input_eos": {
+                "type": "string",
+                "description": "Input end of string (terminator)"
+              },
+              "output_eos": {
+                "type": "string",
+                "description": "Output end of string (terminator)"
+              },
+              "priority": {
+                "type": "integer",
+                "description": "Priority",
+                "default": 100
+              },
+              "noAutoConnect": {
+                "type": "boolean",
+                "description": "Set to stop auto connect"
+              },
+              "noProcessEos": {
+                "type": "boolean",
+                "description": "Set to avoid processing end of string"
+              },
+              "simulation": {
+                "type": "string",
+                "description": "IP port to connect to if in simulation mode"
+              },
+              "baud": {
+                "type": "integer",
+                "description": "Baud Rate"
+              },
+              "bits": {
+                "type": "integer",
+                "description": "Bits [8,7,6,5]"
+              },
+              "parity": {
+                "type": "string",
+                "description": "Parity [null,even,odd]"
+              },
+              "stop": {
+                "type": "integer",
+                "description": "Stop Bits [1,2]"
+              },
+              "crtscts": {
+                "type": "boolean",
+                "description": "Set hardware flow control on"
+              },
+              "type": {
+                "type": "string",
+                "const": "asyn.AsynSerial",
+                "default": "asyn.AsynSerial"
+              }
+            },
+            "required": [
+              "port"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "port": {
+                "type": "string",
+                "description": "Serial port tty name / IP address optionally followed by protocol"
+              },
+              "name": {
+                "type": "string",
+                "description": "Name for the Asyn Port"
+              },
+              "input_eos": {
+                "type": "string",
+                "description": "Input end of string (terminator)"
+              },
+              "output_eos": {
+                "type": "string",
+                "description": "Output end of string (terminator)"
+              },
+              "priority": {
+                "type": "integer",
+                "description": "Priority",
+                "default": 100
+              },
+              "noAutoConnect": {
+                "type": "boolean",
+                "description": "Set to stop auto connect"
+              },
+              "noProcessEos": {
+                "type": "boolean",
+                "description": "Set to avoid processing end of string"
+              },
+              "simulation": {
+                "type": "string",
+                "description": "IP port to connect to if in simulation mode"
+              },
+              "type": {
+                "type": "string",
+                "const": "asyn.AsynIP",
+                "default": "asyn.AsynIP"
+              }
+            },
+            "required": [
+              "port",
+              "name"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string",
+                "description": "Name to use for the geobrick's asyn port"
+              },
+              "PORT": {
+                "type": "string",
+                "description": "Asyn port name for PmacAsynIPPort to connect to"
+              },
+              "P": {
+                "type": "string",
+                "description": "PV Prefix for all pmac db templates"
+              },
+              "numAxes": {
+                "type": "integer",
+                "description": "number of axes to initialize for the controller"
+              },
+              "idlePoll": {
+                "type": "integer",
+                "description": "Idle Poll Period in ms"
+              },
+              "movingPoll": {
+                "type": "integer",
+                "description": "Moving Poll Period in ms"
+              },
+              "type": {
+                "type": "string",
+                "const": "pmac.Geobrick",
+                "default": "pmac.Geobrick"
+              }
+            },
+            "required": [
+              "name",
+              "PORT",
+              "P",
+              "numAxes",
+              "idlePoll",
+              "movingPoll"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string",
+                "description": "Asyn port name"
+              },
+              "IP": {
+                "type": "string",
+                "description": "IP address of pmac"
+              },
+              "type": {
+                "type": "string",
+                "const": "pmac.PmacAsynIPPort",
+                "default": "pmac.PmacAsynIPPort"
+              }
+            },
+            "required": [
+              "name",
+              "IP"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "PMAC": {
+                "type": "string",
+                "description": "PMAC to attach to"
+              },
+              "axis": {
+                "type": "integer",
+                "description": "which axis number this motor drives"
+              },
+              "P": {
+                "type": "string",
+                "description": "PV prefix name for this motor"
+              },
+              "M": {
+                "type": "string",
+                "description": "PV motor name for this motor"
+              },
+              "PORT": {
+                "type": "string",
+                "description": "Delta tau motor controller"
+              },
+              "SPORT": {
+                "type": "string",
+                "description": "Delta tau motor controller comms port"
+              },
+              "name": {
+                "type": "string",
+                "description": "Object name and gui association name"
+              },
+              "DESC": {
+                "type": "string",
+                "description": "Description, displayed on EDM screen",
+                "default": ""
+              },
+              "MRES": {
+                "type": "number",
+                "description": "Motor Step Size (EGU)",
+                "default": 0.0001
+              },
+              "VELO": {
+                "type": "number",
+                "description": "axis Velocity (EGU/s)",
+                "default": 1.0
+              },
+              "PREC": {
+                "type": "number",
+                "description": "Display Precision",
+                "default": 3.0
+              },
+              "EGU": {
+                "type": "string",
+                "description": "Engineering Units",
+                "default": "mm"
+              },
+              "TWV": {
+                "type": "integer",
+                "description": "Tweak Step Size (EGU)",
+                "default": 1
+              },
+              "DTYP": {
+                "type": "string",
+                "description": "Datatype of record",
+                "default": "asynMotor"
+              },
+              "DIR": {
+                "type": "integer",
+                "description": "User direction",
+                "default": 0
+              },
+              "VBAS": {
+                "type": "number",
+                "description": "Base Velocity (EGU/s)",
+                "default": 1.0
+              },
+              "VMAX": {
+                "type": "string",
+                "description": "Max Velocity (EGU/s)",
+                "default": "$(VELO)"
+              },
+              "ACCL": {
+                "type": "number",
+                "description": "Seconds to Velocity",
+                "default": 0.5
+              },
+              "BDST": {
+                "type": "number",
+                "description": "BL Distance (EGU)",
+                "default": 0.0
+              },
+              "BVEL": {
+                "type": "number",
+                "description": "BL Velocity(EGU/s)",
+                "default": 0.0
+              },
+              "BACC": {
+                "type": "number",
+                "description": "BL Seconds to Veloc",
+                "default": 0.0
+              },
+              "DHLM": {
+                "type": "number",
+                "description": "Dial High Limit",
+                "default": 10000.0
+              },
+              "DLMM": {
+                "type": "number",
+                "description": "Dial low limit",
+                "default": -10000.0
+              },
+              "HLM": {
+                "type": "number",
+                "description": "User High Limit",
+                "default": 0.0
+              },
+              "LLM": {
+                "type": "number",
+                "description": "User Low Limit",
+                "default": 0.0
+              },
+              "HLSV": {
+                "type": "string",
+                "description": "HW Lim, Violation Svr",
+                "default": "MAJOR"
+              },
+              "INIT": {
+                "type": "string",
+                "description": "Startup commands",
+                "default": ""
+              },
+              "SREV": {
+                "type": "number",
+                "description": "Steps per Revolution",
+                "default": 1000.0
+              },
+              "RRES": {
+                "type": "number",
+                "description": "Readback Step Size (EGU",
+                "default": 0.0
+              },
+              "ERES": {
+                "type": "number",
+                "description": "Encoder Step Size (EGU)",
+                "default": 0.0
+              },
+              "JAR": {
+                "type": "number",
+                "description": "Jog Acceleration (EGU/s^2)",
+                "default": 0.0
+              },
+              "UEIP": {
+                "type": "integer",
+                "description": "Use Encoder If Present",
+                "default": 0
+              },
+              "URIP": {
+                "type": "integer",
+                "description": "Use RDBL If Present",
+                "default": 0
+              },
+              "RDBL": {
+                "type": "string",
+                "description": "Readback Location, set URIP =1 if you specify this",
+                "default": "0"
+              },
+              "RLNK": {
+                "type": "string",
+                "description": "Readback output link",
+                "default": ""
+              },
+              "RTRY": {
+                "type": "integer",
+                "description": "Max retry count",
+                "default": 0
+              },
+              "DLY": {
+                "type": "number",
+                "description": "Readback settle time (s)",
+                "default": 0.0
+              },
+              "OFF": {
+                "type": "number",
+                "description": "User Offset (EGU)",
+                "default": 0.0
+              },
+              "RDBD": {
+                "type": "number",
+                "description": "Retry Deadband (EGU)",
+                "default": 0.0
+              },
+              "FOFF": {
+                "type": "integer",
+                "description": "Freeze Offset, 0=variable, 1=frozen",
+                "default": 0
+              },
+              "ADEL": {
+                "type": "number",
+                "description": "Alarm monitor deadband (EGU)",
+                "default": 0.0
+              },
+              "NTM": {
+                "type": "integer",
+                "description": "New Target Monitor, only set to 0 for soft motors",
+                "default": 1
+              },
+              "FEHEIGH": {
+                "type": "number",
+                "description": "HIGH limit for following error",
+                "default": 0.0
+              },
+              "FEHIHI": {
+                "type": "number",
+                "description": "HIHI limit for following error",
+                "default": 0.0
+              },
+              "FEHHSV": {
+                "type": "string",
+                "description": "HIHI alarm severity for following error",
+                "default": "NO_ALARM"
+              },
+              "FEHSV": {
+                "type": "string",
+                "description": "HIGH alarm severity for following error",
+                "default": "NO_ALARM"
+              },
+              "SCALE": {
+                "type": "integer",
+                "default": 1
+              },
+              "HOMEVIS": {
+                "type": "integer",
+                "description": "If 1 then home is visible on the gui",
+                "default": 1
+              },
+              "HOMEVISST": {
+                "type": "string",
+                "default": "Use motor summary screen"
+              },
+              "alh": {
+                "type": "string",
+                "description": "Set this to alh to add the motor to the alarm handler and send emails",
+                "default": ""
+              },
+              "gda_name": {
+                "type": "string",
+                "description": "Name to export this as to GDA",
+                "default": "none"
+              },
+              "gda_desc": {
+                "type": "string",
+                "description": "Description to export as to GDA",
+                "default": "$(DESC)"
+              },
+              "HOME": {
+                "type": "string",
+                "description": "Prefix for autohome instance. Defaults to $(P) If unspecified",
+                "default": "$(P)"
+              },
+              "ALLOW_HOMED_SET": {
+                "type": "string",
+                "description": "Set to a blank to allow this axis to have its homed",
+                "default": "#"
+              },
+              "type": {
+                "type": "string",
+                "const": "pmac.DlsPmacAsynMotor",
+                "default": "pmac.DlsPmacAsynMotor"
+              }
+            },
+            "required": [
+              "PMAC",
+              "axis",
+              "P",
+              "M",
+              "PORT",
+              "SPORT",
+              "name"
+            ],
+            "additionalProperties": false
+          }
+        ]
+      },
+      "description": "List of classes of Entity this IOC supports"
+    },
+    "generic_image": {
+      "type": "string",
+      "description": "The generic IOC container image registry URL"
+    }
+  },
+  "required": [
+    "ioc_name",
+    "description",
+    "entities",
+    "generic_image"
+  ],
+  "additionalProperties": false,
+  "$schema": "http://json-schema.org/draft/2019-09/schema#"
+}
