@@ -51,7 +51,7 @@ def load_ioc_yaml(ioc_instance_yaml: Path, no_schema: bool = False) -> Dict:
         except Exception:
             log.error(
                 f"Error getting schema for {ioc_instance_yaml}. "
-                "make sure it has '# yaml-language-server:'"
+                "make sure it has '# yaml-language-server: $schema='"
             )
             raise
 
