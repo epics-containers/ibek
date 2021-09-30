@@ -22,7 +22,7 @@ def test_conversion_classes():
             dict(type="mymodule.port", name="PORT"),
             dict(type="mymodule.device", port="PORT"),
         ],
-        generic_image="",
+        generic_ioc_image="",
     )
     ioc = IOC.deserialize(d)
     port, device = ioc.entities

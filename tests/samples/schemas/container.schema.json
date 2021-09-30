@@ -3,7 +3,7 @@
   "properties": {
     "ioc_name": {
       "type": "string",
-      "description": "Name of IOC"
+      "description": "Name of IOC instance"
     },
     "description": {
       "type": "string",
@@ -473,9 +473,9 @@
           }
         ]
       },
-      "description": "List of classes of Entity this IOC supports"
+      "description": "List of entities this IOC instantiates"
     },
-    "generic_image": {
+    "generic_ioc_image": {
       "type": "string",
       "description": "The generic IOC container image registry URL"
     }
@@ -484,7 +484,7 @@
     "ioc_name",
     "description",
     "entities",
-    "generic_image"
+    "generic_ioc_image"
   ],
   "additionalProperties": false,
   "$schema": "http://json-schema.org/draft/2019-09/schema#"

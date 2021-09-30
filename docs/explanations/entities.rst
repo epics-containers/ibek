@@ -264,7 +264,7 @@ The ibek commands to progress through the file sequence above are as follows
           against ``<container>.schema.json``
     *   - 6
         - IOC startup script
-        - ``ibek make-startup <ioc>.<container>.yaml ...``. Run at IOC startup time in the
+        - ``ibek build-startup <ioc>.<container>.yaml ...``. Run at IOC startup time in the
           container. ``...`` == all ``<support>.ibek.yaml`` within the container.
 
 
