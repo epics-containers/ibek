@@ -36,3 +36,8 @@ entities:
     P: BL45P-MO-THIN-01
     M: ":Y1"
     MRES: 0.001
+
+  - type: asyn.AsynIP
+    port: 192.168.0.0:1025
+    name: anAsynIpPort
+

@@ -140,37 +140,19 @@ def clear_entity_classes():
 @dataclass
 class IOC:
     """
-    A base class for all generated Generic IOC classes.
+    Used to load an IOC instance entities yaml file into memory using
+    IOC.deserialize(YAML().load(ioc_instance_yaml).
 
-    Each class derived from this dataclass represents a Generic IOC and the
-    set of types of Entity it can instantiate. However, note that we
-    hold the Entity types in globals::namespace, see NOTE.
-
-    These classes are generated from the support module definition
-    YAML files in a generic IOC container.
-
-    Each instance of this class represents an IOC instance with its list
-    of instantiated Entities.
-
-    NOTE: because I have made the namespace for generated classes global
-    all GenericIoc are exactly the same - just a list of Entity. This
-    incorrectly implies that instantiating two Generic IOCs in the same
-    session would mean they share all their Entity types.
-
-    I'm not sure this matters, when deserializing any <support>.ibek.yaml
-    you get exactly the same class but as a side effect populate the
-    global namespace with the Entity Types that the file describes. This
-    side effect occurs in the function generator::get_module.
-
-    We don't need to look at two IOCs in the same session, ironically we
-    do need to look at multiple Support modules in a session and this
-    means that we don't need to distinguish between a support module and
-    a set of support modules in an ioc.
+    Before loading the entities file all Entity classes that it contains
+    must be defined in modules.py. This is achieved by deserializing all
+    support module definitions yaml files used by this IOC and calling
+    make_entity_classes(support_module).
     """
 
-    ioc_name: A[str, desc("Name of IOC")]
+    ioc_name: A[str, desc("Name of IOC instance")]
     description: A[str, desc("Description of what the IOC does")]
-    entities: A[Sequence[Entity], desc("List of classes of Entity this IOC supports")]
+    entities: A[Sequence[Entity], desc("List of entities this IOC instantiates")]
+    generic_ioc_image: A[str, desc("The generic IOC container image registry URL")]
 
     @classmethod
     def deserialize(cls: Type[T], d: Mapping[str, Any]) -> T:

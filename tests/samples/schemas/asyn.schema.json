@@ -1,0 +1,144 @@
+{
+  "type": "object",
+  "properties": {
+    "ioc_name": {
+      "type": "string",
+      "description": "Name of IOC instance"
+    },
+    "description": {
+      "type": "string",
+      "description": "Description of what the IOC does"
+    },
+    "entities": {
+      "type": "array",
+      "items": {
+        "anyOf": [
+          {
+            "type": "object",
+            "properties": {
+              "port": {
+                "type": "string",
+                "description": "The port name for this asyn object"
+              },
+              "input_eos": {
+                "type": "string",
+                "description": "Input end of string (terminator)"
+              },
+              "output_eos": {
+                "type": "string",
+                "description": "Output end of string (terminator)"
+              },
+              "priority": {
+                "type": "integer",
+                "description": "Priority",
+                "default": 100
+              },
+              "noAutoConnect": {
+                "type": "boolean",
+                "description": "Set to stop auto connect"
+              },
+              "noProcessEos": {
+                "type": "boolean",
+                "description": "Set to avoid processing end of string"
+              },
+              "simulation": {
+                "type": "string",
+                "description": "IP port to connect to if in simulation mode"
+              },
+              "baud": {
+                "type": "integer",
+                "description": "Baud Rate"
+              },
+              "bits": {
+                "type": "integer",
+                "description": "Bits [8,7,6,5]"
+              },
+              "parity": {
+                "type": "string",
+                "description": "Parity [null,even,odd]"
+              },
+              "stop": {
+                "type": "integer",
+                "description": "Stop Bits [1,2]"
+              },
+              "crtscts": {
+                "type": "boolean",
+                "description": "Set hardware flow control on"
+              },
+              "type": {
+                "type": "string",
+                "const": "asyn.AsynSerial",
+                "default": "asyn.AsynSerial"
+              }
+            },
+            "required": [
+              "port"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "port": {
+                "type": "string",
+                "description": "Serial port tty name / IP address optionally followed by protocol"
+              },
+              "name": {
+                "type": "string",
+                "description": "Name for the Asyn Port"
+              },
+              "input_eos": {
+                "type": "string",
+                "description": "Input end of string (terminator)"
+              },
+              "output_eos": {
+                "type": "string",
+                "description": "Output end of string (terminator)"
+              },
+              "priority": {
+                "type": "integer",
+                "description": "Priority",
+                "default": 100
+              },
+              "noAutoConnect": {
+                "type": "boolean",
+                "description": "Set to stop auto connect"
+              },
+              "noProcessEos": {
+                "type": "boolean",
+                "description": "Set to avoid processing end of string"
+              },
+              "simulation": {
+                "type": "string",
+                "description": "IP port to connect to if in simulation mode"
+              },
+              "type": {
+                "type": "string",
+                "const": "asyn.AsynIP",
+                "default": "asyn.AsynIP"
+              }
+            },
+            "required": [
+              "port",
+              "name"
+            ],
+            "additionalProperties": false
+          }
+        ]
+      },
+      "description": "List of entities this IOC instantiates"
+    },
+    "generic_ioc_image": {
+      "type": "string",
+      "description": "The generic IOC container image registry URL"
+    }
+  },
+  "required": [
+    "ioc_name",
+    "description",
+    "entities",
+    "generic_ioc_image"
+  ],
+  "additionalProperties": false,
+  "$schema": "http://json-schema.org/draft/2019-09/schema#"
+}

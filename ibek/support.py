@@ -72,6 +72,14 @@ class IntArg(Arg):
 
 
 @dataclass
+class BoolArg(Arg):
+    """An argument with an bool value"""
+
+    type: Literal["bool"] = "bool"
+    default: Default[bool] = Undefined
+
+
+@dataclass
 class ObjectArg(Arg):
     """A reference to another entity defined in this IOC"""
 
