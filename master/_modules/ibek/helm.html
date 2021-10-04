@@ -1,82 +1,38 @@
-
-
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
   <meta charset="utf-8" />
-  
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  
-  <title>ibek.helm &mdash; ibek 0.2+68.g8397dc9 documentation</title>
-  
-
-  
-  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="../../_static/graphviz.css" type="text/css" />
-  <link rel="stylesheet" href="../../_static/theme_overrides.css" type="text/css" />
-
-  
-  
+  <title>ibek.helm &mdash; ibek 0.3+13.gdb40aa5 documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/graphviz.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/theme_overrides.css" type="text/css" />
     <link rel="shortcut icon" href="../../_static/ibek-favicon.ico"/>
-  
-
-  
-  
-
-  
-
-  
   <!--[if lt IE 9]>
     <script src="../../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
         <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
         <script src="../../_static/jquery.js"></script>
         <script src="../../_static/underscore.js"></script>
         <script src="../../_static/doctools.js"></script>
-    
-    <script type="text/javascript" src="../../_static/js/theme.js"></script>
-
-    
+    <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" /> 
 </head>
 
-<body class="wy-body-for-nav">
-
-   
+<body class="wy-body-for-nav"> 
   <div class="wy-grid-for-nav">
-    
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search"  style="background: rgb(7, 43, 93)" >
-          
-
-          
             <a href="../../index.html" class="icon icon-home"> ibek
-          
-
-          
-            
             <img src="../../_static/ibek-logo.svg" class="logo" alt="Logo"/>
-          
           </a>
-
-          
-            
-            
               <div class="version">
                 master
               </div>
-            
-          
-
-          
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" />
@@ -84,13 +40,7 @@
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
-
-          
-        </div>
-
-        
-        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-          
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
   <style>
     /* style mobile top nav to look like main nav */
     .wy-nav-top {
@@ -98,11 +48,6 @@
     }
   </style>
   
-            
-            
-              
-            
-            
               <p class="caption" role="heading"><span class="caption-text">Tutorials</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../tutorials/installation.html">Installation Tutorial</a></li>
@@ -121,8 +66,6 @@
 <li class="toctree-l1"><a class="reference internal" href="../../reference/contributing.html">Contributing</a></li>
 </ul>
 
-            
-          
   <!-- Include Index in the sidebar -->
   <!-- https://stackoverflow.com/a/37843854 -->
   <a href="../../genindex.html">Index</a>
@@ -163,110 +106,113 @@
   </script>
 
         </div>
-        
       </div>
     </nav>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
-
-      
-      <nav class="wy-nav-top" aria-label="top navigation">
-        
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu"  style="background: rgb(7, 43, 93)" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="../../index.html">ibek</a>
-        
       </nav>
 
-
       <div class="wy-nav-content">
-        
         <div class="rst-content">
-        
-          
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div role="navigation" aria-label="breadcrumbs navigation">
-
+          <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-    
       <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
-        
           <li><a href="../index.html">Module code</a> &raquo;</li>
-        
       <li>ibek.helm</li>
-    
-    
       <li class="wy-breadcrumbs-aside">
-        
       </li>
-    
   </ul>
-
-  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
-            
+             
   <h1>Source code for ibek.helm</h1><div class="highlight"><pre>
 <span></span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">Functions for building the helm chart</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
+<span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">import</span> <span class="nn">re</span>
 <span class="kn">import</span> <span class="nn">shutil</span>
+<span class="kn">import</span> <span class="nn">urllib.request</span>
 <span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Tuple</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Match</span><span class="p">,</span> <span class="n">cast</span>
 
 <span class="kn">from</span> <span class="nn">jinja2</span> <span class="kn">import</span> <span class="n">Template</span>
+<span class="kn">from</span> <span class="nn">jsonschema</span> <span class="kn">import</span> <span class="n">validate</span>
 <span class="kn">from</span> <span class="nn">ruamel.yaml.main</span> <span class="kn">import</span> <span class="n">YAML</span>
 
 <span class="kn">from</span> <span class="nn">.ioc</span> <span class="kn">import</span> <span class="n">IOC</span><span class="p">,</span> <span class="n">make_entity_classes</span>
 <span class="kn">from</span> <span class="nn">.render</span> <span class="kn">import</span> <span class="n">render_database_elements</span><span class="p">,</span> <span class="n">render_script_elements</span>
 <span class="kn">from</span> <span class="nn">.support</span> <span class="kn">import</span> <span class="n">Support</span>
 
+<span class="n">log</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
 <span class="n">HELM_TEMPLATE</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">parent</span> <span class="o">/</span> <span class="s2">&quot;helm-template&quot;</span>
 <span class="n">TEMPLATES</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span><span class="o">.</span><span class="n">parent</span> <span class="o">/</span> <span class="s2">&quot;templates&quot;</span>
 
+<span class="n">schema_modeline</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;# *yaml-language-server *: *\$schema=([^ ]*)&quot;</span><span class="p">)</span>
+<span class="n">url_f</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;file://&quot;</span>
 
-<div class="viewcode-block" id="create_boot_script"><a class="viewcode-back" href="../../reference/api.html#ibek.helm.create_boot_script">[docs]</a><span class="k">def</span> <span class="nf">create_boot_script</span><span class="p">(</span>
-    <span class="n">ioc_instance_yaml</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span> <span class="n">definition_yaml</span><span class="p">:</span> <span class="n">Path</span>
-<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">IOC</span><span class="p">,</span> <span class="nb">str</span><span class="p">]:</span>
+
+<div class="viewcode-block" id="load_ioc_yaml"><a class="viewcode-back" href="../../reference/api.html#ibek.helm.load_ioc_yaml">[docs]</a><span class="k">def</span> <span class="nf">load_ioc_yaml</span><span class="p">(</span><span class="n">ioc_instance_yaml</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span> <span class="n">no_schema</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Create the boot script for an IOCs helm chart</span>
+<span class="sd">    Read in an ioc instance entity YAML and convert to dictionary</span>
+<span class="sd">    and validate against its declared schema</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">entity_dict</span> <span class="o">=</span> <span class="n">YAML</span><span class="p">()</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">ioc_instance_yaml</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">no_schema</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">comment1</span> <span class="o">=</span> <span class="n">entity_dict</span><span class="o">.</span><span class="n">ca</span><span class="o">.</span><span class="n">comment</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">value</span>
+            <span class="n">matches</span> <span class="o">=</span> <span class="n">schema_modeline</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">comment1</span><span class="p">)</span>
+            <span class="n">schema_url</span> <span class="o">=</span> <span class="n">cast</span><span class="p">(</span><span class="n">Match</span><span class="p">,</span> <span class="n">matches</span><span class="p">)</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+            <span class="c1"># allow relative file paths so that tests can use this</span>
+            <span class="n">parts</span> <span class="o">=</span> <span class="n">schema_url</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">url_f</span><span class="p">)</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">parts</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">schema_url</span> <span class="o">=</span> <span class="n">url_f</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="n">parts</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span><span class="o">.</span><span class="n">absolute</span><span class="p">())</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+
+            <span class="k">with</span> <span class="n">urllib</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">urlopen</span><span class="p">(</span><span class="n">schema_url</span><span class="p">)</span> <span class="k">as</span> <span class="n">url</span><span class="p">:</span>
+                <span class="n">entity_schema</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">url</span><span class="o">.</span><span class="n">read</span><span class="p">()</span><span class="o">.</span><span class="n">decode</span><span class="p">())</span>
+
+        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+            <span class="n">log</span><span class="o">.</span><span class="n">error</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Error getting schema for </span><span class="si">{</span><span class="n">ioc_instance_yaml</span><span class="si">}</span><span class="s2">. &quot;</span>
+                <span class="s2">&quot;make sure it has &#39;# yaml-language-server: $schema=&#39;&quot;</span>
+            <span class="p">)</span>
+            <span class="k">raise</span>
+
+        <span class="n">validate</span><span class="p">(</span><span class="n">entity_dict</span><span class="p">,</span> <span class="n">entity_schema</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">entity_dict</span></div>
+
+
+<div class="viewcode-block" id="create_boot_script"><a class="viewcode-back" href="../../reference/api.html#ibek.helm.create_boot_script">[docs]</a><span class="k">def</span> <span class="nf">create_boot_script</span><span class="p">(</span><span class="n">ioc_instance_yaml</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span> <span class="n">definition_yaml</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Path</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Create the boot script for an IOC</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># Read and load the support module definitions</span>
-    <span class="n">support</span> <span class="o">=</span> <span class="n">Support</span><span class="o">.</span><span class="n">deserialize</span><span class="p">(</span><span class="n">YAML</span><span class="p">()</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">definition_yaml</span><span class="p">))</span>
-    <span class="n">make_entity_classes</span><span class="p">(</span><span class="n">support</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">yaml</span> <span class="ow">in</span> <span class="n">definition_yaml</span><span class="p">:</span>
+        <span class="n">support</span> <span class="o">=</span> <span class="n">Support</span><span class="o">.</span><span class="n">deserialize</span><span class="p">(</span><span class="n">YAML</span><span class="p">()</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">yaml</span><span class="p">))</span>
+        <span class="n">make_entity_classes</span><span class="p">(</span><span class="n">support</span><span class="p">)</span>
 
     <span class="c1"># Create an IOC instance from it</span>
     <span class="n">ioc_instance</span> <span class="o">=</span> <span class="n">IOC</span><span class="o">.</span><span class="n">deserialize</span><span class="p">(</span><span class="n">YAML</span><span class="p">()</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">ioc_instance_yaml</span><span class="p">))</span>
 
     <span class="c1"># Open jinja template for startup script and fill it in with script</span>
-    <span class="c1"># elements and database elements parsed from the defintion file</span>
+    <span class="c1"># elements and database elements described by IOC Entity objects</span>
     <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">TEMPLATES</span> <span class="o">/</span> <span class="s2">&quot;ioc.boot.jinja&quot;</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
         <span class="n">template</span> <span class="o">=</span> <span class="n">Template</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">())</span>
 
-    <span class="n">script_txt</span> <span class="o">=</span> <span class="n">template</span><span class="o">.</span><span class="n">render</span><span class="p">(</span>
+    <span class="k">return</span> <span class="n">template</span><span class="o">.</span><span class="n">render</span><span class="p">(</span>
         <span class="n">script_elements</span><span class="o">=</span><span class="n">render_script_elements</span><span class="p">(</span><span class="n">ioc_instance</span><span class="p">),</span>
         <span class="n">database_elements</span><span class="o">=</span><span class="n">render_database_elements</span><span class="p">(</span><span class="n">ioc_instance</span><span class="p">),</span>
-    <span class="p">)</span>
-
-    <span class="k">return</span> <span class="n">ioc_instance</span><span class="p">,</span> <span class="n">script_txt</span></div>
+    <span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="render_file"><a class="viewcode-back" href="../../reference/api.html#ibek.helm.render_file">[docs]</a><span class="k">def</span> <span class="nf">render_file</span><span class="p">(</span><span class="n">file_template</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
@@ -282,14 +228,14 @@
     <span class="n">file_template</span><span class="o">.</span><span class="n">unlink</span><span class="p">()</span></div>
 
 
-<div class="viewcode-block" id="create_helm"><a class="viewcode-back" href="../../reference/api.html#ibek.helm.create_helm">[docs]</a><span class="k">def</span> <span class="nf">create_helm</span><span class="p">(</span><span class="n">instance</span><span class="p">:</span> <span class="n">IOC</span><span class="p">,</span> <span class="n">script_txt</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="n">Path</span><span class="p">):</span>
+<div class="viewcode-block" id="create_helm"><a class="viewcode-back" href="../../reference/api.html#ibek.helm.create_helm">[docs]</a><span class="k">def</span> <span class="nf">create_helm</span><span class="p">(</span><span class="n">ioc_dict</span><span class="p">:</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">entity_yaml</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="n">Path</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    create a boilerplate helm chart with name str in folder path</span>
 
 <span class="sd">    update the values.yml and Chart.yml by rendering their jinja templates</span>
 <span class="sd">    and insert the boot script whose text is supplied in script_txt</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">helm_folder</span> <span class="o">=</span> <span class="n">path</span> <span class="o">/</span> <span class="n">instance</span><span class="o">.</span><span class="n">ioc_name</span>
+    <span class="n">helm_folder</span> <span class="o">=</span> <span class="n">path</span> <span class="o">/</span> <span class="n">ioc_dict</span><span class="p">[</span><span class="s2">&quot;ioc_name&quot;</span><span class="p">]</span>
 
     <span class="k">if</span> <span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
         <span class="k">if</span> <span class="n">helm_folder</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
@@ -302,54 +248,42 @@
 
     <span class="n">render_file</span><span class="p">(</span>
         <span class="n">helm_folder</span> <span class="o">/</span> <span class="s2">&quot;Chart.yaml.jinja&quot;</span><span class="p">,</span>
-        <span class="n">ioc_name</span><span class="o">=</span><span class="n">instance</span><span class="o">.</span><span class="n">ioc_name</span><span class="p">,</span>
-        <span class="n">description</span><span class="o">=</span><span class="n">instance</span><span class="o">.</span><span class="n">description</span><span class="p">,</span>
+        <span class="n">ioc_name</span><span class="o">=</span><span class="n">ioc_dict</span><span class="p">[</span><span class="s2">&quot;ioc_name&quot;</span><span class="p">],</span>
+        <span class="n">description</span><span class="o">=</span><span class="n">ioc_dict</span><span class="p">[</span><span class="s2">&quot;description&quot;</span><span class="p">],</span>
     <span class="p">)</span>
     <span class="n">render_file</span><span class="p">(</span>
-        <span class="n">helm_folder</span> <span class="o">/</span> <span class="s2">&quot;values.yaml.jinja&quot;</span><span class="p">,</span>
-        <span class="n">base_image</span><span class="o">=</span><span class="s2">&quot;gcr.io/diamond-pubreg/controls/prod/ioc/ioc-pmac:2.5.3&quot;</span><span class="p">,</span>
+        <span class="n">helm_folder</span> <span class="o">/</span> <span class="s2">&quot;values.yaml.jinja&quot;</span><span class="p">,</span> <span class="n">base_image</span><span class="o">=</span><span class="n">ioc_dict</span><span class="p">[</span><span class="s2">&quot;generic_ioc_image&quot;</span><span class="p">],</span>
     <span class="p">)</span>
 
-    <span class="n">boot_script_path</span> <span class="o">=</span> <span class="n">helm_folder</span> <span class="o">/</span> <span class="s2">&quot;config&quot;</span> <span class="o">/</span> <span class="s2">&quot;ioc.boot&quot;</span>
+    <span class="n">boot_script_path</span> <span class="o">=</span> <span class="n">helm_folder</span> <span class="o">/</span> <span class="s2">&quot;config&quot;</span> <span class="o">/</span> <span class="s2">&quot;ioc.boot.yaml&quot;</span>
 
     <span class="c1"># Saves rendered boot script</span>
     <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">boot_script_path</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
-        <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">script_txt</span><span class="p">)</span></div>
+        <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">entity_yaml</span><span class="p">)</span></div>
 </pre></div>
 
            </div>
-           
           </div>
           <footer>
 
   <hr/>
 
   <div role="contentinfo">
-    <p>
-        &#169; Copyright 2021, Diamond Light Source.
+    <p>&#169; Copyright 2021, Diamond Light Source.</p>
+  </div>
 
-    </p>
-  </div> 
+   
 
 </footer>
         </div>
       </div>
-
     </section>
-
   </div>
-  
-
-  <script type="text/javascript">
+  <script>
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script>
-
-  
-  
-    
-   
+  </script> 
 
 </body>
 </html>
