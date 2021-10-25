@@ -2,6 +2,7 @@
 Functions for rendering lines in the boot script using Jinja2
 """
 
+import sys
 from dataclasses import asdict
 from typing import Optional
 
@@ -10,18 +11,27 @@ from jinja2 import Template
 from .ioc import IOC, Entity
 
 
+def render_template_from_entity_attribute(
+    instance: Entity, attribute: str
+) -> Optional[str]:
+    """
+    Get the rendered template based on an instance attribute
+    """
+    attribute = getattr(instance.__definition__, attribute)
+    if not attribute:
+        return None
+    all_lines = "\n".join(attribute)
+    jinja_template = Template(all_lines)
+    result = jinja_template.render(asdict(instance))
+    return result
+
+
 def render_script(instance: Entity) -> Optional[str]:
     """
     render the startup script by combining the jinja template from
     an entity with the arguments from an Entity
     """
-    script = instance.__definition__.script
-    if not script:
-        return None
-    all_lines = "\n".join(script)
-    jinja_template = Template(all_lines)
-    result = jinja_template.render(asdict(instance))
-    return result
+    return render_template_from_entity_attribute(instance, "script")
 
 
 def render_database(instance: Entity) -> Optional[str]:
@@ -60,13 +70,7 @@ def render_environment_variables(instance: Entity) -> Optional[str]:
     render the environment variable elements by combining the jinja template
     from an entity with the arguments from an Entity
     """
-    env_vars = instance.__definition__.env_vars
-    if not env_vars:
-        return None
-    all_lines = "\n".join(env_vars)
-    jinja_template = Template(all_lines)
-    result = jinja_template.render(asdict(instance))
-    return result
+    return render_template_from_entity_attribute(instance, "env_vars")
 
 
 def render_post_ioc_init(instance: Entity) -> Optional[str]:
@@ -74,58 +78,45 @@ def render_post_ioc_init(instance: Entity) -> Optional[str]:
     render the post-iocInit entries by combining the jinja template
     from an entity with the arguments from an Entity
     """
-    entries = instance.__definition__.post_ioc_init
-    if not entries:
-        return None
-    all_lines = "\n".join(entries)
-    jinja_template = Template(all_lines)
-    result = jinja_template.render(asdict(instance))
-    return result
+    return render_template_from_entity_attribute(instance, "post_ioc_init")
+
+
+def render_elements(ioc: IOC, element: str) -> str:
+    """
+    Render elements of a given IOC instance based on calling the correct method
+    """
+    method = getattr(sys.modules[__name__], element)
+    elements = ""
+    for instance in ioc.entities:
+        element = method(instance)
+        if element:
+            elements += element + "\n"
+    return elements
 
 
 def render_script_elements(ioc: IOC) -> str:
     """
     Render all of the startup script entries for a given IOC instance
     """
-    scripts = ""
-    for instance in ioc.entities:
-        script = render_script(instance)
-        if script:
-            scripts += script + "\n"
-    return scripts
+    return render_elements(ioc, "render_script")
 
 
 def render_database_elements(ioc: IOC) -> str:
     """
     Render all of the DBLoadRecords entries for a given IOC instance
     """
-    databases = ""
-    for instance in ioc.entities:
-        database = render_database(instance)
-        if database:
-            databases += database + "\n"
-    return databases
+    return render_elements(ioc, "render_database")
 
 
 def render_environment_variable_elements(ioc: IOC) -> str:
     """
     Render all of the environment variable entries for a given IOC instance
     """
-    env_var_elements = ""
-    for instance in ioc.entities:
-        element = render_environment_variables(instance)
-        if element:
-            env_var_elements += element + "\n"
-    return env_var_elements
+    return render_elements(ioc, "render_environment_variables")
 
 
 def render_post_ioc_init_elements(ioc: IOC) -> str:
     """
     Render all of the post-iocInit elements for a given IOC instance
     """
-    post_ioc_init_elements = ""
-    for instance in ioc.entities:
-        element = render_post_ioc_init(instance)
-        if element:
-            post_ioc_init_elements += element + "\n"
-    return post_ioc_init_elements
+    return render_elements(ioc, "render_post_ioc_init")
