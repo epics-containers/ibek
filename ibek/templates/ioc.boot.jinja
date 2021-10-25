@@ -1,12 +1,12 @@
 cd "$(TOP)"
+
 epicsEnvSet "EPICS_CA_MAX_ARRAY_BYTES", '6000000'
 epicsEnvSet "EPICS_TS_MIN_WEST", '0'
-cd "$(TOP)"
+
 dbLoadDatabase "dbd/ioc.dbd"
 ioc_registerRecordDeviceDriver(pdbbase)
-{{ script_elements }}
-{{- database_elements }}
-cd "$(TOP)"
-iocInit()
 
+{{ script_elements }}
+{{ database_elements }}
+iocInit()
 

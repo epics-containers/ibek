@@ -141,7 +141,7 @@ def clear_entity_classes():
 class IOC:
     """
     Used to load an IOC instance entities yaml file into memory using
-    IOC.deserialize(YAML().load(ioc_instance_yaml).
+    IOC.deserialize(YAML().load(ioc_instance_yaml)).
 
     Before loading the entities file all Entity classes that it contains
     must be defined in modules.py. This is achieved by deserializing all

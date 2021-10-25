@@ -3,30 +3,37 @@ Functions for rendering lines in the boot script using Jinja2
 """
 
 from dataclasses import asdict
+from typing import Optional
 
 from jinja2 import Template
 
 from .ioc import IOC, Entity
 
 
-def render_script(instance: Entity) -> str:
+def render_script(instance: Entity) -> Optional[str]:
     """
     render the startup script by combining the jinja template from
     an entity with the arguments from and Entity
     """
-    all_lines = "\n".join(instance.__definition__.script)
+    script = instance.__definition__.script
+    if not script:
+        return None
+    all_lines = "\n".join(script)
     jinja_template = Template(all_lines)
     result = jinja_template.render(asdict(instance))
     return result
 
 
-def render_database(instance: Entity) -> str:
+def render_database(instance: Entity) -> Optional[str]:
     """
     render the lines required to instantiate database by combining the
     templates from the Entity's database list with the arguments from
     an Entity
     """
     templates = instance.__definition__.databases
+    # The entity may not instantiate any database templates
+    if not templates:
+        return None
     jinja_txt = ""
     # include list entries expand to e.g. P={{ P }}
     jinja_arg = Template('{{ arg }}={{ "{{" + arg + "}}" }}')
@@ -54,7 +61,9 @@ def render_script_elements(ioc: IOC) -> str:
     """
     scripts = ""
     for instance in ioc.entities:
-        scripts += render_script(instance) + "\n"
+        script = render_script(instance)
+        if script:
+            scripts += script + "\n"
     return scripts
 
 
@@ -64,5 +73,7 @@ def render_database_elements(ioc: IOC) -> str:
     """
     databases = ""
     for instance in ioc.entities:
-        databases += render_database(instance) + "\n"
+        database = render_database(instance)
+        if database:
+            databases += database + "\n"
     return databases
