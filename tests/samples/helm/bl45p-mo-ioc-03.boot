@@ -1,8 +1,5 @@
 cd "$(TOP)"
 
-epicsEnvSet "EPICS_CA_MAX_ARRAY_BYTES", '6000000'
-epicsEnvSet "EPICS_TS_MIN_WEST", '0'
-
 dbLoadDatabase "dbd/ioc.dbd"
 ioc_registerRecordDeviceDriver(pdbbase)
 

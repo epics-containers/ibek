@@ -1,0 +1,31 @@
+# yaml-language-server: $schema=file://schemas/ibek.schema.json
+module: epics
+definitions:
+  - name: EPICS_CA_MAX_ARRAY_BYTES
+    args:
+      - type: int
+        name: max_bytes
+        description: Max size in bytes for sending arrays over channel access
+        default: 6000000
+    env_vars:
+      - epicsEnvSet "EPICS_CA_MAX_ARRAY_BYTES", '{{ max_bytes }}'
+
+  - name: EPICS_TS_MIN_WEST
+    args:
+      - type: int
+        name: minutes_west
+        description: Set relative time zone minutes West relative to GMT (+/-720)
+        default: 0
+    env_vars:
+      - epicsEnvSet "EPICS_TS_MIN_WEST", '{{ minutes_west }}'
+
+  - name: dbpf
+    args:
+      - type: str
+        name: pv
+        description: Name of PV
+      - type: str
+        name: value
+        description: Value to set
+    post_ioc_init:
+      - dbpf "{{ pv }}", "{{ value }}"

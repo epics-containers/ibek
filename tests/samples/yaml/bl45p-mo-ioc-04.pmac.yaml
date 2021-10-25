@@ -1,0 +1,51 @@
+# yaml-language-server: $schema=file://schemas/pmac.schema.json
+ioc_name: bl45p-mo-ioc-04
+description: an example motion ioc for ibek testing
+generic_ioc_image: ghcr.io/epics-containers/ioc-pmac:main.run
+entities:
+  - type: epics.EPICS_CA_MAX_ARRAY_BYTES
+  
+  - type: epics.EPICS_TS_MIN_WEST
+    minutes_west: 60
+
+  - type: pmac.PmacAsynIPPort
+    name: BRICK1port
+    IP: 192.168.0.12:1112
+
+  - type: pmac.Geobrick
+    name: BL45P-MO-BRICK-01
+    PORT: BRICK1port
+    P: "BL45P-MO-STEP-01:"
+    numAxes: 8
+    idlePoll: 100
+    movingPoll: 500
+
+  - type: pmac.DlsPmacAsynMotor
+    name: X1 motor
+    # TODO previously would have been an object pointing to a pmac.Geobrick
+    PMAC: BL45P-MO-BRICK-01
+    # TODO Previously would have used pmac.PORT, pmac.SPORT
+    PORT: BL45P-MO-BRICK-01
+    SPORT: BRICK1port
+    axis: 1
+    P: BL45P-MO-THIN-01
+    M: ":X1"
+    MRES: 0.001
+
+  - type: pmac.DlsPmacAsynMotor
+    name: Y1 motor
+    PMAC: BL45P-MO-BRICK-01
+    PORT: BL45P-MO-BRICK-01
+    SPORT: BRICK1port
+    axis: 2
+    P: BL45P-MO-THIN-01
+    M: ":Y1"
+    MRES: 0.001
+
+  - type: epics.dbpf
+    pv: BL45P-MO-THIN-01:X1.TWV
+    value: "2.5"
+  
+  - type: epics.dbpf
+    pv: BL45P-MO-THIN-01:Y1.TWV
+    value: "0.5"

@@ -1,0 +1,65 @@
+{
+  "type": "object",
+  "properties": {
+    "ioc_name": {
+      "type": "string",
+      "description": "Name of IOC instance"
+    },
+    "description": {
+      "type": "string",
+      "description": "Description of what the IOC does"
+    },
+    "entities": {
+      "type": "array",
+      "items": {
+        "anyOf": [
+          {
+            "type": "object",
+            "properties": {
+              "max_bytes": {
+                "type": "integer",
+                "description": "Max size in bytes for sending arrays over channel access",
+                "default": 6000000
+              },
+              "type": {
+                "type": "string",
+                "const": "epics_env.EPICS_CA_MAX_ARRAY_BYTES",
+                "default": "epics_env.EPICS_CA_MAX_ARRAY_BYTES"
+              }
+            },
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "minutes_west": {
+                "type": "integer",
+                "description": "Set relative time zone minutes West relative to GMT (+/-720)",
+                "default": 0
+              },
+              "type": {
+                "type": "string",
+                "const": "epics_env.EPICS_TS_MIN_WEST",
+                "default": "epics_env.EPICS_TS_MIN_WEST"
+              }
+            },
+            "additionalProperties": false
+          }
+        ]
+      },
+      "description": "List of entities this IOC instantiates"
+    },
+    "generic_ioc_image": {
+      "type": "string",
+      "description": "The generic IOC container image registry URL"
+    }
+  },
+  "required": [
+    "ioc_name",
+    "description",
+    "entities",
+    "generic_ioc_image"
+  ],
+  "additionalProperties": false,
+  "$schema": "http://json-schema.org/draft/2019-09/schema#"
+}
