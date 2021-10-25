@@ -23,8 +23,8 @@
               },
               "type": {
                 "type": "string",
-                "const": "epics_env.EPICS_CA_MAX_ARRAY_BYTES",
-                "default": "epics_env.EPICS_CA_MAX_ARRAY_BYTES"
+                "const": "epics.EPICS_CA_MAX_ARRAY_BYTES",
+                "default": "epics.EPICS_CA_MAX_ARRAY_BYTES"
               }
             },
             "additionalProperties": false
@@ -39,10 +39,33 @@
               },
               "type": {
                 "type": "string",
-                "const": "epics_env.EPICS_TS_MIN_WEST",
-                "default": "epics_env.EPICS_TS_MIN_WEST"
+                "const": "epics.EPICS_TS_MIN_WEST",
+                "default": "epics.EPICS_TS_MIN_WEST"
               }
             },
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "pv": {
+                "type": "string",
+                "description": "Name of PV"
+              },
+              "value": {
+                "type": "string",
+                "description": "Value to set"
+              },
+              "type": {
+                "type": "string",
+                "const": "epics.dbpf",
+                "default": "epics.dbpf"
+              }
+            },
+            "required": [
+              "pv",
+              "value"
+            ],
             "additionalProperties": false
           }
         ]
