@@ -8,7 +8,8 @@ definitions:
         description: Max size in bytes for sending arrays over channel access
         default: 6000000
     env_vars:
-      - epicsEnvSet "EPICS_CA_MAX_ARRAY_BYTES", '{{ max_bytes }}'
+      - name: EPICS_CA_MAX_ARRAY_BYTES
+        value: "{{ max_bytes }}"
 
   - name: EPICS_TS_MIN_WEST
     args:
@@ -17,7 +18,8 @@ definitions:
         description: Set relative time zone minutes West relative to GMT (+/-720)
         default: 0
     env_vars:
-      - epicsEnvSet "EPICS_TS_MIN_WEST", '{{ minutes_west }}'
+      - name: EPICS_TS_MIN_WEST
+        value: "{{ minutes_west }}"
 
   - name: dbpf
     args:
@@ -29,3 +31,15 @@ definitions:
         description: Value to set
     post_ioc_init:
       - dbpf "{{ pv }}", "{{ value }}"
+
+  - name: epicsEnvSet
+    args:
+      - type: str
+        name: name
+        description: Name of environment variable
+      - type: str
+        name: value
+        description: Value of environment variable
+    env_vars:
+      - name: "{{ name }}"
+        value: "{{ value }}"

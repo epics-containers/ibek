@@ -70,7 +70,16 @@ def render_environment_variables(instance: Entity) -> Optional[str]:
     render the environment variable elements by combining the jinja template
     from an entity with the arguments from an Entity
     """
-    return render_template_from_entity_attribute(instance, "env_vars")
+    variables = getattr(instance.__definition__, "env_vars")
+    if not variables:
+        return None
+    instance_as_dict = asdict(instance)
+    env_var_txt = ""
+    for variable in variables:
+        # Substitute the name and value of the environment variable from args
+        env_template = Template(f"epicsEnvSet \"{variable.name}\", '{variable.value}'")
+        env_var_txt += env_template.render(instance_as_dict)
+    return env_var_txt
 
 
 def render_post_ioc_init(instance: Entity) -> Optional[str]:

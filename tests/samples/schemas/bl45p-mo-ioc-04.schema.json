@@ -16,6 +16,84 @@
           {
             "type": "object",
             "properties": {
+              "max_bytes": {
+                "type": "integer",
+                "description": "Max size in bytes for sending arrays over channel access",
+                "default": 6000000
+              },
+              "type": {
+                "type": "string",
+                "const": "epics.EPICS_CA_MAX_ARRAY_BYTES",
+                "default": "epics.EPICS_CA_MAX_ARRAY_BYTES"
+              }
+            },
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "minutes_west": {
+                "type": "integer",
+                "description": "Set relative time zone minutes West relative to GMT (+/-720)",
+                "default": 0
+              },
+              "type": {
+                "type": "string",
+                "const": "epics.EPICS_TS_MIN_WEST",
+                "default": "epics.EPICS_TS_MIN_WEST"
+              }
+            },
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "pv": {
+                "type": "string",
+                "description": "Name of PV"
+              },
+              "value": {
+                "type": "string",
+                "description": "Value to set"
+              },
+              "type": {
+                "type": "string",
+                "const": "epics.dbpf",
+                "default": "epics.dbpf"
+              }
+            },
+            "required": [
+              "pv",
+              "value"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string",
+                "description": "Name of environment variable"
+              },
+              "value": {
+                "type": "string",
+                "description": "Value of environment variable"
+              },
+              "type": {
+                "type": "string",
+                "const": "epics.epicsEnvSet",
+                "default": "epics.epicsEnvSet"
+              }
+            },
+            "required": [
+              "name",
+              "value"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
               "name": {
                 "type": "string",
                 "description": "Name to use for the geobrick's asyn port"
@@ -359,61 +437,6 @@
               "name"
             ],
             "additionalProperties": false
-          },
-          {
-            "type": "object",
-            "properties": {
-              "max_bytes": {
-                "type": "integer",
-                "description": "Max size in bytes for sending arrays over channel access",
-                "default": 6000000
-              },
-              "type": {
-                "type": "string",
-                "const": "epics.EPICS_CA_MAX_ARRAY_BYTES",
-                "default": "epics.EPICS_CA_MAX_ARRAY_BYTES"
-              }
-            },
-            "additionalProperties": false
-          },
-          {
-            "type": "object",
-            "properties": {
-              "minutes_west": {
-                "type": "integer",
-                "description": "Set relative time zone minutes West relative to GMT (+/-720)",
-                "default": 0
-              },
-              "type": {
-                "type": "string",
-                "const": "epics.EPICS_TS_MIN_WEST",
-                "default": "epics.EPICS_TS_MIN_WEST"
-              }
-            },
-            "additionalProperties": false
-          },
-          {
-            "type": "object",
-            "properties": {
-              "pv": {
-                "type": "string",
-                "description": "Name of PV"
-              },
-              "value": {
-                "type": "string",
-                "description": "Value to set"
-              },
-              "type": {
-                "type": "string",
-                "const": "epics.dbpf",
-                "default": "epics.dbpf"
-              }
-            },
-            "required": [
-              "pv",
-              "value"
-            ],
-            "additionalProperties": false
           }
         ]
       },
@@ -431,5 +454,5 @@
     "generic_ioc_image"
   ],
   "additionalProperties": false,
-  "$schema": "http://json-schema.org/draft/2019-09/schema#"
+  "$schema": "http://json-schema.org/draft/2020-12/schema#"
 }

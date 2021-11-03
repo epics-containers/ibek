@@ -101,6 +101,16 @@ class Database:
 
 
 @dataclass
+class EnvironmentVariable:
+    """
+    An environment variable that should be set in the startup script
+    """
+
+    name: A[str, desc("Name of environment variable")]
+    value: A[str, desc("Value to set")]
+
+
+@dataclass
 class Definition:
     """
     A single definition of a class of Entity that an IOC instance may instantiate
@@ -113,7 +123,8 @@ class Definition:
         Sequence[str], desc("Startup script snippet defined as Jinja template")
     ] = ()
     env_vars: A[
-        Sequence[str], desc("Environment variables to set in the boot script")
+        Sequence[EnvironmentVariable],
+        desc("Environment variables to set in the boot script"),
     ] = ()
     post_ioc_init: A[
         Sequence[str], desc("Entries to add post iocInit(), such as dbpf")

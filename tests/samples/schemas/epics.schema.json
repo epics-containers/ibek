@@ -67,6 +67,29 @@
               "value"
             ],
             "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string",
+                "description": "Name of environment variable"
+              },
+              "value": {
+                "type": "string",
+                "description": "Value of environment variable"
+              },
+              "type": {
+                "type": "string",
+                "const": "epics.epicsEnvSet",
+                "default": "epics.epicsEnvSet"
+              }
+            },
+            "required": [
+              "name",
+              "value"
+            ],
+            "additionalProperties": false
           }
         ]
       },
@@ -84,5 +107,5 @@
     "generic_ioc_image"
   ],
   "additionalProperties": false,
-  "$schema": "http://json-schema.org/draft/2019-09/schema#"
+  "$schema": "http://json-schema.org/draft/2020-12/schema#"
 }

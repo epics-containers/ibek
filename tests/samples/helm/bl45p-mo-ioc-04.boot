@@ -2,6 +2,7 @@ cd "$(TOP)"
 
 epicsEnvSet "EPICS_CA_MAX_ARRAY_BYTES", '6000000'
 epicsEnvSet "EPICS_TS_MIN_WEST", '60'
+epicsEnvSet "EPICS_CA_SERVER_PORT", '5010'
 
 dbLoadDatabase "dbd/ioc.dbd"
 ioc_registerRecordDeviceDriver(pdbbase)
