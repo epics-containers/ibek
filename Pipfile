@@ -6,6 +6,8 @@ verify_ssl = true
 [dev-packages]
 # Pinning black stops us having to allow pre-releases globally
 black = "==19.10b0"
+# Flake version 4.0 and 4.0.1 do not like pytest: https://github.com/tholo/pytest-flake8/issues/81
+flake8 = "==3.9.2"
 # Pins to make lockfile usable on multiple Python versions and platforms
 mypy = "*"
 atomicwrites = "*"
@@ -21,7 +23,7 @@ flake8-isort = "*"
 isort = ">5.0"
 sphinx-rtd-theme = "*"
 sphinx-apischema = "*"
-autopep8 = "*"
+autopep8 = "==1.5.7"
 
 [packages]
 # Pins to make lockfile usable on multiple Python versions and platforms
