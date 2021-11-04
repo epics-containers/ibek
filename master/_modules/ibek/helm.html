@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ibek.helm &mdash; ibek 0.3+13.gdb40aa5 documentation</title>
+  <title>ibek.helm &mdash; ibek 0.3+23.gaa3c972 documentation</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/graphviz.css" type="text/css" />
@@ -147,7 +147,12 @@
 <span class="kn">from</span> <span class="nn">ruamel.yaml.main</span> <span class="kn">import</span> <span class="n">YAML</span>
 
 <span class="kn">from</span> <span class="nn">.ioc</span> <span class="kn">import</span> <span class="n">IOC</span><span class="p">,</span> <span class="n">make_entity_classes</span>
-<span class="kn">from</span> <span class="nn">.render</span> <span class="kn">import</span> <span class="n">render_database_elements</span><span class="p">,</span> <span class="n">render_script_elements</span>
+<span class="kn">from</span> <span class="nn">.render</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">render_database_elements</span><span class="p">,</span>
+    <span class="n">render_environment_variable_elements</span><span class="p">,</span>
+    <span class="n">render_post_ioc_init_elements</span><span class="p">,</span>
+    <span class="n">render_script_elements</span><span class="p">,</span>
+<span class="p">)</span>
 <span class="kn">from</span> <span class="nn">.support</span> <span class="kn">import</span> <span class="n">Support</span>
 
 <span class="n">log</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
@@ -210,8 +215,10 @@
         <span class="n">template</span> <span class="o">=</span> <span class="n">Template</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">())</span>
 
     <span class="k">return</span> <span class="n">template</span><span class="o">.</span><span class="n">render</span><span class="p">(</span>
+        <span class="n">env_var_elements</span><span class="o">=</span><span class="n">render_environment_variable_elements</span><span class="p">(</span><span class="n">ioc_instance</span><span class="p">),</span>
         <span class="n">script_elements</span><span class="o">=</span><span class="n">render_script_elements</span><span class="p">(</span><span class="n">ioc_instance</span><span class="p">),</span>
         <span class="n">database_elements</span><span class="o">=</span><span class="n">render_database_elements</span><span class="p">(</span><span class="n">ioc_instance</span><span class="p">),</span>
+        <span class="n">post_ioc_init_elements</span><span class="o">=</span><span class="n">render_post_ioc_init_elements</span><span class="p">(</span><span class="n">ioc_instance</span><span class="p">),</span>
     <span class="p">)</span></div>
 
 

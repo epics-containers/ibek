@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ibek.support &mdash; ibek 0.3+13.gdb40aa5 documentation</title>
+  <title>ibek.support &mdash; ibek 0.3+23.gaa3c972 documentation</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/graphviz.css" type="text/css" />
@@ -232,6 +232,16 @@
     <span class="n">define_args</span><span class="p">:</span> <span class="n">A</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">desc</span><span class="p">(</span><span class="s2">&quot;Arg string list to be generated as Jinja template&quot;</span><span class="p">)]</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span></div>
 
 
+<div class="viewcode-block" id="EnvironmentVariable"><a class="viewcode-back" href="../../reference/api.html#ibek.support.EnvironmentVariable">[docs]</a><span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">EnvironmentVariable</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    An environment variable that should be set in the startup script</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">name</span><span class="p">:</span> <span class="n">A</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">desc</span><span class="p">(</span><span class="s2">&quot;Name of environment variable&quot;</span><span class="p">)]</span>
+    <span class="n">value</span><span class="p">:</span> <span class="n">A</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">desc</span><span class="p">(</span><span class="s2">&quot;Value to set&quot;</span><span class="p">)]</span></div>
+
+
 <div class="viewcode-block" id="Definition"><a class="viewcode-back" href="../../reference/api.html#ibek.support.Definition">[docs]</a><span class="nd">@dataclass</span>
 <span class="k">class</span> <span class="nc">Definition</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
@@ -243,6 +253,13 @@
     <span class="n">databases</span><span class="p">:</span> <span class="n">A</span><span class="p">[</span><span class="n">Sequence</span><span class="p">[</span><span class="n">Database</span><span class="p">],</span> <span class="n">desc</span><span class="p">(</span><span class="s2">&quot;Databases to instantiate&quot;</span><span class="p">)]</span> <span class="o">=</span> <span class="p">()</span>
     <span class="n">script</span><span class="p">:</span> <span class="n">A</span><span class="p">[</span>
         <span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">desc</span><span class="p">(</span><span class="s2">&quot;Startup script snippet defined as Jinja template&quot;</span><span class="p">)</span>
+    <span class="p">]</span> <span class="o">=</span> <span class="p">()</span>
+    <span class="n">env_vars</span><span class="p">:</span> <span class="n">A</span><span class="p">[</span>
+        <span class="n">Sequence</span><span class="p">[</span><span class="n">EnvironmentVariable</span><span class="p">],</span>
+        <span class="n">desc</span><span class="p">(</span><span class="s2">&quot;Environment variables to set in the boot script&quot;</span><span class="p">),</span>
+    <span class="p">]</span> <span class="o">=</span> <span class="p">()</span>
+    <span class="n">post_ioc_init</span><span class="p">:</span> <span class="n">A</span><span class="p">[</span>
+        <span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">desc</span><span class="p">(</span><span class="s2">&quot;Entries to add post iocInit(), such as dbpf&quot;</span><span class="p">)</span>
     <span class="p">]</span> <span class="o">=</span> <span class="p">()</span></div>
 
 

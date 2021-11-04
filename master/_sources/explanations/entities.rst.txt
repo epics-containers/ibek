@@ -258,10 +258,10 @@ The ibek commands to progress through the file sequence above are as follows
         - Hand crafted at IOC instance design time
     *   - 5
         - Helm Chart files
-        - ``ibek build-helm  <container>.schema.json <ioc>.<container>.yaml``
+        - ``ibek build-helm <ioc>.<container>.yaml``
           run at IOC helm chart generation time. This generates a helm chart
           with ``<ioc>.<container>.yaml`` in its config folder and validates it
-          against ``<container>.schema.json``
+          against the schema defined at the top of the YAML file.
     *   - 6
         - IOC startup script
         - ``ibek build-startup <ioc>.<container>.yaml ...``. Run at IOC startup time in the
