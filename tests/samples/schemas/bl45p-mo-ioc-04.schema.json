@@ -16,111 +16,78 @@
           {
             "type": "object",
             "properties": {
-              "port": {
-                "type": "string",
-                "description": "The port name for this asyn object"
-              },
-              "input_eos": {
-                "type": "string",
-                "description": "Input end of string (terminator)"
-              },
-              "output_eos": {
-                "type": "string",
-                "description": "Output end of string (terminator)"
-              },
-              "priority": {
+              "max_bytes": {
                 "type": "integer",
-                "description": "Priority",
-                "default": 100
-              },
-              "noAutoConnect": {
-                "type": "boolean",
-                "description": "Set to stop auto connect"
-              },
-              "noProcessEos": {
-                "type": "boolean",
-                "description": "Set to avoid processing end of string"
-              },
-              "simulation": {
-                "type": "string",
-                "description": "IP port to connect to if in simulation mode"
-              },
-              "baud": {
-                "type": "integer",
-                "description": "Baud Rate"
-              },
-              "bits": {
-                "type": "integer",
-                "description": "Bits [8,7,6,5]"
-              },
-              "parity": {
-                "type": "string",
-                "description": "Parity [null,even,odd]"
-              },
-              "stop": {
-                "type": "integer",
-                "description": "Stop Bits [1,2]"
-              },
-              "crtscts": {
-                "type": "boolean",
-                "description": "Set hardware flow control on"
+                "description": "Max size in bytes for sending arrays over channel access",
+                "default": 6000000
               },
               "type": {
                 "type": "string",
-                "const": "asyn.AsynSerial",
-                "default": "asyn.AsynSerial"
+                "const": "epics.EPICS_CA_MAX_ARRAY_BYTES",
+                "default": "epics.EPICS_CA_MAX_ARRAY_BYTES"
+              }
+            },
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "minutes_west": {
+                "type": "integer",
+                "description": "Set relative time zone minutes West relative to GMT (+/-720)",
+                "default": 0
+              },
+              "type": {
+                "type": "string",
+                "const": "epics.EPICS_TS_MIN_WEST",
+                "default": "epics.EPICS_TS_MIN_WEST"
+              }
+            },
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "pv": {
+                "type": "string",
+                "description": "Name of PV"
+              },
+              "value": {
+                "type": "string",
+                "description": "Value to set"
+              },
+              "type": {
+                "type": "string",
+                "const": "epics.dbpf",
+                "default": "epics.dbpf"
               }
             },
             "required": [
-              "port"
+              "pv",
+              "value"
             ],
             "additionalProperties": false
           },
           {
             "type": "object",
             "properties": {
-              "port": {
-                "type": "string",
-                "description": "Serial port tty name / IP address optionally followed by protocol"
-              },
               "name": {
                 "type": "string",
-                "description": "Name for the Asyn Port"
+                "description": "Name of environment variable"
               },
-              "input_eos": {
+              "value": {
                 "type": "string",
-                "description": "Input end of string (terminator)"
-              },
-              "output_eos": {
-                "type": "string",
-                "description": "Output end of string (terminator)"
-              },
-              "priority": {
-                "type": "integer",
-                "description": "Priority",
-                "default": 100
-              },
-              "noAutoConnect": {
-                "type": "boolean",
-                "description": "Set to stop auto connect"
-              },
-              "noProcessEos": {
-                "type": "boolean",
-                "description": "Set to avoid processing end of string"
-              },
-              "simulation": {
-                "type": "string",
-                "description": "IP port to connect to if in simulation mode"
+                "description": "Value of environment variable"
               },
               "type": {
                 "type": "string",
-                "const": "asyn.AsynIP",
-                "default": "asyn.AsynIP"
+                "const": "epics.epicsEnvSet",
+                "default": "epics.epicsEnvSet"
               }
             },
             "required": [
-              "port",
-              "name"
+              "name",
+              "value"
             ],
             "additionalProperties": false
           },

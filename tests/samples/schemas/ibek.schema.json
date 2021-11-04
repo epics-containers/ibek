@@ -216,6 +216,37 @@
             },
             "description": "Startup script snippet defined as Jinja template",
             "default": []
+          },
+          "env_vars": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "description": "Name of environment variable"
+                },
+                "value": {
+                  "type": "string",
+                  "description": "Value to set"
+                }
+              },
+              "required": [
+                "name",
+                "value"
+              ],
+              "additionalProperties": false
+            },
+            "description": "Environment variables to set in the boot script",
+            "default": []
+          },
+          "post_ioc_init": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Entries to add post iocInit(), such as dbpf",
+            "default": []
           }
         },
         "required": [
@@ -231,5 +262,5 @@
     "definitions"
   ],
   "additionalProperties": false,
-  "$schema": "http://json-schema.org/draft/2019-09/schema#"
+  "$schema": "http://json-schema.org/draft/2020-12/schema#"
 }

@@ -2,31 +2,48 @@
 Functions for rendering lines in the boot script using Jinja2
 """
 
+import sys
 from dataclasses import asdict
+from typing import Optional
 
 from jinja2 import Template
 
 from .ioc import IOC, Entity
 
 
-def render_script(instance: Entity) -> str:
+def render_template_from_entity_attribute(
+    instance: Entity, attribute: str
+) -> Optional[str]:
     """
-    render the startup script by combining the jinja template from
-    an entity with the arguments from and Entity
+    Get the rendered template based on an instance attribute
     """
-    all_lines = "\n".join(instance.__definition__.script)
+    attribute = getattr(instance.__definition__, attribute)
+    if not attribute:
+        return None
+    all_lines = "\n".join(attribute)
     jinja_template = Template(all_lines)
     result = jinja_template.render(asdict(instance))
     return result
 
 
-def render_database(instance: Entity) -> str:
+def render_script(instance: Entity) -> Optional[str]:
+    """
+    render the startup script by combining the jinja template from
+    an entity with the arguments from an Entity
+    """
+    return render_template_from_entity_attribute(instance, "script")
+
+
+def render_database(instance: Entity) -> Optional[str]:
     """
     render the lines required to instantiate database by combining the
     templates from the Entity's database list with the arguments from
     an Entity
     """
     templates = instance.__definition__.databases
+    # The entity may not instantiate any database templates
+    if not templates:
+        return None
     jinja_txt = ""
     # include list entries expand to e.g. P={{ P }}
     jinja_arg = Template('{{ arg }}={{ "{{" + arg + "}}" }}')
@@ -48,21 +65,67 @@ def render_database(instance: Entity) -> str:
     return db_txt
 
 
+def render_environment_variables(instance: Entity) -> Optional[str]:
+    """
+    render the environment variable elements by combining the jinja template
+    from an entity with the arguments from an Entity
+    """
+    variables = getattr(instance.__definition__, "env_vars")
+    if not variables:
+        return None
+    instance_as_dict = asdict(instance)
+    env_var_txt = ""
+    for variable in variables:
+        # Substitute the name and value of the environment variable from args
+        env_template = Template(f"epicsEnvSet \"{variable.name}\", '{variable.value}'")
+        env_var_txt += env_template.render(instance_as_dict)
+    return env_var_txt
+
+
+def render_post_ioc_init(instance: Entity) -> Optional[str]:
+    """
+    render the post-iocInit entries by combining the jinja template
+    from an entity with the arguments from an Entity
+    """
+    return render_template_from_entity_attribute(instance, "post_ioc_init")
+
+
+def render_elements(ioc: IOC, element: str) -> str:
+    """
+    Render elements of a given IOC instance based on calling the correct method
+    """
+    method = getattr(sys.modules[__name__], element)
+    elements = ""
+    for instance in ioc.entities:
+        element = method(instance)
+        if element:
+            elements += element + "\n"
+    return elements
+
+
 def render_script_elements(ioc: IOC) -> str:
     """
     Render all of the startup script entries for a given IOC instance
     """
-    scripts = ""
-    for instance in ioc.entities:
-        scripts += render_script(instance) + "\n"
-    return scripts
+    return render_elements(ioc, "render_script")
 
 
 def render_database_elements(ioc: IOC) -> str:
     """
     Render all of the DBLoadRecords entries for a given IOC instance
     """
-    databases = ""
-    for instance in ioc.entities:
-        databases += render_database(instance) + "\n"
-    return databases
+    return render_elements(ioc, "render_database")
+
+
+def render_environment_variable_elements(ioc: IOC) -> str:
+    """
+    Render all of the environment variable entries for a given IOC instance
+    """
+    return render_elements(ioc, "render_environment_variables")
+
+
+def render_post_ioc_init_elements(ioc: IOC) -> str:
+    """
+    Render all of the post-iocInit elements for a given IOC instance
+    """
+    return render_elements(ioc, "render_post_ioc_init")

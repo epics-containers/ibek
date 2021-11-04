@@ -1,8 +1,17 @@
-# yaml-language-server: $schema=file://tests/samples/schemas/container.schema.json
-ioc_name: bl45p-mo-ioc-03
-description: an example motion ioc for ibek testing
+# yaml-language-server: $schema=file://tests/samples/schemas/bl45p-mo-ioc-04.schema.json
+ioc_name: bl45p-mo-ioc-04
+description: an example motion ioc with epics environment variables and dbpf entries
 generic_ioc_image: ghcr.io/epics-containers/ioc-pmac:main.run
 entities:
+  - type: epics.EPICS_CA_MAX_ARRAY_BYTES
+  
+  - type: epics.EPICS_TS_MIN_WEST
+    minutes_west: 60
+
+  - type: epics.epicsEnvSet
+    name: EPICS_CA_SERVER_PORT
+    value: "5010"
+
   - type: pmac.PmacAsynIPPort
     name: BRICK1port
     IP: 192.168.0.12:1112
@@ -37,7 +46,10 @@ entities:
     M: ":Y1"
     MRES: 0.001
 
-  - type: asyn.AsynIP
-    port: 192.168.0.0:1025
-    name: anAsynIpPort
-
+  - type: epics.dbpf
+    pv: BL45P-MO-THIN-01:X1.TWV
+    value: "2.5"
+  
+  - type: epics.dbpf
+    pv: BL45P-MO-THIN-01:Y1.TWV
+    value: "0.5"

@@ -15,7 +15,12 @@ from jsonschema import validate
 from ruamel.yaml.main import YAML
 
 from .ioc import IOC, make_entity_classes
-from .render import render_database_elements, render_script_elements
+from .render import (
+    render_database_elements,
+    render_environment_variable_elements,
+    render_post_ioc_init_elements,
+    render_script_elements,
+)
 from .support import Support
 
 log = logging.getLogger(__name__)
@@ -78,8 +83,10 @@ def create_boot_script(ioc_instance_yaml: Path, definition_yaml: List[Path]) -> 
         template = Template(f.read())
 
     return template.render(
+        env_var_elements=render_environment_variable_elements(ioc_instance),
         script_elements=render_script_elements(ioc_instance),
         database_elements=render_database_elements(ioc_instance),
+        post_ioc_init_elements=render_post_ioc_init_elements(ioc_instance),
     )
 
 
