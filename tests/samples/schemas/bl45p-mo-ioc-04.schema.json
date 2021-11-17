@@ -25,6 +25,10 @@
                 "type": "string",
                 "const": "epics.EPICS_CA_MAX_ARRAY_BYTES",
                 "default": "epics.EPICS_CA_MAX_ARRAY_BYTES"
+              },
+              "entity_disabled": {
+                "type": "boolean",
+                "default": false
               }
             },
             "additionalProperties": false
@@ -41,6 +45,10 @@
                 "type": "string",
                 "const": "epics.EPICS_TS_MIN_WEST",
                 "default": "epics.EPICS_TS_MIN_WEST"
+              },
+              "entity_disabled": {
+                "type": "boolean",
+                "default": false
               }
             },
             "additionalProperties": false
@@ -60,6 +68,10 @@
                 "type": "string",
                 "const": "epics.dbpf",
                 "default": "epics.dbpf"
+              },
+              "entity_disabled": {
+                "type": "boolean",
+                "default": false
               }
             },
             "required": [
@@ -83,6 +95,10 @@
                 "type": "string",
                 "const": "epics.epicsEnvSet",
                 "default": "epics.epicsEnvSet"
+              },
+              "entity_disabled": {
+                "type": "boolean",
+                "default": false
               }
             },
             "required": [
@@ -122,6 +138,10 @@
                 "type": "string",
                 "const": "pmac.Geobrick",
                 "default": "pmac.Geobrick"
+              },
+              "entity_disabled": {
+                "type": "boolean",
+                "default": false
               }
             },
             "required": [
@@ -149,6 +169,10 @@
                 "type": "string",
                 "const": "pmac.PmacAsynIPPort",
                 "default": "pmac.PmacAsynIPPort"
+              },
+              "entity_disabled": {
+                "type": "boolean",
+                "default": false
               }
             },
             "required": [
@@ -425,6 +449,10 @@
                 "type": "string",
                 "const": "pmac.DlsPmacAsynMotor",
                 "default": "pmac.DlsPmacAsynMotor"
+              },
+              "entity_disabled": {
+                "type": "boolean",
+                "default": false
               }
             },
             "required": [

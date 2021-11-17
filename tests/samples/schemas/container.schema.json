@@ -69,6 +69,10 @@
                 "type": "string",
                 "const": "asyn.AsynSerial",
                 "default": "asyn.AsynSerial"
+              },
+              "entity_disabled": {
+                "type": "boolean",
+                "default": false
               }
             },
             "required": [
@@ -116,6 +120,10 @@
                 "type": "string",
                 "const": "asyn.AsynIP",
                 "default": "asyn.AsynIP"
+              },
+              "entity_disabled": {
+                "type": "boolean",
+                "default": false
               }
             },
             "required": [
@@ -155,6 +163,10 @@
                 "type": "string",
                 "const": "pmac.Geobrick",
                 "default": "pmac.Geobrick"
+              },
+              "entity_disabled": {
+                "type": "boolean",
+                "default": false
               }
             },
             "required": [
@@ -182,6 +194,10 @@
                 "type": "string",
                 "const": "pmac.PmacAsynIPPort",
                 "default": "pmac.PmacAsynIPPort"
+              },
+              "entity_disabled": {
+                "type": "boolean",
+                "default": false
               }
             },
             "required": [
@@ -458,6 +474,10 @@
                 "type": "string",
                 "const": "pmac.DlsPmacAsynMotor",
                 "default": "pmac.DlsPmacAsynMotor"
+              },
+              "entity_disabled": {
+                "type": "boolean",
+                "default": false
               }
             },
             "required": [
