@@ -6,18 +6,7 @@ from __future__ import annotations
 
 import types
 from dataclasses import Field, dataclass, field, make_dataclass
-from typing import (
-    Any,
-    ClassVar,
-    Dict,
-    List,
-    Mapping,
-    Sequence,
-    Tuple,
-    Type,
-    Union,
-    cast,
-)
+from typing import Any, Dict, List, Mapping, Sequence, Tuple, Type, Union, cast
 
 from apischema import Undefined, cache, deserialize, deserializer
 from apischema.conversions import (
@@ -42,8 +31,8 @@ class Entity:
     """
 
     # a link back to the Definition Object that generated this Definition
-    __definition__: ClassVar[Definition]
-    __instances__: ClassVar[Dict[str, Entity]]
+    __definition__: Definition
+    __instances__: Dict[str, Entity]
     entity_disabled: bool
 
     def __post_init__(self):

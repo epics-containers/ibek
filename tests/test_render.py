@@ -142,7 +142,12 @@ def test_entity_disabled_does_not_render_elements(pmac_classes, epics_classes):
     )
 
     # Make an IOC with our instances
-    ioc = IOC("TEST-IOC-01", "Test IOC", instance_list, "test_ioc_image",)
+    ioc = IOC(
+        "TEST-IOC-01",
+        "Test IOC",
+        instance_list,
+        "test_ioc_image",
+    )
 
     # Render script and check output
     expected_script = (

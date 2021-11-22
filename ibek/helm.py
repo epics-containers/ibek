@@ -127,7 +127,8 @@ def create_helm(ioc_dict: Dict, entity_yaml: str, path: Path):
         description=ioc_dict["description"],
     )
     render_file(
-        helm_folder / "values.yaml.jinja", base_image=ioc_dict["generic_ioc_image"],
+        helm_folder / "values.yaml.jinja",
+        base_image=ioc_dict["generic_ioc_image"],
     )
 
     boot_script_path = helm_folder / "config" / "ioc.boot.yaml"

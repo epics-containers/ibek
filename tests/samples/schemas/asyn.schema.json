@@ -16,6 +16,10 @@
           {
             "type": "object",
             "properties": {
+              "entity_disabled": {
+                "type": "boolean",
+                "default": false
+              },
               "port": {
                 "type": "string",
                 "description": "The port name for this asyn object"
@@ -69,10 +73,6 @@
                 "type": "string",
                 "const": "asyn.AsynSerial",
                 "default": "asyn.AsynSerial"
-              },
-              "entity_disabled": {
-                "type": "boolean",
-                "default": false
               }
             },
             "required": [
@@ -83,6 +83,10 @@
           {
             "type": "object",
             "properties": {
+              "entity_disabled": {
+                "type": "boolean",
+                "default": false
+              },
               "port": {
                 "type": "string",
                 "description": "Serial port tty name / IP address optionally followed by protocol"
@@ -120,10 +124,6 @@
                 "type": "string",
                 "const": "asyn.AsynIP",
                 "default": "asyn.AsynIP"
-              },
-              "entity_disabled": {
-                "type": "boolean",
-                "default": false
               }
             },
             "required": [
