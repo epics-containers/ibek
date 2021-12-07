@@ -16,6 +16,10 @@
           {
             "type": "object",
             "properties": {
+              "entity_disabled": {
+                "type": "boolean",
+                "default": false
+              },
               "max_bytes": {
                 "type": "integer",
                 "description": "Max size in bytes for sending arrays over channel access",
@@ -32,6 +36,10 @@
           {
             "type": "object",
             "properties": {
+              "entity_disabled": {
+                "type": "boolean",
+                "default": false
+              },
               "minutes_west": {
                 "type": "integer",
                 "description": "Set relative time zone minutes West relative to GMT (+/-720)",
@@ -48,6 +56,10 @@
           {
             "type": "object",
             "properties": {
+              "entity_disabled": {
+                "type": "boolean",
+                "default": false
+              },
               "pv": {
                 "type": "string",
                 "description": "Name of PV"
@@ -71,6 +83,10 @@
           {
             "type": "object",
             "properties": {
+              "entity_disabled": {
+                "type": "boolean",
+                "default": false
+              },
               "name": {
                 "type": "string",
                 "description": "Name of environment variable"

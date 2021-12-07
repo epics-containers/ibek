@@ -4,33 +4,12 @@ url = "https://pypi.org/simple"
 verify_ssl = true
 
 [dev-packages]
-# Pinning black stops us having to allow pre-releases globally
-black = "==19.10b0"
-# Flake version 4.0 and 4.0.1 do not like pytest: https://github.com/tholo/pytest-flake8/issues/81
-flake8 = "==3.9.2"
-# Pins to make lockfile usable on multiple Python versions and platforms
-mypy = "*"
-atomicwrites = "*"
-typing-extensions = "*"
-importlib-metadata = "*"
-typed-ast = "*"
-# Test and docs dependencies
-pytest-cov = "*"
-pytest-mypy = "*"
-pytest-flake8 = "*"
-pytest-black = "*"
-flake8-isort = "*"
-isort = ">5.0"
-sphinx-rtd-theme = "*"
-sphinx-apischema = "*"
-autopep8 = "==1.5.7"
+# All other package requirements from setup.cfg
+ibek = {editable = true, path = ".", extras = ["dev"]}
 
 [packages]
-# Pins to make lockfile usable on multiple Python versions and platforms
-typing-extensions = "*"
 # All other package requirements from setup.cfg
-ibek = {editable = true,path = "."}
-jsonschema = "*"
+ibek = {editable = true, path = "."}
 
 [scripts]
 tests = "python -m pytest"

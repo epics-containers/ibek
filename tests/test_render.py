@@ -4,7 +4,16 @@ Entity classes
 """
 from unittest.mock import Mock
 
-from ibek.render import render_database, render_environment_variables, render_script
+from ibek.ioc import IOC
+from ibek.render import (
+    render_database,
+    render_database_elements,
+    render_environment_variable_elements,
+    render_environment_variables,
+    render_post_ioc_init_elements,
+    render_script,
+    render_script_elements,
+)
 
 
 def test_pmac_asyn_ip_port_script(pmac_classes):
@@ -74,3 +83,94 @@ def test_epics_environment_variables(epics_classes):
     env_text = render_environment_variables(epics_env_set_instance)
 
     assert env_text == f"epicsEnvSet \"{env_name}\", '{env_value}'"
+
+
+def test_entity_disabled_does_not_render_elements(pmac_classes, epics_classes):
+    # There are four elements to check: script, database, environment variables
+    # and post-iocInit
+
+    # Entity which has a script and database
+    pmac_geobrick_class = pmac_classes.Geobrick
+    # Entity which has env_vars
+    ca_max_array_bytes_class = epics_classes.EPICS_CA_MAX_ARRAY_BYTES
+    # Entity which has post_ioc_init
+    dbpf_class = epics_classes.dbpf
+
+    # We require pmac asyn IP port instances for the Geobrick class
+    pmac_asyn_ip_class = pmac_classes.PmacAsynIPPort
+    brick_one_asyn_ip_port = pmac_asyn_ip_class(
+        name="geobrick_one_port", IP="172.23.100.101"
+    )
+    brick_two_asyn_ip_port = pmac_asyn_ip_class(
+        name="geobrick_two_port", IP="172.23.100.101"
+    )
+
+    # Store created instances in a list
+    instance_list = []
+
+    # Create two instances of the Geobrick entity, one disabled
+    instance_list.append(
+        pmac_geobrick_class(
+            name="geobrick_enabled",
+            PORT=brick_one_asyn_ip_port,
+            P="geobrick_one",
+            numAxes=8,
+            idlePoll=200,
+            movingPoll=800,
+        )
+    )
+    instance_list.append(
+        pmac_geobrick_class(
+            name="geobrick_disabled",
+            PORT=brick_two_asyn_ip_port,
+            P="geobrick_two",
+            numAxes=8,
+            idlePoll=200,
+            movingPoll=800,
+            entity_disabled=True,
+        )
+    )
+
+    # Create two instances of the CA max array bytes entity, one disabled
+    instance_list.append(ca_max_array_bytes_class())
+    instance_list.append(ca_max_array_bytes_class(entity_disabled=True))
+
+    # Create two instances of the dpbf class
+    instance_list.append(dbpf_class(pv="TEST:PV:1", value="pv_value_1"))
+    instance_list.append(
+        dbpf_class(pv="TEST:PV:2", value="pv_value_2", entity_disabled=True)
+    )
+
+    # Make an IOC with our instances
+    ioc = IOC(
+        "TEST-IOC-01",
+        "Test IOC",
+        instance_list,
+        "test_ioc_image",
+    )
+
+    # Render script and check output
+    expected_script = (
+        "pmacCreateController(geobrick_enabled, geobrick_one_port, 0, 8, 800, 200)\n"
+        "pmacCreateAxes(geobrick_enabled, 8)\n"
+    )
+    script = render_script_elements(ioc)
+    assert script == expected_script
+
+    # Render database
+    expected_database = (
+        'dbLoadRecords("pmacController.template", "PMAC=geobrick_one")\n'
+        'dbLoadRecords("pmacStatus.template", "PMAC=geobrick_one")\n'
+    )
+    database = render_database_elements(ioc)
+    assert database == expected_database
+
+    # Render environment variables
+    expected_env_vars = "epicsEnvSet \"EPICS_CA_MAX_ARRAY_BYTES\", '6000000'\n"
+    env_vars = render_environment_variable_elements(ioc)
+    assert env_vars == expected_env_vars
+
+    # Render post_ioc_init
+    expected_post_ioc_init = 'dbpf "TEST:PV:1", "pv_value_1"\n'
+    post_ioc_init = render_post_ioc_init_elements(ioc)
+    assert post_ioc_init == expected_post_ioc_init

@@ -10,5 +10,5 @@ T = TypeVar("T")
 
 
 def desc(description: str):
-    """ a description Annotation to add to our Entity derived Types """
+    """a description Annotation to add to our Entity derived Types"""
     return schema(description=description)

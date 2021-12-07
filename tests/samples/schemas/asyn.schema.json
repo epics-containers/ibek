@@ -16,6 +16,10 @@
           {
             "type": "object",
             "properties": {
+              "entity_disabled": {
+                "type": "boolean",
+                "default": false
+              },
               "port": {
                 "type": "string",
                 "description": "The port name for this asyn object"
@@ -79,6 +83,10 @@
           {
             "type": "object",
             "properties": {
+              "entity_disabled": {
+                "type": "boolean",
+                "default": false
+              },
               "port": {
                 "type": "string",
                 "description": "Serial port tty name / IP address optionally followed by protocol"

@@ -6,18 +6,7 @@ from __future__ import annotations
 
 import types
 from dataclasses import Field, dataclass, field, make_dataclass
-from typing import (
-    Any,
-    ClassVar,
-    Dict,
-    List,
-    Mapping,
-    Sequence,
-    Tuple,
-    Type,
-    Union,
-    cast,
-)
+from typing import Any, Dict, List, Mapping, Sequence, Tuple, Type, Union, cast
 
 from apischema import Undefined, cache, deserialize, deserializer
 from apischema.conversions import (
@@ -35,7 +24,6 @@ from .globals import T, desc
 from .support import Definition, ObjectArg, StrArg, Support
 
 
-@dataclass
 class Entity:
     """
     A baseclass for all generated Entity classes. Provides the
@@ -43,8 +31,9 @@ class Entity:
     """
 
     # a link back to the Definition Object that generated this Definition
-    __definition__: ClassVar[Definition]
-    __instances__: ClassVar[Dict[str, Entity]]
+    __definition__: Definition
+    __instances__: Dict[str, Entity]
+    entity_disabled: bool
 
     def __post_init__(self):
         # If there is an argument which is an id then allow deserialization by that
@@ -100,6 +89,10 @@ def make_entity_class(definition: Definition, support: Support) -> Type[Entity]:
     # a unique key for each of the entity types we may instantiate
     full_name = f"{support.module}.{definition.name}"
     fields.append(("type", Literal[full_name], field(default=cast(Any, full_name))))
+
+    # add a field so we can control rendering of the entity without having to delete
+    # it
+    fields.append(("entity_disabled", bool, field(default=cast(Any, False))))
 
     namespace = dict(
         __definition__=definition, __instances__={}, __module__="ibek.modules"
