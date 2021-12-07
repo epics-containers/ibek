@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ibek.render &mdash; ibek 0.3+23.gaa3c972 documentation</title>
+  <title>ibek.render &mdash; ibek 0.3+28.ga8fd489 documentation</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/graphviz.css" type="text/css" />
@@ -229,9 +229,10 @@
     <span class="n">method</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">modules</span><span class="p">[</span><span class="vm">__name__</span><span class="p">],</span> <span class="n">element</span><span class="p">)</span>
     <span class="n">elements</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
     <span class="k">for</span> <span class="n">instance</span> <span class="ow">in</span> <span class="n">ioc</span><span class="o">.</span><span class="n">entities</span><span class="p">:</span>
-        <span class="n">element</span> <span class="o">=</span> <span class="n">method</span><span class="p">(</span><span class="n">instance</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">element</span><span class="p">:</span>
-            <span class="n">elements</span> <span class="o">+=</span> <span class="n">element</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">instance</span><span class="o">.</span><span class="n">entity_disabled</span><span class="p">:</span>
+            <span class="n">element</span> <span class="o">=</span> <span class="n">method</span><span class="p">(</span><span class="n">instance</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">element</span><span class="p">:</span>
+                <span class="n">elements</span> <span class="o">+=</span> <span class="n">element</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
     <span class="k">return</span> <span class="n">elements</span></div>
 
 

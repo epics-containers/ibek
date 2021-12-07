@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ibek.ioc &mdash; ibek 0.3+23.gaa3c972 documentation</title>
+  <title>ibek.ioc &mdash; ibek 0.3+28.ga8fd489 documentation</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/graphviz.css" type="text/css" />
@@ -138,18 +138,7 @@
 
 <span class="kn">import</span> <span class="nn">types</span>
 <span class="kn">from</span> <span class="nn">dataclasses</span> <span class="kn">import</span> <span class="n">Field</span><span class="p">,</span> <span class="n">dataclass</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">make_dataclass</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="p">(</span>
-    <span class="n">Any</span><span class="p">,</span>
-    <span class="n">ClassVar</span><span class="p">,</span>
-    <span class="n">Dict</span><span class="p">,</span>
-    <span class="n">List</span><span class="p">,</span>
-    <span class="n">Mapping</span><span class="p">,</span>
-    <span class="n">Sequence</span><span class="p">,</span>
-    <span class="n">Tuple</span><span class="p">,</span>
-    <span class="n">Type</span><span class="p">,</span>
-    <span class="n">Union</span><span class="p">,</span>
-    <span class="n">cast</span><span class="p">,</span>
-<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Mapping</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Type</span><span class="p">,</span> <span class="n">Union</span><span class="p">,</span> <span class="n">cast</span>
 
 <span class="kn">from</span> <span class="nn">apischema</span> <span class="kn">import</span> <span class="n">Undefined</span><span class="p">,</span> <span class="n">cache</span><span class="p">,</span> <span class="n">deserialize</span><span class="p">,</span> <span class="n">deserializer</span>
 <span class="kn">from</span> <span class="nn">apischema.conversions</span> <span class="kn">import</span> <span class="p">(</span>
@@ -167,16 +156,16 @@
 <span class="kn">from</span> <span class="nn">.support</span> <span class="kn">import</span> <span class="n">Definition</span><span class="p">,</span> <span class="n">ObjectArg</span><span class="p">,</span> <span class="n">StrArg</span><span class="p">,</span> <span class="n">Support</span>
 
 
-<div class="viewcode-block" id="Entity"><a class="viewcode-back" href="../../reference/api.html#ibek.ioc.Entity">[docs]</a><span class="nd">@dataclass</span>
-<span class="k">class</span> <span class="nc">Entity</span><span class="p">:</span>
+<div class="viewcode-block" id="Entity"><a class="viewcode-back" href="../../reference/api.html#ibek.ioc.Entity">[docs]</a><span class="k">class</span> <span class="nc">Entity</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    A baseclass for all generated Entity classes. Provides the</span>
 <span class="sd">    deserialize entry point.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="c1"># a link back to the Definition Object that generated this Definition</span>
-    <span class="n">__definition__</span><span class="p">:</span> <span class="n">ClassVar</span><span class="p">[</span><span class="n">Definition</span><span class="p">]</span>
-    <span class="n">__instances__</span><span class="p">:</span> <span class="n">ClassVar</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Entity</span><span class="p">]]</span>
+    <span class="n">__definition__</span><span class="p">:</span> <span class="n">Definition</span>
+    <span class="n">__instances__</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Entity</span><span class="p">]</span>
+    <span class="n">entity_disabled</span><span class="p">:</span> <span class="nb">bool</span>
 
     <span class="k">def</span> <span class="nf">__post_init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="c1"># If there is an argument which is an id then allow deserialization by that</span>
@@ -232,6 +221,10 @@
     <span class="c1"># a unique key for each of the entity types we may instantiate</span>
     <span class="n">full_name</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">support</span><span class="o">.</span><span class="n">module</span><span class="si">}</span><span class="s2">.</span><span class="si">{</span><span class="n">definition</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span>
     <span class="n">fields</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="s2">&quot;type&quot;</span><span class="p">,</span> <span class="n">Literal</span><span class="p">[</span><span class="n">full_name</span><span class="p">],</span> <span class="n">field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="n">cast</span><span class="p">(</span><span class="n">Any</span><span class="p">,</span> <span class="n">full_name</span><span class="p">))))</span>
+
+    <span class="c1"># add a field so we can control rendering of the entity without having to delete</span>
+    <span class="c1"># it</span>
+    <span class="n">fields</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="s2">&quot;entity_disabled&quot;</span><span class="p">,</span> <span class="nb">bool</span><span class="p">,</span> <span class="n">field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="n">cast</span><span class="p">(</span><span class="n">Any</span><span class="p">,</span> <span class="kc">False</span><span class="p">))))</span>
 
     <span class="n">namespace</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
         <span class="n">__definition__</span><span class="o">=</span><span class="n">definition</span><span class="p">,</span> <span class="n">__instances__</span><span class="o">=</span><span class="p">{},</span> <span class="vm">__module__</span><span class="o">=</span><span class="s2">&quot;ibek.modules&quot;</span>
