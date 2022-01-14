@@ -21,11 +21,17 @@ def test_cli_version():
     assert subprocess.check_output(cmd).decode().strip() == __version__
 
 
+def run_cli(*args):
+    result = runner.invoke(cli, [str(x) for x in args])
+    if result.exception:
+        raise result.exception
+    assert result.exit_code == 0, result
+
+
 def test_builder_schema(tmp_path: Path, samples: Path):
     """generate the global ibek schema"""
     schema_path = tmp_path / "schema.json"
-    result = runner.invoke(cli, ["ibek-schema", str(schema_path)])
-    assert result.exit_code == 0, f"ibek-schema failed with: {result}"
+    run_cli("ibek-schema", schema_path)
     expected = json.loads(open(samples / "schemas" / "ibek.schema.json").read())
     # Don't care if version number didn't update to match if the rest is the same
     # expected["title"] = mock.ANY
@@ -40,8 +46,7 @@ def test_pmac_schema(tmp_path: Path, samples: Path):
 
     schema_path = tmp_path / "pmac.ibek.schema.json"
     yaml_path = samples / "yaml" / "pmac.ibek.yaml"
-    result = runner.invoke(cli, ["ioc-schema", str(yaml_path), str(schema_path)])
-    assert result.exit_code == 0, f"ioc-schema failed with: {result}"
+    run_cli("ioc-schema", yaml_path, schema_path)
 
     expected = json.loads(open(samples / "schemas" / "pmac.schema.json").read())
 
@@ -55,8 +60,7 @@ def test_asyn_schema(tmp_path: Path, samples: Path):
 
     schema_path = tmp_path / "asyn.ibek.schema.json"
     yaml_path = samples / "yaml" / "asyn.ibek.yaml"
-    result = runner.invoke(cli, ["ioc-schema", str(yaml_path), str(schema_path)])
-    assert result.exit_code == 0, f"ioc-schema failed with: {result}"
+    run_cli("ioc-schema", yaml_path, schema_path)
 
     expected = json.loads(open(samples / "schemas" / "asyn.schema.json").read())
 
@@ -71,10 +75,7 @@ def test_container_schema(tmp_path: Path, samples: Path):
     schema_combined = tmp_path / "container.schema.json"
     yaml_path1 = samples / "yaml" / "asyn.ibek.yaml"
     yaml_path2 = samples / "yaml" / "pmac.ibek.yaml"
-    result = runner.invoke(
-        cli, ["ioc-schema", str(yaml_path1), str(yaml_path2), str(schema_combined)]
-    )
-    assert result.exit_code == 0, f"ioc-schema failed with: {result}"
+    run_cli("ioc-schema", yaml_path1, yaml_path2, schema_combined)
 
     expected = json.loads(open(samples / "schemas" / "container.schema.json").read())
 
@@ -88,8 +89,7 @@ def test_build_helm(tmp_path: Path, samples: Path):
     entity_file = samples / "yaml" / "bl45p-mo-ioc-02.pmac.yaml"
 
     os.chdir(str(samples))
-    result = runner.invoke(cli, ["build-helm", str(entity_file), str(tmp_path)])
-    assert result.exit_code == 0, f"build-ioc failed with: {result}"
+    run_cli("build-helm", entity_file, tmp_path)
 
     example_entity = entity_file.read_text()
     actual_file = tmp_path / "bl45p-mo-ioc-02" / "config" / "ioc.boot.yaml"
@@ -115,10 +115,7 @@ def test_build_startup_single(tmp_path: Path, samples: Path):
     definition_file = samples / "yaml" / "pmac.ibek.yaml"
     out_file = tmp_path / "ioc.boot"
 
-    result = runner.invoke(
-        cli, ["build-startup", str(entity_file), str(definition_file), str(out_file)]
-    )
-    assert result.exit_code == 0, f"build-ioc failed with: {result}"
+    run_cli("build-startup", entity_file, definition_file, out_file)
 
     example_boot = (samples / "helm" / "ioc.boot").read_text()
     actual_boot = out_file.read_text()
@@ -137,17 +134,7 @@ def test_build_startup_multiple(tmp_path: Path, samples: Path):
     definition_file2 = samples / "yaml" / "pmac.ibek.yaml"
     out_file = tmp_path / "ioc.boot"
 
-    result = runner.invoke(
-        cli,
-        [
-            "build-startup",
-            str(entity_file),
-            str(definition_file1),
-            str(definition_file2),
-            str(out_file),
-        ],
-    )
-    assert result.exit_code == 0, f"build-ioc failed with: {result}"
+    run_cli("build-startup", entity_file, definition_file1, definition_file2, out_file)
 
     example_boot = (samples / "helm" / "bl45p-mo-ioc-03.boot").read_text()
     actual_boot = out_file.read_text()
@@ -167,17 +154,7 @@ def test_build_startup_env_vars_and_post_ioc_init(tmp_path: Path, samples: Path)
     definition_file2 = samples / "yaml" / "pmac.ibek.yaml"
     out_file = tmp_path / "ioc.boot"
 
-    result = runner.invoke(
-        cli,
-        [
-            "build-startup",
-            str(entity_file),
-            str(definition_file1),
-            str(definition_file2),
-            str(out_file),
-        ],
-    )
-    assert result.exit_code == 0, f"build-ioc failed with: {result}"
+    run_cli("build-startup", entity_file, definition_file1, definition_file2, out_file)
 
     example_boot = (samples / "helm" / "bl45p-mo-ioc-04.boot").read_text()
     actual_boot = out_file.read_text()

@@ -8,13 +8,8 @@ import types
 from dataclasses import Field, dataclass, field, make_dataclass
 from typing import Any, Dict, List, Mapping, Sequence, Tuple, Type, Union, cast
 
-from apischema import Undefined, cache, deserialize, deserializer
-from apischema.conversions import (
-    Conversion,
-    LazyConversion,
-    identity,
-    reset_deserializers,
-)
+from apischema import Undefined, cache, deserialize, deserializer, identity
+from apischema.conversions import Conversion, LazyConversion, reset_deserializers
 from apischema.metadata import conversion
 from typing_extensions import Annotated as A
 from typing_extensions import Literal
