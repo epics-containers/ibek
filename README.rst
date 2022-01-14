@@ -1,4 +1,4 @@
-dls-python3-skeleton
+ibek
 ===========================
 
 |code_ci| |docs_ci| |coverage| |pypi_version| |license|
@@ -7,10 +7,10 @@ This is where you should write a short paragraph that describes what your module
 how it does it, and why people should use it.
 
 ============== ==============================================================
-PyPI           ``pip install dls_python3_skeleton``
-Source code    https://github.com/dls-controls/dls-python3-skeleton
-Documentation  https://dls-controls.github.io/dls-python3-skeleton
-Releases       https://github.com/dls-controls/dls-python3-skeleton/releases
+PyPI           ``pip install ibek``
+Source code    https://github.com/epics-containers/ibek
+Documentation  https://epics-containers.github.io/ibek
+Releases       https://github.com/epics-containers/ibek/releases
 ============== ==============================================================
 
 This is where you should put some images or code snippets that illustrate
@@ -19,29 +19,29 @@ introductory code here:
 
 .. code:: python
 
-    from dls_python3_skeleton.hello import HelloClass
+    from ibek.hello import HelloClass
 
     hello = HelloClass("me")
     print(hello.format_greeting())
 
 Or if it is a commandline tool then you might put some example commands here::
 
-    dls-python3-skeleton person --times=2
+    ibek person --times=2
 
-.. |code_ci| image:: https://github.com/dls-controls/dls-python3-skeleton/workflows/Code%20CI/badge.svg?branch=master
-    :target: https://github.com/dls-controls/dls-python3-skeleton/actions?query=workflow%3A%22Code+CI%22
+.. |code_ci| image:: https://github.com/epics-containers/ibek/workflows/Code%20CI/badge.svg?branch=master
+    :target: https://github.com/epics-containers/ibek/actions?query=workflow%3A%22Code+CI%22
     :alt: Code CI
 
-.. |docs_ci| image:: https://github.com/dls-controls/dls-python3-skeleton/workflows/Docs%20CI/badge.svg?branch=master
-    :target: https://github.com/dls-controls/dls-python3-skeleton/actions?query=workflow%3A%22Docs+CI%22
+.. |docs_ci| image:: https://github.com/epics-containers/ibek/workflows/Docs%20CI/badge.svg?branch=master
+    :target: https://github.com/epics-containers/ibek/actions?query=workflow%3A%22Docs+CI%22
     :alt: Docs CI
 
-.. |coverage| image:: https://codecov.io/gh/dls-controls/dls-python3-skeleton/branch/master/graph/badge.svg
-    :target: https://codecov.io/gh/dls-controls/dls-python3-skeleton
+.. |coverage| image:: https://codecov.io/gh/epics-containers/ibek/branch/master/graph/badge.svg
+    :target: https://codecov.io/gh/epics-containers/ibek
     :alt: Test Coverage
 
-.. |pypi_version| image:: https://img.shields.io/pypi/v/dls_python3_skeleton.svg
-    :target: https://pypi.org/project/dls_python3_skeleton
+.. |pypi_version| image:: https://img.shields.io/pypi/v/ibek.svg
+    :target: https://pypi.org/project/ibek
     :alt: Latest PyPI version
 
 .. |license| image:: https://img.shields.io/badge/License-Apache%202.0-blue.svg
@@ -52,4 +52,4 @@ Or if it is a commandline tool then you might put some example commands here::
     Anything below this line is used when viewing README.rst and will be replaced
     when included in index.rst
 
-See https://dls-controls.github.io/dls-python3-skeleton for more detailed documentation.
+See https://epics-containers.github.io/ibek for more detailed documentation.
