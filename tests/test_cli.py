@@ -1,5 +1,7 @@
 import json
 import os
+import subprocess
+import sys
 from pathlib import Path
 
 import pytest
@@ -14,11 +16,9 @@ from ibek.support import Support
 runner = CliRunner()
 
 
-def test_version():
-    """check version reporting"""
-    result = runner.invoke(cli, ["--version"])
-    assert result.exit_code == 0, f"ibek --version failed with: {result}"
-    assert result.stdout == __version__ + "\n"
+def test_cli_version():
+    cmd = [sys.executable, "-m", "ibek", "--version"]
+    assert subprocess.check_output(cmd).decode().strip() == __version__
 
 
 def test_builder_schema(tmp_path: Path, samples: Path):

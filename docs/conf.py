@@ -10,8 +10,6 @@ import ibek
 
 # General information about the project.
 project = "ibek"
-copyright = "2021, Diamond Light Source"
-author = "Tom Cobb"
 
 # The full version, including alpha/beta/rc tags.
 release = ibek.__version__
@@ -73,9 +71,6 @@ graphviz_output_format = "svg"
 # role, that is, for text marked up `like this`
 default_role = "any"
 
-# Add any paths that contain templates here, relative to this directory.
-templates_path = ["_templates"]
-
 # The suffix of source filenames.
 source_suffix = ".rst"
 
@@ -108,7 +103,7 @@ rst_epilog = """
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
 #
-html_theme = "sphinx_rtd_theme"
+html_theme = "sphinx_rtd_theme_github_versions"
 
 # Options for the sphinx rtd theme, use DLS blue
 html_theme_options = dict(style_nav_header_background="rgb(7, 43, 93)")
@@ -122,7 +117,7 @@ html_static_path = ["_static"]
 html_show_sphinx = False
 
 # If true, "(C) Copyright ..." is shown in the HTML footer. Default is True.
-html_show_copyright = True
+html_show_copyright = False
 
 # Add some CSS classes for columns and other tweaks in a custom css file
 html_css_files = ["theme_overrides.css"]

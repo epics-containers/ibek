@@ -16,7 +16,7 @@ CMD = "git describe --tags --dirty --always --long --match=[0-9]*[-.][0-9]*"
 
 
 def get_version_from_git(path=None):
-    """Try to parse version from git describe, fallback to git archive tags"""
+    """Try to parse version from git describe, fallback to git archive tags."""
     tag, plus, suffix = "0.0", "untagged", ""
     if not GIT_SHA1.startswith("$"):
         # git archive or the cmdclasses below have filled in these strings
@@ -61,8 +61,11 @@ __version__, git_sha1, git_error = get_version_from_git()
 
 
 def get_cmdclass(build_py=None, sdist=None):
-    """Create cmdclass dict to pass to setuptools.setup that will write a
-    _version_static.py file in our resultant sdist, wheel or egg"""
+    """Create cmdclass dict to pass to setuptools.setup.
+
+    Create cmdclass dict to pass to setuptools.setup which will write a
+    _version_static.py file in our resultant sdist, wheel or egg.
+    """
     if build_py is None:
         from setuptools.command.build_py import build_py
     if sdist is None:

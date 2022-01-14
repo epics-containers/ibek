@@ -19,7 +19,7 @@ IOC Builder for EPICS and Kubernetes:
 PyPI           ``pip install ibek``
 Source code    https://github.com/epics-containers/ibek
 Documentation  https://epics-containers.github.io/ibek
-Changelog      https://github.com/epics-containers/ibek/blob/master/CHANGELOG.rst
+Releases       https://github.com/epics-containers/ibek/releases
 ============== ==============================================================
 
 TODO
