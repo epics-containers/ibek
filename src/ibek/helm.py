@@ -25,8 +25,7 @@ from .support import Support
 
 log = logging.getLogger(__name__)
 
-# TODO: these are not packaged, should move them to src/ibek
-HELM_TEMPLATE = Path(__file__).parent.parent.parent / "helm-template"
+HELM_TEMPLATE = Path(__file__).parent / "helm-template"
 TEMPLATES = Path(__file__).parent / "templates"
 
 schema_modeline = re.compile(r"# *yaml-language-server *: *\$schema=([^ ]*)")

@@ -3,7 +3,6 @@ repos:
     rev: v2.3.0
     hooks:
       - id: check-added-large-files
-      - id: check-yaml
       - id: check-merge-conflict
 
   - repo: local
