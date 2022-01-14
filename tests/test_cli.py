@@ -32,11 +32,11 @@ def test_builder_schema(tmp_path: Path, samples: Path):
     """generate the global ibek schema"""
     schema_path = tmp_path / "schema.json"
     run_cli("ibek-schema", schema_path)
-    expected = json.loads(open(samples / "schemas" / "ibek.schema.json").read())
+    expected = json.loads((samples / "schemas" / "ibek.schema.json").read_text())
     # Don't care if version number didn't update to match if the rest is the same
     # expected["title"] = mock.ANY
 
-    actual = json.loads(open(schema_path).read())
+    actual = json.loads((schema_path).read_text())
     assert expected == actual
 
 
@@ -48,9 +48,9 @@ def test_pmac_schema(tmp_path: Path, samples: Path):
     yaml_path = samples / "yaml" / "pmac.ibek.yaml"
     run_cli("ioc-schema", yaml_path, schema_path)
 
-    expected = json.loads(open(samples / "schemas" / "pmac.schema.json").read())
+    expected = json.loads((samples / "schemas" / "pmac.schema.json").read_text())
 
-    actual = json.loads(open(schema_path).read())
+    actual = json.loads((schema_path).read_text())
     assert expected == actual
 
 
@@ -62,9 +62,9 @@ def test_asyn_schema(tmp_path: Path, samples: Path):
     yaml_path = samples / "yaml" / "asyn.ibek.yaml"
     run_cli("ioc-schema", yaml_path, schema_path)
 
-    expected = json.loads(open(samples / "schemas" / "asyn.schema.json").read())
+    expected = json.loads((samples / "schemas" / "asyn.schema.json").read_text())
 
-    actual = json.loads(open(schema_path).read())
+    actual = json.loads((schema_path).read_text())
     assert expected == actual
 
 
@@ -77,9 +77,9 @@ def test_container_schema(tmp_path: Path, samples: Path):
     yaml_path2 = samples / "yaml" / "pmac.ibek.yaml"
     run_cli("ioc-schema", yaml_path1, yaml_path2, schema_combined)
 
-    expected = json.loads(open(samples / "schemas" / "container.schema.json").read())
+    expected = json.loads((samples / "schemas" / "container.schema.json").read_text())
 
-    actual = json.loads(open(schema_combined).read())
+    actual = json.loads((schema_combined).read_text())
     assert expected == actual
 
 
