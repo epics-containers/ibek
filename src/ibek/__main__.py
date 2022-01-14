@@ -64,7 +64,7 @@ def ioc_schema(
     # first check the definition file with jsonschema since it has more
     # legible error messages than apischema
     for definition in definitions:
-        support_dict = YAML().load(definition)
+        support_dict = YAML(typ="safe").load(definition)
         if not no_schema:
             schema_support = make_schema(Support)
             jsonschema.validate(support_dict, schema_support)

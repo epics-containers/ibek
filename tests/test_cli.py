@@ -173,7 +173,7 @@ def test_loading_module_twice(tmp_path: Path, samples: Path):
     # we may get clashes in the namespace of generated Entity classes.
     # This tests that we get a sensible error when we do
     definition_file = samples / "yaml" / "pmac.ibek.yaml"
-    support = Support.deserialize(YAML().load(definition_file))
+    support = Support.deserialize(YAML(typ="safe").load(definition_file))
     make_entity_classes(support)
     with pytest.raises(AssertionError) as ctx:
         make_entity_classes(support)

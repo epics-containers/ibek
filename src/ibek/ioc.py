@@ -8,7 +8,14 @@ import types
 from dataclasses import Field, dataclass, field, make_dataclass
 from typing import Any, Dict, List, Mapping, Sequence, Tuple, Type, Union, cast
 
-from apischema import Undefined, cache, deserialize, deserializer, identity
+from apischema import (
+    Undefined,
+    ValidationError,
+    cache,
+    deserialize,
+    deserializer,
+    identity,
+)
 from apischema.conversions import Conversion, LazyConversion, reset_deserializers
 from apischema.metadata import conversion
 from typing_extensions import Annotated as A
@@ -54,7 +61,7 @@ def make_entity_class(definition: Definition, support: Support) -> Type[Entity]:
 
     See :ref:`entities`
     """
-    fields: List[Union[Tuple[str, type], Tuple[str, type, Field[Any]]]] = []
+    fields: List[Tuple[str, type, Field[Any]]] = []
 
     # add in each of the arguments
     for arg in definition.args:
@@ -67,11 +74,17 @@ def make_entity_class(definition: Definition, support: Support) -> Type[Entity]:
             def make_conversion(name: str = arg.type) -> Conversion:
                 module_name, entity_name = name.split(".", maxsplit=1)
                 entity_cls = getattr(getattr(modules, module_name), entity_name)
-                return Conversion(
-                    lambda id: entity_cls.__instances__[id], str, entity_cls
-                )
+
+                def lookup_instance(id):
+                    try:
+                        return entity_cls.__instances__[id]
+                    except KeyError:
+                        raise ValidationError(f"{id} is not a {name}")
+
+                return Conversion(lookup_instance, str, Entity)
 
             metadata = conversion(deserialization=LazyConversion(make_conversion))
+            arg_type = Entity
         if arg.description:
             arg_type = A[arg_type, desc(arg.description)]
         if arg.default is Undefined:
@@ -89,9 +102,7 @@ def make_entity_class(definition: Definition, support: Support) -> Type[Entity]:
     # it
     fields.append(("entity_disabled", bool, field(default=cast(Any, False))))
 
-    namespace = dict(
-        __definition__=definition, __instances__={}, __module__="ibek.modules"
-    )
+    namespace = dict(__definition__=definition, __instances__={})
 
     # make the Entity derived dataclass for this EntityClass, with a reference
     # to the Definition that created it

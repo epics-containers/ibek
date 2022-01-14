@@ -72,11 +72,11 @@ def create_boot_script(ioc_instance_yaml: Path, definition_yaml: List[Path]) -> 
     """
     # Read and load the support module definitions
     for yaml in definition_yaml:
-        support = Support.deserialize(YAML().load(yaml))
+        support = Support.deserialize(YAML(typ="safe").load(yaml))
         make_entity_classes(support)
 
     # Create an IOC instance from it
-    ioc_instance = IOC.deserialize(YAML().load(ioc_instance_yaml))
+    ioc_instance = IOC.deserialize(YAML(typ="safe").load(ioc_instance_yaml))
 
     # Open jinja template for startup script and fill it in with script
     # elements and database elements described by IOC Entity objects
