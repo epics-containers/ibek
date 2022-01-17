@@ -1,4 +1,4 @@
-# yaml-language-server: $schema=file://tests/samples/schemas/container.schema.json
+# yaml-language-server: $schema=../schemas/container.schema.json
 ioc_name: bl45p-mo-ioc-03
 description: an example motion ioc for ibek testing
 generic_ioc_image: ghcr.io/epics-containers/ioc-pmac:main.run

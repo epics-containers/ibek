@@ -1,63 +1,44 @@
 .. include:: ../README.rst
     :end-before: when included in index.rst
 
+
 How the documentation is structured
 -----------------------------------
 
-Documentation is split into four categories, accessible from links in the side-bar.
+Documentation is split into four categories, also accessible from links in the
+side-bar.
 
 .. rst-class:: columns
 
-Tutorials
-~~~~~~~~~
+`tutorials`
+~~~~~~~~~~~
 
-Tutorials for installation, library and commandline usage. New users start here.
-
-.. toctree::
-    :caption: Tutorials
-    :hidden:
-
-    tutorials/installation
+.. include:: tutorials.rst
+    :start-after: =========
 
 .. rst-class:: columns
 
-How-to Guides
-~~~~~~~~~~~~~
+`how-to`
+~~~~~~~~
 
-Practical step-by-step guides for the more experienced user.
-
-.. toctree::
-    :caption: How-to Guides
-    :hidden:
-
-    how-to/edit-yaml
+.. include:: how-to.rst
+    :start-after: =============
 
 .. rst-class:: columns
 
-Explanations
-~~~~~~~~~~~~
+`explanations`
+~~~~~~~~~~~~~~
 
-Explanation of how the library works and why it works that way.
-
-.. toctree::
-    :caption: Explanations
-    :hidden:
-
-    explanations/entities
+.. include:: explanations.rst
+    :start-after: ============
 
 .. rst-class:: columns
 
-Reference
-~~~~~~~~~
+`reference`
+~~~~~~~~~~~
 
-Technical reference material, for classes, methods, APIs, commands, and contributing to the project.
-
-.. toctree::
-    :caption: Reference
-    :hidden:
-
-    reference/api
-    reference/contributing
+.. include:: reference.rst
+    :start-after: =========
 
 .. rst-class:: endcolumns
 

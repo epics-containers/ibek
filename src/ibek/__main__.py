@@ -1,10 +1,10 @@
 import json
 from pathlib import Path
-from typing import List, Optional
+from typing import Any, List, Mapping, Optional
 
 import jsonschema
 import typer
-from apischema.json_schema import deserialization_schema
+from apischema.json_schema import JsonSchemaVersion, deserialization_schema
 from ruamel.yaml import YAML
 
 from ibek import __version__
@@ -15,6 +15,10 @@ from .support import Support
 
 cli = typer.Typer()
 yaml = YAML()
+
+
+def make_schema(cls: type) -> Mapping[str, Any]:
+    return deserialization_schema(cls, version=JsonSchemaVersion.DRAFT_7)
 
 
 def version_callback(value: bool):
@@ -41,7 +45,7 @@ def ibek_schema(
     output: Path = typer.Argument(..., help="The filename to write the schema to")
 ):
     """Produce the JSON global schema for all <support_module>.ibek.yaml files"""
-    schema = json.dumps(deserialization_schema(Support), indent=2)
+    schema = json.dumps(make_schema(Support), indent=2)
     output.write_text(schema)
 
 
@@ -60,15 +64,15 @@ def ioc_schema(
     # first check the definition file with jsonschema since it has more
     # legible error messages than apischema
     for definition in definitions:
-        support_dict = YAML().load(definition)
+        support_dict = YAML(typ="safe").load(definition)
         if not no_schema:
-            schema_support = deserialization_schema(Support)
+            schema_support = make_schema(Support)
             jsonschema.validate(support_dict, schema_support)
 
         support = Support.deserialize(support_dict)
         make_entity_classes(support)
 
-    schema = json.dumps(deserialization_schema(IOC), indent=2)
+    schema = json.dumps(make_schema(IOC), indent=2)
     output.write_text(schema)
 
 

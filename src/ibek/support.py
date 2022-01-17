@@ -6,8 +6,8 @@ It contains a hierarchy of Entity dataclasses.
 from dataclasses import dataclass
 from typing import Any, Mapping, Optional, Sequence, Type, Union
 
-from apischema import Undefined, UndefinedType, deserialize, deserializer
-from apischema.conversions import Conversion, identity
+from apischema import Undefined, UndefinedType, deserialize, deserializer, identity
+from apischema.conversions import Conversion
 from typing_extensions import Annotated as A
 from typing_extensions import Literal
 

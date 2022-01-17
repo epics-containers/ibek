@@ -1,4 +1,6 @@
 [build-system]
-# Pin versions compatible with dls-python3 for reproducible wheels
-requires = ["setuptools==44.1.1", "wheel==0.33.1"]
+# To get a reproducible wheel, wheel must be pinned to the same version as in
+# dls-python3, and setuptools must produce the same dist-info. Cap setuptools
+# to the last version that didn't add License-File to METADATA
+requires = ["setuptools<57", "wheel==0.33.1"]
 build-backend = "setuptools.build_meta"
