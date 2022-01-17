@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ibek.ioc &mdash; ibek 0.3+28.ga8fd489 documentation</title>
+  <title>ibek.ioc &mdash; ibek 0.3+39.g0c021e0 documentation</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/graphviz.css" type="text/css" />
@@ -41,16 +41,9 @@
   </form>
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
-  <style>
-    /* style mobile top nav to look like main nav */
-    .wy-nav-top {
-        background: rgb(7, 43, 93)
-    }
-  </style>
-  
               <p class="caption" role="heading"><span class="caption-text">Tutorials</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../tutorials/installation.html">Installation Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/installation.html">Installation</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">How-to Guides</span></p>
 <ul>
@@ -64,46 +57,9 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../reference/api.html">API</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../reference/contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/epics-containers/ibek/releases">Releases</a></li>
+<li class="toctree-l1"><a class="reference external" href="genindex.html#http://">Index</a></li>
 </ul>
-
-  <!-- Include Index in the sidebar -->
-  <!-- https://stackoverflow.com/a/37843854 -->
-  <a href="../../genindex.html">Index</a>
-  <!-- Include link to changelog -->
-  <a href="https://github.com/epics-containers/ibek/blob/master/CHANGELOG.rst">Changelog</a>
-  <!-- Add versions for selected branches + tags -->
-  <p class="caption"><span class="caption-text">Versions</span></p>
-  <ul id="versions"/>
-  <script>
-    // Add any branches to appear in the side pane here, tags will be added below
-    // Will only appear if docs are built and pushed in gh-pages
-    var versions = ['master', 'main'];
-    var dirs = new Set();
-    function addVersion(name) {
-      if (dirs.has(name)) {
-        var li = document.createElement("li");
-        var a = document.createElement("a");
-        a.href = 'https://epics-containers.github.io/ibek/' + name;
-        a.innerText = name;
-        li.appendChild(a)
-        document.getElementById('versions').appendChild(li);
-      }
-    }
-    Promise.all([
-      // Find gh-pages directories and populate `dirs`
-      fetch("https://api.github.com/repos/epics-containers/ibek/contents?ref=gh-pages")
-      .then(response => response.json())
-      .then(data => data.forEach(function(e) {
-        if (e.type == "dir") dirs.add(e.name);
-      })),
-      // Add tags to `versions`
-      fetch('https://api.github.com/repos/epics-containers/ibek/tags')
-        .then(response => response.json())
-        .then(data => data.forEach(function(e) {
-          versions.push(e.name);
-        }))
-      ]).then(_ => versions.forEach(addVersion))
-  </script>
 
         </div>
       </div>
@@ -138,15 +94,17 @@
 
 <span class="kn">import</span> <span class="nn">types</span>
 <span class="kn">from</span> <span class="nn">dataclasses</span> <span class="kn">import</span> <span class="n">Field</span><span class="p">,</span> <span class="n">dataclass</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">make_dataclass</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Mapping</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Type</span><span class="p">,</span> <span class="n">Union</span><span class="p">,</span> <span class="n">cast</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Mapping</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Type</span><span class="p">,</span> <span class="n">cast</span>
 
-<span class="kn">from</span> <span class="nn">apischema</span> <span class="kn">import</span> <span class="n">Undefined</span><span class="p">,</span> <span class="n">cache</span><span class="p">,</span> <span class="n">deserialize</span><span class="p">,</span> <span class="n">deserializer</span>
-<span class="kn">from</span> <span class="nn">apischema.conversions</span> <span class="kn">import</span> <span class="p">(</span>
-    <span class="n">Conversion</span><span class="p">,</span>
-    <span class="n">LazyConversion</span><span class="p">,</span>
+<span class="kn">from</span> <span class="nn">apischema</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">Undefined</span><span class="p">,</span>
+    <span class="n">ValidationError</span><span class="p">,</span>
+    <span class="n">cache</span><span class="p">,</span>
+    <span class="n">deserialize</span><span class="p">,</span>
+    <span class="n">deserializer</span><span class="p">,</span>
     <span class="n">identity</span><span class="p">,</span>
-    <span class="n">reset_deserializers</span><span class="p">,</span>
 <span class="p">)</span>
+<span class="kn">from</span> <span class="nn">apischema.conversions</span> <span class="kn">import</span> <span class="n">Conversion</span><span class="p">,</span> <span class="n">LazyConversion</span><span class="p">,</span> <span class="n">reset_deserializers</span>
 <span class="kn">from</span> <span class="nn">apischema.metadata</span> <span class="kn">import</span> <span class="n">conversion</span>
 <span class="kn">from</span> <span class="nn">typing_extensions</span> <span class="kn">import</span> <span class="n">Annotated</span> <span class="k">as</span> <span class="n">A</span>
 <span class="kn">from</span> <span class="nn">typing_extensions</span> <span class="kn">import</span> <span class="n">Literal</span>
@@ -191,7 +149,7 @@
 
 <span class="sd">    See :ref:`entities`</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">fields</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">type</span><span class="p">],</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">type</span><span class="p">,</span> <span class="n">Field</span><span class="p">[</span><span class="n">Any</span><span class="p">]]]]</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">fields</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">type</span><span class="p">,</span> <span class="n">Field</span><span class="p">[</span><span class="n">Any</span><span class="p">]]]</span> <span class="o">=</span> <span class="p">[]</span>
 
     <span class="c1"># add in each of the arguments</span>
     <span class="k">for</span> <span class="n">arg</span> <span class="ow">in</span> <span class="n">definition</span><span class="o">.</span><span class="n">args</span><span class="p">:</span>
@@ -204,11 +162,17 @@
             <span class="k">def</span> <span class="nf">make_conversion</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">arg</span><span class="o">.</span><span class="n">type</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Conversion</span><span class="p">:</span>
                 <span class="n">module_name</span><span class="p">,</span> <span class="n">entity_name</span> <span class="o">=</span> <span class="n">name</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">,</span> <span class="n">maxsplit</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
                 <span class="n">entity_cls</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="nb">getattr</span><span class="p">(</span><span class="n">modules</span><span class="p">,</span> <span class="n">module_name</span><span class="p">),</span> <span class="n">entity_name</span><span class="p">)</span>
-                <span class="k">return</span> <span class="n">Conversion</span><span class="p">(</span>
-                    <span class="k">lambda</span> <span class="nb">id</span><span class="p">:</span> <span class="n">entity_cls</span><span class="o">.</span><span class="n">__instances__</span><span class="p">[</span><span class="nb">id</span><span class="p">],</span> <span class="nb">str</span><span class="p">,</span> <span class="n">entity_cls</span>
-                <span class="p">)</span>
+
+                <span class="k">def</span> <span class="nf">lookup_instance</span><span class="p">(</span><span class="nb">id</span><span class="p">):</span>
+                    <span class="k">try</span><span class="p">:</span>
+                        <span class="k">return</span> <span class="n">entity_cls</span><span class="o">.</span><span class="n">__instances__</span><span class="p">[</span><span class="nb">id</span><span class="p">]</span>
+                    <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+                        <span class="k">raise</span> <span class="n">ValidationError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="nb">id</span><span class="si">}</span><span class="s2"> is not a </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+                <span class="k">return</span> <span class="n">Conversion</span><span class="p">(</span><span class="n">lookup_instance</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="n">Entity</span><span class="p">)</span>
 
             <span class="n">metadata</span> <span class="o">=</span> <span class="n">conversion</span><span class="p">(</span><span class="n">deserialization</span><span class="o">=</span><span class="n">LazyConversion</span><span class="p">(</span><span class="n">make_conversion</span><span class="p">))</span>
+            <span class="n">arg_type</span> <span class="o">=</span> <span class="n">Entity</span>
         <span class="k">if</span> <span class="n">arg</span><span class="o">.</span><span class="n">description</span><span class="p">:</span>
             <span class="n">arg_type</span> <span class="o">=</span> <span class="n">A</span><span class="p">[</span><span class="n">arg_type</span><span class="p">,</span> <span class="n">desc</span><span class="p">(</span><span class="n">arg</span><span class="o">.</span><span class="n">description</span><span class="p">)]</span>
         <span class="k">if</span> <span class="n">arg</span><span class="o">.</span><span class="n">default</span> <span class="ow">is</span> <span class="n">Undefined</span><span class="p">:</span>
@@ -226,9 +190,7 @@
     <span class="c1"># it</span>
     <span class="n">fields</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="s2">&quot;entity_disabled&quot;</span><span class="p">,</span> <span class="nb">bool</span><span class="p">,</span> <span class="n">field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="n">cast</span><span class="p">(</span><span class="n">Any</span><span class="p">,</span> <span class="kc">False</span><span class="p">))))</span>
 
-    <span class="n">namespace</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
-        <span class="n">__definition__</span><span class="o">=</span><span class="n">definition</span><span class="p">,</span> <span class="n">__instances__</span><span class="o">=</span><span class="p">{},</span> <span class="vm">__module__</span><span class="o">=</span><span class="s2">&quot;ibek.modules&quot;</span>
-    <span class="p">)</span>
+    <span class="n">namespace</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">__definition__</span><span class="o">=</span><span class="n">definition</span><span class="p">,</span> <span class="n">__instances__</span><span class="o">=</span><span class="p">{})</span>
 
     <span class="c1"># make the Entity derived dataclass for this EntityClass, with a reference</span>
     <span class="c1"># to the Definition that created it</span>
@@ -291,7 +253,7 @@
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2021, Diamond Light Source.</p>
+    <p></p>
   </div>
 
    
@@ -305,7 +267,36 @@
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script> 
+  </script>
+   
+  <div id="other-versions-div" class="rst-versions" data-toggle="rst-versions" role="note" aria-label="Versions" style="visibility: hidden">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      <span class="fa fa-book"> Other Versions</span>
+      master
+      <span class="fa fa-caret-down"></span>
+    </span>
+    <div class="rst-other-versions">
+      <dl id="other-versions-dl"/>
+    </div>
+  </div>
+  <script>
+    function addVersion(name) {
+      var dd = document.createElement("dd");
+      var a = document.createElement("a");
+      a.href = "../../../" + name;
+      a.innerText = name;
+      dd.appendChild(a);
+      document.getElementById('other-versions-dl').appendChild(dd);
+    }
+    // Get versions.txt and add a version for each line
+    fetch("../../../versions.txt").then(response => {
+      if (response.ok) {
+        document.getElementById('other-versions-div').style.visibility = "visible";
+        return response.text().then(text => text.split(/\r?\n/).forEach(addVersion))
+      }
+    });
+  </script>
+
 
 </body>
 </html>

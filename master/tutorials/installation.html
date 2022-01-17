@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Installation Tutorial &mdash; ibek 0.3+28.ga8fd489 documentation</title>
+  <title>Installation &mdash; ibek 0.3+39.g0c021e0 documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../_static/graphviz.css" type="text/css" />
@@ -44,16 +44,9 @@
   </form>
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
-  <style>
-    /* style mobile top nav to look like main nav */
-    .wy-nav-top {
-        background: rgb(7, 43, 93)
-    }
-  </style>
-  
               <p class="caption" role="heading"><span class="caption-text">Tutorials</span></p>
 <ul class="current">
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Installation Tutorial</a><ul>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Installation</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#check-your-version-of-python">Check your version of python</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#create-a-virtual-environment">Create a virtual environment</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#installing-the-library">Installing the library</a></li>
@@ -72,46 +65,9 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../reference/api.html">API</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../reference/contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/epics-containers/ibek/releases">Releases</a></li>
+<li class="toctree-l1"><a class="reference external" href="genindex.html#http://">Index</a></li>
 </ul>
-
-  <!-- Include Index in the sidebar -->
-  <!-- https://stackoverflow.com/a/37843854 -->
-  <a href="../genindex.html">Index</a>
-  <!-- Include link to changelog -->
-  <a href="https://github.com/epics-containers/ibek/blob/master/CHANGELOG.rst">Changelog</a>
-  <!-- Add versions for selected branches + tags -->
-  <p class="caption"><span class="caption-text">Versions</span></p>
-  <ul id="versions"/>
-  <script>
-    // Add any branches to appear in the side pane here, tags will be added below
-    // Will only appear if docs are built and pushed in gh-pages
-    var versions = ['master', 'main'];
-    var dirs = new Set();
-    function addVersion(name) {
-      if (dirs.has(name)) {
-        var li = document.createElement("li");
-        var a = document.createElement("a");
-        a.href = 'https://epics-containers.github.io/ibek/' + name;
-        a.innerText = name;
-        li.appendChild(a)
-        document.getElementById('versions').appendChild(li);
-      }
-    }
-    Promise.all([
-      // Find gh-pages directories and populate `dirs`
-      fetch("https://api.github.com/repos/epics-containers/ibek/contents?ref=gh-pages")
-      .then(response => response.json())
-      .then(data => data.forEach(function(e) {
-        if (e.type == "dir") dirs.add(e.name);
-      })),
-      // Add tags to `versions`
-      fetch('https://api.github.com/repos/epics-containers/ibek/tags')
-        .then(response => response.json())
-        .then(data => data.forEach(function(e) {
-          versions.push(e.name);
-        }))
-      ]).then(_ => versions.forEach(addVersion))
-  </script>
 
         </div>
       </div>
@@ -127,7 +83,7 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
-      <li>Installation Tutorial</li>
+      <li>Installation</li>
       <li class="wy-breadcrumbs-aside">
             <a href="../_sources/tutorials/installation.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -137,13 +93,15 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="installation-tutorial">
-<h1>Installation Tutorial<a class="headerlink" href="#installation-tutorial" title="Permalink to this headline"></a></h1>
+  <section id="installation">
+<h1>Installation<a class="headerlink" href="#installation" title="Permalink to this headline"></a></h1>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>For installation inside DLS, please see the internal documentation on
 <code class="docutils literal notranslate"><span class="pre">dls-python3</span></code> and <code class="docutils literal notranslate"><span class="pre">pipenv</span></code>. Although these instructions will work
 inside DLS, they are intended for external use.</p>
+<p>If you want to contribute to the library itself, please follow
+the <a class="reference internal" href="../reference/contributing.html"><span class="doc">Contributing</span></a> instructions.</p>
 </div>
 <section id="check-your-version-of-python">
 <h2>Check your version of python<a class="headerlink" href="#check-your-version-of-python" title="Permalink to this headline"></a></h2>
@@ -192,7 +150,7 @@ You can check the version that has been installed by typing:</p>
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2021, Diamond Light Source.</p>
+    <p></p>
   </div>
 
    
@@ -206,7 +164,36 @@ You can check the version that has been installed by typing:</p>
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script> 
+  </script>
+   
+  <div id="other-versions-div" class="rst-versions" data-toggle="rst-versions" role="note" aria-label="Versions" style="visibility: hidden">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      <span class="fa fa-book"> Other Versions</span>
+      master
+      <span class="fa fa-caret-down"></span>
+    </span>
+    <div class="rst-other-versions">
+      <dl id="other-versions-dl"/>
+    </div>
+  </div>
+  <script>
+    function addVersion(name) {
+      var dd = document.createElement("dd");
+      var a = document.createElement("a");
+      a.href = "../../" + name;
+      a.innerText = name;
+      dd.appendChild(a);
+      document.getElementById('other-versions-dl').appendChild(dd);
+    }
+    // Get versions.txt and add a version for each line
+    fetch("../../versions.txt").then(response => {
+      if (response.ok) {
+        document.getElementById('other-versions-div').style.visibility = "visible";
+        return response.text().then(text => text.split(/\r?\n/).forEach(addVersion))
+      }
+    });
+  </script>
+
 
 </body>
 </html>

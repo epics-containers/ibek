@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ibek &mdash; ibek 0.3+28.ga8fd489 documentation</title>
+  <title>ibek &mdash; ibek 0.3+39.g0c021e0 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="_static/graphviz.css" type="text/css" />
@@ -21,7 +21,7 @@
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Installation Tutorial" href="tutorials/installation.html" /> 
+    <link rel="next" title="Installation" href="tutorials/installation.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -43,16 +43,9 @@
   </form>
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
-  <style>
-    /* style mobile top nav to look like main nav */
-    .wy-nav-top {
-        background: rgb(7, 43, 93)
-    }
-  </style>
-  
               <p class="caption" role="heading"><span class="caption-text">Tutorials</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="tutorials/installation.html">Installation Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorials/installation.html">Installation</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">How-to Guides</span></p>
 <ul>
@@ -66,46 +59,9 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="reference/api.html">API</a></li>
 <li class="toctree-l1"><a class="reference internal" href="reference/contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/epics-containers/ibek/releases">Releases</a></li>
+<li class="toctree-l1"><a class="reference external" href="genindex.html#http://">Index</a></li>
 </ul>
-
-  <!-- Include Index in the sidebar -->
-  <!-- https://stackoverflow.com/a/37843854 -->
-  <a href="genindex.html">Index</a>
-  <!-- Include link to changelog -->
-  <a href="https://github.com/epics-containers/ibek/blob/master/CHANGELOG.rst">Changelog</a>
-  <!-- Add versions for selected branches + tags -->
-  <p class="caption"><span class="caption-text">Versions</span></p>
-  <ul id="versions"/>
-  <script>
-    // Add any branches to appear in the side pane here, tags will be added below
-    // Will only appear if docs are built and pushed in gh-pages
-    var versions = ['master', 'main'];
-    var dirs = new Set();
-    function addVersion(name) {
-      if (dirs.has(name)) {
-        var li = document.createElement("li");
-        var a = document.createElement("a");
-        a.href = 'https://epics-containers.github.io/ibek/' + name;
-        a.innerText = name;
-        li.appendChild(a)
-        document.getElementById('versions').appendChild(li);
-      }
-    }
-    Promise.all([
-      // Find gh-pages directories and populate `dirs`
-      fetch("https://api.github.com/repos/epics-containers/ibek/contents?ref=gh-pages")
-      .then(response => response.json())
-      .then(data => data.forEach(function(e) {
-        if (e.type == "dir") dirs.add(e.name);
-      })),
-      // Add tags to `versions`
-      fetch('https://api.github.com/repos/epics-containers/ibek/tags')
-        .then(response => response.json())
-        .then(data => data.forEach(function(e) {
-          versions.push(e.name);
-        }))
-      ]).then(_ => versions.forEach(addVersion))
-  </script>
 
         </div>
       </div>
@@ -149,7 +105,7 @@ up the IOC contained in the image with them</p></li>
 <table class="docutils align-default">
 <colgroup>
 <col style="width: 18%" />
-<col style="width: 83%" />
+<col style="width: 82%" />
 </colgroup>
 <tbody>
 <tr class="row-odd"><td><p>PyPI</p></td>
@@ -161,8 +117,8 @@ up the IOC contained in the image with them</p></li>
 <tr class="row-odd"><td><p>Documentation</p></td>
 <td><p><a class="reference external" href="https://epics-containers.github.io/ibek">https://epics-containers.github.io/ibek</a></p></td>
 </tr>
-<tr class="row-even"><td><p>Changelog</p></td>
-<td><p><a class="reference external" href="https://github.com/epics-containers/ibek/blob/master/CHANGELOG.rst">https://github.com/epics-containers/ibek/blob/master/CHANGELOG.rst</a></p></td>
+<tr class="row-even"><td><p>Releases</p></td>
+<td><p><a class="reference external" href="https://github.com/epics-containers/ibek/releases">https://github.com/epics-containers/ibek/releases</a></p></td>
 </tr>
 </tbody>
 </table>
@@ -186,29 +142,79 @@ embedding ibek into the epics-base container image.</p></li>
 </section>
 <section id="how-the-documentation-is-structured">
 <h2>How the documentation is structured<a class="headerlink" href="#how-the-documentation-is-structured" title="Permalink to this headline"></a></h2>
-<p>Documentation is split into four categories, accessible from links in the side-bar.</p>
+<p>Documentation is split into four categories, also accessible from links in the
+side-bar.</p>
 <section class="columns" id="tutorials">
-<h3>Tutorials<a class="headerlink" href="#tutorials" title="Permalink to this headline"></a></h3>
+<h3><a class="reference internal" href="tutorials.html"><span class="doc">Tutorials</span></a><a class="headerlink" href="#tutorials" title="Permalink to this headline"></a></h3>
 <p>Tutorials for installation, library and commandline usage. New users start here.</p>
 <div class="toctree-wrapper compound">
+<p class="caption" role="heading"><span class="caption-text">Tutorials</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="tutorials/installation.html">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="tutorials/installation.html#check-your-version-of-python">Check your version of python</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorials/installation.html#create-a-virtual-environment">Create a virtual environment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorials/installation.html#installing-the-library">Installing the library</a></li>
+</ul>
+</li>
+</ul>
 </div>
 </section>
-<section class="columns" id="how-to-guides">
-<h3>How-to Guides<a class="headerlink" href="#how-to-guides" title="Permalink to this headline"></a></h3>
+<section class="columns" id="how-to">
+<h3><a class="reference internal" href="how-to.html"><span class="doc">How-to Guides</span></a><a class="headerlink" href="#how-to" title="Permalink to this headline"></a></h3>
 <p>Practical step-by-step guides for the more experienced user.</p>
 <div class="toctree-wrapper compound">
+<p class="caption" role="heading"><span class="caption-text">How-to Guides</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="how-to/edit-yaml.html">YAML schema</a></li>
+</ul>
 </div>
 </section>
 <section class="columns" id="explanations">
-<h3>Explanations<a class="headerlink" href="#explanations" title="Permalink to this headline"></a></h3>
+<h3><a class="reference internal" href="explanations.html"><span class="doc">Explanations</span></a><a class="headerlink" href="#explanations" title="Permalink to this headline"></a></h3>
 <p>Explanation of how the library works and why it works that way.</p>
 <div class="toctree-wrapper compound">
+<p class="caption" role="heading"><span class="caption-text">Explanations</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="explanations/entities.html">Modules, Definitions and Entities</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="explanations/entities.html#modules">Modules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="explanations/entities.html#definition">Definition</a></li>
+<li class="toctree-l2"><a class="reference internal" href="explanations/entities.html#entity">Entity</a></li>
+<li class="toctree-l2"><a class="reference internal" href="explanations/entities.html#schemas">Schemas</a></li>
+<li class="toctree-l2"><a class="reference internal" href="explanations/entities.html#commands">Commands</a></li>
+</ul>
+</li>
+</ul>
 </div>
 </section>
 <section class="columns" id="reference">
-<h3>Reference<a class="headerlink" href="#reference" title="Permalink to this headline"></a></h3>
-<p>Technical reference material, for classes, methods, APIs, commands, and contributing to the project.</p>
+<h3><a class="reference internal" href="reference.html"><span class="doc">Reference</span></a><a class="headerlink" href="#reference" title="Permalink to this headline"></a></h3>
+<p>Practical step-by-step guides for the more experienced user.</p>
 <div class="toctree-wrapper compound">
+<p class="caption" role="heading"><span class="caption-text">Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="reference/api.html">API</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="reference/api.html#ibek"><code class="docutils literal notranslate"><span class="pre">ibek</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="reference/api.html#module-ibek.globals"><code class="docutils literal notranslate"><span class="pre">ibek.globals</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="reference/api.html#module-ibek.support"><code class="docutils literal notranslate"><span class="pre">ibek.support</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="reference/api.html#module-ibek.ioc"><code class="docutils literal notranslate"><span class="pre">ibek.ioc</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="reference/api.html#module-ibek.modules"><code class="docutils literal notranslate"><span class="pre">ibek.modules</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="reference/api.html#module-ibek.helm"><code class="docutils literal notranslate"><span class="pre">ibek.helm</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="reference/api.html#module-ibek.render"><code class="docutils literal notranslate"><span class="pre">ibek.render</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="reference/contributing.html">Contributing</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="reference/contributing.html#running-the-tests">Running the tests</a></li>
+<li class="toctree-l2"><a class="reference internal" href="reference/contributing.html#code-styling">Code Styling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="reference/contributing.html#documentation">Documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="reference/contributing.html#release-process">Release Process</a></li>
+<li class="toctree-l2"><a class="reference internal" href="reference/contributing.html#updating-the-tools">Updating the tools</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/epics-containers/ibek/releases">Releases</a></li>
+<li class="toctree-l1"><a class="reference external" href="genindex.html#http://">Index</a></li>
+</ul>
 </div>
 </section>
 <section class="endcolumns" id="about-the-documentation">
@@ -222,13 +228,13 @@ embedding ibek into the epics-base container image.</p></li>
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="tutorials/installation.html" class="btn btn-neutral float-right" title="Installation Tutorial" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="tutorials/installation.html" class="btn btn-neutral float-right" title="Installation" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2021, Diamond Light Source.</p>
+    <p></p>
   </div>
 
    
@@ -242,7 +248,36 @@ embedding ibek into the epics-base container image.</p></li>
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script> 
+  </script>
+   
+  <div id="other-versions-div" class="rst-versions" data-toggle="rst-versions" role="note" aria-label="Versions" style="visibility: hidden">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      <span class="fa fa-book"> Other Versions</span>
+      master
+      <span class="fa fa-caret-down"></span>
+    </span>
+    <div class="rst-other-versions">
+      <dl id="other-versions-dl"/>
+    </div>
+  </div>
+  <script>
+    function addVersion(name) {
+      var dd = document.createElement("dd");
+      var a = document.createElement("a");
+      a.href = "../" + name;
+      a.innerText = name;
+      dd.appendChild(a);
+      document.getElementById('other-versions-dl').appendChild(dd);
+    }
+    // Get versions.txt and add a version for each line
+    fetch("../versions.txt").then(response => {
+      if (response.ok) {
+        document.getElementById('other-versions-div').style.visibility = "visible";
+        return response.text().then(text => text.split(/\r?\n/).forEach(addVersion))
+      }
+    });
+  </script>
+
 
 </body>
 </html>
