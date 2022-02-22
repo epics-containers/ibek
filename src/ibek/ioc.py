@@ -4,6 +4,7 @@ support module definition YAML file
 """
 from __future__ import annotations
 
+import builtins
 import types
 from dataclasses import Field, dataclass, field, make_dataclass
 from typing import Any, Dict, List, Mapping, Sequence, Tuple, Type, cast
@@ -16,14 +17,14 @@ from apischema import (
     deserializer,
     identity,
 )
-from apischema.conversions import Conversion, LazyConversion, reset_deserializers
+from apischema.conversions import Conversion, reset_deserializers
 from apischema.metadata import conversion
 from typing_extensions import Annotated as A
 from typing_extensions import Literal
 
 from . import modules
 from .globals import T, desc
-from .support import Definition, ObjectArg, StrArg, Support
+from .support import Definition, IdArg, ObjectArg, Support
 
 
 class Entity:
@@ -34,22 +35,22 @@ class Entity:
 
     # a link back to the Definition Object that generated this Definition
     __definition__: Definition
-    __instances__: Dict[str, Entity]
+
     entity_disabled: bool
 
     def __post_init__(self):
         # If there is an argument which is an id then allow deserialization by that
         args = self.__definition__.args
-        ids = set(a.name for a in args if isinstance(a, StrArg) and a.is_id)
+        ids = set(a.name for a in args if isinstance(a, IdArg))
         assert len(ids) <= 1, f"Multiple id args {list(ids)} defined in {args}"
         if ids:
             # A string id, use that
             inst_id = getattr(self, ids.pop())
-        else:
-            # No string id, make one
-            inst_id = str(len(self.__instances__))
-        assert inst_id not in self.__instances__, f"Already got an instance {inst_id}"
-        self.__instances__[inst_id] = self
+            assert inst_id not in id_to_entity, f"Already got an instance {inst_id}"
+            id_to_entity[inst_id] = self
+
+
+id_to_entity: Dict[str, Entity] = {}
 
 
 def make_entity_class(definition: Definition, support: Support) -> Type[Entity]:
@@ -67,24 +68,25 @@ def make_entity_class(definition: Definition, support: Support) -> Type[Entity]:
     for arg in definition.args:
         # make_dataclass can cope with string types, so cast them here rather
         # than lookup
-        arg_type = cast(type, arg.type)
         metadata: Any = None
+        arg_type: type
         if isinstance(arg, ObjectArg):
 
-            def make_conversion(name: str = arg.type) -> Conversion:
-                module_name, entity_name = name.split(".", maxsplit=1)
-                entity_cls = getattr(getattr(modules, module_name), entity_name)
+            def lookup_instance(id__):
+                try:
+                    return id_to_entity[id__]
+                except KeyError:
+                    raise ValidationError(f"{id__} is not in {list(id_to_entity)}")
 
-                def lookup_instance(id):
-                    try:
-                        return entity_cls.__instances__[id]
-                    except KeyError:
-                        raise ValidationError(f"{id} is not a {name}")
-
-                return Conversion(lookup_instance, str, Entity)
-
-            metadata = conversion(deserialization=LazyConversion(make_conversion))
+            metadata = conversion(
+                deserialization=Conversion(lookup_instance, str, Entity)
+            )
             arg_type = Entity
+        elif isinstance(arg, IdArg):
+            arg_type = str
+        else:
+            # arg.type is str, int, float, etc.
+            arg_type = getattr(builtins, arg.type)
         if arg.description:
             arg_type = A[arg_type, desc(arg.description)]
         if arg.default is Undefined:
@@ -102,7 +104,7 @@ def make_entity_class(definition: Definition, support: Support) -> Type[Entity]:
     # it
     fields.append(("entity_disabled", bool, field(default=cast(Any, False))))
 
-    namespace = dict(__definition__=definition, __instances__={})
+    namespace = dict(__definition__=definition)
 
     # make the Entity derived dataclass for this EntityClass, with a reference
     # to the Definition that created it
@@ -122,14 +124,15 @@ def make_entity_classes(support: Support) -> types.SimpleNamespace:
     setattr(modules, support.module, module)
     modules.__all__.append(support.module)
     for definition in support.definitions:
-        entity_cls = make_entity_class(definition, support)
-        setattr(module, definition.name, entity_cls)
+        id_to_entity = make_entity_class(definition, support)
+        setattr(module, definition.name, id_to_entity)
     return module
 
 
 def clear_entity_classes():
     """Reset the modules namespaces, deserializers and caches of defined Entity
     subclasses"""
+    id_to_entity.clear()
     while modules.__all__:
         delattr(modules, modules.__all__.pop())
     reset_deserializers(Entity)

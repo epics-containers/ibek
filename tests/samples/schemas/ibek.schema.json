@@ -70,11 +70,6 @@
                         "null"
                       ],
                       "description": "If given, and instance doesn't supply argument, what value should be used"
-                    },
-                    "is_id": {
-                      "type": "boolean",
-                      "description": "If true, instances may refer to this instance by this arg",
-                      "default": false
                     }
                   },
                   "required": [
@@ -156,7 +151,8 @@
                     },
                     "type": {
                       "type": "string",
-                      "description": "Entity class, <module>.<entity_name>"
+                      "const": "object",
+                      "default": "object"
                     },
                     "default": {
                       "type": [
@@ -168,8 +164,37 @@
                   },
                   "required": [
                     "name",
-                    "description",
-                    "type"
+                    "description"
+                  ],
+                  "additionalProperties": false
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "name": {
+                      "type": "string",
+                      "description": "Name of the argument that the IOC instance should pass"
+                    },
+                    "description": {
+                      "type": "string",
+                      "description": "Description of what the argument will be used for"
+                    },
+                    "type": {
+                      "type": "string",
+                      "const": "id",
+                      "default": "id"
+                    },
+                    "default": {
+                      "type": [
+                        "string",
+                        "null"
+                      ],
+                      "description": "If given, and instance doesn't supply argument, what value should be used"
+                    }
+                  },
+                  "required": [
+                    "name",
+                    "description"
                   ],
                   "additionalProperties": false
                 }

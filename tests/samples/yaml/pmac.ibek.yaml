@@ -1,4 +1,4 @@
-# yaml-language-server: $schema=https://raw.githubusercontent.com/epics-containers/ibek/master/tests/samples/schemas/ibek.schema.json
+# yaml-language-server: $schema=../schemas/ibek.schema.json
 module: pmac
 definitions:
   # TODO - this is basic Geobrick support only. Does not do CS groups or
@@ -9,7 +9,7 @@ definitions:
         name: name
         description: Name to use for the geobrick's asyn port
 
-      - type: pmac.PmacAsynIPPort
+      - type: object
         name: PORT
         description: Asyn port name for PmacAsynIPPort to connect to
 
@@ -43,10 +43,9 @@ definitions:
 
   - name: PmacAsynIPPort
     args:
-      - type: str
+      - type: id
         name: name
         description: Asyn port name
-        is_id: true
 
       - type: str
         name: IP

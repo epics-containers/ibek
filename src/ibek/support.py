@@ -1,7 +1,4 @@
-"""
-The Support Class represents a deserialized <MODULE_NAME>.ibek.yaml file.
-It contains a hierarchy of Entity dataclasses.
-"""
+from __future__ import annotations
 
 from dataclasses import dataclass
 from typing import Any, Mapping, Optional, Sequence, Type, Union
@@ -13,6 +10,11 @@ from typing_extensions import Literal
 
 from .globals import T, desc
 
+"""
+The Support Class represents a deserialized <MODULE_NAME>.ibek.yaml file.
+It contains a hierarchy of Entity dataclasses.
+"""
+
 
 @dataclass
 class Arg:
@@ -23,7 +25,7 @@ class Arg:
     type: str
     default: Any
 
-    # https://wyfo.github.io/apischema/examples/subclass_union/
+    # https://wyfo.github.io/apischema/latest/examples/subclass_union/
     def __init_subclass__(cls):
         # Deserializers stack directly as a Union
         deserializer(Conversion(identity, source=cls, target=Arg))
@@ -58,9 +60,6 @@ class StrArg(Arg):
 
     type: Literal["str"] = "str"
     default: Default[str] = Undefined
-    is_id: A[
-        bool, desc("If true, instances may refer to this instance by this arg")
-    ] = False
 
 
 @dataclass
@@ -83,7 +82,15 @@ class BoolArg(Arg):
 class ObjectArg(Arg):
     """A reference to another entity defined in this IOC"""
 
-    type: A[str, desc("Entity class, <module>.<entity_name>")]
+    type: Literal["object"] = "object"
+    default: Default[str] = Undefined
+
+
+@dataclass
+class IdArg(Arg):
+    """Explicit ID argument"""
+
+    type: Literal["id"] = "id"
     default: Default[str] = Undefined
 
 
