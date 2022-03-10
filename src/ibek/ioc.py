@@ -123,7 +123,7 @@ def make_entity_classes(support: Support) -> types.SimpleNamespace:
     ), f"Entity classes already created for {support.module}"
     setattr(modules, support.module, module)
     modules.__all__.append(support.module)
-    for definition in support.definitions:
+    for definition in support.defs:
         id_to_entity = make_entity_class(definition, support)
         setattr(module, definition.name, id_to_entity)
     return module

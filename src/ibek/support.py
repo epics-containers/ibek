@@ -147,7 +147,7 @@ class Support:
     """
 
     module: A[str, desc("Support module name, normally the repo name")]
-    definitions: A[
+    defs: A[
         Sequence[Definition],
         desc("The definitions an IOC can create using this module"),
     ]

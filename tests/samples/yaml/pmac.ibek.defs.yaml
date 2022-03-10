@@ -1,6 +1,6 @@
-# yaml-language-server: $schema=../schemas/ibek.schema.json
+# yaml-language-server: $schema=../schemas/ibek.defs.schema.json
 module: pmac
-definitions:
+defs:
   # TODO - this is basic Geobrick support only. Does not do CS groups or
   # status screen PVs
   - name: Geobrick

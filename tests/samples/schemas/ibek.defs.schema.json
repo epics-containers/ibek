@@ -5,7 +5,7 @@
       "type": "string",
       "description": "Support module name, normally the repo name"
     },
-    "definitions": {
+    "defs": {
       "type": "array",
       "items": {
         "type": "object",
@@ -284,7 +284,7 @@
   },
   "required": [
     "module",
-    "definitions"
+    "defs"
   ],
   "additionalProperties": false,
   "$schema": "http://json-schema.org/draft-07/schema#"
