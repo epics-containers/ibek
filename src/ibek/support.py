@@ -11,7 +11,7 @@ from typing_extensions import Literal
 from .globals import T, desc
 
 """
-The Support Class represents a deserialized <MODULE_NAME>.ibek.yaml file.
+The Support Class represents a deserialized <MODULE_NAME>.ibek.defs.yaml file.
 It contains a hierarchy of Entity dataclasses.
 """
 
@@ -88,7 +88,7 @@ class ObjectArg(Arg):
 
 @dataclass
 class IdArg(Arg):
-    """Explicit ID argument"""
+    """Explicit ID argument that an object can refer to"""
 
     type: Literal["id"] = "id"
     default: Default[str] = Undefined
