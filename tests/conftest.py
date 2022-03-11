@@ -25,7 +25,7 @@ def samples():
 
 @fixture
 def pmac_support(samples):
-    return get_support(samples, "pmac.ibek.yaml")
+    return get_support(samples, "pmac.ibek.defs.yaml")
 
 
 @fixture
@@ -43,7 +43,7 @@ def pmac_classes(pmac_support):
 
 @fixture
 def epics_support(samples):
-    return get_support(samples, "epics.ibek.yaml")
+    return get_support(samples, "epics.ibek.defs.yaml")
 
 
 @fixture

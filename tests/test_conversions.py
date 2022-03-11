@@ -13,8 +13,8 @@ def test_conversion_classes():
     )
     namespace = make_entity_classes(support)
     assert {"device", "port"}.issubset(dir(namespace))
-    assert namespace.port.__definition__ == support.definitions[0]
-    assert namespace.device.__definition__ == support.definitions[1]
+    assert namespace.port.__definition__ == support.defs[0]
+    assert namespace.device.__definition__ == support.defs[1]
     d = dict(
         ioc_name="",
         description="",
