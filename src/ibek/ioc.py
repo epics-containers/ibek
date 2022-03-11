@@ -72,11 +72,11 @@ def make_entity_class(definition: Definition, support: Support) -> Type[Entity]:
         arg_type: type
         if isinstance(arg, ObjectArg):
 
-            def lookup_instance(id__):
+            def lookup_instance(id):
                 try:
-                    return id_to_entity[id__]
+                    return id_to_entity[id]
                 except KeyError:
-                    raise ValidationError(f"{id__} is not in {list(id_to_entity)}")
+                    raise ValidationError(f"{id} is not in {list(id_to_entity)}")
 
             metadata = conversion(
                 deserialization=Conversion(lookup_instance, str, Entity)
@@ -124,8 +124,8 @@ def make_entity_classes(support: Support) -> types.SimpleNamespace:
     setattr(modules, support.module, module)
     modules.__all__.append(support.module)
     for definition in support.defs:
-        id_to_entity = make_entity_class(definition, support)
-        setattr(module, definition.name, id_to_entity)
+        entity_cls = make_entity_class(definition, support)
+        setattr(module, definition.name, entity_cls)
     return module
 
 

@@ -1,3 +1,7 @@
+"""
+The Support Class represents a deserialized <MODULE_NAME>.ibek.defs.yaml file.
+It contains a hierarchy of Entity dataclasses.
+"""
 from __future__ import annotations
 
 from dataclasses import dataclass
@@ -9,11 +13,6 @@ from typing_extensions import Annotated as A
 from typing_extensions import Literal
 
 from .globals import T, desc
-
-"""
-The Support Class represents a deserialized <MODULE_NAME>.ibek.defs.yaml file.
-It contains a hierarchy of Entity dataclasses.
-"""
 
 
 @dataclass
