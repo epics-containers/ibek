@@ -26,7 +26,8 @@
               },
               "PORT": {
                 "type": "string",
-                "description": "Asyn port name for PmacAsynIPPort to connect to"
+                "description": "Asyn port name for PmacAsynIPPort to connect to",
+                "$data": "type_object"
               },
               "P": {
                 "type": "string",

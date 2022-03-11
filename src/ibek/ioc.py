@@ -16,6 +16,7 @@ from apischema import (
     deserialize,
     deserializer,
     identity,
+    schema,
 )
 from apischema.conversions import Conversion, reset_deserializers
 from apischema.metadata import conversion
@@ -80,10 +81,11 @@ def make_entity_class(definition: Definition, support: Support) -> Type[Entity]:
 
             metadata = conversion(
                 deserialization=Conversion(lookup_instance, str, Entity)
-            )
+            ) | schema(extra={"$data": "type_object"})
             arg_type = Entity
         elif isinstance(arg, IdArg):
             arg_type = str
+            schema(extra={"$data": "type_id"})
         else:
             # arg.type is str, int, float, etc.
             arg_type = getattr(builtins, arg.type)
