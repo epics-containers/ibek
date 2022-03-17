@@ -27,7 +27,7 @@
               "PORT": {
                 "type": "string",
                 "description": "Asyn port name for PmacAsynIPPort to connect to",
-                "$data": "type_object"
+                "vscode_ibek_plugin_type": "type_object"
               },
               "P": {
                 "type": "string",
@@ -70,7 +70,8 @@
               },
               "name": {
                 "type": "string",
-                "description": "Asyn port name"
+                "description": "Asyn port name",
+                "vscode_ibek_plugin_type": "type_id"
               },
               "IP": {
                 "type": "string",

@@ -81,11 +81,11 @@ def make_entity_class(definition: Definition, support: Support) -> Type[Entity]:
 
             metadata = conversion(
                 deserialization=Conversion(lookup_instance, str, Entity)
-            ) | schema(extra={"$data": "type_object"})
+            ) | schema(extra={"vscode_ibek_plugin_type": "type_object"})
             arg_type = Entity
         elif isinstance(arg, IdArg):
             arg_type = str
-            schema(extra={"$data": "type_id"})
+            metadata = schema(extra={"vscode_ibek_plugin_type": "type_id"})
         else:
             # arg.type is str, int, float, etc.
             arg_type = getattr(builtins, arg.type)
