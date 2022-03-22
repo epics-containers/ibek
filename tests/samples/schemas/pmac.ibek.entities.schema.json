@@ -16,9 +16,9 @@
           {
             "type": "object",
             "properties": {
-              "entity_disabled": {
+              "entity_enabled": {
                 "type": "boolean",
-                "default": false
+                "default": true
               },
               "name": {
                 "type": "string",
@@ -64,9 +64,9 @@
           {
             "type": "object",
             "properties": {
-              "entity_disabled": {
+              "entity_enabled": {
                 "type": "boolean",
-                "default": false
+                "default": true
               },
               "name": {
                 "type": "string",
@@ -92,9 +92,9 @@
           {
             "type": "object",
             "properties": {
-              "entity_disabled": {
+              "entity_enabled": {
                 "type": "boolean",
-                "default": false
+                "default": true
               },
               "PMAC": {
                 "type": "string",

@@ -37,7 +37,7 @@ class Entity:
     # a link back to the Definition Object that generated this Definition
     __definition__: Definition
 
-    entity_disabled: bool
+    entity_enabled: bool
 
     def __post_init__(self):
         # If there is an argument which is an id then allow deserialization by that
@@ -104,7 +104,7 @@ def make_entity_class(definition: Definition, support: Support) -> Type[Entity]:
 
     # add a field so we can control rendering of the entity without having to delete
     # it
-    fields.append(("entity_disabled", bool, field(default=cast(Any, False))))
+    fields.append(("entity_enabled", bool, field(default=cast(Any, True))))
 
     namespace = dict(__definition__=definition)
 
