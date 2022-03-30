@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Modules, Definitions and Entities &mdash; ibek 0.3+39.g0c021e0 documentation</title>
+  <title>Modules, Definitions and Entities &mdash; ibek 0.3+49.g5a8d40b documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../_static/graphviz.css" type="text/css" />
@@ -124,13 +124,13 @@ instance of that class represent an IOC instance.</p>
 <section id="definition">
 <h2>Definition<a class="headerlink" href="#definition" title="Permalink to this headline"></a></h2>
 <p>Each support module has its own <strong>support module definition file</strong> . This
-is a YAML file whose name is by convention <code class="docutils literal notranslate"><span class="pre">&lt;support_module&gt;.ibek.yaml</span></code></p>
+is a YAML file whose name is by convention <code class="docutils literal notranslate"><span class="pre">&lt;support_module&gt;.ibek.defs.yaml</span></code></p>
 <p>These will all reside in a folder called /ibek in the container
 image.</p>
 <p>The <strong>support module definition file</strong> contains <strong>Definitions</strong> which
 determine what <strong>Entities</strong> an IOC instance may instantiate.</p>
 <p>For example the pmac support module declares the following <strong>Definitions</strong>
-in <code class="docutils literal notranslate"><span class="pre">pmac.ibek.yaml</span></code>
+in <code class="docutils literal notranslate"><span class="pre">pmac.ibek.defs.yaml</span></code>
 (currently this is limited to 3 - the full implementation would have more):</p>
 <blockquote>
 <div><ul class="simple">
@@ -153,9 +153,9 @@ the above arguments</p></li>
 <p>Expand below for the example pmac <strong>support module definition file</strong>:</p>
 <blockquote>
 <div><details>
-<summary><a>pmac.ibek.yaml</a></summary><div class="highlight-default notranslate"><div class="highlight"><pre><span></span># yaml-language-server: $schema=https://raw.githubusercontent.com/epics-containers/ibek/master/tests/samples/schemas/ibek.schema.json
+<summary><a>pmac.ibek.defs.yaml</a></summary><div class="highlight-default notranslate"><div class="highlight"><pre><span></span># yaml-language-server: $schema=../schemas/ibek.defs.schema.json
 module: pmac
-definitions:
+defs:
   # TODO - this is basic Geobrick support only. Does not do CS groups or
   # status screen PVs
   - name: Geobrick
@@ -164,7 +164,7 @@ definitions:
         name: name
         description: Name to use for the geobrick&#39;s asyn port
 
-      - type: pmac.PmacAsynIPPort
+      - type: object
         name: PORT
         description: Asyn port name for PmacAsynIPPort to connect to
 
@@ -198,10 +198,9 @@ definitions:
 
   - name: PmacAsynIPPort
     args:
-      - type: str
+      - type: id
         name: name
         description: Asyn port name
-        is_id: true
 
       - type: str
         name: IP
@@ -600,7 +599,7 @@ file that ibek will generate from it.</p>
 <p>Click the arrows to reveal the files.</p>
 <blockquote>
 <div><details>
-<summary><a>bl45p-mo-ioc-02.pmac.yaml</a></summary><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># yaml-language-server: $schema=file://schemas/pmac.schema.json</span>
+<summary><a>bl45p-mo-ioc-02.ibek.entities.yaml</a></summary><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># yaml-language-server: $schema=file://schemas/pmac.ibek.entities.schema.json</span>
 <span class="n">ioc_name</span><span class="p">:</span> <span class="n">bl45p</span><span class="o">-</span><span class="n">mo</span><span class="o">-</span><span class="n">ioc</span><span class="o">-</span><span class="mi">02</span>
 <span class="n">description</span><span class="p">:</span> <span class="n">an</span> <span class="n">example</span> <span class="n">motion</span> <span class="n">ioc</span> <span class="k">for</span> <span class="n">ibek</span> <span class="n">testing</span>
 <span class="n">generic_ioc_image</span><span class="p">:</span> <span class="n">ghcr</span><span class="o">.</span><span class="n">io</span><span class="o">/</span><span class="n">epics</span><span class="o">-</span><span class="n">containers</span><span class="o">/</span><span class="n">ioc</span><span class="o">-</span><span class="n">pmac</span><span class="p">:</span><span class="n">main</span><span class="o">.</span><span class="n">run</span>
@@ -687,19 +686,19 @@ the container or during container development.</p>
 </thead>
 <tbody>
 <tr class="row-even"><td><p>1</p></td>
-<td><p>ibek.schema.json</p></td>
+<td><p>ibek.defs.schema.json</p></td>
 <td><p>Global Schema for <strong>2</strong></p></td>
 </tr>
 <tr class="row-odd"><td><p>2</p></td>
-<td><p>&lt;support&gt;.ibek.yaml</p></td>
+<td><p>&lt;support&gt;.ibek.defs.yaml</p></td>
 <td><p>Definition file for a support module. Generates part of <strong>3</strong></p></td>
 </tr>
 <tr class="row-even"><td><p>3</p></td>
-<td><p>&lt;container&gt;.schema.json</p></td>
+<td><p>&lt;container&gt;.entities.schema.json</p></td>
 <td><p>Schema for <strong>4</strong>. Generated by combining all of <strong>2</strong> from a container</p></td>
 </tr>
 <tr class="row-odd"><td><p>4</p></td>
-<td><p>&lt;ioc&gt;.&lt;container&gt;.yaml</p></td>
+<td><p>&lt;ioc&gt;.ibek.entities.yaml</p></td>
 <td><p>Description of Entities for an IOC instance.</p></td>
 </tr>
 <tr class="row-even"><td><p>5</p></td>
@@ -722,7 +721,7 @@ the container or during container development.</p>
       <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
       <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Support module name, normally the repo name&quot;</span>
     <span class="p">},</span>
-    <span class="s2">&quot;definitions&quot;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="s2">&quot;defs&quot;</span><span class="p">:</span> <span class="p">{</span>
       <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;array&quot;</span><span class="p">,</span>
       <span class="s2">&quot;items&quot;</span><span class="p">:</span> <span class="p">{</span>
         <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span>
@@ -787,11 +786,6 @@ the container or during container development.</p>
                         <span class="s2">&quot;null&quot;</span>
                       <span class="p">],</span>
                       <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;If given, and instance doesn&#39;t supply argument, what value should be used&quot;</span>
-                    <span class="p">},</span>
-                    <span class="s2">&quot;is_id&quot;</span><span class="p">:</span> <span class="p">{</span>
-                      <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;boolean&quot;</span><span class="p">,</span>
-                      <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;If true, instances may refer to this instance by this arg&quot;</span><span class="p">,</span>
-                      <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="n">false</span>
                     <span class="p">}</span>
                   <span class="p">},</span>
                   <span class="s2">&quot;required&quot;</span><span class="p">:</span> <span class="p">[</span>
@@ -873,7 +867,8 @@ the container or during container development.</p>
                     <span class="p">},</span>
                     <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="p">{</span>
                       <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
-                      <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Entity class, &lt;module&gt;.&lt;entity_name&gt;&quot;</span>
+                      <span class="s2">&quot;const&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span>
+                      <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span>
                     <span class="p">},</span>
                     <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="p">{</span>
                       <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="p">[</span>
@@ -885,8 +880,37 @@ the container or during container development.</p>
                   <span class="p">},</span>
                   <span class="s2">&quot;required&quot;</span><span class="p">:</span> <span class="p">[</span>
                     <span class="s2">&quot;name&quot;</span><span class="p">,</span>
-                    <span class="s2">&quot;description&quot;</span><span class="p">,</span>
-                    <span class="s2">&quot;type&quot;</span>
+                    <span class="s2">&quot;description&quot;</span>
+                  <span class="p">],</span>
+                  <span class="s2">&quot;additionalProperties&quot;</span><span class="p">:</span> <span class="n">false</span>
+                <span class="p">},</span>
+                <span class="p">{</span>
+                  <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span>
+                  <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="p">{</span>
+                      <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+                      <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Name of the argument that the IOC instance should pass&quot;</span>
+                    <span class="p">},</span>
+                    <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="p">{</span>
+                      <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+                      <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Description of what the argument will be used for&quot;</span>
+                    <span class="p">},</span>
+                    <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="p">{</span>
+                      <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+                      <span class="s2">&quot;const&quot;</span><span class="p">:</span> <span class="s2">&quot;id&quot;</span><span class="p">,</span>
+                      <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="s2">&quot;id&quot;</span>
+                    <span class="p">},</span>
+                    <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="p">{</span>
+                      <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="p">[</span>
+                        <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;null&quot;</span>
+                      <span class="p">],</span>
+                      <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;If given, and instance doesn&#39;t supply argument, what value should be used&quot;</span>
+                    <span class="p">}</span>
+                  <span class="p">},</span>
+                  <span class="s2">&quot;required&quot;</span><span class="p">:</span> <span class="p">[</span>
+                    <span class="s2">&quot;name&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;description&quot;</span>
                   <span class="p">],</span>
                   <span class="s2">&quot;additionalProperties&quot;</span><span class="p">:</span> <span class="n">false</span>
                 <span class="p">}</span>
@@ -976,7 +1000,7 @@ the container or during container development.</p>
   <span class="p">},</span>
   <span class="s2">&quot;required&quot;</span><span class="p">:</span> <span class="p">[</span>
     <span class="s2">&quot;module&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;definitions&quot;</span>
+    <span class="s2">&quot;defs&quot;</span>
   <span class="p">],</span>
   <span class="s2">&quot;additionalProperties&quot;</span><span class="p">:</span> <span class="n">false</span><span class="p">,</span>
   <span class="s2">&quot;$schema&quot;</span><span class="p">:</span> <span class="s2">&quot;http://json-schema.org/draft-07/schema#&quot;</span>
@@ -1003,9 +1027,9 @@ the container or during container development.</p>
           <span class="p">{</span>
             <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span>
             <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span>
-              <span class="s2">&quot;entity_disabled&quot;</span><span class="p">:</span> <span class="p">{</span>
+              <span class="s2">&quot;entity_enabled&quot;</span><span class="p">:</span> <span class="p">{</span>
                 <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;boolean&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="n">false</span>
+                <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="n">true</span>
               <span class="p">},</span>
               <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="p">{</span>
                 <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
@@ -1013,7 +1037,8 @@ the container or during container development.</p>
               <span class="p">},</span>
               <span class="s2">&quot;PORT&quot;</span><span class="p">:</span> <span class="p">{</span>
                 <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Asyn port name for PmacAsynIPPort to connect to&quot;</span>
+                <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Asyn port name for PmacAsynIPPort to connect to&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;vscode_ibek_plugin_type&quot;</span><span class="p">:</span> <span class="s2">&quot;type_object&quot;</span>
               <span class="p">},</span>
               <span class="s2">&quot;P&quot;</span><span class="p">:</span> <span class="p">{</span>
                 <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
@@ -1050,13 +1075,14 @@ the container or during container development.</p>
           <span class="p">{</span>
             <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span>
             <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span>
-              <span class="s2">&quot;entity_disabled&quot;</span><span class="p">:</span> <span class="p">{</span>
+              <span class="s2">&quot;entity_enabled&quot;</span><span class="p">:</span> <span class="p">{</span>
                 <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;boolean&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="n">false</span>
+                <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="n">true</span>
               <span class="p">},</span>
               <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="p">{</span>
                 <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Asyn port name&quot;</span>
+                <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Asyn port name&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;vscode_ibek_plugin_type&quot;</span><span class="p">:</span> <span class="s2">&quot;type_id&quot;</span>
               <span class="p">},</span>
               <span class="s2">&quot;IP&quot;</span><span class="p">:</span> <span class="p">{</span>
                 <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
@@ -1077,9 +1103,9 @@ the container or during container development.</p>
           <span class="p">{</span>
             <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span>
             <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span>
-              <span class="s2">&quot;entity_disabled&quot;</span><span class="p">:</span> <span class="p">{</span>
+              <span class="s2">&quot;entity_enabled&quot;</span><span class="p">:</span> <span class="p">{</span>
                 <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;boolean&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="n">false</span>
+                <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="n">true</span>
               <span class="p">},</span>
               <span class="s2">&quot;PMAC&quot;</span><span class="p">:</span> <span class="p">{</span>
                 <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
@@ -1399,33 +1425,33 @@ the container or during container development.</p>
 </thead>
 <tbody>
 <tr class="row-even"><td><p>1</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">ibek.schema.json</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">ibek.defs.schema.json</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">ibek</span> <span class="pre">ibek-schema</span></code></p></td>
 </tr>
 <tr class="row-odd"><td><p>2</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">&lt;support&gt;.ibek.yaml</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">&lt;support&gt;.ibek.defs.yaml</span></code></p></td>
 <td><p>Hand crafted by the container developer. Held in the container.</p></td>
 </tr>
 <tr class="row-even"><td><p>3</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">&lt;container&gt;.schema.json</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">&lt;container&gt;.ibek.entities.schema.json</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">ibek</span> <span class="pre">ioc-schema</span> <span class="pre">...</span></code> run at container build time. <code class="docutils literal notranslate"><span class="pre">...</span></code>
-== all <code class="docutils literal notranslate"><span class="pre">&lt;support&gt;.ibek.yaml</span></code> within the container.</p></td>
+== all <code class="docutils literal notranslate"><span class="pre">&lt;support&gt;.ibek.defs.yaml</span></code> within the container.</p></td>
 </tr>
 <tr class="row-odd"><td><p>4</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">&lt;ioc&gt;.&lt;container&gt;.yaml</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">&lt;ioc&gt;.ibek.entities.yaml</span></code></p></td>
 <td><p>Hand crafted at IOC instance design time</p></td>
 </tr>
 <tr class="row-even"><td><p>5</p></td>
 <td><p>Helm Chart files</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">ibek</span> <span class="pre">build-helm</span> <span class="pre">&lt;ioc&gt;.&lt;container&gt;.yaml</span></code>
+<td><p><code class="docutils literal notranslate"><span class="pre">ibek</span> <span class="pre">build-helm</span> <span class="pre">&lt;ioc&gt;.ibek.entities.yaml</span></code>
 run at IOC helm chart generation time. This generates a helm chart
-with <code class="docutils literal notranslate"><span class="pre">&lt;ioc&gt;.&lt;container&gt;.yaml</span></code> in its config folder and validates it
+with <code class="docutils literal notranslate"><span class="pre">&lt;ioc&gt;.ibek.entities.yaml</span></code> in its config folder and validates it
 against the schema defined at the top of the YAML file.</p></td>
 </tr>
 <tr class="row-odd"><td><p>6</p></td>
 <td><p>IOC startup script</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">ibek</span> <span class="pre">build-startup</span> <span class="pre">&lt;ioc&gt;.&lt;container&gt;.yaml</span> <span class="pre">...</span></code>. Run at IOC startup time in the
-container. <code class="docutils literal notranslate"><span class="pre">...</span></code> == all <code class="docutils literal notranslate"><span class="pre">&lt;support&gt;.ibek.yaml</span></code> within the container.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">ibek</span> <span class="pre">build-startup</span> <span class="pre">&lt;ioc&gt;.ibek.entities.yaml</span> <span class="pre">...</span></code>. Run at IOC startup time in the
+container. <code class="docutils literal notranslate"><span class="pre">...</span></code> == all <code class="docutils literal notranslate"><span class="pre">&lt;support&gt;.ibek.defs.yaml</span></code> within the container.</p></td>
 </tr>
 </tbody>
 </table>

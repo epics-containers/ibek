@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ibek.ioc &mdash; ibek 0.3+39.g0c021e0 documentation</title>
+  <title>ibek.ioc &mdash; ibek 0.3+49.g5a8d40b documentation</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/graphviz.css" type="text/css" />
@@ -92,6 +92,7 @@
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
 
+<span class="kn">import</span> <span class="nn">builtins</span>
 <span class="kn">import</span> <span class="nn">types</span>
 <span class="kn">from</span> <span class="nn">dataclasses</span> <span class="kn">import</span> <span class="n">Field</span><span class="p">,</span> <span class="n">dataclass</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">make_dataclass</span>
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Mapping</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Type</span><span class="p">,</span> <span class="n">cast</span>
@@ -103,15 +104,16 @@
     <span class="n">deserialize</span><span class="p">,</span>
     <span class="n">deserializer</span><span class="p">,</span>
     <span class="n">identity</span><span class="p">,</span>
+    <span class="n">schema</span><span class="p">,</span>
 <span class="p">)</span>
-<span class="kn">from</span> <span class="nn">apischema.conversions</span> <span class="kn">import</span> <span class="n">Conversion</span><span class="p">,</span> <span class="n">LazyConversion</span><span class="p">,</span> <span class="n">reset_deserializers</span>
+<span class="kn">from</span> <span class="nn">apischema.conversions</span> <span class="kn">import</span> <span class="n">Conversion</span><span class="p">,</span> <span class="n">reset_deserializers</span>
 <span class="kn">from</span> <span class="nn">apischema.metadata</span> <span class="kn">import</span> <span class="n">conversion</span>
 <span class="kn">from</span> <span class="nn">typing_extensions</span> <span class="kn">import</span> <span class="n">Annotated</span> <span class="k">as</span> <span class="n">A</span>
 <span class="kn">from</span> <span class="nn">typing_extensions</span> <span class="kn">import</span> <span class="n">Literal</span>
 
 <span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">modules</span>
 <span class="kn">from</span> <span class="nn">.globals</span> <span class="kn">import</span> <span class="n">T</span><span class="p">,</span> <span class="n">desc</span>
-<span class="kn">from</span> <span class="nn">.support</span> <span class="kn">import</span> <span class="n">Definition</span><span class="p">,</span> <span class="n">ObjectArg</span><span class="p">,</span> <span class="n">StrArg</span><span class="p">,</span> <span class="n">Support</span>
+<span class="kn">from</span> <span class="nn">.support</span> <span class="kn">import</span> <span class="n">Definition</span><span class="p">,</span> <span class="n">IdArg</span><span class="p">,</span> <span class="n">ObjectArg</span><span class="p">,</span> <span class="n">Support</span>
 
 
 <div class="viewcode-block" id="Entity"><a class="viewcode-back" href="../../reference/api.html#ibek.ioc.Entity">[docs]</a><span class="k">class</span> <span class="nc">Entity</span><span class="p">:</span>
@@ -122,22 +124,22 @@
 
     <span class="c1"># a link back to the Definition Object that generated this Definition</span>
     <span class="n">__definition__</span><span class="p">:</span> <span class="n">Definition</span>
-    <span class="n">__instances__</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Entity</span><span class="p">]</span>
-    <span class="n">entity_disabled</span><span class="p">:</span> <span class="nb">bool</span>
+
+    <span class="n">entity_enabled</span><span class="p">:</span> <span class="nb">bool</span>
 
     <span class="k">def</span> <span class="nf">__post_init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="c1"># If there is an argument which is an id then allow deserialization by that</span>
         <span class="n">args</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__definition__</span><span class="o">.</span><span class="n">args</span>
-        <span class="n">ids</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">name</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">args</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">StrArg</span><span class="p">)</span> <span class="ow">and</span> <span class="n">a</span><span class="o">.</span><span class="n">is_id</span><span class="p">)</span>
+        <span class="n">ids</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">name</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">args</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">IdArg</span><span class="p">))</span>
         <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">ids</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="mi">1</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;Multiple id args </span><span class="si">{</span><span class="nb">list</span><span class="p">(</span><span class="n">ids</span><span class="p">)</span><span class="si">}</span><span class="s2"> defined in </span><span class="si">{</span><span class="n">args</span><span class="si">}</span><span class="s2">&quot;</span>
         <span class="k">if</span> <span class="n">ids</span><span class="p">:</span>
             <span class="c1"># A string id, use that</span>
             <span class="n">inst_id</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ids</span><span class="o">.</span><span class="n">pop</span><span class="p">())</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="c1"># No string id, make one</span>
-            <span class="n">inst_id</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__instances__</span><span class="p">))</span>
-        <span class="k">assert</span> <span class="n">inst_id</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__instances__</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;Already got an instance </span><span class="si">{</span><span class="n">inst_id</span><span class="si">}</span><span class="s2">&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">__instances__</span><span class="p">[</span><span class="n">inst_id</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span></div>
+            <span class="k">assert</span> <span class="n">inst_id</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">id_to_entity</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;Already got an instance </span><span class="si">{</span><span class="n">inst_id</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="n">id_to_entity</span><span class="p">[</span><span class="n">inst_id</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span></div>
+
+
+<span class="n">id_to_entity</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Entity</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
 
 
 <div class="viewcode-block" id="make_entity_class"><a class="viewcode-back" href="../../reference/api.html#ibek.ioc.make_entity_class">[docs]</a><span class="k">def</span> <span class="nf">make_entity_class</span><span class="p">(</span><span class="n">definition</span><span class="p">:</span> <span class="n">Definition</span><span class="p">,</span> <span class="n">support</span><span class="p">:</span> <span class="n">Support</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Type</span><span class="p">[</span><span class="n">Entity</span><span class="p">]:</span>
@@ -155,24 +157,26 @@
     <span class="k">for</span> <span class="n">arg</span> <span class="ow">in</span> <span class="n">definition</span><span class="o">.</span><span class="n">args</span><span class="p">:</span>
         <span class="c1"># make_dataclass can cope with string types, so cast them here rather</span>
         <span class="c1"># than lookup</span>
-        <span class="n">arg_type</span> <span class="o">=</span> <span class="n">cast</span><span class="p">(</span><span class="nb">type</span><span class="p">,</span> <span class="n">arg</span><span class="o">.</span><span class="n">type</span><span class="p">)</span>
         <span class="n">metadata</span><span class="p">:</span> <span class="n">Any</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">arg_type</span><span class="p">:</span> <span class="nb">type</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">arg</span><span class="p">,</span> <span class="n">ObjectArg</span><span class="p">):</span>
 
-            <span class="k">def</span> <span class="nf">make_conversion</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">arg</span><span class="o">.</span><span class="n">type</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Conversion</span><span class="p">:</span>
-                <span class="n">module_name</span><span class="p">,</span> <span class="n">entity_name</span> <span class="o">=</span> <span class="n">name</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">,</span> <span class="n">maxsplit</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-                <span class="n">entity_cls</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="nb">getattr</span><span class="p">(</span><span class="n">modules</span><span class="p">,</span> <span class="n">module_name</span><span class="p">),</span> <span class="n">entity_name</span><span class="p">)</span>
+            <span class="k">def</span> <span class="nf">lookup_instance</span><span class="p">(</span><span class="nb">id</span><span class="p">):</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="k">return</span> <span class="n">id_to_entity</span><span class="p">[</span><span class="nb">id</span><span class="p">]</span>
+                <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="n">ValidationError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="nb">id</span><span class="si">}</span><span class="s2"> is not in </span><span class="si">{</span><span class="nb">list</span><span class="p">(</span><span class="n">id_to_entity</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
-                <span class="k">def</span> <span class="nf">lookup_instance</span><span class="p">(</span><span class="nb">id</span><span class="p">):</span>
-                    <span class="k">try</span><span class="p">:</span>
-                        <span class="k">return</span> <span class="n">entity_cls</span><span class="o">.</span><span class="n">__instances__</span><span class="p">[</span><span class="nb">id</span><span class="p">]</span>
-                    <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
-                        <span class="k">raise</span> <span class="n">ValidationError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="nb">id</span><span class="si">}</span><span class="s2"> is not a </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-
-                <span class="k">return</span> <span class="n">Conversion</span><span class="p">(</span><span class="n">lookup_instance</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="n">Entity</span><span class="p">)</span>
-
-            <span class="n">metadata</span> <span class="o">=</span> <span class="n">conversion</span><span class="p">(</span><span class="n">deserialization</span><span class="o">=</span><span class="n">LazyConversion</span><span class="p">(</span><span class="n">make_conversion</span><span class="p">))</span>
+            <span class="n">metadata</span> <span class="o">=</span> <span class="n">conversion</span><span class="p">(</span>
+                <span class="n">deserialization</span><span class="o">=</span><span class="n">Conversion</span><span class="p">(</span><span class="n">lookup_instance</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="n">Entity</span><span class="p">)</span>
+            <span class="p">)</span> <span class="o">|</span> <span class="n">schema</span><span class="p">(</span><span class="n">extra</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;vscode_ibek_plugin_type&quot;</span><span class="p">:</span> <span class="s2">&quot;type_object&quot;</span><span class="p">})</span>
             <span class="n">arg_type</span> <span class="o">=</span> <span class="n">Entity</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">arg</span><span class="p">,</span> <span class="n">IdArg</span><span class="p">):</span>
+            <span class="n">arg_type</span> <span class="o">=</span> <span class="nb">str</span>
+            <span class="n">metadata</span> <span class="o">=</span> <span class="n">schema</span><span class="p">(</span><span class="n">extra</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;vscode_ibek_plugin_type&quot;</span><span class="p">:</span> <span class="s2">&quot;type_id&quot;</span><span class="p">})</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># arg.type is str, int, float, etc.</span>
+            <span class="n">arg_type</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">builtins</span><span class="p">,</span> <span class="n">arg</span><span class="o">.</span><span class="n">type</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">arg</span><span class="o">.</span><span class="n">description</span><span class="p">:</span>
             <span class="n">arg_type</span> <span class="o">=</span> <span class="n">A</span><span class="p">[</span><span class="n">arg_type</span><span class="p">,</span> <span class="n">desc</span><span class="p">(</span><span class="n">arg</span><span class="o">.</span><span class="n">description</span><span class="p">)]</span>
         <span class="k">if</span> <span class="n">arg</span><span class="o">.</span><span class="n">default</span> <span class="ow">is</span> <span class="n">Undefined</span><span class="p">:</span>
@@ -188,9 +192,9 @@
 
     <span class="c1"># add a field so we can control rendering of the entity without having to delete</span>
     <span class="c1"># it</span>
-    <span class="n">fields</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="s2">&quot;entity_disabled&quot;</span><span class="p">,</span> <span class="nb">bool</span><span class="p">,</span> <span class="n">field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="n">cast</span><span class="p">(</span><span class="n">Any</span><span class="p">,</span> <span class="kc">False</span><span class="p">))))</span>
+    <span class="n">fields</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="s2">&quot;entity_enabled&quot;</span><span class="p">,</span> <span class="nb">bool</span><span class="p">,</span> <span class="n">field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="n">cast</span><span class="p">(</span><span class="n">Any</span><span class="p">,</span> <span class="kc">True</span><span class="p">))))</span>
 
-    <span class="n">namespace</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">__definition__</span><span class="o">=</span><span class="n">definition</span><span class="p">,</span> <span class="n">__instances__</span><span class="o">=</span><span class="p">{})</span>
+    <span class="n">namespace</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">__definition__</span><span class="o">=</span><span class="n">definition</span><span class="p">)</span>
 
     <span class="c1"># make the Entity derived dataclass for this EntityClass, with a reference</span>
     <span class="c1"># to the Definition that created it</span>
@@ -209,7 +213,7 @@
     <span class="p">),</span> <span class="sa">f</span><span class="s2">&quot;Entity classes already created for </span><span class="si">{</span><span class="n">support</span><span class="o">.</span><span class="n">module</span><span class="si">}</span><span class="s2">&quot;</span>
     <span class="nb">setattr</span><span class="p">(</span><span class="n">modules</span><span class="p">,</span> <span class="n">support</span><span class="o">.</span><span class="n">module</span><span class="p">,</span> <span class="n">module</span><span class="p">)</span>
     <span class="n">modules</span><span class="o">.</span><span class="n">__all__</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">support</span><span class="o">.</span><span class="n">module</span><span class="p">)</span>
-    <span class="k">for</span> <span class="n">definition</span> <span class="ow">in</span> <span class="n">support</span><span class="o">.</span><span class="n">definitions</span><span class="p">:</span>
+    <span class="k">for</span> <span class="n">definition</span> <span class="ow">in</span> <span class="n">support</span><span class="o">.</span><span class="n">defs</span><span class="p">:</span>
         <span class="n">entity_cls</span> <span class="o">=</span> <span class="n">make_entity_class</span><span class="p">(</span><span class="n">definition</span><span class="p">,</span> <span class="n">support</span><span class="p">)</span>
         <span class="nb">setattr</span><span class="p">(</span><span class="n">module</span><span class="p">,</span> <span class="n">definition</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">entity_cls</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">module</span></div>
@@ -218,6 +222,7 @@
 <div class="viewcode-block" id="clear_entity_classes"><a class="viewcode-back" href="../../reference/api.html#ibek.ioc.clear_entity_classes">[docs]</a><span class="k">def</span> <span class="nf">clear_entity_classes</span><span class="p">():</span>
     <span class="sd">&quot;&quot;&quot;Reset the modules namespaces, deserializers and caches of defined Entity</span>
 <span class="sd">    subclasses&quot;&quot;&quot;</span>
+    <span class="n">id_to_entity</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
     <span class="k">while</span> <span class="n">modules</span><span class="o">.</span><span class="n">__all__</span><span class="p">:</span>
         <span class="nb">delattr</span><span class="p">(</span><span class="n">modules</span><span class="p">,</span> <span class="n">modules</span><span class="o">.</span><span class="n">__all__</span><span class="o">.</span><span class="n">pop</span><span class="p">())</span>
     <span class="n">reset_deserializers</span><span class="p">(</span><span class="n">Entity</span><span class="p">)</span>

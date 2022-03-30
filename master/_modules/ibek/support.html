@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ibek.support &mdash; ibek 0.3+39.g0c021e0 documentation</title>
+  <title>ibek.support &mdash; ibek 0.3+49.g5a8d40b documentation</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/graphviz.css" type="text/css" />
@@ -87,9 +87,10 @@
              
   <h1>Source code for ibek.support</h1><div class="highlight"><pre>
 <span></span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">The Support Class represents a deserialized &lt;MODULE_NAME&gt;.ibek.yaml file.</span>
+<span class="sd">The Support Class represents a deserialized &lt;MODULE_NAME&gt;.ibek.defs.yaml file.</span>
 <span class="sd">It contains a hierarchy of Entity dataclasses.</span>
 <span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
 
 <span class="kn">from</span> <span class="nn">dataclasses</span> <span class="kn">import</span> <span class="n">dataclass</span>
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Mapping</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">,</span> <span class="n">Type</span><span class="p">,</span> <span class="n">Union</span>
@@ -111,7 +112,7 @@
     <span class="nb">type</span><span class="p">:</span> <span class="nb">str</span>
     <span class="n">default</span><span class="p">:</span> <span class="n">Any</span>
 
-    <span class="c1"># https://wyfo.github.io/apischema/examples/subclass_union/</span>
+    <span class="c1"># https://wyfo.github.io/apischema/latest/examples/subclass_union/</span>
     <span class="k">def</span> <span class="nf">__init_subclass__</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
         <span class="c1"># Deserializers stack directly as a Union</span>
         <span class="n">deserializer</span><span class="p">(</span><span class="n">Conversion</span><span class="p">(</span><span class="n">identity</span><span class="p">,</span> <span class="n">source</span><span class="o">=</span><span class="bp">cls</span><span class="p">,</span> <span class="n">target</span><span class="o">=</span><span class="n">Arg</span><span class="p">))</span></div>
@@ -127,7 +128,7 @@
 <span class="c1">#</span>
 <span class="c1">#    TypeError: Invalid JSON type &lt;class &#39;ruamel.yaml.scalarfloat.ScalarFloat&#39;&gt;</span>
 <span class="c1">#</span>
-<span class="c1"># During Support.deserialize, when default float values in pmac.ibek.yaml do not</span>
+<span class="c1"># During Support.deserialize, when default float values in pmac.ibek.defs.yaml do not</span>
 <span class="c1"># have a trailing &#39;f&#39;. It is due to the order of declaration of subclasses of</span>
 <span class="c1"># Arg. When StrArg is before FloatArg, apischema attempts to deserialize as a</span>
 <span class="c1"># string first. The coercion from str to number requires a trailing f if there</span>
@@ -145,10 +146,7 @@
     <span class="sd">&quot;&quot;&quot;An argument with a str value&quot;&quot;&quot;</span>
 
     <span class="nb">type</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;str&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;str&quot;</span>
-    <span class="n">default</span><span class="p">:</span> <span class="n">Default</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">Undefined</span>
-    <span class="n">is_id</span><span class="p">:</span> <span class="n">A</span><span class="p">[</span>
-        <span class="nb">bool</span><span class="p">,</span> <span class="n">desc</span><span class="p">(</span><span class="s2">&quot;If true, instances may refer to this instance by this arg&quot;</span><span class="p">)</span>
-    <span class="p">]</span> <span class="o">=</span> <span class="kc">False</span></div>
+    <span class="n">default</span><span class="p">:</span> <span class="n">Default</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">Undefined</span></div>
 
 
 <div class="viewcode-block" id="IntArg"><a class="viewcode-back" href="../../reference/api.html#ibek.support.IntArg">[docs]</a><span class="nd">@dataclass</span>
@@ -171,7 +169,15 @@
 <span class="k">class</span> <span class="nc">ObjectArg</span><span class="p">(</span><span class="n">Arg</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;A reference to another entity defined in this IOC&quot;&quot;&quot;</span>
 
-    <span class="nb">type</span><span class="p">:</span> <span class="n">A</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">desc</span><span class="p">(</span><span class="s2">&quot;Entity class, &lt;module&gt;.&lt;entity_name&gt;&quot;</span><span class="p">)]</span>
+    <span class="nb">type</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;object&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;object&quot;</span>
+    <span class="n">default</span><span class="p">:</span> <span class="n">Default</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">Undefined</span></div>
+
+
+<div class="viewcode-block" id="IdArg"><a class="viewcode-back" href="../../reference/api.html#ibek.support.IdArg">[docs]</a><span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">IdArg</span><span class="p">(</span><span class="n">Arg</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Explicit ID argument that an object can refer to&quot;&quot;&quot;</span>
+
+    <span class="nb">type</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;id&quot;</span>
     <span class="n">default</span><span class="p">:</span> <span class="n">Default</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">Undefined</span></div>
 
 
@@ -228,7 +234,7 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">module</span><span class="p">:</span> <span class="n">A</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">desc</span><span class="p">(</span><span class="s2">&quot;Support module name, normally the repo name&quot;</span><span class="p">)]</span>
-    <span class="n">definitions</span><span class="p">:</span> <span class="n">A</span><span class="p">[</span>
+    <span class="n">defs</span><span class="p">:</span> <span class="n">A</span><span class="p">[</span>
         <span class="n">Sequence</span><span class="p">[</span><span class="n">Definition</span><span class="p">],</span>
         <span class="n">desc</span><span class="p">(</span><span class="s2">&quot;The definitions an IOC can create using this module&quot;</span><span class="p">),</span>
     <span class="p">]</span>
