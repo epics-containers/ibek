@@ -1,6 +1,6 @@
-# yaml-language-server: $schema=file://schemas/ibek.schema.json
+# yaml-language-server: $schema=file://schemas/ibek.defs.schema.json
 module: asyn
-definitions:
+defs:
   - name: AsynSerial
     args:
       - type: str

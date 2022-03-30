@@ -97,7 +97,7 @@ def render_elements(ioc: IOC, element: str) -> str:
     method = getattr(sys.modules[__name__], element)
     elements = ""
     for instance in ioc.entities:
-        if not instance.entity_disabled:
+        if instance.entity_enabled:
             element = method(instance)
             if element:
                 elements += element + "\n"

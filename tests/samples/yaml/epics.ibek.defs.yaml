@@ -1,6 +1,6 @@
-# yaml-language-server: $schema=file://schemas/ibek.schema.json
+# yaml-language-server: $schema=file://schemas/ibek.defs.schema.json
 module: epics
-definitions:
+defs:
   - name: EPICS_CA_MAX_ARRAY_BYTES
     args:
       - type: int

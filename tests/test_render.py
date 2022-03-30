@@ -127,18 +127,18 @@ def test_entity_disabled_does_not_render_elements(pmac_classes, epics_classes):
             numAxes=8,
             idlePoll=200,
             movingPoll=800,
-            entity_disabled=True,
+            entity_enabled=False,
         )
     )
 
     # Create two instances of the CA max array bytes entity, one disabled
     instance_list.append(ca_max_array_bytes_class())
-    instance_list.append(ca_max_array_bytes_class(entity_disabled=True))
+    instance_list.append(ca_max_array_bytes_class(entity_enabled=False))
 
     # Create two instances of the dpbf class
     instance_list.append(dbpf_class(pv="TEST:PV:1", value="pv_value_1"))
     instance_list.append(
-        dbpf_class(pv="TEST:PV:2", value="pv_value_2", entity_disabled=True)
+        dbpf_class(pv="TEST:PV:2", value="pv_value_2", entity_enabled=False)
     )
 
     # Make an IOC with our instances

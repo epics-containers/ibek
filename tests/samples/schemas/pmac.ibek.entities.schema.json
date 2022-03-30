@@ -16,128 +16,9 @@
           {
             "type": "object",
             "properties": {
-              "entity_disabled": {
+              "entity_enabled": {
                 "type": "boolean",
-                "default": false
-              },
-              "port": {
-                "type": "string",
-                "description": "The port name for this asyn object"
-              },
-              "input_eos": {
-                "type": "string",
-                "description": "Input end of string (terminator)"
-              },
-              "output_eos": {
-                "type": "string",
-                "description": "Output end of string (terminator)"
-              },
-              "priority": {
-                "type": "integer",
-                "description": "Priority",
-                "default": 100
-              },
-              "noAutoConnect": {
-                "type": "boolean",
-                "description": "Set to stop auto connect"
-              },
-              "noProcessEos": {
-                "type": "boolean",
-                "description": "Set to avoid processing end of string"
-              },
-              "simulation": {
-                "type": "string",
-                "description": "IP port to connect to if in simulation mode"
-              },
-              "baud": {
-                "type": "integer",
-                "description": "Baud Rate"
-              },
-              "bits": {
-                "type": "integer",
-                "description": "Bits [8,7,6,5]"
-              },
-              "parity": {
-                "type": "string",
-                "description": "Parity [null,even,odd]"
-              },
-              "stop": {
-                "type": "integer",
-                "description": "Stop Bits [1,2]"
-              },
-              "crtscts": {
-                "type": "boolean",
-                "description": "Set hardware flow control on"
-              },
-              "type": {
-                "type": "string",
-                "const": "asyn.AsynSerial",
-                "default": "asyn.AsynSerial"
-              }
-            },
-            "required": [
-              "port"
-            ],
-            "additionalProperties": false
-          },
-          {
-            "type": "object",
-            "properties": {
-              "entity_disabled": {
-                "type": "boolean",
-                "default": false
-              },
-              "port": {
-                "type": "string",
-                "description": "Serial port tty name / IP address optionally followed by protocol"
-              },
-              "name": {
-                "type": "string",
-                "description": "Name for the Asyn Port"
-              },
-              "input_eos": {
-                "type": "string",
-                "description": "Input end of string (terminator)"
-              },
-              "output_eos": {
-                "type": "string",
-                "description": "Output end of string (terminator)"
-              },
-              "priority": {
-                "type": "integer",
-                "description": "Priority",
-                "default": 100
-              },
-              "noAutoConnect": {
-                "type": "boolean",
-                "description": "Set to stop auto connect"
-              },
-              "noProcessEos": {
-                "type": "boolean",
-                "description": "Set to avoid processing end of string"
-              },
-              "simulation": {
-                "type": "string",
-                "description": "IP port to connect to if in simulation mode"
-              },
-              "type": {
-                "type": "string",
-                "const": "asyn.AsynIP",
-                "default": "asyn.AsynIP"
-              }
-            },
-            "required": [
-              "port",
-              "name"
-            ],
-            "additionalProperties": false
-          },
-          {
-            "type": "object",
-            "properties": {
-              "entity_disabled": {
-                "type": "boolean",
-                "default": false
+                "default": true
               },
               "name": {
                 "type": "string",
@@ -145,7 +26,8 @@
               },
               "PORT": {
                 "type": "string",
-                "description": "Asyn port name for PmacAsynIPPort to connect to"
+                "description": "Asyn port name for PmacAsynIPPort to connect to",
+                "vscode_ibek_plugin_type": "type_object"
               },
               "P": {
                 "type": "string",
@@ -182,13 +64,14 @@
           {
             "type": "object",
             "properties": {
-              "entity_disabled": {
+              "entity_enabled": {
                 "type": "boolean",
-                "default": false
+                "default": true
               },
               "name": {
                 "type": "string",
-                "description": "Asyn port name"
+                "description": "Asyn port name",
+                "vscode_ibek_plugin_type": "type_id"
               },
               "IP": {
                 "type": "string",
@@ -209,9 +92,9 @@
           {
             "type": "object",
             "properties": {
-              "entity_disabled": {
+              "entity_enabled": {
                 "type": "boolean",
-                "default": false
+                "default": true
               },
               "PMAC": {
                 "type": "string",

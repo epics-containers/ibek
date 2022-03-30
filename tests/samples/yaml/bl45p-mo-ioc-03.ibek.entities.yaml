@@ -1,5 +1,5 @@
-# yaml-language-server: $schema=file://schemas/pmac.schema.json
-ioc_name: bl45p-mo-ioc-02
+# yaml-language-server: $schema=../schemas/container.ibek.entities.schema.json
+ioc_name: bl45p-mo-ioc-03
 description: an example motion ioc for ibek testing
 generic_ioc_image: ghcr.io/epics-containers/ioc-pmac:main.run
 entities:
@@ -36,3 +36,8 @@ entities:
     P: BL45P-MO-THIN-01
     M: ":Y1"
     MRES: 0.001
+
+  - type: asyn.AsynIP
+    port: 192.168.0.0:1025
+    name: anAsynIpPort
+

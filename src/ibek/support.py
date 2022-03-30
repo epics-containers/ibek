@@ -1,7 +1,8 @@
 """
-The Support Class represents a deserialized <MODULE_NAME>.ibek.yaml file.
+The Support Class represents a deserialized <MODULE_NAME>.ibek.defs.yaml file.
 It contains a hierarchy of Entity dataclasses.
 """
+from __future__ import annotations
 
 from dataclasses import dataclass
 from typing import Any, Mapping, Optional, Sequence, Type, Union
@@ -23,7 +24,7 @@ class Arg:
     type: str
     default: Any
 
-    # https://wyfo.github.io/apischema/examples/subclass_union/
+    # https://wyfo.github.io/apischema/latest/examples/subclass_union/
     def __init_subclass__(cls):
         # Deserializers stack directly as a Union
         deserializer(Conversion(identity, source=cls, target=Arg))
@@ -39,7 +40,7 @@ Default = A[
 #
 #    TypeError: Invalid JSON type <class 'ruamel.yaml.scalarfloat.ScalarFloat'>
 #
-# During Support.deserialize, when default float values in pmac.ibek.yaml do not
+# During Support.deserialize, when default float values in pmac.ibek.defs.yaml do not
 # have a trailing 'f'. It is due to the order of declaration of subclasses of
 # Arg. When StrArg is before FloatArg, apischema attempts to deserialize as a
 # string first. The coercion from str to number requires a trailing f if there
@@ -58,9 +59,6 @@ class StrArg(Arg):
 
     type: Literal["str"] = "str"
     default: Default[str] = Undefined
-    is_id: A[
-        bool, desc("If true, instances may refer to this instance by this arg")
-    ] = False
 
 
 @dataclass
@@ -83,7 +81,15 @@ class BoolArg(Arg):
 class ObjectArg(Arg):
     """A reference to another entity defined in this IOC"""
 
-    type: A[str, desc("Entity class, <module>.<entity_name>")]
+    type: Literal["object"] = "object"
+    default: Default[str] = Undefined
+
+
+@dataclass
+class IdArg(Arg):
+    """Explicit ID argument that an object can refer to"""
+
+    type: Literal["id"] = "id"
     default: Default[str] = Undefined
 
 
@@ -140,7 +146,7 @@ class Support:
     """
 
     module: A[str, desc("Support module name, normally the repo name")]
-    definitions: A[
+    defs: A[
         Sequence[Definition],
         desc("The definitions an IOC can create using this module"),
     ]

@@ -50,6 +50,8 @@ nitpick_ignore = [
     ("py:class", "'float'"),
     ("py:class", "'int'"),
     ("py:class", "'bool'"),
+    ("py:class", "'object'"),
+    ("py:class", "'id'"),
     ("py:class", "apischema.utils.UndefinedType"),
     ("py:class", "typing_extensions.Literal"),
 ]

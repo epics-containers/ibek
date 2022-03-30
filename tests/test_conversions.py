@@ -1,5 +1,5 @@
-from ibek.ioc import IOC, clear_entity_classes, make_entity_classes
-from ibek.support import Definition, ObjectArg, StrArg, Support
+from ibek.ioc import IOC, clear_entity_classes, id_to_entity, make_entity_classes
+from ibek.support import Definition, IdArg, ObjectArg, Support
 
 
 def test_conversion_classes():
@@ -7,14 +7,14 @@ def test_conversion_classes():
     support = Support(
         "mymodule",
         [
-            Definition("port", [StrArg("name", "the name", is_id=True)]),
-            Definition("device", [ObjectArg("port", "the port", "mymodule.port")]),
+            Definition("port", [IdArg("name", "the name", "id")]),
+            Definition("device", [ObjectArg("port", "the port", "object")]),
         ],
     )
     namespace = make_entity_classes(support)
     assert {"device", "port"}.issubset(dir(namespace))
-    assert namespace.port.__definition__ == support.definitions[0]
-    assert namespace.device.__definition__ == support.definitions[1]
+    assert namespace.port.__definition__ == support.defs[0]
+    assert namespace.device.__definition__ == support.defs[1]
     d = dict(
         ioc_name="",
         description="",
@@ -27,7 +27,6 @@ def test_conversion_classes():
     ioc = IOC.deserialize(d)
     port, device = ioc.entities
     assert port.type == "mymodule.port"
-    assert namespace.port.__instances__ == {"PORT": port}
+    assert id_to_entity == {"PORT": port}
     assert device.type == "mymodule.device"
     assert device.port is port
-    assert namespace.device.__instances__ == {"0": device}
