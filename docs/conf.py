@@ -88,6 +88,9 @@ rst_epilog = """
     http://www.diamond.ac.uk
 """
 
+# Ignore localhost links for period check that links in docs are valid
+linkcheck_ignore = [r"http://localhost:\d+/"]
+
 # -- Options for HTML output -------------------------------------------------
 
 # The theme to use for HTML and HTML Help pages.  See the documentation for
