@@ -8,7 +8,6 @@ on:
       # next 5 lines to restore the original behaviour
       - master
       - main
-      - skeleton2
     tags:
       - "*"
   pull_request:
@@ -193,13 +192,21 @@ jobs:
         id: buildx
         uses: docker/setup-buildx-action@v1
 
+      - name: Determine repo name
+        id: entrypoint
+        # REPO name extracted from org/repo is used for ENTRYPOINT
+        # Replace this with the cli command if different to the repo name
+        run: echo "::set-output name=entry::${GITHUB_REPOSITORY#*\/}"
+
       - name: Build runtime image
         uses: docker/build-push-action@v2
         with:
           file: .devcontainer/Dockerfile
           context: .
           push: true
-          build-args: BASE=python:3.10-slim
+          build-args: |
+            BASE=python:3.10-slim
+            ENTRYPOINT=${{ steps.entrypoint.outputs.entry }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=local,src=/tmp/.buildx-cache

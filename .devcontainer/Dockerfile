@@ -10,15 +10,7 @@ FROM ${BASE} as base
 # use root to pin where the packages will install
 USER root
 ENV PATH=/root/.local/bin:$PATH
-
-# things to make pyQt5 work
-RUN apt-get update && export DEBIAN_FRONTEND=noninteractive && \
-    apt-get install -y --no-install-recommends \
-    libqt5gui5 libxcb-xinerama0 && \
-    rm -rf /var/lib/apt/lists/*
     
-ENV XDG_RUNTIME_DIR=/tmp/runtime-vscode
-
 FROM base as developer
 
 WORKDIR /workspace
@@ -27,10 +19,14 @@ COPY . .
 # install runtime from DIST if there is one
 RUN mkdir -p /root/.local && \
     test -d dist && \
-    requirements=$(test -f requirements.txt && echo -r requirements.txt) \
-    pip install --user $requirements dist/*.whl || :
+    touch requirements.txt && \
+    pip install --user -r requirements.txt dist/*.whl || :
 
 FROM base as runtime
+
 COPY --from=developer /root/.local /root/.local
 
-ENTRYPOINT ["ibek"]
+ARG ENTRYPOINT="bash"
+ENV ENTRYPOINT=${ENTRYPOINT}
+
+ENTRYPOINT ${ENTRYPOINT}
