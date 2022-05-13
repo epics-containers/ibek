@@ -26,7 +26,5 @@ FROM base as runtime
 
 COPY --from=developer /root/.local /root/.local
 
-ARG ENTRYPOINT="bash"
-ENV ENTRYPOINT=${ENTRYPOINT}
-
-ENTRYPOINT ["${ENTRYPOINT}"]
+ENTRYPOINT ["ibek"]
+CMD ["--version"]
