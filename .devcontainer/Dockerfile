@@ -10,7 +10,7 @@ FROM ${BASE} as base
 # use root to pin where the packages will install
 USER root
 ENV PATH=/root/.local/bin:$PATH
-    
+
 FROM base as developer
 
 WORKDIR /workspace
