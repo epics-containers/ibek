@@ -19,10 +19,10 @@ jobs:
   lint:
     runs-on: "ubuntu-latest"
     steps:
-      - name: checkout
+      - name: Checkout
         uses: actions/checkout@v2
 
-      - name: lint
+      - name: Lint
         run: |
           pip install --user .[dev]
           tox -e pre-commit,mypy
@@ -82,17 +82,17 @@ jobs:
       QT_QPA_PLATFORM: "offscreen"
 
     steps:
-      - name: checkout
+      - name: Checkout
         uses: actions/checkout@v2
         with:
           fetch-depth: 0
 
-      - name: setup python ${{ matrix.python }}
+      - name: Setup python ${{ matrix.python }}
         uses: actions/setup-python@v2
         with:
           python-version: ${{ matrix.python }}
 
-      - name: install with locked dependencies
+      - name: Install with locked dependencies
         if: matrix.lock
         run: |
           touch requirements.txt requirements_dev.txt
@@ -101,14 +101,14 @@ jobs:
           pip install -r requirements_dev.txt -e .[dev]
           pip freeze --exclude-editable > requirements_dev.txt
 
-      - name: install with latest dependencies
+      - name: Install with latest dependencies
         if: ${{ ! matrix.lock }}
         run: pip install -e .[dev]
 
-      - name: run tests
+      - name: Run tests
         run:  pytest tests
 
-      - name: create requirements_dev.txt
+      - name: Create requirements_dev.txt
         run: |
           pip freeze --exclude-editable > requirements_dev.txt
 
@@ -163,7 +163,7 @@ jobs:
       packages: write
 
     steps:
-      - name: checkout
+      - name: Checkout
         uses: actions/checkout@v2
 
       - uses: actions/download-artifact@v2
