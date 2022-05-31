@@ -3,16 +3,18 @@
 #
 # generic kubernetes IOC startup script
 #
-source ${SUPPORT}/configure/RELEASE.shell
-
 this_dir=$(realpath $(dirname $0))
 TOP=$(realpath ${this_dir}/..)
-
 cd ${this_dir}
-if [ -f config.tz ]
+
+# add module paths to environment for use in ioc startup script
+source ${SUPPORT}/configure/RELEASE.shell
+
+# if there is a non-zero length config.tz then decompress into config_untar
+if [ -s config.tz ]
 then
-    # decompress the configuration files into config_untar
-    config_dir=${TOP}/config_untar
+    # decompress the configuration files into config_untar (/tmp is always writeable)
+    config_dir=/tmp/config_untar
 
     mkdir -p ${config_dir}
     tar -zxvf config.tz -C ${config_dir}
@@ -25,6 +27,6 @@ boot=${config_dir}/ioc.boot
 # Update the boot script to work in the directory it resides in
 # using msi MACRO substitution.
 # Output to /tmp for guarenteed writability
-msi -MTOP=${TOP},THIS_DIR=${config_dir} ${boot} > /tmp/ioc.boot
+msi -MTOP=${TOP},THIS_DIR=${config_dir},ADCORE=${adcore} ${boot} > /tmp/ioc.boot
 
 exec ${IOC}/bin/linux-x86_64/ioc /tmp/ioc.boot
