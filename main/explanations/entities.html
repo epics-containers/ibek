@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Modules, Definitions and Entities &mdash; ibek 0.3+51.g063f80a documentation</title>
+  <title>Modules, Definitions and Entities &mdash; ibek 0.4.dev66+gd93d29c documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../_static/graphviz.css" type="text/css" />
@@ -17,6 +17,7 @@
         <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
         <script src="../_static/jquery.js"></script>
         <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../_static/doctools.js"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
@@ -96,7 +97,7 @@
            <div itemprop="articleBody">
              
   <section id="modules-definitions-and-entities">
-<span id="entities"></span><h1>Modules, Definitions and Entities<a class="headerlink" href="#modules-definitions-and-entities" title="Permalink to this headline"></a></h1>
+<span id="entities"></span><h1>Modules, Definitions and Entities<a class="headerlink" href="#modules-definitions-and-entities" title="Permalink to this heading"></a></h1>
 <p>This page is a top down explanation of the above key terms by referencing the
 example IOC instance bl45p-mo-ioc-02 used in the system tests for this
 project.</p>
@@ -104,7 +105,7 @@ project.</p>
 generic IOCs and IOC instances. See
 <a class="reference external" href="https://epics-containers.github.io/main/explanations/introduction.html#generic-iocs-and-instances">Generic IOCs and instances</a>.</p>
 <section id="modules">
-<h2>Modules<a class="headerlink" href="#modules" title="Permalink to this headline"></a></h2>
+<h2>Modules<a class="headerlink" href="#modules" title="Permalink to this heading"></a></h2>
 <p>Every generic IOC image will include a number of EPICS support modules.</p>
 <p>The bl45p-mo-ioc-02 ioc instance example uses the generic IOC container image
 <a class="reference external" href="https://github.com/epics-containers/ioc-pmac">ioc-pmac</a> . This image
@@ -122,7 +123,7 @@ inside of each generic IOC.</p>
 instance of that class represent an IOC instance.</p>
 </section>
 <section id="definition">
-<h2>Definition<a class="headerlink" href="#definition" title="Permalink to this headline"></a></h2>
+<h2>Definition<a class="headerlink" href="#definition" title="Permalink to this heading"></a></h2>
 <p>Each support module has its own <strong>support module definition file</strong> . This
 is a YAML file whose name is by convention <code class="docutils literal notranslate"><span class="pre">&lt;support_module&gt;.ibek.defs.yaml</span></code></p>
 <p>These will all reside in a folder called /ibek in the container
@@ -539,7 +540,7 @@ defs:
 <p>Definition is implemented in the code using a class of the same name.</p>
 </section>
 <section id="entity">
-<h2>Entity<a class="headerlink" href="#entity" title="Permalink to this headline"></a></h2>
+<h2>Entity<a class="headerlink" href="#entity" title="Permalink to this heading"></a></h2>
 <p>ibek can generate an IOC instance using an
 <strong>IOC instance entity file</strong>. This is
 a YAML file with name of the form <code class="docutils literal notranslate"><span class="pre">&lt;ioc_name&gt;.&lt;container&gt;.yaml</span></code>.</p>
@@ -662,7 +663,7 @@ file that ibek will generate from it.</p>
 <p>Entity is implemented in the code using a class of the same name.</p>
 </section>
 <section id="schemas">
-<h2>Schemas<a class="headerlink" href="#schemas" title="Permalink to this headline"></a></h2>
+<h2>Schemas<a class="headerlink" href="#schemas" title="Permalink to this heading"></a></h2>
 <p>The YAML files described above are constrained by schemas. These schemas are
 available to the developer and may be used to assist in generating the YAML.</p>
 <p>Note that the author of an IOC instance needs access to &lt;container&gt;.schema.json
@@ -1408,7 +1409,7 @@ the container or during container development.</p>
 </details></div></blockquote>
 </section>
 <section id="commands">
-<h2>Commands<a class="headerlink" href="#commands" title="Permalink to this headline"></a></h2>
+<h2>Commands<a class="headerlink" href="#commands" title="Permalink to this heading"></a></h2>
 <p>The ibek commands to progress through the file sequence above are as follows</p>
 <table class="colwidths-given docutils align-default" id="id2">
 <caption><span class="caption-text">Summary of ibek stages</span><a class="headerlink" href="#id2" title="Permalink to this table"></a></caption>

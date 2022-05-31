@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ibek &mdash; ibek 0.3+51.g063f80a documentation</title>
+  <title>ibek &mdash; ibek 0.4.dev66+gd93d29c documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="_static/graphviz.css" type="text/css" />
@@ -17,6 +17,7 @@
         <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
         <script src="_static/jquery.js"></script>
         <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="_static/doctools.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
@@ -88,7 +89,7 @@
            <div itemprop="articleBody">
              
   <section id="ibek">
-<h1>ibek<a class="headerlink" href="#ibek" title="Permalink to this headline"></a></h1>
+<h1>ibek<a class="headerlink" href="#ibek" title="Permalink to this heading"></a></h1>
 <p><a class="reference external" href="https://github.com/epics-containers/ibek/actions?query=workflow%3A%22Code+CI%22"><img alt="Code CI" src="https://github.com/epics-containers/ibek/workflows/Code%20CI/badge.svg?branch=master" /></a> <a class="reference external" href="https://github.com/epics-containers/ibek/actions?query=workflow%3A%22Docs+CI%22"><img alt="Docs CI" src="https://github.com/epics-containers/ibek/workflows/Docs%20CI/badge.svg?branch=master" /></a> <a class="reference external" href="https://codecov.io/gh/epics-containers/ibek"><img alt="Test Coverage" src="https://codecov.io/gh/epics-containers/ibek/branch/master/graph/badge.svg" /></a> <a class="reference external" href="https://pypi.org/project/ibek"><img alt="Latest PyPI version" src="https://img.shields.io/pypi/v/ibek.svg" /></a> <a class="reference external" href="https://opensource.org/licenses/Apache-2.0"><img alt="Apache License" src="https://img.shields.io/badge/License-Apache%202.0-blue.svg" /></a></p>
 <p>IOC Builder for EPICS and Kubernetes:</p>
 <ul class="simple">
@@ -123,7 +124,7 @@ up the IOC contained in the image with them</p></li>
 </tbody>
 </table>
 <section id="todo">
-<h2>TODO<a class="headerlink" href="#todo" title="Permalink to this headline"></a></h2>
+<h2>TODO<a class="headerlink" href="#todo" title="Permalink to this heading"></a></h2>
 <p>This project is approaching completion. The following items are still to do:</p>
 <blockquote>
 <div><ul class="simple">
@@ -141,11 +142,11 @@ embedding ibek into the epics-base container image.</p></li>
 </div></blockquote>
 </section>
 <section id="how-the-documentation-is-structured">
-<h2>How the documentation is structured<a class="headerlink" href="#how-the-documentation-is-structured" title="Permalink to this headline"></a></h2>
+<h2>How the documentation is structured<a class="headerlink" href="#how-the-documentation-is-structured" title="Permalink to this heading"></a></h2>
 <p>Documentation is split into four categories, also accessible from links in the
 side-bar.</p>
 <section class="columns" id="tutorials">
-<h3><a class="reference internal" href="tutorials.html"><span class="doc">Tutorials</span></a><a class="headerlink" href="#tutorials" title="Permalink to this headline"></a></h3>
+<h3><a class="reference internal" href="tutorials.html"><span class="doc">Tutorials</span></a><a class="headerlink" href="#tutorials" title="Permalink to this heading"></a></h3>
 <p>Tutorials for installation, library and commandline usage. New users start here.</p>
 <div class="toctree-wrapper compound">
 <p class="caption" role="heading"><span class="caption-text">Tutorials</span></p>
@@ -160,7 +161,7 @@ side-bar.</p>
 </div>
 </section>
 <section class="columns" id="how-to">
-<h3><a class="reference internal" href="how-to.html"><span class="doc">How-to Guides</span></a><a class="headerlink" href="#how-to" title="Permalink to this headline"></a></h3>
+<h3><a class="reference internal" href="how-to.html"><span class="doc">How-to Guides</span></a><a class="headerlink" href="#how-to" title="Permalink to this heading"></a></h3>
 <p>Practical step-by-step guides for the more experienced user.</p>
 <div class="toctree-wrapper compound">
 <p class="caption" role="heading"><span class="caption-text">How-to Guides</span></p>
@@ -170,7 +171,7 @@ side-bar.</p>
 </div>
 </section>
 <section class="columns" id="explanations">
-<h3><a class="reference internal" href="explanations.html"><span class="doc">Explanations</span></a><a class="headerlink" href="#explanations" title="Permalink to this headline"></a></h3>
+<h3><a class="reference internal" href="explanations.html"><span class="doc">Explanations</span></a><a class="headerlink" href="#explanations" title="Permalink to this heading"></a></h3>
 <p>Explanation of how the library works and why it works that way.</p>
 <div class="toctree-wrapper compound">
 <p class="caption" role="heading"><span class="caption-text">Explanations</span></p>
@@ -187,7 +188,7 @@ side-bar.</p>
 </div>
 </section>
 <section class="columns" id="reference">
-<h3><a class="reference internal" href="reference.html"><span class="doc">Reference</span></a><a class="headerlink" href="#reference" title="Permalink to this headline"></a></h3>
+<h3><a class="reference internal" href="reference.html"><span class="doc">Reference</span></a><a class="headerlink" href="#reference" title="Permalink to this heading"></a></h3>
 <p>Practical step-by-step guides for the more experienced user.</p>
 <div class="toctree-wrapper compound">
 <p class="caption" role="heading"><span class="caption-text">Reference</span></p>
@@ -205,10 +206,15 @@ side-bar.</p>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="reference/contributing.html">Contributing</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="reference/contributing.html#running-the-tests">Running the tests</a></li>
+<li class="toctree-l2"><a class="reference internal" href="reference/contributing.html#running-the-tests">Running the tests</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="reference/contributing.html#to-run-in-a-container">To run in a container</a></li>
+<li class="toctree-l3"><a class="reference internal" href="reference/contributing.html#to-run-locally">To run locally</a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="reference/contributing.html#code-styling">Code Styling</a></li>
 <li class="toctree-l2"><a class="reference internal" href="reference/contributing.html#documentation">Documentation</a></li>
 <li class="toctree-l2"><a class="reference internal" href="reference/contributing.html#release-process">Release Process</a></li>
+<li class="toctree-l2"><a class="reference internal" href="reference/contributing.html#checking-dependencies">Checking Dependencies</a></li>
 <li class="toctree-l2"><a class="reference internal" href="reference/contributing.html#updating-the-tools">Updating the tools</a></li>
 </ul>
 </li>
@@ -218,7 +224,7 @@ side-bar.</p>
 </div>
 </section>
 <section class="endcolumns" id="about-the-documentation">
-<h3>About the documentation<a class="headerlink" href="#about-the-documentation" title="Permalink to this headline"></a></h3>
+<h3>About the documentation<a class="headerlink" href="#about-the-documentation" title="Permalink to this heading"></a></h3>
 <p><a class="reference external" href="https://documentation.divio.com">Why is the documentation structured this way?</a></p>
 </section>
 </section>
