@@ -70,7 +70,7 @@ def make_entity_class(definition: Definition, support: Support) -> Type[Entity]:
         # make_dataclass can cope with string types, so cast them here rather
         # than lookup
         metadata: Any = None
-        arg_type: type
+        arg_type: Type
         if isinstance(arg, ObjectArg):
 
             def lookup_instance(id):
@@ -90,17 +90,23 @@ def make_entity_class(definition: Definition, support: Support) -> Type[Entity]:
             # arg.type is str, int, float, etc.
             arg_type = getattr(builtins, arg.type)
         if arg.description:
-            arg_type = A[arg_type, desc(arg.description)]
+            arg_type = A[arg_type, desc(arg.description)]  # type: ignore
         if arg.default is Undefined:
             fld = field(metadata=metadata)
         else:
             fld = field(metadata=metadata, default=arg.default)
-        fields.append((arg.name, arg_type, fld))
+        fields.append((arg.name, arg_type, fld))  # type: ignore
 
     # put the literal name in as 'type' for this Entity this gives us
     # a unique key for each of the entity types we may instantiate
     full_name = f"{support.module}.{definition.name}"
-    fields.append(("type", Literal[full_name], field(default=cast(Any, full_name))))
+    fields.append(
+        (
+            "type",
+            Literal[full_name],  # type: ignore
+            field(default=cast(Any, full_name)),
+        )
+    )
 
     # add a field so we can control rendering of the entity without having to delete
     # it
