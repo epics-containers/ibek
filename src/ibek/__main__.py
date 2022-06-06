@@ -106,8 +106,9 @@ def build_startup(
     definitions: List[Path] = typer.Argument(
         ..., help="The filepath to a support module definition file"
     ),
-    out: Path = typer.Argument(
-        default="config/ioc.boot", help="Path to output startup script"
+    out: Path = typer.Option(
+        default="config/ioc.boot",
+        help="Path to output startup script",
     ),
 ):
     """
