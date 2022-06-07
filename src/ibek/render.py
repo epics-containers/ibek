@@ -61,6 +61,15 @@ def render_database(instance: Entity) -> Optional[str]:
     jinja_template = Template(jinja_txt)
     db_txt = jinja_template.render(asdict(instance))
 
+    # run the result through jinja again so we can refer to args for arg defaults
+    # e.g.
+    # - type: str
+    #   name: VMAX
+    #   description: Max Velocity (EGU/s)
+    #   default: "{{VELO}}""
+    db_template = Template(db_txt)
+    db_txt = db_template.render(asdict(instance))
+
     return db_txt
 
 
