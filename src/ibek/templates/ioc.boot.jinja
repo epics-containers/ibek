@@ -6,7 +6,7 @@ dbLoadDatabase "dbd/ioc.dbd"
 ioc_registerRecordDeviceDriver(pdbbase)
 
 {{ script_elements }}
-{{ database_elements }}
+dbLoadRecords("/tmp/ioc.db")
 iocInit()
 {% if post_ioc_init_elements %}
 {{ post_ioc_init_elements -}}

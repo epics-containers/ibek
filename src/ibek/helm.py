@@ -65,9 +65,11 @@ def load_ioc_yaml(ioc_instance_yaml: Path, no_schema: bool = False) -> Dict:
     return entity_dict
 
 
-def create_boot_script(ioc_instance_yaml: Path, definition_yaml: List[Path]) -> str:
+def ioc_deserialize(ioc_instance_yaml: Path, definition_yaml: List[Path]) -> IOC:
     """
-    Create the boot script for an IOC
+    Takes an ioc instance entities file, list of generic ioc definitions files.
+
+    Returns an in memory object graph of the resulting ioc instance
     """
     # Read and load the support module definitions
     for yaml in definition_yaml:
@@ -75,17 +77,29 @@ def create_boot_script(ioc_instance_yaml: Path, definition_yaml: List[Path]) -> 
         make_entity_classes(support)
 
     # Create an IOC instance from it
-    ioc_instance = IOC.deserialize(YAML(typ="safe").load(ioc_instance_yaml))
+    return IOC.deserialize(YAML(typ="safe").load(ioc_instance_yaml))
 
-    # Open jinja template for startup script and fill it in with script
-    # elements and database elements described by IOC Entity objects
+
+def create_db_script(ioc_instance: IOC) -> str:
+    """
+    Create make_db.sh script for expanding the database templates
+    """
+    with open(TEMPLATES / "make_db.jinja", "r") as f:
+        template = Template(f.read())
+
+    return template.render(database_elements=render_database_elements(ioc_instance))
+
+
+def create_boot_script(ioc_instance: IOC) -> str:
+    """
+    Create the boot script for an IOC
+    """
     with open(TEMPLATES / "ioc.boot.jinja", "r") as f:
         template = Template(f.read())
 
     return template.render(
         env_var_elements=render_environment_variable_elements(ioc_instance),
         script_elements=render_script_elements(ioc_instance),
-        database_elements=render_database_elements(ioc_instance),
         post_ioc_init_elements=render_post_ioc_init_elements(ioc_instance),
     )
 

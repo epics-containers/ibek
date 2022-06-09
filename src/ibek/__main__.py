@@ -9,7 +9,13 @@ from ruamel.yaml import YAML
 
 from ibek import __version__
 
-from .helm import create_boot_script, create_helm, load_ioc_yaml
+from .helm import (
+    create_boot_script,
+    create_db_script,
+    create_helm,
+    ioc_deserialize,
+    load_ioc_yaml,
+)
 from .ioc import IOC, make_entity_classes
 from .support import Support
 
@@ -110,16 +116,25 @@ def build_startup(
         default="config/ioc.boot",
         help="Path to output startup script",
     ),
+    db_out: Path = typer.Option(
+        default="config/make_db.sh",
+        help="Path to output database expansion shell script",
+    ),
 ):
     """
     Build a startup script for an IOC instance
     """
-    script_txt = create_boot_script(
-        ioc_instance_yaml=instance, definition_yaml=definitions
-    )
+
+    ioc_instance = ioc_deserialize(instance, definitions)
+    script_txt = create_boot_script(ioc_instance)
 
     with out.open("w") as stream:
         stream.write(script_txt)
+
+    db_txt = create_db_script(ioc_instance)
+
+    with db_out.open("w") as stream:
+        stream.write(db_txt)
 
 
 # test with:
