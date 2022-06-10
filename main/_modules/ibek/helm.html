@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ibek.helm &mdash; ibek 0.4.dev73+g94e7aaf documentation</title>
+  <title>ibek.helm &mdash; ibek 0.4.dev76+g4fd8c8e documentation</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/graphviz.css" type="text/css" />
@@ -154,9 +154,11 @@
     <span class="k">return</span> <span class="n">entity_dict</span></div>
 
 
-<div class="viewcode-block" id="create_boot_script"><a class="viewcode-back" href="../../reference/api.html#ibek.helm.create_boot_script">[docs]</a><span class="k">def</span> <span class="nf">create_boot_script</span><span class="p">(</span><span class="n">ioc_instance_yaml</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span> <span class="n">definition_yaml</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Path</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<div class="viewcode-block" id="ioc_deserialize"><a class="viewcode-back" href="../../reference/api.html#ibek.helm.ioc_deserialize">[docs]</a><span class="k">def</span> <span class="nf">ioc_deserialize</span><span class="p">(</span><span class="n">ioc_instance_yaml</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span> <span class="n">definition_yaml</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Path</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">IOC</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Create the boot script for an IOC</span>
+<span class="sd">    Takes an ioc instance entities file, list of generic ioc definitions files.</span>
+
+<span class="sd">    Returns an in memory object graph of the resulting ioc instance</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># Read and load the support module definitions</span>
     <span class="k">for</span> <span class="n">yaml</span> <span class="ow">in</span> <span class="n">definition_yaml</span><span class="p">:</span>
@@ -164,17 +166,29 @@
         <span class="n">make_entity_classes</span><span class="p">(</span><span class="n">support</span><span class="p">)</span>
 
     <span class="c1"># Create an IOC instance from it</span>
-    <span class="n">ioc_instance</span> <span class="o">=</span> <span class="n">IOC</span><span class="o">.</span><span class="n">deserialize</span><span class="p">(</span><span class="n">YAML</span><span class="p">(</span><span class="n">typ</span><span class="o">=</span><span class="s2">&quot;safe&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">ioc_instance_yaml</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">IOC</span><span class="o">.</span><span class="n">deserialize</span><span class="p">(</span><span class="n">YAML</span><span class="p">(</span><span class="n">typ</span><span class="o">=</span><span class="s2">&quot;safe&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">ioc_instance_yaml</span><span class="p">))</span></div>
 
-    <span class="c1"># Open jinja template for startup script and fill it in with script</span>
-    <span class="c1"># elements and database elements described by IOC Entity objects</span>
+
+<div class="viewcode-block" id="create_db_script"><a class="viewcode-back" href="../../reference/api.html#ibek.helm.create_db_script">[docs]</a><span class="k">def</span> <span class="nf">create_db_script</span><span class="p">(</span><span class="n">ioc_instance</span><span class="p">:</span> <span class="n">IOC</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Create make_db.sh script for expanding the database templates</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">TEMPLATES</span> <span class="o">/</span> <span class="s2">&quot;make_db.jinja&quot;</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">template</span> <span class="o">=</span> <span class="n">Template</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">())</span>
+
+    <span class="k">return</span> <span class="n">template</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="n">database_elements</span><span class="o">=</span><span class="n">render_database_elements</span><span class="p">(</span><span class="n">ioc_instance</span><span class="p">))</span></div>
+
+
+<div class="viewcode-block" id="create_boot_script"><a class="viewcode-back" href="../../reference/api.html#ibek.helm.create_boot_script">[docs]</a><span class="k">def</span> <span class="nf">create_boot_script</span><span class="p">(</span><span class="n">ioc_instance</span><span class="p">:</span> <span class="n">IOC</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Create the boot script for an IOC</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">TEMPLATES</span> <span class="o">/</span> <span class="s2">&quot;ioc.boot.jinja&quot;</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
         <span class="n">template</span> <span class="o">=</span> <span class="n">Template</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">())</span>
 
     <span class="k">return</span> <span class="n">template</span><span class="o">.</span><span class="n">render</span><span class="p">(</span>
         <span class="n">env_var_elements</span><span class="o">=</span><span class="n">render_environment_variable_elements</span><span class="p">(</span><span class="n">ioc_instance</span><span class="p">),</span>
         <span class="n">script_elements</span><span class="o">=</span><span class="n">render_script_elements</span><span class="p">(</span><span class="n">ioc_instance</span><span class="p">),</span>
-        <span class="n">database_elements</span><span class="o">=</span><span class="n">render_database_elements</span><span class="p">(</span><span class="n">ioc_instance</span><span class="p">),</span>
         <span class="n">post_ioc_init_elements</span><span class="o">=</span><span class="n">render_post_ioc_init_elements</span><span class="p">(</span><span class="n">ioc_instance</span><span class="p">),</span>
     <span class="p">)</span></div>
 

@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Modules, Definitions and Entities &mdash; ibek 0.4.dev73+g94e7aaf documentation</title>
+  <title>Modules, Definitions and Entities &mdash; ibek 0.4.dev76+g4fd8c8e documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../_static/graphviz.css" type="text/css" />
@@ -651,11 +651,7 @@ file that ibek will generate from it.</p>
 <span class="n">pmacCreateController</span><span class="p">(</span><span class="n">BL45P</span><span class="o">-</span><span class="n">MO</span><span class="o">-</span><span class="n">BRICK</span><span class="o">-</span><span class="mi">01</span><span class="p">,</span> <span class="n">BRICK1port</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">500</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
 <span class="n">pmacCreateAxes</span><span class="p">(</span><span class="n">BL45P</span><span class="o">-</span><span class="n">MO</span><span class="o">-</span><span class="n">BRICK</span><span class="o">-</span><span class="mi">01</span><span class="p">,</span> <span class="mi">8</span><span class="p">)</span>
 
-<span class="n">dbLoadRecords</span><span class="p">(</span><span class="s2">&quot;pmacController.template&quot;</span><span class="p">,</span> <span class="s2">&quot;PMAC=BL45P-MO-STEP-01:&quot;</span><span class="p">)</span>
-<span class="n">dbLoadRecords</span><span class="p">(</span><span class="s2">&quot;pmacStatus.template&quot;</span><span class="p">,</span> <span class="s2">&quot;PMAC=BL45P-MO-STEP-01:&quot;</span><span class="p">)</span>
-<span class="n">dbLoadRecords</span><span class="p">(</span><span class="s2">&quot;$(PMAC)/db/dls_pmac_asyn_motor.template&quot;</span><span class="p">,</span> <span class="s2">&quot;ADDR=1, P=BL45P-MO-THIN-01, M=:X1, PORT=BL45P-MO-BRICK-01, DESC=, MRES=0.001, VELO=1.0, PREC=3.0, EGU=mm, TWV=1, DTYP=asynMotor, DIR=0, VBAS=1.0, VMAX=$(VELO), ACCL=0.5, BDST=0.0, BVEL=0.0, BACC=0.0, DHLM=10000.0, DLLM=, HLM=0.0, LLM=0.0, HLSV=MAJOR, INIT=, SREV=1000.0, RRES=0.0, ERES=0.0, JAR=0.0, UEIP=0, RDBL=0, RLINK=, RTRY=0, DLY=0.0, OFF=0.0, RDBD=0.0, FOFF=0, ADEL=0.0, NTM=1, FEHIGH=, FEHIHI=0.0, FEHHSV=NO_ALARM, FEHSV=NO_ALARM, SCALE=1, HOMEVIS=1, HOMEVISSTR=, name=X1 motor, alh=, gda_name=none, gda_desc=$(DESC), SPORT=BRICK1port, HOME=$(P), PMAC=BL45P-MO-BRICK-01, ALLOW_HOMED_SET=#&quot;</span><span class="p">)</span>
-<span class="n">dbLoadRecords</span><span class="p">(</span><span class="s2">&quot;$(PMAC)/db/dls_pmac_asyn_motor.template&quot;</span><span class="p">,</span> <span class="s2">&quot;ADDR=2, P=BL45P-MO-THIN-01, M=:Y1, PORT=BL45P-MO-BRICK-01, DESC=, MRES=0.001, VELO=1.0, PREC=3.0, EGU=mm, TWV=1, DTYP=asynMotor, DIR=0, VBAS=1.0, VMAX=$(VELO), ACCL=0.5, BDST=0.0, BVEL=0.0, BACC=0.0, DHLM=10000.0, DLLM=, HLM=0.0, LLM=0.0, HLSV=MAJOR, INIT=, SREV=1000.0, RRES=0.0, ERES=0.0, JAR=0.0, UEIP=0, RDBL=0, RLINK=, RTRY=0, DLY=0.0, OFF=0.0, RDBD=0.0, FOFF=0, ADEL=0.0, NTM=1, FEHIGH=, FEHIHI=0.0, FEHHSV=NO_ALARM, FEHSV=NO_ALARM, SCALE=1, HOMEVIS=1, HOMEVISSTR=, name=Y1 motor, alh=, gda_name=none, gda_desc=$(DESC), SPORT=BRICK1port, HOME=$(P), PMAC=BL45P-MO-BRICK-01, ALLOW_HOMED_SET=#&quot;</span><span class="p">)</span>
-
+<span class="n">dbLoadRecords</span><span class="p">(</span><span class="s2">&quot;/tmp/ioc.db&quot;</span><span class="p">)</span>
 <span class="n">iocInit</span><span class="p">()</span>
 </pre></div>
 </div>
