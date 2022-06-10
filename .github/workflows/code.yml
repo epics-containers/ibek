@@ -118,14 +118,19 @@ jobs:
           name: ${{ matrix.python }}/${{ matrix.os }}/${{ matrix.lock }}
           files: cov.xml
 
-      - name: Upload lockfiles
+      - name: Generate ibek.defs.schema.json
+        run: |
+          ibek ibek-schema ibek.defs.schema.json
+
+      - name: Upload build files
         if: matrix.lock
         uses: actions/upload-artifact@v2
         with:
-          name: lockfiles
+          name: buildfiles
           path: |
             requirements.txt
             requirements_dev.txt
+            ibek.defs.schema.json
 
   release:
     needs: [lint, wheel, test]
@@ -144,7 +149,7 @@ jobs:
         with:
           files: |
             artifacts/dist/*
-            artifacts/lockfiles/*
+            artifacts/buildfiles/*
           generate_release_notes: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
