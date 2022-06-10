@@ -1,4 +1,4 @@
-cd "$(TOP)"
+cd "/repos/epics/ioc"
 
 dbLoadDatabase "dbd/ioc.dbd"
 ioc_registerRecordDeviceDriver(pdbbase)
