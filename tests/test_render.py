@@ -60,8 +60,10 @@ def test_geobrick_database(pmac_classes):
     db_txt = render_database(pmac_geobrick_instance)
 
     assert (
-        db_txt == 'dbLoadRecords("pmacController.template", "PMAC=geobrick_one")\n'
-        'dbLoadRecords("pmacStatus.template", "PMAC=geobrick_one")'
+        db_txt == 'msi -I${EPICS_DB_INCLUDE_PATH} -M"PMAC=geobrick_one"'
+        ' "pmacController.template"\n'
+        'msi -I${EPICS_DB_INCLUDE_PATH} -M"PMAC=geobrick_one"'
+        ' "pmacStatus.template"'
     )
 
 
@@ -159,8 +161,9 @@ def test_entity_disabled_does_not_render_elements(pmac_classes, epics_classes):
 
     # Render database
     expected_database = (
-        'dbLoadRecords("pmacController.template", "PMAC=geobrick_one")\n'
-        'dbLoadRecords("pmacStatus.template", "PMAC=geobrick_one")\n'
+        'msi -I${EPICS_DB_INCLUDE_PATH} -M"PMAC=geobrick_one"'
+        ' "pmacController.template"\n'
+        'msi -I${EPICS_DB_INCLUDE_PATH} -M"PMAC=geobrick_one" "pmacStatus.template"\n'
     )
     database = render_database_elements(ioc)
     assert database == expected_database

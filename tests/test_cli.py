@@ -120,8 +120,17 @@ def test_build_startup_single(tmp_path: Path, samples: Path):
     entity_file = samples / "yaml" / "bl45p-mo-ioc-02.ibek.entities.yaml"
     definition_file = samples / "yaml" / "pmac.ibek.defs.yaml"
     out_file = tmp_path / "ioc.boot"
+    out_db = tmp_path / "make_db.sh"
 
-    run_cli("build-startup", entity_file, definition_file, "--out", out_file)
+    run_cli(
+        "build-startup",
+        entity_file,
+        definition_file,
+        "--out",
+        out_file,
+        "--db-out",
+        out_db,
+    )
 
     example_boot = (samples / "helm" / "ioc.boot").read_text()
     actual_boot = out_file.read_text()
@@ -139,6 +148,7 @@ def test_build_startup_multiple(tmp_path: Path, samples: Path):
     definition_file1 = samples / "yaml" / "asyn.ibek.defs.yaml"
     definition_file2 = samples / "yaml" / "pmac.ibek.defs.yaml"
     out_file = tmp_path / "ioc.boot"
+    out_db = tmp_path / "make_db.sh"
 
     run_cli(
         "build-startup",
@@ -147,6 +157,8 @@ def test_build_startup_multiple(tmp_path: Path, samples: Path):
         definition_file2,
         "--out",
         out_file,
+        "--db-out",
+        out_db,
     )
 
     example_boot = (samples / "helm" / "bl45p-mo-ioc-03.boot").read_text()
@@ -166,6 +178,7 @@ def test_build_startup_env_vars_and_post_ioc_init(tmp_path: Path, samples: Path)
     definition_file1 = samples / "yaml" / "epics.ibek.defs.yaml"
     definition_file2 = samples / "yaml" / "pmac.ibek.defs.yaml"
     out_file = tmp_path / "ioc.boot"
+    out_db = tmp_path / "make_db.sh"
 
     run_cli(
         "build-startup",
@@ -174,6 +187,8 @@ def test_build_startup_env_vars_and_post_ioc_init(tmp_path: Path, samples: Path)
         definition_file2,
         "--out",
         out_file,
+        "--db-out",
+        out_db,
     )
 
     example_boot = (samples / "helm" / "bl45p-mo-ioc-04.boot").read_text()

@@ -48,6 +48,8 @@ def render_database(instance: Entity) -> Optional[str]:
     # include list entries expand to e.g. P={{ P }}
     jinja_arg = Template('{{ arg }}={{ "{{" + arg + "}}" }}')
 
+    # TODO review need for Jinja in include args
+    #   Jinja render define args then use fstring to combine
     for template in templates:
         db_file = template.file.strip("\n")
         db_args = template.define_args.splitlines()
@@ -56,7 +58,9 @@ def render_database(instance: Entity) -> Optional[str]:
         ]
         db_arg_string = ", ".join(db_args + include_list)
 
-        jinja_txt += f'dbLoadRecords("{db_file}", ' f'"{db_arg_string}")\n'
+        jinja_txt += (
+            f'msi -I${{EPICS_DB_INCLUDE_PATH}} -M"{db_arg_string}" "{db_file}"\n'
+        )
 
     jinja_template = Template(jinja_txt)
     db_txt = jinja_template.render(asdict(instance))

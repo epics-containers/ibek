@@ -29,4 +29,7 @@ boot=${config_dir}/ioc.boot
 # Output to /tmp for guarenteed writability
 msi -MTOP=${TOP},THIS_DIR=${config_dir},ADCORE=${adcore} ${boot} > /tmp/ioc.boot
 
+if [ -f make_db.sh ]; then
+    bash ./make_db.sh > /tmp/ioc.db
+fi
 exec ${IOC}/bin/linux-x86_64/ioc /tmp/ioc.boot
