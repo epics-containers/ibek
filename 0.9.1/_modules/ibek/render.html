@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ibek.render &mdash; ibek 0.9.1 documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/graphviz.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/theme_overrides.css" type="text/css" />
+    <link rel="shortcut icon" href="../../_static/ibek-favicon.ico"/>
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: rgb(7, 43, 93)" >
+            <a href="../../index.html" class="icon icon-home"> ibek
+            <img src="../../_static/ibek-logo.svg" class="logo" alt="Logo"/>
+          </a>
+              <div class="version">
+                0.9.1
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Tutorials</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/installation.html">Installation</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">How-to Guides</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../how-to/edit-yaml.html">YAML schema</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Explanations</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../explanations/entities.html">Modules, Definitions and Entities</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../reference/api.html">API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference/contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/epics-containers/ibek/releases">Releases</a></li>
+<li class="toctree-l1"><a class="reference external" href="genindex.html#http://">Index</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu"  style="background: rgb(7, 43, 93)" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">ibek</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+      <li>ibek.render</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for ibek.render</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Functions for rendering lines in the boot script using Jinja2</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">from</span> <span class="nn">dataclasses</span> <span class="kn">import</span> <span class="n">asdict</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Optional</span>
+
+<span class="kn">from</span> <span class="nn">jinja2</span> <span class="kn">import</span> <span class="n">Template</span>
+
+<span class="kn">from</span> <span class="nn">.ioc</span> <span class="kn">import</span> <span class="n">IOC</span><span class="p">,</span> <span class="n">Entity</span>
+
+
+<div class="viewcode-block" id="render_template_from_entity_attribute"><a class="viewcode-back" href="../../reference/api.html#ibek.render.render_template_from_entity_attribute">[docs]</a><span class="k">def</span> <span class="nf">render_template_from_entity_attribute</span><span class="p">(</span>
+    <span class="n">instance</span><span class="p">:</span> <span class="n">Entity</span><span class="p">,</span> <span class="n">attribute</span><span class="p">:</span> <span class="nb">str</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Get the rendered template based on an instance attribute</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">attribute</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">instance</span><span class="o">.</span><span class="n">__definition__</span><span class="p">,</span> <span class="n">attribute</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">attribute</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">None</span>
+    <span class="n">all_lines</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">attribute</span><span class="p">)</span>
+    <span class="n">jinja_template</span> <span class="o">=</span> <span class="n">Template</span><span class="p">(</span><span class="n">all_lines</span><span class="p">)</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">jinja_template</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="n">asdict</span><span class="p">(</span><span class="n">instance</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">result</span></div>
+
+
+<div class="viewcode-block" id="render_script"><a class="viewcode-back" href="../../reference/api.html#ibek.render.render_script">[docs]</a><span class="k">def</span> <span class="nf">render_script</span><span class="p">(</span><span class="n">instance</span><span class="p">:</span> <span class="n">Entity</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    render the startup script by combining the jinja template from</span>
+<span class="sd">    an entity with the arguments from an Entity</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">render_template_from_entity_attribute</span><span class="p">(</span><span class="n">instance</span><span class="p">,</span> <span class="s2">&quot;script&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="render_database"><a class="viewcode-back" href="../../reference/api.html#ibek.render.render_database">[docs]</a><span class="k">def</span> <span class="nf">render_database</span><span class="p">(</span><span class="n">instance</span><span class="p">:</span> <span class="n">Entity</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    render the lines required to instantiate database by combining the</span>
+<span class="sd">    templates from the Entity&#39;s database list with the arguments from</span>
+<span class="sd">    an Entity</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">templates</span> <span class="o">=</span> <span class="n">instance</span><span class="o">.</span><span class="n">__definition__</span><span class="o">.</span><span class="n">databases</span>
+    <span class="c1"># The entity may not instantiate any database templates</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">templates</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">None</span>
+    <span class="n">jinja_txt</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+    <span class="c1"># include list entries expand to e.g. P={{ P }}</span>
+    <span class="n">jinja_arg</span> <span class="o">=</span> <span class="n">Template</span><span class="p">(</span><span class="s1">&#39;{{ arg }}={{ &quot;{{&quot; + arg + &quot;}}&quot; }}&#39;</span><span class="p">)</span>
+
+    <span class="c1"># TODO review need for Jinja in include args</span>
+    <span class="c1">#   Jinja render define args then use fstring to combine</span>
+    <span class="k">for</span> <span class="n">template</span> <span class="ow">in</span> <span class="n">templates</span><span class="p">:</span>
+        <span class="n">db_file</span> <span class="o">=</span> <span class="n">template</span><span class="o">.</span><span class="n">file</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">db_args</span> <span class="o">=</span> <span class="n">template</span><span class="o">.</span><span class="n">define_args</span><span class="o">.</span><span class="n">splitlines</span><span class="p">()</span>
+        <span class="n">include_list</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">jinja_arg</span><span class="o">.</span><span class="n">render</span><span class="p">({</span><span class="s2">&quot;arg&quot;</span><span class="p">:</span> <span class="n">arg</span><span class="p">})</span> <span class="k">for</span> <span class="n">arg</span> <span class="ow">in</span> <span class="n">template</span><span class="o">.</span><span class="n">include_args</span> <span class="ow">or</span> <span class="p">[]</span>
+        <span class="p">]</span>
+        <span class="n">db_arg_string</span> <span class="o">=</span> <span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">db_args</span> <span class="o">+</span> <span class="n">include_list</span><span class="p">)</span>
+
+        <span class="n">jinja_txt</span> <span class="o">+=</span> <span class="p">(</span>
+            <span class="sa">f</span><span class="s1">&#39;msi -I$</span><span class="se">{{</span><span class="s1">EPICS_DB_INCLUDE_PATH</span><span class="se">}}</span><span class="s1"> -M&quot;</span><span class="si">{</span><span class="n">db_arg_string</span><span class="si">}</span><span class="s1">&quot; &quot;</span><span class="si">{</span><span class="n">db_file</span><span class="si">}</span><span class="s1">&quot;</span><span class="se">\n</span><span class="s1">&#39;</span>
+        <span class="p">)</span>
+
+    <span class="n">jinja_template</span> <span class="o">=</span> <span class="n">Template</span><span class="p">(</span><span class="n">jinja_txt</span><span class="p">)</span>
+    <span class="n">db_txt</span> <span class="o">=</span> <span class="n">jinja_template</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="n">asdict</span><span class="p">(</span><span class="n">instance</span><span class="p">))</span>
+
+    <span class="c1"># run the result through jinja again so we can refer to args for arg defaults</span>
+    <span class="c1"># e.g.</span>
+    <span class="c1"># - type: str</span>
+    <span class="c1">#   name: VMAX</span>
+    <span class="c1">#   description: Max Velocity (EGU/s)</span>
+    <span class="c1">#   default: &quot;{{VELO}}&quot;&quot;</span>
+    <span class="n">db_template</span> <span class="o">=</span> <span class="n">Template</span><span class="p">(</span><span class="n">db_txt</span><span class="p">)</span>
+    <span class="n">db_txt</span> <span class="o">=</span> <span class="n">db_template</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="n">asdict</span><span class="p">(</span><span class="n">instance</span><span class="p">))</span>
+
+    <span class="k">return</span> <span class="n">db_txt</span></div>
+
+
+<div class="viewcode-block" id="render_environment_variables"><a class="viewcode-back" href="../../reference/api.html#ibek.render.render_environment_variables">[docs]</a><span class="k">def</span> <span class="nf">render_environment_variables</span><span class="p">(</span><span class="n">instance</span><span class="p">:</span> <span class="n">Entity</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    render the environment variable elements by combining the jinja template</span>
+<span class="sd">    from an entity with the arguments from an Entity</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">variables</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">instance</span><span class="o">.</span><span class="n">__definition__</span><span class="p">,</span> <span class="s2">&quot;env_vars&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">variables</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">None</span>
+    <span class="n">instance_as_dict</span> <span class="o">=</span> <span class="n">asdict</span><span class="p">(</span><span class="n">instance</span><span class="p">)</span>
+    <span class="n">env_var_txt</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+    <span class="k">for</span> <span class="n">variable</span> <span class="ow">in</span> <span class="n">variables</span><span class="p">:</span>
+        <span class="c1"># Substitute the name and value of the environment variable from args</span>
+        <span class="n">env_template</span> <span class="o">=</span> <span class="n">Template</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;epicsEnvSet </span><span class="se">\&quot;</span><span class="si">{</span><span class="n">variable</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="se">\&quot;</span><span class="s2">, &#39;</span><span class="si">{</span><span class="n">variable</span><span class="o">.</span><span class="n">value</span><span class="si">}</span><span class="s2">&#39;&quot;</span><span class="p">)</span>
+        <span class="n">env_var_txt</span> <span class="o">+=</span> <span class="n">env_template</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="n">instance_as_dict</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">env_var_txt</span></div>
+
+
+<div class="viewcode-block" id="render_post_ioc_init"><a class="viewcode-back" href="../../reference/api.html#ibek.render.render_post_ioc_init">[docs]</a><span class="k">def</span> <span class="nf">render_post_ioc_init</span><span class="p">(</span><span class="n">instance</span><span class="p">:</span> <span class="n">Entity</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    render the post-iocInit entries by combining the jinja template</span>
+<span class="sd">    from an entity with the arguments from an Entity</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">render_template_from_entity_attribute</span><span class="p">(</span><span class="n">instance</span><span class="p">,</span> <span class="s2">&quot;post_ioc_init&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="render_elements"><a class="viewcode-back" href="../../reference/api.html#ibek.render.render_elements">[docs]</a><span class="k">def</span> <span class="nf">render_elements</span><span class="p">(</span><span class="n">ioc</span><span class="p">:</span> <span class="n">IOC</span><span class="p">,</span> <span class="n">element</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Render elements of a given IOC instance based on calling the correct method</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">method</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">modules</span><span class="p">[</span><span class="vm">__name__</span><span class="p">],</span> <span class="n">element</span><span class="p">)</span>
+    <span class="n">elements</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+    <span class="k">for</span> <span class="n">instance</span> <span class="ow">in</span> <span class="n">ioc</span><span class="o">.</span><span class="n">entities</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">instance</span><span class="o">.</span><span class="n">entity_enabled</span><span class="p">:</span>
+            <span class="n">element</span> <span class="o">=</span> <span class="n">method</span><span class="p">(</span><span class="n">instance</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">element</span><span class="p">:</span>
+                <span class="n">elements</span> <span class="o">+=</span> <span class="n">element</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
+    <span class="k">return</span> <span class="n">elements</span></div>
+
+
+<div class="viewcode-block" id="render_script_elements"><a class="viewcode-back" href="../../reference/api.html#ibek.render.render_script_elements">[docs]</a><span class="k">def</span> <span class="nf">render_script_elements</span><span class="p">(</span><span class="n">ioc</span><span class="p">:</span> <span class="n">IOC</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Render all of the startup script entries for a given IOC instance</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">render_elements</span><span class="p">(</span><span class="n">ioc</span><span class="p">,</span> <span class="s2">&quot;render_script&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="render_database_elements"><a class="viewcode-back" href="../../reference/api.html#ibek.render.render_database_elements">[docs]</a><span class="k">def</span> <span class="nf">render_database_elements</span><span class="p">(</span><span class="n">ioc</span><span class="p">:</span> <span class="n">IOC</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Render all of the DBLoadRecords entries for a given IOC instance</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">render_elements</span><span class="p">(</span><span class="n">ioc</span><span class="p">,</span> <span class="s2">&quot;render_database&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="render_environment_variable_elements"><a class="viewcode-back" href="../../reference/api.html#ibek.render.render_environment_variable_elements">[docs]</a><span class="k">def</span> <span class="nf">render_environment_variable_elements</span><span class="p">(</span><span class="n">ioc</span><span class="p">:</span> <span class="n">IOC</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Render all of the environment variable entries for a given IOC instance</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">render_elements</span><span class="p">(</span><span class="n">ioc</span><span class="p">,</span> <span class="s2">&quot;render_environment_variables&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="render_post_ioc_init_elements"><a class="viewcode-back" href="../../reference/api.html#ibek.render.render_post_ioc_init_elements">[docs]</a><span class="k">def</span> <span class="nf">render_post_ioc_init_elements</span><span class="p">(</span><span class="n">ioc</span><span class="p">:</span> <span class="n">IOC</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Render all of the post-iocInit elements for a given IOC instance</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">render_elements</span><span class="p">(</span><span class="n">ioc</span><span class="p">,</span> <span class="s2">&quot;render_post_ioc_init&quot;</span><span class="p">)</span></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p></p>
+  </div>
+
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+   
+  <div id="other-versions-div" class="rst-versions" data-toggle="rst-versions" role="note" aria-label="Versions" style="visibility: hidden">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      <span class="fa fa-book"> Other Versions</span>
+      0.9.1
+      <span class="fa fa-caret-down"></span>
+    </span>
+    <div class="rst-other-versions">
+      <dl id="other-versions-dl"/>
+    </div>
+  </div>
+  <script>
+    function addVersion(name) {
+      var dd = document.createElement("dd");
+      var a = document.createElement("a");
+      a.href = "../../../" + name;
+      a.innerText = name;
+      dd.appendChild(a);
+      document.getElementById('other-versions-dl').appendChild(dd);
+    }
+    // Get versions.txt and add a version for each line
+    fetch("../../../versions.txt").then(response => {
+      if (response.ok) {
+        document.getElementById('other-versions-div').style.visibility = "visible";
+        return response.text().then(text => text.split(/\r?\n/).forEach(addVersion))
+      }
+    });
+  </script>
+
+
+</body>
+</html>
