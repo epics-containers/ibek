@@ -17,9 +17,9 @@ entities:
 
   - type: pmac.DlsPmacAsynMotor
     name: X1 motor
-    # TODO previously would have been an object pointing to a pmac.Geobrick
+    # NOTE the completed pmac defs use an object ref here
     PMAC: BL45P-MO-BRICK-01
-    # TODO Previously would have used pmac.PORT, pmac.SPORT
+    # NOTE the completed pmac defs use an object ref here
     PORT: BL45P-MO-BRICK-01
     SPORT: BRICK1port
     axis: 1
