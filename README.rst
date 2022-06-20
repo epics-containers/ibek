@@ -28,15 +28,15 @@ Or if it is a commandline tool then you might put some example commands here::
 
     dls-python3-skeleton person --times=2
 
-.. |code_ci| image:: https://github.com/dls-controls/dls-python3-skeleton/workflows/Code%20CI/badge.svg?branch=master
+.. |code_ci| image:: https://github.com/dls-controls/dls-python3-skeleton/workflows/Code%20CI/badge.svg?branch=main
     :target: https://github.com/dls-controls/dls-python3-skeleton/actions?query=workflow%3A%22Code+CI%22
     :alt: Code CI
 
-.. |docs_ci| image:: https://github.com/dls-controls/dls-python3-skeleton/workflows/Docs%20CI/badge.svg?branch=master
+.. |docs_ci| image:: https://github.com/dls-controls/dls-python3-skeleton/workflows/Docs%20CI/badge.svg?branch=main
     :target: https://github.com/dls-controls/dls-python3-skeleton/actions?query=workflow%3A%22Docs+CI%22
     :alt: Docs CI
 
-.. |coverage| image:: https://codecov.io/gh/dls-controls/dls-python3-skeleton/branch/master/graph/badge.svg
+.. |coverage| image:: https://codecov.io/gh/dls-controls/dls-python3-skeleton/branch/main/graph/badge.svg
     :target: https://codecov.io/gh/dls-controls/dls-python3-skeleton
     :alt: Test Coverage
 

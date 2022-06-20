@@ -17,7 +17,7 @@ release = dls_python3_skeleton.__version__
 # The short X.Y version.
 if "+" in release:
     # Not on a tag
-    version = "master"
+    version = "main"
 else:
     version = release
 
