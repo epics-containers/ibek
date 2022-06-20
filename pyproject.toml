@@ -4,3 +4,6 @@
 # to the last version that didn't add License-File to METADATA
 requires = ["setuptools<57", "wheel==0.33.1"]
 build-backend = "setuptools.build_meta"
+
+[tool.setuptools_scm]
+write_to = "src/python3_pip_skeleton/_version.py"

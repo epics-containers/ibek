@@ -4,15 +4,15 @@
 # list see the documentation:
 # https://www.sphinx-doc.org/en/master/usage/configuration.html
 
-import dls_python3_skeleton
+import python3_pip_skeleton
 
 # -- General configuration ------------------------------------------------
 
 # General information about the project.
-project = "dls-python3-skeleton"
+project = "python3-pip-skeleton"
 
 # The full version, including alpha/beta/rc tags.
-release = dls_python3_skeleton.__version__
+release = python3_pip_skeleton.__version__
 
 # The short X.Y version.
 if "+" in release:
@@ -42,7 +42,17 @@ nitpicky = True
 # generating warnings in "nitpicky mode". Note that type should include the
 # domain name if present. Example entries would be ('py:func', 'int') or
 # ('envvar', 'LD_LIBRARY_PATH').
-nitpick_ignore = [("py:func", "int")]
+nitpick_ignore = [
+    ("py:class", "NoneType"),
+    ("py:class", "'str'"),
+    ("py:class", "'float'"),
+    ("py:class", "'int'"),
+    ("py:class", "'bool'"),
+    ("py:class", "'object'"),
+    ("py:class", "'id'"),
+    ("py:class", "apischema.utils.UndefinedType"),
+    ("py:class", "typing_extensions.Literal"),
+]
 
 # Both the class’ and the __init__ method’s docstring are concatenated and
 # inserted into the main body of the autoclass directive
