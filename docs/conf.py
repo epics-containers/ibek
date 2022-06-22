@@ -17,7 +17,7 @@ release = ibek.__version__
 # The short X.Y version.
 if "+" in release:
     # Not on a tag
-    version = "master"
+    version = "main"
 else:
     version = release
 
@@ -99,6 +99,9 @@ rst_epilog = """
 .. _Diamond Light Source:
     http://www.diamond.ac.uk
 """
+
+# Ignore localhost links for period check that links in docs are valid
+linkcheck_ignore = [r"http://localhost:\d+/"]
 
 # -- Options for HTML output -------------------------------------------------
 

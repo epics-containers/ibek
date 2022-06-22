@@ -32,13 +32,13 @@ This project is approaching completion. The following items are still to do:
     - Add a diagram and more details. Use draw.io for image, and save as SVG
       with source embed in it, save as something.draw.io.svg
 
-    - Add ability to define embedded objects e.g. AsynIp and AsynSerial would
+    - DONE: Add ability to define embedded objects e.g. AsynIp and AsynSerial would
       both be defined by embedding AsynPort (so similar to how original builder.py
       works)
 
     - Add support for enums where you define the possible values inline
 
-    - update helm-template/config/start.sh to call 'ibek build-startup' when it
+    - DONE: update helm-template/config/start.sh to call 'ibek build-startup' when it
       sees a ioc.boot.yaml file in the startup directory. This change requires
       embedding ibek into the epics-base container image.
 

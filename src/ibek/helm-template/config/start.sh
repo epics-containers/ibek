@@ -38,6 +38,7 @@ if [ -f ${startup_src} ] ; then
     # defs="${SUPPORT}/*/ibek/*.ibek.defs.yaml ${TOP}/ibek/*.ibek.defs.yaml"
 
     # TODO - for early development we ship all latest def files in ioc/ibek
+    # These Should Assets published by epics-modules and ioc-pmac
     defs=${TOP}/ibek/*.ibek.defs.yaml
     ibek build-startup ${startup_src} ${defs} --out ${boot} --db-out ${db_src}
 fi
