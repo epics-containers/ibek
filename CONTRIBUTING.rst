@@ -144,16 +144,16 @@ To see a graph of the python package dependency tree type::
 Updating the tools
 ------------------
 
-This module is merged with the dls-python3-skeleton_. This is a generic
+This module is merged with the python3-pip-skeleton_. This is a generic
 Python project structure which provides a means to keep tools and
 techniques in sync between multiple Python projects. To update to the
 latest version of the skeleton, run::
 
-    $ git pull https://github.com/dls-controls/dls-python3-skeleton skeleton
+    $ git pull https://github.com/dls-controls/python3-pip-skeleton skeleton
 
 Any merge conflicts will indicate an area where something has changed that
 conflicts with the setup of the current module. Check the `closed pull requests
-<https://github.com/dls-controls/dls-python3-skeleton/pulls?q=is%3Apr+is%3Aclosed>`_
+<https://github.com/dls-controls/python3-pip-skeleton/pulls?q=is%3Apr+is%3Aclosed>`_
 of the skeleton module for more details.
 
-.. _dls-python3-skeleton: https://dls-controls.github.io/dls-python3-skeleton
+.. _python3-pip-skeleton: https://dls-controls.github.io/dls-python3-skeleton
