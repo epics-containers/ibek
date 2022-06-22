@@ -1,8 +1,8 @@
 # yaml-language-server: $schema=../schemas/ibek.defs.schema.json
 module: pmac
 defs:
-  # TODO - this is basic Geobrick support only. Does not do CS groups or
-  # status screen PVs
+  # NOTE - this is basic Geobrick support only. Does not do CS groups or
+  # See 
   - name: Geobrick
     args:
       - type: str
@@ -29,8 +29,6 @@ defs:
         name: movingPoll
         description: Moving Poll Period in ms
 
-    # axes hard coded to 8 for geobrick (builder.py counted the axes created)
-    # TODO is num_axes is an example of something hard to do in this new approach?
     script:
       - pmacCreateController({{name}}, {{PORT.name}}, 0, {{numAxes}}, {{movingPoll}}, {{idlePoll}})
       - pmacCreateAxes({{name}}, {{numAxes}})

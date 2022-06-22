@@ -36,8 +36,7 @@ defs:
         default: null
       - type: int
         name: bits
-        # TODO we should add enums to ibek's allowed data types
-        # TODO this would require we define the enum values int 'type:' too
+        # Bits, parity, stop could benefit from https://github.com/epics-containers/ibek/issues/34
         description: Bits [8,7,6,5]
         default: null
       - type: str
@@ -55,13 +54,8 @@ defs:
         description: Set hardware flow control on
         default: null
     script:
-      - TODO provide Jinja to generate Startup Entries
-      - note this is interesting because builder.py has a few if clauses
-      - for generating the necessary script
+      - Later tests provide Jinja templated script lines
 
-  # TODO potentially we could break out the common arguments into another object
-  # TODO like AsynPort in builder.py. This would require a change that allows
-  # TODO us to embed definition of one object within another
   - name: AsynIP
     args:
       - type: str
@@ -95,6 +89,4 @@ defs:
         description: IP port to connect to if in simulation mode
         default: null
     script:
-      - TODO provide Jinja to generate Startup Entries
-      - note this is interesting because builder.py has a few if clauses
-      - for generating the necessary script
+      - none

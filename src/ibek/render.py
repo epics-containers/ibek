@@ -45,17 +45,11 @@ def render_database(instance: Entity) -> Optional[str]:
     if not templates:
         return None
     jinja_txt = ""
-    # include list entries expand to e.g. P={{ P }}
-    jinja_arg = Template('{{ arg }}={{ "{{" + arg + "}}" }}')
 
-    # TODO review need for Jinja in include args
-    #   Jinja render define args then use fstring to combine
     for template in templates:
         db_file = template.file.strip("\n")
         db_args = template.define_args.splitlines()
-        include_list = [
-            jinja_arg.render({"arg": arg}) for arg in template.include_args or []
-        ]
+        include_list = [f"{arg}={{{{ {arg} }}}}" for arg in template.include_args or []]
         db_arg_string = ", ".join(db_args + include_list)
 
         jinja_txt += (
