@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Modules, Definitions and Entities &mdash; ibek 0.10.dev2+g2e0704b documentation</title>
+  <title>Modules, Definitions and Entities &mdash; ibek 0.9.2.dev19+g51e342d documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../_static/graphviz.css" type="text/css" />
@@ -35,7 +35,7 @@
             <img src="../_static/ibek-logo.svg" class="logo" alt="Logo"/>
           </a>
               <div class="version">
-                master
+                main
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
@@ -157,8 +157,8 @@ the above arguments</p></li>
 <summary><a>pmac.ibek.defs.yaml</a></summary><div class="highlight-default notranslate"><div class="highlight"><pre><span></span># yaml-language-server: $schema=../schemas/ibek.defs.schema.json
 module: pmac
 defs:
-  # TODO - this is basic Geobrick support only. Does not do CS groups or
-  # status screen PVs
+  # NOTE - this is basic Geobrick support only. Does not do CS groups or
+  # See 
   - name: Geobrick
     args:
       - type: str
@@ -185,8 +185,6 @@ defs:
         name: movingPoll
         description: Moving Poll Period in ms
 
-    # axes hard coded to 8 for geobrick (builder.py counted the axes created)
-    # TODO is num_axes is an example of something hard to do in this new approach?
     script:
       - pmacCreateController({{name}}, {{PORT.name}}, 0, {{numAxes}}, {{movingPoll}}, {{idlePoll}})
       - pmacCreateAxes({{name}}, {{numAxes}})
@@ -619,9 +617,9 @@ file that ibek will generate from it.</p>
 
   <span class="o">-</span> <span class="nb">type</span><span class="p">:</span> <span class="n">pmac</span><span class="o">.</span><span class="n">DlsPmacAsynMotor</span>
     <span class="n">name</span><span class="p">:</span> <span class="n">X1</span> <span class="n">motor</span>
-    <span class="c1"># TODO previously would have been an object pointing to a pmac.Geobrick</span>
+    <span class="c1"># NOTE the completed pmac defs use an object ref here</span>
     <span class="n">PMAC</span><span class="p">:</span> <span class="n">BL45P</span><span class="o">-</span><span class="n">MO</span><span class="o">-</span><span class="n">BRICK</span><span class="o">-</span><span class="mi">01</span>
-    <span class="c1"># TODO Previously would have used pmac.PORT, pmac.SPORT</span>
+    <span class="c1"># NOTE the completed pmac defs use an object ref here</span>
     <span class="n">PORT</span><span class="p">:</span> <span class="n">BL45P</span><span class="o">-</span><span class="n">MO</span><span class="o">-</span><span class="n">BRICK</span><span class="o">-</span><span class="mi">01</span>
     <span class="n">SPORT</span><span class="p">:</span> <span class="n">BRICK1port</span>
     <span class="n">axis</span><span class="p">:</span> <span class="mi">1</span>
@@ -1485,7 +1483,7 @@ container. <code class="docutils literal notranslate"><span class="pre">...</spa
   <div id="other-versions-div" class="rst-versions" data-toggle="rst-versions" role="note" aria-label="Versions" style="visibility: hidden">
     <span class="rst-current-version" data-toggle="rst-current-version">
       <span class="fa fa-book"> Other Versions</span>
-      master
+      main
       <span class="fa fa-caret-down"></span>
     </span>
     <div class="rst-other-versions">
