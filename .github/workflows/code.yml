@@ -133,7 +133,7 @@ jobs:
 
       - name: Generate ibek.defs.schema.json
         run: |
-          for i in ${{ steps.meta.outputs.tags }}; do docker run ${i} ibek ibek-schema dist/ibek.defs.schema.json; done
+          for i in ${{ steps.meta.outputs.tags }}; do docker run ${i} ibek-schema dist/ibek.defs.schema.json; done
 
       - name: Upload build files
         uses: actions/upload-artifact@v3
@@ -181,61 +181,3 @@ jobs:
           TWINE_USERNAME: __token__
           TWINE_PASSWORD: ${{ secrets.pypi_token }}
         run: pipx run twine upload artifacts/dist/*
-
-  make-container:
-    needs: [lint, wheel, test]
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      packages: write
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-
-      - uses: actions/download-artifact@v2
-        with:
-          name: dist
-          path: dist
-
-      - name: Cache Docker layers
-        uses: actions/cache@v2
-        with:
-          path: /tmp/.buildx-cache
-          key: ${{ runner.os }}-buildx-${{ github.sha }}
-          restore-keys: |
-            ${{ runner.os }}-buildx-
-
-      - name: Log in to GitHub Docker Registry
-        if: github.event_name != 'pull_request'
-        uses: docker/login-action@v1
-        with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Docker meta
-        id: meta
-        uses: docker/metadata-action@v4
-        with:
-          images: ghcr.io/${{ github.repository }}
-          tags: |
-            type=ref,event=branch
-            type=ref,event=tag
-            type=raw,value=latest
-
-      - name: Set up Docker Buildx
-        id: buildx
-        uses: docker/setup-buildx-action@v1
-
-      - name: Build runtime image
-        uses: docker/build-push-action@v2
-        with:
-          file: .devcontainer/Dockerfile
-          context: .
-          push: ${{ github.event_name != 'pull_request' }}
-          build-args: BASE=python:3.10-slim
-          tags: ${{ steps.meta.outputs.tags }}
-          labels: ${{ steps.meta.outputs.labels }}
-          cache-from: type=local,src=/tmp/.buildx-cache
-          cache-to: type=local,dest=/tmp/.buildx-cache
