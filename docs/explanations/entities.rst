@@ -212,7 +212,7 @@ The Global Schema and example IOC instance schema are below:
     .. raw:: html
 
         <details>
-        <summary><a>ibek.schema.json</a></summary>
+        <summary><a>ibek.defs.schema.json</a></summary>
 
     .. include:: ../../tests/samples/schemas/ibek.defs.schema.json
         :literal:
@@ -221,7 +221,7 @@ The Global Schema and example IOC instance schema are below:
 
         </details>
         <details>
-        <summary><a>ibek.pmac.json</a></summary>
+        <summary><a>pmac.ibek.entities.schema.json</a></summary>
 
     .. include:: ../../tests/samples/schemas/pmac.ibek.entities.schema.json
         :literal:
@@ -229,6 +229,11 @@ The Global Schema and example IOC instance schema are below:
     .. raw:: html
 
         </details>
+
+This results in the overall generated file structure:
+
+.. raw:: html
+    :file: ../images/ibek-arch.svg
 
 Commands
 --------
