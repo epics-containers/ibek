@@ -43,12 +43,12 @@ This project is approaching completion. The following items are still to do:
       embedding ibek into the epics-base container image.
 
 
-.. |code_ci| image:: https://github.com/epics-containers/ibek/workflows/code.yml/badge.svg?branch=main
-    :target: https://github.com/DiamondLightSource/python3-pip-skeleton/actions/workflows/code.yml
+.. |code_ci| image:: https://github.com/epics-containers/ibek/actions/workflows/code.yml/badge.svg?branch=main
+    :target: https://github.com/epics-containers/ibek/actions/workflows/code.yml
     :alt: Code CI
 
-.. |docs_ci| image:: https://github.com/epics-containers/ibek/workflows/docs.yml/badge.svg?branch=main
-    :target: https://github.com/DiamondLightSource/python3-pip-skeleton/actions/workflows/docs.yml
+.. |docs_ci| image:: https://github.com/epics-containers/ibek/actions/workflows/docs.yml/badge.svg?branch=main
+    :target: https://github.com/epics-containers/ibek/actions/workflows/docs.yml
     :alt: Docs CI
 
 .. |coverage| image:: https://codecov.io/gh/epics-containers/ibek/branch/master/graph/badge.svg
