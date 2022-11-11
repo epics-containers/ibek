@@ -25,6 +25,7 @@ side-bar.
             :caption: How-to Guides
             :maxdepth: 1
 
+            how-to/edit-yaml
             how-to/run-container
 
         +++

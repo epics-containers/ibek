@@ -24,33 +24,21 @@ Installing the library
 
 You can now use ``pip`` to install the library and its dependencies::
 
-<<<<<<< HEAD:docs/tutorials/installation.rst
     python3 -m pip install ibek
-=======
-    $ python3 -m pip install python3-pip-skeleton
->>>>>>> 4ccb60169da316ebd2b80f99d0131ad7b0043790:docs/user/tutorials/installation.rst
 
 If you require a feature that is not currently released you can also install
 from github::
 
-<<<<<<< HEAD:docs/tutorials/installation.rst
     python3 -m pip install git+https://github.com/epics-containers/ibek.git
-=======
-    $ python3 -m pip install git+https://github.com/DiamondLightSource/python3-pip-skeleton.git
->>>>>>> 4ccb60169da316ebd2b80f99d0131ad7b0043790:docs/user/tutorials/installation.rst
 
 The library should now be installed and the commandline interface on your path.
 You can check the version that has been installed by typing::
 
-<<<<<<< HEAD:docs/tutorials/installation.rst
     ibek --version
 
 Running in a container
 ----------------------
 
 To pull the container from github container registry and run::
-    
+
     docker run ghcr.io/epics-containers/ibek:main --version
-=======
-    $ python3-pip-skeleton --version
->>>>>>> 4ccb60169da316ebd2b80f99d0131ad7b0043790:docs/user/tutorials/installation.rst

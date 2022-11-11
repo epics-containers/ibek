@@ -44,6 +44,7 @@ side-bar.
             :maxdepth: 1
 
             explanations/decisions
+            explanations/entities
 
         +++
 
