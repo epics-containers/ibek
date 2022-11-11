@@ -1,31 +1,37 @@
-# ideas from https://www.docker.com/blog/containerized-python-development-part-1/
+# This file is for use as a devcontainer and a runtime container
+#
+# The devcontainer should use the build target and run as root with podman
+# or docker with user namespaces.
+#
+FROM python:3.10 as build
 
-# This file is for use as a .vscode devcontainer as well as a runtime 
-# container. The devcontainer should be rootful and use podman or docker 
-# with user namespaces.
+ARG PIP_OPTIONS
 
-ARG BASE="mcr.microsoft.com/vscode/devcontainers/python:0-3.10-bullseye"
-FROM ${BASE} as base
+# Add any system dependencies for the developer/build environment here e.g.
+# RUN apt-get update && apt-get upgrade -y && \
+#     apt-get install -y --no-install-recommends \
+#     desired-packages \
+#     && rm -rf /var/lib/apt/lists/*
 
-# use root to pin where the packages will install
-USER root
-ENV PATH=/root/.local/bin:$PATH
+# set up a virtual environment and put it in PATH
+RUN python -m venv /venv
+ENV PATH=/venv/bin:$PATH
 
-FROM base as developer
+# Copy any required context for the pip install over
+COPY . /context
+WORKDIR /context
 
-WORKDIR /workspace
-COPY . .
+# install python package into /venv
+RUN pip install ${PIP_OPTIONS}
 
-# install runtime from DIST if there is one
-RUN mkdir -p /root/.local && \
-    if [ -d dist ] ; then \
-    touch requirements.txt && \
-    pip install --user -r requirements.txt dist/*.whl ; \
-    fi
+FROM python:3.10-slim as runtime
 
-FROM base as runtime
+# Add apt-get system dependecies for runtime here if needed
 
-COPY --from=developer /root/.local /root/.local
+# copy the virtual environment from the build stage and put it in PATH
+COPY --from=build /venv/ /venv/
+ENV PATH=/venv/bin:$PATH
 
+# change this entrypoint if it is not the same as the repo
 ENTRYPOINT ["ibek"]
 CMD ["--version"]
