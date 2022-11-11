@@ -8,7 +8,7 @@ on:
     - cron: "0 8 * * WED"
 env:
   # The target python version, which must match the Dockerfile version
-  CONTAINER_PYTHON: "3.11"
+  CONTAINER_PYTHON: "3.10"
 
 jobs:
   lint:
@@ -35,7 +35,7 @@ jobs:
       fail-fast: false
       matrix:
         os: ["ubuntu-latest"] # can add windows-latest, macos-latest
-        python: ["3.9", "3.10", "3.11"]
+        python: ["3.9", "3.10"]
         install: ["-e .[dev]"]
         # Make one version be non-editable to test both paths of version code
         include:
