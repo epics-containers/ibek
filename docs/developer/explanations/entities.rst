@@ -78,7 +78,7 @@ Expand below for the example pmac **support module definition file**:
         <details>
         <summary><a>pmac.ibek.defs.yaml</a></summary>
 
-    .. include:: ../../tests/samples/yaml/pmac.ibek.defs.yaml
+    .. include:: ../../../tests/samples/yaml/pmac.ibek.defs.yaml
         :literal:
 
     .. raw:: html
@@ -149,7 +149,7 @@ Click the arrows to reveal the files.
         <details>
         <summary><a>bl45p-mo-ioc-02.ibek.entities.yaml</a></summary>
 
-    .. include:: ../../tests/samples/yaml/bl45p-mo-ioc-02.ibek.entities.yaml
+    .. include:: ../../../tests/samples/yaml/bl45p-mo-ioc-02.ibek.entities.yaml
         :literal:
 
     .. raw:: html
@@ -158,7 +158,7 @@ Click the arrows to reveal the files.
         <details>
         <summary><a>ioc.boot</a></summary>
 
-    .. include:: ../../tests/samples/helm/ioc.boot
+    .. include:: ../../../tests/samples/helm/ioc.boot
         :literal:
 
     .. raw:: html
@@ -214,7 +214,7 @@ The Global Schema and example IOC instance schema are below:
         <details>
         <summary><a>ibek.defs.schema.json</a></summary>
 
-    .. include:: ../../tests/samples/schemas/ibek.defs.schema.json
+    .. include:: ../../../tests/samples/schemas/ibek.defs.schema.json
         :literal:
 
     .. raw:: html
@@ -223,7 +223,7 @@ The Global Schema and example IOC instance schema are below:
         <details>
         <summary><a>pmac.ibek.entities.schema.json</a></summary>
 
-    .. include:: ../../tests/samples/schemas/pmac.ibek.entities.schema.json
+    .. include:: ../../../tests/samples/schemas/pmac.ibek.entities.schema.json
         :literal:
 
     .. raw:: html
@@ -233,7 +233,7 @@ The Global Schema and example IOC instance schema are below:
 This results in the overall generated file structure:
 
 .. raw:: html
-    :file: ../images/ibek-arch.svg
+    :file: ../../images/ibek-arch.svg
 
 Commands
 --------
