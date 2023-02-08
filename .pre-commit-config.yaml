@@ -4,7 +4,6 @@ repos:
     hooks:
       - id: check-added-large-files
       - id: check-yaml
-        exclude: src/ibek/helm-template/templates
       - id: check-merge-conflict
 
   - repo: local

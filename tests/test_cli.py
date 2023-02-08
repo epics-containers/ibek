@@ -89,28 +89,6 @@ def test_container_schema(tmp_path: Path, samples: Path):
     assert expected == actual
 
 
-def test_build_helm(tmp_path: Path, samples: Path):
-    """build an ioc helm chart from an IOC instance entity file"""
-    clear_entity_classes()
-    entity_file = samples / "yaml" / "bl45p-mo-ioc-02.ibek.entities.yaml"
-
-    os.chdir(str(samples))
-    run_cli("build-helm", entity_file, tmp_path)
-
-    example_entity = entity_file.read_text()
-    actual_file = tmp_path / "bl45p-mo-ioc-02" / "config" / "ioc.boot.yaml"
-    actual_entity = actual_file.read_text()
-
-    assert example_entity == actual_entity
-
-    for test_file in ["Chart.yaml", "values.yaml"]:
-        example = (samples / "helm" / test_file).read_text()
-        actual_file = tmp_path / "bl45p-mo-ioc-02" / test_file
-        actual = actual_file.read_text()
-
-        assert example == actual
-
-
 def test_build_startup_single(tmp_path: Path, samples: Path):
     """
     build an ioc startup script from an IOC instance entity file
