@@ -158,7 +158,7 @@ Click the arrows to reveal the files.
         <details>
         <summary><a>ioc.boot</a></summary>
 
-    .. include:: ../../../tests/samples/helm/ioc.boot
+    .. include:: ../../../tests/samples/boot_scripts/ioc.boot
         :literal:
 
     .. raw:: html

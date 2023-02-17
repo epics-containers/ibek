@@ -1,5 +1,5 @@
 """
-Functions for building the helm chart
+Functions for building the db and boot scripts
 """
 import logging
 import re

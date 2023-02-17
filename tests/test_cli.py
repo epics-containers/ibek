@@ -109,7 +109,7 @@ def test_build_startup_single(tmp_path: Path, samples: Path):
         out_db,
     )
 
-    example_boot = (samples / "helm" / "ioc.boot").read_text()
+    example_boot = (samples / "boot_scripts" / "ioc.boot").read_text()
     actual_boot = out_file.read_text()
 
     assert example_boot == actual_boot
@@ -138,7 +138,7 @@ def test_build_startup_multiple(tmp_path: Path, samples: Path):
         out_db,
     )
 
-    example_boot = (samples / "helm" / "bl45p-mo-ioc-03.boot").read_text()
+    example_boot = (samples / "boot_scripts" / "bl45p-mo-ioc-03.boot").read_text()
     actual_boot = out_file.read_text()
 
     assert example_boot == actual_boot
@@ -168,7 +168,7 @@ def test_build_startup_env_vars_and_post_ioc_init(tmp_path: Path, samples: Path)
         out_db,
     )
 
-    example_boot = (samples / "helm" / "bl45p-mo-ioc-04.boot").read_text()
+    example_boot = (samples / "boot_scripts" / "bl45p-mo-ioc-04.boot").read_text()
     actual_boot = out_file.read_text()
 
     assert example_boot == actual_boot
