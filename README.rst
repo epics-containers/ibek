@@ -12,7 +12,7 @@ IOC Builder for EPICS and Kubernetes:
   image to create a JSON schema of what an IOC using that image can contain
 - Write an ``ioc.yaml`` file against that schema listing instances of the
   entities with arguments
-- Use ``ibek`` to generate a startup script, database and Helm chart that runs
+- Use ``ibek`` to generate a startup script and database that runs
   up the IOC contained in the image with them
 
 ============== ==============================================================

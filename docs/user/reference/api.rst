@@ -38,12 +38,6 @@ This is the internal API reference for ibek
 .. automodule:: ibek.modules
     :members:
 
-``ibek.helm``
--------------
-
-.. automodule:: ibek.helm
-    :members:
-
 ``ibek.render``
 ---------------
 

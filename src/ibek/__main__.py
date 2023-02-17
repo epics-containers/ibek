@@ -9,13 +9,7 @@ from ruamel.yaml import YAML
 
 from ibek import __version__
 
-from .helm import (
-    create_boot_script,
-    create_db_script,
-    create_helm,
-    ioc_deserialize,
-    load_ioc_yaml,
-)
+from .gen_scripts import create_boot_script, create_db_script, ioc_deserialize
 from .ioc import IOC, make_entity_classes
 from .support import Support
 
@@ -80,28 +74,6 @@ def ioc_schema(
 
     schema = json.dumps(make_schema(IOC), indent=2)
     output.write_text(schema)
-
-
-@cli.command()
-def build_helm(
-    entity: Path = typer.Argument(
-        ..., help="The filepath to the ioc instance entity file"
-    ),
-    out: Path = typer.Argument(
-        default="iocs", help="Path in which to build the helm chart"
-    ),
-    no_schema: bool = typer.Option(False, help="disable schema checking"),
-):
-    """
-    Build a startup script, database and Helm chart from <ioc>.yaml
-    """
-
-    ioc_dict = load_ioc_yaml(ioc_instance_yaml=entity, no_schema=no_schema)
-
-    with entity.open("r") as stream:
-        entity_yaml = stream.read()
-
-    create_helm(ioc_dict=ioc_dict, entity_yaml=entity_yaml, path=out)
 
 
 @cli.command()

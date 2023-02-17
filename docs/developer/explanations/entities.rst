@@ -158,7 +158,7 @@ Click the arrows to reveal the files.
         <details>
         <summary><a>ioc.boot</a></summary>
 
-    .. include:: ../../../tests/samples/helm/ioc.boot
+    .. include:: ../../../tests/samples/boot_scripts/ioc.boot
         :literal:
 
     .. raw:: html
@@ -201,9 +201,6 @@ Thus, the sequence of files is as follows:
         - <ioc>.ibek.entities.yaml
         - Description of Entities for an IOC instance.
     *   - 5
-        - Helm Chart files
-        - The generated files for deploying the described IOC instance
-    *   - 6
         - IOC Startup Script ioc.boot
         - Startup script for booting the IOC
 
@@ -262,12 +259,6 @@ The ibek commands to progress through the file sequence above are as follows
         - ``<ioc>.ibek.entities.yaml``
         - Hand crafted at IOC instance design time
     *   - 5
-        - Helm Chart files
-        - ``ibek build-helm <ioc>.ibek.entities.yaml``
-          run at IOC helm chart generation time. This generates a helm chart
-          with ``<ioc>.ibek.entities.yaml`` in its config folder and validates it
-          against the schema defined at the top of the YAML file.
-    *   - 6
         - IOC startup script
         - ``ibek build-startup <ioc>.ibek.entities.yaml ...``. Run at IOC startup time in the
           container. ``...`` == all ``<support>.ibek.defs.yaml`` within the container.
