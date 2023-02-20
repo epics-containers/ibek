@@ -88,6 +88,33 @@ def test_container_schema(tmp_path: Path, samples: Path):
     assert expected == actual
 
 
+def test_build_startup_output_path(tmp_path: Path, samples: Path):
+    """
+    build an ioc startup script and ensure output directory gets generated
+    if it doesn't pre-exist
+    """
+    clear_entity_classes()
+    entity_file = samples / "yaml" / "bl45p-mo-ioc-02.ibek.entities.yaml"
+    definition_file = samples / "yaml" / "pmac.ibek.defs.yaml"
+    out_file = tmp_path / "new_dir" / "ioc.boot"
+    out_db = tmp_path / "new_dir" / "make_db.sh"
+
+    run_cli(
+        "build-startup",
+        entity_file,
+        definition_file,
+        "--out",
+        out_file,
+        "--db-out",
+        out_db,
+    )
+
+    example_boot = (samples / "boot_scripts" / "ioc.boot").read_text()
+    actual_boot = out_file.read_text()
+
+    assert example_boot == actual_boot
+
+
 def test_build_startup_single(tmp_path: Path, samples: Path):
     """
     build an ioc startup script from an IOC instance entity file
