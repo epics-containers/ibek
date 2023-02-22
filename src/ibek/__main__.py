@@ -100,6 +100,8 @@ def build_startup(
     ioc_instance = ioc_deserialize(instance, definitions)
     script_txt = create_boot_script(ioc_instance)
 
+    out.parent.mkdir(parents=True, exist_ok=True)
+
     with out.open("w") as stream:
         stream.write(script_txt)
 
