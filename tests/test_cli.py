@@ -44,7 +44,7 @@ def test_pmac_schema(tmp_path: Path, samples: Path):
     clear_entity_classes()
 
     schema_path = tmp_path / "pmac.ibek.entities.schema.json"
-    yaml_path = samples / "yaml" / "pmac.ibek.defs.yaml"
+    yaml_path = samples / "yaml" / "pmac.ibek.support.yaml"
     run_cli("ioc-schema", yaml_path, schema_path)
 
     expected = json.loads(
@@ -60,7 +60,7 @@ def test_asyn_schema(tmp_path: Path, samples: Path):
     clear_entity_classes()
 
     schema_path = tmp_path / "asyn.ibek.entities.schema.json"
-    yaml_path = samples / "yaml" / "asyn.ibek.defs.yaml"
+    yaml_path = samples / "yaml" / "asyn.ibek.support.yaml"
     run_cli("ioc-schema", yaml_path, schema_path)
 
     expected = json.loads(
@@ -76,8 +76,8 @@ def test_container_schema(tmp_path: Path, samples: Path):
     """generate schema for a container with two support modules"""
 
     schema_combined = tmp_path / "container.ibek.entities.schema.json"
-    yaml_path1 = samples / "yaml" / "asyn.ibek.defs.yaml"
-    yaml_path2 = samples / "yaml" / "pmac.ibek.defs.yaml"
+    yaml_path1 = samples / "yaml" / "asyn.ibek.support.yaml"
+    yaml_path2 = samples / "yaml" / "pmac.ibek.support.yaml"
     run_cli("ioc-schema", yaml_path1, yaml_path2, schema_combined)
 
     expected = json.loads(
@@ -95,7 +95,7 @@ def test_build_startup_output_path(tmp_path: Path, samples: Path):
     """
     clear_entity_classes()
     entity_file = samples / "yaml" / "bl45p-mo-ioc-02.ibek.entities.yaml"
-    definition_file = samples / "yaml" / "pmac.ibek.defs.yaml"
+    definition_file = samples / "yaml" / "pmac.ibek.support.yaml"
     out_file = tmp_path / "new_dir" / "stIOC"
     out_db = tmp_path / "new_dir" / "make_db.sh"
 
@@ -122,7 +122,7 @@ def test_build_startup_single(tmp_path: Path, samples: Path):
     """
     clear_entity_classes()
     entity_file = samples / "yaml" / "bl45p-mo-ioc-02.ibek.entities.yaml"
-    definition_file = samples / "yaml" / "pmac.ibek.defs.yaml"
+    definition_file = samples / "yaml" / "pmac.ibek.support.yaml"
     out_file = tmp_path / "stIOC"
     out_db = tmp_path / "make_db.sh"
 
@@ -149,8 +149,8 @@ def test_build_startup_multiple(tmp_path: Path, samples: Path):
     """
     clear_entity_classes()
     entity_file = samples / "yaml" / "bl45p-mo-ioc-03.ibek.entities.yaml"
-    definition_file1 = samples / "yaml" / "asyn.ibek.defs.yaml"
-    definition_file2 = samples / "yaml" / "pmac.ibek.defs.yaml"
+    definition_file1 = samples / "yaml" / "asyn.ibek.support.yaml"
+    definition_file2 = samples / "yaml" / "pmac.ibek.support.yaml"
     out_file = tmp_path / "stIOC"
     out_db = tmp_path / "make_db.sh"
 
@@ -179,8 +179,8 @@ def test_build_startup_env_vars_and_post_ioc_init(tmp_path: Path, samples: Path)
     """
     clear_entity_classes()
     entity_file = samples / "yaml" / "bl45p-mo-ioc-04.ibek.entities.yaml"
-    definition_file1 = samples / "yaml" / "epics.ibek.defs.yaml"
-    definition_file2 = samples / "yaml" / "pmac.ibek.defs.yaml"
+    definition_file1 = samples / "yaml" / "epics.ibek.support.yaml"
+    definition_file2 = samples / "yaml" / "pmac.ibek.support.yaml"
     out_file = tmp_path / "stIOC"
     out_db = tmp_path / "make_db.sh"
 
@@ -211,7 +211,7 @@ def test_loading_module_twice(tmp_path: Path, samples: Path):
     # When we deserialize the same yaml twice as we do in the full test suite
     # we may get clashes in the namespace of generated Entity classes.
     # This tests that we get a sensible error when we do
-    definition_file = samples / "yaml" / "pmac.ibek.defs.yaml"
+    definition_file = samples / "yaml" / "pmac.ibek.support.yaml"
     support = Support.deserialize(YAML(typ="safe").load(definition_file))
     make_entity_classes(support)
     with pytest.raises(AssertionError) as ctx:

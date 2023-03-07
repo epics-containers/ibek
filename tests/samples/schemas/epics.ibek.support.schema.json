@@ -1,0 +1,127 @@
+{
+  "type": "object",
+  "properties": {
+    "ioc_name": {
+      "type": "string",
+      "description": "Name of IOC instance"
+    },
+    "description": {
+      "type": "string",
+      "description": "Description of what the IOC does"
+    },
+    "entities": {
+      "type": "array",
+      "items": {
+        "anyOf": [
+          {
+            "type": "object",
+            "properties": {
+              "entity_enabled": {
+                "type": "boolean",
+                "default": true
+              },
+              "max_bytes": {
+                "type": "integer",
+                "description": "Max size in bytes for sending arrays over channel access",
+                "default": 6000000
+              },
+              "type": {
+                "type": "string",
+                "const": "epics.EPICS_CA_MAX_ARRAY_BYTES",
+                "default": "epics.EPICS_CA_MAX_ARRAY_BYTES"
+              }
+            },
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "entity_enabled": {
+                "type": "boolean",
+                "default": true
+              },
+              "minutes_west": {
+                "type": "integer",
+                "description": "Set relative time zone minutes West relative to GMT (+/-720)",
+                "default": 0
+              },
+              "type": {
+                "type": "string",
+                "const": "epics.EPICS_TS_MIN_WEST",
+                "default": "epics.EPICS_TS_MIN_WEST"
+              }
+            },
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "entity_enabled": {
+                "type": "boolean",
+                "default": true
+              },
+              "pv": {
+                "type": "string",
+                "description": "Name of PV"
+              },
+              "value": {
+                "type": "string",
+                "description": "Value to set"
+              },
+              "type": {
+                "type": "string",
+                "const": "epics.dbpf",
+                "default": "epics.dbpf"
+              }
+            },
+            "required": [
+              "pv",
+              "value"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "entity_enabled": {
+                "type": "boolean",
+                "default": true
+              },
+              "name": {
+                "type": "string",
+                "description": "Name of environment variable"
+              },
+              "value": {
+                "type": "string",
+                "description": "Value of environment variable"
+              },
+              "type": {
+                "type": "string",
+                "const": "epics.epicsEnvSet",
+                "default": "epics.epicsEnvSet"
+              }
+            },
+            "required": [
+              "name",
+              "value"
+            ],
+            "additionalProperties": false
+          }
+        ]
+      },
+      "description": "List of entities this IOC instantiates"
+    },
+    "generic_ioc_image": {
+      "type": "string",
+      "description": "The generic IOC container image registry URL"
+    }
+  },
+  "required": [
+    "ioc_name",
+    "description",
+    "entities",
+    "generic_ioc_image"
+  ],
+  "additionalProperties": false,
+  "$schema": "http://json-schema.org/draft-07/schema#"
+}

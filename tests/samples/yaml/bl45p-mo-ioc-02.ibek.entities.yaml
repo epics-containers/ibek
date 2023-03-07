@@ -1,4 +1,4 @@
-# yaml-language-server: $schema=file://schemas/pmac.ibek.entities.schema.json
+# yaml-language-server: $schema=../schemas/container.ibek.entities.schema.json
 ioc_name: bl45p-mo-ioc-02
 description: an example motion ioc for ibek testing
 generic_ioc_image: ghcr.io/epics-containers/ioc-pmac:main.run
@@ -17,11 +17,7 @@ entities:
 
   - type: pmac.DlsPmacAsynMotor
     name: X1 motor
-    # NOTE the completed pmac defs use an object ref here
-    PMAC: BL45P-MO-BRICK-01
-    # NOTE the completed pmac defs use an object ref here
-    PORT: BL45P-MO-BRICK-01
-    SPORT: BRICK1port
+    Controller: BL45P-MO-BRICK-01
     axis: 1
     P: BL45P-MO-THIN-01
     M: ":X1"
@@ -29,9 +25,7 @@ entities:
 
   - type: pmac.DlsPmacAsynMotor
     name: Y1 motor
-    PMAC: BL45P-MO-BRICK-01
-    PORT: BL45P-MO-BRICK-01
-    SPORT: BRICK1port
+    Controller: BL45P-MO-BRICK-01
     axis: 2
     P: BL45P-MO-THIN-01
     M: ":Y1"

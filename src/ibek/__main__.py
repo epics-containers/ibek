@@ -44,7 +44,7 @@ def main(
 def ibek_schema(
     output: Path = typer.Argument(..., help="The filename to write the schema to")
 ):
-    """Produce the JSON global schema for all <support_module>.ibek.defs.yaml files"""
+    """Produce JSON global schema for all <support_module>.ibek.support.yaml files"""
     schema = json.dumps(make_schema(Support), indent=2)
     output.write_text(schema)
 
@@ -58,7 +58,7 @@ def ioc_schema(
     no_schema: bool = typer.Option(False, help="disable schema checking"),
 ):
     """
-    Create a json schema from a <support_module>.ibek.defs.yaml file
+    Create a json schema from a <support_module>.ibek.support.yaml file
     """
 
     # first check the definition file with jsonschema since it has more
