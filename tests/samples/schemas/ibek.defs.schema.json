@@ -265,6 +265,14 @@
             "description": "Environment variables to set in the boot script",
             "default": []
           },
+          "pre_ioc_init": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Entries to add pre iocInit(), such as dbLoadRecords",
+            "default": []
+          },
           "post_ioc_init": {
             "type": "array",
             "items": {

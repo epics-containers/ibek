@@ -96,6 +96,14 @@ def render_post_ioc_init(instance: Entity) -> Optional[str]:
     return render_template_from_entity_attribute(instance, "post_ioc_init")
 
 
+def render_pre_ioc_init(instance: Entity) -> Optional[str]:
+    """
+    render the pre-iocInit entries by combining the jinja template
+    from an entity with the arguments from an Entity
+    """
+    return render_template_from_entity_attribute(instance, "pre_ioc_init")
+
+
 def render_elements(ioc: IOC, element: str) -> str:
     """
     Render elements of a given IOC instance based on calling the correct method
@@ -136,3 +144,10 @@ def render_post_ioc_init_elements(ioc: IOC) -> str:
     Render all of the post-iocInit elements for a given IOC instance
     """
     return render_elements(ioc, "render_post_ioc_init")
+
+
+def render_pre_ioc_init_elements(ioc: IOC) -> str:
+    """
+    Render all of the pre-iocInit elements for a given IOC instance
+    """
+    return render_elements(ioc, "render_pre_ioc_init")

@@ -14,6 +14,7 @@ from .render import (
     render_database_elements,
     render_environment_variable_elements,
     render_post_ioc_init_elements,
+    render_pre_ioc_init_elements,
     render_script_elements,
 )
 from .support import Support
@@ -62,4 +63,5 @@ def create_boot_script(ioc_instance: IOC) -> str:
         env_var_elements=render_environment_variable_elements(ioc_instance),
         script_elements=render_script_elements(ioc_instance),
         post_ioc_init_elements=render_post_ioc_init_elements(ioc_instance),
+        pre_ioc_init_elements=render_pre_ioc_init_elements(ioc_instance),
     )
