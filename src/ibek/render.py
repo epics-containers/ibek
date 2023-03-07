@@ -22,7 +22,7 @@ def render_template_from_entity_attribute(
         return None
     all_lines = "\n".join(attribute)
     jinja_template = Template(all_lines)
-    result = jinja_template.render(asdict(instance))
+    result = jinja_template.render(asdict(instance))  # type: ignore
     return result
 
 
@@ -57,7 +57,7 @@ def render_database(instance: Entity) -> Optional[str]:
         )
 
     jinja_template = Template(jinja_txt)
-    db_txt = jinja_template.render(asdict(instance))
+    db_txt = jinja_template.render(asdict(instance))  # type: ignore
 
     # run the result through jinja again so we can refer to args for arg defaults
     # e.g.
@@ -66,7 +66,7 @@ def render_database(instance: Entity) -> Optional[str]:
     #   description: Max Velocity (EGU/s)
     #   default: "{{VELO}}""
     db_template = Template(db_txt)
-    db_txt = db_template.render(asdict(instance))
+    db_txt = db_template.render(asdict(instance))  # type: ignore
 
     return db_txt
 
@@ -79,7 +79,7 @@ def render_environment_variables(instance: Entity) -> Optional[str]:
     variables = getattr(instance.__definition__, "env_vars")
     if not variables:
         return None
-    instance_as_dict = asdict(instance)
+    instance_as_dict = asdict(instance)  # type: ignore
     env_var_txt = ""
     for variable in variables:
         # Substitute the name and value of the environment variable from args
