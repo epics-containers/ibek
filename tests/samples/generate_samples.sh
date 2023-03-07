@@ -27,11 +27,11 @@ echo making a schema for bl45p-mo-ioc-04
 ibek ioc-schema ${SAMPLES_DIR}/yaml/{epics,pmac}.ibek.defs.yaml $SAMPLES_DIR/schemas/bl45p-mo-ioc-04.ibek.entities.schema.json
 
 echo making startup script
-ibek build-startup ${SAMPLES_DIR}/yaml/bl45p-mo-ioc-02.ibek.entities.yaml ${SAMPLES_DIR}/yaml/pmac.ibek.defs.yaml --out /tmp/ioc/ioc.boot --db-out /tmp/ioc/make_db.sh
-cp /tmp/ioc/ioc.boot ${SAMPLES_DIR}/boot_scripts/
+ibek build-startup ${SAMPLES_DIR}/yaml/bl45p-mo-ioc-02.ibek.entities.yaml ${SAMPLES_DIR}/yaml/pmac.ibek.defs.yaml --out /tmp/ioc/stIOC --db-out /tmp/ioc/make_db.sh
+cp /tmp/ioc/stIOC ${SAMPLES_DIR}/boot_scripts/
 echo making bl45p-mo-ioc-03.boot
-ibek build-startup ${SAMPLES_DIR}/yaml/bl45p-mo-ioc-03.ibek.entities.yaml ${SAMPLES_DIR}/yaml/pmac.ibek.defs.yaml ${SAMPLES_DIR}/yaml/asyn.ibek.defs.yaml --out /tmp/ioc/ioc.boot --db-out /tmp/ioc/make_db.sh
-cp /tmp/ioc/ioc.boot ${SAMPLES_DIR}/boot_scripts/bl45p-mo-ioc-03.boot
+ibek build-startup ${SAMPLES_DIR}/yaml/bl45p-mo-ioc-03.ibek.entities.yaml ${SAMPLES_DIR}/yaml/pmac.ibek.defs.yaml ${SAMPLES_DIR}/yaml/asyn.ibek.defs.yaml --out /tmp/ioc/stIOC --db-out /tmp/ioc/make_db.sh
+cp /tmp/ioc/stIOC ${SAMPLES_DIR}/boot_scripts/bl45p-mo-ioc-03.boot
 echo making bl45p-mo-ioc-04.boot
-ibek build-startup ${SAMPLES_DIR}/yaml/bl45p-mo-ioc-04.ibek.entities.yaml ${SAMPLES_DIR}/yaml/{epics,pmac}.ibek.defs.yaml --out /tmp/ioc/ioc.boot --db-out /tmp/ioc/make_db.sh
-cp /tmp/ioc/ioc.boot ${SAMPLES_DIR}/boot_scripts/bl45p-mo-ioc-04.boot
+ibek build-startup ${SAMPLES_DIR}/yaml/bl45p-mo-ioc-04.ibek.entities.yaml ${SAMPLES_DIR}/yaml/{epics,pmac}.ibek.defs.yaml --out /tmp/ioc/stIOC --db-out /tmp/ioc/make_db.sh
+cp /tmp/ioc/stIOC ${SAMPLES_DIR}/boot_scripts/bl45p-mo-ioc-04.boot

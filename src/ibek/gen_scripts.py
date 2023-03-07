@@ -55,7 +55,7 @@ def create_boot_script(ioc_instance: IOC) -> str:
     """
     Create the boot script for an IOC
     """
-    with open(TEMPLATES / "ioc.boot.jinja", "r") as f:
+    with open(TEMPLATES / "stIOC.jinja", "r") as f:
         template = Template(f.read())
 
     return template.render(

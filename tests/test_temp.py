@@ -31,6 +31,6 @@ def xxtest_build_startup_p45(tmp_path: Path, samples: Path):
     clear_entity_classes()
     entity_file = root / "bl45p-mo-ioc-99.yaml"
     definitions = Path.glob(root / "ibek", "*.ibek.defs.yaml")
-    out_file = root / "iocs/bl45p-mo-ioc-99/config/ioc.boot"
+    out_file = root / "iocs/bl45p-mo-ioc-99/config/stIOC"
 
     run_cli("build-startup", entity_file, *definitions, "--out", out_file)
