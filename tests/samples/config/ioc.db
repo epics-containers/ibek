@@ -1,0 +1,25 @@
+record(calc, "EXAMPLE:IBEK:SUM") {
+  field(DESC, "Sum A and B")
+  field(CALC, "A+B")
+  field(INPA, "EXAMPLE:IBEK:A")
+  field(INPB, "EXAMPLE:IBEK:B")
+  field(SCAN, "1 second")
+}
+
+record(ao, "EXAMPLE:IBEK:A") {
+    field(DESC, "A voltage")
+    field(PREC, "3")
+    field(EGU,  "Volts")
+    field(DRVL, "-10")
+    field(DRVH, "+10")
+    field(VAL,  "0.000")
+}
+
+record(ao, "EXAMPLE:IBEK:B") {
+    field(DESC, "B voltage")
+    field(PREC, "3")
+    field(EGU,  "Volts")
+    field(DRVL, "-10")
+    field(DRVH, "+10")
+    field(VAL,  "0.000")
+}
