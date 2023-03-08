@@ -96,7 +96,7 @@ def test_build_startup_output_path(tmp_path: Path, samples: Path):
     clear_entity_classes()
     entity_file = samples / "yaml" / "bl45p-mo-ioc-02.ibek.entities.yaml"
     definition_file = samples / "yaml" / "pmac.ibek.support.yaml"
-    out_file = tmp_path / "new_dir" / "stIOC"
+    out_file = tmp_path / "new_dir" / "st.cmd"
     out_db = tmp_path / "new_dir" / "make_db.sh"
 
     run_cli(
@@ -109,7 +109,7 @@ def test_build_startup_output_path(tmp_path: Path, samples: Path):
         out_db,
     )
 
-    example_boot = (samples / "boot_scripts" / "stIOC").read_text()
+    example_boot = (samples / "boot_scripts" / "st.cmd").read_text()
     actual_boot = out_file.read_text()
 
     assert example_boot == actual_boot
@@ -123,7 +123,7 @@ def test_build_startup_single(tmp_path: Path, samples: Path):
     clear_entity_classes()
     entity_file = samples / "yaml" / "bl45p-mo-ioc-02.ibek.entities.yaml"
     definition_file = samples / "yaml" / "pmac.ibek.support.yaml"
-    out_file = tmp_path / "stIOC"
+    out_file = tmp_path / "st.cmd"
     out_db = tmp_path / "make_db.sh"
 
     run_cli(
@@ -136,7 +136,7 @@ def test_build_startup_single(tmp_path: Path, samples: Path):
         out_db,
     )
 
-    example_boot = (samples / "boot_scripts" / "stIOC").read_text()
+    example_boot = (samples / "boot_scripts" / "st.cmd").read_text()
     actual_boot = out_file.read_text()
 
     assert example_boot == actual_boot
@@ -151,7 +151,7 @@ def test_build_startup_multiple(tmp_path: Path, samples: Path):
     entity_file = samples / "yaml" / "bl45p-mo-ioc-03.ibek.entities.yaml"
     definition_file1 = samples / "yaml" / "asyn.ibek.support.yaml"
     definition_file2 = samples / "yaml" / "pmac.ibek.support.yaml"
-    out_file = tmp_path / "stIOC"
+    out_file = tmp_path / "st.cmd"
     out_db = tmp_path / "make_db.sh"
 
     run_cli(
@@ -165,7 +165,7 @@ def test_build_startup_multiple(tmp_path: Path, samples: Path):
         out_db,
     )
 
-    example_boot = (samples / "boot_scripts" / "bl45p-mo-ioc-03.boot").read_text()
+    example_boot = (samples / "boot_scripts" / "stbl45p-mo-ioc-03").read_text()
     actual_boot = out_file.read_text()
 
     assert example_boot == actual_boot
@@ -181,7 +181,7 @@ def test_build_startup_env_vars_and_post_ioc_init(tmp_path: Path, samples: Path)
     entity_file = samples / "yaml" / "bl45p-mo-ioc-04.ibek.entities.yaml"
     definition_file1 = samples / "yaml" / "epics.ibek.support.yaml"
     definition_file2 = samples / "yaml" / "pmac.ibek.support.yaml"
-    out_file = tmp_path / "stIOC"
+    out_file = tmp_path / "st.cmd"
     out_db = tmp_path / "make_db.sh"
 
     run_cli(
@@ -195,7 +195,7 @@ def test_build_startup_env_vars_and_post_ioc_init(tmp_path: Path, samples: Path)
         out_db,
     )
 
-    example_boot = (samples / "boot_scripts" / "bl45p-mo-ioc-04.boot").read_text()
+    example_boot = (samples / "boot_scripts" / "stbl45p-mo-ioc-04").read_text()
     actual_boot = out_file.read_text()
 
     assert example_boot == actual_boot

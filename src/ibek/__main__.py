@@ -85,7 +85,7 @@ def build_startup(
         ..., help="The filepath to a support module definition file"
     ),
     out: Path = typer.Option(
-        default="config/stIOC",
+        default="config/st.cmd",
         help="Path to output startup script",
     ),
     db_out: Path = typer.Option(

@@ -39,7 +39,7 @@ This project is approaching completion. The following items are still to do:
     - Add support for enums where you define the possible values inline
 
     - DONE: update helm-template/config/start.sh to call 'ibek build-startup' when it
-      sees a stIOC.yaml file in the startup directory. This change requires
+      sees a st.cmd.yaml file in the startup directory. This change requires
       embedding ibek into the epics-base container image.
 
 

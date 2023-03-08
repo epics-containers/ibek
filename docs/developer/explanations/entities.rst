@@ -139,7 +139,7 @@ The example motion IOC instance bl45p-mo-ioc-02 has the following entities:
 
         - dbLoadRecords of dls_pmac_asyn_motor.template
 
-The example **IOC instance entity file** is shown below along with the stIOC
+The example **IOC instance entity file** is shown below along with the st.cmd
 file that ibek will generate from it.
 
 Click the arrows to reveal the files.
@@ -156,9 +156,9 @@ Click the arrows to reveal the files.
 
         </details>
         <details>
-        <summary><a>stIOC</a></summary>
+        <summary><a>st.cmd</a></summary>
 
-    .. include:: ../../../tests/samples/boot_scripts/stIOC
+    .. include:: ../../../tests/samples/boot_scripts/st.cmd
         :literal:
 
     .. raw:: html
@@ -201,7 +201,7 @@ Thus, the sequence of files is as follows:
         - <ioc>.ibek.entities.yaml
         - Description of Entities for an IOC instance.
     *   - 5
-        - IOC Startup Script stIOC
+        - IOC Startup Script st.cmd
         - Startup script for booting the IOC
 
 The Global Schema and example IOC instance schema are below:
