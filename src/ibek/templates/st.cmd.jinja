@@ -18,6 +18,6 @@ ioc_registerRecordDeviceDriver(pdbbase)
 dbLoadRecords("/tmp/ioc.db")
 iocInit()
 
-{%- if post_ioc_init_elements %}
+{% if post_ioc_init_elements %}
 {{ post_ioc_init_elements }}
 {% endif %}

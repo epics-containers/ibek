@@ -12,3 +12,4 @@ pmacCreateAxes(BL45P-MO-BRICK-01, 8)
 
 dbLoadRecords("/tmp/ioc.db")
 iocInit()
+

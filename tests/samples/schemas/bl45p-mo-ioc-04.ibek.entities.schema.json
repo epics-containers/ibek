@@ -114,6 +114,50 @@
                 "type": "boolean",
                 "default": true
               },
+              "command": {
+                "type": "string",
+                "description": "An arbitrary command in the startup script before iocInit"
+              },
+              "type": {
+                "type": "string",
+                "const": "epics.startupCommand",
+                "default": "epics.startupCommand"
+              }
+            },
+            "required": [
+              "command"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "entity_enabled": {
+                "type": "boolean",
+                "default": true
+              },
+              "command": {
+                "type": "string",
+                "description": "An arbitrary command in the startup script after iocInit"
+              },
+              "type": {
+                "type": "string",
+                "const": "epics.postStartupCommand",
+                "default": "epics.postStartupCommand"
+              }
+            },
+            "required": [
+              "command"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "entity_enabled": {
+                "type": "boolean",
+                "default": true
+              },
               "name": {
                 "type": "string",
                 "description": "Asyn port name",
