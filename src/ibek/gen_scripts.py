@@ -14,6 +14,7 @@ from .render import (
     render_database_elements,
     render_environment_variable_elements,
     render_post_ioc_init_elements,
+    render_pre_ioc_init_elements,
     render_script_elements,
 )
 from .support import Support
@@ -55,11 +56,12 @@ def create_boot_script(ioc_instance: IOC) -> str:
     """
     Create the boot script for an IOC
     """
-    with open(TEMPLATES / "ioc.boot.jinja", "r") as f:
+    with open(TEMPLATES / "st.cmd.jinja", "r") as f:
         template = Template(f.read())
 
     return template.render(
         env_var_elements=render_environment_variable_elements(ioc_instance),
         script_elements=render_script_elements(ioc_instance),
         post_ioc_init_elements=render_post_ioc_init_elements(ioc_instance),
+        pre_ioc_init_elements=render_pre_ioc_init_elements(ioc_instance),
     )

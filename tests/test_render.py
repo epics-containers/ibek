@@ -60,10 +60,11 @@ def test_geobrick_database(pmac_classes):
     db_txt = render_database(pmac_geobrick_instance)
 
     assert (
-        db_txt == 'msi -I${EPICS_DB_INCLUDE_PATH} -M"PMAC=geobrick_one"'
-        ' "pmacController.template"\n'
-        'msi -I${EPICS_DB_INCLUDE_PATH} -M"PMAC=geobrick_one"'
-        ' "pmacStatus.template"'
+        db_txt == 'msi -I${EPICS_DB_INCLUDE_PATH} -M"NAXES=8, PORT=test_geobrick, '
+        "P=geobrick_one, idlePoll=200, movingPoll=800, TIMEOUT=4, CSG0=, CSG1=, "
+        'CSG2=, CSG3=, CSG4=" "pmacController.template"\n'
+        'msi -I${EPICS_DB_INCLUDE_PATH} -M"PORT=test_geobrick, '
+        'P=geobrick_one" "pmacStatus.template"'
     )
 
 
@@ -161,9 +162,11 @@ def test_entity_disabled_does_not_render_elements(pmac_classes, epics_classes):
 
     # Render database
     expected_database = (
-        'msi -I${EPICS_DB_INCLUDE_PATH} -M"PMAC=geobrick_one"'
-        ' "pmacController.template"\n'
-        'msi -I${EPICS_DB_INCLUDE_PATH} -M"PMAC=geobrick_one" "pmacStatus.template"\n'
+        'msi -I${EPICS_DB_INCLUDE_PATH} -M"NAXES=8, PORT=geobrick_enabled, '
+        "P=geobrick_one, idlePoll=200, movingPoll=800, TIMEOUT=4, CSG0=, CSG1=, "
+        'CSG2=, CSG3=, CSG4=" "pmacController.template"\n'
+        'msi -I${EPICS_DB_INCLUDE_PATH} -M"PORT=geobrick_enabled, P=geobrick_one" '
+        '"pmacStatus.template"\n'
     )
     database = render_database_elements(ioc)
     assert database == expected_database

@@ -40,7 +40,7 @@ Definition
 ----------
 
 Each support module has its own **support module definition file** . This
-is a YAML file whose name is by convention ``<support_module>.ibek.defs.yaml``
+is a YAML file whose name is by convention ``<support_module>.ibek.support.yaml``
 
 These will all reside in a folder called /ibek in the container
 image.
@@ -49,7 +49,7 @@ The **support module definition file** contains **Definitions** which
 determine what **Entities** an IOC instance may instantiate.
 
 For example the pmac support module declares the following **Definitions**
-in ``pmac.ibek.defs.yaml``
+in ``pmac.ibek.support.yaml``
 (currently this is limited to 3 - the full implementation would have more):
 
   - Geobrick
@@ -76,9 +76,9 @@ Expand below for the example pmac **support module definition file**:
     .. raw:: html
 
         <details>
-        <summary><a>pmac.ibek.defs.yaml</a></summary>
+        <summary><a>pmac.ibek.support.yaml</a></summary>
 
-    .. include:: ../../../tests/samples/yaml/pmac.ibek.defs.yaml
+    .. include:: ../../../tests/samples/yaml/pmac.ibek.support.yaml
         :literal:
 
     .. raw:: html
@@ -139,7 +139,7 @@ The example motion IOC instance bl45p-mo-ioc-02 has the following entities:
 
         - dbLoadRecords of dls_pmac_asyn_motor.template
 
-The example **IOC instance entity file** is shown below along with the ioc.boot
+The example **IOC instance entity file** is shown below along with the st.cmd
 file that ibek will generate from it.
 
 Click the arrows to reveal the files.
@@ -156,9 +156,9 @@ Click the arrows to reveal the files.
 
         </details>
         <details>
-        <summary><a>ioc.boot</a></summary>
+        <summary><a>st.cmd</a></summary>
 
-    .. include:: ../../../tests/samples/boot_scripts/ioc.boot
+    .. include:: ../../../tests/samples/boot_scripts/st.cmd
         :literal:
 
     .. raw:: html
@@ -192,7 +192,7 @@ Thus, the sequence of files is as follows:
         - ibek.defs.schema.json
         - Global Schema for **2**
     *   - 2
-        - <support>.ibek.defs.yaml
+        - <support>.ibek.support.yaml
         - Definition file for a support module. Generates part of **3**
     *   - 3
         - <container>.entities.schema.json
@@ -201,7 +201,7 @@ Thus, the sequence of files is as follows:
         - <ioc>.ibek.entities.yaml
         - Description of Entities for an IOC instance.
     *   - 5
-        - IOC Startup Script ioc.boot
+        - IOC Startup Script st.cmd
         - Startup script for booting the IOC
 
 The Global Schema and example IOC instance schema are below:
@@ -249,19 +249,19 @@ The ibek commands to progress through the file sequence above are as follows
         - ``ibek.defs.schema.json``
         - ``ibek ibek-schema``
     *   - 2
-        - ``<support>.ibek.defs.yaml``
+        - ``<support>.ibek.support.yaml``
         - Hand crafted by the container developer. Held in the container.
     *   - 3
         - ``<container>.ibek.entities.schema.json``
         - ``ibek ioc-schema ...`` run at container build time. ``...``
-          == all ``<support>.ibek.defs.yaml`` within the container.
+          == all ``<support>.ibek.support.yaml`` within the container.
     *   - 4
         - ``<ioc>.ibek.entities.yaml``
         - Hand crafted at IOC instance design time
     *   - 5
         - IOC startup script
         - ``ibek build-startup <ioc>.ibek.entities.yaml ...``. Run at IOC startup time in the
-          container. ``...`` == all ``<support>.ibek.defs.yaml`` within the container.
+          container. ``...`` == all ``<support>.ibek.support.yaml`` within the container.
 
 
 
