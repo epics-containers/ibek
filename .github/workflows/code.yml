@@ -56,6 +56,7 @@ jobs:
         with:
           # Need this to get version number from last tag
           fetch-depth: 0
+          submodules: recursive
 
       - name: Install python packages
         uses: ./.github/actions/install_requirements
