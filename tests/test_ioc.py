@@ -45,3 +45,12 @@ def test_example_ioc(tmp_path: Path, samples: Path):
 
     assert example_boot == actual_boot
     assert example_db == actual_db
+
+
+def test_system_example_ioc(tmp_path: Path, samples: Path):
+    """
+    Install the this local version of ibek into an epic-base container
+    and verify that it can execute an IOC defined by YAML
+
+    Pre-requisites: podman needs to be installed
+    """

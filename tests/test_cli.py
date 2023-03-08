@@ -94,7 +94,7 @@ def test_build_startup_output_path(tmp_path: Path, samples: Path):
     if it doesn't pre-exist
     """
     clear_entity_classes()
-    entity_file = samples / "yaml" / "bl45p-mo-ioc-02.ibek.entities.yaml"
+    entity_file = samples / "yaml" / "bl45p-mo-ioc-02.ibek.ioc.yaml"
     definition_file = samples / "yaml" / "pmac.ibek.support.yaml"
     out_file = tmp_path / "new_dir" / "st.cmd"
     out_db = tmp_path / "new_dir" / "make_db.sh"
@@ -121,7 +121,7 @@ def test_build_startup_single(tmp_path: Path, samples: Path):
     and a single support module definition file
     """
     clear_entity_classes()
-    entity_file = samples / "yaml" / "bl45p-mo-ioc-02.ibek.entities.yaml"
+    entity_file = samples / "yaml" / "bl45p-mo-ioc-02.ibek.ioc.yaml"
     definition_file = samples / "yaml" / "pmac.ibek.support.yaml"
     out_file = tmp_path / "st.cmd"
     out_db = tmp_path / "make_db.sh"
@@ -148,7 +148,7 @@ def test_build_startup_multiple(tmp_path: Path, samples: Path):
     and multiple support module definition files
     """
     clear_entity_classes()
-    entity_file = samples / "yaml" / "bl45p-mo-ioc-03.ibek.entities.yaml"
+    entity_file = samples / "yaml" / "bl45p-mo-ioc-03.ibek.ioc.yaml"
     definition_file1 = samples / "yaml" / "asyn.ibek.support.yaml"
     definition_file2 = samples / "yaml" / "pmac.ibek.support.yaml"
     out_file = tmp_path / "st.cmd"
@@ -178,7 +178,7 @@ def test_build_startup_env_vars_and_post_ioc_init(tmp_path: Path, samples: Path)
     post iocInit() entries
     """
     clear_entity_classes()
-    entity_file = samples / "yaml" / "bl45p-mo-ioc-04.ibek.entities.yaml"
+    entity_file = samples / "yaml" / "bl45p-mo-ioc-04.ibek.ioc.yaml"
     definition_file1 = samples / "yaml" / "epics.ibek.support.yaml"
     definition_file2 = samples / "yaml" / "pmac.ibek.support.yaml"
     out_file = tmp_path / "st.cmd"
