@@ -14,13 +14,17 @@ def test_example_ioc(tmp_path: Path, samples: Path):
     build an ioc from yaml and verify the result
 
     includes use of the feature 'pre_ioc_init'
+
+    NOTE: the system test in tests/sys-test.sh uses the same example-ibek-config
+    but instead of verifying the output, it runs the ioc in a container and \
+    verifies that it starts up correctly.
     """
     clear_entity_classes()
 
     tmp_path = Path("/tmp/ibek_test")
     tmp_path.mkdir(exist_ok=True)
 
-    entity_file = samples / "config" / "test.ibek.ioc.yaml"
+    entity_file = samples / "example-ibek-config" / "ioc.yaml"
     definition_file = samples / "yaml" / "epics.ibek.support.yaml"
     definition_file2 = samples / "yaml" / "deviocstats.ibek.support.yaml"
     out_file = tmp_path / "new_dir" / "test.ioc.cmd"
@@ -45,12 +49,3 @@ def test_example_ioc(tmp_path: Path, samples: Path):
 
     assert example_boot == actual_boot
     assert example_db == actual_db
-
-
-def test_system_example_ioc(tmp_path: Path, samples: Path):
-    """
-    Install the this local version of ibek into an epic-base container
-    and verify that it can execute an IOC defined by YAML
-
-    Pre-requisites: podman needs to be installed
-    """
