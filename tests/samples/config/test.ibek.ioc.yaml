@@ -1,0 +1,18 @@
+ioc_name: test-ibek-ioc
+description: a basic example for testing ioc-template
+generic_ioc_image: ghcr.io/epics-containers/ioc-template:23.3.2
+
+entities:
+  - type: epics.EPICS_CA_MAX_ARRAY_BYTES
+    max_bytes: 6000000
+
+  - type: epics.epicsEnvSet
+    name: EPICS_CA_SERVER_PORT
+    # important: all environment vars passed as string in IOC YAML
+    value: "7064"
+
+  - type: deviocstats.iocAdminSoft
+    IOC: test-ibek-ioc
+
+  - type: epics.startupCommand
+    command: dbLoadRecords("config/ioc.db")
