@@ -23,6 +23,18 @@ def render_template_from_entity_attribute(
     all_lines = "\n".join(attribute)
     jinja_template = Template(all_lines)
     result = jinja_template.render(asdict(instance))  # type: ignore
+
+    # run the result through jinja again so we can refer to args for arg defaults
+    # e.g.
+    #
+    #   - type: str
+    #     name: IPACid
+    #     description: IPAC identifier
+    #     default: "IPAC{{ slot }}"
+
+    jinja_template = Template(result)
+    result = jinja_template.render(asdict(instance))  # type: ignore
+
     return result
 
 
@@ -60,11 +72,7 @@ def render_database(instance: Entity) -> Optional[str]:
     db_txt = jinja_template.render(asdict(instance))  # type: ignore
 
     # run the result through jinja again so we can refer to args for arg defaults
-    # e.g.
-    # - type: str
-    #   name: VMAX
-    #   description: Max Velocity (EGU/s)
-    #   default: "{{VELO}}""
+
     db_template = Template(db_txt)
     db_txt = db_template.render(asdict(instance))  # type: ignore
 
