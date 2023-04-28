@@ -12,6 +12,7 @@ from ibek import __version__
 from .gen_scripts import create_boot_script, create_db_script, ioc_deserialize
 from .ioc import IOC, make_entity_classes
 from .support import Support
+from .utils import Utils
 
 cli = typer.Typer()
 yaml = YAML()
@@ -98,14 +99,17 @@ def build_startup(
     """
 
     ioc_instance = ioc_deserialize(instance, definitions)
-    script_txt = create_boot_script(ioc_instance)
+
+    utility = Utils(ioc_instance.ioc_name)
+
+    script_txt = create_boot_script(ioc_instance, utility)
 
     out.parent.mkdir(parents=True, exist_ok=True)
 
     with out.open("w") as stream:
         stream.write(script_txt)
 
-    db_txt = create_db_script(ioc_instance)
+    db_txt = create_db_script(ioc_instance, utility)
 
     with db_out.open("w") as stream:
         stream.write(db_txt)
