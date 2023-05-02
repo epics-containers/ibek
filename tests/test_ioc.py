@@ -13,8 +13,6 @@ def test_example_ioc(tmp_path: Path, samples: Path):
     """
     build an ioc from yaml and verify the result
 
-    includes use of the feature 'pre_ioc_init'
-
     NOTE: the system test in tests/sys-test.sh uses the same example-ibek-config
     but instead of verifying the output, it runs the ioc in a container and \
     verifies that it starts up correctly.

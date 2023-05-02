@@ -103,9 +103,7 @@ class Render:
         env_var_txt = ""
         for variable in variables:
             # Substitute the name and value of the environment variable from args
-            env_template = Template(
-                f"epicsEnvSet \"{variable.name}\", '{variable.value}'"
-            )
+            env_template = Template(f"epicsEnvSet {variable.name} {variable.value}")
             env_var_txt += env_template.render(self._to_dict(instance))
         return env_var_txt
 
@@ -115,13 +113,6 @@ class Render:
         from an entity with the arguments from an Entity
         """
         return self.render_template_from_entity_attribute(instance, "post_ioc_init")
-
-    def render_pre_ioc_init(self, instance: Entity) -> Optional[str]:
-        """
-        render the pre-iocInit entries by combining the jinja template
-        from an entity with the arguments from an Entity
-        """
-        return self.render_template_from_entity_attribute(instance, "pre_ioc_init")
 
     def render_elements(self, ioc: IOC, element: str) -> str:
         """
@@ -159,9 +150,3 @@ class Render:
         Render all of the post-iocInit elements for a given IOC instance
         """
         return self.render_elements(ioc, "render_post_ioc_init")
-
-    def render_pre_ioc_init_elements(self, ioc: IOC) -> str:
-        """
-        Render all of the pre-iocInit elements for a given IOC instance
-        """
-        return self.render_elements(ioc, "render_pre_ioc_init")

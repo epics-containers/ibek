@@ -71,7 +71,7 @@ def test_epics_environment_variables(epics_classes):
     render = Render("test_ioc")
     env_text = render.render_environment_variables(max_array_bytes_instance)
 
-    assert env_text == "epicsEnvSet \"EPICS_CA_MAX_ARRAY_BYTES\", '10000000'"
+    assert env_text == "epicsEnvSet EPICS_CA_MAX_ARRAY_BYTES 10000000"
 
     # Using the generic entity
     env_name = "EPICS_CA_SERVER_PORT"
@@ -81,7 +81,7 @@ def test_epics_environment_variables(epics_classes):
 
     env_text = render.render_environment_variables(epics_env_set_instance)
 
-    assert env_text == f"epicsEnvSet \"{env_name}\", '{env_value}'"
+    assert env_text == f"epicsEnvSet {env_name} {env_value}"
 
 
 def test_entity_disabled_does_not_render_elements(pmac_classes, epics_classes):
@@ -169,7 +169,7 @@ def test_entity_disabled_does_not_render_elements(pmac_classes, epics_classes):
     assert database == expected_database
 
     # Render environment variables
-    expected_env_vars = "epicsEnvSet \"EPICS_CA_MAX_ARRAY_BYTES\", '6000000'\n"
+    expected_env_vars = "epicsEnvSet EPICS_CA_MAX_ARRAY_BYTES 6000000\n"
     env_vars = render.render_environment_variable_elements(ioc)
     assert env_vars == expected_env_vars
 

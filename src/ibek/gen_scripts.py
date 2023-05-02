@@ -66,5 +66,4 @@ def create_boot_script(ioc_instance: IOC, utility: Utils) -> str:
         env_var_elements=renderer.render_environment_variable_elements(ioc_instance),
         script_elements=renderer.render_script_elements(ioc_instance),
         post_ioc_init_elements=renderer.render_post_ioc_init_elements(ioc_instance),
-        pre_ioc_init_elements=renderer.render_pre_ioc_init_elements(ioc_instance),
     )
