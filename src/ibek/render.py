@@ -3,7 +3,7 @@ Functions for rendering lines in the boot script using Jinja2
 """
 
 from dataclasses import asdict
-from typing import Any, Dict, Optional
+from typing import Any, Dict, List, Optional
 
 from jinja2 import Template
 
@@ -14,6 +14,7 @@ from .utils import Utils
 class Render:
     def __init__(self, utils: Utils):
         self.utils = utils
+        self.once_done: List[str] = []
 
     def _to_dict(self, instance: Any) -> Dict[str, Any]:
         """
@@ -55,7 +56,17 @@ class Render:
         render the startup script by combining the jinja template from
         an entity with the arguments from an Entity
         """
-        return self.render_template_from_entity_attribute(instance, "script")
+        once: Optional[str] = None
+        if instance.__definition__.name not in self.once_done:
+            once = self.render_template_from_entity_attribute(instance, "script_once")
+            self.once_done.append(instance.__definition__.name)
+
+        script = self.render_template_from_entity_attribute(instance, "script")
+
+        if once and script:
+            return once + "\n" + script
+        else:
+            return once or script
 
     def render_database(self, instance: Entity) -> Optional[str]:
         """

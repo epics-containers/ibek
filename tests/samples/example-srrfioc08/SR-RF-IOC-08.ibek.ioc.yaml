@@ -1,0 +1,34 @@
+# yaml-language-server: $schema=../schemas/all.ibek.support.schema.json
+
+ioc_name: sr-rf-ioc-08
+generic_ioc_image: none
+description: test power supply IOC
+
+entities:
+  - type: epics.epicsEnvSet
+    name: EPICS_TS_NTP_INET
+    value: 172.23.194.5
+
+  - type: epics.EPICS_TS_MIN_WEST
+    minutes_west: 0
+
+  - type: epics.InterruptVectorVME
+    name: Vec0
+  - type: epics.InterruptVectorVME
+    name: Vec1
+
+  - type: ipac.Hy8002
+    name: IPAC4
+    slot: 4
+
+  - type: Hy8401ip.Hy8401ip
+    name: SlotA
+    carrier: IPAC4
+    ipslot: 0
+    vector: Vec0
+
+  - type: Hy8401ip.Hy8401ip
+    name: SlotC
+    carrier: IPAC4
+    ipslot: 2
+    vector: Vec1

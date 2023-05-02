@@ -247,7 +247,7 @@
             "items": {
               "type": "string"
             },
-            "description": "Entries to add pre iocInit(), such as dbLoadRecords",
+            "description": "Startup script snippet to add only on first invocation",
             "default": []
           },
           "env_vars": {

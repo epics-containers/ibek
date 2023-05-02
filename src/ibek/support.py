@@ -129,7 +129,7 @@ class Definition:
         Sequence[str], desc("Startup script snippet defined as Jinja template")
     ] = ()
     script_once: A[
-        Sequence[str], desc("Entries to add pre iocInit(), such as dbLoadRecords")
+        Sequence[str], desc("Startup script snippet to add only on first invocation")
     ] = ()
     env_vars: A[
         Sequence[EnvironmentVariable],

@@ -19,6 +19,11 @@ def get_support(samples: Path, yaml_file: str) -> Support:
 
 
 @fixture
+def ibek_defs():
+    return Path(__file__).parent.parent / "ibek-defs"
+
+
+@fixture
 def samples():
     return Path(__file__).parent / "samples"
 
