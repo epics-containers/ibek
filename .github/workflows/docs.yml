@@ -47,6 +47,9 @@ jobs:
       - name: Write switcher.json
         run: python .github/pages/make_switcher.py --add $DOCS_VERSION ${{ github.repository }} .github/pages/switcher.json
 
+      - name: Setup Pages
+        uses: actions/configure-pages@v3
+
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v1.0.8
         with:
