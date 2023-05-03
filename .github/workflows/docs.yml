@@ -58,4 +58,4 @@ jobs:
       - name: Publish docs to GitHub Pages
         if: github.event_name == 'push' && github.actor != 'dependabot[bot]'
         id: deployment
-        uses: actions/github-pages@v2.0.1
+        uses: actions/deploy-pages@v2.0.1
