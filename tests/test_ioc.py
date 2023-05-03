@@ -55,7 +55,7 @@ def test_example_sr_rf_08(tmp_path: Path, samples: Path, ibek_defs: Path):
 
     - all the yaml files in ibek-defs are schema compliant
     - the Utils class counter function (for Vectors and Carriers)
-    - the script_once field (for Hy8401 comments)
+    - the once field (for Hy8401 comments)
     """
 
     clear_entity_classes()

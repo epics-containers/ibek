@@ -5,7 +5,7 @@ It contains a hierarchy of Entity dataclasses.
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Any, Mapping, Optional, Sequence, Type, Union
+from typing import Any, Dict, Mapping, Optional, Sequence, Type, Union
 
 from apischema import Undefined, UndefinedType, deserialize, deserializer, identity
 from apischema.conversions import Conversion
@@ -117,6 +117,30 @@ class EnvironmentVariable:
 
 
 @dataclass
+class Function:
+    """
+    A script snippet that defines a function to call
+    """
+
+    name: A[str, desc("Name of the function to call")]
+    args: A[Dict[str, str], desc("The arguments IOC instance should supply")]
+    header: A[
+        Sequence[str], desc("commands/comments to appear before the function")
+    ] = ()
+    type: Literal["function"] = "function"
+
+
+@dataclass
+class Once:
+    """
+    A script snippet that should for the first occurrence only
+    """
+
+    type: Literal["once"] = "once"
+    value: A[str, desc("Startup script snippets defined as Jinja template")] = ""
+
+
+@dataclass
 class Definition:
     """
     A single definition of a class of Entity that an IOC instance may instantiate
@@ -126,10 +150,8 @@ class Definition:
     args: A[Sequence[Arg], desc("The arguments IOC instance should supply")] = ()
     databases: A[Sequence[Database], desc("Databases to instantiate")] = ()
     script: A[
-        Sequence[str], desc("Startup script snippet defined as Jinja template")
-    ] = ()
-    script_once: A[
-        Sequence[str], desc("Startup script snippet to add only on first invocation")
+        Sequence[Union[str, Function, Once]],
+        desc("Startup script snippets defined as Jinja template or function"),
     ] = ()
     env_vars: A[
         Sequence[EnvironmentVariable],

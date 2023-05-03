@@ -8,6 +8,7 @@ from typing import Any, Dict, List, Optional
 from jinja2 import Template
 
 from .ioc import IOC, Entity
+from .support import Function, Once
 from .utils import Utils
 
 
@@ -25,17 +26,11 @@ class Render:
 
         return result
 
-    def render_template_from_entity_attribute(
-        self, instance: Entity, attribute: str
-    ) -> Optional[str]:
+    def render_text(self, instance: Entity, text: str) -> str:
         """
         Get the rendered template based on an instance attribute
         """
-        attribute = getattr(instance.__definition__, attribute)
-        if not attribute:
-            return None
-        all_lines = "\n".join(attribute)
-        jinja_template = Template(all_lines)
+        jinja_template = Template(text)
         result = jinja_template.render(self._to_dict(instance))  # type: ignore
 
         # run the result through jinja again so we can refer to args for arg defaults
@@ -57,11 +52,20 @@ class Render:
         an entity with the arguments from an Entity
         """
         once: Optional[str] = None
-        if instance.__definition__.name not in self.once_done:
-            once = self.render_template_from_entity_attribute(instance, "script_once")
-            self.once_done.append(instance.__definition__.name)
+        #     once = self.render_template_from_entity_attribute(instance, "script_once")
+        #     self.once_done.append(instance.__definition__.name)
 
-        script = self.render_template_from_entity_attribute(instance, "script")
+        script = ""
+        script_items = getattr(instance.__definition__, "script")
+        for line in script_items:
+            if isinstance(line, str):
+                script += self.render_text(instance, line) + "\n"
+            elif isinstance(line, Once):
+                if instance.__definition__.name not in self.once_done:
+                    self.once_done.append(instance.__definition__.name)
+                    script += self.render_text(instance, line.value) + "\n"
+            elif isinstance(line, Function):
+                pass
 
         if once and script:
             return once + "\n" + script
@@ -123,7 +127,12 @@ class Render:
         render the post-iocInit entries by combining the jinja template
         from an entity with the arguments from an Entity
         """
-        return self.render_template_from_entity_attribute(instance, "post_ioc_init")
+        script = ""
+        for line in getattr(instance.__definition__, "post_ioc_init"):
+            rendered_line = self.render_text(instance, line)
+            script += rendered_line + "\n"
+
+        return script
 
     def render_elements(self, ioc: IOC, element: str) -> str:
         """
