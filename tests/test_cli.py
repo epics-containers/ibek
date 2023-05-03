@@ -217,3 +217,20 @@ def test_loading_module_twice(tmp_path: Path, samples: Path):
     with pytest.raises(AssertionError) as ctx:
         make_entity_classes(support)
     assert str(ctx.value) == "Entity classes already created for pmac"
+
+
+def test_bad_counter(tmp_path: Path, samples: Path):
+    """
+    Check you cannot redefine a counter with the same name and different params
+    """
+
+    clear_entity_classes()
+    entity_file = samples / "yaml" / "bad_counter.ibek.ioc.yaml"
+    definition_file1 = samples / "yaml" / "bad_counter.ibek.support.yaml"
+
+    with pytest.raises(ValueError) as ctx:
+        run_cli("build-startup", entity_file, definition_file1)
+    assert (
+        str(ctx.value)
+        == "Redefining counter InterruptVector with different start/stop values"
+    )
