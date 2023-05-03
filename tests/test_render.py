@@ -14,7 +14,7 @@ def test_pmac_asyn_ip_port_script(pmac_classes):
 
     render = Render("test_ioc")
     script_txt = render.render_script(pmac_asyn_ip)
-    assert script_txt == "pmacAsynIPConfigure(my_pmac_instance, 111.111.111.111:1025)"
+    assert script_txt == "pmacAsynIPConfigure(my_pmac_instance, 111.111.111.111:1025)\n"
 
 
 def test_geobrick_script(pmac_classes):
@@ -36,7 +36,7 @@ def test_geobrick_script(pmac_classes):
     assert (
         script_txt
         == "pmacCreateController(test_geobrick, my_asyn_port, 0, 8, 800, 200)\n"
-        "pmacCreateAxes(test_geobrick, 8)"
+        "pmacCreateAxes(test_geobrick, 8)\n"
     )
 
 
@@ -151,7 +151,7 @@ def test_entity_disabled_does_not_render_elements(pmac_classes, epics_classes):
     # Render script and check output
     expected_script = (
         "pmacCreateController(geobrick_enabled, geobrick_one_port, 0, 8, 800, 200)\n"
-        "pmacCreateAxes(geobrick_enabled, 8)\n"
+        "pmacCreateAxes(geobrick_enabled, 8)\n\n"
     )
     render = Render("test_ioc")
     script = render.render_script_elements(ioc)
@@ -174,6 +174,6 @@ def test_entity_disabled_does_not_render_elements(pmac_classes, epics_classes):
     assert env_vars == expected_env_vars
 
     # Render post_ioc_init
-    expected_post_ioc_init = 'dbpf "TEST:PV:1", "pv_value_1"\n'
+    expected_post_ioc_init = 'dbpf "TEST:PV:1", "pv_value_1"\n\n'
     post_ioc_init = render.render_post_ioc_init_elements(ioc)
     assert post_ioc_init == expected_post_ioc_init
