@@ -9,8 +9,9 @@
 # STEPS:
 # 1. Launch the ioc-template container in the background with these mounts:
 #    example-ibek-config -> /repos/epics/ioc/config
-#
+#        brings in the config files for the IOC
 #    this repo root -> /repos/ibek
+#        mounts the same
 #    this repo root/ibek-defs -> /ctools
 # 2. Install this instance of ibek into the container's global venv
 #    using /repos/ibek
@@ -32,6 +33,9 @@ THIS_DIR=$(realpath $(dirname $0))
 ROOT=$(realpath ${THIS_DIR}/..)
 
 set -ex
+
+# make ibek-defs available
+git submodule update --init --recursive
 
 base_args=(
     --rm
