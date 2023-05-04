@@ -40,4 +40,10 @@ ibek build-startup ${SAMPLES_DIR}/example-ibek-config/ioc.yaml ${SAMPLES_DIR}/ya
 cp /tmp/ioc/st.cmd ${SAMPLES_DIR}/boot_scripts/test.ioc.cmd
 cp /tmp/ioc/make_db.sh ${SAMPLES_DIR}/boot_scripts/test.ioc.make_db.sh
 
+echo making SR-RF-IOC-08 IOC
+ibek build-startup ${SAMPLES_DIR}/example-srrfioc08/SR-RF-IOC-08.ibek.ioc.yaml ../../ibek-defs/*/*.support.yaml --out /tmp/ioc/st.cmd --db-out /tmp/ioc/make_db.sh
+cp /tmp/ioc/st.cmd ${SAMPLES_DIR}/example-srrfioc08
+cp /tmp/ioc/make_db.sh ${SAMPLES_DIR}/example-srrfioc08
+
+
 

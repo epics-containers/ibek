@@ -5,22 +5,15 @@ Entity classes
 from unittest.mock import Mock
 
 from ibek.ioc import IOC
-from ibek.render import (
-    render_database,
-    render_database_elements,
-    render_environment_variable_elements,
-    render_environment_variables,
-    render_post_ioc_init_elements,
-    render_script,
-    render_script_elements,
-)
+from ibek.render import Render
 
 
 def test_pmac_asyn_ip_port_script(pmac_classes):
     generated_class = pmac_classes.PmacAsynIPPort
     pmac_asyn_ip = generated_class(name="my_pmac_instance", IP="111.111.111.111")
 
-    script_txt = render_script(pmac_asyn_ip)
+    render = Render("test_ioc")
+    script_txt = render.render_script(pmac_asyn_ip)
     assert script_txt == "pmacAsynIPConfigure(my_pmac_instance, 111.111.111.111:1025)"
 
 
@@ -37,7 +30,8 @@ def test_geobrick_script(pmac_classes):
         movingPoll=800,
     )
 
-    script_txt = render_script(pmac_geobrick_instance)
+    render = Render("test_ioc")
+    script_txt = render.render_script(pmac_geobrick_instance)
 
     assert (
         script_txt
@@ -57,7 +51,8 @@ def test_geobrick_database(pmac_classes):
         movingPoll=800,
     )
 
-    db_txt = render_database(pmac_geobrick_instance)
+    render = Render("test_ioc")
+    db_txt = render.render_database(pmac_geobrick_instance)
 
     assert (
         db_txt == 'msi -I${EPICS_DB_INCLUDE_PATH} -M"NAXES=8, PORT=test_geobrick, '
@@ -73,9 +68,10 @@ def test_epics_environment_variables(epics_classes):
     generated_class = epics_classes.EPICS_CA_MAX_ARRAY_BYTES
     max_array_bytes_instance = generated_class(max_bytes=10000000)
 
-    env_text = render_environment_variables(max_array_bytes_instance)
+    render = Render("test_ioc")
+    env_text = render.render_environment_variables(max_array_bytes_instance)
 
-    assert env_text == "epicsEnvSet \"EPICS_CA_MAX_ARRAY_BYTES\", '10000000'"
+    assert env_text == "epicsEnvSet EPICS_CA_MAX_ARRAY_BYTES 10000000"
 
     # Using the generic entity
     env_name = "EPICS_CA_SERVER_PORT"
@@ -83,9 +79,9 @@ def test_epics_environment_variables(epics_classes):
     generated_class = epics_classes.epicsEnvSet
     epics_env_set_instance = generated_class(name=env_name, value=env_value)
 
-    env_text = render_environment_variables(epics_env_set_instance)
+    env_text = render.render_environment_variables(epics_env_set_instance)
 
-    assert env_text == f"epicsEnvSet \"{env_name}\", '{env_value}'"
+    assert env_text == f"epicsEnvSet {env_name} {env_value}"
 
 
 def test_entity_disabled_does_not_render_elements(pmac_classes, epics_classes):
@@ -157,7 +153,8 @@ def test_entity_disabled_does_not_render_elements(pmac_classes, epics_classes):
         "pmacCreateController(geobrick_enabled, geobrick_one_port, 0, 8, 800, 200)\n"
         "pmacCreateAxes(geobrick_enabled, 8)\n"
     )
-    script = render_script_elements(ioc)
+    render = Render("test_ioc")
+    script = render.render_script_elements(ioc)
     assert script == expected_script
 
     # Render database
@@ -168,15 +165,15 @@ def test_entity_disabled_does_not_render_elements(pmac_classes, epics_classes):
         'msi -I${EPICS_DB_INCLUDE_PATH} -M"PORT=geobrick_enabled, P=geobrick_one" '
         '"pmacStatus.template"\n'
     )
-    database = render_database_elements(ioc)
+    database = render.render_database_elements(ioc)
     assert database == expected_database
 
     # Render environment variables
-    expected_env_vars = "epicsEnvSet \"EPICS_CA_MAX_ARRAY_BYTES\", '6000000'\n"
-    env_vars = render_environment_variable_elements(ioc)
+    expected_env_vars = "epicsEnvSet EPICS_CA_MAX_ARRAY_BYTES 6000000\n"
+    env_vars = render.render_environment_variable_elements(ioc)
     assert env_vars == expected_env_vars
 
     # Render post_ioc_init
     expected_post_ioc_init = 'dbpf "TEST:PV:1", "pv_value_1"\n'
-    post_ioc_init = render_post_ioc_init_elements(ioc)
+    post_ioc_init = render.render_post_ioc_init_elements(ioc)
     assert post_ioc_init == expected_post_ioc_init

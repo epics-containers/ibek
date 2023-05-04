@@ -6,17 +6,13 @@ cd "/repos/epics/ioc"
 {{ env_var_elements}}
 {% endif -%}
 
-dbLoadDatabase "dbd/ioc.dbd"
-ioc_registerRecordDeviceDriver(pdbbase)
+dbLoadDatabase dbd/ioc.dbd
+ioc_registerRecordDeviceDriver pdbbase
 
 {{ script_elements }}
 
-{%- if pre_ioc_init_elements %}
-{{ pre_ioc_init_elements }}
-{% endif %}
-
-dbLoadRecords("/tmp/ioc.db")
-iocInit()
+dbLoadRecords /tmp/ioc.db
+iocInit
 
 {% if post_ioc_init_elements %}
 {{ post_ioc_init_elements }}

@@ -128,12 +128,12 @@ class Definition:
     script: A[
         Sequence[str], desc("Startup script snippet defined as Jinja template")
     ] = ()
+    script_once: A[
+        Sequence[str], desc("Startup script snippet to add only on first invocation")
+    ] = ()
     env_vars: A[
         Sequence[EnvironmentVariable],
         desc("Environment variables to set in the boot script"),
-    ] = ()
-    pre_ioc_init: A[
-        Sequence[str], desc("Entries to add pre iocInit(), such as dbLoadRecords")
     ] = ()
     post_ioc_init: A[
         Sequence[str], desc("Entries to add post iocInit(), such as dbpf")

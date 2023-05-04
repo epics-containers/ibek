@@ -150,6 +150,29 @@
               "command"
             ],
             "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "entity_enabled": {
+                "type": "boolean",
+                "default": true
+              },
+              "name": {
+                "type": "string",
+                "description": "A name for an interrupt vector variable",
+                "vscode_ibek_plugin_type": "type_id"
+              },
+              "type": {
+                "type": "string",
+                "const": "epics.InterruptVectorVME",
+                "default": "epics.InterruptVectorVME"
+              }
+            },
+            "required": [
+              "name"
+            ],
+            "additionalProperties": false
           }
         ]
       },
