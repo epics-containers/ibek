@@ -250,18 +250,16 @@
                     },
                     "args": {
                       "type": "object",
-                      "additionalProperties": {
-                        "type": "string"
-                      },
                       "description": "The arguments IOC instance should supply"
                     },
                     "header": {
-                      "type": "array",
-                      "items": {
-                        "type": "string"
-                      },
-                      "description": "commands/comments to appear before the function",
-                      "default": []
+                      "type": "string",
+                      "description": "commands/comments to appear before the function"
+                    },
+                    "once": {
+                      "type": "boolean",
+                      "description": "If true, only call the function once",
+                      "default": false
                     },
                     "type": {
                       "type": "string",
@@ -271,7 +269,8 @@
                   },
                   "required": [
                     "name",
-                    "args"
+                    "args",
+                    "header"
                   ],
                   "additionalProperties": false
                 },

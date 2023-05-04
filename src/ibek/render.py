@@ -26,10 +26,17 @@ class Render:
 
         return result
 
-    def render_text(self, instance: Entity, text: str) -> str:
+    def render_text(self, instance: Entity, text: str, once=False, suffix="") -> str:
         """
         Get the rendered template based on an instance attribute
         """
+        if once:
+            name = instance.__definition__.name + suffix
+            if name not in self.once_done:
+                self.once_done.append(name)
+            else:
+                return ""
+
         jinja_template = Template(text)
         result = jinja_template.render(self._to_dict(instance))  # type: ignore
 
@@ -44,33 +51,44 @@ class Render:
         jinja_template = Template(result)
         result = jinja_template.render(self._to_dict(instance))  # type: ignore
 
-        return result
+        return result + "\n"
+
+    def render_function(self, instance: Entity, function: Function) -> str:
+        """
+        Render a Function object that represents a function call in the IOC
+        startup script
+        """
+        comment = f"# {function.name} "
+        call = f"{function.name} "
+        for name, value in function.args.items():
+            comment += f"{name} "
+            call += f"{value} "
+
+        text = (
+            self.render_text(instance, comment, once=True, suffix="func")
+            + self.render_text(instance, function.header, once=True, suffix="func_hdr")
+            + self.render_text(instance, call)
+        )
+
+        return text
 
     def render_script(self, instance: Entity) -> Optional[str]:
         """
         render the startup script by combining the jinja template from
         an entity with the arguments from an Entity
         """
-        once: Optional[str] = None
-        #     once = self.render_template_from_entity_attribute(instance, "script_once")
-        #     self.once_done.append(instance.__definition__.name)
 
         script = ""
         script_items = getattr(instance.__definition__, "script")
         for line in script_items:
             if isinstance(line, str):
-                script += self.render_text(instance, line) + "\n"
+                script += self.render_text(instance, line)
             elif isinstance(line, Once):
-                if instance.__definition__.name not in self.once_done:
-                    self.once_done.append(instance.__definition__.name)
-                    script += self.render_text(instance, line.value) + "\n"
+                script += self.render_text(instance, line.value, True)
             elif isinstance(line, Function):
-                pass
+                script += self.render_function(instance, line)
 
-        if once and script:
-            return once + "\n" + script
-        else:
-            return once or script
+        return script
 
     def render_database(self, instance: Entity) -> Optional[str]:
         """
@@ -104,7 +122,7 @@ class Render:
         db_template = Template(db_txt)
         db_txt = db_template.render(self._to_dict(instance))  # type: ignore
 
-        return db_txt
+        return db_txt + "\n"
 
     def render_environment_variables(self, instance: Entity) -> Optional[str]:
         """
@@ -120,7 +138,7 @@ class Render:
             # Substitute the name and value of the environment variable from args
             env_template = Template(f"epicsEnvSet {variable.name} {variable.value}")
             env_var_txt += env_template.render(self._to_dict(instance))
-        return env_var_txt
+        return env_var_txt + "\n"
 
     def render_post_ioc_init(self, instance: Entity) -> Optional[str]:
         """
@@ -129,8 +147,7 @@ class Render:
         """
         script = ""
         for line in getattr(instance.__definition__, "post_ioc_init"):
-            rendered_line = self.render_text(instance, line)
-            script += rendered_line + "\n"
+            script += self.render_text(instance, line)
 
         return script
 
@@ -144,7 +161,7 @@ class Render:
             if instance.entity_enabled:
                 element = method(instance)
                 if element:
-                    elements += element + "\n"
+                    elements += element
         return elements
 
     def render_script_elements(self, ioc: IOC) -> str:

@@ -127,7 +127,7 @@ copybutton_prompt_is_regexp = True
 #
 html_theme = "pydata_sphinx_theme"
 github_repo = project
-github_user = "DiamondLightSource"
+github_user = "epics-containers"
 
 # Theme options for pydata_sphinx_theme
 html_theme_options = dict(

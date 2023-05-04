@@ -10,7 +10,6 @@ ioc_registerRecordDeviceDriver pdbbase
 
 dbLoadRecords("config/ioc.db")
 
-
 dbLoadRecords /tmp/ioc.db
 iocInit
 
