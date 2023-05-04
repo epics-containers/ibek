@@ -46,7 +46,15 @@ class Utils:
 
         creates a new counter if it does not yet exist
         """
-        counter = self.counters.get(name, Counter(start, start, stop))
+        counter = self.counters.get(name)
+        if counter is None:
+            counter = Counter(start, start, stop)
+            self.counters[name] = counter
+        else:
+            if counter.start != start or counter.stop != stop:
+                raise ValueError(
+                    f"Redefining counter {name} with different start/stop values"
+                )
         result = counter.current
         counter.increment()
         self.counters[name] = counter
