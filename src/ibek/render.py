@@ -58,7 +58,9 @@ class Render:
         Render a Function object that represents a function call in the IOC
         startup script
         """
-        comment = f"# {function.name} "
+
+        # initial function comment appears after newline for prettier formatting
+        comment = f"\n# {function.name} "
         call = f"{function.name} "
         for name, value in function.args.items():
             comment += f"{name} "

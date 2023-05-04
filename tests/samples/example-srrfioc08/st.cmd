@@ -14,6 +14,7 @@ ioc_registerRecordDeviceDriver pdbbase
 epicsEnvSet IPAC4 0
 # ipacAddHy8002 "slot , interrupt_level"
 ipacAddHy8002 "4, 2"
+
 # Hy8401ipConfigure CardId IPACid IpSlot InterruptVector InterruptEnable AiType ExternalClock ClockRate Inhibit SampleCount SampleSpacing SampleSize 
 #   IpSlot A=0 B=1 C=2 D=3
 #   ClockRate  0=1Hz  1=2Hz  2=5Hz  3=10Hz 4=20Hz 5=50Hz 6=100Hz7=200Hz 8=500Hz 9=1kHz 10=2kHz11=5kHz 12=10kHz 13=20kHz 14=50kHz 15=100kHz
