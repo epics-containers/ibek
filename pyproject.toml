@@ -15,6 +15,12 @@ classifiers = [
 ]
 description = "IOC Builder for EPICS and Kubernetes"
 dependencies = [
+    "typing-extensions",
+    "apischema>=0.15",
+    "typer",
+    "ruamel.yaml",
+    "jsonschema",
+    "jinja2",
     "typing-extensions;python_version<'3.8'",
 ] # Add project dependencies here, e.g. ["click", "numpy"]
 dynamic = ["version"]
@@ -33,6 +39,7 @@ dev = [
     "pydata-sphinx-theme>=0.12",
     "pytest",
     "pytest-cov",
+    "sphinx_apischema",
     "sphinx-autobuild",
     "sphinx-copybutton",
     "sphinx-design",
