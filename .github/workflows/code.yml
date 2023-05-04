@@ -3,9 +3,6 @@ name: Code CI
 on:
   push:
   pull_request:
-  schedule:
-    # Run weekly to check latest versions of dependencies
-    - cron: "0 8 * * WED"
 env:
   # The target python version, which must match the Dockerfile version
   CONTAINER_PYTHON: "3.10"
@@ -46,7 +43,7 @@ jobs:
       fail-fast: false
       matrix:
         os: ["ubuntu-latest"] # can add windows-latest, macos-latest
-        python: ["3.9", "3.10"]
+        python: ["3.9", "3.10", "3.11"]
         install: ["-e .[dev]"]
         # Make one version be non-editable to test both paths of version code
         include:
@@ -111,7 +108,7 @@ jobs:
           path: dist
 
       - name: Check for packaging errors
-        run: pipx run twine check dist/*
+        run: pipx run twine check --strict dist/*
 
       - name: Install python packages
         uses: ./.github/actions/install_requirements
@@ -143,7 +140,7 @@ jobs:
       - name: Download wheel and lockfiles
         uses: actions/download-artifact@v3
         with:
-          path: .devcontainer
+          path: artifacts/
 
       - name: Log in to GitHub Docker Registry
         if: github.event_name != 'pull_request'
@@ -174,7 +171,9 @@ jobs:
           push: ${{ github.event_name == 'push' && startsWith(github.ref, 'refs/tags') }}
           load: ${{ ! (github.event_name == 'push' && startsWith(github.ref, 'refs/tags')) }}
           tags: ${{ steps.meta.outputs.tags }}
-          context: .devcontainer
+          labels: ${{ steps.meta.outputs.labels }}
+          context: artifacts/
+          file: ./Dockerfile
           # If you have a long docker build, uncomment the following to turn on caching
           # For short build times this makes it a little slower
           #cache-from: type=gha
@@ -188,6 +187,8 @@ jobs:
     needs: [lint, dist, test, system-test]
     if: ${{ github.event_name == 'push' && startsWith(github.ref, 'refs/tags') }}
     runs-on: ubuntu-latest
+    env:
+      HAS_PYPI_TOKEN: ${{ secrets.PYPI_TOKEN != '' }}
 
     steps:
       - uses: actions/download-artifact@v3
@@ -199,7 +200,7 @@ jobs:
       - name: Github Release
         # We pin to the SHA, not the tag, for security reasons.
         # https://docs.github.com/en/actions/learn-github-actions/security-hardening-for-github-actions#using-third-party-actions
-        uses: softprops/action-gh-release@1e07f4398721186383de40550babbdf2b84acfc5 # v0.1.14
+        uses: softprops/action-gh-release@de2c0eb89ae2a093876385947365aca7b0e5f844 # v0.1.15
         with:
           prerelease: ${{ contains(github.ref_name, 'a') || contains(github.ref_name, 'b') || contains(github.ref_name, 'rc') }}
           files: |
@@ -210,6 +211,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Publish to PyPI
+        if: ${{ env.HAS_PYPI_TOKEN }}
         uses: pypa/gh-action-pypi-publish@release/v1
         with:
           password: ${{ secrets.PYPI_TOKEN }}
