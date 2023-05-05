@@ -13,13 +13,20 @@ from .utils import Utils
 
 
 class Render:
+    """
+    A class for generating snippets of startup script / EPICS DB
+    by using Jinja to combine snippet templates from support module
+    definition yaml with substitution values supplied in ioc entity yaml
+    """
+
     def __init__(self, utils: Utils):
         self.utils = utils
         self.once_done: List[str] = []
 
     def _to_dict(self, instance: Any) -> Dict[str, Any]:
         """
-        Add the utils to the instance so we can use them in the jinja templates
+        add the global utils object to the instance so we can use them in the
+        jinja templates
         """
         result = asdict(instance)
         result["__utils__"] = self.utils
@@ -28,7 +35,13 @@ class Render:
 
     def render_text(self, instance: Entity, text: str, once=False, suffix="") -> str:
         """
-        Get the rendered template based on an instance attribute
+        render a line of jinja template in ``text`` using the values supplied
+        in the ``instance`` object. Supports the ``once`` flag to only render
+        the line once per definitions file.
+
+        ``once`` uses the name of the definition + suffix to track which lines
+        have been rendered already. The suffix can be used where a given
+        Entity has more than one element to render once (e.g. functions)
         """
         if once:
             name = instance.__definition__.name + suffix
@@ -55,7 +68,7 @@ class Render:
 
     def render_function(self, instance: Entity, function: Function) -> str:
         """
-        Render a Function object that represents a function call in the IOC
+        render a Function object that represents a function call in the IOC
         startup script
         """
 

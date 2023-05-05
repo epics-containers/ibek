@@ -13,6 +13,10 @@ from typing import Any, Dict
 
 @dataclass
 class Counter:
+    """
+    Provides the ability to supply unique numbers to Jinja templates
+    """
+
     start: int
     current: int
     stop: int
@@ -26,6 +30,10 @@ class Counter:
 
 
 class Utils:
+    """
+    A Utility class for adding functions to the Jinja context
+    """
+
     def __init__(self, ioc_name: str):
         self.ioc_name = ioc_name
         self.variables: Dict[str, Any] = {}
