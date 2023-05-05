@@ -24,7 +24,7 @@ def test_example_ioc(tmp_path: Path, samples: Path):
 
     entity_file = samples / "example-ibek-config" / "ioc.yaml"
     definition_file = samples / "yaml" / "epics.ibek.support.yaml"
-    definition_file2 = samples / "yaml" / "deviocstats.ibek.support.yaml"
+    definition_file2 = samples / "yaml" / "devIocStats.ibek.support.yaml"
     out_file = tmp_path / "new_dir" / "test.ioc.cmd"
     out_db = tmp_path / "new_dir" / "make_db.sh"
 
