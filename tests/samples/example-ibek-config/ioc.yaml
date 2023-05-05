@@ -1,18 +1,20 @@
+# yaml-language-server: $schema=../schemas/all.ibek.support.schema.json
+
 ioc_name: test-ibek-ioc
 description: a basic example for testing ioc-template
 generic_ioc_image: ghcr.io/epics-containers/ioc-template:23.3.2
 
 entities:
-  - type: epics.EPICS_CA_MAX_ARRAY_BYTES
+  - type: epics.EpicsCaMaxArrayBytes
     max_bytes: 6000000
 
-  - type: epics.epicsEnvSet
+  - type: epics.EpicsEnvSet
     name: EPICS_CA_SERVER_PORT
     # important: all environment vars passed as string in IOC YAML
     value: "7064"
 
-  - type: deviocstats.iocAdminSoft
-    IOC: test-ibek-ioc
+  - type: deviocstats.IocAdminSoft
+    ioc: test-ibek-ioc
 
-  - type: epics.startupCommand
+  - type: epics.StartupCommand
     command: dbLoadRecords("config/ioc.db")

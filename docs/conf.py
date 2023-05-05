@@ -130,7 +130,8 @@ copybutton_prompt_is_regexp = True
 #
 html_theme = "pydata_sphinx_theme"
 github_repo = project
-github_user = "DiamondLightSource"
+github_user = "epics-containers"
+
 switcher_json = f"https://{github_user}.github.io/{github_repo}/switcher.json"
 switcher_exists = requests.get(switcher_json).ok
 if not switcher_exists:

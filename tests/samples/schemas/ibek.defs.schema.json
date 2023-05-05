@@ -237,17 +237,62 @@
           "script": {
             "type": "array",
             "items": {
-              "type": "string"
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "name": {
+                      "type": "string",
+                      "description": "Name of the function to call"
+                    },
+                    "args": {
+                      "type": "object",
+                      "description": "The arguments IOC instance should supply"
+                    },
+                    "header": {
+                      "type": "string",
+                      "description": "commands/comments to appear before the function"
+                    },
+                    "once": {
+                      "type": "boolean",
+                      "description": "If true, only call the function once",
+                      "default": false
+                    },
+                    "type": {
+                      "type": "string",
+                      "const": "function",
+                      "default": "function"
+                    }
+                  },
+                  "required": [
+                    "name",
+                    "args",
+                    "header"
+                  ],
+                  "additionalProperties": false
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string",
+                      "const": "once",
+                      "default": "once"
+                    },
+                    "value": {
+                      "type": "string",
+                      "description": "Startup script snippets defined as Jinja template",
+                      "default": ""
+                    }
+                  },
+                  "additionalProperties": false
+                }
+              ]
             },
-            "description": "Startup script snippet defined as Jinja template",
-            "default": []
-          },
-          "script_once": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "description": "Startup script snippet to add only on first invocation",
+            "description": "Startup script snippets defined as Jinja template or function",
             "default": []
           },
           "env_vars": {

@@ -27,8 +27,8 @@
               },
               "type": {
                 "type": "string",
-                "const": "epics.EPICS_CA_MAX_ARRAY_BYTES",
-                "default": "epics.EPICS_CA_MAX_ARRAY_BYTES"
+                "const": "epics.EpicsCaMaxArrayBytes",
+                "default": "epics.EpicsCaMaxArrayBytes"
               }
             },
             "additionalProperties": false
@@ -47,8 +47,8 @@
               },
               "type": {
                 "type": "string",
-                "const": "epics.EPICS_TS_MIN_WEST",
-                "default": "epics.EPICS_TS_MIN_WEST"
+                "const": "epics.EpicsTsMinWest",
+                "default": "epics.EpicsTsMinWest"
               }
             },
             "additionalProperties": false
@@ -70,8 +70,8 @@
               },
               "type": {
                 "type": "string",
-                "const": "epics.dbpf",
-                "default": "epics.dbpf"
+                "const": "epics.Dbpf",
+                "default": "epics.Dbpf"
               }
             },
             "required": [
@@ -97,8 +97,8 @@
               },
               "type": {
                 "type": "string",
-                "const": "epics.epicsEnvSet",
-                "default": "epics.epicsEnvSet"
+                "const": "epics.EpicsEnvSet",
+                "default": "epics.EpicsEnvSet"
               }
             },
             "required": [
@@ -116,17 +116,15 @@
               },
               "command": {
                 "type": "string",
-                "description": "An arbitrary command in the startup script before iocInit"
+                "description": "An arbitrary command in the startup script before iocInit",
+                "default": ""
               },
               "type": {
                 "type": "string",
-                "const": "epics.startupCommand",
-                "default": "epics.startupCommand"
+                "const": "epics.StartupCommand",
+                "default": "epics.StartupCommand"
               }
             },
-            "required": [
-              "command"
-            ],
             "additionalProperties": false
           },
           {
@@ -138,17 +136,15 @@
               },
               "command": {
                 "type": "string",
-                "description": "An arbitrary command in the startup script after iocInit"
+                "description": "An arbitrary command in the startup script after iocInit",
+                "default": ""
               },
               "type": {
                 "type": "string",
-                "const": "epics.postStartupCommand",
-                "default": "epics.postStartupCommand"
+                "const": "epics.PostStartupCommand",
+                "default": "epics.PostStartupCommand"
               }
             },
-            "required": [
-              "command"
-            ],
             "additionalProperties": false
           },
           {

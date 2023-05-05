@@ -3,8 +3,8 @@ ioc_name: bl45p-mo-ioc-04
 description: an example motion ioc with epics environment variables and dbpf entries
 generic_ioc_image: ghcr.io/epics-containers/ioc-pmac:main.run
 entities:
-  # - type: epics.EPICS_CA_MAX_ARRAY_BYTES
-  
+  # - type: epics.EpicsCaMaxArrayBytes
+
   # - type: epics.EPICS_TS_MIN_WEST
   #   minutes_west: 60
 
@@ -47,7 +47,7 @@ entities:
   # - type: epics.dbpf
   #   pv: BL45P-MO-THIN-01:X1.TWV
   #   value: "2.5"
-  
-  - type: epics.dbpf
+
+  - type: epics.Dbpf
     pv: BL45P-MO-THIN-01:Y1.TWV
     value: "0.5"

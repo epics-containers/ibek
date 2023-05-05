@@ -14,7 +14,7 @@ def test_pmac_asyn_ip_port_script(pmac_classes):
 
     render = Render("test_ioc")
     script_txt = render.render_script(pmac_asyn_ip)
-    assert script_txt == "pmacAsynIPConfigure(my_pmac_instance, 111.111.111.111:1025)"
+    assert script_txt == "pmacAsynIPConfigure(my_pmac_instance, 111.111.111.111:1025)\n"
 
 
 def test_geobrick_script(pmac_classes):
@@ -36,7 +36,7 @@ def test_geobrick_script(pmac_classes):
     assert (
         script_txt
         == "pmacCreateController(test_geobrick, my_asyn_port, 0, 8, 800, 200)\n"
-        "pmacCreateAxes(test_geobrick, 8)"
+        "pmacCreateAxes(test_geobrick, 8)\n"
     )
 
 
@@ -59,29 +59,29 @@ def test_geobrick_database(pmac_classes):
         "P=geobrick_one, idlePoll=200, movingPoll=800, TIMEOUT=4, CSG0=, CSG1=, "
         'CSG2=, CSG3=, CSG4=" "pmacController.template"\n'
         'msi -I${EPICS_DB_INCLUDE_PATH} -M"PORT=test_geobrick, '
-        'P=geobrick_one" "pmacStatus.template"'
+        'P=geobrick_one" "pmacStatus.template"\n'
     )
 
 
 def test_epics_environment_variables(epics_classes):
     # Using a specific variable entity
-    generated_class = epics_classes.EPICS_CA_MAX_ARRAY_BYTES
+    generated_class = epics_classes.EpicsCaMaxArrayBytes
     max_array_bytes_instance = generated_class(max_bytes=10000000)
 
     render = Render("test_ioc")
     env_text = render.render_environment_variables(max_array_bytes_instance)
 
-    assert env_text == "epicsEnvSet EPICS_CA_MAX_ARRAY_BYTES 10000000"
+    assert env_text == "epicsEnvSet EPICS_CA_MAX_ARRAY_BYTES 10000000\n"
 
     # Using the generic entity
     env_name = "EPICS_CA_SERVER_PORT"
     env_value = 6000
-    generated_class = epics_classes.epicsEnvSet
+    generated_class = epics_classes.EpicsEnvSet
     epics_env_set_instance = generated_class(name=env_name, value=env_value)
 
     env_text = render.render_environment_variables(epics_env_set_instance)
 
-    assert env_text == f"epicsEnvSet {env_name} {env_value}"
+    assert env_text == f"epicsEnvSet {env_name} {env_value}\n"
 
 
 def test_entity_disabled_does_not_render_elements(pmac_classes, epics_classes):
@@ -91,9 +91,9 @@ def test_entity_disabled_does_not_render_elements(pmac_classes, epics_classes):
     # Entity which has a script and database
     pmac_geobrick_class = pmac_classes.Geobrick
     # Entity which has env_vars
-    ca_max_array_bytes_class = epics_classes.EPICS_CA_MAX_ARRAY_BYTES
+    ca_max_array_bytes_class = epics_classes.EpicsCaMaxArrayBytes
     # Entity which has post_ioc_init
-    dbpf_class = epics_classes.dbpf
+    dbpf_class = epics_classes.Dbpf
 
     # We require pmac asyn IP port instances for the Geobrick class
     pmac_asyn_ip_class = pmac_classes.PmacAsynIPPort
