@@ -12,8 +12,11 @@ export SAMPLES_DIR=$(realpath $(dirname "${BASH_SOURCE[0]}"))
 # this is so relative schema mode lines work
 cd $SAMPLES_DIR
 
-echo making the global schema
+echo making the support yaml schema
 ibek ibek-schema ${SAMPLES_DIR}/schemas/ibek.defs.schema.json
+
+echo making the global ioc schema using all support yaml in ibek-defs
+ibek ioc-schema ${SAMPLES_DIR}/../../ibek-defs/*/*.support.yaml ${SAMPLES_DIR}/schemas/all.ibek.support.schema.json
 
 echo making the epics definition schema
 ibek ioc-schema ${SAMPLES_DIR}/yaml/epics.ibek.support.yaml $SAMPLES_DIR/schemas/epics.ibek.support.schema.json

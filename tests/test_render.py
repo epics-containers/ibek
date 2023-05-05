@@ -65,7 +65,7 @@ def test_geobrick_database(pmac_classes):
 
 def test_epics_environment_variables(epics_classes):
     # Using a specific variable entity
-    generated_class = epics_classes.EPICS_CA_MAX_ARRAY_BYTES
+    generated_class = epics_classes.EpicsCaMaxArrayBytes
     max_array_bytes_instance = generated_class(max_bytes=10000000)
 
     render = Render("test_ioc")
@@ -76,7 +76,7 @@ def test_epics_environment_variables(epics_classes):
     # Using the generic entity
     env_name = "EPICS_CA_SERVER_PORT"
     env_value = 6000
-    generated_class = epics_classes.epicsEnvSet
+    generated_class = epics_classes.EpicsEnvSet
     epics_env_set_instance = generated_class(name=env_name, value=env_value)
 
     env_text = render.render_environment_variables(epics_env_set_instance)
@@ -91,9 +91,9 @@ def test_entity_disabled_does_not_render_elements(pmac_classes, epics_classes):
     # Entity which has a script and database
     pmac_geobrick_class = pmac_classes.Geobrick
     # Entity which has env_vars
-    ca_max_array_bytes_class = epics_classes.EPICS_CA_MAX_ARRAY_BYTES
+    ca_max_array_bytes_class = epics_classes.EpicsCaMaxArrayBytes
     # Entity which has post_ioc_init
-    dbpf_class = epics_classes.dbpf
+    dbpf_class = epics_classes.Dbpf
 
     # We require pmac asyn IP port instances for the Geobrick class
     pmac_asyn_ip_class = pmac_classes.PmacAsynIPPort

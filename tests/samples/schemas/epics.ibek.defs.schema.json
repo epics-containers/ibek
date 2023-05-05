@@ -27,8 +27,8 @@
               },
               "type": {
                 "type": "string",
-                "const": "epics.EPICS_CA_MAX_ARRAY_BYTES",
-                "default": "epics.EPICS_CA_MAX_ARRAY_BYTES"
+                "const": "epics.EpicsCaMaxArrayBytes",
+                "default": "epics.EpicsCaMaxArrayBytes"
               }
             },
             "additionalProperties": false

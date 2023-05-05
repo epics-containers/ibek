@@ -10,10 +10,12 @@ epicsEnvSet Vec1 193
 dbLoadDatabase dbd/ioc.dbd
 ioc_registerRecordDeviceDriver pdbbase
 
-# Assign the Carrier Handle for Hy8002 "IPAC4" in slot 4
+
+# ipacAddHy8002 "slot, interrupt_level" 
+#   Create a new Hy8002 carrier.
+#   The resulting carrier handle is saved in an env variable.
+ipacAddHy8002 "4, 2" 
 epicsEnvSet IPAC4 0
-# ipacAddHy8002 "slot , interrupt_level"
-ipacAddHy8002 "4, 2"
 
 # Hy8401ipConfigure CardId IPACid IpSlot InterruptVector InterruptEnable AiType ExternalClock ClockRate Inhibit SampleCount SampleSpacing SampleSize 
 #   IpSlot A=0 B=1 C=2 D=3
