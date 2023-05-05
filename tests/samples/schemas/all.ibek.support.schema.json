@@ -139,6 +139,29 @@
                 "type": "boolean",
                 "default": true
               },
+              "carrier": {
+                "type": "string",
+                "description": "IPAC carrier name",
+                "vscode_ibek_plugin_type": "type_object"
+              },
+              "type": {
+                "type": "string",
+                "const": "psc.Psc",
+                "default": "psc.Psc"
+              }
+            },
+            "required": [
+              "carrier"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "entity_enabled": {
+                "type": "boolean",
+                "default": true
+              },
               "ioc": {
                 "type": "string",
                 "description": "Device Prefix for this IOC"
@@ -1329,29 +1352,6 @@
               "name",
               "Controller",
               "CS"
-            ],
-            "additionalProperties": false
-          },
-          {
-            "type": "object",
-            "properties": {
-              "entity_enabled": {
-                "type": "boolean",
-                "default": true
-              },
-              "carrier": {
-                "type": "string",
-                "description": "IPAC carrier name",
-                "vscode_ibek_plugin_type": "type_object"
-              },
-              "type": {
-                "type": "string",
-                "const": "psc.Psc",
-                "default": "psc.Psc"
-              }
-            },
-            "required": [
-              "carrier"
             ],
             "additionalProperties": false
           },
