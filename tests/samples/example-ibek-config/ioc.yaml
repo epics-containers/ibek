@@ -13,7 +13,7 @@ entities:
     # important: all environment vars passed as string in IOC YAML
     value: "7064"
 
-  - type: deviocstats.IocAdminSoft
+  - type: devIocStats.IocAdminSoft
     ioc: test-ibek-ioc
 
   - type: epics.StartupCommand

@@ -146,8 +146,8 @@
               },
               "type": {
                 "type": "string",
-                "const": "psc.Psc",
-                "default": "psc.Psc"
+                "const": "dls_psc_support.Psc",
+                "default": "dls_psc_support.Psc"
               }
             },
             "required": [
@@ -168,8 +168,8 @@
               },
               "type": {
                 "type": "string",
-                "const": "deviocstats.IocAdminSoft",
-                "default": "deviocstats.IocAdminSoft"
+                "const": "devIocStats.IocAdminSoft",
+                "default": "devIocStats.IocAdminSoft"
               }
             },
             "required": [
@@ -1379,8 +1379,8 @@
               },
               "type": {
                 "type": "string",
-                "const": "timingTemplates.DefaultEVR",
-                "default": "timingTemplates.DefaultEVR"
+                "const": "TimingTemplates.DefaultEVR",
+                "default": "TimingTemplates.DefaultEVR"
               }
             },
             "required": [
@@ -1403,8 +1403,8 @@
               },
               "type": {
                 "type": "string",
-                "const": "timingTemplates.EvrAlive",
-                "default": "timingTemplates.EvrAlive"
+                "const": "TimingTemplates.EvrAlive",
+                "default": "TimingTemplates.EvrAlive"
               }
             },
             "required": [
@@ -1436,8 +1436,8 @@
               },
               "type": {
                 "type": "string",
-                "const": "timingTemplates.GeneralTime",
-                "default": "timingTemplates.GeneralTime"
+                "const": "TimingTemplates.GeneralTime",
+                "default": "TimingTemplates.GeneralTime"
               }
             },
             "required": [
