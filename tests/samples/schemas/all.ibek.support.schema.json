@@ -139,29 +139,6 @@
                 "type": "boolean",
                 "default": true
               },
-              "carrier": {
-                "type": "string",
-                "description": "IPAC carrier name",
-                "vscode_ibek_plugin_type": "type_object"
-              },
-              "type": {
-                "type": "string",
-                "const": "dls_psc_support.Psc",
-                "default": "dls_psc_support.Psc"
-              }
-            },
-            "required": [
-              "carrier"
-            ],
-            "additionalProperties": false
-          },
-          {
-            "type": "object",
-            "properties": {
-              "entity_enabled": {
-                "type": "boolean",
-                "default": true
-              },
               "ioc": {
                 "type": "string",
                 "description": "Device Prefix for this IOC"
@@ -323,6 +300,11 @@
                 "description": "A name for an interrupt vector variable",
                 "vscode_ibek_plugin_type": "type_id"
               },
+              "count": {
+                "type": "integer",
+                "description": "The number of interrupt vectors to reserve",
+                "default": 1
+              },
               "type": {
                 "type": "string",
                 "const": "epics.InterruptVectorVME",
@@ -351,7 +333,7 @@
                 "description": "Carrier Board Identifier",
                 "vscode_ibek_plugin_type": "type_object"
               },
-              "ip_slot": {
+              "ip_site_number": {
                 "type": "integer",
                 "description": "IP Site Number 0=A, 1=B, 2=C, 3=D"
               },
@@ -388,7 +370,7 @@
               "card_id": {
                 "type": "string",
                 "description": "Card Identifier",
-                "default": "{{ carrier.slot }}{{ ip_slot }}"
+                "default": "{{ carrier.slot }}{{ ip_site_number }}"
               },
               "type": {
                 "type": "string",
@@ -399,7 +381,7 @@
             "required": [
               "name",
               "carrier",
-              "ip_slot",
+              "ip_site_number",
               "vector"
             ],
             "additionalProperties": false

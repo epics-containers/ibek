@@ -254,7 +254,8 @@
                     },
                     "header": {
                       "type": "string",
-                      "description": "commands/comments to appear before the function"
+                      "description": "commands/comments to appear before the function",
+                      "default": ""
                     },
                     "once": {
                       "type": "boolean",
@@ -269,8 +270,7 @@
                   },
                   "required": [
                     "name",
-                    "args",
-                    "header"
+                    "args"
                   ],
                   "additionalProperties": false
                 },

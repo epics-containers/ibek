@@ -124,7 +124,7 @@ class Function:
 
     name: A[str, desc("Name of the function to call")]
     args: A[Dict[str, Any], desc("The arguments IOC instance should supply")]
-    header: A[str, desc("commands/comments to appear before the function")]
+    header: A[str, desc("commands/comments to appear before the function")] = ""
     once: A[bool, desc("If true, only call the function once")] = False
     type: Literal["function"] = "function"
 

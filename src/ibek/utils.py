@@ -21,8 +21,8 @@ class Counter:
     current: int
     stop: int
 
-    def increment(self):
-        self.current += 1
+    def increment(self, count: int):
+        self.current += count
         if self.current > self.stop:
             raise ValueError(
                 f"Counter {self.current} exceeded stop value of {self.stop}"
@@ -48,9 +48,11 @@ class Utils:
         # Intentionally raises a KeyError if the key doesn't exist
         return self.variables[key]
 
-    def counter(self, name: str, start: int = 0, stop: int = 65535) -> int:
+    def counter(
+        self, name: str, start: int = 0, stop: int = 65535, inc: int = 1
+    ) -> int:
         """
-        get a named counter that increments each time it is called
+        get a named counter that increments by inc each time it is called
 
         creates a new counter if it does not yet exist
         """
@@ -64,7 +66,7 @@ class Utils:
                     f"Redefining counter {name} with different start/stop values"
                 )
         result = counter.current
-        counter.increment()
+        counter.increment(inc)
         self.counters[name] = counter
 
         return result
