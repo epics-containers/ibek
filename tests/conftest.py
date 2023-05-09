@@ -12,7 +12,7 @@ def get_support(samples: Path, yaml_file: str) -> Support:
     Get a support object from the sample YAML directory
     """
     # load from file
-    d = YAML(typ="safe").load(samples / "yaml" / f"{yaml_file}")
+    d = YAML(typ="safe").load(samples / f"{yaml_file}")
     # create a support object from that dict
     support = Support.deserialize(d)
     return support
@@ -29,8 +29,8 @@ def samples():
 
 
 @fixture
-def pmac_support(samples):
-    return get_support(samples, "pmac.ibek.support.yaml")
+def pmac_support(ibek_defs):
+    return get_support(ibek_defs / "pmac", "pmac.ibek.support.yaml")
 
 
 @fixture
@@ -47,8 +47,8 @@ def pmac_classes(pmac_support):
 
 
 @fixture
-def epics_support(samples):
-    return get_support(samples, "epics.ibek.support.yaml")
+def epics_support(ibek_defs):
+    return get_support(ibek_defs / "_global", "epics.ibek.support.yaml")
 
 
 @fixture

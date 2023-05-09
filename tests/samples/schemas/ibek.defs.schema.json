@@ -14,6 +14,10 @@
             "type": "string",
             "description": "Publish Definition as type <module>.<name> for IOC instances"
           },
+          "description": {
+            "type": "string",
+            "description": "Describes the purpose of the definition"
+          },
           "args": {
             "type": "array",
             "items": {
@@ -328,7 +332,8 @@
           }
         },
         "required": [
-          "name"
+          "name",
+          "description"
         ],
         "additionalProperties": false
       },

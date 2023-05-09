@@ -7,8 +7,8 @@ def test_conversion_classes():
     support = Support(
         "mymodule",
         [
-            Definition("port", [IdArg("name", "the name", "id")]),
-            Definition("device", [ObjectArg("port", "the port", "object")]),
+            Definition("port", "A port", [IdArg("name", "the name", "id")]),
+            Definition("device", "a device", [ObjectArg("port", "the port", "object")]),
         ],
     )
     namespace = make_entity_classes(support)

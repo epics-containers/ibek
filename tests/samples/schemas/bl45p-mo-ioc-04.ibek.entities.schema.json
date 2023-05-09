@@ -42,7 +42,7 @@
               },
               "minutes_west": {
                 "type": "integer",
-                "description": "Set relative time zone minutes West relative to GMT (+/-720)",
+                "description": "relative time zone minutes",
                 "default": 0
               },
               "type": {
@@ -116,7 +116,7 @@
               },
               "command": {
                 "type": "string",
-                "description": "An arbitrary command in the startup script before iocInit",
+                "description": "command string",
                 "default": ""
               },
               "type": {
@@ -136,7 +136,7 @@
               },
               "command": {
                 "type": "string",
-                "description": "An arbitrary command in the startup script after iocInit",
+                "description": "command string",
                 "default": ""
               },
               "type": {

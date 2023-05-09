@@ -9,7 +9,7 @@ from .test_cli import run_cli
 runner = CliRunner()
 
 
-def test_example_ioc(tmp_path: Path, samples: Path):
+def test_example_ioc(tmp_path: Path, samples: Path, ibek_defs: Path):
     """
     build an ioc from yaml and verify the result
 
@@ -23,8 +23,8 @@ def test_example_ioc(tmp_path: Path, samples: Path):
     tmp_path.mkdir(exist_ok=True)
 
     entity_file = samples / "example-ibek-config" / "ioc.yaml"
-    definition_file = samples / "yaml" / "epics.ibek.support.yaml"
-    definition_file2 = samples / "yaml" / "devIocStats.ibek.support.yaml"
+    definition_file = ibek_defs / "_global" / "epics.ibek.support.yaml"
+    definition_file2 = ibek_defs / "_global" / "devIocStats.ibek.support.yaml"
     out_file = tmp_path / "new_dir" / "test.ioc.cmd"
     out_db = tmp_path / "new_dir" / "make_db.sh"
 
