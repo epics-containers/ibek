@@ -70,6 +70,8 @@ e.g.
     script:
       - type: function
         name: pscAddIpModule
+        header: |
+          # Add IP module
         args:
           CarrierId: $({{ carrier.name }})
           IpSiteNumber: "{{ ip_site_number }}"
