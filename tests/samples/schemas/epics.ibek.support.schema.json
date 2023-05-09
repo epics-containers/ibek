@@ -159,6 +159,11 @@
                 "description": "A name for an interrupt vector variable",
                 "vscode_ibek_plugin_type": "type_id"
               },
+              "count": {
+                "type": "integer",
+                "description": "The number of interrupt vectors to reserve",
+                "default": 1
+              },
               "type": {
                 "type": "string",
                 "const": "epics.InterruptVectorVME",

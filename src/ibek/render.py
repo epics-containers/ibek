@@ -43,6 +43,7 @@ class Render:
         have been rendered already. The suffix can be used where a given
         Entity has more than one element to render once (e.g. functions)
         """
+
         if once:
             name = instance.__definition__.name + suffix
             if name not in self.once_done:
@@ -63,6 +64,9 @@ class Render:
 
         jinja_template = Template(result)
         result = jinja_template.render(self._to_dict(instance))  # type: ignore
+
+        if result == "":
+            return ""
 
         return result + "\n"
 
