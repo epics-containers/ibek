@@ -39,7 +39,7 @@ echo making bl45p-mo-ioc-04
 ibek build-startup ${SAMPLES_DIR}/yaml/bl45p-mo-ioc-04.ibek.ioc.yaml ${SAMPLES_DIR}/yaml/{epics,pmac}.ibek.support.yaml --out /tmp/ioc/st.cmd --db-out /tmp/ioc/make_db.sh
 cp /tmp/ioc/st.cmd ${SAMPLES_DIR}/boot_scripts/stbl45p-mo-ioc-04
 echo making test-ioc
-ibek build-startup ${SAMPLES_DIR}/example-ibek-config/ioc.yaml ${SAMPLES_DIR}/yaml/{epics,deviocstats}.ibek.support.yaml --out /tmp/ioc/st.cmd --db-out /tmp/ioc/make_db.sh
+ibek build-startup ${SAMPLES_DIR}/example-ibek-config/ioc.yaml ${SAMPLES_DIR}/yaml/{epics,devIocStats}.ibek.support.yaml --out /tmp/ioc/st.cmd --db-out /tmp/ioc/make_db.sh
 cp /tmp/ioc/st.cmd ${SAMPLES_DIR}/boot_scripts/test.ioc.cmd
 cp /tmp/ioc/make_db.sh ${SAMPLES_DIR}/boot_scripts/test.ioc.make_db.sh
 

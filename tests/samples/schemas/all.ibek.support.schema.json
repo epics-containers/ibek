@@ -139,14 +139,37 @@
                 "type": "boolean",
                 "default": true
               },
+              "carrier": {
+                "type": "string",
+                "description": "IPAC carrier name",
+                "vscode_ibek_plugin_type": "type_object"
+              },
+              "type": {
+                "type": "string",
+                "const": "dls_psc_support.Psc",
+                "default": "dls_psc_support.Psc"
+              }
+            },
+            "required": [
+              "carrier"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "entity_enabled": {
+                "type": "boolean",
+                "default": true
+              },
               "ioc": {
                 "type": "string",
                 "description": "Device Prefix for this IOC"
               },
               "type": {
                 "type": "string",
-                "const": "deviocstats.IocAdminSoft",
-                "default": "deviocstats.IocAdminSoft"
+                "const": "devIocStats.IocAdminSoft",
+                "default": "devIocStats.IocAdminSoft"
               }
             },
             "required": [
@@ -1339,29 +1362,6 @@
                 "type": "boolean",
                 "default": true
               },
-              "carrier": {
-                "type": "string",
-                "description": "IPAC carrier name",
-                "vscode_ibek_plugin_type": "type_object"
-              },
-              "type": {
-                "type": "string",
-                "const": "psc.Psc",
-                "default": "psc.Psc"
-              }
-            },
-            "required": [
-              "carrier"
-            ],
-            "additionalProperties": false
-          },
-          {
-            "type": "object",
-            "properties": {
-              "entity_enabled": {
-                "type": "boolean",
-                "default": true
-              },
               "device": {
                 "type": "string",
                 "description": "The device PV prefix",
@@ -1379,8 +1379,8 @@
               },
               "type": {
                 "type": "string",
-                "const": "timingTemplates.DefaultEVR",
-                "default": "timingTemplates.DefaultEVR"
+                "const": "TimingTemplates.DefaultEVR",
+                "default": "TimingTemplates.DefaultEVR"
               }
             },
             "required": [
@@ -1403,8 +1403,8 @@
               },
               "type": {
                 "type": "string",
-                "const": "timingTemplates.EvrAlive",
-                "default": "timingTemplates.EvrAlive"
+                "const": "TimingTemplates.EvrAlive",
+                "default": "TimingTemplates.EvrAlive"
               }
             },
             "required": [
@@ -1436,8 +1436,8 @@
               },
               "type": {
                 "type": "string",
-                "const": "timingTemplates.GeneralTime",
-                "default": "timingTemplates.GeneralTime"
+                "const": "TimingTemplates.GeneralTime",
+                "default": "TimingTemplates.GeneralTime"
               }
             },
             "required": [
