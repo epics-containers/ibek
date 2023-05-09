@@ -1,6 +1,8 @@
 module: epics
 defs:
   - name: InterruptVectorVME
+    description: |
+      Reserve an interrupt vector for use with VME hardware.
     args:
       - type: id
         name: name

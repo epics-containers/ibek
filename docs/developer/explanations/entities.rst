@@ -78,7 +78,7 @@ Expand below for the example pmac **support module definition file**:
         <details>
         <summary><a>pmac.ibek.support.yaml</a></summary>
 
-    .. include:: ../../../tests/samples/yaml/pmac.ibek.support.yaml
+    .. include:: ../../../ibek-defs/pmac/pmac.ibek.support.yaml
         :literal:
 
     .. raw:: html

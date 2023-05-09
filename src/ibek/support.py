@@ -146,6 +146,7 @@ class Definition:
     """
 
     name: A[str, desc("Publish Definition as type <module>.<name> for IOC instances")]
+    description: A[str, desc("Describes the purpose of the definition")]
     args: A[Sequence[Arg], desc("The arguments IOC instance should supply")] = ()
     databases: A[Sequence[Database], desc("Databases to instantiate")] = ()
     script: A[

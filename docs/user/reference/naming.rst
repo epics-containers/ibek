@@ -56,3 +56,22 @@ Args
 
 Every Arg also has a name and these should be snake_case as they represent
 class properties in Python.
+
+Functions
+---------
+
+Function Arguments should be in UpperCamelCase. Function names must be as
+per the function name you are calling in iocShell startup.
+
+e.g.
+
+.. code-block:: yaml
+
+    script:
+      - type: function
+        name: pscAddIpModule
+        args:
+          CarrierId: $({{ carrier.name }})
+          IpSiteNumber: "{{ ip_site_number }}"
+          Vector: "$({{ interrupt_vector.name }})"
+          Links: "{{ links }}"
