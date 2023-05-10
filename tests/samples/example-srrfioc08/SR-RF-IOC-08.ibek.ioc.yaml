@@ -16,19 +16,31 @@ entities:
     name: Vec0
   - type: epics.InterruptVectorVME
     name: Vec1
+  - type: epics.InterruptVectorVME
+    name: Vec2
 
   - type: ipac.Hy8002
     name: IPAC4
     slot: 4
 
+  - type: ipac.Hy8002
+    name: IPAC5
+    slot: 5
+
   - type: Hy8401ip.Hy8401ip
-    name: SlotA
+    name: SlotA_Card4
     carrier: IPAC4
     ip_site_number: 0
     vector: Vec0
 
   - type: Hy8401ip.Hy8401ip
-    name: SlotC
+    name: SlotC_Card4
     carrier: IPAC4
     ip_site_number: 2
     vector: Vec1
+
+  - type: Hy8401ip.Hy8401ip
+    name: SlotA_Card5
+    carrier: IPAC5
+    ip_site_number: 0
+    vector: Vec2

@@ -2,7 +2,6 @@
 Functions for rendering lines in the boot script using Jinja2
 """
 
-from dataclasses import asdict
 from typing import Any, Callable, Dict, List, Optional
 
 from jinja2 import Template
@@ -23,13 +22,12 @@ class Render:
         self.utils = utils
         self.once_done: List[str] = []
 
-    def _to_dict(self, instance: Any) -> Dict[str, Any]:
+    def _to_dict(self, instance: Entity) -> Dict[str, Any]:
         """
         add the global utils object to the instance so we can use them in the
         jinja templates
         """
-        result = asdict(instance)
-        result.update(instance.__class__.__dict__)
+        result = instance.__context__
         result["__utils__"] = self.utils
 
         return result

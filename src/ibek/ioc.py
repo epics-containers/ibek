@@ -6,7 +6,7 @@ from __future__ import annotations
 
 import builtins
 import types
-from dataclasses import Field, dataclass, field, make_dataclass
+from dataclasses import Field, asdict, dataclass, field, make_dataclass
 from typing import Any, Dict, List, Mapping, Sequence, Tuple, Type, cast
 
 from apischema import (
@@ -49,6 +49,12 @@ class Entity:
             inst_id = getattr(self, ids.pop())
             assert inst_id not in id_to_entity, f"Already got an instance {inst_id}"
             id_to_entity[inst_id] = self
+
+        # create a context dictionary for use in Jinja expansion of this Entity
+        context = asdict(self)
+        # todo jinja expand all values with context
+        self.__context__ = context
+        # then pass __context__ to jinja template in render.py
 
 
 id_to_entity: Dict[str, Entity] = {}
@@ -111,6 +117,10 @@ def make_entity_class(definition: Definition, support: Support) -> Type[Entity]:
     # add a field so we can control rendering of the entity without having to delete
     # it
     fields.append(("entity_enabled", bool, field(default=cast(Any, True))))
+
+    # add in the values fields as class attributes
+    for value in definition.values:
+        fields.append((value.name, str, field(default=cast(Any, value.value))))
 
     namespace = dict(__definition__=definition)
 

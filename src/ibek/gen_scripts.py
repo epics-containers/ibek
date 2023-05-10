@@ -3,6 +3,7 @@ Functions for building the db and boot scripts
 """
 import logging
 import re
+from dataclasses import asdict
 from pathlib import Path
 from typing import Dict, List
 
@@ -11,7 +12,7 @@ from ruamel.yaml.main import YAML
 
 from .ioc import IOC, make_entity_classes
 from .render import Render
-from .support import Support
+from .support import Definition, Support
 from .utils import Utils
 
 log = logging.getLogger(__name__)
@@ -28,31 +29,34 @@ def ioc_deserialize(ioc_instance_yaml: Path, definition_yaml: List[Path]) -> IOC
 
     Returns an in memory object graph of the resulting ioc instance
     """
-    all_values: Dict[str, Dict[str, str]] = {}
+    all_values: Dict[str, str] = {}
 
     # Read and load the support module definitions
     for yaml in definition_yaml:
         support = Support.deserialize(YAML(typ="safe").load(yaml))
-        make_entity_classes(support)
-
-        # collect all definition 'values' for copying into entity instances
         for definition in support.defs:
-            entity_def_name = f"{support.module}.{definition.name}"
-            all_values[entity_def_name] = {}
             for value in definition.values:
-                all_values[entity_def_name][value.name] = value.name
+                all_values[value.name] = value.value
+        make_entity_classes(support)
+        for definition in support.defs:
+            make_entity_context(definition)
 
     # Create an IOC instance from it
     ioc_instance = IOC.deserialize(YAML(typ="safe").load(ioc_instance_yaml))
-
-    # copy over the values from the support module definitions to entity instances
-    for entity in ioc_instance.entities:
-        values_dict = all_values.get(entity.type)
-        if values_dict:
-            for name, value in values_dict.items():
-                setattr(entity, name, value)
-
     return ioc_instance
+
+
+def make_entity_context(definition: Definition):
+    """
+    Create a context dictionary for the given `Entity` instance
+    This is for use in Jinja expansion of instances of this Entity
+    """
+    context = asdict(definition)
+
+    for value in definition.values:
+        context[value.name] = value.value
+
+    setattr(definition, "__context__", context)
 
 
 def create_db_script(ioc_instance: IOC, utility: Utils) -> str:

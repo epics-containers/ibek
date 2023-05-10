@@ -423,7 +423,7 @@
               },
               "name": {
                 "type": "string",
-                "description": "IPAC identifier (suggested: IPAC{{ slot }})",
+                "description": "IPAC identifier (suggested: IPAC<slot>)",
                 "vscode_ibek_plugin_type": "type_id"
               },
               "slot": {
@@ -439,6 +439,10 @@
                 "type": "string",
                 "const": "ipac.Hy8002",
                 "default": "ipac.Hy8002"
+              },
+              "card_id": {
+                "type": "string",
+                "default": "{{ __utils__.counter(\"Carriers\", start=0) }}"
               }
             },
             "required": [
