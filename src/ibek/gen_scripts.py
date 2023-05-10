@@ -4,7 +4,7 @@ Functions for building the db and boot scripts
 import logging
 import re
 from pathlib import Path
-from typing import List
+from typing import Dict, List
 
 from jinja2 import Template
 from ruamel.yaml.main import YAML
@@ -28,13 +28,31 @@ def ioc_deserialize(ioc_instance_yaml: Path, definition_yaml: List[Path]) -> IOC
 
     Returns an in memory object graph of the resulting ioc instance
     """
+    all_values: Dict[str, Dict[str, str]] = {}
+
     # Read and load the support module definitions
     for yaml in definition_yaml:
         support = Support.deserialize(YAML(typ="safe").load(yaml))
         make_entity_classes(support)
 
+        # collect all definition 'values' for copying into entity instances
+        for definition in support.defs:
+            entity_def_name = f"{support.module}.{definition.name}"
+            all_values[entity_def_name] = {}
+            for value in definition.values:
+                all_values[entity_def_name][value.name] = value.name
+
     # Create an IOC instance from it
-    return IOC.deserialize(YAML(typ="safe").load(ioc_instance_yaml))
+    ioc_instance = IOC.deserialize(YAML(typ="safe").load(ioc_instance_yaml))
+
+    # copy over the values from the support module definitions to entity instances
+    for entity in ioc_instance.entities:
+        values_dict = all_values.get(entity.type)
+        if values_dict:
+            for name, value in values_dict.items():
+                setattr(entity, name, value)
+
+    return ioc_instance
 
 
 def create_db_script(ioc_instance: IOC, utility: Utils) -> str:

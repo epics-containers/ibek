@@ -207,6 +207,34 @@
             "description": "The arguments IOC instance should supply",
             "default": []
           },
+          "values": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "description": "Name of the value that the IOC instance will expose"
+                },
+                "description": {
+                  "type": "string",
+                  "description": "Description of what the value will be used for"
+                },
+                "value": {
+                  "type": "string",
+                  "description": "The contents of the value"
+                }
+              },
+              "required": [
+                "name",
+                "description",
+                "value"
+              ],
+              "additionalProperties": false
+            },
+            "description": "The values IOC instance should supply",
+            "default": []
+          },
           "databases": {
             "type": "array",
             "items": {

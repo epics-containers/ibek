@@ -140,6 +140,18 @@ class Once:
 
 
 @dataclass
+class Value:
+    """A calculated string value for a definition"""
+
+    name: A[str, desc("Name of the value that the IOC instance will expose")]
+    description: A[str, desc("Description of what the value will be used for")]
+    value: A[str, desc("The contents of the value")]
+
+    def __str__(self):
+        return self.value
+
+
+@dataclass
 class Definition:
     """
     A single definition of a class of Entity that an IOC instance may instantiate
@@ -148,6 +160,7 @@ class Definition:
     name: A[str, desc("Publish Definition as type <module>.<name> for IOC instances")]
     description: A[str, desc("Describes the purpose of the definition")]
     args: A[Sequence[Arg], desc("The arguments IOC instance should supply")] = ()
+    values: A[Sequence[Value], desc("The values IOC instance should supply")] = ()
     databases: A[Sequence[Database], desc("Databases to instantiate")] = ()
     script: A[
         Sequence[Union[str, Function, Once]],

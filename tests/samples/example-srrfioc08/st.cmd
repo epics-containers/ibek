@@ -15,7 +15,7 @@ ioc_registerRecordDeviceDriver pdbbase
 #   Create a new Hy8002 carrier.
 #   The resulting carrier handle is saved in an env variable.
 ipacAddHy8002 "4, 2" 
-epicsEnvSet IPAC4 0
+epicsEnvSet IPAC4 
 
 # Hy8401ipConfigure CardId IPACid IpSiteNumber InterruptVector InterruptEnable AiType ExternalClock ClockRate Inhibit SampleCount SampleSpacing SampleSize 
 #   IpSlot 0=A 1=B 2=C 3=D
