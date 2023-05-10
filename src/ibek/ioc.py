@@ -6,8 +6,19 @@ from __future__ import annotations
 
 import builtins
 import types
-from dataclasses import Field, asdict, dataclass, field, make_dataclass
-from typing import Any, Dict, List, Mapping, Sequence, Tuple, Type, cast
+from dataclasses import Field, dataclass, field, make_dataclass
+from typing import (
+    Any,
+    ClassVar,
+    Dict,
+    List,
+    Mapping,
+    Sequence,
+    Tuple,
+    Type,
+    cast,
+    get_type_hints,
+)
 
 from apischema import (
     Undefined,
@@ -42,7 +53,7 @@ class Entity:
 
     entity_enabled: bool
 
-    def __post_init__(self):
+    def __post_init__(self: "Entity"):
         # If there is an argument which is an id then allow deserialization by that
         args = self.__definition__.args
         ids = set(a.name for a in args if isinstance(a, IdArg))
@@ -54,8 +65,13 @@ class Entity:
             id_to_entity[inst_id] = self
 
         # create a context dictionary for use in Jinja expansion of this Entity
-        context = asdict(self)
+        context: Dict[str, Any] = {}
+        for attribute in get_type_hints(self).keys():
+            context[attribute] = getattr(self, attribute)
+
+        # add in the global __utils__ object for state sharing
         context["__utils__"] = self.__utils__
+
         # todo jinja expand all values with context
         self.__context__ = context
         # then pass __context__ to jinja template in render.py
@@ -124,7 +140,13 @@ def make_entity_class(definition: Definition, support: Support) -> Type[Entity]:
 
     # add in the values fields as class attributes
     for value in definition.values:
-        fields.append((value.name, str, field(default=cast(Any, value.value))))
+        fields.append(
+            (
+                value.name,
+                ClassVar[str],  # type: ignore
+                field(default=cast(Any, value.value)),
+            )
+        )
 
     namespace = dict(__definition__=definition)
 
