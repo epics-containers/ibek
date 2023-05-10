@@ -8,7 +8,6 @@ from jinja2 import Template
 
 from .ioc import IOC, Entity
 from .support import Function, Once
-from .utils import Utils
 
 
 class Render:
@@ -18,8 +17,7 @@ class Render:
     definition yaml with substitution values supplied in ioc entity yaml
     """
 
-    def __init__(self, utils: Utils):
-        self.utils = utils
+    def __init__(self: "Render"):
         self.once_done: List[str] = []
 
     def _to_dict(self, instance: Entity) -> Dict[str, Any]:
@@ -28,7 +26,6 @@ class Render:
         jinja templates
         """
         result = instance.__context__
-        result["__utils__"] = self.utils
 
         return result
 

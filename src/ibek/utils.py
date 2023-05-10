@@ -34,8 +34,7 @@ class Utils:
     A Utility class for adding functions to the Jinja context
     """
 
-    def __init__(self, ioc_name: str):
-        self.ioc_name = ioc_name
+    def __init__(self: "Utils"):
         self.variables: Dict[str, Any] = {}
         self.counters: Dict[str, Counter] = {}
 

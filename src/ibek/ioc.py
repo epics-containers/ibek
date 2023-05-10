@@ -26,6 +26,7 @@ from typing_extensions import Literal
 from . import modules
 from .globals import T, desc
 from .support import Definition, IdArg, ObjectArg, Support
+from .utils import Utils
 
 
 class Entity:
@@ -36,6 +37,8 @@ class Entity:
 
     # a link back to the Definition Object that generated this Definition
     __definition__: Definition
+    # a singleton Utility object for sharing state across all Entity renders
+    __utils__: Utils = Utils()
 
     entity_enabled: bool
 
@@ -52,6 +55,7 @@ class Entity:
 
         # create a context dictionary for use in Jinja expansion of this Entity
         context = asdict(self)
+        context["__utils__"] = self.__utils__
         # todo jinja expand all values with context
         self.__context__ = context
         # then pass __context__ to jinja template in render.py
