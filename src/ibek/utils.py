@@ -35,6 +35,13 @@ class Utils:
     """
 
     def __init__(self: "Utils"):
+        self.__reset__()
+
+    def __reset__(self: "Utils"):
+        """
+        Reset all saved state. For use in testing where more than one
+        IOC is rendered in a single session
+        """
         self.variables: Dict[str, Any] = {}
         self.counters: Dict[str, Counter] = {}
 
