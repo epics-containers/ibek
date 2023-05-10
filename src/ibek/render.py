@@ -2,7 +2,7 @@
 Functions for rendering lines in the boot script using Jinja2
 """
 
-from typing import Any, Callable, Dict, List, Optional
+from typing import Callable, List, Optional
 
 from jinja2 import Template
 
@@ -19,15 +19,6 @@ class Render:
 
     def __init__(self: "Render"):
         self.once_done: List[str] = []
-
-    def _to_dict(self, instance: Entity) -> Dict[str, Any]:
-        """
-        add the global utils object to the instance so we can use them in the
-        jinja templates
-        """
-        result = instance.__context__
-
-        return result
 
     def render_text(self, instance: Entity, text: str, once=False, suffix="") -> str:
         """
@@ -48,7 +39,7 @@ class Render:
                 return ""
 
         jinja_template = Template(text)
-        result = jinja_template.render(self._to_dict(instance))  # type: ignore
+        result = jinja_template.render(instance.__context__)  # type: ignore
 
         # run the result through jinja again so we can refer to args for arg defaults
         # e.g.
@@ -59,7 +50,7 @@ class Render:
         #     default: "IPAC{{ slot }}"
 
         jinja_template = Template(result)
-        result = jinja_template.render(self._to_dict(instance))  # type: ignore
+        result = jinja_template.render(instance.__context__)  # type: ignore
 
         if result == "":
             return ""
@@ -130,12 +121,12 @@ class Render:
             )
 
         jinja_template = Template(jinja_txt)
-        db_txt = jinja_template.render(self._to_dict(instance))  # type: ignore
+        db_txt = jinja_template.render(instance.__context__)  # type: ignore
 
         # run the result through jinja again so we can refer to args for arg defaults
 
         db_template = Template(db_txt)
-        db_txt = db_template.render(self._to_dict(instance))  # type: ignore
+        db_txt = db_template.render(instance.__context__)  # type: ignore
 
         return db_txt + "\n"
 
@@ -152,7 +143,7 @@ class Render:
         for variable in variables:
             # Substitute the name and value of the environment variable from args
             env_template = Template(f"epicsEnvSet {variable.name} {variable.value}")
-            env_var_txt += env_template.render(self._to_dict(instance))
+            env_var_txt += env_template.render(instance.__context__)
         return env_var_txt + "\n"
 
     def render_post_ioc_init(self, instance: Entity) -> Optional[str]:
