@@ -3,7 +3,7 @@ Functions for rendering lines in the boot script using Jinja2
 """
 
 from dataclasses import asdict
-from typing import Any, Dict, List, Optional
+from typing import Any, Callable, Dict, List, Optional
 
 from jinja2 import Template
 
@@ -29,6 +29,7 @@ class Render:
         jinja templates
         """
         result = asdict(instance)
+        result.update(instance.__class__.__dict__)
         result["__utils__"] = self.utils
 
         return result
@@ -170,11 +171,10 @@ class Render:
 
         return script
 
-    def render_elements(self, ioc: IOC, element: str) -> str:
+    def render_elements(self, ioc: IOC, method: Callable) -> str:
         """
         Render elements of a given IOC instance based on calling the correct method
         """
-        method = getattr(self, element)
         elements = ""
         for instance in ioc.entities:
             if instance.entity_enabled:
@@ -187,22 +187,22 @@ class Render:
         """
         Render all of the startup script entries for a given IOC instance
         """
-        return self.render_elements(ioc, "render_script")
+        return self.render_elements(ioc, self.render_script)
 
     def render_database_elements(self, ioc: IOC) -> str:
         """
         Render all of the DBLoadRecords entries for a given IOC instance
         """
-        return self.render_elements(ioc, "render_database")
+        return self.render_elements(ioc, self.render_database)
 
     def render_environment_variable_elements(self, ioc: IOC) -> str:
         """
         Render all of the environment variable entries for a given IOC instance
         """
-        return self.render_elements(ioc, "render_environment_variables")
+        return self.render_elements(ioc, self.render_environment_variables)
 
     def render_post_ioc_init_elements(self, ioc: IOC) -> str:
         """
         Render all of the post-iocInit elements for a given IOC instance
         """
-        return self.render_elements(ioc, "render_post_ioc_init")
+        return self.render_elements(ioc, self.render_post_ioc_init)
