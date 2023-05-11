@@ -2,7 +2,7 @@ from pathlib import Path
 
 from typer.testing import CliRunner
 
-from ibek.ioc import clear_entity_classes
+from ibek.ioc import Entity, clear_entity_classes
 
 from .test_cli import run_cli
 
@@ -18,6 +18,7 @@ def test_example_ioc(tmp_path: Path, samples: Path, ibek_defs: Path):
     verifies that it starts up correctly.
     """
     clear_entity_classes()
+    Entity.__utils__.__reset__()
 
     tmp_path = Path("/tmp/ibek_test")
     tmp_path.mkdir(exist_ok=True)
@@ -59,6 +60,7 @@ def test_example_sr_rf_08(tmp_path: Path, samples: Path, ibek_defs: Path):
     """
 
     clear_entity_classes()
+    Entity.__utils__.__reset__()
 
     tmp_path = Path("/tmp/ibek_test2")
     tmp_path.mkdir(exist_ok=True)
@@ -88,3 +90,43 @@ def test_example_sr_rf_08(tmp_path: Path, samples: Path, ibek_defs: Path):
 
     assert example_boot == actual_boot
     assert example_db == actual_db
+
+
+def test_values_ioc(tmp_path: Path, samples: Path, ibek_defs: Path):
+    """
+    build values ioc from yaml and verify the result
+
+    This IOC verifies that repeated reference to a 'values' field
+    with counter gets the same value every time.
+
+    TODO: IMPORTANT: this test currently proves that the values are NOT the same
+    TODO: make sure samples/values_test/st.cmd is updated when this is fixed.
+    """
+
+    clear_entity_classes()
+    Entity.__utils__.__reset__()
+
+    tmp_path = Path("/tmp/ibek_test2")
+    tmp_path.mkdir(exist_ok=True)
+    test_path = samples / "values_test"
+
+    entity_file = test_path / "values.ibek.ioc.yaml"
+    definition_files = test_path.glob("*.support.yaml")
+    out_file = tmp_path / "new_dir" / "st.cmd"
+    out_db = tmp_path / "new_dir" / "make_db.sh"
+
+    params = [
+        "build-startup",
+        entity_file,
+        "--out",
+        out_file,
+        "--db-out",
+        out_db,
+    ]
+    params += definition_files
+
+    run_cli(*params)
+
+    example_boot = (test_path / "st.cmd").read_text()
+    actual_boot = out_file.read_text()
+    assert example_boot == actual_boot

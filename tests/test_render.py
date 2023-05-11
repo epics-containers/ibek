@@ -12,7 +12,7 @@ def test_pmac_asyn_ip_port_script(pmac_classes):
     generated_class = pmac_classes.PmacAsynIPPort
     pmac_asyn_ip = generated_class(name="my_pmac_instance", IP="111.111.111.111")
 
-    render = Render("test_ioc")
+    render = Render()
     script_txt = render.render_script(pmac_asyn_ip)
     assert script_txt == "pmacAsynIPConfigure(my_pmac_instance, 111.111.111.111:1025)\n"
 
@@ -30,7 +30,7 @@ def test_geobrick_script(pmac_classes):
         movingPoll=800,
     )
 
-    render = Render("test_ioc")
+    render = Render()
     script_txt = render.render_script(pmac_geobrick_instance)
 
     assert (
@@ -51,7 +51,7 @@ def test_geobrick_database(pmac_classes):
         movingPoll=800,
     )
 
-    render = Render("test_ioc")
+    render = Render()
     db_txt = render.render_database(pmac_geobrick_instance)
 
     assert (
@@ -68,7 +68,7 @@ def test_epics_environment_variables(epics_classes):
     generated_class = epics_classes.EpicsCaMaxArrayBytes
     max_array_bytes_instance = generated_class(max_bytes=10000000)
 
-    render = Render("test_ioc")
+    render = Render()
     env_text = render.render_environment_variables(max_array_bytes_instance)
 
     assert env_text == "epicsEnvSet EPICS_CA_MAX_ARRAY_BYTES 10000000\n"
@@ -153,7 +153,7 @@ def test_entity_disabled_does_not_render_elements(pmac_classes, epics_classes):
         "pmacCreateController(geobrick_enabled, geobrick_one_port, 0, 8, 800, 200)\n"
         "pmacCreateAxes(geobrick_enabled, 8)\n"
     )
-    render = Render("test_ioc")
+    render = Render()
     script = render.render_script_elements(ioc)
     assert script == expected_script
 

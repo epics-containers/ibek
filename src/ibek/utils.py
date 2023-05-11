@@ -34,8 +34,14 @@ class Utils:
     A Utility class for adding functions to the Jinja context
     """
 
-    def __init__(self, ioc_name: str):
-        self.ioc_name = ioc_name
+    def __init__(self: "Utils"):
+        self.__reset__()
+
+    def __reset__(self: "Utils"):
+        """
+        Reset all saved state. For use in testing where more than one
+        IOC is rendered in a single session
+        """
         self.variables: Dict[str, Any] = {}
         self.counters: Dict[str, Counter] = {}
 

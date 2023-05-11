@@ -2,14 +2,12 @@
 Functions for rendering lines in the boot script using Jinja2
 """
 
-from dataclasses import asdict
-from typing import Any, Dict, List, Optional
+from typing import Callable, List, Optional, Union
 
 from jinja2 import Template
 
 from .ioc import IOC, Entity
 from .support import Function, Once
-from .utils import Utils
 
 
 class Render:
@@ -19,25 +17,17 @@ class Render:
     definition yaml with substitution values supplied in ioc entity yaml
     """
 
-    def __init__(self, utils: Utils):
-        self.utils = utils
+    def __init__(self: "Render"):
         self.once_done: List[str] = []
-
-    def _to_dict(self, instance: Any) -> Dict[str, Any]:
-        """
-        add the global utils object to the instance so we can use them in the
-        jinja templates
-        """
-        result = asdict(instance)
-        result["__utils__"] = self.utils
-
-        return result
 
     def render_text(self, instance: Entity, text: str, once=False, suffix="") -> str:
         """
-        render a line of jinja template in ``text`` using the values supplied
-        in the ``instance`` object. Supports the ``once`` flag to only render
-        the line once per definitions file.
+        Add in the next line of text, honouring the ``once`` flag which will
+        only add the line once per IOC.
+
+        Jinja rendering of values/args has already been done in Entity.__post_init__
+        but we pass all strings though jinja again to render any other jinja
+        in the IOC (e.g. database and function entries)
 
         ``once`` uses the name of the definition + suffix to track which lines
         have been rendered already. The suffix can be used where a given
@@ -51,19 +41,9 @@ class Render:
             else:
                 return ""
 
+        # Render Jinja entries in the text
         jinja_template = Template(text)
-        result = jinja_template.render(self._to_dict(instance))  # type: ignore
-
-        # run the result through jinja again so we can refer to args for arg defaults
-        # e.g.
-        #
-        #   - type: str
-        #     name: IPACid
-        #     description: IPAC identifier
-        #     default: "IPAC{{ slot }}"
-
-        jinja_template = Template(result)
-        result = jinja_template.render(self._to_dict(instance))  # type: ignore
+        result = jinja_template.render(instance.__context__)  # type: ignore
 
         if result == "":
             return ""
@@ -84,9 +64,9 @@ class Render:
             call += f"{value} "
 
         text = (
-            self.render_text(instance, comment, once=True, suffix="func")
+            self.render_text(instance, comment.strip(" "), once=True, suffix="func")
             + self.render_text(instance, function.header, once=True, suffix="func_hdr")
-            + self.render_text(instance, call)
+            + self.render_text(instance, call.strip(" "))
         )
 
         return text
@@ -124,9 +104,17 @@ class Render:
         for template in templates:
             db_file = template.file.strip("\n")
             db_args = template.define_args.splitlines()
-            include_list = [
-                f"{arg}={{{{ {arg} }}}}" for arg in template.include_args or []
-            ]
+
+            include_list = []
+            for arg in template.include_args:
+                if arg in instance.__context__:
+                    include_list.append(f"{arg}={{{{ {arg} }}}}")
+                else:
+                    raise ValueError(
+                        f"include arg '{arg}' in database template "
+                        f"'{template.file}' not found in context"
+                    )
+
             db_arg_string = ", ".join(db_args + include_list)
 
             jinja_txt += (
@@ -134,12 +122,12 @@ class Render:
             )
 
         jinja_template = Template(jinja_txt)
-        db_txt = jinja_template.render(self._to_dict(instance))  # type: ignore
+        db_txt = jinja_template.render(instance.__context__)  # type: ignore
 
         # run the result through jinja again so we can refer to args for arg defaults
 
         db_template = Template(db_txt)
-        db_txt = db_template.render(self._to_dict(instance))  # type: ignore
+        db_txt = db_template.render(instance.__context__)  # type: ignore
 
         return db_txt + "\n"
 
@@ -156,7 +144,7 @@ class Render:
         for variable in variables:
             # Substitute the name and value of the environment variable from args
             env_template = Template(f"epicsEnvSet {variable.name} {variable.value}")
-            env_var_txt += env_template.render(self._to_dict(instance))
+            env_var_txt += env_template.render(instance.__context__)
         return env_var_txt + "\n"
 
     def render_post_ioc_init(self, instance: Entity) -> Optional[str]:
@@ -170,11 +158,12 @@ class Render:
 
         return script
 
-    def render_elements(self, ioc: IOC, element: str) -> str:
+    def render_elements(
+        self, ioc: IOC, method: Callable[[Entity], Union[str, None]]
+    ) -> str:
         """
         Render elements of a given IOC instance based on calling the correct method
         """
-        method = getattr(self, element)
         elements = ""
         for instance in ioc.entities:
             if instance.entity_enabled:
@@ -187,22 +176,22 @@ class Render:
         """
         Render all of the startup script entries for a given IOC instance
         """
-        return self.render_elements(ioc, "render_script")
+        return self.render_elements(ioc, self.render_script)
 
     def render_database_elements(self, ioc: IOC) -> str:
         """
         Render all of the DBLoadRecords entries for a given IOC instance
         """
-        return self.render_elements(ioc, "render_database")
+        return self.render_elements(ioc, self.render_database)
 
     def render_environment_variable_elements(self, ioc: IOC) -> str:
         """
         Render all of the environment variable entries for a given IOC instance
         """
-        return self.render_elements(ioc, "render_environment_variables")
+        return self.render_elements(ioc, self.render_environment_variables)
 
     def render_post_ioc_init_elements(self, ioc: IOC) -> str:
         """
         Render all of the post-iocInit elements for a given IOC instance
         """
-        return self.render_elements(ioc, "render_post_ioc_init")
+        return self.render_elements(ioc, self.render_post_ioc_init)

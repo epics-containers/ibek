@@ -386,7 +386,7 @@
                 "description": "New Target Monitor, only set to 0 for soft motors",
                 "default": 1
               },
-              "FEHEIGH": {
+              "FEHIGH": {
                 "type": "number",
                 "description": "HIGH limit for following error",
                 "default": 0.0
@@ -433,6 +433,11 @@
                 "type": "string",
                 "description": "Set to a blank to allow this axis to have its homed",
                 "default": "#"
+              },
+              "RLINK": {
+                "type": "string",
+                "description": "not sure what this is",
+                "default": ""
               },
               "type": {
                 "type": "string",

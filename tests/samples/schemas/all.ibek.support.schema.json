@@ -423,7 +423,7 @@
               },
               "name": {
                 "type": "string",
-                "description": "IPAC identifier (suggested: IPAC{{ slot }})",
+                "description": "IPAC identifier (suggested: IPAC<slot>)",
                 "vscode_ibek_plugin_type": "type_id"
               },
               "slot": {
@@ -858,7 +858,7 @@
                 "description": "New Target Monitor, only set to 0 for soft motors",
                 "default": 1
               },
-              "FEHEIGH": {
+              "FEHIGH": {
                 "type": "number",
                 "description": "HIGH limit for following error",
                 "default": 0.0
@@ -905,6 +905,11 @@
                 "type": "string",
                 "description": "Set to a blank to allow this axis to have its homed",
                 "default": "#"
+              },
+              "RLINK": {
+                "type": "string",
+                "description": "not sure what this is",
+                "default": ""
               },
               "type": {
                 "type": "string",
@@ -1335,6 +1340,146 @@
               "Controller",
               "CS"
             ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "entity_enabled": {
+                "type": "boolean",
+                "default": true
+              },
+              "device": {
+                "type": "string",
+                "description": "Device Name, channel name until the last colon, up to 16 chars",
+                "vscode_ibek_plugin_type": "type_id"
+              },
+              "carrier": {
+                "type": "string",
+                "description": "IPAC carrier name",
+                "vscode_ibek_plugin_type": "type_object"
+              },
+              "ip_site_number": {
+                "type": "integer",
+                "description": "Site on the carrier for this IP Module (0=A, 1=B, 2=C, 3=D)"
+              },
+              "interrupt_vector": {
+                "type": "string",
+                "description": "Interrupt Vector reserved with epics.InterruptVectorVME, count=3",
+                "vscode_ibek_plugin_type": "type_object"
+              },
+              "link": {
+                "type": "integer",
+                "description": "Link number on this IP module (0 or 1)",
+                "default": 0
+              },
+              "type": {
+                "type": "string",
+                "const": "psc.PscIpModule",
+                "default": "psc.PscIpModule"
+              }
+            },
+            "required": [
+              "device",
+              "carrier",
+              "ip_site_number",
+              "interrupt_vector"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "entity_enabled": {
+                "type": "boolean",
+                "default": true
+              },
+              "i_abserr": {
+                "type": "integer",
+                "description": "todo",
+                "default": 0
+              },
+              "abserr": {
+                "type": "integer",
+                "description": "todo",
+                "default": 0
+              },
+              "relerr": {
+                "type": "integer",
+                "description": "todo",
+                "default": 0
+              },
+              "controlerr": {
+                "type": "integer",
+                "description": "todo",
+                "default": 0
+              },
+              "startsw_evnt": {
+                "type": "integer",
+                "description": "todo",
+                "default": 0
+              },
+              "syncsw_evnt": {
+                "type": "integer",
+                "description": "todo",
+                "default": 0
+              },
+              "hyscycle_dly": {
+                "type": "integer",
+                "description": "todo",
+                "default": 0
+              },
+              "hyscydir": {
+                "type": "integer",
+                "description": "todo",
+                "default": 0
+              },
+              "hyscmask": {
+                "type": "integer",
+                "description": "todo",
+                "default": 0
+              },
+              "hyslock": {
+                "type": "integer",
+                "description": "todo",
+                "default": 0
+              },
+              "hysimin": {
+                "type": "integer",
+                "description": "todo",
+                "default": 0
+              },
+              "hysimax": {
+                "type": "integer",
+                "description": "todo",
+                "default": 0
+              },
+              "oninitcycle": {
+                "type": "integer",
+                "description": "todo",
+                "default": 0
+              },
+              "vdclink_adel": {
+                "type": "integer",
+                "description": "todo",
+                "default": 0
+              },
+              "vload_adel": {
+                "type": "integer",
+                "description": "todo",
+                "default": 0
+              },
+              "icharge_adel": {
+                "type": "integer",
+                "description": "todo",
+                "default": 0
+              },
+              "type": {
+                "type": "string",
+                "const": "psc.PscTemplate",
+                "default": "psc.PscTemplate"
+              }
+            },
             "additionalProperties": false
           },
           {

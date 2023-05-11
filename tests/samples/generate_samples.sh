@@ -49,5 +49,10 @@ ibek build-startup ${SAMPLES_DIR}/example-srrfioc08/SR-RF-IOC-08.ibek.ioc.yaml $
 cp /tmp/ioc/st.cmd ${SAMPLES_DIR}/example-srrfioc08
 cp /tmp/ioc/make_db.sh ${SAMPLES_DIR}/example-srrfioc08
 
+echo makgin values_test IOC
+ibek build-startup ${SAMPLES_DIR}/values_test/values.ibek.ioc.yaml ${SAMPLES_DIR}/values_test/*.support.yaml --out /tmp/ioc/st.cmd --db-out /tmp/ioc/make_db.sh
+cp /tmp/ioc/st.cmd ${SAMPLES_DIR}/values_test
+
+
 
 
