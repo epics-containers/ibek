@@ -71,9 +71,9 @@ class Render:
             call += f"{value} "
 
         text = (
-            self.render_text(instance, comment, once=True, suffix="func")
+            self.render_text(instance, comment.strip(), once=True, suffix="func")
             + self.render_text(instance, function.header, once=True, suffix="func_hdr")
-            + self.render_text(instance, call)
+            + self.render_text(instance, call.strip())
         )
 
         return text
