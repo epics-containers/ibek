@@ -2,7 +2,7 @@
 Functions for rendering lines in the boot script using Jinja2
 """
 
-from typing import Callable, List, Optional
+from typing import Callable, List, Optional, Union
 
 from jinja2 import Template
 
@@ -41,14 +41,7 @@ class Render:
             else:
                 return ""
 
-        # run the result through jinja again so we can refer to args for arg defaults
-        # e.g.
-        #
-        #   - type: str
-        #     name: IPACid
-        #     description: IPAC identifier
-        #     default: "IPAC{{ slot }}"
-
+        # Render Jinja entries in the text
         jinja_template = Template(text)
         result = jinja_template.render(instance.__context__)  # type: ignore
 
@@ -165,7 +158,9 @@ class Render:
 
         return script
 
-    def render_elements(self, ioc: IOC, method: Callable) -> str:
+    def render_elements(
+        self, ioc: IOC, method: Callable[[Entity], Union[str, None]]
+    ) -> str:
         """
         Render elements of a given IOC instance based on calling the correct method
         """
