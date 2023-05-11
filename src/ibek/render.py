@@ -111,9 +111,17 @@ class Render:
         for template in templates:
             db_file = template.file.strip("\n")
             db_args = template.define_args.splitlines()
-            include_list = [
-                f"{arg}={{{{ {arg} }}}}" for arg in template.include_args or []
-            ]
+
+            include_list = []
+            for arg in template.include_args:
+                if arg in instance.__context__:
+                    include_list.append(f"{arg}={{{{ {arg} }}}}")
+                else:
+                    raise ValueError(
+                        f"include arg '{arg}' in database template "
+                        f"'{template.file}' not found in context"
+                    )
+
             db_arg_string = ", ".join(db_args + include_list)
 
             jinja_txt += (
