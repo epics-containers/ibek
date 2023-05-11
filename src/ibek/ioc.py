@@ -6,19 +6,8 @@ from __future__ import annotations
 
 import builtins
 import types
-from dataclasses import Field, dataclass, field, make_dataclass
-from typing import (
-    Any,
-    ClassVar,
-    Dict,
-    List,
-    Mapping,
-    Sequence,
-    Tuple,
-    Type,
-    cast,
-    get_type_hints,
-)
+from dataclasses import Field, asdict, dataclass, field, make_dataclass
+from typing import Any, Dict, List, Mapping, Sequence, Tuple, Type, cast
 
 from apischema import (
     Undefined,
@@ -66,9 +55,9 @@ class Entity:
             id_to_entity[inst_id] = self
 
         # create a context dictionary for use in Jinja expansion of this Entity
-        context: Dict[str, Any] = {}
-        for attribute in get_type_hints(self).keys():
-            context[attribute] = getattr(self, attribute)
+        context: Dict[str, Any] = asdict(self)  # type: ignore
+        for value in self.__definition__.values:
+            context[value.name] = value.value
 
         # add in the global __utils__ object for state sharing
         context["__utils__"] = self.__utils__
@@ -143,16 +132,6 @@ def make_entity_class(definition: Definition, support: Support) -> Type[Entity]:
     # add a field so we can control rendering of the entity without having to delete
     # it
     fields.append(("entity_enabled", bool, field(default=cast(Any, True))))
-
-    # add in the values fields as class attributes
-    for value in definition.values:
-        fields.append(
-            (
-                value.name,
-                ClassVar[str],  # type: ignore
-                field(default=cast(Any, value.value)),
-            )
-        )
 
     namespace = dict(__definition__=definition)
 
