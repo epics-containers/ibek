@@ -22,9 +22,12 @@ class Render:
 
     def render_text(self, instance: Entity, text: str, once=False, suffix="") -> str:
         """
-        render a line of jinja template in ``text`` using the values supplied
-        in the ``instance`` object. Supports the ``once`` flag to only render
-        the line once per definitions file.
+        Add in the next line of text, honouring the ``once`` flag which will
+        only add the line once per IOC.
+
+        Jinja rendering of values/args has already been done in Entity.__post_init__
+        but we pass all strings though jinja again to render any other jinja
+        in the IOC (e.g. database and function entries)
 
         ``once`` uses the name of the definition + suffix to track which lines
         have been rendered already. The suffix can be used where a given
@@ -38,9 +41,6 @@ class Render:
             else:
                 return ""
 
-        jinja_template = Template(text)
-        result = jinja_template.render(instance.__context__)  # type: ignore
-
         # run the result through jinja again so we can refer to args for arg defaults
         # e.g.
         #
@@ -49,7 +49,7 @@ class Render:
         #     description: IPAC identifier
         #     default: "IPAC{{ slot }}"
 
-        jinja_template = Template(result)
+        jinja_template = Template(text)
         result = jinja_template.render(instance.__context__)  # type: ignore
 
         if result == "":

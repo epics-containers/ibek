@@ -31,6 +31,7 @@ from apischema import (
 )
 from apischema.conversions import Conversion, reset_deserializers
 from apischema.metadata import conversion
+from jinja2 import Template
 from typing_extensions import Annotated as A
 from typing_extensions import Literal
 
@@ -72,9 +73,14 @@ class Entity:
         # add in the global __utils__ object for state sharing
         context["__utils__"] = self.__utils__
 
-        # todo jinja expand all values with context
+        # Do Jinja expansion of any string args/values in the context
+        for arg, value in context.items():
+            if isinstance(value, str):
+                jinja_template = Template(value)
+                rendered = jinja_template.render(context)
+                context[arg] = rendered
+
         self.__context__ = context
-        # then pass __context__ to jinja template in render.py
 
 
 id_to_entity: Dict[str, Entity] = {}
