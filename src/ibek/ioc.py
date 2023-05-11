@@ -40,6 +40,8 @@ class Entity:
     __definition__: Definition
     # a singleton Utility object for sharing state across all Entity renders
     __utils__: Utils = Utils()
+    # Context of expanded args and values to be passed to all Jinja expansion
+    __context__: Dict[str, Any]
 
     entity_enabled: bool
 

@@ -1,0 +1,32 @@
+
+psc.substitutions file format:
+
+device	Device Name: channel name until the last colon, up to 16 chars
+c		Card Number    : card are numbered by the occurence of ipacAddCarrier in the startup.script: first card is "0", second is "1", ...
+s		Slot Number    : IP Carrier slot number, module in that slot has to be configured by the pscAddIpModule function in the startup.script: pscAddIpModule(cardno, slot, intVec, links)
+link	Link Number    : each module has two links: "0" and "1"
+abserr	Absolute Error : absolute error limit in [A]
+relerr	Relative Error : relative error limit [0..1]
+controlerr: Control Error:
+startsw-evnt	Event to start Soft ramps: ignore
+syncsw-evnt	Event to synchronise Soft ramps: ignore
+hyscycle-dly	Seconds to wait in hysteresis cycle: time of PS between min and max value
+hyscydir	Direction of hysteresis cycle: approaching setpoint from above (-) or below (+) at the end of the cycle
+hyscmask	Defines the number of hysteresis cycles to run (for values >1 (3, 7, ...) the seq delay has to be specified in an extra template)
+hyslock		The value "locked" will force the PS to do a full cycle, whenever the value I-SET is changed in the wrong direction (against HYCDIR)
+hysimin		Minimum value for hysteresis cycle
+hysimax		Maximum value for hysteresis cycle
+oninitcycle	Flag to determine if power supply should do a hysteresis cycle when it is switched ON
+
+file $(PSC)/db/psc.template
+{
+pattern { device, c, s, link, i_abserr, abserr, relerr, controlerr, startsw-evnt, syncsw-evnt, hyscycle-dly, hyscydir, hyscmask, hyslock, hysimin, hysimax, oninitcycle, vdclink_adel, vload_adel, icharge_adel }
+    { "SR25A-PC-TEST-01", "0", "0", "0", "0.0005", "0.0005", "0.0002", "0.0005", "53", "54", "3", "0", "3", "0", "-3", "3", "0", "0.5", "0.1", "0.004" }
+    { "SR25A-PC-TEST-02", "0", "0", "1", "0.0005", "0.0005", "0.0002", "0.0005", "53", "54", "3", "0", "3", "0", "-3", "3", "0", "0.5", "0.1", "0.004" }
+    { "SR25A-PC-TEST-03", "0", "1", "0", "0.0005", "0.0005", "0.0002", "0.0005", "53", "54", "3", "0", "3", "0", "-3", "3", "0", "0.5", "0.1", "0.004" }
+    { "SR25A-PC-TEST-04", "0", "1", "1", "0.0005", "0.0005", "0.0002", "0.0005", "53", "54", "3", "0", "3", "0", "-3", "3", "0", "0.5", "0.1", "0.004" }
+    { "SR25A-PC-TEST-05", "0", "2", "0", "0.0005", "0.0005", "0.0002", "0.0005", "53", "54", "3", "0", "3", "0", "-3", "3", "0", "0.5", "0.1", "0.004" }
+    { "SR25A-PC-TEST-06", "0", "2", "1", "0.0005", "0.0005", "0.0002", "0.0005", "53", "54", "3", "0", "3", "0", "-3", "3", "0", "0.5", "0.1", "0.004" }
+    { "SR25A-PC-TEST-07", "0", "3", "0", "0.0005", "0.0005", "0.0002", "0.0005", "53", "54", "3", "0", "3", "0", "-3", "3", "0", "0.5", "0.1", "0.004" }
+    { "SR25A-PC-TEST-08", "0", "3", "1", "0.0005", "0.0005", "0.0002", "0.0005", "53", "54", "3", "0", "3", "0", "-3", "3", "0", "0.5", "0.1", "0.004" }
+}
