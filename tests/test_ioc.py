@@ -2,7 +2,8 @@ from pathlib import Path
 
 from typer.testing import CliRunner
 
-from ibek.ioc import Entity, clear_entity_classes
+from ibek.ioc import clear_entity_classes
+from ibek.utils import UTILS
 
 from .test_cli import run_cli
 
@@ -18,7 +19,7 @@ def test_example_ioc(tmp_path: Path, samples: Path, ibek_defs: Path):
     verifies that it starts up correctly.
     """
     clear_entity_classes()
-    Entity.__utils__.__reset__()
+    UTILS.__reset__()
 
     tmp_path = Path("/tmp/ibek_test")
     tmp_path.mkdir(exist_ok=True)
@@ -60,7 +61,7 @@ def test_example_sr_rf_08(tmp_path: Path, samples: Path, ibek_defs: Path):
     """
 
     clear_entity_classes()
-    Entity.__utils__.__reset__()
+    UTILS.__reset__()
 
     tmp_path = Path("/tmp/ibek_test2")
     tmp_path.mkdir(exist_ok=True)
@@ -104,7 +105,7 @@ def test_values_ioc(tmp_path: Path, samples: Path, ibek_defs: Path):
     """
 
     clear_entity_classes()
-    Entity.__utils__.__reset__()
+    UTILS.__reset__()
 
     tmp_path = Path("/tmp/ibek_test2")
     tmp_path.mkdir(exist_ok=True)

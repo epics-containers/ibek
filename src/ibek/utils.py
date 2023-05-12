@@ -76,3 +76,7 @@ class Utils:
         self.counters[name] = counter
 
         return result
+
+
+# a singleton Utility object for sharing state across all Entity renders
+UTILS: Utils = Utils()
