@@ -124,11 +124,6 @@ class Render:
         jinja_template = Template(jinja_txt)
         db_txt = jinja_template.render(instance.__dict__)  # type: ignore
 
-        # run the result through jinja again so we can refer to args for arg defaults
-
-        db_template = Template(db_txt)
-        db_txt = db_template.render(instance.__dict__)  # type: ignore
-
         return db_txt + "\n"
 
     def render_environment_variables(self, instance: Entity) -> Optional[str]:
