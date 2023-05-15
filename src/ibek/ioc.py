@@ -6,7 +6,7 @@ from __future__ import annotations
 
 import builtins
 import types
-from dataclasses import Field, asdict, dataclass, field, make_dataclass
+from dataclasses import Field, dataclass, field, make_dataclass
 from typing import Any, Dict, List, Mapping, Sequence, Tuple, Type, cast
 
 from apischema import (
@@ -27,7 +27,7 @@ from typing_extensions import Literal
 from . import modules
 from .globals import T, desc
 from .support import Definition, IdArg, ObjectArg, Support
-from .utils import Utils
+from .utils import UTILS
 
 
 class Entity:
@@ -38,10 +38,6 @@ class Entity:
 
     # a link back to the Definition Object that generated this Definition
     __definition__: Definition
-    # a singleton Utility object for sharing state across all Entity renders
-    __utils__: Utils = Utils()
-    # Context of expanded args and values to be passed to all Jinja expansion
-    __context__: Dict[str, Any]
 
     entity_enabled: bool
 
@@ -56,22 +52,22 @@ class Entity:
             assert inst_id not in id_to_entity, f"Already got an instance {inst_id}"
             id_to_entity[inst_id] = self
 
-        # create a context dictionary for use in Jinja expansion of this Entity
-        context: Dict[str, Any] = asdict(self)  # type: ignore
-        for value in self.__definition__.values:
-            context[value.name] = value.value
+            # TODO - not working as printing own ID
+            setattr(self, "__str__", inst_id)
 
         # add in the global __utils__ object for state sharing
-        context["__utils__"] = self.__utils__
+        self.__utils__ = UTILS
 
-        # Do Jinja expansion of any string args/values in the context
-        for arg, value in context.items():
+        # copy 'values' from the definition into the Entity
+        for value in self.__definition__.values:
+            setattr(self, value.name, value.value)
+
+        # Jinja expansion of any string args/values in the Entity's attributes
+        for arg, value in self.__dict__.items():
             if isinstance(value, str):
                 jinja_template = Template(value)
-                rendered = jinja_template.render(context)
-                context[arg] = rendered
-
-        self.__context__ = context
+                rendered = jinja_template.render(self.__dict__)
+                setattr(self, arg, rendered)
 
 
 id_to_entity: Dict[str, Entity] = {}

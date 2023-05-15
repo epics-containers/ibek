@@ -43,7 +43,7 @@ class Render:
 
         # Render Jinja entries in the text
         jinja_template = Template(text)
-        result = jinja_template.render(instance.__context__)  # type: ignore
+        result = jinja_template.render(instance.__dict__)  # type: ignore
 
         if result == "":
             return ""
@@ -107,7 +107,7 @@ class Render:
 
             include_list = []
             for arg in template.include_args:
-                if arg in instance.__context__:
+                if arg in instance.__dict__:
                     include_list.append(f"{arg}={{{{ {arg} }}}}")
                 else:
                     raise ValueError(
@@ -122,12 +122,7 @@ class Render:
             )
 
         jinja_template = Template(jinja_txt)
-        db_txt = jinja_template.render(instance.__context__)  # type: ignore
-
-        # run the result through jinja again so we can refer to args for arg defaults
-
-        db_template = Template(db_txt)
-        db_txt = db_template.render(instance.__context__)  # type: ignore
+        db_txt = jinja_template.render(instance.__dict__)  # type: ignore
 
         return db_txt + "\n"
 
@@ -144,7 +139,7 @@ class Render:
         for variable in variables:
             # Substitute the name and value of the environment variable from args
             env_template = Template(f"epicsEnvSet {variable.name} {variable.value}")
-            env_var_txt += env_template.render(instance.__context__)
+            env_var_txt += env_template.render(instance.__dict__)
         return env_var_txt + "\n"
 
     def render_post_ioc_init(self, instance: Entity) -> Optional[str]:
