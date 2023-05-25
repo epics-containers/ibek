@@ -119,9 +119,6 @@ jobs:
       TEST_TAG: "testing"
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-
       # image names must be all lower case
       - name: Generate image repo name
         run: echo IMAGE_REPOSITORY=ghcr.io/$(tr '[:upper:]' '[:lower:]' <<< "${{ github.repository }}") >> $GITHUB_ENV
@@ -157,10 +154,10 @@ jobs:
           #cache-from: type=gha
           #cache-to: type=gha,mode=max
 
-      - name: Test cli works in runtime image
-        run: docker run ${{ env.IMAGE_REPOSITORY }}:${{ env.TEST_TAG }} --version
+      - name: Test cli works in cached runtime image
+        run: docker run docker.io/library/${{ env.TEST_TAG }} --version
 
-      - name: Docker meta
+      - name: Create tags for publishing image
         id: meta
         uses: docker/metadata-action@v4
         with:
