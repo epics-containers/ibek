@@ -119,6 +119,9 @@ jobs:
       TEST_TAG: "testing"
 
     steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        
       # image names must be all lower case
       - name: Generate image repo name
         run: echo IMAGE_REPOSITORY=ghcr.io/$(tr '[:upper:]' '[:lower:]' <<< "${{ github.repository }}") >> $GITHUB_ENV
