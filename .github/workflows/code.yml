@@ -187,6 +187,10 @@ jobs:
         if: github.ref_type == 'tag'
         uses: docker/build-push-action@v3
         with:
+          build-args: |
+            PIP_OPTIONS=-r lockfiles/requirements.txt dist/*.whl
+          context: artifacts/
+          file: ./Dockerfile
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
