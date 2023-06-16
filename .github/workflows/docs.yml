@@ -8,12 +8,7 @@ jobs:
   docs:
     if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name != github.repository
     runs-on: ubuntu-latest
-    permissions:
-      pages: write
-      id-token: write
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
+
     steps:
       - name: Avoid git conflicts when tag and branch pushed at same time
         if: startsWith(github.ref, 'refs/tags')
@@ -48,15 +43,12 @@ jobs:
       - name: Write switcher.json
         run: python .github/pages/make_switcher.py --add $DOCS_VERSION ${{ github.repository }} .github/pages/switcher.json
 
-      - name: Setup Pages
-        uses: actions/configure-pages@v3
-
-      - name: Upload Pages artifact
-        uses: actions/upload-pages-artifact@v1.0.8
-        with:
-          path: .github/pages
-
-      - name: Publish docs to GitHub Pages
+      - name: Publish Docs to gh-pages
         if: github.event_name == 'push' && github.actor != 'dependabot[bot]'
-        id: deployment
-        uses: actions/deploy-pages@v2.0.1
+        # We pin to the SHA, not the tag, for security reasons.
+        # https://docs.github.com/en/actions/learn-github-actions/security-hardening-for-github-actions#using-third-party-actions
+        uses: peaceiris/actions-gh-pages@373f7f263a76c20808c831209c920827a82a2847 # v3.9.3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: .github/pages
+          keep_files: true
