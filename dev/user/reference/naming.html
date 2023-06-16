@@ -9,7 +9,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
-    <title>Support YAML Conventions &#8212; ibek 0.9.6.dev92+g14ca38a documentation</title>
+    <title>Support YAML Conventions &#8212; ibek 0.9.6.dev93+g05f2205 documentation</title>
   
   
   
@@ -495,6 +495,14 @@ represents a class in Python.</p>
 <h2>Args<a class="headerlink" href="#args" title="Permalink to this heading">#</a></h2>
 <p>Every Arg also has a name and these should be snake_case as they represent
 class properties in Python.</p>
+<p>HOWEVER: where these arguments refer to a database template macro, the original
+name should be used. This means that no changes are required in the templates
+in order to support the include_args feature.</p>
+<p>ADDITIONAL: because the above caveat breaks the naming convention. We will
+maintain the historical naming from builder.py where support module has this
+historical support.</p>
+<p>SUMMARY: only new modules will use the snake_case naming convention. Others
+will use the historical adhoc naming conventions.</p>
 </section>
 <section id="functions">
 <h2>Functions<a class="headerlink" href="#functions" title="Permalink to this heading">#</a></h2>
