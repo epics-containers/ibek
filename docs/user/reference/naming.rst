@@ -57,6 +57,17 @@ Args
 Every Arg also has a name and these should be snake_case as they represent
 class properties in Python.
 
+HOWEVER: where these arguments refer to a database template macro, the original
+name should be used. This means that no changes are required in the templates
+in order to support the include_args feature.
+
+ADDITIONAL: because the above caveat breaks the naming convention. We will
+maintain the historical naming from builder.py where support module has this
+historical support.
+
+SUMMARY: only new modules will use the snake_case naming convention. Others
+will use the historical adhoc naming conventions.
+
 Functions
 ---------
 
