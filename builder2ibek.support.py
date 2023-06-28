@@ -5,7 +5,8 @@ import sys
 class_name_re = re.compile(r"class '.*\.(.*)'")
 description_re = re.compile(r"(.*)\n<type")
 
-# this is used with python -i to investigate the builder classes interactively
+# use dls-python -i builder2ibek.support.py PATH_TO_SUPPORT_MODULE and then
+# use global MODULE to interactively inspect the builder Classes
 MODULE = None
 
 
@@ -44,6 +45,7 @@ def main():
         sys.exit(1)
 
     global MODULE
+    # Here we will build up a tree of objects representing the YAML structure
     object_tree = ordereddict()
 
     options, args = ParseEtcArgs(architecture="linux-x86_64")
@@ -57,7 +59,6 @@ def main():
     # the last module is the root module that we are interested in
     MODULE = modules[-1]
 
-    # Here we will build up a tree of objects representing the YAML structure
     object_tree["module"] = MODULE.Name()
 
     defs = object_tree["defs"] = []
