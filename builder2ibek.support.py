@@ -5,6 +5,9 @@ import sys
 class_name_re = re.compile(r"class '.*\.(.*)'")
 description_re = re.compile(r"(.*)\n<type")
 
+# this is used with python -i to investigate the builder classes interactively
+MODULE = None
+
 
 def arg_details(args, arg_name, builder_class, default=None):
     arg = builder_class.ArgInfo.descriptions[arg_name]
@@ -40,24 +43,26 @@ def main():
         print("Usage: %s <path to support module>" % sys.argv[0])
         sys.exit(1)
 
-    release_file = sys.argv[1] + "/configure/RELEASE"
+    global MODULE
+    object_tree = ordereddict()
 
-    MODULE_TREE = ordereddict()
+    options, args = ParseEtcArgs(architecture="linux-x86_64")
 
-    Configure()
-    ImportFunctions()
+    # ParseAndConfigure expects to be in etc/makeIocs and looks for
+    # ../../configure/RELEASE relative to that
+    options.build_root = sys.argv[1] + "/etc/makeIocs"
 
-    # load builder modules for a single support module ADCore
-    tree = dependency_tree(None, release_file)
+    modules = configure.ParseAndConfigure(options, dependency_tree)
 
-    for leaf in tree.leaves:
-        ModuleVersion(leaf.name, leaf.version)
+    # the last module is the root module that we are interested in
+    MODULE = modules[-1]
 
-    m = ModuleVersion(tree.name, tree.version)
-    MODULE_TREE["module"] = tree.name
-    defs = MODULE_TREE["defs"] = []
+    # Here we will build up a tree of objects representing the YAML structure
+    object_tree["module"] = MODULE.Name()
 
-    for builder_class in m.ClassesList:
+    defs = object_tree["defs"] = []
+
+    for builder_class in MODULE.ClassesList:
         name = class_name_re.findall(str(builder_class))[0]
         if (
             hasattr(builder_class, "ArgInfo")
@@ -87,7 +92,7 @@ def main():
     yaml = YAML()
     yaml.default_flow_style = False
 
-    yaml.dump(MODULE_TREE, sys.stdout)
+    yaml.dump(object_tree, sys.stdout)
 
 
 if __name__ == "__main__":
@@ -100,9 +105,7 @@ if __name__ == "__main__":
 
     # import required modules
     from dls_dependency_tree import dependency_tree
-    from iocbuilder.configure import Configure
-    from iocbuilder.libversion import ModuleVersion
-    from iocbuilder.mydbstatic import ImportFunctions
+    from iocbuilder import ParseEtcArgs, configure
     from ruamel.yaml import YAML
     from ruamel.yaml.comments import CommentedMap as ordereddict
 
