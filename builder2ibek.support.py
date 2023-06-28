@@ -8,6 +8,18 @@ description_re = re.compile(r"(.*)\n<type")
 # use dls-python -i builder2ibek.support.py PATH_TO_SUPPORT_MODULE and then
 # use global MODULE to interactively inspect the builder Classes
 MODULE = None
+ARG_NUM = 0
+
+
+class RenderAsArg:
+    def __init__(self, name):
+        self.name = name
+
+    def __getattr__(self, attr):
+        return RenderAsArg(self.name + "." + attr)
+
+    def __str__(self):
+        return "{{ " + self.name + " }}"
 
 
 def arg_details(args, arg_name, builder_class, default=None):
@@ -37,6 +49,43 @@ def arg_details(args, arg_name, builder_class, default=None):
         arg["default"] = default
 
     args.append(arg)
+
+
+def instantiate_builder_object(args, builder_class):
+    global ARG_NUM
+
+    args_dict = {}
+
+    # Mock up a set of args with which to instantiate a builder object
+    for arg in args:
+        # if the arg is a Choice then use the first Choice as the value
+        desc = builder_class.ArgInfo.descriptions[arg["name"]]
+        if hasattr(desc, "labels"):
+            args_dict[arg["name"]] = desc.labels[0]
+        # Otherwise use an identifiable Mock object
+        else:
+            ARG_NUM += 1
+            magic_arg = MagicMock()
+            magic_arg.arg_num = ARG_NUM
+            magic_arg.arg_name = arg["name"]
+            magic_arg.arg_render = RenderAsArg(arg["name"])
+            args_dict[arg["name"]] = magic_arg
+
+    builder_object = builder_class(**args_dict)
+
+    all_substitutions = RecordsSubstitutionSet._SubstitutionSet__Substitutions
+
+    # extract the set of templates with substitutions for the new builder object
+    while all_substitutions:
+        template, substitutions = all_substitutions.popitem()
+        first_substitution = substitutions[1][0]
+        print("SUBSTITUTION: %s, %s" % (template, first_substitution))
+        first_substitution._PrintSubstitution()
+
+    try:
+        builder_object.Initialise()
+    except (AttributeError, ValueError):
+        print("FAILED to initialise builder object for %s" % builder_class)
 
 
 def main():
@@ -73,7 +122,11 @@ def main():
             this_def = ordereddict()
             defs.append(this_def)
             this_def["name"] = name
-            this_def["description"] = "TODO TODO TODO add description"
+            if builder_class.__doc__:
+                desc = builder_class.__doc__.strip()
+            else:
+                desc = "TODO ------ NO DESCRIPTION -------"
+            this_def["description"] = desc
             args = this_def["args"] = []
 
             for arg_name in builder_class.ArgInfo.required_names:
@@ -90,10 +143,14 @@ def main():
                     builder_class.ArgInfo.default_values[index],
                 )
 
+            instantiate_builder_object(args, builder_class)
+
     yaml = YAML()
     yaml.default_flow_style = False
 
-    yaml.dump(object_tree, sys.stdout)
+    # yaml.dump(object_tree, sys.stdout)
+
+    # print(RecordsSubstitutionSet._SubstitutionSet__Substitutions)
 
 
 if __name__ == "__main__":
@@ -103,10 +160,13 @@ if __name__ == "__main__":
     require("iocbuilder")
     require("dls_dependency_tree")
     require("ruamel.yaml")
+    require("mock")
 
     # import required modules
     from dls_dependency_tree import dependency_tree
     from iocbuilder import ParseEtcArgs, configure
+    from iocbuilder.recordset import RecordsSubstitutionSet
+    from mock import MagicMock
     from ruamel.yaml import YAML
     from ruamel.yaml.comments import CommentedMap as ordereddict
 
