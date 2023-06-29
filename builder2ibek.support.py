@@ -2,6 +2,23 @@
 import re
 import sys
 
+# import required modules
+from pkg_resources import require
+
+require("iocbuilder")
+require("dls_dependency_tree")
+require("ruamel.yaml")
+require("mock")
+
+
+from dls_dependency_tree import dependency_tree  # isort:skip
+from iocbuilder import ParseEtcArgs, configure, device  # isort:skip
+from iocbuilder.recordset import RecordsSubstitutionSet  # isort:skip
+from mock import MagicMock  # isort:skip
+from ruamel.yaml import YAML  # isort:skip
+from ruamel.yaml.comments import CommentedMap as ordereddict  # isort:skip
+
+
 class_name_re = re.compile(r"class '.*\.(.*)'")
 description_re = re.compile(r"(.*)\n<type")
 
@@ -9,6 +26,30 @@ description_re = re.compile(r"(.*)\n<type")
 # use global MODULE to interactively inspect the builder Classes
 MODULE = None
 ARG_NUM = 0
+
+
+class MockArg(MagicMock):
+    """
+    A mock object that can be used to represent an argument to a builder class
+    """
+
+    def __init__(
+        self, arg_num="", arg_name="", arg_render="", path="", *args, **kwargs
+    ):
+        super(MockArg, self).__init__(*args, **kwargs)
+        self.path = path
+        self.arg_num = arg_num
+        self.arg_name = arg_name
+        self.arg_render = arg_render
+
+    def __repr__(self):
+        return "MockArg(%s, %s)" % (self.arg_num, self.arg_name)
+
+    def __getattr__(self, name):
+        if name in ("_mock_methods", "_mock_unsafe"):
+            return super(MockArg, self).__getattr__(name)
+
+        return MockArg(self.path + "." + name)
 
 
 class RenderAsArg:
@@ -65,10 +106,7 @@ def instantiate_builder_object(args, builder_class):
         # Otherwise use an identifiable Mock object
         else:
             ARG_NUM += 1
-            magic_arg = MagicMock()
-            magic_arg.arg_num = ARG_NUM
-            magic_arg.arg_name = arg["name"]
-            magic_arg.arg_render = RenderAsArg(arg["name"])
+            magic_arg = MockArg(ARG_NUM, arg["name"], RenderAsArg(arg["name"]))
             args_dict[arg["name"]] = magic_arg
 
     builder_object = builder_class(**args_dict)
@@ -82,10 +120,10 @@ def instantiate_builder_object(args, builder_class):
         print("SUBSTITUTION: %s, %s" % (template, first_substitution))
         first_substitution._PrintSubstitution()
 
-    try:
-        builder_object.Initialise()
-    except (AttributeError, ValueError):
-        print("FAILED to initialise builder object for %s" % builder_class)
+    # try:
+    #     builder_object.Initialise()
+    # except (AttributeError, ValueError):
+    #     print("FAILED to initialise builder object for %s" % builder_class)
 
 
 def main():
@@ -154,20 +192,9 @@ def main():
 
 
 if __name__ == "__main__":
-    # import required packages with pkg_resources
-    from pkg_resources import require
-
-    require("iocbuilder")
-    require("dls_dependency_tree")
-    require("ruamel.yaml")
-    require("mock")
-
-    # import required modules
-    from dls_dependency_tree import dependency_tree
-    from iocbuilder import ParseEtcArgs, configure
-    from iocbuilder.recordset import RecordsSubstitutionSet
-    from mock import MagicMock
-    from ruamel.yaml import YAML
-    from ruamel.yaml.comments import CommentedMap as ordereddict
+    # TODO pmac driver blows up on device.__CheckResources with
+    # missing vx works library but this does not help ASK TOM
+    device._ResourceExclusions["vxWorks-ppc604_long"] = ["library", "object"]
+    print(device._ResourceExclusions)
 
     main()
