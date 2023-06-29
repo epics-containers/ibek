@@ -21,11 +21,12 @@ from ruamel.yaml.comments import CommentedMap as ordereddict  # isort:skip
 
 class_name_re = re.compile(r"class '.*\.(.*)'")
 description_re = re.compile(r"(.*)\n<type")
+arg_values_re = re.compile(r"(\d*):(.*)")
 
 # use dls-python -i builder2ibek.support.py PATH_TO_SUPPORT_MODULE and then
 # use global MODULE to interactively inspect the builder Classes
 MODULE = None
-ARG_NUM = 0
+ARG_VALUES = {}
 
 
 class MockArg(MagicMock):
@@ -33,23 +34,33 @@ class MockArg(MagicMock):
     A mock object that can be used to represent an argument to a builder class
     """
 
-    def __init__(
-        self, arg_num="", arg_name="", arg_render="", path="", *args, **kwargs
-    ):
+    ARG_NUM = 0
+
+    def __init__(self, name="", path="", *args, **kwargs):
         super(MockArg, self).__init__(*args, **kwargs)
-        self.path = path
-        self.arg_num = arg_num
-        self.arg_name = arg_name
-        self.arg_render = arg_render
+
+        MockArg.ARG_NUM += 1
+
+        self.path = path  # tracks the object path to get to this mock object
+        self.arg_num = MockArg.ARG_NUM
+        self.arg_name = name
+        self.arg_render = RenderAsArg(name)
+        self.arg_value = ARG_VALUES.get(str(self.arg_num), None)
+
+        if self.arg_value is not None:
+            self.__str__ = lambda self: self.arg_value
+
+        print("MockArg: %s, %s, %s" % (self.arg_num, name, self.arg_value))
 
     def __repr__(self):
-        return "MockArg(%s, %s)" % (self.arg_num, self.arg_name)
+        return self.arg_value or "MockArg(%s, %s)" % (self.arg_num, self.arg_name)
 
-    def __getattr__(self, name):
-        if name in ("_mock_methods", "_mock_unsafe"):
-            return super(MockArg, self).__getattr__(name)
+    # def __getattr__(self, name):
+    #     if name in ("_mock_methods", "_mock_unsafe"):
+    #         return super(MockArg, self).__getattr__(name)
 
-        return MockArg(self.path + "." + name)
+    #     print("MockArg %s, attr: %s, value: %s" % (self.arg_num, name, self.arg_value))
+    #     return MockArg(path=self.path + "." + name)
 
 
 class RenderAsArg:
@@ -93,21 +104,19 @@ def arg_details(args, arg_name, builder_class, default=None):
 
 
 def instantiate_builder_object(args, builder_class):
-    global ARG_NUM
-
     args_dict = {}
 
     # Mock up a set of args with which to instantiate a builder object
     for arg in args:
+        arg_name = arg["name"]
         # if the arg is a Choice then use the first Choice as the value
-        desc = builder_class.ArgInfo.descriptions[arg["name"]]
+        desc = builder_class.ArgInfo.descriptions[arg_name]
         if hasattr(desc, "labels"):
-            args_dict[arg["name"]] = desc.labels[0]
+            args_dict[arg_name] = desc.labels[0]
         # Otherwise use an identifiable Mock object
         else:
-            ARG_NUM += 1
-            magic_arg = MockArg(ARG_NUM, arg["name"], RenderAsArg(arg["name"]))
-            args_dict[arg["name"]] = magic_arg
+            magic_arg = MockArg(arg_name)
+            args_dict[arg_name] = magic_arg.arg_value or magic_arg
 
     builder_object = builder_class(**args_dict)
 
@@ -127,9 +136,14 @@ def instantiate_builder_object(args, builder_class):
 
 
 def main():
-    if len(sys.argv) != 2:
+    if len(sys.argv) < 2:
         print("Usage: %s <path to support module>" % sys.argv[0])
         sys.exit(1)
+
+    for i in range(2, len(sys.argv)):
+        m = arg_values_re.match(sys.argv[i])
+        assert len(m.groups()) == 2, "Invalid argument format %s" % sys.argv[i]
+        ARG_VALUES[m.group(1)] = m.group(2)
 
     global MODULE
     # Here we will build up a tree of objects representing the YAML structure
@@ -195,6 +209,5 @@ if __name__ == "__main__":
     # TODO pmac driver blows up on device.__CheckResources with
     # missing vx works library but this does not help ASK TOM
     device._ResourceExclusions["vxWorks-ppc604_long"] = ["library", "object"]
-    print(device._ResourceExclusions)
 
     main()
