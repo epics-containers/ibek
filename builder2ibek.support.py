@@ -99,8 +99,11 @@ class Builder2Support:
         arg_info = builder_class.ArgInfo.descriptions[arg_name]
 
         matches = description_re.findall(arg_info.desc)
-        description = matches[0] if len(matches) > 0 else "NO DESCRIPTION"
+        description = (
+            matches[0] if len(matches) > 0 else "TODO ------ NO DESCRIPTION -------"
+        )
 
+        # create a YAML type for the argument
         if arg_name == getattr(builder_class, "UniqueName", "name"):
             typ = "id"
         elif arg_info.typ == str:
@@ -116,6 +119,12 @@ class Builder2Support:
         else:
             typ = "UNKNOWN"
 
+        # Special case for the CS ArgInfo which is failing to show as int
+        # in the pmac builder class CS (maybe because class==ArgInfo name ?)
+        if arg_name == "CS":
+            typ = "int"
+
+        # Create the object representing a YAML argument
         arg = ordereddict()
         arg["type"], arg["name"], arg["description"] = typ, arg_name, description
         if default is not None:
@@ -130,11 +139,16 @@ class Builder2Support:
         # Mock up a set of args with which to instantiate a builder object
         for arg in args:
             arg_name = arg["name"]
+
             # if the arg is a Choice then use the first Choice as the value
             desc = builder_class.ArgInfo.descriptions[arg_name]
 
+            # pick a sensible value for the argument to builder object's __init__
             if hasattr(desc, "labels"):
                 value = desc.labels[0]
+            elif hasattr(desc, "ident"):
+                # wrapping None means that this behaves as a Mock
+                value = None
             elif "default" in arg:
                 value = arg["default"]
             elif arg["type"] == "int":
@@ -144,20 +158,20 @@ class Builder2Support:
             elif arg["type"] == "bool":
                 value = False
             elif arg["type"] == "string":
-                value = "UNDEFINED"
+                value = arg_name + "_STRING"
+            elif arg["type"] == "id":
+                value = arg_name + "_ID"
             else:
-                value = None
+                assert 0, "Unknown type %s" % arg["type"]
 
             magic_arg = MockArg(wraps=value, name=arg_name)
-            args_dict[arg_name] = magic_arg
+            if magic_arg.overridden:
+                print("OVERRIDDEN: %s, %s" % (arg_name, magic_arg._mock_wraps))
+                args_dict[arg_name] = magic_arg._mock_wraps
+            else:
+                args_dict[arg_name] = magic_arg
 
-            # if hasattr(desc, "labels"):
-            #     args_dict[arg_name] = desc.labels[0]
-            # # Otherwise use an identifiable Mock object
-            # else:
-            #     magic_arg = MockArg(arg_name, arg)
-            #     args_dict[arg_name] = magic_arg.arg_value or magic_arg
-
+        # instantiate the builder object with our mock arguments
         builder_object = builder_class(**args_dict)
 
         all_substitutions = RecordsSubstitutionSet._SubstitutionSet__Substitutions
@@ -186,6 +200,10 @@ class Builder2Support:
 class MockArg(Mock):
     """
     A mock object that can be used to represent an argument to a builder class
+    __init__ method.
+
+    We use the mock object "name" to store the name of the argument and
+    the mock object "wraps" to store a value for the argument.
     """
 
     ARG_NUM = 0
@@ -193,22 +211,63 @@ class MockArg(Mock):
     def __init__(self, wraps=None, name="", *args, **kwargs):
         MockArg.ARG_NUM += 1
 
-        wraps = Builder2Support.arg_value_overrides.get(str(MockArg.ARG_NUM), wraps)
+        # override the wrapped value if a command line override was specified
+        new_wrap = Builder2Support.arg_value_overrides.get(str(MockArg.ARG_NUM), wraps)
 
-        super(MockArg, self).__init__(wraps=wraps, name=name, *args, **kwargs)
-        print("MockArg: %s, %s, %s" % (MockArg.ARG_NUM, name, wraps))
+        super(MockArg, self).__init__(wraps=new_wrap, name=name, *args, **kwargs)
+
+        # this print is required to assist users in deciding which numbered
+        # MockArk to override on the command line when an error occurs without
+        # overrides
+        print(
+            "MockArg: %s, %s, %s, %s"
+            % (MockArg.ARG_NUM, name, new_wrap, type(new_wrap).__name__)
+        )
 
         self.arg_num = MockArg.ARG_NUM
+        self.overridden = new_wrap != wraps
+        self.repr = "MockArg(%s, %s, %s)" % (self.arg_num, name, new_wrap)
+
+    def __repr__(self):
+        return self.repr
+
+    ################################################################################
+    # BELOW - we override methods that are called by builder.py on the builder #####
+    # object's arguments.                                                      #####
 
     def __add__(self, other):
-        result = "%s + %s" % (str(self), other)
-        return result
+        return self._mock_wraps + other
 
     def __int__(self):
-        if self._mock_wraps is None:
-            return 1
-        else:
+        try:
             return int(self._mock_wraps)
+        except ValueError:
+            pass
+
+        try:
+            return int(bool(self._mock_wraps))
+        except ValueError:
+            pass
+
+        return 1
+
+    def __iter__(self):
+        return iter(self._mock_wraps)
+
+    def __setitem__(self, _key, _value):
+        pass
+
+    def __getitem__(self, key):
+        return "%s[%s]" % (self, key)
+
+    def __lt__(self, other):
+        return self._mock_wraps < other
+
+    def __gt__(self, other):
+        return self._mock_wraps > other
+
+    def __eq__(self, other):
+        return self._mock_wraps == other
 
 
 def parse_args():
