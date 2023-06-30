@@ -1,7 +1,8 @@
 #!/bin/env dls-python
+
 """
-Diamond Light Source specific script to convert IOC builder classes into
-ibek.support.yaml
+Diamond Light Source specific script to convert IOC builder classes from
+etc/builder.py into **ibek.support.yaml files
 """
 
 import re
@@ -38,9 +39,13 @@ class Builder2Support:
         self.support_module_path = support_module_path
         Builder2Support.arg_value_overrides = arg_value_overrides
         self.yaml_tree = ordereddict()
-        self.builder_module = self._configure()
+        self.builder_module, self.builder_classes = self._configure()
 
     def _configure(self):
+        """
+        Setup the IOC builder environment and parse the support module
+        """
+
         # Dont bother with checking for libs and object files
         device._ResourceExclusions["linux-x86_64"] = ["library", "object"]
 
@@ -54,48 +59,67 @@ class Builder2Support:
         modules = configure.ParseAndConfigure(options, dependency_tree)
 
         # the last support module is the root module that we are interested in
-        return modules[-1]
+        module = modules[-1]
+        classes = self._valid_classes(module.ClassesList)
 
-    def make_yaml_tree(self):
-        self.yaml_tree["module"] = self.builder_module.Name()
+        return module, classes
 
-        defs = self.yaml_tree["defs"] = []
-
-        for builder_class in self.builder_module.ClassesList:
+    def _valid_classes(self, class_list):
+        """
+        Extract the list of builder classes that are relevant for conversion
+        to ibek YAML.
+        """
+        classes = {}
+        for builder_class in class_list:
             name = class_name_re.findall(str(builder_class))[0]
             if (
                 hasattr(builder_class, "ArgInfo")
                 and not name.startswith("_")
                 and not name.endswith("Template")
             ):
-                this_def = ordereddict()
-                defs.append(this_def)
-                this_def["name"] = name
-                if builder_class.__doc__:
-                    desc = builder_class.__doc__.strip()
-                else:
-                    desc = "TODO ------ NO DESCRIPTION -------"
-                this_def["description"] = desc
-                args = this_def["args"] = []
+                classes[name] = builder_class
 
-                for arg_name in builder_class.ArgInfo.required_names:
-                    args.append(self._make_arg(arg_name, builder_class))
+        return classes
 
-                for arg_name in builder_class.ArgInfo.optional_names:
-                    args.append(self._make_arg(arg_name, builder_class, "UNDEFINED"))
+    def _make_builder_object(self, name, builder_class):
+        """
+        Make an instance of a builder class by generating a best guess
+        set of arguments to the builder class __init__ method.
 
-                for index, arg_name in enumerate(builder_class.ArgInfo.default_names):
-                    args.append(
-                        self._make_arg(
-                            arg_name,
-                            builder_class,
-                            builder_class.ArgInfo.default_values[index],
-                        )
-                    )
+        Returns:
+            A tuple containing the generated arguments as an ibek.support.yaml
+            definition object graph, plus the instantiated builder object.
+        """
+        this_def = ordereddict()
+        this_def["name"] = name
+        if builder_class.__doc__:
+            desc = builder_class.__doc__.strip()
+        else:
+            desc = "TODO ------ NO DESCRIPTION -------"
+        this_def["description"] = desc
+        args = this_def["args"] = []
 
-                self.instantiate_builder_object(args, builder_class)
+        for arg_name in builder_class.ArgInfo.required_names:
+            args.append(self._make_arg(arg_name, builder_class))
+
+        for arg_name in builder_class.ArgInfo.optional_names:
+            args.append(self._make_arg(arg_name, builder_class, "UNDEFINED"))
+
+        for index, arg_name in enumerate(builder_class.ArgInfo.default_names):
+            args.append(
+                self._make_arg(
+                    arg_name,
+                    builder_class,
+                    builder_class.ArgInfo.default_values[index],
+                )
+            )
+
+        return this_def, self._instantiate_builder_objects(args, builder_class)
 
     def _make_arg(self, arg_name, builder_class, default=None):
+        """
+        Generate a ibek YAML argument from a builder ArgInfo
+        """
         arg_info = builder_class.ArgInfo.descriptions[arg_name]
 
         matches = description_re.findall(arg_info.desc)
@@ -132,8 +156,7 @@ class Builder2Support:
 
         return arg
 
-    # print(RecordsSubstitutionSet._SubstitutionSet__Substitutions)
-    def instantiate_builder_object(self, args, builder_class):
+    def _instantiate_builder_objects(self, args, builder_class):
         args_dict = {}
 
         # Mock up a set of args with which to instantiate a builder object
@@ -171,24 +194,76 @@ class Builder2Support:
             else:
                 args_dict[arg_name] = magic_arg
 
-        # instantiate the builder object with our mock arguments
-        builder_object = builder_class(**args_dict)
+        # instantiate a builder object using our mock arguments
+        return builder_class(**args_dict)
 
+    def _extract_substitutions(self):
+        """
+        Extract all of the database substitutions from the builder class
+        and populate the ibek YAML database object graph.
+
+        This function removes the substitutions from all_substitutions
+        so must be called inside a loop that iterates over each of the
+        builder classes in a module.
+
+        Returns:
+            A database object graph for the ibek YAML file, the root is an
+            array of databases, since each builder class can instantiate
+            multiple database templates.
+        """
         all_substitutions = RecordsSubstitutionSet._SubstitutionSet__Substitutions
+
+        databases = []
 
         # extract the set of templates with substitutions for the new builder object
         while all_substitutions:
+            database = ordereddict()
+            databases.append(database)
+
             template, substitutions = all_substitutions.popitem()
             first_substitution = substitutions[1][0]
-            print("SUBSTITUTION: %s, %s" % (template, first_substitution))
-            first_substitution._PrintSubstitution()
 
-        # TODO - get the Initialise source code instead of calling it
-        if False:
-            try:
-                builder_object.Initialise()
-            except (AttributeError, ValueError):
-                print("FAILED to initialise builder object for %s" % builder_class)
+            database["file"] = template
+            database["include_args"] = [a[0] for a in first_substitution.args.items()]
+
+        return databases
+
+        # print("SUBSTITUTION: %s, %s" % (template, first_substitution))
+        # first_substitution._PrintSubstitution()
+
+    def _call_initialise(self, builder_object):
+        # TODO - get the Initialise source code if Initialise() fails
+        # TODO - hook this into the YAML generation
+        try:
+            builder_object.Initialise()
+        except (AttributeError, ValueError):
+            print("FAILED to initialise builder object for %s" % builder_object)
+
+    def dump_subst_file(self):
+        """
+        Print out the database substitutions for all the builder classes
+        in the support module
+        """
+        for name, builder_class in self.builder_classes.items():
+            self._make_builder_object(name, builder_class)
+
+        RecordsSubstitutionSet.Print()
+
+    def make_yaml_tree(self):
+        """
+        Main entry point: generate the ibek YAML object graph from
+        builder classes.
+        """
+        builder_objects = []
+        self.yaml_tree["module"] = self.builder_module.Name()
+
+        yaml_defs = self.yaml_tree["defs"] = []
+
+        for name, builder_class in self.builder_classes.items():
+            one_def, builder_object = self._make_builder_object(name, builder_class)
+            yaml_defs.append(one_def)
+            builder_objects.append(builder_object)
+            one_def["databases"] = self._extract_substitutions()
 
     def write_yaml_tree(self):
         yaml = YAML()
@@ -217,7 +292,7 @@ class MockArg(Mock):
         super(MockArg, self).__init__(wraps=new_wrap, name=name, *args, **kwargs)
 
         # this print is required to assist users in deciding which numbered
-        # MockArk to override on the command line when an error occurs without
+        # MockArg to override on the command line when an error occurs without
         # overrides
         print(
             "MockArg: %s, %s, %s, %s"
@@ -231,12 +306,16 @@ class MockArg(Mock):
     def __repr__(self):
         return self.repr
 
-    ################################################################################
-    # BELOW - we override methods that are called by builder.py on the builder #####
-    # object's arguments.                                                      #####
+    ############################################################################
+    # BELOW - we override methods that are called by builder.py on the builder
+    # object's (Mock) arguments.
+    ############################################################################
 
     def __add__(self, other):
-        return self._mock_wraps + other
+        try:
+            return self._mock_wraps + other
+        except TypeError:
+            return "%s + %s" % (self._mock_wraps, other)
 
     def __int__(self):
         try:
@@ -271,6 +350,11 @@ class MockArg(Mock):
 
 
 def parse_args():
+    """
+    first arg is the path to the support module root
+    remaining args are overrides for the builder class arguments of the form
+    'arg_num:value'
+    """
     if len(sys.argv) < 2:
         print("Usage: %s <path to support module>" % sys.argv[0])
         sys.exit(1)
@@ -295,5 +379,6 @@ def parse_args():
 if __name__ == "__main__":
     support_module_path, arg_value_overrides = parse_args()
     builder2support = Builder2Support(support_module_path, arg_value_overrides)
+    # builder2support.dump_subst_file()
     builder2support.make_yaml_tree()
     builder2support.write_yaml_tree()
