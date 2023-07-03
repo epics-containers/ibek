@@ -17,12 +17,12 @@ require("ruamel.yaml")
 require("mock")
 
 
-from dls_dependency_tree import dependency_tree  # isort:skip
-from iocbuilder import ParseEtcArgs, configure, device  # isort:skip
-from iocbuilder.recordset import RecordsSubstitutionSet  # isort:skip
-from mock import MagicMock, Mock  # isort:skip
-from ruamel.yaml import YAML  # isort:skip
-from ruamel.yaml.comments import CommentedMap as ordereddict  # isort:skip
+from dls_dependency_tree import dependency_tree  # noqa: E402 isort:skip
+from iocbuilder import ParseEtcArgs, configure, device  # noqa: E402 isort:skip
+from iocbuilder.recordset import RecordsSubstitutionSet  # noqa: E402 isort:skip
+from mock import Mock  # noqa: E402 isort:skip
+from ruamel.yaml import YAML  # noqa: E402 isort:skip
+from ruamel.yaml.comments import CommentedMap as ordereddict  # noqa: E402 isort:skip
 
 
 class_name_re = re.compile(r"class '.*\.(.*)'")
@@ -224,6 +224,9 @@ class Builder2Support:
             first_substitution = substitutions[1][0]
 
             database["file"] = template
+            # for name, arg in first_substitution.args.items():
+            #     print("ARG: %s = %s" % (name, arg))
+
             database["include_args"] = [a[0] for a in first_substitution.args.items()]
 
         return databases
