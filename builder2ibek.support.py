@@ -5,6 +5,7 @@ Diamond Light Source specific script to convert IOC builder classes from
 etc/builder.py into **ibek.support.yaml files
 """
 
+import inspect
 import re
 import sys
 
@@ -224,23 +225,42 @@ class Builder2Support:
             first_substitution = substitutions[1][0]
 
             database["file"] = template
-            # for name, arg in first_substitution.args.items():
-            #     print("ARG: %s = %s" % (name, arg))
 
             database["include_args"] = [a[0] for a in first_substitution.args.items()]
 
         return databases
 
-        # print("SUBSTITUTION: %s, %s" % (template, first_substitution))
-        # first_substitution._PrintSubstitution()
+    def _make_init_script(self, builder_object, func_name, typ, script):
+        """
+        Find the source code for a builder class method and create an object
+        graph representing as script entries in the ibek YAML file.
+        """
+        func = getattr(builder_object, func_name, None)
+        if func:
+            script_item = ordereddict()
+            script_item["type"] = typ
+            func_text = inspect.getsource(func)
+            script_item["value"] = func_text
+            script.append(script_item)
 
     def _call_initialise(self, builder_object):
+        """
+        Extract the code from the builder class Initialise() method
+        to insert into the ibek YAML script object graph.
+
+        Also extract the code from the builder class PostIocInitialise()
+        and InitialiseOnce() methods.
+
+        """
         # TODO - get the Initialise source code if Initialise() fails
-        # TODO - hook this into the YAML generation
-        try:
-            builder_object.Initialise()
-        except (AttributeError, ValueError):
-            print("FAILED to initialise builder object for %s" % builder_object)
+        script = []
+        self._make_init_script(builder_object, "InitialiseOnce", "once", script)
+        self._make_init_script(builder_object, "Initialise", "text", script)
+        self._make_init_script(
+            builder_object, "PostIocInitialise", "post_ioc_init", script
+        )
+
+        return script
 
     def dump_subst_file(self):
         """
@@ -267,12 +287,37 @@ class Builder2Support:
             yaml_defs.append(one_def)
             builder_objects.append(builder_object)
             one_def["databases"] = self._extract_substitutions()
+            one_def["script"] = self._call_initialise(builder_object)
 
     def write_yaml_tree(self):
-        yaml = YAML()
-        yaml.default_flow_style = False
+        """
+        Convert the yaml object graph into a YAML file
+        """
 
-        yaml.dump(self.yaml_tree, sys.stdout)
+        def add_blank_lines(yaml):
+            # add blank lines between major fields
+            for field in ["- type:", "- file:", "- name:", "databases:"]:
+                yaml = re.sub(r"(\s*%s)" % field, "\n\\g<1>", yaml)
+            # cheesy way to make multiline strings readable in YAML
+            # as ruamel quotes and escapes newlines
+            yaml = re.sub(r"(\\\n *\\?)", "", yaml, flags=re.MULTILINE)
+            yaml = re.sub(r"(\\n)", "\n      # ", yaml, flags=re.MULTILINE)
+            yaml = re.sub(r"\\\"", '"', yaml, flags=re.MULTILINE)
+            yaml = re.sub(
+                r"value: \"",
+                "value:\n      # "
+                + "TODO --- CONVERT THE FOLLOWING TO AN IBEK FUNCTION"
+                + "\n      # ",
+                yaml,
+                flags=re.MULTILINE,
+            )
+            yaml = re.sub(r"      # \"", "", yaml, flags=re.MULTILINE)
+            return yaml
+
+        yaml = YAML()
+
+        yaml.default_flow_style = False
+        yaml.dump(self.yaml_tree, sys.stdout, transform=add_blank_lines)
 
 
 class MockArg(Mock):
@@ -307,6 +352,9 @@ class MockArg(Mock):
         self.repr = "MockArg(%s, %s, %s)" % (self.arg_num, name, new_wrap)
 
     def __repr__(self):
+        return self.repr
+
+    def __str__(self):
         return self.repr
 
     ############################################################################
