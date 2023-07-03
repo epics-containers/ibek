@@ -298,9 +298,9 @@ class Builder2Support:
             # add blank lines between major fields
             for field in ["- type:", "- file:", "- name:", "databases:"]:
                 yaml = re.sub(r"(\s*%s)" % field, "\n\\g<1>", yaml)
-            # cheesy way to make multiline strings readable in YAML
+            # cheesy way to make multiline Init Function strings readable in YAML
             # as ruamel quotes and escapes newlines
-            yaml = re.sub(r"(\\\n *\\?)", "", yaml, flags=re.MULTILINE)
+            yaml = re.sub(r"(\\ *\n *\\?)", "", yaml, flags=re.MULTILINE)
             yaml = re.sub(r"(\\n)", "\n      # ", yaml, flags=re.MULTILINE)
             yaml = re.sub(r"\\\"", '"', yaml, flags=re.MULTILINE)
             yaml = re.sub(
