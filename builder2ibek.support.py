@@ -5,6 +5,7 @@ Diamond Light Source specific script to convert IOC builder classes from
 etc/builder.py into **ibek.support.yaml files
 """
 
+import argparse
 import inspect
 import re
 import sys
@@ -132,7 +133,7 @@ class Builder2Support:
         if arg_name == getattr(builder_class, "UniqueName", "name"):
             typ = "id"
         elif arg_info.typ == str:
-            typ = "string"
+            typ = "str"
         elif arg_info.typ == int:
             typ = "int"
         elif arg_info.typ == bool:
@@ -181,7 +182,7 @@ class Builder2Support:
                 value = 1.0
             elif arg["type"] == "bool":
                 value = False
-            elif arg["type"] == "string":
+            elif arg["type"] == "str":
                 value = arg_name + "_STRING"
             elif arg["type"] == "id":
                 value = arg_name + "_ID"
@@ -289,7 +290,7 @@ class Builder2Support:
             one_def["databases"] = self._extract_substitutions()
             one_def["script"] = self._call_initialise(builder_object)
 
-    def write_yaml_tree(self):
+    def write_yaml_tree(self, filename):
         """
         Convert the yaml object graph into a YAML file
         """
@@ -298,8 +299,9 @@ class Builder2Support:
             # add blank lines between major fields
             for field in ["- type:", "- file:", "- name:", "databases:"]:
                 yaml = re.sub(r"(\s*%s)" % field, "\n\\g<1>", yaml)
+
             # cheesy way to make multiline Init Function strings readable in YAML
-            # as ruamel quotes and escapes newlines
+            # because ruamel quotes them and escapes newlines
             yaml = re.sub(r"(\\ *\n *\\?)", "", yaml, flags=re.MULTILINE)
             yaml = re.sub(r"(\\n)", "\n      # ", yaml, flags=re.MULTILINE)
             yaml = re.sub(r"\\\"", '"', yaml, flags=re.MULTILINE)
@@ -317,7 +319,10 @@ class Builder2Support:
         yaml = YAML()
 
         yaml.default_flow_style = False
-        yaml.dump(self.yaml_tree, sys.stdout, transform=add_blank_lines)
+
+        print("\nWriting YAML output to %s ..." % filename)
+        with open(filename, "wb") as f:
+            yaml.dump(self.yaml_tree, f, transform=add_blank_lines)
 
 
 class MockArg(Mock):
@@ -402,34 +407,49 @@ class MockArg(Mock):
 
 def parse_args():
     """
-    first arg is the path to the support module root
-    remaining args are overrides for the builder class arguments of the form
-    'arg_num:value'
+    Parse the command line arguments
     """
-    if len(sys.argv) < 2:
-        print("Usage: %s <path to support module>" % sys.argv[0])
-        sys.exit(1)
-
-    module_path = sys.argv[1]
+    parser = argparse.ArgumentParser(
+        prog="builder2ibek",
+        description="A tool for converting builder.py classes to ibek support YAML",
+    )
+    parser.add_argument("path", help="path to the support module")
+    parser.add_argument(
+        "yaml",
+        help="path to the YAML file to be generated",
+        default=None,
+        nargs="?",
+    )
+    parser.add_argument(
+        "-o",
+        "--overrides",
+        action="append",
+        help=(
+            "override a MockArg argument value in the builder class"
+            " using the form 'arg_num:value'"
+        ),
+    )
+    args = parser.parse_args()
 
     arg_overrides = {}
-    for i in range(2, len(sys.argv)):
-        m = arg_values_re.match(sys.argv[i])
-        assert len(m.groups()) == 2, "Invalid argument format %s" % sys.argv[i]
+    for o in args.overrides or []:
+        m = arg_values_re.match(o)
+        assert len(m.groups()) == 2, "Invalid argument format %s" % o
         value = m.group(2)
         if re.match(is_int_re, value):
-            print("INT")
             value = int(value)
         elif re.match(is_float_re, value):
             value = float(value)
         arg_overrides[m.group(1)] = value
 
-    return module_path, arg_overrides
+    yaml_file = args.yaml or "ibek.support.yaml"
+
+    return args.path, yaml_file, arg_overrides
 
 
 if __name__ == "__main__":
-    support_module_path, arg_value_overrides = parse_args()
+    support_module_path, filename, arg_value_overrides = parse_args()
     builder2support = Builder2Support(support_module_path, arg_value_overrides)
     # builder2support.dump_subst_file()
     builder2support.make_yaml_tree()
-    builder2support.write_yaml_tree()
+    builder2support.write_yaml_tree(filename)
