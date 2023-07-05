@@ -18,6 +18,8 @@ require("dls_dependency_tree")
 require("ruamel.yaml")
 require("mock")
 
+UNDEFINED = "UNDEFINED"
+
 
 from dls_dependency_tree import dependency_tree  # noqa: E402 isort:skip
 from iocbuilder import ParseEtcArgs, configure, device  # noqa: E402 isort:skip
@@ -105,16 +107,14 @@ class Builder2Support:
             args.append(self._make_arg(arg_name, builder_class))
 
         for arg_name in builder_class.ArgInfo.optional_names:
-            args.append(self._make_arg(arg_name, builder_class, "UNDEFINED"))
+            args.append(self._make_arg(arg_name, builder_class, UNDEFINED))
 
         for index, arg_name in enumerate(builder_class.ArgInfo.default_names):
-            args.append(
-                self._make_arg(
-                    arg_name,
-                    builder_class,
-                    builder_class.ArgInfo.default_values[index],
-                )
-            )
+            if builder_class.ArgInfo.default_values[index] is not None:
+                default = builder_class.ArgInfo.default_values[index]
+            else:
+                default = UNDEFINED
+            args.append(self._make_arg(arg_name, builder_class, default))
 
         return this_def, self._instantiate_builder_objects(args, builder_class)
 
@@ -136,10 +136,16 @@ class Builder2Support:
             typ = "str"
         elif arg_info.typ == int:
             typ = "int"
+            if default == UNDEFINED:
+                default = 0
         elif arg_info.typ == bool:
             typ = "bool"
+            if default == UNDEFINED:
+                default = False
         elif arg_info.typ == float:
             typ = "float"
+            if default == UNDEFINED:
+                default = 0
         elif "iocbuilder.modules" in str(arg_info.typ):
             typ = "object"
         else:
@@ -227,7 +233,7 @@ class Builder2Support:
 
             database["file"] = template
 
-            database["include_args"] = [a[0] for a in first_substitution.args.items()]
+            database["args"] = {a[0]: None for a in first_substitution.args.items()}
 
         return databases
 
@@ -260,6 +266,10 @@ class Builder2Support:
         self._make_init_script(
             builder_object, "PostIocInitialise", "post_ioc_init", script
         )
+
+        # TODO - disabled for schema checking DATABASE section changes
+        # TODO delete this line
+        script = []
 
         return script
 
@@ -319,6 +329,12 @@ class Builder2Support:
         yaml = YAML()
 
         yaml.default_flow_style = False
+
+        # add a placeholder for the schema using a relative path
+        # this is more useful than the URL during support yaml development
+        self.yaml_tree.yaml_add_eol_comment(
+            "yaml-language-server: $schema=../_global/ibek.defs.schema.json"
+        )
 
         print("\nWriting YAML output to %s ..." % filename)
         with open(filename, "wb") as f:

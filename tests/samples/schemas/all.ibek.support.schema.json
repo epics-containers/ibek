@@ -20,63 +20,54 @@
                 "type": "boolean",
                 "default": true
               },
-              "port": {
+              "PORT": {
                 "type": "string",
-                "description": "The port name for this asyn object"
+                "description": "Port Name for teh camera",
+                "vscode_ibek_plugin_type": "type_id"
               },
-              "input_eos": {
+              "P": {
                 "type": "string",
-                "description": "Input end of string (terminator)"
+                "description": "The PV prefix"
               },
-              "output_eos": {
+              "R": {
                 "type": "string",
-                "description": "Output end of string (terminator)"
+                "description": "The PV suffix"
               },
-              "priority": {
+              "ID": {
+                "type": "string",
+                "description": "Cam ip address, hostname, MAC address, or ID <manufacturer>-<serial>,\n(e.g. Prosilica-02-2166A-06844)\n"
+              },
+              "BUFFERS": {
                 "type": "integer",
-                "description": "Priority",
-                "default": 100
+                "description": "Max NDArray buffers to be created for plugin callbacks",
+                "default": 50
               },
-              "no_auto_connect": {
-                "type": "boolean",
-                "description": "Set to stop auto connect"
+              "MEMORY": {
+                "type": "integer",
+                "description": "Max memory to allocate, should be maxw*maxh*nbuffer\nfor driver and all attached plugins or -1 for unlimited\n",
+                "default": -1
               },
-              "no_process_eos": {
-                "type": "boolean",
-                "description": "Set to avoid processing end of string"
+              "TIMEOUT": {
+                "type": "integer",
+                "description": "timeout for communication with camera",
+                "default": 1
               },
-              "simulation": {
+              "PV_ALIAS": {
                 "type": "string",
-                "description": "IP port to connect to if in simulation mode"
-              },
-              "baud": {
-                "type": "integer",
-                "description": "Baud Rate"
-              },
-              "bits": {
-                "type": "integer",
-                "description": "Bits [8,7,6,5]"
-              },
-              "parity": {
-                "type": "string",
-                "description": "Parity [null,even,odd]"
-              },
-              "stop": {
-                "type": "integer",
-                "description": "Stop Bits [1,2]"
-              },
-              "crtscts": {
-                "type": "boolean",
-                "description": "Set hardware flow control on"
+                "description": "TODO this need to look into the purpose of this in builder.py\ndetermine its function and see if we can do the equivalent in ibek\n",
+                "default": ""
               },
               "type": {
                 "type": "string",
-                "const": "asyn.AsynSerial",
-                "default": "asyn.AsynSerial"
+                "const": "ADAravis.ADAravis",
+                "default": "ADAravis.ADAravis"
               }
             },
             "required": [
-              "port"
+              "PORT",
+              "P",
+              "R",
+              "ID"
             ],
             "additionalProperties": false
           },
@@ -87,48 +78,410 @@
                 "type": "boolean",
                 "default": true
               },
-              "port": {
+              "camera": {
                 "type": "string",
-                "description": "Serial port tty name / IP address optionally followed by protocol"
-              },
-              "name": {
-                "type": "string",
-                "description": "Name for the Asyn Port"
-              },
-              "input_eos": {
-                "type": "string",
-                "description": "Input end of string (terminator)"
-              },
-              "output_eos": {
-                "type": "string",
-                "description": "Output end of string (terminator)"
-              },
-              "priority": {
-                "type": "integer",
-                "description": "Priority",
-                "default": 100
-              },
-              "no_auto_connect": {
-                "type": "boolean",
-                "description": "Set to stop auto connect"
-              },
-              "no_process_eos": {
-                "type": "boolean",
-                "description": "Set to avoid processing end of string"
-              },
-              "simulation": {
-                "type": "string",
-                "description": "IP port to connect to if in simulation mode"
+                "description": "reference to ADAravis.ADAravis instance",
+                "vscode_ibek_plugin_type": "type_object"
               },
               "type": {
                 "type": "string",
-                "const": "asyn.AsynIP",
-                "default": "asyn.AsynIP"
+                "const": "ADAravis.MantaG235B",
+                "default": "ADAravis.MantaG235B"
               }
             },
             "required": [
-              "port",
-              "name"
+              "camera"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "entity_enabled": {
+                "type": "boolean",
+                "default": true
+              },
+              "camera": {
+                "type": "string",
+                "description": "reference to ADAravis.ADAravis instance",
+                "vscode_ibek_plugin_type": "type_object"
+              },
+              "type": {
+                "type": "string",
+                "const": "ADAravis.Mako_G234B",
+                "default": "ADAravis.Mako_G234B"
+              }
+            },
+            "required": [
+              "camera"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "entity_enabled": {
+                "type": "boolean",
+                "default": true
+              },
+              "name": {
+                "type": "string",
+                "description": "Name to refer to when making a channel",
+                "vscode_ibek_plugin_type": "type_id"
+              },
+              "carrier": {
+                "type": "string",
+                "description": "Carrier Board Identifier",
+                "vscode_ibek_plugin_type": "type_object"
+              },
+              "ip_site_number": {
+                "type": "integer",
+                "description": "IP Site Number 0=A, 1=B, 2=C, 3=D"
+              },
+              "vector": {
+                "type": "string",
+                "description": "Interrupt Vector",
+                "vscode_ibek_plugin_type": "type_object"
+              },
+              "int_enable": {
+                "type": "boolean",
+                "description": "Interrupt Enable",
+                "default": false
+              },
+              "external_clock": {
+                "type": "boolean",
+                "description": "Use External Clock",
+                "default": false
+              },
+              "clock_rate": {
+                "type": "integer",
+                "description": "Clock Rate",
+                "default": 15
+              },
+              "inhibit": {
+                "type": "boolean",
+                "description": "Enable front panel inhibit signal",
+                "default": false
+              },
+              "sample_size": {
+                "type": "integer",
+                "description": "Number of samples for triggered capture",
+                "default": 0
+              },
+              "card_id": {
+                "type": "string",
+                "description": "Card Identifier",
+                "default": "{{ carrier.slot }}{{ ip_site_number }}"
+              },
+              "type": {
+                "type": "string",
+                "const": "Hy8401ip.Hy8401ip",
+                "default": "Hy8401ip.Hy8401ip"
+              }
+            },
+            "required": [
+              "name",
+              "carrier",
+              "ip_site_number",
+              "vector"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "entity_enabled": {
+                "type": "boolean",
+                "default": true
+              },
+              "card": {
+                "type": "string",
+                "description": "8401 card identifier",
+                "vscode_ibek_plugin_type": "type_object"
+              },
+              "signal": {
+                "type": "integer",
+                "description": "8401 signal number (0-7)"
+              },
+              "type": {
+                "type": "string",
+                "const": "Hy8401ip.Hy8401Channel",
+                "default": "Hy8401ip.Hy8401Channel"
+              }
+            },
+            "required": [
+              "card",
+              "signal"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "entity_enabled": {
+                "type": "boolean",
+                "default": true
+              },
+              "name": {
+                "type": "string",
+                "description": "Name to refer to when making a channel",
+                "vscode_ibek_plugin_type": "type_id"
+              },
+              "carrier": {
+                "type": "string",
+                "description": "Carrier Board Identifier",
+                "vscode_ibek_plugin_type": "type_object"
+              },
+              "ip_site_number": {
+                "type": "integer",
+                "description": "IP Site Number 0=A, 1=B, 2=C, 3=D"
+              },
+              "vector": {
+                "type": "string",
+                "description": "Interrupt Vector",
+                "vscode_ibek_plugin_type": "type_object"
+              },
+              "aitype": {
+                "type": "integer",
+                "description": "0=differential, 1=single ended, 2=PT100, 3=Thermocouple, 4=PT100 with 8212 Transition Card, 5=Thermocouples with 8212 Transition Card"
+              },
+              "memsize": {
+                "type": "integer",
+                "description": "1=1MB memory, 2=2MB memory"
+              },
+              "clock_source": {
+                "type": "integer",
+                "description": "0=internal, 1=external"
+              },
+              "clock_rate": {
+                "type": "integer",
+                "description": "Xilinx scanning frequency in Hertz. Valid values: 1,2,5,10,20,50,100 and 200 Hz."
+              },
+              "gain": {
+                "type": "integer",
+                "description": "Gain for all ADC inputs. Valid values are: 1,2,4,8,16,32,64, 128"
+              },
+              "vref": {
+                "type": "integer",
+                "description": "Determine the internal ADC reference voltage: =1: 1.25V =2: 2.5V"
+              },
+              "card_id": {
+                "type": "string",
+                "description": "Card Identifier",
+                "default": "{{ carrier.slot }}{{ ip_site_number }}"
+              },
+              "type": {
+                "type": "string",
+                "const": "Hy8403ip.Hy8403ip",
+                "default": "Hy8403ip.Hy8403ip"
+              }
+            },
+            "required": [
+              "name",
+              "carrier",
+              "ip_site_number",
+              "vector",
+              "aitype",
+              "memsize",
+              "clock_source",
+              "clock_rate",
+              "gain",
+              "vref"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "entity_enabled": {
+                "type": "boolean",
+                "default": true
+              },
+              "device": {
+                "type": "string",
+                "description": "Device Name, PV Suffix"
+              },
+              "card": {
+                "type": "string",
+                "description": "8403 card identifier",
+                "vscode_ibek_plugin_type": "type_object"
+              },
+              "type": {
+                "type": "string",
+                "const": "Hy8403ip.Hy8403Channel",
+                "default": "Hy8403ip.Hy8403Channel"
+              }
+            },
+            "required": [
+              "device",
+              "card"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "entity_enabled": {
+                "type": "boolean",
+                "default": true
+              },
+              "PT": {
+                "type": "string",
+                "description": "Process Variable prefix"
+              },
+              "ADC_REF_CHAN": {
+                "type": "string",
+                "description": "adc reference channel PV"
+              },
+              "ADC_CHAN": {
+                "type": "string",
+                "description": "ADC channel PV"
+              },
+              "deadband": {
+                "type": "number",
+                "description": "hysteresis value for monitor updates in Deg.C"
+              },
+              "hihi": {
+                "type": "number",
+                "description": "hihi alarm"
+              },
+              "hi": {
+                "type": "number",
+                "description": "hi alarm"
+              },
+              "lo": {
+                "type": "number",
+                "description": "lo alarm"
+              },
+              "lolo": {
+                "type": "number",
+                "description": "lolo alarm"
+              },
+              "scan": {
+                "type": "number",
+                "description": "scan period in seconds",
+                "default": 1.0
+              },
+              "prec": {
+                "type": "integer",
+                "description": "record display precision",
+                "default": 0
+              },
+              "hopr": {
+                "type": "number",
+                "description": "high operating range",
+                "default": 100.0
+              },
+              "lopr": {
+                "type": "number",
+                "description": "low operating range",
+                "default": 0.0
+              },
+              "type": {
+                "type": "string",
+                "const": "PT100.PT100",
+                "default": "PT100.PT100"
+              }
+            },
+            "required": [
+              "PT",
+              "ADC_REF_CHAN",
+              "ADC_CHAN",
+              "deadband",
+              "hihi",
+              "hi",
+              "lo",
+              "lolo"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "entity_enabled": {
+                "type": "boolean",
+                "default": true
+              },
+              "device": {
+                "type": "string",
+                "description": "The device PV prefix",
+                "vscode_ibek_plugin_type": "type_id"
+              },
+              "event_receiver": {
+                "type": "string",
+                "description": "reference to EventReceiverPMC entry",
+                "vscode_ibek_plugin_type": "type_object"
+              },
+              "er": {
+                "type": "string",
+                "description": "Event Receiver record suffix",
+                "default": "SET-ER"
+              },
+              "type": {
+                "type": "string",
+                "const": "TimingTemplates.DefaultEVR",
+                "default": "TimingTemplates.DefaultEVR"
+              }
+            },
+            "required": [
+              "device",
+              "event_receiver"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "entity_enabled": {
+                "type": "boolean",
+                "default": true
+              },
+              "default_evr": {
+                "type": "string",
+                "description": "reference to DefaultEVR entry",
+                "vscode_ibek_plugin_type": "type_object"
+              },
+              "type": {
+                "type": "string",
+                "const": "TimingTemplates.EvrAlive",
+                "default": "TimingTemplates.EvrAlive"
+              }
+            },
+            "required": [
+              "default_evr"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "entity_enabled": {
+                "type": "boolean",
+                "default": true
+              },
+              "device": {
+                "type": "string",
+                "description": "device name",
+                "vscode_ibek_plugin_type": "type_id"
+              },
+              "gt": {
+                "type": "string",
+                "description": "generalTime PV Prefix",
+                "default": "GT:"
+              },
+              "scan": {
+                "type": "string",
+                "description": "scan rate",
+                "default": "10 second"
+              },
+              "type": {
+                "type": "string",
+                "const": "TimingTemplates.GeneralTime",
+                "default": "TimingTemplates.GeneralTime"
+              }
+            },
+            "required": [
+              "device"
             ],
             "additionalProperties": false
           },
@@ -323,66 +676,63 @@
                 "type": "boolean",
                 "default": true
               },
-              "name": {
+              "port": {
                 "type": "string",
-                "description": "Name to refer to when making a channel",
-                "vscode_ibek_plugin_type": "type_id"
+                "description": "The port name for this asyn object"
               },
-              "carrier": {
+              "input_eos": {
                 "type": "string",
-                "description": "Carrier Board Identifier",
-                "vscode_ibek_plugin_type": "type_object"
+                "description": "Input end of string (terminator)"
               },
-              "ip_site_number": {
+              "output_eos": {
+                "type": "string",
+                "description": "Output end of string (terminator)"
+              },
+              "priority": {
                 "type": "integer",
-                "description": "IP Site Number 0=A, 1=B, 2=C, 3=D"
+                "description": "Priority",
+                "default": 100
               },
-              "vector": {
+              "no_auto_connect": {
+                "type": "boolean",
+                "description": "Set to stop auto connect"
+              },
+              "no_process_eos": {
+                "type": "boolean",
+                "description": "Set to avoid processing end of string"
+              },
+              "simulation": {
                 "type": "string",
-                "description": "Interrupt Vector",
-                "vscode_ibek_plugin_type": "type_object"
+                "description": "IP port to connect to if in simulation mode"
               },
-              "int_enable": {
-                "type": "boolean",
-                "description": "Interrupt Enable",
-                "default": false
-              },
-              "external_clock": {
-                "type": "boolean",
-                "description": "Use External Clock",
-                "default": false
-              },
-              "clock_rate": {
+              "baud": {
                 "type": "integer",
-                "description": "Clock Rate",
-                "default": 15
+                "description": "Baud Rate"
               },
-              "inhibit": {
-                "type": "boolean",
-                "description": "Enable front panel inhibit signal",
-                "default": false
-              },
-              "sample_size": {
+              "bits": {
                 "type": "integer",
-                "description": "Number of samples for triggered capture",
-                "default": 0
+                "description": "Bits [8,7,6,5]"
               },
-              "card_id": {
+              "parity": {
                 "type": "string",
-                "description": "Card Identifier",
-                "default": "{{ carrier.slot }}{{ ip_site_number }}"
+                "description": "Parity [null,even,odd]"
+              },
+              "stop": {
+                "type": "integer",
+                "description": "Stop Bits [1,2]"
+              },
+              "crtscts": {
+                "type": "boolean",
+                "description": "Set hardware flow control on"
               },
               "type": {
                 "type": "string",
-                "const": "Hy8401ip.Hy8401ip",
-                "default": "Hy8401ip.Hy8401ip"
+                "const": "asyn.AsynSerial",
+                "default": "asyn.AsynSerial"
               }
             },
             "required": [
-              "name",
-              "carrier",
-              "ip_site_number",
-              "vector"
+              "port"
             ],
             "additionalProperties": false
           },
@@ -393,24 +743,48 @@
                 "type": "boolean",
                 "default": true
               },
-              "card": {
+              "port": {
                 "type": "string",
-                "description": "8401 card identifier",
-                "vscode_ibek_plugin_type": "type_object"
+                "description": "Serial port tty name / IP address optionally followed by protocol"
               },
-              "signal": {
+              "name": {
+                "type": "string",
+                "description": "Name for the Asyn Port"
+              },
+              "input_eos": {
+                "type": "string",
+                "description": "Input end of string (terminator)"
+              },
+              "output_eos": {
+                "type": "string",
+                "description": "Output end of string (terminator)"
+              },
+              "priority": {
                 "type": "integer",
-                "description": "8401 signal number (0-7)"
+                "description": "Priority",
+                "default": 100
+              },
+              "no_auto_connect": {
+                "type": "boolean",
+                "description": "Set to stop auto connect"
+              },
+              "no_process_eos": {
+                "type": "boolean",
+                "description": "Set to avoid processing end of string"
+              },
+              "simulation": {
+                "type": "string",
+                "description": "IP port to connect to if in simulation mode"
               },
               "type": {
                 "type": "string",
-                "const": "Hy8401ip.Hy8401Channel",
-                "default": "Hy8401ip.Hy8401Channel"
+                "const": "asyn.AsynIP",
+                "default": "asyn.AsynIP"
               }
             },
             "required": [
-              "card",
-              "signal"
+              "port",
+              "name"
             ],
             "additionalProperties": false
           },
@@ -454,6 +828,26 @@
                 "type": "boolean",
                 "default": true
               },
+              "priority": {
+                "type": "integer",
+                "description": "Time provider priority",
+                "default": 10
+              },
+              "type": {
+                "type": "string",
+                "const": "mrfTiming.EventReceiverInit",
+                "default": "mrfTiming.EventReceiverInit"
+              }
+            },
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "entity_enabled": {
+                "type": "boolean",
+                "default": true
+              },
               "name": {
                 "type": "string",
                 "description": "A name to reference this EVR",
@@ -467,11 +861,6 @@
                 "type": "integer",
                 "description": "PMC slot number",
                 "default": 0
-              },
-              "priority": {
-                "type": "integer",
-                "description": "Time provider priority",
-                "default": 10
               },
               "type": {
                 "type": "string",
@@ -1508,86 +1897,50 @@
                 "type": "boolean",
                 "default": true
               },
-              "device": {
+              "card": {
                 "type": "string",
-                "description": "The device PV prefix",
-                "vscode_ibek_plugin_type": "type_id"
-              },
-              "event_receiver": {
-                "type": "string",
-                "description": "reference to EventReceiverPMC entry",
+                "description": "8401 card identifier",
                 "vscode_ibek_plugin_type": "type_object"
               },
-              "er": {
+              "psc_template": {
                 "type": "string",
-                "description": "Event Receiver record suffix",
-                "default": "SET-ER"
-              },
-              "type": {
-                "type": "string",
-                "const": "TimingTemplates.DefaultEVR",
-                "default": "TimingTemplates.DefaultEVR"
-              }
-            },
-            "required": [
-              "device",
-              "event_receiver"
-            ],
-            "additionalProperties": false
-          },
-          {
-            "type": "object",
-            "properties": {
-              "entity_enabled": {
-                "type": "boolean",
-                "default": true
-              },
-              "default_evr": {
-                "type": "string",
-                "description": "reference to DefaultEVR entry",
+                "description": "The PSC template instance",
                 "vscode_ibek_plugin_type": "type_object"
               },
-              "type": {
-                "type": "string",
-                "const": "TimingTemplates.EvrAlive",
-                "default": "TimingTemplates.EvrAlive"
-              }
-            },
-            "required": [
-              "default_evr"
-            ],
-            "additionalProperties": false
-          },
-          {
-            "type": "object",
-            "properties": {
-              "entity_enabled": {
-                "type": "boolean",
-                "default": true
+              "channel": {
+                "type": "integer",
+                "description": "8401 channel number (0-7)"
               },
-              "device": {
+              "name": {
                 "type": "string",
-                "description": "device name",
-                "vscode_ibek_plugin_type": "type_id"
+                "description": "Suffix for PV name for this channel"
               },
-              "gt": {
-                "type": "string",
-                "description": "generalTime PV Prefix",
-                "default": "GT:"
+              "cal_m": {
+                "type": "number",
+                "description": "Calibrated current multiplier"
               },
-              "scan": {
-                "type": "string",
-                "description": "scan rate",
-                "default": "10 second"
+              "cal_c": {
+                "type": "number",
+                "description": "Calibrated current constant"
+              },
+              "adel": {
+                "type": "number",
+                "description": "Archive deadband for calibrated current"
               },
               "type": {
                 "type": "string",
-                "const": "TimingTemplates.GeneralTime",
-                "default": "TimingTemplates.GeneralTime"
+                "const": "psc.pscHy8401Channel-BS",
+                "default": "psc.pscHy8401Channel-BS"
               }
             },
             "required": [
-              "device"
+              "card",
+              "psc_template",
+              "channel",
+              "name",
+              "cal_m",
+              "cal_c",
+              "adel"
             ],
             "additionalProperties": false
           }
