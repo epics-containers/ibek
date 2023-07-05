@@ -9,7 +9,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
-    <title>Modules, Definitions and Entities &#8212; ibek 0.9.6.dev107+g77c22af documentation</title>
+    <title>Modules, Definitions and Entities &#8212; ibek 0.9.6.dev108+g41e06fb documentation</title>
   
   
   
@@ -517,13 +517,7 @@ the above arguments</p></li>
 <p>Expand below for the example pmac <strong>support module definition file</strong>:</p>
 <blockquote>
 <div><details>
-<summary><a>pmac.ibek.support.yaml</a></summary><div class="highlight-default notranslate"><div class="highlight"><pre><span></span># yaml-language-server: $schema=../_global/ibek.defs.schema.json
-
-# TODO - make naming convention compliant
-# Defs Names should be CamelCase
-# args names should be snake_case
-
-module: pmac
+<summary><a>pmac.ibek.support.yaml</a></summary><div class="highlight-default notranslate"><div class="highlight"><pre><span></span>module: pmac
 
 defs:
   - name: PmacAsynSSHPort
@@ -661,15 +655,22 @@ defs:
 
     databases:
       - file: pmacController.template
-        define_args: |
-          NAXES={{numAxes}}
-          PORT={{name}}
-        include_args:
-          [P, idlePoll, movingPoll, TIMEOUT, CSG0, CSG1, CSG2, CSG3, CSG4]
+        args:
+          NAXES: &quot;{{numAxes}}&quot;
+          PORT: &quot;{{name}}&quot;
+          P:
+          idlePoll:
+          movingPoll:
+          TIMEOUT:
+          CSG0:
+          CSG1:
+          CSG2:
+          CSG3:
+          CSG4:
       - file: pmacStatus.template
-        define_args: PORT={{name}}
-        include_args:
-          - P
+        args:
+          PORT: &quot;{{name}}&quot;
+          P:
 
   - name: DlsPmacAsynMotor
     description: Add a motor to a motor controller
@@ -931,61 +932,58 @@ defs:
 
     databases:
       - file: dls_pmac_asyn_motor.template
-        define_args: |
-          ADDR={{ axis }}
-          PMAC={{ Controller.P }}
-          PORT={{ Controller.name }}
-          SPORT={{ Controller.PORT.name }}
-        include_args:
-          [
-            P,
-            M,
-            DESC,
-            MRES,
-            VELO,
-            PREC,
-            EGU,
-            TWV,
-            DTYP,
-            DIR,
-            VBAS,
-            VMAX,
-            ACCL,
-            BDST,
-            BVEL,
-            BACC,
-            DHLM,
-            DLLM,
-            HLM,
-            LLM,
-            HLSV,
-            INIT,
-            SREV,
-            RRES,
-            ERES,
-            JAR,
-            UEIP,
-            RDBL,
-            RLINK,
-            RTRY,
-            DLY,
-            &quot;OFF&quot;,
-            RDBD,
-            FOFF,
-            ADEL,
-            NTM,
-            FEHIGH,
-            FEHIHI,
-            FEHHSV,
-            FEHSV,
-            SCALE,
-            HOMEVIS,
-            HOMEVISSTR,
-            name,
-            alh,
-            HOME,
-            ALLOW_HOMED_SET,
-          ]
+        args:
+          ADDR: &quot;{{ axis }}&quot;
+          PMAC: &quot;{{ Controller.P }}&quot;
+          PORT: &quot;{{ Controller.name }}&quot;
+          SPORT: &quot;{{ Controller.PORT.name }}&quot;
+          P:
+          M:
+          DESC:
+          MRES:
+          VELO:
+          PREC:
+          EGU:
+          TWV:
+          DTYP:
+          DIR:
+          VBAS:
+          VMAX:
+          ACCL:
+          BDST:
+          BVEL:
+          BACC:
+          DHLM:
+          DLLM:
+          HLM:
+          LLM:
+          HLSV:
+          INIT:
+          SREV:
+          RRES:
+          ERES:
+          JAR:
+          UEIP:
+          RDBL:
+          RLINK:
+          RTRY:
+          DLY:
+          OFF:
+          RDBD:
+          FOFF:
+          ADEL:
+          NTM:
+          FEHIGH:
+          FEHIHI:
+          FEHHSV:
+          FEHSV:
+          SCALE:
+          HOMEVIS:
+          HOMEVISSTR:
+          name:
+          alh:
+          HOME:
+          ALLOW_HOMED_SET:
 
   - name: DlsCsPmacAsynMotor
     description: add a DLS Coordinate system motor
@@ -1237,61 +1235,58 @@ defs:
 
     databases:
       - file: dls_pmac_cs_asyn_motor.template
-        define_args: |
-          ADDR={{ axis }}
-          PORT={{ CsController.name }}
-          CS=CS{{ CsController.CS }}
-          PMAC={{ CsController.Controller.name }}
-        include_args:
-          [
-            P,
-            M,
-            DESC,
-            MRES,
-            VELO,
-            PREC,
-            EGU,
-            TWV,
-            DTYP,
-            DIR,
-            VBAS,
-            VMAX,
-            ACCL,
-            BDST,
-            BVEL,
-            BACC,
-            DHLM,
-            DLLM,
-            HLM,
-            LLM,
-            HLSV,
-            INIT,
-            SREV,
-            RRES,
-            ERES,
-            JAR,
-            UEIP,
-            RDBL,
-            RLINK,
-            RTRY,
-            DLY,
-            &quot;OFF&quot;,
-            RDBD,
-            FOFF,
-            ADEL,
-            NTM,
-            FEHIGH,
-            FEHIHI,
-            FEHHSV,
-            FEHSV,
-            SCALE,
-            HOMEVIS,
-            HOMEVISSTR,
-            name,
-            alh,
-            HOME,
-            ALLOW_HOMED_SET,
-          ]
+        args:
+          ADDR: &quot;{{ axis }}&quot;
+          PORT: &quot;{{ CsController.name }}&quot;
+          CS=C: &quot;{{ CsController.CS }}&quot;
+          PMAC: &quot;{{ CsController.Controller.name }}&quot;
+          P:
+          M:
+          DESC:
+          MRES:
+          VELO:
+          PREC:
+          EGU:
+          TWV:
+          DTYP:
+          DIR:
+          VBAS:
+          VMAX:
+          ACCL:
+          BDST:
+          BVEL:
+          BACC:
+          DHLM:
+          DLLM:
+          HLM:
+          LLM:
+          HLSV:
+          INIT:
+          SREV:
+          RRES:
+          ERES:
+          JAR:
+          UEIP:
+          RDBL:
+          RLINK:
+          RTRY:
+          DLY:
+          OFF:
+          RDBD:
+          FOFF:
+          ADEL:
+          NTM:
+          FEHIGH:
+          FEHIHI:
+          FEHHSV:
+          FEHSV:
+          SCALE:
+          HOMEVIS:
+          HOMEVISSTR:
+          name:
+          alh:
+          HOME:
+          ALLOW_HOMED_SET:
 
   - name: pmacDisableLimitsCheck
     description: disable the limits check on an axis
@@ -1361,11 +1356,22 @@ defs:
 
     databases:
       - file: autohome.template
-        define_args: |
-          PORT={{Controller.name}}
-          CTRL={{Controller.P}}
-        include_args:
-          [P, PLC, GRP1, GRP2, GRP3, GRP4, GRP5, GRP6, GRP7, GRP8, GRP9]
+        args:
+          {
+            PORT: &quot;{{Controller.name}}&quot;,
+            CTRL: &quot;{{Controller.P}}&quot;,
+            P,
+            PLC,
+            GRP1,
+            GRP2,
+            GRP3,
+            GRP4,
+            GRP5,
+            GRP6,
+            GRP7,
+            GRP8,
+            GRP9,
+          }
 
   - name: CS
     description: Create a coordinate system
@@ -1397,12 +1403,12 @@ defs:
       - pmacCreateCSAxes(&quot;{{name}}&quot;, {{NAxes}})
     databases:
       - file: pmacCsController.template
-        define_args: |
-          PORT={{name}}
-          TIMEOUT={{Controller.TIMEOUT}}
-          PARENTPORT={{Controller.name}}
-          PMAC={{Controller.P}}
-        include_args: [CS]
+        args:
+          PORT: &quot;{{name}}&quot;
+          TIMEOUT: &quot;{{Controller.TIMEOUT}}&quot;
+          PARENTPORT: &quot;{{Controller.name}}&quot;
+          PMAC: &quot;{{Controller.P}}&quot;
+          CS:
 </pre></div>
 </div>
 </details></div></blockquote>
@@ -1818,22 +1824,20 @@ the container or during container development.</p>
                   <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
                   <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Filename of the database template in &lt;module_root&gt;/db&quot;</span>
                 <span class="p">},</span>
-                <span class="s2">&quot;include_args&quot;</span><span class="p">:</span> <span class="p">{</span>
-                  <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;array&quot;</span><span class="p">,</span>
-                  <span class="s2">&quot;items&quot;</span><span class="p">:</span> <span class="p">{</span>
-                    <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
+                <span class="s2">&quot;args&quot;</span><span class="p">:</span> <span class="p">{</span>
+                  <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span>
+                  <span class="s2">&quot;additionalProperties&quot;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="p">[</span>
+                      <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+                      <span class="s2">&quot;null&quot;</span>
+                    <span class="p">]</span>
                   <span class="p">},</span>
-                  <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;List of args to pass through to database&quot;</span><span class="p">,</span>
-                  <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="p">[]</span>
-                <span class="p">},</span>
-                <span class="s2">&quot;define_args&quot;</span><span class="p">:</span> <span class="p">{</span>
-                  <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
-                  <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Arg string list to be generated as Jinja template&quot;</span><span class="p">,</span>
-                  <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span>
+                  <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Dictionary of args and values to pass through to database. A value of None is equivalent to ARG: &#39;{{ ARG }}&#39;&quot;</span>
                 <span class="p">}</span>
               <span class="p">},</span>
               <span class="s2">&quot;required&quot;</span><span class="p">:</span> <span class="p">[</span>
-                <span class="s2">&quot;file&quot;</span>
+                <span class="s2">&quot;file&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;args&quot;</span>
               <span class="p">],</span>
               <span class="s2">&quot;additionalProperties&quot;</span><span class="p">:</span> <span class="n">false</span>
             <span class="p">},</span>

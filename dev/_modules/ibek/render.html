@@ -8,7 +8,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>ibek.render &#8212; ibek 0.9.6.dev107+g77c22af documentation</title>
+    <title>ibek.render &#8212; ibek 0.9.6.dev108+g41e06fb documentation</title>
   
   
   
@@ -521,19 +521,20 @@ document.write(`
 
         <span class="k">for</span> <span class="n">template</span> <span class="ow">in</span> <span class="n">templates</span><span class="p">:</span>
             <span class="n">db_file</span> <span class="o">=</span> <span class="n">template</span><span class="o">.</span><span class="n">file</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
-            <span class="n">db_args</span> <span class="o">=</span> <span class="n">template</span><span class="o">.</span><span class="n">define_args</span><span class="o">.</span><span class="n">splitlines</span><span class="p">()</span>
 
-            <span class="n">include_list</span> <span class="o">=</span> <span class="p">[]</span>
-            <span class="k">for</span> <span class="n">arg</span> <span class="ow">in</span> <span class="n">template</span><span class="o">.</span><span class="n">include_args</span><span class="p">:</span>
-                <span class="k">if</span> <span class="n">arg</span> <span class="ow">in</span> <span class="n">instance</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">:</span>
-                    <span class="n">include_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">arg</span><span class="si">}</span><span class="s2">=</span><span class="se">{{{{</span><span class="s2"> </span><span class="si">{</span><span class="n">arg</span><span class="si">}</span><span class="s2"> </span><span class="se">}}}}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">macros</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">arg</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">template</span><span class="o">.</span><span class="n">args</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="k">if</span> <span class="n">value</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">arg</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">instance</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">:</span>
+                        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                            <span class="sa">f</span><span class="s2">&quot;database arg &#39;</span><span class="si">{</span><span class="n">arg</span><span class="si">}</span><span class="s2">&#39; in database template &quot;</span>
+                            <span class="sa">f</span><span class="s2">&quot;&#39;</span><span class="si">{</span><span class="n">template</span><span class="o">.</span><span class="n">file</span><span class="si">}</span><span class="s2">&#39; not found in context&quot;</span>
+                        <span class="p">)</span>
+                    <span class="n">macros</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">arg</span><span class="si">}</span><span class="s2">=</span><span class="se">{{{{</span><span class="s2"> </span><span class="si">{</span><span class="n">arg</span><span class="si">}</span><span class="s2"> </span><span class="se">}}}}</span><span class="s2">&quot;</span><span class="p">)</span>
                 <span class="k">else</span><span class="p">:</span>
-                    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                        <span class="sa">f</span><span class="s2">&quot;include arg &#39;</span><span class="si">{</span><span class="n">arg</span><span class="si">}</span><span class="s2">&#39; in database template &quot;</span>
-                        <span class="sa">f</span><span class="s2">&quot;&#39;</span><span class="si">{</span><span class="n">template</span><span class="o">.</span><span class="n">file</span><span class="si">}</span><span class="s2">&#39; not found in context&quot;</span>
-                    <span class="p">)</span>
+                    <span class="n">macros</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">arg</span><span class="si">}</span><span class="s2">=</span><span class="si">{</span><span class="n">value</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
-            <span class="n">db_arg_string</span> <span class="o">=</span> <span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">db_args</span> <span class="o">+</span> <span class="n">include_list</span><span class="p">)</span>
+            <span class="n">db_arg_string</span> <span class="o">=</span> <span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">macros</span><span class="p">)</span>
 
             <span class="n">jinja_txt</span> <span class="o">+=</span> <span class="p">(</span>
                 <span class="sa">f</span><span class="s1">&#39;msi -I$</span><span class="se">{{</span><span class="s1">EPICS_DB_INCLUDE_PATH</span><span class="se">}}</span><span class="s1"> -M&quot;</span><span class="si">{</span><span class="n">db_arg_string</span><span class="si">}</span><span class="s1">&quot; &quot;</span><span class="si">{</span><span class="n">db_file</span><span class="si">}</span><span class="s1">&quot;</span><span class="se">\n</span><span class="s1">&#39;</span>
