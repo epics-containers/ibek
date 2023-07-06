@@ -264,65 +264,34 @@
             "description": "Databases to instantiate",
             "default": []
           },
-          "script": {
+          "pre_init": {
             "type": "array",
             "items": {
               "anyOf": [
                 {
-                  "type": "string"
+                  "$ref": "#/definitions/Function"
                 },
                 {
-                  "type": "object",
-                  "properties": {
-                    "name": {
-                      "type": "string",
-                      "description": "Name of the function to call"
-                    },
-                    "args": {
-                      "type": "object",
-                      "description": "The arguments IOC instance should supply"
-                    },
-                    "header": {
-                      "type": "string",
-                      "description": "commands/comments to appear before the function",
-                      "default": ""
-                    },
-                    "once": {
-                      "type": "boolean",
-                      "description": "If true, only call the function once",
-                      "default": false
-                    },
-                    "type": {
-                      "type": "string",
-                      "const": "function",
-                      "default": "function"
-                    }
-                  },
-                  "required": [
-                    "name",
-                    "args"
-                  ],
-                  "additionalProperties": false
-                },
-                {
-                  "type": "object",
-                  "properties": {
-                    "type": {
-                      "type": "string",
-                      "const": "once",
-                      "default": "once"
-                    },
-                    "value": {
-                      "type": "string",
-                      "description": "Startup script snippets defined as Jinja template",
-                      "default": ""
-                    }
-                  },
-                  "additionalProperties": false
+                  "$ref": "#/definitions/Comment"
                 }
               ]
             },
-            "description": "Startup script snippets defined as Jinja template or function",
+            "description": "Startup script snippets to add before iocInit()",
+            "default": []
+          },
+          "post_init": {
+            "type": "array",
+            "items": {
+              "anyOf": [
+                {
+                  "$ref": "#/definitions/Function"
+                },
+                {
+                  "$ref": "#/definitions/Comment"
+                }
+              ]
+            },
+            "description": "Startup script snippets to add post iocInit(), such as dbpf",
             "default": []
           },
           "env_vars": {
@@ -347,14 +316,6 @@
             },
             "description": "Environment variables to set in the boot script",
             "default": []
-          },
-          "post_ioc_init": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "description": "Entries to add post iocInit(), such as dbpf",
-            "default": []
           }
         },
         "required": [
@@ -371,5 +332,61 @@
     "defs"
   ],
   "additionalProperties": false,
+  "definitions": {
+    "Function": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Name of the function to call"
+        },
+        "args": {
+          "type": "object",
+          "description": "The arguments to pass to the function"
+        },
+        "header": {
+          "type": "string",
+          "description": "commands/comments to appear before the function",
+          "default": ""
+        },
+        "when": {
+          "type": "string",
+          "description": "one of first / every / last",
+          "default": "every"
+        },
+        "type": {
+          "type": "string",
+          "const": "function",
+          "default": "function"
+        }
+      },
+      "required": [
+        "name",
+        "args"
+      ],
+      "additionalProperties": false
+    },
+    "Comment": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "const": "comment",
+          "default": "comment"
+        },
+        "when": {
+          "type": "string",
+          "description": "One of first / every / last",
+          "default": "every"
+        },
+        "value": {
+          "type": "string",
+          "description": "A comment to add into the startup script",
+          "default": ""
+        }
+      },
+      "additionalProperties": false
+    }
+  },
   "$schema": "http://json-schema.org/draft-07/schema#"
 }

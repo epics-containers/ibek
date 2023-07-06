@@ -608,46 +608,6 @@
                 "type": "boolean",
                 "default": true
               },
-              "command": {
-                "type": "string",
-                "description": "command string",
-                "default": ""
-              },
-              "type": {
-                "type": "string",
-                "const": "epics.StartupCommand",
-                "default": "epics.StartupCommand"
-              }
-            },
-            "additionalProperties": false
-          },
-          {
-            "type": "object",
-            "properties": {
-              "entity_enabled": {
-                "type": "boolean",
-                "default": true
-              },
-              "command": {
-                "type": "string",
-                "description": "command string",
-                "default": ""
-              },
-              "type": {
-                "type": "string",
-                "const": "epics.PostStartupCommand",
-                "default": "epics.PostStartupCommand"
-              }
-            },
-            "additionalProperties": false
-          },
-          {
-            "type": "object",
-            "properties": {
-              "entity_enabled": {
-                "type": "boolean",
-                "default": true
-              },
               "name": {
                 "type": "string",
                 "description": "A name for an interrupt vector variable",
