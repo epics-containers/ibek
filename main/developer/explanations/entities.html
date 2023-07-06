@@ -9,7 +9,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
-    <title>Modules, Definitions and Entities &#8212; ibek 1.10.2.dev19+gacebf27 documentation</title>
+    <title>Modules, Definitions and Entities &#8212; ibek 1.10.2.dev22+gb05d34f documentation</title>
   
   
   
@@ -517,7 +517,8 @@ the above arguments</p></li>
 <p>Expand below for the example pmac <strong>support module definition file</strong>:</p>
 <blockquote>
 <div><details>
-<summary><a>pmac.ibek.support.yaml</a></summary><div class="highlight-default notranslate"><div class="highlight"><pre><span></span>module: pmac
+<summary><a>pmac.ibek.support.yaml</a></summary><div class="highlight-default notranslate"><div class="highlight"><pre><span></span># yaml-language-server: $schema=../_global/ibek.defs.schema.json
+module: pmac
 
 defs:
   - name: PmacAsynSSHPort
@@ -558,8 +559,17 @@ defs:
         description: No EOS used if set to 1
         default: 0
 
-    script:
-      - drvAsynPowerPMACPortConfigure(&quot;{{name}}&quot;, &quot;{{IP}}&quot;, &quot;{{USERNAME}}&quot;, &quot;{{PASSWORD}}&quot;, &quot;{{PRIORITY}}&quot;, &quot;{{NOAUTOCONNECT}}&quot;, &quot;{{NOEOS}}&quot;)
+    pre_init:
+      - type: function
+        name: drvAsynPowerPMACPortConfigure
+        args:
+          AsynPortName: &quot;{{name}}&quot;
+          IPAddress: &quot;{{IP}}&quot;
+          Username: &quot;{{USERNAME}}&quot;
+          Password: &quot;{{PASSWORD}}&quot;
+          Priority: &quot;{{PRIORITY}}&quot;
+          NoAutoConnect: &quot;{{NOAUTOCONNECT}}&quot;
+          NoEOS: &quot;{{NOEOS}}&quot;
 
   - name: PmacAsynIPPort
     description: |
@@ -579,8 +589,12 @@ defs:
         description: TCP port for connection
         default: 1025
 
-    script:
-      - pmacAsynIPConfigure({{ name }}, {{ IP }}:{{ PORT }})
+    pre_init:
+      - type: function
+        name: pmacAsynIPConfigure
+        args:
+          AsynPortName: &quot;{{name}}&quot;
+          IPAddress: &quot;{{IP}}:{{PORT}}&quot;
 
   - name: Geobrick
     description: Add a geobrick to the IOC
@@ -649,9 +663,22 @@ defs:
 
     # numAxes must be supplied for geobrick (but builder.py counted the axes created)
     # TODO is counting num_axes is an example of something hard to do in this new approach?
-    script:
-      - pmacCreateController({{name}}, {{PORT.name}}, 0, {{numAxes}}, {{movingPoll}}, {{idlePoll}})
-      - pmacCreateAxes({{name}}, {{numAxes}})
+    pre_init:
+      - type: function
+        name: pmacCreateController
+        args:
+          AsynPortName: &quot;{{name}}&quot;
+          PmacAsynPort: &quot;{{PORT.name}}&quot;
+          Address: 0
+          NumAxes: &quot;{{numAxes}}&quot;
+          MovingPollPeriod: &quot;{{movingPoll}}&quot;
+          IdlePollPeriod: &quot;{{idlePoll}}&quot;
+
+      - type: function
+        name: pmacCreateAxes
+        args:
+          AsynPortName: &quot;{{name}}&quot;
+          NumberOfAxes: &quot;{{numAxes}}&quot;
 
     databases:
       - file: pmacController.template
@@ -1299,8 +1326,13 @@ defs:
         name: Axis
         description: Axis to have limits disabled
 
-    script:
-      - pmacDisableLimitsCheck({{ Controller.name }}, {{ Axis }}, 0)
+    pre_init:
+      - type: function
+        name: pmacDisableLimitsCheck
+        args:
+          AsynPortName: &quot;{{Controller.name}}&quot;
+          Axis: &quot;{{Axis}}&quot;
+          AllAxes: False
 
   - name: autohome
     description: setup auto home groups
@@ -1398,9 +1430,20 @@ defs:
         description: PROG number for CS motion
         default: 10
 
-    script:
-      - pmacCreateCS(&quot;{{name}}&quot;, &quot;{{Controller.name}}&quot;, {{CS}}, {{Program}})
-      - pmacCreateCSAxes(&quot;{{name}}&quot;, {{NAxes}})
+    pre_init:
+      - type: function
+        name: pmacCreateCS
+        args:
+          AsynPortName: &quot;{{name}}&quot;
+          PmacAsynPort: &quot;{{Controller.name}}&quot;
+          CSNumber: &quot;{{CS}}&quot;
+          PLCNumber: &quot;{{Program}}&quot;
+      - type: function
+        name: pmacCreateCSAxes
+        args:
+          AsynPortName: &quot;{{name}}&quot;
+          NumberOfAxes: &quot;{{NAxes}}&quot;
+
     databases:
       - file: pmacCsController.template
         args:
@@ -1517,9 +1560,13 @@ file that ibek will generate from it.</p>
 <span class="n">dbLoadDatabase</span> <span class="n">dbd</span><span class="o">/</span><span class="n">ioc</span><span class="o">.</span><span class="n">dbd</span>
 <span class="n">ioc_registerRecordDeviceDriver</span> <span class="n">pdbbase</span>
 
-<span class="n">pmacAsynIPConfigure</span><span class="p">(</span><span class="n">BRICK1port</span><span class="p">,</span> <span class="mf">192.168.0.12</span><span class="p">:</span><span class="mi">1112</span><span class="p">:</span><span class="mi">1025</span><span class="p">)</span>
-<span class="n">pmacCreateController</span><span class="p">(</span><span class="n">BL45P</span><span class="o">-</span><span class="n">MO</span><span class="o">-</span><span class="n">BRICK</span><span class="o">-</span><span class="mi">01</span><span class="p">,</span> <span class="n">BRICK1port</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">500</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
-<span class="n">pmacCreateAxes</span><span class="p">(</span><span class="n">BL45P</span><span class="o">-</span><span class="n">MO</span><span class="o">-</span><span class="n">BRICK</span><span class="o">-</span><span class="mi">01</span><span class="p">,</span> <span class="mi">8</span><span class="p">)</span>
+
+<span class="c1"># pmacAsynIPConfigure AsynPortName IPAddress</span>
+<span class="n">pmacAsynIPConfigure</span> <span class="n">BRICK1port</span> <span class="mf">192.168.0.12</span><span class="p">:</span><span class="mi">1112</span><span class="p">:</span><span class="mi">1025</span>
+
+<span class="c1"># pmacCreateController AsynPortName PmacAsynPort Address NumAxes MovingPollPeriod IdlePollPeriod</span>
+<span class="n">pmacCreateController</span> <span class="n">BL45P</span><span class="o">-</span><span class="n">MO</span><span class="o">-</span><span class="n">BRICK</span><span class="o">-</span><span class="mi">01</span> <span class="n">BRICK1port</span> <span class="mi">0</span> <span class="mi">8</span> <span class="mi">500</span> <span class="mi">100</span>
+<span class="n">pmacCreateAxes</span> <span class="n">BL45P</span><span class="o">-</span><span class="n">MO</span><span class="o">-</span><span class="n">BRICK</span><span class="o">-</span><span class="mi">01</span> <span class="mi">8</span>
 
 <span class="n">dbLoadRecords</span> <span class="o">/</span><span class="n">tmp</span><span class="o">/</span><span class="n">ioc</span><span class="o">.</span><span class="n">db</span>
 <span class="n">iocInit</span>
@@ -1844,65 +1891,40 @@ the container or during container development.</p>
             <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Databases to instantiate&quot;</span><span class="p">,</span>
             <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="p">[]</span>
           <span class="p">},</span>
-          <span class="s2">&quot;script&quot;</span><span class="p">:</span> <span class="p">{</span>
+          <span class="s2">&quot;pre_init&quot;</span><span class="p">:</span> <span class="p">{</span>
             <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;array&quot;</span><span class="p">,</span>
             <span class="s2">&quot;items&quot;</span><span class="p">:</span> <span class="p">{</span>
               <span class="s2">&quot;anyOf&quot;</span><span class="p">:</span> <span class="p">[</span>
                 <span class="p">{</span>
-                  <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
+                  <span class="s2">&quot;$ref&quot;</span><span class="p">:</span> <span class="s2">&quot;#/definitions/Function&quot;</span>
                 <span class="p">},</span>
                 <span class="p">{</span>
-                  <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span>
-                  <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span>
-                    <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="p">{</span>
-                      <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
-                      <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Name of the function to call&quot;</span>
-                    <span class="p">},</span>
-                    <span class="s2">&quot;args&quot;</span><span class="p">:</span> <span class="p">{</span>
-                      <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span>
-                      <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;The arguments IOC instance should supply&quot;</span>
-                    <span class="p">},</span>
-                    <span class="s2">&quot;header&quot;</span><span class="p">:</span> <span class="p">{</span>
-                      <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
-                      <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;commands/comments to appear before the function&quot;</span><span class="p">,</span>
-                      <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span>
-                    <span class="p">},</span>
-                    <span class="s2">&quot;once&quot;</span><span class="p">:</span> <span class="p">{</span>
-                      <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;boolean&quot;</span><span class="p">,</span>
-                      <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;If true, only call the function once&quot;</span><span class="p">,</span>
-                      <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="n">false</span>
-                    <span class="p">},</span>
-                    <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="p">{</span>
-                      <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
-                      <span class="s2">&quot;const&quot;</span><span class="p">:</span> <span class="s2">&quot;function&quot;</span><span class="p">,</span>
-                      <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="s2">&quot;function&quot;</span>
-                    <span class="p">}</span>
-                  <span class="p">},</span>
-                  <span class="s2">&quot;required&quot;</span><span class="p">:</span> <span class="p">[</span>
-                    <span class="s2">&quot;name&quot;</span><span class="p">,</span>
-                    <span class="s2">&quot;args&quot;</span>
-                  <span class="p">],</span>
-                  <span class="s2">&quot;additionalProperties&quot;</span><span class="p">:</span> <span class="n">false</span>
+                  <span class="s2">&quot;$ref&quot;</span><span class="p">:</span> <span class="s2">&quot;#/definitions/Comment&quot;</span>
                 <span class="p">},</span>
                 <span class="p">{</span>
-                  <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span>
-                  <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span>
-                    <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="p">{</span>
-                      <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
-                      <span class="s2">&quot;const&quot;</span><span class="p">:</span> <span class="s2">&quot;once&quot;</span><span class="p">,</span>
-                      <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="s2">&quot;once&quot;</span>
-                    <span class="p">},</span>
-                    <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="p">{</span>
-                      <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
-                      <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Startup script snippets defined as Jinja template&quot;</span><span class="p">,</span>
-                      <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span>
-                    <span class="p">}</span>
-                  <span class="p">},</span>
-                  <span class="s2">&quot;additionalProperties&quot;</span><span class="p">:</span> <span class="n">false</span>
+                  <span class="s2">&quot;$ref&quot;</span><span class="p">:</span> <span class="s2">&quot;#/definitions/Text&quot;</span>
                 <span class="p">}</span>
               <span class="p">]</span>
             <span class="p">},</span>
-            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Startup script snippets defined as Jinja template or function&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Startup script snippets to add before iocInit()&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="p">[]</span>
+          <span class="p">},</span>
+          <span class="s2">&quot;post_init&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;array&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;items&quot;</span><span class="p">:</span> <span class="p">{</span>
+              <span class="s2">&quot;anyOf&quot;</span><span class="p">:</span> <span class="p">[</span>
+                <span class="p">{</span>
+                  <span class="s2">&quot;$ref&quot;</span><span class="p">:</span> <span class="s2">&quot;#/definitions/Function&quot;</span>
+                <span class="p">},</span>
+                <span class="p">{</span>
+                  <span class="s2">&quot;$ref&quot;</span><span class="p">:</span> <span class="s2">&quot;#/definitions/Comment&quot;</span>
+                <span class="p">},</span>
+                <span class="p">{</span>
+                  <span class="s2">&quot;$ref&quot;</span><span class="p">:</span> <span class="s2">&quot;#/definitions/Text&quot;</span>
+                <span class="p">}</span>
+              <span class="p">]</span>
+            <span class="p">},</span>
+            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Startup script snippets to add post iocInit(), such as dbpf&quot;</span><span class="p">,</span>
             <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="p">[]</span>
           <span class="p">},</span>
           <span class="s2">&quot;env_vars&quot;</span><span class="p">:</span> <span class="p">{</span>
@@ -1927,14 +1949,6 @@ the container or during container development.</p>
             <span class="p">},</span>
             <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Environment variables to set in the boot script&quot;</span><span class="p">,</span>
             <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="p">[]</span>
-          <span class="p">},</span>
-          <span class="s2">&quot;post_ioc_init&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;array&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;items&quot;</span><span class="p">:</span> <span class="p">{</span>
-              <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
-            <span class="p">},</span>
-            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Entries to add post iocInit(), such as dbpf&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="p">[]</span>
           <span class="p">}</span>
         <span class="p">},</span>
         <span class="s2">&quot;required&quot;</span><span class="p">:</span> <span class="p">[</span>
@@ -1951,6 +1965,83 @@ the container or during container development.</p>
     <span class="s2">&quot;defs&quot;</span>
   <span class="p">],</span>
   <span class="s2">&quot;additionalProperties&quot;</span><span class="p">:</span> <span class="n">false</span><span class="p">,</span>
+  <span class="s2">&quot;definitions&quot;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="s2">&quot;Function&quot;</span><span class="p">:</span> <span class="p">{</span>
+      <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="p">{</span>
+          <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+          <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Name of the function to call&quot;</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;args&quot;</span><span class="p">:</span> <span class="p">{</span>
+          <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span>
+          <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;The arguments to pass to the function&quot;</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;header&quot;</span><span class="p">:</span> <span class="p">{</span>
+          <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+          <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;commands/comments to appear before the function&quot;</span><span class="p">,</span>
+          <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;when&quot;</span><span class="p">:</span> <span class="p">{</span>
+          <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+          <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;one of first / every / last&quot;</span><span class="p">,</span>
+          <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="s2">&quot;every&quot;</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="p">{</span>
+          <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+          <span class="s2">&quot;const&quot;</span><span class="p">:</span> <span class="s2">&quot;function&quot;</span><span class="p">,</span>
+          <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="s2">&quot;function&quot;</span>
+        <span class="p">}</span>
+      <span class="p">},</span>
+      <span class="s2">&quot;required&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="s2">&quot;name&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;args&quot;</span>
+      <span class="p">],</span>
+      <span class="s2">&quot;additionalProperties&quot;</span><span class="p">:</span> <span class="n">false</span>
+    <span class="p">},</span>
+    <span class="s2">&quot;Comment&quot;</span><span class="p">:</span> <span class="p">{</span>
+      <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="p">{</span>
+          <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+          <span class="s2">&quot;const&quot;</span><span class="p">:</span> <span class="s2">&quot;comment&quot;</span><span class="p">,</span>
+          <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="s2">&quot;comment&quot;</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;when&quot;</span><span class="p">:</span> <span class="p">{</span>
+          <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+          <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;One of first / every / last&quot;</span><span class="p">,</span>
+          <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="s2">&quot;every&quot;</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="p">{</span>
+          <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+          <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;A comment to add into the startup script&quot;</span><span class="p">,</span>
+          <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span>
+        <span class="p">}</span>
+      <span class="p">},</span>
+      <span class="s2">&quot;additionalProperties&quot;</span><span class="p">:</span> <span class="n">false</span>
+    <span class="p">},</span>
+    <span class="s2">&quot;Text&quot;</span><span class="p">:</span> <span class="p">{</span>
+      <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="p">{</span>
+          <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+          <span class="s2">&quot;const&quot;</span><span class="p">:</span> <span class="s2">&quot;text&quot;</span><span class="p">,</span>
+          <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="s2">&quot;text&quot;</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;when&quot;</span><span class="p">:</span> <span class="p">{</span>
+          <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+          <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;One of first / every / last&quot;</span><span class="p">,</span>
+          <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="s2">&quot;every&quot;</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="p">{</span>
+          <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+          <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;raw text to add to the startup script&quot;</span><span class="p">,</span>
+          <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span>
+        <span class="p">}</span>
+      <span class="p">},</span>
+      <span class="s2">&quot;additionalProperties&quot;</span><span class="p">:</span> <span class="n">false</span>
+    <span class="p">}</span>
+  <span class="p">},</span>
   <span class="s2">&quot;$schema&quot;</span><span class="p">:</span> <span class="s2">&quot;http://json-schema.org/draft-07/schema#&quot;</span>
 <span class="p">}</span>
 </pre></div>
