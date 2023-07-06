@@ -67,7 +67,9 @@ def test_example_sr_rf_08(tmp_path: Path, samples: Path, ibek_defs: Path):
     tmp_path.mkdir(exist_ok=True)
 
     entity_file = samples / "example-srrfioc08" / "SR-RF-IOC-08.ibek.ioc.yaml"
-    definition_files = ibek_defs.glob("*/*.support.yaml")
+    definition_files = list(ibek_defs.glob("_global/*.support.yaml"))
+    definition_files.append(ibek_defs / "ipac" / "ipac.ibek.support.yaml")
+    definition_files.append(ibek_defs / "Hy8401ip" / "Hy8401ip.ibek.support.yaml")
     out_file = tmp_path / "new_dir" / "st.cmd"
     out_db = tmp_path / "new_dir" / "make_db.sh"
 

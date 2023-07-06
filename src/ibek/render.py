@@ -103,19 +103,20 @@ class Render:
 
         for template in templates:
             db_file = template.file.strip("\n")
-            db_args = template.define_args.splitlines()
 
-            include_list = []
-            for arg in template.include_args:
-                if arg in instance.__dict__:
-                    include_list.append(f"{arg}={{{{ {arg} }}}}")
+            macros = []
+            for arg, value in template.args.items():
+                if value is None:
+                    if arg not in instance.__dict__:
+                        raise ValueError(
+                            f"database arg '{arg}' in database template "
+                            f"'{template.file}' not found in context"
+                        )
+                    macros.append(f"{arg}={{{{ {arg} }}}}")
                 else:
-                    raise ValueError(
-                        f"include arg '{arg}' in database template "
-                        f"'{template.file}' not found in context"
-                    )
+                    macros.append(f"{arg}={value}")
 
-            db_arg_string = ", ".join(db_args + include_list)
+            db_arg_string = ", ".join(macros)
 
             jinja_txt += (
                 f'msi -I${{EPICS_DB_INCLUDE_PATH}} -M"{db_arg_string}" "{db_file}"\n'

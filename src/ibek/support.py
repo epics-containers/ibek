@@ -100,10 +100,13 @@ class Database:
     """
 
     file: A[str, desc("Filename of the database template in <module_root>/db")]
-    include_args: A[
-        Sequence[str], desc("List of args to pass through to database")
-    ] = ()
-    define_args: A[str, desc("Arg string list to be generated as Jinja template")] = ""
+    args: A[
+        Dict[str, Optional[str]],
+        desc(
+            "Dictionary of args and values to pass through to database. "
+            "A value of None is equivalent to ARG: '{{ ARG }}'"
+        ),
+    ]
 
 
 @dataclass
