@@ -9,7 +9,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
-    <title>Modules, Definitions and Entities &#8212; ibek 0.9.6.dev109+g0085a59 documentation</title>
+    <title>Modules, Definitions and Entities &#8212; ibek 0.9.6.dev110+g8f2aace documentation</title>
   
   
   
@@ -1900,6 +1900,9 @@ the container or during container development.</p>
                 <span class="p">},</span>
                 <span class="p">{</span>
                   <span class="s2">&quot;$ref&quot;</span><span class="p">:</span> <span class="s2">&quot;#/definitions/Comment&quot;</span>
+                <span class="p">},</span>
+                <span class="p">{</span>
+                  <span class="s2">&quot;$ref&quot;</span><span class="p">:</span> <span class="s2">&quot;#/definitions/Text&quot;</span>
                 <span class="p">}</span>
               <span class="p">]</span>
             <span class="p">},</span>
@@ -1915,6 +1918,9 @@ the container or during container development.</p>
                 <span class="p">},</span>
                 <span class="p">{</span>
                   <span class="s2">&quot;$ref&quot;</span><span class="p">:</span> <span class="s2">&quot;#/definitions/Comment&quot;</span>
+                <span class="p">},</span>
+                <span class="p">{</span>
+                  <span class="s2">&quot;$ref&quot;</span><span class="p">:</span> <span class="s2">&quot;#/definitions/Text&quot;</span>
                 <span class="p">}</span>
               <span class="p">]</span>
             <span class="p">},</span>
@@ -2009,6 +2015,27 @@ the container or during container development.</p>
         <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="p">{</span>
           <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
           <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;A comment to add into the startup script&quot;</span><span class="p">,</span>
+          <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span>
+        <span class="p">}</span>
+      <span class="p">},</span>
+      <span class="s2">&quot;additionalProperties&quot;</span><span class="p">:</span> <span class="n">false</span>
+    <span class="p">},</span>
+    <span class="s2">&quot;Text&quot;</span><span class="p">:</span> <span class="p">{</span>
+      <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="p">{</span>
+          <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+          <span class="s2">&quot;const&quot;</span><span class="p">:</span> <span class="s2">&quot;text&quot;</span><span class="p">,</span>
+          <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="s2">&quot;text&quot;</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;when&quot;</span><span class="p">:</span> <span class="p">{</span>
+          <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+          <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;One of first / every / last&quot;</span><span class="p">,</span>
+          <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="s2">&quot;every&quot;</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="p">{</span>
+          <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+          <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;raw text to add to the startup script&quot;</span><span class="p">,</span>
           <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span>
         <span class="p">}</span>
       <span class="p">},</span>

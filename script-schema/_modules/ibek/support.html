@@ -8,7 +8,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>ibek.support &#8212; ibek 0.9.6.dev109+g0085a59 documentation</title>
+    <title>ibek.support &#8212; ibek 0.9.6.dev110+g8f2aace documentation</title>
   
   
   
@@ -561,13 +561,26 @@ document.write(`
 <div class="viewcode-block" id="Comment"><a class="viewcode-back" href="../../user/reference/api.html#ibek.support.Comment">[docs]</a><span class="nd">@dataclass</span>
 <span class="k">class</span> <span class="nc">Comment</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    A script snippet that should for the first occurrence only</span>
+<span class="sd">    A script snippet that will have &#39;# &#39; prepended to every line</span>
+<span class="sd">    for insertion into the startup script</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="nb">type</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;comment&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;comment&quot;</span>
     <span class="c1"># TODO will be an enum</span>
     <span class="n">when</span><span class="p">:</span> <span class="n">A</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">desc</span><span class="p">(</span><span class="s2">&quot;One of first / every / last&quot;</span><span class="p">)]</span> <span class="o">=</span> <span class="s2">&quot;every&quot;</span>
     <span class="n">value</span><span class="p">:</span> <span class="n">A</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">desc</span><span class="p">(</span><span class="s2">&quot;A comment to add into the startup script&quot;</span><span class="p">)]</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span></div>
+
+
+<div class="viewcode-block" id="Text"><a class="viewcode-back" href="../../user/reference/api.html#ibek.support.Text">[docs]</a><span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">Text</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A script snippet to insert into the startup script</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="nb">type</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;text&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;text&quot;</span>
+    <span class="c1"># TODO will be an enum</span>
+    <span class="n">when</span><span class="p">:</span> <span class="n">A</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">desc</span><span class="p">(</span><span class="s2">&quot;One of first / every / last&quot;</span><span class="p">)]</span> <span class="o">=</span> <span class="s2">&quot;every&quot;</span>
+    <span class="n">value</span><span class="p">:</span> <span class="n">A</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">desc</span><span class="p">(</span><span class="s2">&quot;raw text to add to the startup script&quot;</span><span class="p">)]</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span></div>
 
 
 <div class="viewcode-block" id="Value"><a class="viewcode-back" href="../../user/reference/api.html#ibek.support.Value">[docs]</a><span class="nd">@dataclass</span>
@@ -582,6 +595,9 @@ document.write(`
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">value</span></div>
 
 
+<span class="n">Script</span> <span class="o">=</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">Function</span><span class="p">,</span> <span class="n">Comment</span><span class="p">,</span> <span class="n">Text</span><span class="p">]]</span>
+
+
 <div class="viewcode-block" id="Definition"><a class="viewcode-back" href="../../user/reference/api.html#ibek.support.Definition">[docs]</a><span class="nd">@dataclass</span>
 <span class="k">class</span> <span class="nc">Definition</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
@@ -594,11 +610,11 @@ document.write(`
     <span class="n">values</span><span class="p">:</span> <span class="n">A</span><span class="p">[</span><span class="n">Sequence</span><span class="p">[</span><span class="n">Value</span><span class="p">],</span> <span class="n">desc</span><span class="p">(</span><span class="s2">&quot;The values IOC instance should supply&quot;</span><span class="p">)]</span> <span class="o">=</span> <span class="p">()</span>
     <span class="n">databases</span><span class="p">:</span> <span class="n">A</span><span class="p">[</span><span class="n">Sequence</span><span class="p">[</span><span class="n">Database</span><span class="p">],</span> <span class="n">desc</span><span class="p">(</span><span class="s2">&quot;Databases to instantiate&quot;</span><span class="p">)]</span> <span class="o">=</span> <span class="p">()</span>
     <span class="n">pre_init</span><span class="p">:</span> <span class="n">A</span><span class="p">[</span>
-        <span class="n">Sequence</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">Function</span><span class="p">,</span> <span class="n">Comment</span><span class="p">]],</span>
+        <span class="n">Script</span><span class="p">,</span>
         <span class="n">desc</span><span class="p">(</span><span class="s2">&quot;Startup script snippets to add before iocInit()&quot;</span><span class="p">),</span>
     <span class="p">]</span> <span class="o">=</span> <span class="p">()</span>
     <span class="n">post_init</span><span class="p">:</span> <span class="n">A</span><span class="p">[</span>
-        <span class="n">Sequence</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">Function</span><span class="p">,</span> <span class="n">Comment</span><span class="p">]],</span>
+        <span class="n">Script</span><span class="p">,</span>
         <span class="n">desc</span><span class="p">(</span><span class="s2">&quot;Startup script snippets to add post iocInit(), such as dbpf&quot;</span><span class="p">),</span>
     <span class="p">]</span> <span class="o">=</span> <span class="p">()</span>
     <span class="n">env_vars</span><span class="p">:</span> <span class="n">A</span><span class="p">[</span>

@@ -8,7 +8,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>ibek.render &#8212; ibek 0.9.6.dev109+g0085a59 documentation</title>
+    <title>ibek.render &#8212; ibek 0.9.6.dev110+g8f2aace documentation</title>
   
   
   
@@ -420,12 +420,12 @@ document.write(`
 <span class="sd">Functions for rendering lines in the boot script using Jinja2</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">,</span> <span class="n">Union</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Union</span>
 
 <span class="kn">from</span> <span class="nn">jinja2</span> <span class="kn">import</span> <span class="n">Template</span>
 
 <span class="kn">from</span> <span class="nn">.ioc</span> <span class="kn">import</span> <span class="n">IOC</span><span class="p">,</span> <span class="n">Entity</span>
-<span class="kn">from</span> <span class="nn">.support</span> <span class="kn">import</span> <span class="n">Comment</span><span class="p">,</span> <span class="n">Function</span><span class="p">,</span> <span class="n">When</span>
+<span class="kn">from</span> <span class="nn">.support</span> <span class="kn">import</span> <span class="n">Comment</span><span class="p">,</span> <span class="n">Function</span><span class="p">,</span> <span class="n">Script</span><span class="p">,</span> <span class="n">Text</span><span class="p">,</span> <span class="n">When</span>
 
 
 <div class="viewcode-block" id="Render"><a class="viewcode-back" href="../../user/reference/api.html#ibek.render.Render">[docs]</a><span class="k">class</span> <span class="nc">Render</span><span class="p">:</span>
@@ -497,9 +497,7 @@ document.write(`
 
         <span class="k">return</span> <span class="n">text</span></div>
 
-    <span class="k">def</span> <span class="nf">render_script</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span> <span class="n">instance</span><span class="p">:</span> <span class="n">Entity</span><span class="p">,</span> <span class="n">script_items</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">Function</span><span class="p">,</span> <span class="n">Comment</span><span class="p">]]</span>
-    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+    <span class="k">def</span> <span class="nf">render_script</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">instance</span><span class="p">:</span> <span class="n">Entity</span><span class="p">,</span> <span class="n">script_items</span><span class="p">:</span> <span class="n">Script</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
         <span class="n">script</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
 
         <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">script_items</span><span class="p">:</span>
@@ -507,6 +505,10 @@ document.write(`
                 <span class="n">comments</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="s2">&quot;# &quot;</span> <span class="o">+</span> <span class="n">line</span> <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">item</span><span class="o">.</span><span class="n">value</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)])</span>
                 <span class="n">script</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">render_text</span><span class="p">(</span>
                     <span class="n">instance</span><span class="p">,</span> <span class="n">comments</span><span class="p">,</span> <span class="n">item</span><span class="o">.</span><span class="n">when</span><span class="p">,</span> <span class="n">suffix</span><span class="o">=</span><span class="s2">&quot;comment&quot;</span>
+                <span class="p">)</span>
+            <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="n">Text</span><span class="p">):</span>
+                <span class="n">script</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">render_text</span><span class="p">(</span>
+                    <span class="n">instance</span><span class="p">,</span> <span class="n">item</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="n">item</span><span class="o">.</span><span class="n">when</span><span class="p">,</span> <span class="n">suffix</span><span class="o">=</span><span class="s2">&quot;text&quot;</span>
                 <span class="p">)</span>
             <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="n">Function</span><span class="p">):</span>
                 <span class="n">script</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">render_function</span><span class="p">(</span><span class="n">instance</span><span class="p">,</span> <span class="n">item</span><span class="p">)</span>
