@@ -8,7 +8,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>ibek.support &#8212; ibek 1.10.2.dev3+g55620c6 documentation</title>
+    <title>ibek.support &#8212; ibek 1.10.2.dev19+gacebf27 documentation</title>
   
   
   
@@ -518,10 +518,13 @@ document.write(`
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">file</span><span class="p">:</span> <span class="n">A</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">desc</span><span class="p">(</span><span class="s2">&quot;Filename of the database template in &lt;module_root&gt;/db&quot;</span><span class="p">)]</span>
-    <span class="n">include_args</span><span class="p">:</span> <span class="n">A</span><span class="p">[</span>
-        <span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">desc</span><span class="p">(</span><span class="s2">&quot;List of args to pass through to database&quot;</span><span class="p">)</span>
-    <span class="p">]</span> <span class="o">=</span> <span class="p">()</span>
-    <span class="n">define_args</span><span class="p">:</span> <span class="n">A</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">desc</span><span class="p">(</span><span class="s2">&quot;Arg string list to be generated as Jinja template&quot;</span><span class="p">)]</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span></div>
+    <span class="n">args</span><span class="p">:</span> <span class="n">A</span><span class="p">[</span>
+        <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]],</span>
+        <span class="n">desc</span><span class="p">(</span>
+            <span class="s2">&quot;Dictionary of args and values to pass through to database. &quot;</span>
+            <span class="s2">&quot;A value of None is equivalent to ARG: &#39;{{ ARG }}&#39;&quot;</span>
+        <span class="p">),</span>
+    <span class="p">]</span></div>
 
 
 <div class="viewcode-block" id="EnvironmentVariable"><a class="viewcode-back" href="../../user/reference/api.html#ibek.support.EnvironmentVariable">[docs]</a><span class="nd">@dataclass</span>
