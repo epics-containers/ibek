@@ -143,13 +143,26 @@ class Function:
 @dataclass
 class Comment:
     """
-    A script snippet that should for the first occurrence only
+    A script snippet that will have '# ' prepended to every line
+    for insertion into the startup script
     """
 
     type: Literal["comment"] = "comment"
     # TODO will be an enum
     when: A[str, desc("One of first / every / last")] = "every"
     value: A[str, desc("A comment to add into the startup script")] = ""
+
+
+@dataclass
+class Text:
+    """
+    A script snippet to insert into the startup script
+    """
+
+    type: Literal["text"] = "text"
+    # TODO will be an enum
+    when: A[str, desc("One of first / every / last")] = "every"
+    value: A[str, desc("raw text to add to the startup script")] = ""
 
 
 @dataclass
@@ -164,6 +177,9 @@ class Value:
         return self.value
 
 
+Script = Sequence[Union[Function, Comment, Text]]
+
+
 @dataclass
 class Definition:
     """
@@ -176,11 +192,11 @@ class Definition:
     values: A[Sequence[Value], desc("The values IOC instance should supply")] = ()
     databases: A[Sequence[Database], desc("Databases to instantiate")] = ()
     pre_init: A[
-        Sequence[Union[Function, Comment]],
+        Script,
         desc("Startup script snippets to add before iocInit()"),
     ] = ()
     post_init: A[
-        Sequence[Union[Function, Comment]],
+        Script,
         desc("Startup script snippets to add post iocInit(), such as dbpf"),
     ] = ()
     env_vars: A[

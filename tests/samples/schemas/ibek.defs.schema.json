@@ -273,6 +273,9 @@
                 },
                 {
                   "$ref": "#/definitions/Comment"
+                },
+                {
+                  "$ref": "#/definitions/Text"
                 }
               ]
             },
@@ -288,6 +291,9 @@
                 },
                 {
                   "$ref": "#/definitions/Comment"
+                },
+                {
+                  "$ref": "#/definitions/Text"
                 }
               ]
             },
@@ -382,6 +388,27 @@
         "value": {
           "type": "string",
           "description": "A comment to add into the startup script",
+          "default": ""
+        }
+      },
+      "additionalProperties": false
+    },
+    "Text": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "const": "text",
+          "default": "text"
+        },
+        "when": {
+          "type": "string",
+          "description": "One of first / every / last",
+          "default": "every"
+        },
+        "value": {
+          "type": "string",
+          "description": "raw text to add to the startup script",
           "default": ""
         }
       },

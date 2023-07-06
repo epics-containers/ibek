@@ -2,12 +2,12 @@
 Functions for rendering lines in the boot script using Jinja2
 """
 
-from typing import Callable, List, Optional, Sequence, Union
+from typing import Callable, List, Optional, Union
 
 from jinja2 import Template
 
 from .ioc import IOC, Entity
-from .support import Comment, Function, When
+from .support import Comment, Function, Script, Text, When
 
 
 class Render:
@@ -79,9 +79,7 @@ class Render:
 
         return text
 
-    def render_script(
-        self, instance: Entity, script_items: Sequence[Union[Function, Comment]]
-    ) -> Optional[str]:
+    def render_script(self, instance: Entity, script_items: Script) -> Optional[str]:
         script = ""
 
         for item in script_items:
@@ -89,6 +87,10 @@ class Render:
                 comments = "\n".join(["# " + line for line in item.value.split("\n")])
                 script += self.render_text(
                     instance, comments, item.when, suffix="comment"
+                )
+            elif isinstance(item, Text):
+                script += self.render_text(
+                    instance, item.value, item.when, suffix="text"
                 )
             elif isinstance(item, Function):
                 script += self.render_function(instance, item)

@@ -16,5 +16,5 @@ entities:
   - type: devIocStats.IocAdminSoft
     ioc: test-ibek-ioc
 
-  # - type: epics.StartupCommand
-  #   command: dbLoadRecords("config/ioc.db")
+  - type: epics.StartupCommand
+    command: dbLoadRecords("config/ioc.db")
