@@ -8,7 +8,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>ibek.render &#8212; ibek 0.9.6.dev108+g41e06fb documentation</title>
+    <title>ibek.render &#8212; ibek 0.9.6.dev110+g8f2aace documentation</title>
   
   
   
@@ -425,7 +425,7 @@ document.write(`
 <span class="kn">from</span> <span class="nn">jinja2</span> <span class="kn">import</span> <span class="n">Template</span>
 
 <span class="kn">from</span> <span class="nn">.ioc</span> <span class="kn">import</span> <span class="n">IOC</span><span class="p">,</span> <span class="n">Entity</span>
-<span class="kn">from</span> <span class="nn">.support</span> <span class="kn">import</span> <span class="n">Function</span><span class="p">,</span> <span class="n">Once</span>
+<span class="kn">from</span> <span class="nn">.support</span> <span class="kn">import</span> <span class="n">Comment</span><span class="p">,</span> <span class="n">Function</span><span class="p">,</span> <span class="n">Script</span><span class="p">,</span> <span class="n">Text</span><span class="p">,</span> <span class="n">When</span>
 
 
 <div class="viewcode-block" id="Render"><a class="viewcode-back" href="../../user/reference/api.html#ibek.render.Render">[docs]</a><span class="k">class</span> <span class="nc">Render</span><span class="p">:</span>
@@ -438,7 +438,9 @@ document.write(`
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">:</span> <span class="s2">&quot;Render&quot;</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">once_done</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
 
-<div class="viewcode-block" id="Render.render_text"><a class="viewcode-back" href="../../user/reference/api.html#ibek.render.Render.render_text">[docs]</a>    <span class="k">def</span> <span class="nf">render_text</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">instance</span><span class="p">:</span> <span class="n">Entity</span><span class="p">,</span> <span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">once</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">suffix</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<div class="viewcode-block" id="Render.render_text"><a class="viewcode-back" href="../../user/reference/api.html#ibek.render.Render.render_text">[docs]</a>    <span class="k">def</span> <span class="nf">render_text</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">instance</span><span class="p">:</span> <span class="n">Entity</span><span class="p">,</span> <span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">when</span><span class="o">=</span><span class="n">When</span><span class="o">.</span><span class="n">every</span><span class="p">,</span> <span class="n">suffix</span><span class="o">=</span><span class="s2">&quot;&quot;</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Add in the next line of text, honouring the ``once`` flag which will</span>
 <span class="sd">        only add the line once per IOC.</span>
@@ -452,12 +454,14 @@ document.write(`
 <span class="sd">        Entity has more than one element to render once (e.g. functions)</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
-        <span class="k">if</span> <span class="n">once</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">when</span> <span class="o">==</span> <span class="n">When</span><span class="o">.</span><span class="n">first</span><span class="p">:</span>
             <span class="n">name</span> <span class="o">=</span> <span class="n">instance</span><span class="o">.</span><span class="n">__definition__</span><span class="o">.</span><span class="n">name</span> <span class="o">+</span> <span class="n">suffix</span>
             <span class="k">if</span> <span class="n">name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">once_done</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">once_done</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="k">return</span> <span class="s2">&quot;&quot;</span>
+        <span class="k">elif</span> <span class="n">when</span> <span class="o">==</span> <span class="n">When</span><span class="o">.</span><span class="n">last</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;When.last not yet implemented&quot;</span><span class="p">)</span>
 
         <span class="c1"># Render Jinja entries in the text</span>
         <span class="n">jinja_template</span> <span class="o">=</span> <span class="n">Template</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
@@ -482,30 +486,50 @@ document.write(`
             <span class="n">call</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">value</span><span class="si">}</span><span class="s2"> &quot;</span>
 
         <span class="n">text</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">render_text</span><span class="p">(</span><span class="n">instance</span><span class="p">,</span> <span class="n">comment</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">),</span> <span class="n">once</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">suffix</span><span class="o">=</span><span class="s2">&quot;func&quot;</span><span class="p">)</span>
-            <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">render_text</span><span class="p">(</span><span class="n">instance</span><span class="p">,</span> <span class="n">function</span><span class="o">.</span><span class="n">header</span><span class="p">,</span> <span class="n">once</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">suffix</span><span class="o">=</span><span class="s2">&quot;func_hdr&quot;</span><span class="p">)</span>
-            <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">render_text</span><span class="p">(</span><span class="n">instance</span><span class="p">,</span> <span class="n">call</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">render_text</span><span class="p">(</span>
+                <span class="n">instance</span><span class="p">,</span> <span class="n">comment</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">),</span> <span class="n">when</span><span class="o">=</span><span class="n">When</span><span class="o">.</span><span class="n">first</span><span class="p">,</span> <span class="n">suffix</span><span class="o">=</span><span class="s2">&quot;func&quot;</span>
+            <span class="p">)</span>
+            <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">render_text</span><span class="p">(</span>
+                <span class="n">instance</span><span class="p">,</span> <span class="n">function</span><span class="o">.</span><span class="n">header</span><span class="p">,</span> <span class="n">when</span><span class="o">=</span><span class="n">When</span><span class="o">.</span><span class="n">first</span><span class="p">,</span> <span class="n">suffix</span><span class="o">=</span><span class="s2">&quot;func_hdr&quot;</span>
+            <span class="p">)</span>
+            <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">render_text</span><span class="p">(</span><span class="n">instance</span><span class="p">,</span> <span class="n">call</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">),</span> <span class="n">when</span><span class="o">=</span><span class="n">function</span><span class="o">.</span><span class="n">when</span><span class="p">)</span>
         <span class="p">)</span>
 
         <span class="k">return</span> <span class="n">text</span></div>
 
-<div class="viewcode-block" id="Render.render_script"><a class="viewcode-back" href="../../user/reference/api.html#ibek.render.Render.render_script">[docs]</a>    <span class="k">def</span> <span class="nf">render_script</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">instance</span><span class="p">:</span> <span class="n">Entity</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+    <span class="k">def</span> <span class="nf">render_script</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">instance</span><span class="p">:</span> <span class="n">Entity</span><span class="p">,</span> <span class="n">script_items</span><span class="p">:</span> <span class="n">Script</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+        <span class="n">script</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+
+        <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">script_items</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="n">Comment</span><span class="p">):</span>
+                <span class="n">comments</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="s2">&quot;# &quot;</span> <span class="o">+</span> <span class="n">line</span> <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">item</span><span class="o">.</span><span class="n">value</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)])</span>
+                <span class="n">script</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">render_text</span><span class="p">(</span>
+                    <span class="n">instance</span><span class="p">,</span> <span class="n">comments</span><span class="p">,</span> <span class="n">item</span><span class="o">.</span><span class="n">when</span><span class="p">,</span> <span class="n">suffix</span><span class="o">=</span><span class="s2">&quot;comment&quot;</span>
+                <span class="p">)</span>
+            <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="n">Text</span><span class="p">):</span>
+                <span class="n">script</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">render_text</span><span class="p">(</span>
+                    <span class="n">instance</span><span class="p">,</span> <span class="n">item</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="n">item</span><span class="o">.</span><span class="n">when</span><span class="p">,</span> <span class="n">suffix</span><span class="o">=</span><span class="s2">&quot;text&quot;</span>
+                <span class="p">)</span>
+            <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="n">Function</span><span class="p">):</span>
+                <span class="n">script</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">render_function</span><span class="p">(</span><span class="n">instance</span><span class="p">,</span> <span class="n">item</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">script</span>
+
+<div class="viewcode-block" id="Render.render_pre_ioc_init"><a class="viewcode-back" href="../../user/reference/api.html#ibek.render.Render.render_pre_ioc_init">[docs]</a>    <span class="k">def</span> <span class="nf">render_pre_ioc_init</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">instance</span><span class="p">:</span> <span class="n">Entity</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        render the startup script by combining the jinja template from</span>
 <span class="sd">        an entity with the arguments from an Entity</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">pre_init</span> <span class="o">=</span> <span class="n">instance</span><span class="o">.</span><span class="n">__definition__</span><span class="o">.</span><span class="n">pre_init</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">render_script</span><span class="p">(</span><span class="n">instance</span><span class="p">,</span> <span class="n">pre_init</span><span class="p">)</span></div>
 
-        <span class="n">script</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
-        <span class="n">script_items</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">instance</span><span class="o">.</span><span class="n">__definition__</span><span class="p">,</span> <span class="s2">&quot;script&quot;</span><span class="p">)</span>
-        <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">script_items</span><span class="p">:</span>
-            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">line</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
-                <span class="n">script</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">render_text</span><span class="p">(</span><span class="n">instance</span><span class="p">,</span> <span class="n">line</span><span class="p">)</span>
-            <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">line</span><span class="p">,</span> <span class="n">Once</span><span class="p">):</span>
-                <span class="n">script</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">render_text</span><span class="p">(</span><span class="n">instance</span><span class="p">,</span> <span class="n">line</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
-            <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">line</span><span class="p">,</span> <span class="n">Function</span><span class="p">):</span>
-                <span class="n">script</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">render_function</span><span class="p">(</span><span class="n">instance</span><span class="p">,</span> <span class="n">line</span><span class="p">)</span>
-
-        <span class="k">return</span> <span class="n">script</span></div>
+<div class="viewcode-block" id="Render.render_post_ioc_init"><a class="viewcode-back" href="../../user/reference/api.html#ibek.render.Render.render_post_ioc_init">[docs]</a>    <span class="k">def</span> <span class="nf">render_post_ioc_init</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">instance</span><span class="p">:</span> <span class="n">Entity</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        render the post-iocInit entries by combining the jinja template</span>
+<span class="sd">        from an entity with the arguments from an Entity</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">post_init</span> <span class="o">=</span> <span class="n">instance</span><span class="o">.</span><span class="n">__definition__</span><span class="o">.</span><span class="n">post_init</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">render_script</span><span class="p">(</span><span class="n">instance</span><span class="p">,</span> <span class="n">post_init</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="Render.render_database"><a class="viewcode-back" href="../../user/reference/api.html#ibek.render.Render.render_database">[docs]</a>    <span class="k">def</span> <span class="nf">render_database</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">instance</span><span class="p">:</span> <span class="n">Entity</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
@@ -561,17 +585,6 @@ document.write(`
             <span class="n">env_var_txt</span> <span class="o">+=</span> <span class="n">env_template</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="n">instance</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">env_var_txt</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span></div>
 
-<div class="viewcode-block" id="Render.render_post_ioc_init"><a class="viewcode-back" href="../../user/reference/api.html#ibek.render.Render.render_post_ioc_init">[docs]</a>    <span class="k">def</span> <span class="nf">render_post_ioc_init</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">instance</span><span class="p">:</span> <span class="n">Entity</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        render the post-iocInit entries by combining the jinja template</span>
-<span class="sd">        from an entity with the arguments from an Entity</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">script</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
-        <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">instance</span><span class="o">.</span><span class="n">__definition__</span><span class="p">,</span> <span class="s2">&quot;post_ioc_init&quot;</span><span class="p">):</span>
-            <span class="n">script</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">render_text</span><span class="p">(</span><span class="n">instance</span><span class="p">,</span> <span class="n">line</span><span class="p">)</span>
-
-        <span class="k">return</span> <span class="n">script</span></div>
-
 <div class="viewcode-block" id="Render.render_elements"><a class="viewcode-back" href="../../user/reference/api.html#ibek.render.Render.render_elements">[docs]</a>    <span class="k">def</span> <span class="nf">render_elements</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">ioc</span><span class="p">:</span> <span class="n">IOC</span><span class="p">,</span> <span class="n">method</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">Entity</span><span class="p">],</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="kc">None</span><span class="p">]]</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
@@ -586,11 +599,17 @@ document.write(`
                     <span class="n">elements</span> <span class="o">+=</span> <span class="n">element</span>
         <span class="k">return</span> <span class="n">elements</span></div>
 
-<div class="viewcode-block" id="Render.render_script_elements"><a class="viewcode-back" href="../../user/reference/api.html#ibek.render.Render.render_script_elements">[docs]</a>    <span class="k">def</span> <span class="nf">render_script_elements</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ioc</span><span class="p">:</span> <span class="n">IOC</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<div class="viewcode-block" id="Render.render_pre_ioc_init_elements"><a class="viewcode-back" href="../../user/reference/api.html#ibek.render.Render.render_pre_ioc_init_elements">[docs]</a>    <span class="k">def</span> <span class="nf">render_pre_ioc_init_elements</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ioc</span><span class="p">:</span> <span class="n">IOC</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Render all of the startup script entries for a given IOC instance</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">render_elements</span><span class="p">(</span><span class="n">ioc</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">render_script</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">render_elements</span><span class="p">(</span><span class="n">ioc</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">render_pre_ioc_init</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Render.render_post_ioc_init_elements"><a class="viewcode-back" href="../../user/reference/api.html#ibek.render.Render.render_post_ioc_init_elements">[docs]</a>    <span class="k">def</span> <span class="nf">render_post_ioc_init_elements</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ioc</span><span class="p">:</span> <span class="n">IOC</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Render all of the post-iocInit elements for a given IOC instance</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">render_elements</span><span class="p">(</span><span class="n">ioc</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">render_post_ioc_init</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="Render.render_database_elements"><a class="viewcode-back" href="../../user/reference/api.html#ibek.render.Render.render_database_elements">[docs]</a>    <span class="k">def</span> <span class="nf">render_database_elements</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ioc</span><span class="p">:</span> <span class="n">IOC</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
@@ -602,13 +621,7 @@ document.write(`
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Render all of the environment variable entries for a given IOC instance</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">render_elements</span><span class="p">(</span><span class="n">ioc</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">render_environment_variables</span><span class="p">)</span></div>
-
-<div class="viewcode-block" id="Render.render_post_ioc_init_elements"><a class="viewcode-back" href="../../user/reference/api.html#ibek.render.Render.render_post_ioc_init_elements">[docs]</a>    <span class="k">def</span> <span class="nf">render_post_ioc_init_elements</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ioc</span><span class="p">:</span> <span class="n">IOC</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Render all of the post-iocInit elements for a given IOC instance</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">render_elements</span><span class="p">(</span><span class="n">ioc</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">render_post_ioc_init</span><span class="p">)</span></div></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">render_elements</span><span class="p">(</span><span class="n">ioc</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">render_environment_variables</span><span class="p">)</span></div></div>
 </pre></div>
 
                 </article>
