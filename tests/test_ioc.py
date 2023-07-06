@@ -114,7 +114,10 @@ def test_values_ioc(tmp_path: Path, samples: Path, ibek_defs: Path):
     test_path = samples / "values_test"
 
     entity_file = test_path / "values.ibek.ioc.yaml"
-    definition_files = test_path.glob("*.support.yaml")
+    definition_files = [
+        ibek_defs / "_global" / "epics.ibek.support.yaml",
+        ibek_defs / "ipac" / "ipac.ibek.support.yaml",
+    ]
     out_file = tmp_path / "new_dir" / "st.cmd"
     out_db = tmp_path / "new_dir" / "make_db.sh"
 

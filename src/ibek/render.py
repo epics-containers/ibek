@@ -7,7 +7,7 @@ from typing import Callable, List, Optional, Union
 from jinja2 import Template
 
 from .ioc import IOC, Entity
-from .support import Function, Once
+from .support import Comment, Function, Script, Text, When
 
 
 class Render:
@@ -20,7 +20,9 @@ class Render:
     def __init__(self: "Render"):
         self.once_done: List[str] = []
 
-    def render_text(self, instance: Entity, text: str, once=False, suffix="") -> str:
+    def render_text(
+        self, instance: Entity, text: str, when=When.every, suffix=""
+    ) -> str:
         """
         Add in the next line of text, honouring the ``once`` flag which will
         only add the line once per IOC.
@@ -34,12 +36,14 @@ class Render:
         Entity has more than one element to render once (e.g. functions)
         """
 
-        if once:
+        if when == When.first:
             name = instance.__definition__.name + suffix
             if name not in self.once_done:
                 self.once_done.append(name)
             else:
                 return ""
+        elif when == When.last:
+            raise NotImplementedError("When.last not yet implemented")
 
         # Render Jinja entries in the text
         jinja_template = Template(text)
@@ -64,30 +68,50 @@ class Render:
             call += f"{value} "
 
         text = (
-            self.render_text(instance, comment.strip(" "), once=True, suffix="func")
-            + self.render_text(instance, function.header, once=True, suffix="func_hdr")
-            + self.render_text(instance, call.strip(" "))
+            self.render_text(
+                instance, comment.strip(" "), when=When.first, suffix="func"
+            )
+            + self.render_text(
+                instance, function.header, when=When.first, suffix="func_hdr"
+            )
+            + self.render_text(instance, call.strip(" "), when=function.when)
         )
 
         return text
 
-    def render_script(self, instance: Entity) -> Optional[str]:
+    def render_script(self, instance: Entity, script_items: Script) -> Optional[str]:
+        script = ""
+
+        for item in script_items:
+            if isinstance(item, Comment):
+                comments = "\n".join(["# " + line for line in item.value.split("\n")])
+                script += self.render_text(
+                    instance, comments, item.when, suffix="comment"
+                )
+            elif isinstance(item, Text):
+                script += self.render_text(
+                    instance, item.value, item.when, suffix="text"
+                )
+            elif isinstance(item, Function):
+                script += self.render_function(instance, item)
+
+        return script
+
+    def render_pre_ioc_init(self, instance: Entity) -> Optional[str]:
         """
         render the startup script by combining the jinja template from
         an entity with the arguments from an Entity
         """
+        pre_init = instance.__definition__.pre_init
+        return self.render_script(instance, pre_init)
 
-        script = ""
-        script_items = getattr(instance.__definition__, "script")
-        for line in script_items:
-            if isinstance(line, str):
-                script += self.render_text(instance, line)
-            elif isinstance(line, Once):
-                script += self.render_text(instance, line.value, True)
-            elif isinstance(line, Function):
-                script += self.render_function(instance, line)
-
-        return script
+    def render_post_ioc_init(self, instance: Entity) -> Optional[str]:
+        """
+        render the post-iocInit entries by combining the jinja template
+        from an entity with the arguments from an Entity
+        """
+        post_init = instance.__definition__.post_init
+        return self.render_script(instance, post_init)
 
     def render_database(self, instance: Entity) -> Optional[str]:
         """
@@ -143,17 +167,6 @@ class Render:
             env_var_txt += env_template.render(instance.__dict__)
         return env_var_txt + "\n"
 
-    def render_post_ioc_init(self, instance: Entity) -> Optional[str]:
-        """
-        render the post-iocInit entries by combining the jinja template
-        from an entity with the arguments from an Entity
-        """
-        script = ""
-        for line in getattr(instance.__definition__, "post_ioc_init"):
-            script += self.render_text(instance, line)
-
-        return script
-
     def render_elements(
         self, ioc: IOC, method: Callable[[Entity], Union[str, None]]
     ) -> str:
@@ -168,11 +181,17 @@ class Render:
                     elements += element
         return elements
 
-    def render_script_elements(self, ioc: IOC) -> str:
+    def render_pre_ioc_init_elements(self, ioc: IOC) -> str:
         """
         Render all of the startup script entries for a given IOC instance
         """
-        return self.render_elements(ioc, self.render_script)
+        return self.render_elements(ioc, self.render_pre_ioc_init)
+
+    def render_post_ioc_init_elements(self, ioc: IOC) -> str:
+        """
+        Render all of the post-iocInit elements for a given IOC instance
+        """
+        return self.render_elements(ioc, self.render_post_ioc_init)
 
     def render_database_elements(self, ioc: IOC) -> str:
         """
@@ -185,9 +204,3 @@ class Render:
         Render all of the environment variable entries for a given IOC instance
         """
         return self.render_elements(ioc, self.render_environment_variables)
-
-    def render_post_ioc_init_elements(self, ioc: IOC) -> str:
-        """
-        Render all of the post-iocInit elements for a given IOC instance
-        """
-        return self.render_elements(ioc, self.render_post_ioc_init)

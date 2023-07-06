@@ -5,6 +5,7 @@ It contains a hierarchy of Entity dataclasses.
 from __future__ import annotations
 
 from dataclasses import dataclass
+from enum import Enum
 from typing import Any, Dict, Mapping, Optional, Sequence, Type, Union
 
 from apischema import Undefined, UndefinedType, deserialize, deserializer, identity
@@ -13,6 +14,12 @@ from typing_extensions import Annotated as A
 from typing_extensions import Literal
 
 from .globals import T, desc
+
+
+class When(Enum):
+    first = "first"
+    every = "every"
+    last = "last"
 
 
 @dataclass
@@ -126,20 +133,36 @@ class Function:
     """
 
     name: A[str, desc("Name of the function to call")]
-    args: A[Dict[str, Any], desc("The arguments IOC instance should supply")]
+    args: A[Dict[str, Any], desc("The arguments to pass to the function")]
     header: A[str, desc("commands/comments to appear before the function")] = ""
-    once: A[bool, desc("If true, only call the function once")] = False
+    # TODO will be an enum
+    when: A[str, desc("one of first / every / last")] = "every"
     type: Literal["function"] = "function"
 
 
 @dataclass
-class Once:
+class Comment:
     """
-    A script snippet that should for the first occurrence only
+    A script snippet that will have '# ' prepended to every line
+    for insertion into the startup script
     """
 
-    type: Literal["once"] = "once"
-    value: A[str, desc("Startup script snippets defined as Jinja template")] = ""
+    type: Literal["comment"] = "comment"
+    # TODO will be an enum
+    when: A[str, desc("One of first / every / last")] = "every"
+    value: A[str, desc("A comment to add into the startup script")] = ""
+
+
+@dataclass
+class Text:
+    """
+    A script snippet to insert into the startup script
+    """
+
+    type: Literal["text"] = "text"
+    # TODO will be an enum
+    when: A[str, desc("One of first / every / last")] = "every"
+    value: A[str, desc("raw text to add to the startup script")] = ""
 
 
 @dataclass
@@ -154,6 +177,9 @@ class Value:
         return self.value
 
 
+Script = Sequence[Union[Function, Comment, Text]]
+
+
 @dataclass
 class Definition:
     """
@@ -165,16 +191,17 @@ class Definition:
     args: A[Sequence[Arg], desc("The arguments IOC instance should supply")] = ()
     values: A[Sequence[Value], desc("The values IOC instance should supply")] = ()
     databases: A[Sequence[Database], desc("Databases to instantiate")] = ()
-    script: A[
-        Sequence[Union[str, Function, Once]],
-        desc("Startup script snippets defined as Jinja template or function"),
+    pre_init: A[
+        Script,
+        desc("Startup script snippets to add before iocInit()"),
+    ] = ()
+    post_init: A[
+        Script,
+        desc("Startup script snippets to add post iocInit(), such as dbpf"),
     ] = ()
     env_vars: A[
         Sequence[EnvironmentVariable],
         desc("Environment variables to set in the boot script"),
-    ] = ()
-    post_ioc_init: A[
-        Sequence[str], desc("Entries to add post iocInit(), such as dbpf")
     ] = ()
 
 

@@ -9,5 +9,7 @@ dbLoadRecords /tmp/ioc.db
 iocInit
 
 
-dbpf "BL45P-MO-THIN-01:Y1.TWV", "0.5"
+
+# dbpf pv value
+dbpf BL45P-MO-THIN-01:Y1.TWV 0.5
 

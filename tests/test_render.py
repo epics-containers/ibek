@@ -13,8 +13,13 @@ def test_pmac_asyn_ip_port_script(pmac_classes):
     pmac_asyn_ip = generated_class(name="my_pmac_instance", IP="111.111.111.111")
 
     render = Render()
-    script_txt = render.render_script(pmac_asyn_ip)
-    assert script_txt == "pmacAsynIPConfigure(my_pmac_instance, 111.111.111.111:1025)\n"
+    script_txt = render.render_script(
+        pmac_asyn_ip, pmac_asyn_ip.__definition__.pre_init
+    )
+    assert script_txt == (
+        "\n# pmacAsynIPConfigure AsynPortName IPAddress\n"
+        "pmacAsynIPConfigure my_pmac_instance 111.111.111.111:1025\n"
+    )
 
 
 def test_geobrick_script(pmac_classes):
@@ -31,12 +36,16 @@ def test_geobrick_script(pmac_classes):
     )
 
     render = Render()
-    script_txt = render.render_script(pmac_geobrick_instance)
+    script_txt = render.render_script(
+        pmac_geobrick_instance, pmac_geobrick_instance.__definition__.pre_init
+    )
 
     assert (
         script_txt
-        == "pmacCreateController(test_geobrick, my_asyn_port, 0, 8, 800, 200)\n"
-        "pmacCreateAxes(test_geobrick, 8)\n"
+        == "\n# pmacCreateController AsynPortName PmacAsynPort Address NumAxes "
+        "MovingPollPeriod IdlePollPeriod\n"
+        "pmacCreateController test_geobrick my_asyn_port 0 8 800 200\n"
+        "pmacCreateAxes test_geobrick 8\n"
     )
 
 
@@ -149,12 +158,15 @@ def test_entity_disabled_does_not_render_elements(pmac_classes, epics_classes):
     )
 
     # Render script and check output
+    # ControlerPort, LowLevelDriverPort, Address, Axes, MovingPoll, IdlePoll
     expected_script = (
-        "pmacCreateController(geobrick_enabled, geobrick_one_port, 0, 8, 800, 200)\n"
-        "pmacCreateAxes(geobrick_enabled, 8)\n"
+        "\n# pmacCreateController AsynPortName PmacAsynPort Address NumAxes "
+        "MovingPollPeriod IdlePollPeriod\n"
+        "pmacCreateController geobrick_enabled geobrick_one_port 0 8 800 200\n"
+        "pmacCreateAxes geobrick_enabled 8\n"
     )
     render = Render()
-    script = render.render_script_elements(ioc)
+    script = render.render_pre_ioc_init_elements(ioc)
     assert script == expected_script
 
     # Render database
@@ -174,6 +186,6 @@ def test_entity_disabled_does_not_render_elements(pmac_classes, epics_classes):
     assert env_vars == expected_env_vars
 
     # Render post_ioc_init
-    expected_post_ioc_init = 'dbpf "TEST:PV:1", "pv_value_1"\n'
+    expected_post_ioc_init = "\n# dbpf pv value\ndbpf TEST:PV:1 pv_value_1\n"
     post_ioc_init = render.render_post_ioc_init_elements(ioc)
     assert post_ioc_init == expected_post_ioc_init
