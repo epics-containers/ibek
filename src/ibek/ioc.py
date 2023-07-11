@@ -5,32 +5,21 @@ support module definition YAML file
 from __future__ import annotations
 
 import builtins
-import types
-from dataclasses import Field, dataclass, field, make_dataclass
-from typing import Any, Dict, List, Mapping, Sequence, Tuple, Type, cast
+import json
+from typing import Any, Dict, Sequence, Tuple, Type, Union
 
-from apischema import (
-    Undefined,
-    ValidationError,
-    cache,
-    deserialize,
-    deserializer,
-    identity,
-    schema,
-)
-from apischema.conversions import Conversion, reset_deserializers
-from apischema.metadata import conversion
 from jinja2 import Template
-from typing_extensions import Annotated as A
+from pydantic import Field, create_model
 from typing_extensions import Literal
 
-from . import modules
-from .globals import T, desc
+from .globals import BaseSettings, model_config
 from .support import Definition, IdArg, ObjectArg, Support
 from .utils import UTILS
 
+# A base class for applying settings to all serializable classes
 
-class Entity:
+
+class Entity(BaseSettings):
     """
     A baseclass for all generated Entity classes. Provides the
     deserialize entry point.
@@ -39,7 +28,9 @@ class Entity:
     # a link back to the Definition Object that generated this Definition
     __definition__: Definition
 
-    entity_enabled: bool
+    entity_enabled: bool = Field(
+        description="enable or disable this entity instance", default=True
+    )
 
     def __post_init__(self: "Entity"):
         # If there is an argument which is an id then allow deserialization by that
@@ -73,7 +64,7 @@ class Entity:
 id_to_entity: Dict[str, Entity] = {}
 
 
-def make_entity_class(definition: Definition, support: Support) -> Type[Entity]:
+def make_entity_model(definition: Definition, support: Support) -> Type[Entity]:
     """
     We can get a set of Definitions by deserializing an ibek
     support module definition YAML file.
@@ -82,107 +73,110 @@ def make_entity_class(definition: Definition, support: Support) -> Type[Entity]:
 
     See :ref:`entities`
     """
-    fields: List[Tuple[str, type, Field[Any]]] = []
+    entities: Dict[str, Tuple[type, Any]] = {}
 
-    # add in each of the arguments
+    # add in each of the arguments as a Field in the Entity
     for arg in definition.args:
-        # make_dataclass can cope with string types, so cast them here rather
-        # than lookup
         metadata: Any = None
         arg_type: Type
+
         if isinstance(arg, ObjectArg):
+            pass  # TODO
+            # def lookup_instance(id):
+            #     try:
+            #         return id_to_entity[id]
+            #     except KeyError:
+            #         raise ValidationError(f"{id} is not in {list(id_to_entity)}")
 
-            def lookup_instance(id):
-                try:
-                    return id_to_entity[id]
-                except KeyError:
-                    raise ValidationError(f"{id} is not in {list(id_to_entity)}")
-
-            metadata = conversion(
-                deserialization=Conversion(lookup_instance, str, Entity)
-            ) | schema(extra={"vscode_ibek_plugin_type": "type_object"})
+            # metadata = schema(extra={"vscode_ibek_plugin_type": "type_object"})
+            # metadata = conversion(
+            #     deserialization=Conversion(lookup_instance, str, Entity)
+            # ) | schema(extra={"vscode_ibek_plugin_type": "type_object"})
             arg_type = Entity
         elif isinstance(arg, IdArg):
             arg_type = str
-            metadata = schema(extra={"vscode_ibek_plugin_type": "type_id"})
+            # TODO
+            # metadata = schema(extra={"vscode_ibek_plugin_type": "type_id"})
         else:
             # arg.type is str, int, float, etc.
             arg_type = getattr(builtins, arg.type)
-        if arg.description:
-            arg_type = A[arg_type, desc(arg.description)]  # type: ignore
-        if arg.default is Undefined:
-            fld = field(metadata=metadata)
-        else:
-            fld = field(metadata=metadata, default=arg.default)
-        fields.append((arg.name, arg_type, fld))  # type: ignore
+
+        default = getattr(arg, "default", None)
+        arg_field = Field(arg_type, description=arg.description)
+
+        # TODO where does metadata go?
+        # fld = Field(arg_type)
+
+        entities[arg.name] = (arg_type, None)
 
     # put the literal name in as 'type' for this Entity this gives us
     # a unique key for each of the entity types we may instantiate
     full_name = f"{support.module}.{definition.name}"
-    fields.append(
-        (
-            "type",
-            Literal[full_name],  # type: ignore
-            field(default=cast(Any, full_name)),
-        )
+    entities["type"] = (
+        Literal[full_name],  # type: ignore
+        full_name,
     )
 
-    # add a field so we can control rendering of the entity without having to delete
-    # it
-    fields.append(("entity_enabled", bool, field(default=cast(Any, True))))
+    # entity_enabled controls rendering of the entity without having to delete it
+    entities["entity_enabled"] = (bool, True)
+    # add a link back to the Definition Object that generated this Definition
+    # TODO
+    # entities["__definition__"] = (Definition, None)
 
-    namespace = dict(__definition__=definition)
-
-    # make the Entity derived dataclass for this EntityClass, with a reference
-    # to the Definition that created it
-    entity_cls = make_dataclass(full_name, fields, bases=(Entity,), namespace=namespace)
-    deserializer(Conversion(identity, source=entity_cls, target=Entity))
+    entity_cls = create_model(
+        "definitions",
+        **entities,
+        __config__=model_config,
+    )  # type: ignore
     return entity_cls
 
 
-def make_entity_classes(support: Support) -> types.SimpleNamespace:
+def make_entity_models(support: Support):
     """Create `Entity` subclasses for all `Definition` objects in the given
-    `Support` instance, put them in a namespace in `ibek.modules` and return
-    it"""
-    module = types.SimpleNamespace()
-    assert not hasattr(
-        modules, support.module
-    ), f"Entity classes already created for {support.module}"
-    setattr(modules, support.module, module)
-    modules.__all__.append(support.module)
+    `Support` instance.
+
+    Then create a Pydantic model of an IOC class with its entities field
+    set to a Union of all the Entity subclasses created."""
+
+    entity_models = []
+
     for definition in support.defs:
-        entity_cls = make_entity_class(definition, support)
-        setattr(module, definition.name, entity_cls)
-    return module
+        entity_models.append(make_entity_model(definition, support))
+
+    return entity_models
 
 
 def clear_entity_classes():
     """Reset the modules namespaces, deserializers and caches of defined Entity
     subclasses"""
-    id_to_entity.clear()
-    while modules.__all__:
-        delattr(modules, modules.__all__.pop())
-    reset_deserializers(Entity)
-    cache.reset()
+
+    # TODO: do we need this for Pydantic?
 
 
-@dataclass
-class IOC:
+def make_ioc_model(entity_classes: Sequence[Type[Entity]]) -> str:
+    class NewIOC(IOC):
+        entities: Sequence[Union[tuple(entity_classes)]] = Field(  # type: ignore
+            description="List of entities this IOC instantiates", default=()
+        )
+
+    return json.dumps(NewIOC.model_json_schema(), indent=2)
+
+
+class IOC(BaseSettings):
     """
-    Used to load an IOC instance entities yaml file into memory using
-    IOC.deserialize(YAML().load(ioc_instance_yaml)).
+    Used to load an IOC instance entities yaml file into memory.
 
-    Before loading the entities file all Entity classes that it contains
-    must be defined in modules.py. This is achieved by deserializing all
-    support module definitions yaml files used by this IOC and calling
-    make_entity_classes(support_module).
+    This is the base class that is adjusted at runtime by updating the
+    type of its entities attribute to be a union of all of the subclasses of Entity
+    provided by the support module definitions used by the current IOC
     """
 
-    ioc_name: A[str, desc("Name of IOC instance")]
-    description: A[str, desc("Description of what the IOC does")]
-    entities: A[Sequence[Entity], desc("List of entities this IOC instantiates")]
-    generic_ioc_image: A[str, desc("The generic IOC container image registry URL")]
-
-    @classmethod
-    def deserialize(cls: Type[T], d: Mapping[str, Any]) -> T:
-        return deserialize(cls, d)
+    ioc_name: str = Field(description="Name of IOC instance")
+    description: str = Field(description="Description of what the IOC does")
+    generic_ioc_image: str = Field(
+        description="The generic IOC container image registry URL"
+    )
+    # placeholder for the entities attribute - updated at runtime
+    entities: Sequence[Entity] = Field(
+        description="List of entities this IOC instantiates"
+    )
