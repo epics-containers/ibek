@@ -9,7 +9,8 @@ import json
 from typing import Any, Dict, Sequence, Tuple, Type, Union
 
 from jinja2 import Template
-from pydantic import Field, create_model
+from pydantic import Field, ValidationError, create_model
+from pydantic.fields import FieldInfo
 from typing_extensions import Literal
 
 from .globals import BaseSettings, model_config
@@ -73,20 +74,24 @@ def make_entity_model(definition: Definition, support: Support) -> Type[Entity]:
 
     See :ref:`entities`
     """
+
+    def add_entity(name, typ, description, default):
+        entities[name] = (typ, FieldInfo(description=description, default=default))
+
     entities: Dict[str, Tuple[type, Any]] = {}
 
     # add in each of the arguments as a Field in the Entity
     for arg in definition.args:
-        metadata: Any = None
         arg_type: Type
 
         if isinstance(arg, ObjectArg):
-            pass  # TODO
-            # def lookup_instance(id):
-            #     try:
-            #         return id_to_entity[id]
-            #     except KeyError:
-            #         raise ValidationError(f"{id} is not in {list(id_to_entity)}")
+            pass
+
+            def lookup_instance(id):
+                try:
+                    return id_to_entity[id]
+                except KeyError:
+                    raise ValidationError(f"{id} is not in {list(id_to_entity)}")
 
             # metadata = schema(extra={"vscode_ibek_plugin_type": "type_object"})
             # metadata = conversion(
@@ -95,39 +100,31 @@ def make_entity_model(definition: Definition, support: Support) -> Type[Entity]:
             arg_type = Entity
         elif isinstance(arg, IdArg):
             arg_type = str
-            # TODO
             # metadata = schema(extra={"vscode_ibek_plugin_type": "type_id"})
         else:
             # arg.type is str, int, float, etc.
             arg_type = getattr(builtins, arg.type)
 
         default = getattr(arg, "default", None)
-        arg_field = Field(arg_type, description=arg.description)
+        add_entity(arg.name, arg_type, arg.description, default)
 
-        # TODO where does metadata go?
-        # fld = Field(arg_type)
-
-        entities[arg.name] = (arg_type, None)
-
-    # put the literal name in as 'type' for this Entity this gives us
-    # a unique key for each of the entity types we may instantiate
+    # type is a unique key for each of the entity types we may instantiate
     full_name = f"{support.module}.{definition.name}"
-    entities["type"] = (
-        Literal[full_name],  # type: ignore
-        full_name,
-    )
+    typ = Literal[full_name]  # type: ignore
+    add_entity("type", typ, "The type of this entity", full_name)
 
     # entity_enabled controls rendering of the entity without having to delete it
-    entities["entity_enabled"] = (bool, True)
-    # add a link back to the Definition Object that generated this Definition
-    # TODO
-    # entities["__definition__"] = (Definition, None)
+    add_entity("entity_enabled", bool, "enable or disable entity", True)
 
     entity_cls = create_model(
         "definitions",
         **entities,
         __config__=model_config,
     )  # type: ignore
+
+    # add a link back to the Definition Object that generated this Entity Class
+    entity_cls.__definition__ = definition
+
     return entity_cls
 
 
