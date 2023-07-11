@@ -1,419 +1,562 @@
 {
-  "type": "object",
-  "properties": {
-    "module": {
-      "type": "string",
-      "description": "Support module name, normally the repo name"
-    },
-    "defs": {
-      "type": "array",
-      "items": {
-        "type": "object",
-        "properties": {
-          "name": {
-            "type": "string",
-            "description": "Publish Definition as type <module>.<name> for IOC instances"
-          },
-          "description": {
-            "type": "string",
-            "description": "Describes the purpose of the definition"
-          },
-          "args": {
-            "type": "array",
-            "items": {
-              "anyOf": [
-                {
-                  "type": "object",
-                  "properties": {
-                    "name": {
-                      "type": "string",
-                      "description": "Name of the argument that the IOC instance should pass"
-                    },
-                    "description": {
-                      "type": "string",
-                      "description": "Description of what the argument will be used for"
-                    },
-                    "type": {
-                      "type": "string",
-                      "const": "float",
-                      "default": "float"
-                    },
-                    "default": {
-                      "type": [
-                        "number",
-                        "null"
-                      ],
-                      "description": "If given, and instance doesn't supply argument, what value should be used"
-                    }
-                  },
-                  "required": [
-                    "name",
-                    "description"
-                  ],
-                  "additionalProperties": false
-                },
-                {
-                  "type": "object",
-                  "properties": {
-                    "name": {
-                      "type": "string",
-                      "description": "Name of the argument that the IOC instance should pass"
-                    },
-                    "description": {
-                      "type": "string",
-                      "description": "Description of what the argument will be used for"
-                    },
-                    "type": {
-                      "type": "string",
-                      "const": "str",
-                      "default": "str"
-                    },
-                    "default": {
-                      "type": [
-                        "string",
-                        "null"
-                      ],
-                      "description": "If given, and instance doesn't supply argument, what value should be used"
-                    }
-                  },
-                  "required": [
-                    "name",
-                    "description"
-                  ],
-                  "additionalProperties": false
-                },
-                {
-                  "type": "object",
-                  "properties": {
-                    "name": {
-                      "type": "string",
-                      "description": "Name of the argument that the IOC instance should pass"
-                    },
-                    "description": {
-                      "type": "string",
-                      "description": "Description of what the argument will be used for"
-                    },
-                    "type": {
-                      "type": "string",
-                      "const": "int",
-                      "default": "int"
-                    },
-                    "default": {
-                      "type": [
-                        "integer",
-                        "null"
-                      ],
-                      "description": "If given, and instance doesn't supply argument, what value should be used"
-                    }
-                  },
-                  "required": [
-                    "name",
-                    "description"
-                  ],
-                  "additionalProperties": false
-                },
-                {
-                  "type": "object",
-                  "properties": {
-                    "name": {
-                      "type": "string",
-                      "description": "Name of the argument that the IOC instance should pass"
-                    },
-                    "description": {
-                      "type": "string",
-                      "description": "Description of what the argument will be used for"
-                    },
-                    "type": {
-                      "type": "string",
-                      "const": "bool",
-                      "default": "bool"
-                    },
-                    "default": {
-                      "type": [
-                        "boolean",
-                        "null"
-                      ],
-                      "description": "If given, and instance doesn't supply argument, what value should be used"
-                    }
-                  },
-                  "required": [
-                    "name",
-                    "description"
-                  ],
-                  "additionalProperties": false
-                },
-                {
-                  "type": "object",
-                  "properties": {
-                    "name": {
-                      "type": "string",
-                      "description": "Name of the argument that the IOC instance should pass"
-                    },
-                    "description": {
-                      "type": "string",
-                      "description": "Description of what the argument will be used for"
-                    },
-                    "type": {
-                      "type": "string",
-                      "const": "object",
-                      "default": "object"
-                    },
-                    "default": {
-                      "type": [
-                        "string",
-                        "null"
-                      ],
-                      "description": "If given, and instance doesn't supply argument, what value should be used"
-                    }
-                  },
-                  "required": [
-                    "name",
-                    "description"
-                  ],
-                  "additionalProperties": false
-                },
-                {
-                  "type": "object",
-                  "properties": {
-                    "name": {
-                      "type": "string",
-                      "description": "Name of the argument that the IOC instance should pass"
-                    },
-                    "description": {
-                      "type": "string",
-                      "description": "Description of what the argument will be used for"
-                    },
-                    "type": {
-                      "type": "string",
-                      "const": "id",
-                      "default": "id"
-                    },
-                    "default": {
-                      "type": [
-                        "string",
-                        "null"
-                      ],
-                      "description": "If given, and instance doesn't supply argument, what value should be used"
-                    }
-                  },
-                  "required": [
-                    "name",
-                    "description"
-                  ],
-                  "additionalProperties": false
-                }
-              ]
-            },
-            "description": "The arguments IOC instance should supply",
-            "default": []
-          },
-          "values": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "properties": {
-                "name": {
-                  "type": "string",
-                  "description": "Name of the value that the IOC instance will expose"
-                },
-                "description": {
-                  "type": "string",
-                  "description": "Description of what the value will be used for"
-                },
-                "value": {
-                  "type": "string",
-                  "description": "The contents of the value"
-                }
-              },
-              "required": [
-                "name",
-                "description",
-                "value"
-              ],
-              "additionalProperties": false
-            },
-            "description": "The values IOC instance should supply",
-            "default": []
-          },
-          "databases": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "properties": {
-                "file": {
-                  "type": "string",
-                  "description": "Filename of the database template in <module_root>/db"
-                },
-                "args": {
-                  "type": "object",
-                  "additionalProperties": {
-                    "type": [
-                      "string",
-                      "null"
-                    ]
-                  },
-                  "description": "Dictionary of args and values to pass through to database. A value of None is equivalent to ARG: '{{ ARG }}'"
-                }
-              },
-              "required": [
-                "file",
-                "args"
-              ],
-              "additionalProperties": false
-            },
-            "description": "Databases to instantiate",
-            "default": []
-          },
-          "pre_init": {
-            "type": "array",
-            "items": {
-              "anyOf": [
-                {
-                  "$ref": "#/definitions/Function"
-                },
-                {
-                  "$ref": "#/definitions/Comment"
-                },
-                {
-                  "$ref": "#/definitions/Text"
-                }
-              ]
-            },
-            "description": "Startup script snippets to add before iocInit()",
-            "default": []
-          },
-          "post_init": {
-            "type": "array",
-            "items": {
-              "anyOf": [
-                {
-                  "$ref": "#/definitions/Function"
-                },
-                {
-                  "$ref": "#/definitions/Comment"
-                },
-                {
-                  "$ref": "#/definitions/Text"
-                }
-              ]
-            },
-            "description": "Startup script snippets to add post iocInit(), such as dbpf",
-            "default": []
-          },
-          "env_vars": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "properties": {
-                "name": {
-                  "type": "string",
-                  "description": "Name of environment variable"
-                },
-                "value": {
-                  "type": "string",
-                  "description": "Value to set"
-                }
-              },
-              "required": [
-                "name",
-                "value"
-              ],
-              "additionalProperties": false
-            },
-            "description": "Environment variables to set in the boot script",
-            "default": []
-          }
-        },
-        "required": [
-          "name",
-          "description"
-        ],
-        "additionalProperties": false
-      },
-      "description": "The definitions an IOC can create using this module"
-    }
-  },
-  "required": [
-    "module",
-    "defs"
-  ],
-  "additionalProperties": false,
-  "definitions": {
-    "Function": {
-      "type": "object",
+  "$defs": {
+    "BoolArg": {
+      "additionalProperties": false,
+      "description": "An argument with an bool value",
       "properties": {
+        "type": {
+          "const": "bool",
+          "default": "bool",
+          "title": "Type"
+        },
         "name": {
-          "type": "string",
-          "description": "Name of the function to call"
+          "description": "Name of the argument that the IOC instance should pass",
+          "title": "Name",
+          "type": "string"
         },
-        "args": {
-          "type": "object",
-          "description": "The arguments to pass to the function"
+        "description": {
+          "description": "Description of what the argument will be used for",
+          "title": "Description",
+          "type": "string"
         },
-        "header": {
-          "type": "string",
-          "description": "commands/comments to appear before the function",
-          "default": ""
+        "default": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Default"
+        }
+      },
+      "required": [
+        "name",
+        "description"
+      ],
+      "title": "BoolArg",
+      "type": "object"
+    },
+    "Comment": {
+      "additionalProperties": false,
+      "description": "\n    A script snippet that will have '# ' prepended to every line\n    for insertion into the startup script\n    ",
+      "properties": {
+        "type": {
+          "const": "comment",
+          "default": "comment",
+          "title": "Type"
         },
         "when": {
-          "type": "string",
-          "description": "one of first / every / last",
-          "default": "every"
+          "allOf": [
+            {
+              "$ref": "#/$defs/When"
+            }
+          ],
+          "default": "every",
+          "description": "One of first / every / last"
+        },
+        "value": {
+          "default": "",
+          "description": "A comment to add into the startup script",
+          "title": "Value",
+          "type": "string"
+        }
+      },
+      "title": "Comment",
+      "type": "object"
+    },
+    "Database": {
+      "additionalProperties": false,
+      "description": "\n    A database file that should be loaded by the startup script and its args\n    ",
+      "properties": {
+        "file": {
+          "description": "Filename of the database template in <module_root>/db",
+          "title": "File",
+          "type": "string"
+        },
+        "args": {
+          "additionalProperties": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "description": "Dictionary of args and values to pass through to database. A value of None is equivalent to ARG: '{{ ARG }}'",
+          "title": "Args",
+          "type": "object"
+        }
+      },
+      "required": [
+        "file",
+        "args"
+      ],
+      "title": "Database",
+      "type": "object"
+    },
+    "Definition": {
+      "additionalProperties": false,
+      "description": "\n    A single definition of a class of Entity that an IOC instance may instantiate\n    ",
+      "properties": {
+        "name": {
+          "description": "Publish Definition as type <module>.<name> for IOC instances",
+          "title": "Name",
+          "type": "string"
+        },
+        "description": {
+          "description": "A description of the Support module defined here",
+          "title": "Description",
+          "type": "string"
+        },
+        "args": {
+          "default": [],
+          "description": "The arguments IOC instance should supply",
+          "items": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/FloatArg"
+              },
+              {
+                "$ref": "#/$defs/StrArg"
+              },
+              {
+                "$ref": "#/$defs/IntArg"
+              },
+              {
+                "$ref": "#/$defs/BoolArg"
+              },
+              {
+                "$ref": "#/$defs/ObjectArg"
+              },
+              {
+                "$ref": "#/$defs/IdArg"
+              }
+            ]
+          },
+          "title": "Args",
+          "type": "array"
+        },
+        "values": {
+          "default": [],
+          "description": "The values IOC instance should supply",
+          "items": {
+            "$ref": "#/$defs/Value"
+          },
+          "title": "Values",
+          "type": "array"
+        },
+        "databases": {
+          "default": [],
+          "description": "Databases to instantiate",
+          "items": {
+            "$ref": "#/$defs/Database"
+          },
+          "title": "Databases",
+          "type": "array"
+        },
+        "pre_init": {
+          "default": [],
+          "description": "Startup script snippets to add before iocInit()",
+          "items": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/Function"
+              },
+              {
+                "$ref": "#/$defs/Comment"
+              },
+              {
+                "$ref": "#/$defs/Text"
+              }
+            ]
+          },
+          "title": "Pre Init",
+          "type": "array"
+        },
+        "post_init": {
+          "default": [],
+          "description": "Startup script snippets to add post iocInit(), such as dbpf",
+          "items": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/Function"
+              },
+              {
+                "$ref": "#/$defs/Comment"
+              },
+              {
+                "$ref": "#/$defs/Text"
+              }
+            ]
+          },
+          "title": "Post Init",
+          "type": "array"
+        },
+        "env_vars": {
+          "default": [],
+          "description": "Environment variables to set in the boot script",
+          "items": {
+            "$ref": "#/$defs/EnvironmentVariable"
+          },
+          "title": "Env Vars",
+          "type": "array"
+        }
+      },
+      "required": [
+        "name",
+        "description"
+      ],
+      "title": "Definition",
+      "type": "object"
+    },
+    "EnvironmentVariable": {
+      "additionalProperties": false,
+      "description": "\n    An environment variable that should be set in the startup script\n    ",
+      "properties": {
+        "name": {
+          "description": "Name of environment variable",
+          "title": "Name",
+          "type": "string"
+        },
+        "value": {
+          "description": "Value to set",
+          "title": "Value",
+          "type": "string"
+        }
+      },
+      "required": [
+        "name",
+        "value"
+      ],
+      "title": "EnvironmentVariable",
+      "type": "object"
+    },
+    "FloatArg": {
+      "additionalProperties": false,
+      "description": "An argument with a float value",
+      "properties": {
+        "type": {
+          "const": "float",
+          "default": "float",
+          "title": "Type"
+        },
+        "name": {
+          "description": "Name of the argument that the IOC instance should pass",
+          "title": "Name",
+          "type": "string"
+        },
+        "description": {
+          "description": "Description of what the argument will be used for",
+          "title": "Description",
+          "type": "string"
+        },
+        "default": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Default"
+        }
+      },
+      "required": [
+        "name",
+        "description"
+      ],
+      "title": "FloatArg",
+      "type": "object"
+    },
+    "Function": {
+      "additionalProperties": false,
+      "description": "\n    A script snippet that defines a function to call\n    ",
+      "properties": {
+        "name": {
+          "description": "Name of the function to call",
+          "title": "Name",
+          "type": "string"
+        },
+        "args": {
+          "description": "The arguments to pass to the function",
+          "title": "Args",
+          "type": "object"
+        },
+        "header": {
+          "default": "",
+          "description": "commands/comments to appear before the function",
+          "title": "Header",
+          "type": "string"
+        },
+        "when": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/When"
+            }
+          ],
+          "default": "every",
+          "description": "one of first / every / last"
         },
         "type": {
-          "type": "string",
           "const": "function",
-          "default": "function"
+          "default": "function",
+          "title": "Type"
         }
       },
       "required": [
         "name",
         "args"
       ],
-      "additionalProperties": false
+      "title": "Function",
+      "type": "object"
     },
-    "Comment": {
-      "type": "object",
+    "IdArg": {
+      "additionalProperties": false,
+      "description": "Explicit ID argument that an object can refer to",
       "properties": {
         "type": {
-          "type": "string",
-          "const": "comment",
-          "default": "comment"
+          "const": "id",
+          "default": "id",
+          "title": "Type"
         },
-        "when": {
-          "type": "string",
-          "description": "One of first / every / last",
-          "default": "every"
+        "name": {
+          "description": "Name of the argument that the IOC instance should pass",
+          "title": "Name",
+          "type": "string"
         },
-        "value": {
-          "type": "string",
-          "description": "A comment to add into the startup script",
-          "default": ""
+        "description": {
+          "description": "Description of what the argument will be used for",
+          "title": "Description",
+          "type": "string"
+        },
+        "default": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Default"
         }
       },
-      "additionalProperties": false
+      "required": [
+        "name",
+        "description"
+      ],
+      "title": "IdArg",
+      "type": "object"
+    },
+    "IntArg": {
+      "additionalProperties": false,
+      "description": "An argument with an int value",
+      "properties": {
+        "type": {
+          "const": "int",
+          "default": "int",
+          "title": "Type"
+        },
+        "name": {
+          "description": "Name of the argument that the IOC instance should pass",
+          "title": "Name",
+          "type": "string"
+        },
+        "description": {
+          "description": "Description of what the argument will be used for",
+          "title": "Description",
+          "type": "string"
+        },
+        "default": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Default"
+        }
+      },
+      "required": [
+        "name",
+        "description"
+      ],
+      "title": "IntArg",
+      "type": "object"
+    },
+    "ObjectArg": {
+      "additionalProperties": false,
+      "description": "A reference to another entity defined in this IOC",
+      "properties": {
+        "type": {
+          "const": "object",
+          "default": "object",
+          "title": "Type"
+        },
+        "name": {
+          "description": "Name of the argument that the IOC instance should pass",
+          "title": "Name",
+          "type": "string"
+        },
+        "description": {
+          "description": "Description of what the argument will be used for",
+          "title": "Description",
+          "type": "string"
+        },
+        "default": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Default"
+        }
+      },
+      "required": [
+        "name",
+        "description"
+      ],
+      "title": "ObjectArg",
+      "type": "object"
+    },
+    "StrArg": {
+      "additionalProperties": false,
+      "description": "An argument with a str value",
+      "properties": {
+        "type": {
+          "const": "str",
+          "default": "str",
+          "title": "Type"
+        },
+        "name": {
+          "description": "Name of the argument that the IOC instance should pass",
+          "title": "Name",
+          "type": "string"
+        },
+        "description": {
+          "description": "Description of what the argument will be used for",
+          "title": "Description",
+          "type": "string"
+        },
+        "default": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Default"
+        }
+      },
+      "required": [
+        "name",
+        "description"
+      ],
+      "title": "StrArg",
+      "type": "object"
     },
     "Text": {
-      "type": "object",
+      "additionalProperties": false,
+      "description": "\n    A script snippet to insert into the startup script\n    ",
       "properties": {
         "type": {
-          "type": "string",
           "const": "text",
-          "default": "text"
+          "default": "text",
+          "title": "Type"
         },
         "when": {
-          "type": "string",
+          "default": "every",
           "description": "One of first / every / last",
-          "default": "every"
+          "title": "When",
+          "type": "string"
         },
         "value": {
-          "type": "string",
+          "default": "",
           "description": "raw text to add to the startup script",
-          "default": ""
+          "title": "Value",
+          "type": "string"
         }
       },
-      "additionalProperties": false
+      "title": "Text",
+      "type": "object"
+    },
+    "Value": {
+      "additionalProperties": false,
+      "description": "A calculated string value for a definition",
+      "properties": {
+        "name": {
+          "description": "Name of the value that the IOC instance will expose",
+          "title": "Name",
+          "type": "string"
+        },
+        "description": {
+          "description": "Description of what the value will be used for",
+          "title": "Description",
+          "type": "string"
+        },
+        "value": {
+          "description": "The contents of the value",
+          "title": "Value",
+          "type": "string"
+        }
+      },
+      "required": [
+        "name",
+        "description",
+        "value"
+      ],
+      "title": "Value",
+      "type": "object"
+    },
+    "When": {
+      "enum": [
+        "first",
+        "every",
+        "last"
+      ],
+      "title": "When",
+      "type": "string"
     }
   },
-  "$schema": "http://json-schema.org/draft-07/schema#"
+  "additionalProperties": false,
+  "description": "\n    Lists the definitions for a support module, this defines what Entities it supports\n\n    Provides the deserialize entry point.\n    ",
+  "properties": {
+    "module": {
+      "description": "Support module name, normally the repo name",
+      "title": "Module",
+      "type": "string"
+    },
+    "defs": {
+      "description": "The definitions an IOC can create using this module",
+      "items": {
+        "$ref": "#/$defs/Definition"
+      },
+      "title": "Defs",
+      "type": "array"
+    }
+  },
+  "required": [
+    "module",
+    "defs"
+  ],
+  "title": "Support",
+  "type": "object"
 }

@@ -1,19 +1,16 @@
 """
 The Support Class represents a deserialized <MODULE_NAME>.ibek.support.yaml file.
-It contains a hierarchy of Entity dataclasses.
 """
 from __future__ import annotations
 
-from dataclasses import dataclass
+import json
 from enum import Enum
-from typing import Any, Dict, Mapping, Optional, Sequence, Type, Union
+from typing import Any, Dict, Optional, Sequence, Union
 
-from apischema import Undefined, UndefinedType, deserialize, deserializer, identity
-from apischema.conversions import Conversion
-from typing_extensions import Annotated as A
+from pydantic import Field
 from typing_extensions import Literal
 
-from .globals import T, desc
+from .globals import BaseSettings
 
 
 class When(Enum):
@@ -22,25 +19,17 @@ class When(Enum):
     last = "last"
 
 
-@dataclass
-class Arg:
+class Arg(BaseSettings):
     """Base class for all Argument Types"""
 
-    name: A[str, desc("Name of the argument that the IOC instance should pass")]
-    description: A[str, desc("Description of what the argument will be used for")]
     type: str
-    default: Any
-
-    # https://wyfo.github.io/apischema/latest/examples/subclass_union/
-    def __init_subclass__(cls):
-        # Deserializers stack directly as a Union
-        deserializer(Conversion(identity, source=cls, target=Arg))
-
-
-Default = A[
-    Union[Optional[T], UndefinedType],
-    desc("If given, and instance doesn't supply argument, what value should be used"),
-]
+    name: str = Field(
+        description="Name of the argument that the IOC instance should pass"
+    )
+    description: str = Field(
+        description="Description of what the argument will be used for"
+    )
+    # __discriminator__ = "type"
 
 
 # FloatArg must be defined before StrArg, otherwise we get:
@@ -52,96 +41,90 @@ Default = A[
 # Arg. When StrArg is before FloatArg, apischema attempts to deserialize as a
 # string first. The coercion from str to number requires a trailing f if there
 # is a decimal.
-@dataclass
 class FloatArg(Arg):
     """An argument with a float value"""
 
     type: Literal["float"] = "float"
-    default: Default[float] = Undefined
+    default: Optional[float] = None
 
 
-@dataclass
 class StrArg(Arg):
     """An argument with a str value"""
 
     type: Literal["str"] = "str"
-    default: Default[str] = Undefined
+    default: Optional[str] = None
 
 
-@dataclass
 class IntArg(Arg):
     """An argument with an int value"""
 
     type: Literal["int"] = "int"
-    default: Default[int] = Undefined
+    default: Optional[int] = None
 
 
-@dataclass
 class BoolArg(Arg):
     """An argument with an bool value"""
 
     type: Literal["bool"] = "bool"
-    default: Default[bool] = Undefined
+    default: Optional[bool] = None
 
 
-@dataclass
 class ObjectArg(Arg):
     """A reference to another entity defined in this IOC"""
 
     type: Literal["object"] = "object"
-    default: Default[str] = Undefined
+    default: Optional[str] = None
 
 
-@dataclass
 class IdArg(Arg):
     """Explicit ID argument that an object can refer to"""
 
     type: Literal["id"] = "id"
-    default: Default[str] = Undefined
+    default: Optional[str] = None
 
 
-@dataclass
-class Database:
+class Database(BaseSettings):
     """
     A database file that should be loaded by the startup script and its args
     """
 
-    file: A[str, desc("Filename of the database template in <module_root>/db")]
-    args: A[
-        Dict[str, Optional[str]],
-        desc(
+    file: str = Field(
+        description="Filename of the database template in <module_root>/db"
+    )
+
+    args: Dict[str, Optional[str]] = Field(
+        description=(
             "Dictionary of args and values to pass through to database. "
             "A value of None is equivalent to ARG: '{{ ARG }}'"
-        ),
-    ]
+        )
+    )
 
 
-@dataclass
-class EnvironmentVariable:
+class EnvironmentVariable(BaseSettings):
     """
     An environment variable that should be set in the startup script
     """
 
-    name: A[str, desc("Name of environment variable")]
-    value: A[str, desc("Value to set")]
+    name: str = Field(description="Name of environment variable")
+    value: str = Field(description="Value to set")
 
 
-@dataclass
-class Function:
+class Function(BaseSettings):
     """
     A script snippet that defines a function to call
     """
 
-    name: A[str, desc("Name of the function to call")]
-    args: A[Dict[str, Any], desc("The arguments to pass to the function")]
-    header: A[str, desc("commands/comments to appear before the function")] = ""
+    name: str = Field(description="Name of the function to call")
+    args: Dict[str, Any] = Field(description="The arguments to pass to the function")
+    header: str = Field(
+        description="commands/comments to appear before the function", default=""
+    )
     # TODO will be an enum
-    when: A[str, desc("one of first / every / last")] = "every"
+    when: When = Field(description="one of first / every / last", default="every")
     type: Literal["function"] = "function"
 
 
-@dataclass
-class Comment:
+class Comment(BaseSettings):
     """
     A script snippet that will have '# ' prepended to every line
     for insertion into the startup script
@@ -149,29 +132,31 @@ class Comment:
 
     type: Literal["comment"] = "comment"
     # TODO will be an enum
-    when: A[str, desc("One of first / every / last")] = "every"
-    value: A[str, desc("A comment to add into the startup script")] = ""
+    when: When = Field(description="One of first / every / last", default="every")
+    value: str = Field(
+        description="A comment to add into the startup script", default=""
+    )
 
 
-@dataclass
-class Text:
+class Text(BaseSettings):
     """
     A script snippet to insert into the startup script
     """
 
     type: Literal["text"] = "text"
     # TODO will be an enum
-    when: A[str, desc("One of first / every / last")] = "every"
-    value: A[str, desc("raw text to add to the startup script")] = ""
+    when: str = Field(description="One of first / every / last", default="every")
+    value: str = Field(description="raw text to add to the startup script", default="")
 
 
-@dataclass
-class Value:
+class Value(BaseSettings):
     """A calculated string value for a definition"""
 
-    name: A[str, desc("Name of the value that the IOC instance will expose")]
-    description: A[str, desc("Description of what the value will be used for")]
-    value: A[str, desc("The contents of the value")]
+    name: str = Field(description="Name of the value that the IOC instance will expose")
+    description: str = Field(
+        description="Description of what the value will be used for"
+    )
+    value: str = Field(description="The contents of the value")
 
     def __str__(self):
         return self.value
@@ -180,45 +165,51 @@ class Value:
 Script = Sequence[Union[Function, Comment, Text]]
 
 
-@dataclass
-class Definition:
+class Definition(BaseSettings):
     """
     A single definition of a class of Entity that an IOC instance may instantiate
     """
 
-    name: A[str, desc("Publish Definition as type <module>.<name> for IOC instances")]
-    description: A[str, desc("Describes the purpose of the definition")]
-    args: A[Sequence[Arg], desc("The arguments IOC instance should supply")] = ()
-    values: A[Sequence[Value], desc("The values IOC instance should supply")] = ()
-    databases: A[Sequence[Database], desc("Databases to instantiate")] = ()
-    pre_init: A[
-        Script,
-        desc("Startup script snippets to add before iocInit()"),
-    ] = ()
-    post_init: A[
-        Script,
-        desc("Startup script snippets to add post iocInit(), such as dbpf"),
-    ] = ()
-    env_vars: A[
-        Sequence[EnvironmentVariable],
-        desc("Environment variables to set in the boot script"),
-    ] = ()
+    name: str = Field(
+        description="Publish Definition as type <module>.<name> for IOC instances"
+    )
+    description: str = Field(
+        description="A description of the Support module defined here"
+    )
+    # declare Arg as Union of its subclasses for Pydantic to be able to deserialize
+    args: Sequence[Union[tuple(Arg.__subclasses__())]] = Field(  # type: ignore
+        description="The arguments IOC instance should supply", default=()
+    )
+    values: Sequence[Value] = Field(
+        description="The values IOC instance should supply", default=()
+    )
+    databases: Sequence[Database] = Field(
+        description="Databases to instantiate", default=()
+    )
+    pre_init: Script = Field(
+        description="Startup script snippets to add before iocInit()", default=()
+    )
+    post_init: Script = Field(
+        description="Startup script snippets to add post iocInit(), such as dbpf",
+        default=(),
+    )
+    env_vars: Sequence[EnvironmentVariable] = Field(
+        description="Environment variables to set in the boot script", default=()
+    )
 
 
-@dataclass
-class Support:
+class Support(BaseSettings):
     """
     Lists the definitions for a support module, this defines what Entities it supports
 
     Provides the deserialize entry point.
     """
 
-    module: A[str, desc("Support module name, normally the repo name")]
-    defs: A[
-        Sequence[Definition],
-        desc("The definitions an IOC can create using this module"),
-    ]
+    module: str = Field(description="Support module name, normally the repo name")
+    defs: Sequence[Definition] = Field(
+        description="The definitions an IOC can create using this module"
+    )
 
     @classmethod
-    def deserialize(cls: Type[T], d: Mapping[str, Any]) -> T:
-        return deserialize(cls, d)
+    def get_schema(cls):
+        return json.dumps(cls.model_json_schema(), indent=2)

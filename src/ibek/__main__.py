@@ -1,24 +1,17 @@
 import json
 from pathlib import Path
-from typing import Any, List, Mapping, Optional
+from typing import List, Optional
 
-import jsonschema
 import typer
-from apischema.json_schema import JsonSchemaVersion, deserialization_schema
 from ruamel.yaml import YAML
 
-from ibek import __version__
-
+from ._version import __version__
 from .gen_scripts import create_boot_script, create_db_script, ioc_deserialize
 from .ioc import IOC, make_entity_classes
 from .support import Support
 
 cli = typer.Typer()
 yaml = YAML()
-
-
-def make_schema(cls: type) -> Mapping[str, Any]:
-    return deserialization_schema(cls, version=JsonSchemaVersion.DRAFT_7)
 
 
 def version_callback(value: bool):
@@ -45,8 +38,7 @@ def ibek_schema(
     output: Path = typer.Argument(..., help="The filename to write the schema to")
 ):
     """Produce JSON global schema for all <support_module>.ibek.support.yaml files"""
-    schema = json.dumps(make_schema(Support), indent=2)
-    output.write_text(schema)
+    output.write_text(Support.get_schema())
 
 
 @cli.command()
@@ -61,18 +53,20 @@ def ioc_schema(
     Create a json schema from a <support_module>.ibek.support.yaml file
     """
 
-    # first check the definition file with jsonschema since it has more
-    # legible error messages than apischema
     for definition in definitions:
         support_dict = YAML(typ="safe").load(definition)
         if not no_schema:
-            schema_support = make_schema(Support)
-            jsonschema.validate(support_dict, schema_support)
+            # Verify the schema of the support module definition file
+            Support.model_validate(support_dict)
 
-        support = Support.deserialize(support_dict)
+        # deserialize the support module definition file
+        support = Support(**support_dict)
+        # make Entity classes described in the support module definition file
         make_entity_classes(support)
 
-    schema = json.dumps(make_schema(IOC), indent=2)
+    # Save the schema for IOC - it will include all subclasses of Entity
+    # that were created in the global namespace by make_entity_classes
+    schema = json.dumps(IOC.model_json_schema(), indent=2)
     output.write_text(schema)
 
 
