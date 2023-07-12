@@ -21,22 +21,35 @@ defs:
 
   - name: Consumer
     description: |
-      An object that uses AnAsynPort
+      A class that uses AnAsynPort
     args:
       - type: id
         name: name
         description: Consumer name
 
-      - type: object
+      - type: str
         name: PORT
         description: a reference to an AnAsynPort
 
-    pre_init:
-      - type: function
-        name: exampleTestFunction
-        args:
-          AsynPortIP: "{{ PORT.IP }}"
-          Name: "{{ name }}"
-        header: |
-          A function that uses the AsynPortIP and Name
-          to do something useful
+  - name: ConsumerTwo
+    description: |
+      Another class that uses AnAsynPort
+    args:
+      - type: id
+        name: name
+        description: Consumer name
+
+      - type: str
+        name: PORT
+        description: a reference to an AnAsynPort
+
+    # pre_init:
+    #   - type: function
+    #     name: exampleTestFunction
+    #     args:
+    #       AsynPortIP: "{{ PORT.IP }}"
+    #       Name: "{{ name }}"
+    #       Value: "{{ PORT.test_value }}"
+    #     header: |
+    #       A function that uses the AsynPortIP and Name
+    #       to do something useful

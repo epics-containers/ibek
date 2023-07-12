@@ -1,7 +1,14 @@
 {
   "$defs": {
     "pydantic_test_AnAsynPort": {
+      "additionalProperties": false,
       "properties": {
+        "entity_enabled": {
+          "default": true,
+          "description": "enable or disable this entity instance",
+          "title": "Entity Enabled",
+          "type": "boolean"
+        },
         "name": {
           "default": null,
           "description": "Asyn port name",
@@ -25,7 +32,14 @@
       "type": "object"
     },
     "pydantic_test_Consumer": {
+      "additionalProperties": false,
       "properties": {
+        "entity_enabled": {
+          "default": true,
+          "description": "enable or disable this entity instance",
+          "title": "Entity Enabled",
+          "type": "boolean"
+        },
         "name": {
           "default": null,
           "description": "Consumer name",
@@ -46,6 +60,37 @@
         }
       },
       "title": "pydantic_test_Consumer",
+      "type": "object"
+    },
+    "pydantic_test_ConsumerTwo": {
+      "additionalProperties": false,
+      "properties": {
+        "entity_enabled": {
+          "default": true,
+          "description": "enable or disable this entity instance",
+          "title": "Entity Enabled",
+          "type": "boolean"
+        },
+        "name": {
+          "default": null,
+          "description": "Consumer name",
+          "title": "Name",
+          "type": "string"
+        },
+        "PORT": {
+          "default": null,
+          "description": "a reference to an AnAsynPort",
+          "title": "Port",
+          "type": "string"
+        },
+        "type": {
+          "const": "pydantic_test.ConsumerTwo",
+          "default": "pydantic_test.ConsumerTwo",
+          "description": "The type of this entity",
+          "title": "Type"
+        }
+      },
+      "title": "pydantic_test_ConsumerTwo",
       "type": "object"
     }
   },
@@ -76,6 +121,9 @@
           },
           {
             "$ref": "#/$defs/pydantic_test_Consumer"
+          },
+          {
+            "$ref": "#/$defs/pydantic_test_ConsumerTwo"
           }
         ]
       },

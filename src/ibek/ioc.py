@@ -8,10 +8,10 @@ import builtins
 from typing import Any, Dict, Literal, Sequence, Tuple, Type, Union
 
 from jinja2 import Template
-from pydantic import Field, create_model, field_validator
+from pydantic import Field, create_model, field_validator, model_validator
 from pydantic.fields import FieldInfo
 
-from .globals import BaseSettings
+from .globals import BaseSettings, model_config
 from .support import Definition, IdArg, ObjectArg, Support
 from .utils import UTILS
 
@@ -34,15 +34,21 @@ class Entity(BaseSettings):
         description="enable or disable this entity instance", default=True
     )
 
-    # @model_validator(mode="before")  # type: ignore
+    @model_validator(mode="before")  # type: ignore
     def add_ibek_attributes(cls, entity: Dict):
         """Add attributes used by ibek"""
 
         # add in the global __utils__ object for state sharing
-        entity["__utils__"] = UTILS
+        # TODO need to convince pydantic to add this to the class without
+        # complaining about __ prefix - or use another approach to pass
+        # the __utils__ object to every jinja template
+        # entity["__utils__"] = UTILS
 
         # copy 'values' from the definition into the Entity
 
+        # TODO this is not literally the Entity Object but a Dictionary of
+        # its attributes. So need a new approach for linking back to the
+        # definition and copying in the values out.
         # if hasattr(entity, "__definition__"):
         #     entity.update(entity.__definition__.values)
 
@@ -64,8 +70,8 @@ def make_entity_model(definition: Definition, support: Support) -> Type[Entity]:
     See :ref:`entities`
     """
 
-    def add_entity(name, typ, description, default):
-        entities[name] = (
+    def add_arg(name, typ, description, default):
+        arguments[name] = (
             typ,
             FieldInfo(
                 description=description,
@@ -73,7 +79,7 @@ def make_entity_model(definition: Definition, support: Support) -> Type[Entity]:
             ),
         )
 
-    entities: Dict[str, Tuple[type, Any]] = {}
+    arguments: Dict[str, Tuple[type, Any]] = {}
     validators: Dict[str, Any] = {}
 
     # fully qualified name of the Entity class including support module
@@ -102,7 +108,7 @@ def make_entity_model(definition: Definition, support: Support) -> Type[Entity]:
                 if id in id_to_entity:
                     # TODO we are getting multiple registers of same Arg
                     pass  # raise KeyError(f"id {id} already defined in {list(id_to_entity)}")
-                id_to_entity[id] = cls
+                id_to_entity[id] = "test_sub_object"
                 return id
 
             validators[full_arg_name] = save_instance
@@ -113,16 +119,17 @@ def make_entity_model(definition: Definition, support: Support) -> Type[Entity]:
             arg_type = getattr(builtins, arg.type)
 
         default = getattr(arg, "default", None)
-        add_entity(arg.name, arg_type, arg.description, default)
+        add_arg(arg.name, arg_type, arg.description, default)
 
     typ = Literal[full_name]  # type: ignore
-    add_entity("type", typ, "The type of this entity", full_name)
+    add_arg("type", typ, "The type of this entity", full_name)
 
     entity_cls = create_model(
         full_name.replace(".", "_"),
-        **entities,
+        **arguments,
         __validators__=validators,
-        # __base__=Entity,
+        __base__=Entity
+        # __config__=model_config, NOTE: either set config or inherit with __base__
     )  # type: ignore
 
     # add a link back to the Definition Object that generated this Entity Class
