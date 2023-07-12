@@ -1,0 +1,42 @@
+# yaml-language-server: $schema=../schemas/ibek.defs.schema.json
+module: pydantic_test
+
+defs:
+  - name: AnAsynPort
+    description: |
+      Example
+    args:
+      - type: id
+        name: name
+        description: Asyn port name
+
+      - type: str
+        name: IP
+        description: IP address of port
+
+    values:
+      - name: test_value
+        value: "{{ name }}.{{ IP }}"
+        description: test jinja render of arg values
+
+  - name: Consumer
+    description: |
+      An object that uses AnAsynPort
+    args:
+      - type: id
+        name: name
+        description: Consumer name
+
+      - type: object
+        name: PORT
+        description: a reference to an AnAsynPort
+
+    pre_init:
+      - type: function
+        name: exampleTestFunction
+        args:
+          AsynPortIP: "{{ PORT.IP }}"
+          Name: "{{ name }}"
+        header: |
+          A function that uses the AsynPortIP and Name
+          to do something useful

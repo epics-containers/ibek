@@ -3,7 +3,7 @@ from pathlib import Path
 from typer.testing import CliRunner
 
 from ibek.__main__ import cli
-from ibek.ioc import clear_entity_classes
+from ibek.ioc import clear_entity_model_ids
 
 runner = CliRunner()
 
@@ -28,7 +28,7 @@ def xxtest_build_startup_p45(tmp_path: Path, samples: Path):
     """
     root = Path("/workspace/bl45p")
 
-    clear_entity_classes()
+    clear_entity_model_ids()
     entity_file = root / "bl45p-mo-ioc-99.yaml"
     definitions = Path.glob(root / "ibek", "*.ibek.support.yaml")
     out_file = root / "iocs/bl45p-mo-ioc-99/config/st.cmd"

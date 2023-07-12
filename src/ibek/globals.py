@@ -1,24 +1,17 @@
 """
 A few global definitions
 """
-from typing import TypeVar
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict
 
-#: A generic Type for use in type hints
-T = TypeVar("T")
-
-
-def desc(description: str):
-    """a description Annotation to add to our Entity derived Types"""
-    return Field(description=description)
+# pydantic model configuration
+model_config = ConfigDict(
+    # arbitrary_types_allowed=True,
+    extra="forbid",
+)
 
 
 class BaseSettings(BaseModel):
     """A Base class for setting Pydantic model configuration"""
 
-    # Pydantic model configuration
-    model_config = ConfigDict(
-        # arbitrary_types_allowed=True,
-        extra="forbid",
-    )
+    model_config = model_config

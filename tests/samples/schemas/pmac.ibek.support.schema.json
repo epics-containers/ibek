@@ -1,5 +1,19 @@
 {
   "$defs": {
+    "Entity": {
+      "additionalProperties": false,
+      "description": "\n    A baseclass for all generated Entity classes. Provides the\n    deserialize entry point.\n    ",
+      "properties": {
+        "entity_enabled": {
+          "default": true,
+          "description": "enable or disable this entity instance",
+          "title": "Entity Enabled",
+          "type": "boolean"
+        }
+      },
+      "title": "Entity",
+      "type": "object"
+    },
     "pmac_CS": {
       "additionalProperties": false,
       "properties": {
@@ -10,10 +24,13 @@
           "type": "string"
         },
         "Controller": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/Entity"
+            }
+          ],
           "default": null,
-          "description": "the PMAC Controller",
-          "title": "Controller",
-          "type": "string"
+          "description": "the PMAC Controller"
         },
         "CS": {
           "default": null,
@@ -53,10 +70,13 @@
           "type": "string"
         },
         "CsController": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/Entity"
+            }
+          ],
           "default": null,
-          "description": "Coordinate system controller to attach to",
-          "title": "Cscontroller",
-          "type": "string"
+          "description": "Coordinate system controller to attach to"
         },
         "axis": {
           "default": null,
@@ -366,10 +386,13 @@
           "type": "string"
         },
         "Controller": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/Entity"
+            }
+          ],
           "default": null,
-          "description": "PMAC Controller to attach to",
-          "title": "Controller",
-          "type": "string"
+          "description": "PMAC Controller to attach to"
         },
         "axis": {
           "default": null,
@@ -685,10 +708,13 @@
           "type": "string"
         },
         "PORT": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/Entity"
+            }
+          ],
           "default": null,
-          "description": "Asyn port name for PmacAsynIPPort to connect to",
-          "title": "Port",
-          "type": "string"
+          "description": "Asyn port name for PmacAsynIPPort to connect to"
         },
         "P": {
           "default": null,
@@ -797,69 +823,17 @@
       "title": "pmac_PmacAsynIPPort",
       "type": "object"
     },
-    "pmac_PmacAsynSSHPort": {
-      "additionalProperties": false,
-      "properties": {
-        "name": {
-          "default": null,
-          "description": "Asyn port name",
-          "title": "Name",
-          "type": "string"
-        },
-        "IP": {
-          "default": null,
-          "description": "IP address of Power pmac",
-          "title": "Ip",
-          "type": "string"
-        },
-        "USERNAME": {
-          "default": "root",
-          "description": "Username for login",
-          "title": "Username",
-          "type": "string"
-        },
-        "PASSWORD": {
-          "default": "deltatau",
-          "description": "Password for login",
-          "title": "Password",
-          "type": "string"
-        },
-        "PRIORITY": {
-          "default": 0,
-          "description": "Priority of the port",
-          "title": "Priority",
-          "type": "integer"
-        },
-        "NOAUTOCONNECT": {
-          "default": 0,
-          "description": "Disables autoconnect if set to 1",
-          "title": "Noautoconnect",
-          "type": "integer"
-        },
-        "NOEOS": {
-          "default": 0,
-          "description": "No EOS used if set to 1",
-          "title": "Noeos",
-          "type": "integer"
-        },
-        "type": {
-          "const": "pmac.PmacAsynSSHPort",
-          "default": "pmac.PmacAsynSSHPort",
-          "description": "The type of this entity",
-          "title": "Type"
-        }
-      },
-      "title": "pmac_PmacAsynSSHPort",
-      "type": "object"
-    },
     "pmac_autohome": {
       "additionalProperties": false,
       "properties": {
         "Controller": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/Entity"
+            }
+          ],
           "default": null,
-          "description": "the PMAC Controller",
-          "title": "Controller",
-          "type": "string"
+          "description": "the PMAC Controller"
         },
         "PLC": {
           "default": null,
@@ -941,10 +915,13 @@
       "additionalProperties": false,
       "properties": {
         "Controller": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/Entity"
+            }
+          ],
           "default": null,
-          "description": "Geobrick on which to disable limits",
-          "title": "Controller",
-          "type": "string"
+          "description": "Geobrick on which to disable limits"
         },
         "Axis": {
           "default": null,
@@ -985,9 +962,6 @@
       "description": "List of entities this IOC instantiates",
       "items": {
         "anyOf": [
-          {
-            "$ref": "#/$defs/pmac_PmacAsynSSHPort"
-          },
           {
             "$ref": "#/$defs/pmac_PmacAsynIPPort"
           },

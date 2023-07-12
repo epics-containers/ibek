@@ -29,7 +29,6 @@ class Arg(BaseSettings):
     description: str = Field(
         description="Description of what the argument will be used for"
     )
-    # __discriminator__ = "type"
 
 
 # FloatArg must be defined before StrArg, otherwise we get:
@@ -40,7 +39,7 @@ class Arg(BaseSettings):
 # have a trailing 'f'. It is due to the order of declaration of subclasses of
 # Arg. When StrArg is before FloatArg, apischema attempts to deserialize as a
 # string first. The coercion from str to number requires a trailing f if there
-# is a decimal.
+# is a decimal. TODO is this still an issue with Pydantic?
 class FloatArg(Arg):
     """An argument with a float value"""
 

@@ -1,3 +1,4 @@
+import json
 from pathlib import Path
 from typing import List, Optional
 
@@ -5,8 +6,12 @@ import typer
 from ruamel.yaml import YAML
 
 from ._version import __version__
-from .gen_scripts import create_boot_script, create_db_script, ioc_deserialize
-from .ioc import make_entity_models, make_ioc_model
+from .gen_scripts import (
+    create_boot_script,
+    create_db_script,
+    ioc_create_model,
+    ioc_deserialize,
+)
 from .support import Support
 
 cli = typer.Typer()
@@ -46,27 +51,13 @@ def ioc_schema(
         ..., help="The filepath to a support module definition file"
     ),
     output: Path = typer.Argument(..., help="The filename to write the schema to"),
-    no_schema: bool = typer.Option(False, help="disable schema checking"),
 ):
     """
     Create a json schema from a <support_module>.ibek.support.yaml file
     """
 
-    entity_classes = []
-
-    for definition in definitions:
-        support_dict = YAML(typ="safe").load(definition)
-        if not no_schema:
-            # Verify the schema of the support module definition file
-            Support.model_validate(support_dict)
-
-        # deserialize the support module definition file
-        support = Support(**support_dict)
-        # make Entity classes described in the support module definition file
-        entity_classes += make_entity_models(support)
-
-    # Save the schema for IOC
-    schema = make_ioc_model(entity_classes)
+    ioc_model = ioc_create_model(definitions)
+    schema = json.dumps(ioc_model.model_json_schema(), indent=2)
     output.write_text(schema)
 
 

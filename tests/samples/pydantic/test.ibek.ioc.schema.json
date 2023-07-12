@@ -1,0 +1,93 @@
+{
+  "$defs": {
+    "pydantic_test_AnAsynPort": {
+      "properties": {
+        "name": {
+          "default": null,
+          "description": "Asyn port name",
+          "title": "Name",
+          "type": "string"
+        },
+        "IP": {
+          "default": null,
+          "description": "IP address of port",
+          "title": "Ip",
+          "type": "string"
+        },
+        "type": {
+          "const": "pydantic_test.AnAsynPort",
+          "default": "pydantic_test.AnAsynPort",
+          "description": "The type of this entity",
+          "title": "Type"
+        }
+      },
+      "title": "pydantic_test_AnAsynPort",
+      "type": "object"
+    },
+    "pydantic_test_Consumer": {
+      "properties": {
+        "name": {
+          "default": null,
+          "description": "Consumer name",
+          "title": "Name",
+          "type": "string"
+        },
+        "PORT": {
+          "default": null,
+          "description": "a reference to an AnAsynPort",
+          "title": "Port",
+          "type": "string"
+        },
+        "type": {
+          "const": "pydantic_test.Consumer",
+          "default": "pydantic_test.Consumer",
+          "description": "The type of this entity",
+          "title": "Type"
+        }
+      },
+      "title": "pydantic_test_Consumer",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "ioc_name": {
+      "description": "Name of IOC instance",
+      "title": "Ioc Name",
+      "type": "string"
+    },
+    "description": {
+      "description": "Description of what the IOC does",
+      "title": "Description",
+      "type": "string"
+    },
+    "generic_ioc_image": {
+      "description": "The generic IOC container image registry URL",
+      "title": "Generic Ioc Image",
+      "type": "string"
+    },
+    "entities": {
+      "default": [],
+      "description": "List of entities this IOC instantiates",
+      "items": {
+        "anyOf": [
+          {
+            "$ref": "#/$defs/pydantic_test_AnAsynPort"
+          },
+          {
+            "$ref": "#/$defs/pydantic_test_Consumer"
+          }
+        ]
+      },
+      "title": "Entities",
+      "type": "array"
+    }
+  },
+  "required": [
+    "ioc_name",
+    "description",
+    "generic_ioc_image"
+  ],
+  "title": "NewIOC",
+  "type": "object"
+}

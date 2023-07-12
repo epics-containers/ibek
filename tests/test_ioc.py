@@ -2,7 +2,7 @@ from pathlib import Path
 
 from typer.testing import CliRunner
 
-from ibek.ioc import clear_entity_classes
+from ibek.ioc import clear_entity_model_ids
 from ibek.utils import UTILS
 
 from .test_cli import run_cli
@@ -18,7 +18,7 @@ def test_example_ioc(tmp_path: Path, samples: Path, ibek_defs: Path):
     but instead of verifying the output, it runs the ioc in a container and \
     verifies that it starts up correctly.
     """
-    clear_entity_classes()
+    clear_entity_model_ids()
     UTILS.__reset__()
 
     tmp_path = Path("/tmp/ibek_test")
@@ -60,7 +60,7 @@ def test_example_sr_rf_08(tmp_path: Path, samples: Path, ibek_defs: Path):
     - the once field (for Hy8401 comments)
     """
 
-    clear_entity_classes()
+    clear_entity_model_ids()
     UTILS.__reset__()
 
     tmp_path = Path("/tmp/ibek_test2")
@@ -106,7 +106,7 @@ def test_values_ioc(tmp_path: Path, samples: Path, ibek_defs: Path):
     TODO: make sure samples/values_test/st.cmd is updated when this is fixed.
     """
 
-    clear_entity_classes()
+    clear_entity_model_ids()
     UTILS.__reset__()
 
     tmp_path = Path("/tmp/ibek_test2")

@@ -1,9 +1,9 @@
-from ibek.ioc import IOC, clear_entity_classes, id_to_entity, make_entity_classes
+from ibek.ioc import IOC, clear_entity_model_ids, id_to_entity, make_entity_models
 from ibek.support import Definition, IdArg, ObjectArg, Support
 
 
 def test_conversion_classes():
-    clear_entity_classes()
+    clear_entity_model_ids()
     support = Support(
         "mymodule",
         [
@@ -11,7 +11,7 @@ def test_conversion_classes():
             Definition("device", "a device", [ObjectArg("port", "the port", "object")]),
         ],
     )
-    namespace = make_entity_classes(support)
+    namespace = make_entity_models(support)
     assert {"device", "port"}.issubset(dir(namespace))
     assert namespace.port.__definition__ == support.defs[0]
     assert namespace.device.__definition__ == support.defs[1]

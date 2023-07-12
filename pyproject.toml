@@ -16,10 +16,9 @@ classifiers = [
 description = "IOC Builder for EPICS and Kubernetes"
 dependencies = [
     "typing-extensions",
-    "apischema>=0.15",
+    "pydantic",
     "typer",
     "ruamel.yaml",
-    "jsonschema",
     "jinja2",
     "typing-extensions;python_version<'3.8'",
 ] # Add project dependencies here, e.g. ["click", "numpy"]
