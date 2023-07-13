@@ -6,7 +6,7 @@ from pydantic import BaseModel, ConfigDict
 
 # pydantic model configuration
 model_config = ConfigDict(
-    # arbitrary_types_allowed=True,
+    arbitrary_types_allowed=True,
     extra="forbid",
 )
 

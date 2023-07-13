@@ -27,7 +27,7 @@ defs:
         name: name
         description: Consumer name
 
-      - type: str
+      - type: object
         name: PORT
         description: a reference to an AnAsynPort
 
@@ -39,17 +39,17 @@ defs:
         name: name
         description: Consumer name
 
-      - type: str
+      - type: object
         name: PORT
         description: a reference to an AnAsynPort
 
-    # pre_init:
-    #   - type: function
-    #     name: exampleTestFunction
-    #     args:
-    #       AsynPortIP: "{{ PORT.IP }}"
-    #       Name: "{{ name }}"
-    #       Value: "{{ PORT.test_value }}"
-    #     header: |
-    #       A function that uses the AsynPortIP and Name
-    #       to do something useful
+    pre_init:
+      - type: function
+        name: exampleTestFunction
+        args:
+          AsynPortIP: "{{ PORT.IP }}"
+          Name: "{{ name }}"
+          Value: "{{ PORT.test_value }}"
+        header: |
+          A function that uses the AsynPortIP and Name
+          to do something useful

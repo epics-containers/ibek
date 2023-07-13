@@ -1,4 +1,6 @@
-# yaml-language-server: $schema=/scratch/hgv27681/work/ibek/tests/samples/pydantic/test.ibek.support.yaml
+# yaml-language-server: $schema=/scratch/hgv27681/work/ibek/tests/samples/pydantic/test.ibek.ioc.schema.json
+# restore the below to the top for investigating tests
+# yaml-language-server: $schema=/tmp/pydantic_test/test.ibek.ioc.schema.json
 
 ioc_name: test-pydantic-ioc
 description: a basic example for testing ioc-template
@@ -13,9 +15,9 @@ entities:
     name: AsynPort2
     IP: 10.0.0.1
 
-  # - type: pydantic_test.Consumer
-  #   name: A Consumer
-  #   PORT: AsynPort
+  - type: pydantic_test.Consumer
+    name: A Consumer
+    PORT: AsynPort
 
   - type: pydantic_test.Consumer
     name: Another Consumer of same port

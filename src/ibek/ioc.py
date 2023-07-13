@@ -5,7 +5,7 @@ support module definition YAML file
 from __future__ import annotations
 
 import builtins
-from typing import Any, Dict, Literal, Sequence, Tuple, Type, Union
+from typing import Annotated, Any, Dict, Literal, Sequence, Tuple, Type, Union
 
 from jinja2 import Template
 from pydantic import Field, create_model, field_validator, model_validator
@@ -21,18 +21,26 @@ from .utils import UTILS
 id_to_entity: Dict[str, Entity] = {}
 
 
+class TypeOfType(BaseSettings):
+    type_name: str = Field("str", description="Type of this entity ")
+
+    def __str__(self) -> str:
+        return self.type_name
+
+
 class Entity(BaseSettings):
     """
     A baseclass for all generated Entity classes. Provides the
     deserialize entry point.
     """
 
-    # a link back to the Definition Object that generated this Definition
-    __definition__: Definition
-
+    type: str = Field(description="The type of this entity")
     entity_enabled: bool = Field(
         description="enable or disable this entity instance", default=True
     )
+
+    # a link back to the Definition Object that generated this Definition
+    __definition__: Definition
 
     @model_validator(mode="before")  # type: ignore
     def add_ibek_attributes(cls, entity: Dict):
@@ -88,8 +96,11 @@ def make_entity_model(definition: Definition, support: Support) -> Type[Entity]:
     # add in each of the arguments as a Field in the Entity
     for arg in definition.args:
         full_arg_name = f"{full_name}.{arg.name}"
+        arg_type: Any
 
-        if isinstance(arg, ObjectArg):
+        if arg.name == "type":
+            arg_type = TypeOfType(type_name=arg.name)
+        elif isinstance(arg, ObjectArg):
 
             @field_validator(arg.name)
             def lookup_instance(cls, id):
@@ -106,8 +117,7 @@ def make_entity_model(definition: Definition, support: Support) -> Type[Entity]:
             @field_validator(arg.name)
             def save_instance(cls, id):
                 if id in id_to_entity:
-                    # TODO we are getting multiple registers of same Arg
-                    pass  # raise KeyError(f"id {id} already defined in {list(id_to_entity)}")
+                    raise KeyError(f"id {id} already defined in {list(id_to_entity)}")
                 id_to_entity[id] = "test_sub_object"
                 return id
 
@@ -158,9 +168,15 @@ def make_entity_models(support: Support):
 
 
 def make_ioc_model(entity_models: Sequence[Type[Entity]]) -> Type[IOC]:
+    EntityModels = Annotated[
+        Union[tuple(entity_models)],  # type: ignore
+        FieldInfo(discriminator="type"),
+    ]
+
     class NewIOC(IOC):
-        entities: Sequence[Union[tuple(entity_models)]] = Field(  # type: ignore
-            description="List of entities this IOC instantiates", default=()
+        entities: Sequence[EntityModels] = Field(  # type: ignore
+            description="List of entities this IOC instantiates",
+            default=(),
         )
 
     return NewIOC
