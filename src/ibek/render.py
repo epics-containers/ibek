@@ -8,6 +8,7 @@ from jinja2 import Template
 
 from .ioc import IOC, Entity
 from .support import Comment, Function, Script, Text, When
+from .utils import UTILS
 
 
 class Render:
@@ -19,6 +20,13 @@ class Render:
 
     def __init__(self: "Render"):
         self.once_done: List[str] = []
+
+    def render_with_utils(self, instance: Entity, template_text: str) -> str:
+        """
+        Render a Jinja template with the global __utils__ object available
+        """
+        jinja_template = Template(template_text)
+        return jinja_template.render(instance.__dict__, __utils__=UTILS)
 
     def render_text(
         self, instance: Entity, text: str, when=When.every, suffix=""
@@ -46,8 +54,7 @@ class Render:
             raise NotImplementedError("When.last not yet implemented")
 
         # Render Jinja entries in the text
-        jinja_template = Template(text)
-        result = jinja_template.render(instance.__dict__)  # type: ignore
+        result = self.render_with_utils(instance, text)
 
         if result == "":
             return ""
@@ -146,8 +153,7 @@ class Render:
                 f'msi -I${{EPICS_DB_INCLUDE_PATH}} -M"{db_arg_string}" "{db_file}"\n'
             )
 
-        jinja_template = Template(jinja_txt)
-        db_txt = jinja_template.render(instance.__dict__)  # type: ignore
+        db_txt = self.render_with_utils(instance, jinja_txt)
 
         return db_txt + "\n"
 
@@ -163,8 +169,8 @@ class Render:
         env_var_txt = ""
         for variable in variables:
             # Substitute the name and value of the environment variable from args
-            env_template = Template(f"epicsEnvSet {variable.name} {variable.value}")
-            env_var_txt += env_template.render(instance.__dict__)
+            env_template = f"epicsEnvSet {variable.name} {variable.value}"
+            env_var_txt += self.render_with_utils(instance, env_template)
         return env_var_txt + "\n"
 
     def render_elements(
@@ -174,7 +180,10 @@ class Render:
         Render elements of a given IOC instance based on calling the correct method
         """
         elements = ""
-        for instance in ioc.entities:
+        for entity in ioc.entities:
+            # TODO can we eliminate the need for intermediate root
+            # see definition of EntityModel in ioc.py
+            instance = getattr(entity, "root")
             if instance.entity_enabled:
                 element = method(instance)
                 if element:

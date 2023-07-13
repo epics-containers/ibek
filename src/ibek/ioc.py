@@ -5,27 +5,19 @@ support module definition YAML file
 from __future__ import annotations
 
 import builtins
-from typing import Annotated, Any, Dict, Literal, Sequence, Tuple, Type, Union
+from typing import Any, Dict, Literal, Sequence, Tuple, Type, Union
 
 from jinja2 import Template
-from pydantic import Field, create_model, field_validator, model_validator
+from pydantic import Field, RootModel, create_model, field_validator, model_validator
 from pydantic.fields import FieldInfo
 
-from .globals import BaseSettings, model_config
+from .globals import BaseSettings
 from .support import Definition, IdArg, ObjectArg, Support
-from .utils import UTILS
 
 # A base class for applying settings to all serializable classes
 
 
 id_to_entity: Dict[str, Entity] = {}
-
-
-class TypeOfType(BaseSettings):
-    type_name: str = Field("str", description="Type of this entity ")
-
-    def __str__(self) -> str:
-        return self.type_name
 
 
 class Entity(BaseSettings):
@@ -79,15 +71,9 @@ def make_entity_model(definition: Definition, support: Support) -> Type[Entity]:
     """
 
     def add_arg(name, typ, description, default):
-        arguments[name] = (
-            typ,
-            FieldInfo(
-                description=description,
-                default=default,
-            ),
-        )
+        args[name] = (typ, FieldInfo(description=description, default=default))
 
-    arguments: Dict[str, Tuple[type, Any]] = {}
+    args: Dict[str, Tuple[type, Any]] = {}
     validators: Dict[str, Any] = {}
 
     # fully qualified name of the Entity class including support module
@@ -98,9 +84,7 @@ def make_entity_model(definition: Definition, support: Support) -> Type[Entity]:
         full_arg_name = f"{full_name}.{arg.name}"
         arg_type: Any
 
-        if arg.name == "type":
-            arg_type = TypeOfType(type_name=arg.name)
-        elif isinstance(arg, ObjectArg):
+        if isinstance(arg, ObjectArg):
 
             @field_validator(arg.name)
             def lookup_instance(cls, id):
@@ -110,7 +94,7 @@ def make_entity_model(definition: Definition, support: Support) -> Type[Entity]:
                     raise KeyError(f"object id {id} not in {list(id_to_entity)}")
 
             validators[full_arg_name] = lookup_instance
-            arg_type = str
+            arg_type = Entity
 
         elif isinstance(arg, IdArg):
 
@@ -118,7 +102,7 @@ def make_entity_model(definition: Definition, support: Support) -> Type[Entity]:
             def save_instance(cls, id):
                 if id in id_to_entity:
                     raise KeyError(f"id {id} already defined in {list(id_to_entity)}")
-                id_to_entity[id] = "test_sub_object"
+                id_to_entity[id] = Entity
                 return id
 
             validators[full_arg_name] = save_instance
@@ -136,13 +120,13 @@ def make_entity_model(definition: Definition, support: Support) -> Type[Entity]:
 
     entity_cls = create_model(
         full_name.replace(".", "_"),
-        **arguments,
+        **args,
         __validators__=validators,
-        __base__=Entity
-        # __config__=model_config, NOTE: either set config or inherit with __base__
+        __base__=Entity,
     )  # type: ignore
 
     # add a link back to the Definition Object that generated this Entity Class
+    # TODO replace this mechanism as it does not work in pydantic
     entity_cls.__definition__ = definition
 
     return entity_cls
@@ -168,15 +152,12 @@ def make_entity_models(support: Support):
 
 
 def make_ioc_model(entity_models: Sequence[Type[Entity]]) -> Type[IOC]:
-    EntityModels = Annotated[
-        Union[tuple(entity_models)],  # type: ignore
-        FieldInfo(discriminator="type"),
-    ]
+    class EntityModel(RootModel):
+        root: Union[tuple(entity_models)] = Field(discriminator="type")  # type: ignore
 
     class NewIOC(IOC):
-        entities: Sequence[EntityModels] = Field(  # type: ignore
-            description="List of entities this IOC instantiates",
-            default=(),
+        entities: Sequence[EntityModel] = Field(  # type: ignore
+            description="List of entities this IOC instantiates"
         )
 
     return NewIOC
@@ -199,3 +180,5 @@ class IOC(BaseSettings):
     generic_ioc_image: str = Field(
         description="The generic IOC container image registry URL"
     )
+    # this will be replaced in derived classes made by make_ioc_model
+    entities: Sequence[Entity]

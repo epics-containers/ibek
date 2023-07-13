@@ -52,13 +52,13 @@ def ioc_deserialize(ioc_instance_yaml: Path, definition_yaml: List[Path]) -> IOC
     """
     ioc_model = ioc_create_model(definition_yaml)
 
-    ioc_instance = YAML(typ="safe").load(ioc_instance_yaml)
+    # extract the ioc instance yaml into a dict
+    ioc_instance_dict = YAML(typ="safe").load(ioc_instance_yaml)
 
-    clear_entity_model_ids()
-    ioc_model.model_validate(ioc_instance)
+    # Create an IOC instance from the instance dict and the model
+    ioc_instance = ioc_model(**ioc_instance_dict)
 
-    # Create an IOC instance from the entities file and the model
-    return ioc_model.model_construct(ioc_instance)
+    return ioc_instance
 
 
 def create_db_script(ioc_instance: IOC) -> str:

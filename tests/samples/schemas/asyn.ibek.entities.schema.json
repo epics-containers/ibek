@@ -1,8 +1,38 @@
 {
   "$defs": {
+    "EntityModel": {
+      "discriminator": {
+        "mapping": {
+          "asyn.AsynIP": "#/$defs/asyn_AsynIP",
+          "asyn.AsynSerial": "#/$defs/asyn_AsynSerial"
+        },
+        "propertyName": "type"
+      },
+      "oneOf": [
+        {
+          "$ref": "#/$defs/asyn_AsynSerial"
+        },
+        {
+          "$ref": "#/$defs/asyn_AsynIP"
+        }
+      ],
+      "title": "EntityModel"
+    },
     "asyn_AsynIP": {
       "additionalProperties": false,
       "properties": {
+        "type": {
+          "const": "asyn.AsynIP",
+          "default": "asyn.AsynIP",
+          "description": "The type of this entity",
+          "title": "Type"
+        },
+        "entity_enabled": {
+          "default": true,
+          "description": "enable or disable this entity instance",
+          "title": "Entity Enabled",
+          "type": "boolean"
+        },
         "port": {
           "default": null,
           "description": "Serial port tty name / IP address optionally followed by protocol",
@@ -50,12 +80,6 @@
           "description": "IP port to connect to if in simulation mode",
           "title": "Simulation",
           "type": "string"
-        },
-        "type": {
-          "const": "asyn.AsynIP",
-          "default": "asyn.AsynIP",
-          "description": "The type of this entity",
-          "title": "Type"
         }
       },
       "title": "asyn_AsynIP",
@@ -64,6 +88,18 @@
     "asyn_AsynSerial": {
       "additionalProperties": false,
       "properties": {
+        "type": {
+          "const": "asyn.AsynSerial",
+          "default": "asyn.AsynSerial",
+          "description": "The type of this entity",
+          "title": "Type"
+        },
+        "entity_enabled": {
+          "default": true,
+          "description": "enable or disable this entity instance",
+          "title": "Entity Enabled",
+          "type": "boolean"
+        },
         "port": {
           "default": null,
           "description": "The port name for this asyn object",
@@ -135,12 +171,6 @@
           "description": "Set hardware flow control on",
           "title": "Crtscts",
           "type": "boolean"
-        },
-        "type": {
-          "const": "asyn.AsynSerial",
-          "default": "asyn.AsynSerial",
-          "description": "The type of this entity",
-          "title": "Type"
         }
       },
       "title": "asyn_AsynSerial",
@@ -165,17 +195,9 @@
       "type": "string"
     },
     "entities": {
-      "default": [],
       "description": "List of entities this IOC instantiates",
       "items": {
-        "anyOf": [
-          {
-            "$ref": "#/$defs/asyn_AsynSerial"
-          },
-          {
-            "$ref": "#/$defs/asyn_AsynIP"
-          }
-        ]
+        "$ref": "#/$defs/EntityModel"
       },
       "title": "Entities",
       "type": "array"
@@ -184,7 +206,8 @@
   "required": [
     "ioc_name",
     "description",
-    "generic_ioc_image"
+    "generic_ioc_image",
+    "entities"
   ],
   "title": "NewIOC",
   "type": "object"

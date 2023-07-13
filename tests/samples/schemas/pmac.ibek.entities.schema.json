@@ -1,8 +1,84 @@
 {
   "$defs": {
+    "Entity": {
+      "additionalProperties": false,
+      "description": "\n    A baseclass for all generated Entity classes. Provides the\n    deserialize entry point.\n    ",
+      "properties": {
+        "type": {
+          "description": "The type of this entity",
+          "title": "Type",
+          "type": "string"
+        },
+        "entity_enabled": {
+          "default": true,
+          "description": "enable or disable this entity instance",
+          "title": "Entity Enabled",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "type"
+      ],
+      "title": "Entity",
+      "type": "object"
+    },
+    "EntityModel": {
+      "discriminator": {
+        "mapping": {
+          "pmac.CS": "#/$defs/pmac_CS",
+          "pmac.DlsCsPmacAsynMotor": "#/$defs/pmac_DlsCsPmacAsynMotor",
+          "pmac.DlsPmacAsynMotor": "#/$defs/pmac_DlsPmacAsynMotor",
+          "pmac.Geobrick": "#/$defs/pmac_Geobrick",
+          "pmac.PmacAsynIPPort": "#/$defs/pmac_PmacAsynIPPort",
+          "pmac.PmacAsynSSHPort": "#/$defs/pmac_PmacAsynSSHPort",
+          "pmac.autohome": "#/$defs/pmac_autohome",
+          "pmac.pmacDisableLimitsCheck": "#/$defs/pmac_pmacDisableLimitsCheck"
+        },
+        "propertyName": "type"
+      },
+      "oneOf": [
+        {
+          "$ref": "#/$defs/pmac_PmacAsynSSHPort"
+        },
+        {
+          "$ref": "#/$defs/pmac_PmacAsynIPPort"
+        },
+        {
+          "$ref": "#/$defs/pmac_Geobrick"
+        },
+        {
+          "$ref": "#/$defs/pmac_DlsPmacAsynMotor"
+        },
+        {
+          "$ref": "#/$defs/pmac_DlsCsPmacAsynMotor"
+        },
+        {
+          "$ref": "#/$defs/pmac_pmacDisableLimitsCheck"
+        },
+        {
+          "$ref": "#/$defs/pmac_autohome"
+        },
+        {
+          "$ref": "#/$defs/pmac_CS"
+        }
+      ],
+      "title": "EntityModel"
+    },
     "pmac_CS": {
       "additionalProperties": false,
       "properties": {
+        "type": {
+          "const": "pmac.CS",
+          "default": "pmac.CS",
+          "description": "The type of this entity",
+          "title": "Type"
+        },
+        "entity_enabled": {
+          "default": true,
+          "description": "enable or disable this entity instance",
+          "title": "Entity Enabled",
+          "type": "boolean"
+        },
         "name": {
           "default": null,
           "description": "Asyn port name for this object",
@@ -10,10 +86,13 @@
           "type": "string"
         },
         "Controller": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/Entity"
+            }
+          ],
           "default": null,
-          "description": "the PMAC Controller",
-          "title": "Controller",
-          "type": "string"
+          "description": "the PMAC Controller"
         },
         "CS": {
           "default": null,
@@ -32,12 +111,6 @@
           "description": "PROG number for CS motion",
           "title": "Program",
           "type": "integer"
-        },
-        "type": {
-          "const": "pmac.CS",
-          "default": "pmac.CS",
-          "description": "The type of this entity",
-          "title": "Type"
         }
       },
       "title": "pmac_CS",
@@ -46,6 +119,18 @@
     "pmac_DlsCsPmacAsynMotor": {
       "additionalProperties": false,
       "properties": {
+        "type": {
+          "const": "pmac.DlsCsPmacAsynMotor",
+          "default": "pmac.DlsCsPmacAsynMotor",
+          "description": "The type of this entity",
+          "title": "Type"
+        },
+        "entity_enabled": {
+          "default": true,
+          "description": "enable or disable this entity instance",
+          "title": "Entity Enabled",
+          "type": "boolean"
+        },
         "name": {
           "default": null,
           "description": "Object name and gui association name",
@@ -53,10 +138,13 @@
           "type": "string"
         },
         "CsController": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/Entity"
+            }
+          ],
           "default": null,
-          "description": "Coordinate system controller to attach to",
-          "title": "Cscontroller",
-          "type": "string"
+          "description": "Coordinate system controller to attach to"
         },
         "axis": {
           "default": null,
@@ -345,12 +433,6 @@
           "description": "Set to a blank to allow this axis to have its homed",
           "title": "Allow Homed Set",
           "type": "string"
-        },
-        "type": {
-          "const": "pmac.DlsCsPmacAsynMotor",
-          "default": "pmac.DlsCsPmacAsynMotor",
-          "description": "The type of this entity",
-          "title": "Type"
         }
       },
       "title": "pmac_DlsCsPmacAsynMotor",
@@ -359,6 +441,18 @@
     "pmac_DlsPmacAsynMotor": {
       "additionalProperties": false,
       "properties": {
+        "type": {
+          "const": "pmac.DlsPmacAsynMotor",
+          "default": "pmac.DlsPmacAsynMotor",
+          "description": "The type of this entity",
+          "title": "Type"
+        },
+        "entity_enabled": {
+          "default": true,
+          "description": "enable or disable this entity instance",
+          "title": "Entity Enabled",
+          "type": "boolean"
+        },
         "name": {
           "default": null,
           "description": "Object name and gui association name",
@@ -366,10 +460,13 @@
           "type": "string"
         },
         "Controller": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/Entity"
+            }
+          ],
           "default": null,
-          "description": "PMAC Controller to attach to",
-          "title": "Controller",
-          "type": "string"
+          "description": "PMAC Controller to attach to"
         },
         "axis": {
           "default": null,
@@ -664,12 +761,6 @@
           "description": "not sure what this is",
           "title": "Rlink",
           "type": "string"
-        },
-        "type": {
-          "const": "pmac.DlsPmacAsynMotor",
-          "default": "pmac.DlsPmacAsynMotor",
-          "description": "The type of this entity",
-          "title": "Type"
         }
       },
       "title": "pmac_DlsPmacAsynMotor",
@@ -678,6 +769,18 @@
     "pmac_Geobrick": {
       "additionalProperties": false,
       "properties": {
+        "type": {
+          "const": "pmac.Geobrick",
+          "default": "pmac.Geobrick",
+          "description": "The type of this entity",
+          "title": "Type"
+        },
+        "entity_enabled": {
+          "default": true,
+          "description": "enable or disable this entity instance",
+          "title": "Entity Enabled",
+          "type": "boolean"
+        },
         "name": {
           "default": null,
           "description": "Name to use for the geobrick's asyn port",
@@ -685,10 +788,13 @@
           "type": "string"
         },
         "PORT": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/Entity"
+            }
+          ],
           "default": null,
-          "description": "Asyn port name for PmacAsynIPPort to connect to",
-          "title": "Port",
-          "type": "string"
+          "description": "Asyn port name for PmacAsynIPPort to connect to"
         },
         "P": {
           "default": null,
@@ -755,12 +861,6 @@
           "description": "Name for Coordinate System Group 3",
           "title": "Csg4",
           "type": "string"
-        },
-        "type": {
-          "const": "pmac.Geobrick",
-          "default": "pmac.Geobrick",
-          "description": "The type of this entity",
-          "title": "Type"
         }
       },
       "title": "pmac_Geobrick",
@@ -769,6 +869,18 @@
     "pmac_PmacAsynIPPort": {
       "additionalProperties": false,
       "properties": {
+        "type": {
+          "const": "pmac.PmacAsynIPPort",
+          "default": "pmac.PmacAsynIPPort",
+          "description": "The type of this entity",
+          "title": "Type"
+        },
+        "entity_enabled": {
+          "default": true,
+          "description": "enable or disable this entity instance",
+          "title": "Entity Enabled",
+          "type": "boolean"
+        },
         "name": {
           "default": null,
           "description": "Asyn port name",
@@ -786,12 +898,6 @@
           "description": "TCP port for connection",
           "title": "Port",
           "type": "integer"
-        },
-        "type": {
-          "const": "pmac.PmacAsynIPPort",
-          "default": "pmac.PmacAsynIPPort",
-          "description": "The type of this entity",
-          "title": "Type"
         }
       },
       "title": "pmac_PmacAsynIPPort",
@@ -800,6 +906,18 @@
     "pmac_PmacAsynSSHPort": {
       "additionalProperties": false,
       "properties": {
+        "type": {
+          "const": "pmac.PmacAsynSSHPort",
+          "default": "pmac.PmacAsynSSHPort",
+          "description": "The type of this entity",
+          "title": "Type"
+        },
+        "entity_enabled": {
+          "default": true,
+          "description": "enable or disable this entity instance",
+          "title": "Entity Enabled",
+          "type": "boolean"
+        },
         "name": {
           "default": null,
           "description": "Asyn port name",
@@ -841,12 +959,6 @@
           "description": "No EOS used if set to 1",
           "title": "Noeos",
           "type": "integer"
-        },
-        "type": {
-          "const": "pmac.PmacAsynSSHPort",
-          "default": "pmac.PmacAsynSSHPort",
-          "description": "The type of this entity",
-          "title": "Type"
         }
       },
       "title": "pmac_PmacAsynSSHPort",
@@ -855,11 +967,26 @@
     "pmac_autohome": {
       "additionalProperties": false,
       "properties": {
+        "type": {
+          "const": "pmac.autohome",
+          "default": "pmac.autohome",
+          "description": "The type of this entity",
+          "title": "Type"
+        },
+        "entity_enabled": {
+          "default": true,
+          "description": "enable or disable this entity instance",
+          "title": "Entity Enabled",
+          "type": "boolean"
+        },
         "Controller": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/Entity"
+            }
+          ],
           "default": null,
-          "description": "the PMAC Controller",
-          "title": "Controller",
-          "type": "string"
+          "description": "the PMAC Controller"
         },
         "PLC": {
           "default": null,
@@ -926,12 +1053,6 @@
           "description": "name of the fourth group of auto home axes",
           "title": "Grp9",
           "type": "string"
-        },
-        "type": {
-          "const": "pmac.autohome",
-          "default": "pmac.autohome",
-          "description": "The type of this entity",
-          "title": "Type"
         }
       },
       "title": "pmac_autohome",
@@ -940,23 +1061,32 @@
     "pmac_pmacDisableLimitsCheck": {
       "additionalProperties": false,
       "properties": {
+        "type": {
+          "const": "pmac.pmacDisableLimitsCheck",
+          "default": "pmac.pmacDisableLimitsCheck",
+          "description": "The type of this entity",
+          "title": "Type"
+        },
+        "entity_enabled": {
+          "default": true,
+          "description": "enable or disable this entity instance",
+          "title": "Entity Enabled",
+          "type": "boolean"
+        },
         "Controller": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/Entity"
+            }
+          ],
           "default": null,
-          "description": "Geobrick on which to disable limits",
-          "title": "Controller",
-          "type": "string"
+          "description": "Geobrick on which to disable limits"
         },
         "Axis": {
           "default": null,
           "description": "Axis to have limits disabled",
           "title": "Axis",
           "type": "integer"
-        },
-        "type": {
-          "const": "pmac.pmacDisableLimitsCheck",
-          "default": "pmac.pmacDisableLimitsCheck",
-          "description": "The type of this entity",
-          "title": "Type"
         }
       },
       "title": "pmac_pmacDisableLimitsCheck",
@@ -981,35 +1111,9 @@
       "type": "string"
     },
     "entities": {
-      "default": [],
       "description": "List of entities this IOC instantiates",
       "items": {
-        "anyOf": [
-          {
-            "$ref": "#/$defs/pmac_PmacAsynSSHPort"
-          },
-          {
-            "$ref": "#/$defs/pmac_PmacAsynIPPort"
-          },
-          {
-            "$ref": "#/$defs/pmac_Geobrick"
-          },
-          {
-            "$ref": "#/$defs/pmac_DlsPmacAsynMotor"
-          },
-          {
-            "$ref": "#/$defs/pmac_DlsCsPmacAsynMotor"
-          },
-          {
-            "$ref": "#/$defs/pmac_pmacDisableLimitsCheck"
-          },
-          {
-            "$ref": "#/$defs/pmac_autohome"
-          },
-          {
-            "$ref": "#/$defs/pmac_CS"
-          }
-        ]
+        "$ref": "#/$defs/EntityModel"
       },
       "title": "Entities",
       "type": "array"
@@ -1018,7 +1122,8 @@
   "required": [
     "ioc_name",
     "description",
-    "generic_ioc_image"
+    "generic_ioc_image",
+    "entities"
   ],
   "title": "NewIOC",
   "type": "object"

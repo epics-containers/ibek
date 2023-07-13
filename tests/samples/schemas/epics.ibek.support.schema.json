@@ -1,8 +1,58 @@
 {
   "$defs": {
+    "EntityModel": {
+      "discriminator": {
+        "mapping": {
+          "epics.Dbpf": "#/$defs/epics_Dbpf",
+          "epics.EpicsCaMaxArrayBytes": "#/$defs/epics_EpicsCaMaxArrayBytes",
+          "epics.EpicsEnvSet": "#/$defs/epics_EpicsEnvSet",
+          "epics.EpicsTsMinWest": "#/$defs/epics_EpicsTsMinWest",
+          "epics.InterruptVectorVME": "#/$defs/epics_InterruptVectorVME",
+          "epics.PostStartupCommand": "#/$defs/epics_PostStartupCommand",
+          "epics.StartupCommand": "#/$defs/epics_StartupCommand"
+        },
+        "propertyName": "type"
+      },
+      "oneOf": [
+        {
+          "$ref": "#/$defs/epics_EpicsCaMaxArrayBytes"
+        },
+        {
+          "$ref": "#/$defs/epics_EpicsTsMinWest"
+        },
+        {
+          "$ref": "#/$defs/epics_Dbpf"
+        },
+        {
+          "$ref": "#/$defs/epics_EpicsEnvSet"
+        },
+        {
+          "$ref": "#/$defs/epics_StartupCommand"
+        },
+        {
+          "$ref": "#/$defs/epics_PostStartupCommand"
+        },
+        {
+          "$ref": "#/$defs/epics_InterruptVectorVME"
+        }
+      ],
+      "title": "EntityModel"
+    },
     "epics_Dbpf": {
       "additionalProperties": false,
       "properties": {
+        "type": {
+          "const": "epics.Dbpf",
+          "default": "epics.Dbpf",
+          "description": "The type of this entity",
+          "title": "Type"
+        },
+        "entity_enabled": {
+          "default": true,
+          "description": "enable or disable this entity instance",
+          "title": "Entity Enabled",
+          "type": "boolean"
+        },
         "pv": {
           "default": null,
           "description": "Name of PV",
@@ -14,12 +64,6 @@
           "description": "Value to set",
           "title": "Value",
           "type": "string"
-        },
-        "type": {
-          "const": "epics.Dbpf",
-          "default": "epics.Dbpf",
-          "description": "The type of this entity",
-          "title": "Type"
         }
       },
       "title": "epics_Dbpf",
@@ -28,17 +72,23 @@
     "epics_EpicsCaMaxArrayBytes": {
       "additionalProperties": false,
       "properties": {
-        "max_bytes": {
-          "default": 6000000,
-          "description": "Max size in bytes for sending arrays over channel access",
-          "title": "Max Bytes",
-          "type": "integer"
-        },
         "type": {
           "const": "epics.EpicsCaMaxArrayBytes",
           "default": "epics.EpicsCaMaxArrayBytes",
           "description": "The type of this entity",
           "title": "Type"
+        },
+        "entity_enabled": {
+          "default": true,
+          "description": "enable or disable this entity instance",
+          "title": "Entity Enabled",
+          "type": "boolean"
+        },
+        "max_bytes": {
+          "default": 6000000,
+          "description": "Max size in bytes for sending arrays over channel access",
+          "title": "Max Bytes",
+          "type": "integer"
         }
       },
       "title": "epics_EpicsCaMaxArrayBytes",
@@ -47,6 +97,18 @@
     "epics_EpicsEnvSet": {
       "additionalProperties": false,
       "properties": {
+        "type": {
+          "const": "epics.EpicsEnvSet",
+          "default": "epics.EpicsEnvSet",
+          "description": "The type of this entity",
+          "title": "Type"
+        },
+        "entity_enabled": {
+          "default": true,
+          "description": "enable or disable this entity instance",
+          "title": "Entity Enabled",
+          "type": "boolean"
+        },
         "name": {
           "default": null,
           "description": "Name of environment variable",
@@ -58,12 +120,6 @@
           "description": "Value of environment variable",
           "title": "Value",
           "type": "string"
-        },
-        "type": {
-          "const": "epics.EpicsEnvSet",
-          "default": "epics.EpicsEnvSet",
-          "description": "The type of this entity",
-          "title": "Type"
         }
       },
       "title": "epics_EpicsEnvSet",
@@ -72,17 +128,23 @@
     "epics_EpicsTsMinWest": {
       "additionalProperties": false,
       "properties": {
-        "minutes_west": {
-          "default": 0,
-          "description": "relative time zone minutes",
-          "title": "Minutes West",
-          "type": "integer"
-        },
         "type": {
           "const": "epics.EpicsTsMinWest",
           "default": "epics.EpicsTsMinWest",
           "description": "The type of this entity",
           "title": "Type"
+        },
+        "entity_enabled": {
+          "default": true,
+          "description": "enable or disable this entity instance",
+          "title": "Entity Enabled",
+          "type": "boolean"
+        },
+        "minutes_west": {
+          "default": 0,
+          "description": "relative time zone minutes",
+          "title": "Minutes West",
+          "type": "integer"
         }
       },
       "title": "epics_EpicsTsMinWest",
@@ -91,6 +153,18 @@
     "epics_InterruptVectorVME": {
       "additionalProperties": false,
       "properties": {
+        "type": {
+          "const": "epics.InterruptVectorVME",
+          "default": "epics.InterruptVectorVME",
+          "description": "The type of this entity",
+          "title": "Type"
+        },
+        "entity_enabled": {
+          "default": true,
+          "description": "enable or disable this entity instance",
+          "title": "Entity Enabled",
+          "type": "boolean"
+        },
         "name": {
           "default": null,
           "description": "A name for an interrupt vector variable",
@@ -102,12 +176,6 @@
           "description": "The number of interrupt vectors to reserve",
           "title": "Count",
           "type": "integer"
-        },
-        "type": {
-          "const": "epics.InterruptVectorVME",
-          "default": "epics.InterruptVectorVME",
-          "description": "The type of this entity",
-          "title": "Type"
         }
       },
       "title": "epics_InterruptVectorVME",
@@ -116,17 +184,23 @@
     "epics_PostStartupCommand": {
       "additionalProperties": false,
       "properties": {
-        "command": {
-          "default": "",
-          "description": "command string",
-          "title": "Command",
-          "type": "string"
-        },
         "type": {
           "const": "epics.PostStartupCommand",
           "default": "epics.PostStartupCommand",
           "description": "The type of this entity",
           "title": "Type"
+        },
+        "entity_enabled": {
+          "default": true,
+          "description": "enable or disable this entity instance",
+          "title": "Entity Enabled",
+          "type": "boolean"
+        },
+        "command": {
+          "default": "",
+          "description": "command string",
+          "title": "Command",
+          "type": "string"
         }
       },
       "title": "epics_PostStartupCommand",
@@ -135,17 +209,23 @@
     "epics_StartupCommand": {
       "additionalProperties": false,
       "properties": {
-        "command": {
-          "default": "",
-          "description": "command string",
-          "title": "Command",
-          "type": "string"
-        },
         "type": {
           "const": "epics.StartupCommand",
           "default": "epics.StartupCommand",
           "description": "The type of this entity",
           "title": "Type"
+        },
+        "entity_enabled": {
+          "default": true,
+          "description": "enable or disable this entity instance",
+          "title": "Entity Enabled",
+          "type": "boolean"
+        },
+        "command": {
+          "default": "",
+          "description": "command string",
+          "title": "Command",
+          "type": "string"
         }
       },
       "title": "epics_StartupCommand",
@@ -170,32 +250,9 @@
       "type": "string"
     },
     "entities": {
-      "default": [],
       "description": "List of entities this IOC instantiates",
       "items": {
-        "anyOf": [
-          {
-            "$ref": "#/$defs/epics_EpicsCaMaxArrayBytes"
-          },
-          {
-            "$ref": "#/$defs/epics_EpicsTsMinWest"
-          },
-          {
-            "$ref": "#/$defs/epics_Dbpf"
-          },
-          {
-            "$ref": "#/$defs/epics_EpicsEnvSet"
-          },
-          {
-            "$ref": "#/$defs/epics_StartupCommand"
-          },
-          {
-            "$ref": "#/$defs/epics_PostStartupCommand"
-          },
-          {
-            "$ref": "#/$defs/epics_InterruptVectorVME"
-          }
-        ]
+        "$ref": "#/$defs/EntityModel"
       },
       "title": "Entities",
       "type": "array"
@@ -204,7 +261,8 @@
   "required": [
     "ioc_name",
     "description",
-    "generic_ioc_image"
+    "generic_ioc_image",
+    "entities"
   ],
   "title": "NewIOC",
   "type": "object"

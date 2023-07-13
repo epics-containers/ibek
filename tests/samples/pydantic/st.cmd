@@ -5,6 +5,12 @@ dbLoadDatabase dbd/ioc.dbd
 ioc_registerRecordDeviceDriver pdbbase
 
 
+# exampleTestFunction AsynPortIP Name Value
+# A function that uses the AsynPortIP and Name
+# to do something useful
+exampleTestFunction  Yet Another Consumer of same port 
+exampleTestFunction  Just One More Consumer of same port 
+
 dbLoadRecords /tmp/ioc.db
 iocInit
 

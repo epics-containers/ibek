@@ -1,8 +1,36 @@
 {
   "$defs": {
+    "EntityModel": {
+      "discriminator": {
+        "mapping": {
+          "pydantic_test.AnAsynPort": "#/$defs/pydantic_test_AnAsynPort",
+          "pydantic_test.Consumer": "#/$defs/pydantic_test_Consumer",
+          "pydantic_test.ConsumerTwo": "#/$defs/pydantic_test_ConsumerTwo"
+        },
+        "propertyName": "type"
+      },
+      "oneOf": [
+        {
+          "$ref": "#/$defs/pydantic_test_AnAsynPort"
+        },
+        {
+          "$ref": "#/$defs/pydantic_test_Consumer"
+        },
+        {
+          "$ref": "#/$defs/pydantic_test_ConsumerTwo"
+        }
+      ],
+      "title": "EntityModel"
+    },
     "pydantic_test_AnAsynPort": {
       "additionalProperties": false,
       "properties": {
+        "type": {
+          "const": "pydantic_test.AnAsynPort",
+          "default": "pydantic_test.AnAsynPort",
+          "description": "The type of this entity",
+          "title": "Type"
+        },
         "entity_enabled": {
           "default": true,
           "description": "enable or disable this entity instance",
@@ -20,12 +48,6 @@
           "description": "IP address of port",
           "title": "Ip",
           "type": "string"
-        },
-        "type": {
-          "const": "pydantic_test.AnAsynPort",
-          "default": "pydantic_test.AnAsynPort",
-          "description": "The type of this entity",
-          "title": "Type"
         }
       },
       "title": "pydantic_test_AnAsynPort",
@@ -34,6 +56,12 @@
     "pydantic_test_Consumer": {
       "additionalProperties": false,
       "properties": {
+        "type": {
+          "const": "pydantic_test.Consumer",
+          "default": "pydantic_test.Consumer",
+          "description": "The type of this entity",
+          "title": "Type"
+        },
         "entity_enabled": {
           "default": true,
           "description": "enable or disable this entity instance",
@@ -51,12 +79,6 @@
           "description": "a reference to an AnAsynPort",
           "title": "Port",
           "type": "string"
-        },
-        "type": {
-          "const": "pydantic_test.Consumer",
-          "default": "pydantic_test.Consumer",
-          "description": "The type of this entity",
-          "title": "Type"
         }
       },
       "title": "pydantic_test_Consumer",
@@ -65,6 +87,12 @@
     "pydantic_test_ConsumerTwo": {
       "additionalProperties": false,
       "properties": {
+        "type": {
+          "const": "pydantic_test.ConsumerTwo",
+          "default": "pydantic_test.ConsumerTwo",
+          "description": "The type of this entity",
+          "title": "Type"
+        },
         "entity_enabled": {
           "default": true,
           "description": "enable or disable this entity instance",
@@ -82,12 +110,6 @@
           "description": "a reference to an AnAsynPort",
           "title": "Port",
           "type": "string"
-        },
-        "type": {
-          "const": "pydantic_test.ConsumerTwo",
-          "default": "pydantic_test.ConsumerTwo",
-          "description": "The type of this entity",
-          "title": "Type"
         }
       },
       "title": "pydantic_test_ConsumerTwo",
@@ -112,20 +134,9 @@
       "type": "string"
     },
     "entities": {
-      "default": [],
       "description": "List of entities this IOC instantiates",
       "items": {
-        "anyOf": [
-          {
-            "$ref": "#/$defs/pydantic_test_AnAsynPort"
-          },
-          {
-            "$ref": "#/$defs/pydantic_test_Consumer"
-          },
-          {
-            "$ref": "#/$defs/pydantic_test_ConsumerTwo"
-          }
-        ]
+        "$ref": "#/$defs/EntityModel"
       },
       "title": "Entities",
       "type": "array"
@@ -134,7 +145,8 @@
   "required": [
     "ioc_name",
     "description",
-    "generic_ioc_image"
+    "generic_ioc_image",
+    "entities"
   ],
   "title": "NewIOC",
   "type": "object"
