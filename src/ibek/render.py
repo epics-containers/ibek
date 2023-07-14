@@ -23,14 +23,14 @@ class Render:
         self, instance: Entity, text: str, when=When.every, suffix=""
     ) -> str:
         """
-        Add in the next line of text, honouring the ``once`` flag which will
+        Add in the next line of text, honouring the once flag which will
         only add the line once per IOC.
 
         Jinja rendering of values/args has already been done in Entity.__post_init__
         but we pass all strings though jinja again to render any other jinja
         in the IOC (e.g. database and function entries)
 
-        ``once`` uses the name of the definition + suffix to track which lines
+        once uses the name of the definition + suffix to track which lines
         have been rendered already. The suffix can be used where a given
         Entity has more than one element to render once (e.g. functions)
         """

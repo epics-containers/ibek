@@ -114,8 +114,8 @@ def make_entity_model(definition: Definition, support: Support) -> Type[Entity]:
 
 def make_entity_models(support: Support):
     """
-    Create `Entity` subclasses for all `Definition` instances in the given
-    `Support` instance. Returns a list of the Entity subclasses Models.
+    Create Entity subclasses for all Definition instances in the given
+    Support instance. Returns a list of the Entity subclasses Models.
     """
 
     entity_models = []
