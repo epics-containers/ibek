@@ -2,6 +2,7 @@
 Tests for the rendering of scripts and database entries from generated
 Entity classes
 """
+from typing import Literal
 from unittest.mock import Mock
 
 from ibek.ioc import IOC
@@ -9,7 +10,17 @@ from ibek.render import Render
 
 
 def test_pmac_asyn_ip_port_script(pmac_classes):
-    generated_class = pmac_classes.PmacAsynIPPort
+    for entity_class in pmac_classes:
+        # TODO is this the easiest way to find the entity class?
+        if (
+            entity_class.model_fields["type"].annotation
+            == Literal["pmac.PmacAsynIPPort"]
+        ):
+            generated_class = entity_class
+            break
+    else:
+        raise ValueError("PmacAsynIPPort not found in pmac_classes")
+
     pmac_asyn_ip = generated_class(name="my_pmac_instance", IP="111.111.111.111")
 
     render = Render()

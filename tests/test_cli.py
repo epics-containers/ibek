@@ -9,7 +9,7 @@ from typer.testing import CliRunner
 
 from ibek import __version__
 from ibek.__main__ import cli
-from ibek.ioc import clear_entity_model_ids, make_entity_models
+from ibek.ioc import clear_entity_model_ids, make_entity_models, make_ioc_model
 from ibek.support import Support
 
 runner = CliRunner()
@@ -205,20 +205,26 @@ def test_build_startup_env_vars_and_post_ioc_init(
 
 def test_loading_module_twice(tmp_path: Path, samples: Path, ibek_defs: Path):
     """
-    regression test to demonstrate that clear_entity_classes works and
-    allows us to call make_entity_classes more than once
+    Now that we use pydantic it is OK to create the same entity twice
+
+    Verify this.
     """
 
-    clear_entity_model_ids()
-    # When we deserialize the same yaml twice as we do in the full test suite
-    # we may get clashes in the namespace of generated Entity classes.
-    # This tests that we get a sensible error when we do
-    definition_file = ibek_defs / "pmac" / "pmac.ibek.support.yaml"
-    support = Support.deserialize(YAML(typ="safe").load(definition_file))
-    make_entity_models(support)
-    with pytest.raises(AssertionError) as ctx:
-        make_entity_models(support)
-    assert str(ctx.value) == "Entity classes already created for pmac"
+    definition_file = samples / "pydantic" / "test.ibek.support.yaml"
+    instance_file = samples / "pydantic" / "test.ibek.ioc.yaml"
+
+    support = Support(**YAML(typ="safe").load(definition_file))
+    entities1 = make_entity_models(support)
+    entities2 = make_entity_models(support)
+
+    generic_ioc1 = make_ioc_model(entities1)
+    generic_ioc2 = make_ioc_model(entities2)
+
+    instance = YAML(typ="safe").load(instance_file)
+    ioc1 = generic_ioc1(**instance)
+    ioc2 = generic_ioc2(**instance)
+
+    assert ioc1.model_dump() == ioc2.model_dump()
 
 
 def test_bad_counter(tmp_path: Path, samples: Path):

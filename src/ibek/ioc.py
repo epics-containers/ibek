@@ -22,7 +22,6 @@ class Entity(BaseSettings):
     deserialize entry point.
     """
 
-    # All entities have these two fields, others are added by make_entity_model
     type: str = Field(description="The type of this entity")
     entity_enabled: bool = Field(
         description="enable or disable this entity instance", default=True
@@ -33,7 +32,7 @@ class Entity(BaseSettings):
     def add_ibek_attributes(cls, entity: Entity):
         """Whole Entity model validation"""
 
-        # find any id fields in this Entity
+        # find the id field in this Entity if it has one
         ids = set(a.name for a in entity.__definition__.args if isinstance(a, IdArg))
 
         entity_dict = entity.model_dump()
@@ -71,7 +70,7 @@ def make_entity_model(definition: Definition, support: Support) -> Type[Entity]:
 
         if isinstance(arg, ObjectArg):
 
-            @field_validator(arg.name)
+            @field_validator(arg.name, mode="after")
             def lookup_instance(cls, id):
                 try:
                     return id_to_entity[id]

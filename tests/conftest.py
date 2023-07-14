@@ -14,7 +14,7 @@ def get_support(samples: Path, yaml_file: str) -> Support:
     # load from file
     d = YAML(typ="safe").load(samples / f"{yaml_file}")
     # create a support object from that dict
-    support = Support.deserialize(d)
+    support = Support(**d)
     return support
 
 

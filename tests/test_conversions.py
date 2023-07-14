@@ -1,20 +1,36 @@
-from ibek.ioc import IOC, clear_entity_model_ids, id_to_entity, make_entity_models
+from ibek.ioc import (
+    clear_entity_model_ids,
+    id_to_entity,
+    make_entity_models,
+    make_ioc_model,
+)
 from ibek.support import Definition, IdArg, ObjectArg, Support
 
 
 def test_conversion_classes():
     clear_entity_model_ids()
+
     support = Support(
-        "mymodule",
-        [
-            Definition("port", "A port", [IdArg("name", "the name", "id")]),
-            Definition("device", "a device", [ObjectArg("port", "the port", "object")]),
+        module="mymodule",
+        defs=[
+            Definition(
+                name="port",
+                description="a port",
+                args=[IdArg(name="name", description="an id")],
+            ),
+            Definition(
+                name="device",
+                description="a device",
+                args=[ObjectArg(name="port", description="the port")],
+            ),
         ],
     )
-    namespace = make_entity_models(support)
-    assert {"device", "port"}.issubset(dir(namespace))
-    assert namespace.port.__definition__ == support.defs[0]
-    assert namespace.device.__definition__ == support.defs[1]
+
+    entities = make_entity_models(support)
+    ioc_model = make_ioc_model(entities)
+    assert entities[0].__definition__ == support.defs[0]
+    assert entities[1].__definition__ == support.defs[1]
+
     d = dict(
         ioc_name="",
         description="",
@@ -24,9 +40,10 @@ def test_conversion_classes():
         ],
         generic_ioc_image="",
     )
-    ioc = IOC.deserialize(d)
+    ioc = ioc_model(**d)
     port, device = ioc.entities
-    assert port.type == "mymodule.port"
-    assert id_to_entity == {"PORT": port}
-    assert device.type == "mymodule.device"
-    assert device.port is port
+    # TODO try to get rid of the need for '.root'
+    assert port.root.type == "mymodule.port"
+    assert device.root.type == "mymodule.device"
+    assert device.root.port is port.root
+    assert id_to_entity == {"PORT": port.root}

@@ -21,7 +21,7 @@ class BaseSettings(BaseModel):
 
 def render_with_utils(context: Dict, template_text: str) -> str:
     """
-    Render a Jinja template with the global __utils__ object available
+    Render a Jinja template with the global __utils__ object in the context
     """
     jinja_template = Template(template_text)
     return jinja_template.render(context, __utils__=UTILS)
