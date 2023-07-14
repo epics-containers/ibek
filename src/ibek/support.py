@@ -31,15 +31,6 @@ class Arg(BaseSettings):
     )
 
 
-# FloatArg must be defined before StrArg, otherwise we get:
-#
-#    TypeError: Invalid JSON type <class 'ruamel.yaml.scalarfloat.ScalarFloat'>
-#
-# During Support.deserialize, when default float values in pmac.ibek.support.yaml do not
-# have a trailing 'f'. It is due to the order of declaration of subclasses of
-# Arg. When StrArg is before FloatArg, apischema attempts to deserialize as a
-# string first. The coercion from str to number requires a trailing f if there
-# is a decimal. TODO is this still an issue with Pydantic?
 class FloatArg(Arg):
     """An argument with a float value"""
 

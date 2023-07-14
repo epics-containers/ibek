@@ -24,10 +24,6 @@ def run_cli(*args):
 def test_ioc_schema(tmp_path: Path, samples: Path):
     """generate the global ibek schema"""
 
-    # TODO: temporarily using a fixed path to try schema in vscode
-    tmp_path = Path("/tmp") / "pydantic_test"
-    tmp_path.mkdir(exist_ok=True)
-
     ibek_schema_path = tmp_path / "ibek.schema.json"
     run_cli("ibek-schema", ibek_schema_path)
     expected = json.loads((samples / "schemas" / "ibek.defs.schema.json").read_text())
@@ -51,10 +47,6 @@ def test_ioc_schema(tmp_path: Path, samples: Path):
 
 def test_ioc_build(tmp_path: Path, samples: Path):
     """generate the global ibek schema"""
-
-    # TODO: temporarily using a fixed path to try schema in vscode
-    tmp_path = Path("/tmp") / "pydantic_test"
-    tmp_path.mkdir(exist_ok=True)
 
     pydantic_sample_path = samples / "pydantic"
     support_yaml_path = pydantic_sample_path / "test.ibek.support.yaml"
