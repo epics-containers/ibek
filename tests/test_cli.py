@@ -205,10 +205,11 @@ def test_build_startup_env_vars_and_post_ioc_init(
 
 def test_loading_module_twice(tmp_path: Path, samples: Path, ibek_defs: Path):
     """
-    Now that we use pydantic it is OK to create the same entity twice
-
-    Verify this.
+    Verify we get a sensible error if we try to load a module twice
+    without clearing the entity model ids
     """
+
+    clear_entity_model_ids()
 
     definition_file = samples / "pydantic" / "test.ibek.support.yaml"
     instance_file = samples / "pydantic" / "test.ibek.ioc.yaml"
@@ -221,10 +222,11 @@ def test_loading_module_twice(tmp_path: Path, samples: Path, ibek_defs: Path):
     generic_ioc2 = make_ioc_model(entities2)
 
     instance = YAML(typ="safe").load(instance_file)
-    ioc1 = generic_ioc1(**instance)
-    ioc2 = generic_ioc2(**instance)
+    generic_ioc1(**instance)
+    with pytest.raises(ValueError) as ctx:
+        generic_ioc2(**instance)
 
-    assert ioc1.model_dump() == ioc2.model_dump()
+    assert "Duplicate id" in str(ctx.value)
 
 
 def test_bad_counter(tmp_path: Path, samples: Path):

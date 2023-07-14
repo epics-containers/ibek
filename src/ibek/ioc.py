@@ -18,8 +18,7 @@ id_to_entity: Dict[str, Entity] = {}
 
 class Entity(BaseSettings):
     """
-    A baseclass for all generated Entity classes. Provides the
-    deserialize entry point.
+    A baseclass for all generated Entity classes.
     """
 
     type: str = Field(description="The type of this entity")
@@ -39,6 +38,8 @@ class Entity(BaseSettings):
         for arg, value in entity_dict.items():
             if arg in ids:
                 # add this entity to the global id index
+                if value in id_to_entity:
+                    raise ValueError(f"Duplicate id {value} in {list(id_to_entity)}")
                 id_to_entity[value] = entity
             elif isinstance(value, str):
                 # Jinja expansion of any of the Entity's string args/values
@@ -75,7 +76,7 @@ def make_entity_model(definition: Definition, support: Support) -> Type[Entity]:
                 try:
                     return id_to_entity[id]
                 except KeyError:
-                    raise KeyError(f"object id {id} not in {list(id_to_entity)}")
+                    raise KeyError(f"object {id} not found in {list(id_to_entity)}")
 
             validators[full_arg_name] = lookup_instance
             arg_type = object
@@ -148,7 +149,6 @@ def make_ioc_model(entity_models: Sequence[Type[Entity]]) -> Type[IOC]:
 
 def clear_entity_model_ids():
     """Resets the global id_to_entity dict."""
-    global id_to_entity
 
     id_to_entity.clear()
 
