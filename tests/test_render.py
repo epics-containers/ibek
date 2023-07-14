@@ -9,17 +9,18 @@ from ibek.ioc import IOC
 from ibek.render import Render
 
 
-def test_pmac_asyn_ip_port_script(pmac_classes):
-    for entity_class in pmac_classes:
-        # TODO is this the easiest way to find the entity class?
-        if (
-            entity_class.model_fields["type"].annotation
-            == Literal["pmac.PmacAsynIPPort"]
-        ):
-            generated_class = entity_class
-            break
+def find_entity_class(entity_classes, entity_type):
+    # TODO is this the easiest way to find the entity class?
+    for entity_class in entity_classes:
+        literal = Literal[entity_type]  # type: ignore
+        if entity_class.model_fields["type"].annotation == literal:
+            return entity_class
     else:
-        raise ValueError("PmacAsynIPPort not found in pmac_classes")
+        raise ValueError(f"{entity_type} not found in entity_classes")
+
+
+def test_pmac_asyn_ip_port_script(pmac_classes):
+    generated_class = find_entity_class(pmac_classes, "pmac.PmacAsynIPPort")
 
     pmac_asyn_ip = generated_class(name="my_pmac_instance", IP="111.111.111.111")
 
@@ -34,7 +35,7 @@ def test_pmac_asyn_ip_port_script(pmac_classes):
 
 
 def test_geobrick_script(pmac_classes):
-    generated_class = pmac_classes.Geobrick
+    generated_class = find_entity_class(pmac_classes, "pmac.Geobrick")
     ip_port = Mock()
     ip_port.name = "my_asyn_port"
     pmac_geobrick_instance = generated_class(
@@ -61,7 +62,8 @@ def test_geobrick_script(pmac_classes):
 
 
 def test_geobrick_database(pmac_classes):
-    generated_class = pmac_classes.Geobrick
+    generated_class = find_entity_class(pmac_classes, "pmac.Geobrick")
+
     pmac_geobrick_instance = generated_class(
         name="test_geobrick",
         PORT="my_asyn_port",
@@ -85,7 +87,8 @@ def test_geobrick_database(pmac_classes):
 
 def test_epics_environment_variables(epics_classes):
     # Using a specific variable entity
-    generated_class = epics_classes.EpicsCaMaxArrayBytes
+    generated_class = find_entity_class(epics_classes, "epics.EpicsCaMaxArrayBytes")
+
     max_array_bytes_instance = generated_class(max_bytes=10000000)
 
     render = Render()
@@ -109,7 +112,7 @@ def test_entity_disabled_does_not_render_elements(pmac_classes, epics_classes):
     # and post-iocInit
 
     # Entity which has a script and database
-    pmac_geobrick_class = pmac_classes.Geobrick
+    pmac_geobrick_class = find_entity_class(pmac_classes, "pmac.Geobrick")
     # Entity which has env_vars
     ca_max_array_bytes_class = epics_classes.EpicsCaMaxArrayBytes
     # Entity which has post_ioc_init
