@@ -8,7 +8,7 @@ generic_ioc_image: ghcr.io/epics-containers/ioc-template:23.3.2
 
 entities:
   - type: pydantic_test.AnAsynPort
-    name: AsynPort
+    name: AsynPort1
     IP: 10.0.0.1
 
   - type: pydantic_test.AnAsynPort

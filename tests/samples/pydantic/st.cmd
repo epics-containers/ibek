@@ -6,13 +6,12 @@ ioc_registerRecordDeviceDriver pdbbase
 
 
 # testValues TestValue
-testValues test_value:AsynPort.10.0.0.1
+testValues test_value:AsynPort1.10.0.0.1
 testValues test_value:AsynPort2.10.0.0.2
 
 # exampleTestFunction AsynPortIP Name Value
-# (A function that uses the AsynPortIP and its own Name)
-exampleTestFunction IP: name:'Consumer of another port' Value:
-exampleTestFunction IP: name:'Another Consumer of the 2nd port' Value:
+exampleTestFunction IP:10.0.0.2 name:'Consumer of another port' Value:AsynPort2.10.0.0.2pydantic_test.AnAsynPort
+exampleTestFunction IP:10.0.0.2 name:'Another Consumer of the 2nd port' Value:AsynPort2.10.0.0.2pydantic_test.AnAsynPort
 
 dbLoadRecords /tmp/ioc.db
 iocInit

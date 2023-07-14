@@ -14,9 +14,6 @@ from pydantic.fields import FieldInfo
 from .globals import BaseSettings
 from .support import Definition, IdArg, ObjectArg, Support
 
-# A base class for applying settings to all serializable classes
-
-
 id_to_entity: Dict[str, Entity] = {}
 
 
@@ -26,19 +23,27 @@ class Entity(BaseSettings):
     deserialize entry point.
     """
 
+    # All entities have these two fields, others are added by make_entity_model
     type: str = Field(description="The type of this entity")
     entity_enabled: bool = Field(
         description="enable or disable this entity instance", default=True
     )
+    __definition__: Definition
 
     @model_validator(mode="after")  # type: ignore
     def add_ibek_attributes(cls, entity: Entity):
-        """Add additional attributes used by ibek"""
+        """Whole Entity model validation"""
 
-        # Jinja expansion of any string args/values in the Entity's attributes
+        # find any id fields in this Entity
+        ids = set(a.name for a in entity.__definition__.args if isinstance(a, IdArg))
+
         entity_dict = entity.model_dump()
         for arg, value in entity_dict.items():
-            if isinstance(value, str):
+            if arg in ids:
+                # add this entity to the global id index
+                id_to_entity[value] = entity
+            elif isinstance(value, str):
+                # Jinja expansion of any of the Entity's string args/values
                 jinja_template = Template(value)
                 setattr(entity, arg, jinja_template.render(entity_dict))
         return entity
@@ -46,16 +51,14 @@ class Entity(BaseSettings):
 
 def make_entity_model(definition: Definition, support: Support) -> Type[Entity]:
     """
-    We can get a set of Definitions by deserializing an ibek
-    support module definition YAML file.
-
-    This function then creates an Entity derived class from each Definition.
-
-    See :ref:`entities`
+    Create an Entity Model from a Definition instance and a Support instance.
     """
 
     def add_arg(name, typ, description, default):
-        args[name] = (typ, FieldInfo(description=description, default=default))
+        args[name] = (
+            typ,
+            FieldInfo(description=description, default=default),
+        )
 
     args: Dict[str, Tuple[type, Any]] = {}
     validators: Dict[str, Any] = {}
@@ -78,18 +81,9 @@ def make_entity_model(definition: Definition, support: Support) -> Type[Entity]:
                     raise KeyError(f"object id {id} not in {list(id_to_entity)}")
 
             validators[full_arg_name] = lookup_instance
-            arg_type = str
+            arg_type = object
 
         elif isinstance(arg, IdArg):
-
-            @field_validator(arg.name)
-            def save_instance(cls, id):
-                if id in id_to_entity:
-                    raise KeyError(f"id {id} already defined in {list(id_to_entity)}")
-                id_to_entity[id] = "hello"
-                return id
-
-            validators[full_arg_name] = save_instance
             arg_type = str
 
         else:
@@ -99,7 +93,7 @@ def make_entity_model(definition: Definition, support: Support) -> Type[Entity]:
         default = getattr(arg, "default", None)
         add_arg(arg.name, arg_type, arg.description, default)
 
-    # add in the calculated values as a Field in the Entity (as Jinja templates)
+    # add in the calculated values Jinja Templates as Fields in the Entity
     for value in definition.values:
         add_arg(value.name, str, value.description, value.value)
 
@@ -114,18 +108,17 @@ def make_entity_model(definition: Definition, support: Support) -> Type[Entity]:
         __base__=Entity,
     )  # type: ignore
 
-    # add a link back to the Definition Object that generated this Entity Class
+    # add a link back to the Definition Instance that generated this Entity Class
     entity_cls.__definition__ = definition
 
     return entity_cls
 
 
 def make_entity_models(support: Support):
-    """Create `Entity` subclasses for all `Definition` objects in the given
-    `Support` instance.
-
-    Then create a Pydantic model of an IOC class with its entities field
-    set to a Union of all the Entity subclasses created."""
+    """
+    Create `Entity` subclasses for all `Definition` instances in the given
+    `Support` instance. Returns a list of the Entity subclasses Models.
+    """
 
     entity_models = []
     entity_names = []
@@ -140,6 +133,11 @@ def make_entity_models(support: Support):
 
 
 def make_ioc_model(entity_models: Sequence[Type[Entity]]) -> Type[IOC]:
+    """
+    Create an IOC derived model, by setting its entities attribute to
+    be of type 'list of Entity derived classes'.
+    """
+
     class EntityModel(RootModel):
         root: Union[tuple(entity_models)] = Field(discriminator="type")  # type: ignore
 

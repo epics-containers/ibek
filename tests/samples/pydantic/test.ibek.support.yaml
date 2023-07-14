@@ -33,7 +33,7 @@ defs:
         name: name
         description: Consumer name
 
-      - type: str
+      - type: object
         name: PORT
         description: a reference to an AnAsynPort
 
@@ -45,7 +45,7 @@ defs:
         name: name
         description: Consumer name
 
-      - type: str
+      - type: object
         name: PORT
         description: a reference to an AnAsynPort
 
@@ -55,6 +55,4 @@ defs:
         args:
           AsynPortIP: IP:{{ PORT.IP }}
           Name: name:'{{ name }}'
-          Value: Value:{{ PORT.test_value }}
-        header: |
-          # (A function that uses the AsynPortIP and its own Name)
+          Value: Value:{{ PORT.test_value }}{{ PORT.type}}
