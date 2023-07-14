@@ -1,27 +1,5 @@
 {
   "$defs": {
-    "Entity": {
-      "additionalProperties": false,
-      "description": "\n    A baseclass for all generated Entity classes. Provides the\n    deserialize entry point.\n    ",
-      "properties": {
-        "type": {
-          "description": "The type of this entity",
-          "title": "Type",
-          "type": "string"
-        },
-        "entity_enabled": {
-          "default": true,
-          "description": "enable or disable this entity instance",
-          "title": "Entity Enabled",
-          "type": "boolean"
-        }
-      },
-      "required": [
-        "type"
-      ],
-      "title": "Entity",
-      "type": "object"
-    },
     "EntityModel": {
       "discriminator": {
         "mapping": {
@@ -307,13 +285,9 @@
           "type": "string"
         },
         "Controller": {
-          "allOf": [
-            {
-              "$ref": "#/$defs/Entity"
-            }
-          ],
           "default": null,
-          "description": "the PMAC Controller"
+          "description": "the PMAC Controller",
+          "title": "Controller"
         },
         "CS": {
           "default": null,
@@ -359,13 +333,9 @@
           "type": "string"
         },
         "CsController": {
-          "allOf": [
-            {
-              "$ref": "#/$defs/Entity"
-            }
-          ],
           "default": null,
-          "description": "Coordinate system controller to attach to"
+          "description": "Coordinate system controller to attach to",
+          "title": "Cscontroller"
         },
         "axis": {
           "default": null,
@@ -681,13 +651,9 @@
           "type": "string"
         },
         "Controller": {
-          "allOf": [
-            {
-              "$ref": "#/$defs/Entity"
-            }
-          ],
           "default": null,
-          "description": "PMAC Controller to attach to"
+          "description": "PMAC Controller to attach to",
+          "title": "Controller"
         },
         "axis": {
           "default": null,
@@ -1009,13 +975,9 @@
           "type": "string"
         },
         "PORT": {
-          "allOf": [
-            {
-              "$ref": "#/$defs/Entity"
-            }
-          ],
           "default": null,
-          "description": "Asyn port name for PmacAsynIPPort to connect to"
+          "description": "Asyn port name for PmacAsynIPPort to connect to",
+          "title": "Port"
         },
         "P": {
           "default": null,
@@ -1201,13 +1163,9 @@
           "type": "boolean"
         },
         "Controller": {
-          "allOf": [
-            {
-              "$ref": "#/$defs/Entity"
-            }
-          ],
           "default": null,
-          "description": "the PMAC Controller"
+          "description": "the PMAC Controller",
+          "title": "Controller"
         },
         "PLC": {
           "default": null,
@@ -1295,13 +1253,9 @@
           "type": "boolean"
         },
         "Controller": {
-          "allOf": [
-            {
-              "$ref": "#/$defs/Entity"
-            }
-          ],
           "default": null,
-          "description": "Geobrick on which to disable limits"
+          "description": "Geobrick on which to disable limits",
+          "title": "Controller"
         },
         "Axis": {
           "default": null,

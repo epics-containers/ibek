@@ -83,13 +83,9 @@
           "type": "boolean"
         },
         "camera": {
-          "allOf": [
-            {
-              "$ref": "#/$defs/Entity"
-            }
-          ],
           "default": null,
-          "description": "reference to ADAravis.ADAravis instance"
+          "description": "reference to ADAravis.ADAravis instance",
+          "title": "Camera"
         }
       },
       "title": "ADAravis_Mako_G234B",
@@ -111,13 +107,9 @@
           "type": "boolean"
         },
         "camera": {
-          "allOf": [
-            {
-              "$ref": "#/$defs/Entity"
-            }
-          ],
           "default": null,
-          "description": "reference to ADAravis.ADAravis instance"
+          "description": "reference to ADAravis.ADAravis instance",
+          "title": "Camera"
         }
       },
       "title": "ADAravis_MantaG235B",
@@ -145,13 +137,9 @@
           "type": "string"
         },
         "NDARRAY_PORT": {
-          "allOf": [
-            {
-              "$ref": "#/$defs/Entity"
-            }
-          ],
           "default": null,
-          "description": "Port Name for input NDArray plugin"
+          "description": "Port Name for input NDArray plugin",
+          "title": "Ndarray Port"
         },
         "P": {
           "default": null,
@@ -306,28 +294,6 @@
         }
       },
       "title": "ADCore_NDStats",
-      "type": "object"
-    },
-    "Entity": {
-      "additionalProperties": false,
-      "description": "\n    A baseclass for all generated Entity classes. Provides the\n    deserialize entry point.\n    ",
-      "properties": {
-        "type": {
-          "description": "The type of this entity",
-          "title": "Type",
-          "type": "string"
-        },
-        "entity_enabled": {
-          "default": true,
-          "description": "enable or disable this entity instance",
-          "title": "Entity Enabled",
-          "type": "boolean"
-        }
-      },
-      "required": [
-        "type"
-      ],
-      "title": "Entity",
       "type": "object"
     },
     "EntityModel": {
@@ -504,13 +470,9 @@
           "type": "boolean"
         },
         "card": {
-          "allOf": [
-            {
-              "$ref": "#/$defs/Entity"
-            }
-          ],
           "default": null,
-          "description": "8401 card identifier"
+          "description": "8401 card identifier",
+          "title": "Card"
         },
         "signal": {
           "default": null,
@@ -544,13 +506,9 @@
           "type": "string"
         },
         "carrier": {
-          "allOf": [
-            {
-              "$ref": "#/$defs/Entity"
-            }
-          ],
           "default": null,
-          "description": "Carrier Board Identifier"
+          "description": "Carrier Board Identifier",
+          "title": "Carrier"
         },
         "ip_site_number": {
           "default": null,
@@ -559,13 +517,9 @@
           "type": "integer"
         },
         "vector": {
-          "allOf": [
-            {
-              "$ref": "#/$defs/Entity"
-            }
-          ],
           "default": null,
-          "description": "Interrupt Vector"
+          "description": "Interrupt Vector",
+          "title": "Vector"
         },
         "int_enable": {
           "default": false,
@@ -629,13 +583,9 @@
           "type": "string"
         },
         "card": {
-          "allOf": [
-            {
-              "$ref": "#/$defs/Entity"
-            }
-          ],
           "default": null,
-          "description": "8403 card identifier"
+          "description": "8403 card identifier",
+          "title": "Card"
         }
       },
       "title": "Hy8403ip_Hy8403Channel",
@@ -663,13 +613,9 @@
           "type": "string"
         },
         "carrier": {
-          "allOf": [
-            {
-              "$ref": "#/$defs/Entity"
-            }
-          ],
           "default": null,
-          "description": "Carrier Board Identifier"
+          "description": "Carrier Board Identifier",
+          "title": "Carrier"
         },
         "ip_site_number": {
           "default": null,
@@ -678,13 +624,9 @@
           "type": "integer"
         },
         "vector": {
-          "allOf": [
-            {
-              "$ref": "#/$defs/Entity"
-            }
-          ],
           "default": null,
-          "description": "Interrupt Vector"
+          "description": "Interrupt Vector",
+          "title": "Vector"
         },
         "aitype": {
           "default": null,
@@ -845,13 +787,9 @@
           "type": "string"
         },
         "event_receiver": {
-          "allOf": [
-            {
-              "$ref": "#/$defs/Entity"
-            }
-          ],
           "default": null,
-          "description": "reference to EventReceiverPMC entry"
+          "description": "reference to EventReceiverPMC entry",
+          "title": "Event Receiver"
         },
         "er": {
           "default": "SET-ER",
@@ -879,13 +817,9 @@
           "type": "boolean"
         },
         "default_evr": {
-          "allOf": [
-            {
-              "$ref": "#/$defs/Entity"
-            }
-          ],
           "default": null,
-          "description": "reference to DefaultEVR entry"
+          "description": "reference to DefaultEVR entry",
+          "title": "Default Evr"
         }
       },
       "title": "TimingTemplates_EvrAlive",
@@ -1336,6 +1270,12 @@
           "description": "Interrupt level",
           "title": "Int Level",
           "type": "integer"
+        },
+        "card_id": {
+          "default": "{{ __utils__.counter(\"Carriers\", start=0) }}",
+          "description": "Carrier Card Identifier",
+          "title": "Card Id",
+          "type": "string"
         }
       },
       "title": "ipac_Hy8002",
@@ -1425,13 +1365,9 @@
           "type": "string"
         },
         "Controller": {
-          "allOf": [
-            {
-              "$ref": "#/$defs/Entity"
-            }
-          ],
           "default": null,
-          "description": "the PMAC Controller"
+          "description": "the PMAC Controller",
+          "title": "Controller"
         },
         "CS": {
           "default": null,
@@ -1477,13 +1413,9 @@
           "type": "string"
         },
         "CsController": {
-          "allOf": [
-            {
-              "$ref": "#/$defs/Entity"
-            }
-          ],
           "default": null,
-          "description": "Coordinate system controller to attach to"
+          "description": "Coordinate system controller to attach to",
+          "title": "Cscontroller"
         },
         "axis": {
           "default": null,
@@ -1799,13 +1731,9 @@
           "type": "string"
         },
         "Controller": {
-          "allOf": [
-            {
-              "$ref": "#/$defs/Entity"
-            }
-          ],
           "default": null,
-          "description": "PMAC Controller to attach to"
+          "description": "PMAC Controller to attach to",
+          "title": "Controller"
         },
         "axis": {
           "default": null,
@@ -2127,13 +2055,9 @@
           "type": "string"
         },
         "PORT": {
-          "allOf": [
-            {
-              "$ref": "#/$defs/Entity"
-            }
-          ],
           "default": null,
-          "description": "Asyn port name for PmacAsynIPPort to connect to"
+          "description": "Asyn port name for PmacAsynIPPort to connect to",
+          "title": "Port"
         },
         "P": {
           "default": null,
@@ -2319,13 +2243,9 @@
           "type": "boolean"
         },
         "Controller": {
-          "allOf": [
-            {
-              "$ref": "#/$defs/Entity"
-            }
-          ],
           "default": null,
-          "description": "the PMAC Controller"
+          "description": "the PMAC Controller",
+          "title": "Controller"
         },
         "PLC": {
           "default": null,
@@ -2413,13 +2333,9 @@
           "type": "boolean"
         },
         "Controller": {
-          "allOf": [
-            {
-              "$ref": "#/$defs/Entity"
-            }
-          ],
           "default": null,
-          "description": "Geobrick on which to disable limits"
+          "description": "Geobrick on which to disable limits",
+          "title": "Controller"
         },
         "Axis": {
           "default": null,
@@ -2453,13 +2369,9 @@
           "type": "string"
         },
         "carrier": {
-          "allOf": [
-            {
-              "$ref": "#/$defs/Entity"
-            }
-          ],
           "default": null,
-          "description": "IPAC carrier name"
+          "description": "IPAC carrier name",
+          "title": "Carrier"
         },
         "ip_site_number": {
           "default": null,
@@ -2468,13 +2380,9 @@
           "type": "integer"
         },
         "interrupt_vector": {
-          "allOf": [
-            {
-              "$ref": "#/$defs/Entity"
-            }
-          ],
           "default": null,
-          "description": "Interrupt Vector reserved with epics.InterruptVectorVME, count=3"
+          "description": "Interrupt Vector reserved with epics.InterruptVectorVME, count=3",
+          "title": "Interrupt Vector"
         },
         "link": {
           "default": 0,
@@ -2508,13 +2416,9 @@
           "type": "string"
         },
         "ip_module": {
-          "allOf": [
-            {
-              "$ref": "#/$defs/Entity"
-            }
-          ],
           "default": null,
-          "description": "PscIpModule object"
+          "description": "PscIpModule object",
+          "title": "Ip Module"
         },
         "link": {
           "default": null,
@@ -2638,22 +2542,14 @@
           "type": "boolean"
         },
         "card": {
-          "allOf": [
-            {
-              "$ref": "#/$defs/Entity"
-            }
-          ],
           "default": null,
-          "description": "8401 card identifier"
+          "description": "8401 card identifier",
+          "title": "Card"
         },
         "psc_template": {
-          "allOf": [
-            {
-              "$ref": "#/$defs/Entity"
-            }
-          ],
           "default": null,
-          "description": "The PSC template instance"
+          "description": "The PSC template instance",
+          "title": "Psc Template"
         },
         "channel": {
           "default": null,

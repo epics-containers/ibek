@@ -55,4 +55,4 @@ defs:
         args:
           AsynPortIP: IP:{{ PORT.IP }}
           Name: name:'{{ name }}'
-          Value: Value:{{ PORT.test_value }}{{ PORT.type}}
+          Value: Value:{{ PORT.test_value }}

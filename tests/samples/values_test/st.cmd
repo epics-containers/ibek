@@ -12,9 +12,9 @@ ioc_registerRecordDeviceDriver pdbbase
 #   Create a new Hy8002 carrier.
 #   The resulting carrier handle (card id) is saved in an env variable.
 ipacAddHy8002 "4, 2"
-epicsEnvSet IPAC4 
+epicsEnvSet IPAC4 0
 ipacAddHy8002 "5, 2"
-epicsEnvSet IPAC5 
+epicsEnvSet IPAC5 1
 
 dbLoadRecords /tmp/ioc.db
 iocInit

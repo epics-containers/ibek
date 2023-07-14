@@ -7,11 +7,10 @@ from __future__ import annotations
 import builtins
 from typing import Any, Dict, Literal, Sequence, Tuple, Type, Union
 
-from jinja2 import Template
 from pydantic import Field, RootModel, create_model, field_validator, model_validator
 from pydantic.fields import FieldInfo
 
-from .globals import BaseSettings
+from .globals import BaseSettings, render_with_utils
 from .support import Definition, IdArg, ObjectArg, Support
 
 id_to_entity: Dict[str, Entity] = {}
@@ -44,8 +43,7 @@ class Entity(BaseSettings):
                 id_to_entity[value] = entity
             elif isinstance(value, str):
                 # Jinja expansion of any of the Entity's string args/values
-                jinja_template = Template(value)
-                setattr(entity, arg, jinja_template.render(entity_dict))
+                setattr(entity, arg, render_with_utils(entity_dict, value))
         return entity
 
 

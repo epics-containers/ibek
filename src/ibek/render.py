@@ -4,11 +4,9 @@ Functions for rendering lines in the boot script using Jinja2
 
 from typing import Callable, List, Optional, Union
 
-from jinja2 import Template
-
+from .globals import render_with_utils
 from .ioc import IOC, Entity
 from .support import Comment, Function, Script, Text, When
-from .utils import UTILS
 
 
 class Render:
@@ -20,13 +18,6 @@ class Render:
 
     def __init__(self: "Render"):
         self.once_done: List[str] = []
-
-    def render_with_utils(self, instance: Entity, template_text: str) -> str:
-        """
-        Render a Jinja template with the global __utils__ object available
-        """
-        jinja_template = Template(template_text)
-        return jinja_template.render(instance.__dict__, __utils__=UTILS)
 
     def render_text(
         self, instance: Entity, text: str, when=When.every, suffix=""
@@ -54,7 +45,7 @@ class Render:
             raise NotImplementedError("When.last not yet implemented")
 
         # Render Jinja entries in the text
-        result = self.render_with_utils(instance, text)
+        result = render_with_utils(instance, text)
 
         if result == "":
             return ""
@@ -153,7 +144,7 @@ class Render:
                 f'msi -I${{EPICS_DB_INCLUDE_PATH}} -M"{db_arg_string}" "{db_file}"\n'
             )
 
-        db_txt = self.render_with_utils(instance, jinja_txt)
+        db_txt = render_with_utils(instance, jinja_txt)
 
         return db_txt + "\n"
 
@@ -170,7 +161,7 @@ class Render:
         for variable in variables:
             # Substitute the name and value of the environment variable from args
             env_template = f"epicsEnvSet {variable.name} {variable.value}"
-            env_var_txt += self.render_with_utils(instance, env_template)
+            env_var_txt += render_with_utils(instance, env_template)
         return env_var_txt + "\n"
 
     def render_elements(
