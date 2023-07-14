@@ -6,7 +6,7 @@ ioc_registerRecordDeviceDriver pdbbase
 
 
 # testValues TestValue
-testValues test_value:AsynPort1.10.0.0.1
+testValues test_value:AsynPort1.127.0.0.1
 testValues test_value:AsynPort2.10.0.0.2
 
 # exampleTestFunction AsynPortIP Name Value

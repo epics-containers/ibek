@@ -13,6 +13,7 @@ defs:
       - type: str
         name: IP
         description: IP address of port
+        default: 127.0.0.1
 
     values:
       - name: test_value
