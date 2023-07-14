@@ -45,7 +45,7 @@ class Render:
             raise NotImplementedError("When.last not yet implemented")
 
         # Render Jinja entries in the text
-        result = render_with_utils(instance, text)
+        result = render_with_utils(instance, text)  # type: ignore
 
         if result == "":
             return ""
@@ -144,7 +144,7 @@ class Render:
                 f'msi -I${{EPICS_DB_INCLUDE_PATH}} -M"{db_arg_string}" "{db_file}"\n'
             )
 
-        db_txt = render_with_utils(instance, jinja_txt)
+        db_txt = render_with_utils(instance, jinja_txt)  # type: ignore
 
         return db_txt + "\n"
 
@@ -161,7 +161,7 @@ class Render:
         for variable in variables:
             # Substitute the name and value of the environment variable from args
             env_template = f"epicsEnvSet {variable.name} {variable.value}"
-            env_var_txt += render_with_utils(instance, env_template)
+            env_var_txt += render_with_utils(instance, env_template)  # type: ignore
         return env_var_txt + "\n"
 
     def render_elements(
