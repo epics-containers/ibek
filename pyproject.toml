@@ -15,12 +15,10 @@ classifiers = [
 ]
 description = "IOC Builder for EPICS and Kubernetes"
 dependencies = [
-    "typing-extensions",
     "pydantic",
     "typer",
     "ruamel.yaml",
     "jinja2",
-    "typing-extensions;python_version<'3.8'",
 ] # Add project dependencies here, e.g. ["click", "numpy"]
 dynamic = ["version"]
 license.file = "LICENSE"

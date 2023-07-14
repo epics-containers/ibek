@@ -109,7 +109,6 @@ class Function(BaseSettings):
     header: str = Field(
         description="commands/comments to appear before the function", default=""
     )
-    # TODO will be an enum
     when: When = Field(description="one of first / every / last", default="every")
     type: Literal["function"] = "function"
 
@@ -121,7 +120,6 @@ class Comment(BaseSettings):
     """
 
     type: Literal["comment"] = "comment"
-    # TODO will be an enum
     when: When = Field(description="One of first / every / last", default="every")
     value: str = Field(
         description="A comment to add into the startup script", default=""
@@ -134,7 +132,6 @@ class Text(BaseSettings):
     """
 
     type: Literal["text"] = "text"
-    # TODO will be an enum
     when: str = Field(description="One of first / every / last", default="every")
     value: str = Field(description="raw text to add to the startup script", default="")
 
