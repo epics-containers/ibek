@@ -48,6 +48,12 @@
           "description": "IP address of port",
           "title": "Ip",
           "type": "string"
+        },
+        "test_value": {
+          "default": "{{ name }}.{{ IP }}",
+          "description": "test jinja render of arg values",
+          "title": "Test Value",
+          "type": "string"
         }
       },
       "title": "pydantic_test_AnAsynPort",

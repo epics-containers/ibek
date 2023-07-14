@@ -13,20 +13,20 @@ entities:
 
   - type: pydantic_test.AnAsynPort
     name: AsynPort2
-    IP: 10.0.0.1
+    IP: 10.0.0.2
 
   - type: pydantic_test.Consumer
     name: A Consumer
-    PORT: AsynPort2
+    PORT: AsynPort1
 
   - type: pydantic_test.Consumer
     name: Another Consumer of same port
+    PORT: AsynPort1
+
+  - type: pydantic_test.ConsumerTwo
+    name: Consumer of another port
     PORT: AsynPort2
 
   - type: pydantic_test.ConsumerTwo
-    name: Yet Another Consumer of same port
-    PORT: AsynPort2
-
-  - type: pydantic_test.ConsumerTwo
-    name: Just One More Consumer of same port
+    name: Another Consumer of the 2nd port
     PORT: AsynPort2

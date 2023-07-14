@@ -31,32 +31,16 @@ class Entity(BaseSettings):
         description="enable or disable this entity instance", default=True
     )
 
-    # a link back to the Definition Object that generated this Definition
-    __definition__: Definition
-
-    @model_validator(mode="before")  # type: ignore
-    def add_ibek_attributes(cls, entity: Dict):
-        """Add attributes used by ibek"""
-
-        # add in the global __utils__ object for state sharing
-        # TODO need to convince pydantic to add this to the class without
-        # complaining about __ prefix - or use another approach to pass
-        # the __utils__ object to every jinja template
-        # entity["__utils__"] = UTILS
-
-        # copy 'values' from the definition into the Entity
-
-        # TODO this is not literally the Entity Object but a Dictionary of
-        # its attributes. So need a new approach for linking back to the
-        # definition and copying in the values out.
-        # if hasattr(entity, "__definition__"):
-        #     entity.update(entity.__definition__.values)
+    @model_validator(mode="after")  # type: ignore
+    def add_ibek_attributes(cls, entity: Entity):
+        """Add additional attributes used by ibek"""
 
         # Jinja expansion of any string args/values in the Entity's attributes
-        for arg, value in entity.items():
+        entity_dict = entity.model_dump()
+        for arg, value in entity_dict.items():
             if isinstance(value, str):
                 jinja_template = Template(value)
-                entity[arg] = jinja_template.render(entity)
+                setattr(entity, arg, jinja_template.render(entity_dict))
         return entity
 
 
@@ -94,7 +78,7 @@ def make_entity_model(definition: Definition, support: Support) -> Type[Entity]:
                     raise KeyError(f"object id {id} not in {list(id_to_entity)}")
 
             validators[full_arg_name] = lookup_instance
-            arg_type = Entity
+            arg_type = str
 
         elif isinstance(arg, IdArg):
 
@@ -102,7 +86,7 @@ def make_entity_model(definition: Definition, support: Support) -> Type[Entity]:
             def save_instance(cls, id):
                 if id in id_to_entity:
                     raise KeyError(f"id {id} already defined in {list(id_to_entity)}")
-                id_to_entity[id] = Entity
+                id_to_entity[id] = "hello"
                 return id
 
             validators[full_arg_name] = save_instance
@@ -115,6 +99,11 @@ def make_entity_model(definition: Definition, support: Support) -> Type[Entity]:
         default = getattr(arg, "default", None)
         add_arg(arg.name, arg_type, arg.description, default)
 
+    # add in the calculated values as a Field in the Entity (as Jinja templates)
+    for value in definition.values:
+        add_arg(value.name, str, value.description, value.value)
+
+    # add the type literal which discriminates between the different Entity classes
     typ = Literal[full_name]  # type: ignore
     add_arg("type", typ, "The type of this entity", full_name)
 
@@ -126,7 +115,6 @@ def make_entity_model(definition: Definition, support: Support) -> Type[Entity]:
     )  # type: ignore
 
     # add a link back to the Definition Object that generated this Entity Class
-    # TODO replace this mechanism as it does not work in pydantic
     entity_cls.__definition__ = definition
 
     return entity_cls

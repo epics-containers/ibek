@@ -19,6 +19,12 @@ defs:
         value: "{{ name }}.{{ IP }}"
         description: test jinja render of arg values
 
+    pre_init:
+      - type: function
+        name: testValues
+        args:
+          TestValue: test_value:{{ test_value }}
+
   - name: Consumer
     description: |
       A class that uses AnAsynPort
@@ -27,7 +33,7 @@ defs:
         name: name
         description: Consumer name
 
-      - type: object
+      - type: str
         name: PORT
         description: a reference to an AnAsynPort
 
@@ -39,7 +45,7 @@ defs:
         name: name
         description: Consumer name
 
-      - type: object
+      - type: str
         name: PORT
         description: a reference to an AnAsynPort
 
@@ -47,9 +53,8 @@ defs:
       - type: function
         name: exampleTestFunction
         args:
-          AsynPortIP: "{{ PORT.IP }}"
-          Name: "{{ name }}"
-          Value: "{{ PORT.test_value }}"
+          AsynPortIP: IP:{{ PORT.IP }}
+          Name: name:'{{ name }}'
+          Value: Value:{{ PORT.test_value }}
         header: |
-          # A function that uses the AsynPortIP and Name
-          # to do something useful
+          # (A function that uses the AsynPortIP and its own Name)
