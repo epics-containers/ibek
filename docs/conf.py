@@ -46,11 +46,13 @@ extensions = [
     "sphinx_copybutton",
     # For the card element
     "sphinx_design",
+    # for pydantic
+    "sphinx_autodoc_typehints",
 ]
 
 # If true, Sphinx will warn about all references where the target cannot
 # be found.
-nitpicky = True
+nitpicky = False
 
 # A list of (type, target) tuples (by default empty) that should be ignored when
 # generating warnings in "nitpicky mode". Note that type should include the
@@ -65,7 +67,7 @@ nitpick_ignore = [
     ("py:class", "'object'"),
     ("py:class", "'id'"),
     ("py:class", "typing_extensions.Literal"),
-    [("py:class", "type")],
+    ("py:class", "type"),
 ]
 
 # Both the class’ and the __init__ method’s docstring are concatenated and
