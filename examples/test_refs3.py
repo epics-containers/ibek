@@ -16,7 +16,7 @@ id_to_entity: Dict[str, Entity] = {}
 
 
 class Entity(BaseModel):
-    type: Literal["e"]
+    type: str = Field(description="The type of this entity")
     name: str = Field(..., description="The name of this entity")
     value: str = Field(..., description="The value of this entity")
     ref: Optional[str] = Field(
@@ -31,6 +31,14 @@ class Entity(BaseModel):
         return entity
 
 
+class Entity1(Entity):
+    type: Literal["e1"] = Field(description="The type of this entity")
+
+
+class Entity2(Entity):
+    type: Literal["e2"] = Field(description="The type of this entity")
+
+
 @field_validator("ref", mode="after")
 def lookup_instance(cls, id):
     try:
@@ -41,32 +49,38 @@ def lookup_instance(cls, id):
 
 validators = {"Entity": lookup_instance}
 
-# add validator to the Entity class using create model
-Entity2 = create_model(
-    "Entity",
+# add validator to the Entity classes using create model
+EntityOne = create_model(
+    "EntityOne",
     __validators__=validators,
-    __base__=Entity,
+    __base__=Entity1,
 )  # type: ignore
 
-entity_models = [Entity2, Entity2]
+EntityTwo = create_model(
+    "EntityTwo",
+    __validators__=validators,
+    __base__=Entity2,
+)  # type: ignore
+
+entity_models = (EntityOne, EntityTwo)
 
 
 class EntityModel(RootModel):
-    root: Union[tuple(entity_models)] = Field(discriminator="type")  # type: ignore
+    root: Union[entity_models] = Field(discriminator="type")  # type: ignore
 
 
 class Entities(BaseModel):
     model_config = ConfigDict(extra="forbid")
     entities: Sequence[EntityModel] = Field(  # type: ignore
-        description="List of entities this IOC instantiates"
+        description="List of entities classes we want to create"
     )
 
 
 model1 = Entities(
     **{
         "entities": [
-            {"type": "e", "name": "one", "value": "OneValue"},
-            {"type": "e", "name": "two", "value": "TwoValue", "ref": "one"},
+            {"type": "e1", "name": "one", "value": "OneValue"},
+            {"type": "e2", "name": "two", "value": "TwoValue", "ref": "one"},
         ]
     }
 )
@@ -78,13 +92,13 @@ assert model1.entities[1].root.ref.value == "OneValue"
 model2 = Entities(
     **{
         "entities": [
+            {"type": "e2", "name": "two", "value": "TwoValue", "ref": "one"},
             {
-                "type": "e",
+                "type": "e1",
                 "name": "one",
                 "value": "OneValue",
                 "illegal": "bad argument",
             },
-            {"type": "e", "name": "two", "value": "TwoValue", "ref": "one"},
         ]
     }
 )
