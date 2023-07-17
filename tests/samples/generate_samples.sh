@@ -13,6 +13,7 @@ export DEFS=${SAMPLES_DIR}/../../ibek-defs
 # this is so relative schema mode lines work
 cd $SAMPLES_DIR
 
+set -x
 echo making the support yaml schema
 ibek ibek-schema ${SAMPLES_DIR}/schemas/ibek.defs.schema.json
 

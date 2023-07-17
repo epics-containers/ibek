@@ -29,7 +29,19 @@ class Entity(BaseSettings):
 
     @model_validator(mode="after")  # type: ignore
     def add_ibek_attributes(cls, entity: Entity):
-        """Whole Entity model validation"""
+        """
+        Whole Entity model validation
+
+        TODO at present an object reference to an ID where the referred object violates
+        schema is seen as "KeyError: "object XXX not found in [...]" which hides the
+        schema violation error.
+
+        This could potentially be fixed by doing the validation here instead
+        (removing extra:forbid from the model_config). BUT, at present passing
+        the info arg to this function receives a dict of the IOC instance
+        that created this entity, not the entity itself. This may be a
+        pydantic bug?
+        """
 
         # find the id field in this Entity if it has one
         ids = set(a.name for a in entity.__definition__.args if isinstance(a, IdArg))
