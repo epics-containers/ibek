@@ -13,3 +13,17 @@ Issue under investigation
 =========================
 
 The issue is that when an object refers to another object then the error reported is that the offending object's id cannot be found. This masks the underlying schema issue which is what should be reported first. The custom field validator created in make_entity_model seems to be throwing the error before the schema validation issue is reported.
+
+At present for the incorrect schema in entity e1 ibek reports:
+
+```
+KeyError: 'object one not found in []'
+```
+
+And test_refs4.py reports
+
+```
+Extra inputs are not permitted [type=extra_forbidden, input_value='bad argument', input_type=str]
+```
+
+The latter is the useful error that points you at the root cause.
