@@ -42,15 +42,19 @@ model1 = Entities(
     }
 )
 
-# demonstrate that entity one has a reference to entity two
+# demonstrate that entity two has a reference to entity one
 assert model1.entities[1].ref.value == "OneValue"
 
-# this should throw an error because entity one has illegal arguments
+# this should throw an error because entity one_again has illegal arguments
+# BUT the error shown is:
+#    KeyError: "object one_again not found in ['one', 'two']"
+# which masks the underlying schema violation error that should look like:
+#    Extra inputs are not permitted [type=extra_forbidden, input_value='bad argument',
 model2 = Entities(
     **{
         "entities": [
-            {"name": "one", "value": "OneValue", "illegal": "bad argument"},
-            {"name": "two", "value": "TwoValue", "ref": "one"},
+            {"name": "one_again", "value": "OneValue", "illegal": "bad argument"},
+            {"name": "two_again", "value": "TwoValue", "ref": "one_again"},
         ]
     }
 )

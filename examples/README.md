@@ -27,3 +27,12 @@ Extra inputs are not permitted [type=extra_forbidden, input_value='bad argument'
 ```
 
 The latter is the useful error that points you at the root cause.
+
+Resolution
+==========
+
+The simplest test_refs1.py has been updated to demo the issue (forgot that
+entity "one" already existed in model1!).
+
+I've posted a discussion on the subject here
+https://github.com/pydantic/pydantic/discussions/6731

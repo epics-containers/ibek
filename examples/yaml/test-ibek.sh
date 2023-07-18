@@ -7,5 +7,5 @@
 # when it should get
 #    Extra inputs are not permitted [type=extra_forbidden, input_value='bad argument', input_type=str]
 
-ibek ioc-schema test.ibek.support.yaml test.ibek.support.schema.json
+ibek ioc-schema test.ibek.support.yaml test.ibek.ioc.schema.json
 ibek build-startup test.ibek.ioc.yaml test.ibek.support.yaml
