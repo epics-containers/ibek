@@ -1,0 +1,31 @@
+# yaml-language-server: $schema=../../tests/samples/schemas/ibek.defs.schema.json
+module: test
+
+defs:
+  - name: e1
+    description: Example One
+    args:
+      - type: id
+        name: name
+        description: identifier e1
+      - type: str
+        name: value
+        description: value of e1
+      - type: object
+        name: ref
+        description: reference to another entity
+        default: null
+
+  - name: e2
+    description: Example One
+    args:
+      - type: id
+        name: name
+        description: identifier e2
+      - type: str
+        name: value
+        description: value of e2
+      - type: object
+        name: ref
+        description: reference to another entity
+        default: null

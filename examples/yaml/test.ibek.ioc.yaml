@@ -1,0 +1,17 @@
+# yaml-language-server: $schema=test.ibek.ioc.schema.json
+
+ioc_name: test
+description: a basic example for testing ioc-template
+generic_ioc_image: ghcr.io/epics-containers/ioc-template:23.3.2
+
+entities:
+  - type: test.e1
+    name: one
+    value: OneValue
+    illegal: bad argument
+    # above to demonstrate how ibek handles this error incorrectly
+
+  - type: test.e2
+    name: two
+    value: TwoValue
+    ref: one
