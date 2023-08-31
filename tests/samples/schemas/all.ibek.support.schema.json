@@ -1,1964 +1,2623 @@
 {
-  "type": "object",
+  "$defs": {
+    "ADAravis_ADAravis": {
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "const": "ADAravis.ADAravis",
+          "default": "ADAravis.ADAravis",
+          "description": "The type of this entity",
+          "title": "Type"
+        },
+        "entity_enabled": {
+          "default": true,
+          "description": "enable or disable this entity instance",
+          "title": "Entity Enabled",
+          "type": "boolean"
+        },
+        "PORT": {
+          "default": null,
+          "description": "Port Name for teh camera",
+          "title": "Port",
+          "type": "string"
+        },
+        "P": {
+          "default": null,
+          "description": "The PV prefix",
+          "title": "P",
+          "type": "string"
+        },
+        "R": {
+          "default": null,
+          "description": "The PV suffix",
+          "title": "R",
+          "type": "string"
+        },
+        "ID": {
+          "default": null,
+          "description": "Cam ip address, hostname, MAC address, or ID <manufacturer>-<serial>,\n(e.g. Prosilica-02-2166A-06844)\n",
+          "title": "Id",
+          "type": "string"
+        },
+        "BUFFERS": {
+          "default": 50,
+          "description": "Max NDArray buffers to be created for plugin callbacks",
+          "title": "Buffers",
+          "type": "integer"
+        },
+        "MEMORY": {
+          "default": -1,
+          "description": "Max memory to allocate, should be maxw*maxh*nbuffer\nfor driver and all attached plugins or -1 for unlimited\n",
+          "title": "Memory",
+          "type": "integer"
+        },
+        "TIMEOUT": {
+          "default": 1,
+          "description": "timeout for communication with camera",
+          "title": "Timeout",
+          "type": "integer"
+        },
+        "PV_ALIAS": {
+          "default": "",
+          "description": "TODO this need to look into the purpose of this in builder.py\ndetermine its function and see if we can do the equivalent in ibek\n",
+          "title": "Pv Alias",
+          "type": "string"
+        }
+      },
+      "title": "ADAravis_ADAravis",
+      "type": "object"
+    },
+    "ADAravis_Mako_G234B": {
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "const": "ADAravis.Mako_G234B",
+          "default": "ADAravis.Mako_G234B",
+          "description": "The type of this entity",
+          "title": "Type"
+        },
+        "entity_enabled": {
+          "default": true,
+          "description": "enable or disable this entity instance",
+          "title": "Entity Enabled",
+          "type": "boolean"
+        },
+        "camera": {
+          "default": null,
+          "description": "reference to ADAravis.ADAravis instance",
+          "title": "Camera"
+        }
+      },
+      "title": "ADAravis_Mako_G234B",
+      "type": "object"
+    },
+    "ADAravis_MantaG235B": {
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "const": "ADAravis.MantaG235B",
+          "default": "ADAravis.MantaG235B",
+          "description": "The type of this entity",
+          "title": "Type"
+        },
+        "entity_enabled": {
+          "default": true,
+          "description": "enable or disable this entity instance",
+          "title": "Entity Enabled",
+          "type": "boolean"
+        },
+        "camera": {
+          "default": null,
+          "description": "reference to ADAravis.ADAravis instance",
+          "title": "Camera"
+        }
+      },
+      "title": "ADAravis_MantaG235B",
+      "type": "object"
+    },
+    "ADCore_NDRoi": {
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "const": "ADCore.NDRoi",
+          "default": "ADCore.NDRoi",
+          "description": "The type of this entity",
+          "title": "Type"
+        },
+        "entity_enabled": {
+          "default": true,
+          "description": "enable or disable this entity instance",
+          "title": "Entity Enabled",
+          "type": "boolean"
+        },
+        "PORT": {
+          "default": null,
+          "description": "Port for this plugin",
+          "title": "Port",
+          "type": "string"
+        },
+        "NDARRAY_PORT": {
+          "default": null,
+          "description": "Port Name for input NDArray plugin",
+          "title": "Ndarray Port"
+        },
+        "P": {
+          "default": null,
+          "description": "The PV prefix",
+          "title": "P",
+          "type": "string"
+        },
+        "R": {
+          "default": null,
+          "description": "The PV suffix",
+          "title": "R",
+          "type": "string"
+        },
+        "TIMEOUT": {
+          "default": 1,
+          "description": "Timeout for ASYN communications",
+          "title": "Timeout",
+          "type": "integer"
+        },
+        "ADDR": {
+          "default": 0,
+          "description": "ASYN Address this plugin",
+          "title": "Addr",
+          "type": "integer"
+        },
+        "NDARRAY_ADDR": {
+          "default": 0,
+          "description": "ASYN Address for input NDArray plugin",
+          "title": "Ndarray Addr",
+          "type": "integer"
+        },
+        "ENABLED": {
+          "default": true,
+          "description": "Enable/Disable this plugin at startup",
+          "title": "Enabled",
+          "type": "boolean"
+        },
+        "SCANRATE": {
+          "default": "I/O Intr",
+          "description": "Epics record scan rate",
+          "title": "Scanrate",
+          "type": "string"
+        },
+        "QUEUE": {
+          "default": 2,
+          "description": "Number of NDArray buffers to be created for plugin callbacks",
+          "title": "Queue",
+          "type": "integer"
+        },
+        "BLOCK": {
+          "default": false,
+          "description": "blocking callbacks?",
+          "title": "Block",
+          "type": "boolean"
+        },
+        "MAX_THREADS": {
+          "default": 1,
+          "description": "Maximum number of threads to use",
+          "title": "Max Threads",
+          "type": "integer"
+        }
+      },
+      "title": "ADCore_NDRoi",
+      "type": "object"
+    },
+    "ADCore_NDStats": {
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "const": "ADCore.NDStats",
+          "default": "ADCore.NDStats",
+          "description": "The type of this entity",
+          "title": "Type"
+        },
+        "entity_enabled": {
+          "default": true,
+          "description": "enable or disable this entity instance",
+          "title": "Entity Enabled",
+          "type": "boolean"
+        },
+        "PORT": {
+          "default": null,
+          "description": "Port for this plugin",
+          "title": "Port",
+          "type": "string"
+        },
+        "NDARRAY_PORT": {
+          "default": null,
+          "description": "Port Name for input NDArray plugin",
+          "title": "Ndarray Port",
+          "type": "string"
+        },
+        "P": {
+          "default": null,
+          "description": "The PV prefix",
+          "title": "P",
+          "type": "string"
+        },
+        "R": {
+          "default": null,
+          "description": "The PV suffix",
+          "title": "R",
+          "type": "string"
+        },
+        "TIMEOUT": {
+          "default": 1,
+          "description": "Timeout for ASYN communications",
+          "title": "Timeout",
+          "type": "integer"
+        },
+        "ADDR": {
+          "default": 0,
+          "description": "ASYN Address this plugin",
+          "title": "Addr",
+          "type": "integer"
+        },
+        "NDARRAY_ADDR": {
+          "default": 0,
+          "description": "ASYN Address for input NDArray plugin",
+          "title": "Ndarray Addr",
+          "type": "integer"
+        },
+        "ENABLED": {
+          "default": true,
+          "description": "Enable/Disable this plugin at startup",
+          "title": "Enabled",
+          "type": "boolean"
+        },
+        "SCANRATE": {
+          "default": "I/O Intr",
+          "description": "Epics record scan rate",
+          "title": "Scanrate",
+          "type": "string"
+        },
+        "QUEUE": {
+          "default": 2,
+          "description": "Number of NDArray buffers to be created for plugin callbacks",
+          "title": "Queue",
+          "type": "integer"
+        },
+        "BLOCK": {
+          "default": false,
+          "description": "blocking callbacks?",
+          "title": "Block",
+          "type": "boolean"
+        },
+        "MAX_THREADS": {
+          "default": 1,
+          "description": "Maximum number of threads to use",
+          "title": "Max Threads",
+          "type": "integer"
+        }
+      },
+      "title": "ADCore_NDStats",
+      "type": "object"
+    },
+    "EntityModel": {
+      "discriminator": {
+        "mapping": {
+          "ADAravis.ADAravis": "#/$defs/ADAravis_ADAravis",
+          "ADAravis.Mako_G234B": "#/$defs/ADAravis_Mako_G234B",
+          "ADAravis.MantaG235B": "#/$defs/ADAravis_MantaG235B",
+          "ADCore.NDRoi": "#/$defs/ADCore_NDRoi",
+          "ADCore.NDStats": "#/$defs/ADCore_NDStats",
+          "Hy8401ip.Hy8401Channel": "#/$defs/Hy8401ip_Hy8401Channel",
+          "Hy8401ip.Hy8401ip": "#/$defs/Hy8401ip_Hy8401ip",
+          "Hy8403ip.Hy8403Channel": "#/$defs/Hy8403ip_Hy8403Channel",
+          "Hy8403ip.Hy8403ip": "#/$defs/Hy8403ip_Hy8403ip",
+          "PT100.PT100": "#/$defs/PT100_PT100",
+          "TimingTemplates.DefaultEVR": "#/$defs/TimingTemplates_DefaultEVR",
+          "TimingTemplates.EvrAlive": "#/$defs/TimingTemplates_EvrAlive",
+          "TimingTemplates.GeneralTime": "#/$defs/TimingTemplates_GeneralTime",
+          "asyn.AsynIP": "#/$defs/asyn_AsynIP",
+          "asyn.AsynSerial": "#/$defs/asyn_AsynSerial",
+          "devIocStats.IocAdminSoft": "#/$defs/devIocStats_IocAdminSoft",
+          "epics.Dbpf": "#/$defs/epics_Dbpf",
+          "epics.EpicsCaMaxArrayBytes": "#/$defs/epics_EpicsCaMaxArrayBytes",
+          "epics.EpicsEnvSet": "#/$defs/epics_EpicsEnvSet",
+          "epics.EpicsTsMinWest": "#/$defs/epics_EpicsTsMinWest",
+          "epics.InterruptVectorVME": "#/$defs/epics_InterruptVectorVME",
+          "epics.PostStartupCommand": "#/$defs/epics_PostStartupCommand",
+          "epics.StartupCommand": "#/$defs/epics_StartupCommand",
+          "ipac.Hy8002": "#/$defs/ipac_Hy8002",
+          "mrfTiming.EventReceiverInit": "#/$defs/mrfTiming_EventReceiverInit",
+          "mrfTiming.EventReceiverPMC": "#/$defs/mrfTiming_EventReceiverPMC",
+          "pmac.CS": "#/$defs/pmac_CS",
+          "pmac.DlsCsPmacAsynMotor": "#/$defs/pmac_DlsCsPmacAsynMotor",
+          "pmac.DlsPmacAsynMotor": "#/$defs/pmac_DlsPmacAsynMotor",
+          "pmac.Geobrick": "#/$defs/pmac_Geobrick",
+          "pmac.PmacAsynIPPort": "#/$defs/pmac_PmacAsynIPPort",
+          "pmac.PmacAsynSSHPort": "#/$defs/pmac_PmacAsynSSHPort",
+          "pmac.autohome": "#/$defs/pmac_autohome",
+          "pmac.pmacDisableLimitsCheck": "#/$defs/pmac_pmacDisableLimitsCheck",
+          "psc.PscIpModule": "#/$defs/psc_PscIpModule",
+          "psc.PscTemplate": "#/$defs/psc_PscTemplate",
+          "psc.pscHy8401Channel-BS": "#/$defs/psc_pscHy8401Channel-BS"
+        },
+        "propertyName": "type"
+      },
+      "oneOf": [
+        {
+          "$ref": "#/$defs/ADAravis_ADAravis"
+        },
+        {
+          "$ref": "#/$defs/ADAravis_MantaG235B"
+        },
+        {
+          "$ref": "#/$defs/ADAravis_Mako_G234B"
+        },
+        {
+          "$ref": "#/$defs/ADCore_NDRoi"
+        },
+        {
+          "$ref": "#/$defs/ADCore_NDStats"
+        },
+        {
+          "$ref": "#/$defs/Hy8401ip_Hy8401ip"
+        },
+        {
+          "$ref": "#/$defs/Hy8401ip_Hy8401Channel"
+        },
+        {
+          "$ref": "#/$defs/Hy8403ip_Hy8403ip"
+        },
+        {
+          "$ref": "#/$defs/Hy8403ip_Hy8403Channel"
+        },
+        {
+          "$ref": "#/$defs/PT100_PT100"
+        },
+        {
+          "$ref": "#/$defs/TimingTemplates_DefaultEVR"
+        },
+        {
+          "$ref": "#/$defs/TimingTemplates_EvrAlive"
+        },
+        {
+          "$ref": "#/$defs/TimingTemplates_GeneralTime"
+        },
+        {
+          "$ref": "#/$defs/devIocStats_IocAdminSoft"
+        },
+        {
+          "$ref": "#/$defs/epics_EpicsCaMaxArrayBytes"
+        },
+        {
+          "$ref": "#/$defs/epics_EpicsTsMinWest"
+        },
+        {
+          "$ref": "#/$defs/epics_Dbpf"
+        },
+        {
+          "$ref": "#/$defs/epics_EpicsEnvSet"
+        },
+        {
+          "$ref": "#/$defs/epics_StartupCommand"
+        },
+        {
+          "$ref": "#/$defs/epics_PostStartupCommand"
+        },
+        {
+          "$ref": "#/$defs/epics_InterruptVectorVME"
+        },
+        {
+          "$ref": "#/$defs/asyn_AsynSerial"
+        },
+        {
+          "$ref": "#/$defs/asyn_AsynIP"
+        },
+        {
+          "$ref": "#/$defs/ipac_Hy8002"
+        },
+        {
+          "$ref": "#/$defs/mrfTiming_EventReceiverInit"
+        },
+        {
+          "$ref": "#/$defs/mrfTiming_EventReceiverPMC"
+        },
+        {
+          "$ref": "#/$defs/pmac_PmacAsynSSHPort"
+        },
+        {
+          "$ref": "#/$defs/pmac_PmacAsynIPPort"
+        },
+        {
+          "$ref": "#/$defs/pmac_Geobrick"
+        },
+        {
+          "$ref": "#/$defs/pmac_DlsPmacAsynMotor"
+        },
+        {
+          "$ref": "#/$defs/pmac_DlsCsPmacAsynMotor"
+        },
+        {
+          "$ref": "#/$defs/pmac_pmacDisableLimitsCheck"
+        },
+        {
+          "$ref": "#/$defs/pmac_autohome"
+        },
+        {
+          "$ref": "#/$defs/pmac_CS"
+        },
+        {
+          "$ref": "#/$defs/psc_PscIpModule"
+        },
+        {
+          "$ref": "#/$defs/psc_PscTemplate"
+        },
+        {
+          "$ref": "#/$defs/psc_pscHy8401Channel-BS"
+        }
+      ],
+      "title": "EntityModel"
+    },
+    "Hy8401ip_Hy8401Channel": {
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "const": "Hy8401ip.Hy8401Channel",
+          "default": "Hy8401ip.Hy8401Channel",
+          "description": "The type of this entity",
+          "title": "Type"
+        },
+        "entity_enabled": {
+          "default": true,
+          "description": "enable or disable this entity instance",
+          "title": "Entity Enabled",
+          "type": "boolean"
+        },
+        "card": {
+          "default": null,
+          "description": "8401 card identifier",
+          "title": "Card"
+        },
+        "signal": {
+          "default": null,
+          "description": "8401 signal number (0-7)",
+          "title": "Signal",
+          "type": "integer"
+        }
+      },
+      "title": "Hy8401ip_Hy8401Channel",
+      "type": "object"
+    },
+    "Hy8401ip_Hy8401ip": {
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "const": "Hy8401ip.Hy8401ip",
+          "default": "Hy8401ip.Hy8401ip",
+          "description": "The type of this entity",
+          "title": "Type"
+        },
+        "entity_enabled": {
+          "default": true,
+          "description": "enable or disable this entity instance",
+          "title": "Entity Enabled",
+          "type": "boolean"
+        },
+        "name": {
+          "default": null,
+          "description": "Name to refer to when making a channel",
+          "title": "Name",
+          "type": "string"
+        },
+        "carrier": {
+          "default": null,
+          "description": "Carrier Board Identifier",
+          "title": "Carrier"
+        },
+        "ip_site_number": {
+          "default": null,
+          "description": "IP Site Number 0=A, 1=B, 2=C, 3=D",
+          "title": "Ip Site Number",
+          "type": "integer"
+        },
+        "vector": {
+          "default": null,
+          "description": "Interrupt Vector",
+          "title": "Vector"
+        },
+        "int_enable": {
+          "default": false,
+          "description": "Interrupt Enable",
+          "title": "Int Enable",
+          "type": "boolean"
+        },
+        "external_clock": {
+          "default": false,
+          "description": "Use External Clock",
+          "title": "External Clock",
+          "type": "boolean"
+        },
+        "clock_rate": {
+          "default": 15,
+          "description": "Clock Rate",
+          "title": "Clock Rate",
+          "type": "integer"
+        },
+        "inhibit": {
+          "default": false,
+          "description": "Enable front panel inhibit signal",
+          "title": "Inhibit",
+          "type": "boolean"
+        },
+        "sample_size": {
+          "default": 0,
+          "description": "Number of samples for triggered capture",
+          "title": "Sample Size",
+          "type": "integer"
+        },
+        "card_id": {
+          "default": "{{ carrier.slot }}{{ ip_site_number }}",
+          "description": "Card Identifier",
+          "title": "Card Id",
+          "type": "string"
+        }
+      },
+      "title": "Hy8401ip_Hy8401ip",
+      "type": "object"
+    },
+    "Hy8403ip_Hy8403Channel": {
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "const": "Hy8403ip.Hy8403Channel",
+          "default": "Hy8403ip.Hy8403Channel",
+          "description": "The type of this entity",
+          "title": "Type"
+        },
+        "entity_enabled": {
+          "default": true,
+          "description": "enable or disable this entity instance",
+          "title": "Entity Enabled",
+          "type": "boolean"
+        },
+        "device": {
+          "default": null,
+          "description": "Device Name, PV Suffix",
+          "title": "Device",
+          "type": "string"
+        },
+        "card": {
+          "default": null,
+          "description": "8403 card identifier",
+          "title": "Card"
+        }
+      },
+      "title": "Hy8403ip_Hy8403Channel",
+      "type": "object"
+    },
+    "Hy8403ip_Hy8403ip": {
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "const": "Hy8403ip.Hy8403ip",
+          "default": "Hy8403ip.Hy8403ip",
+          "description": "The type of this entity",
+          "title": "Type"
+        },
+        "entity_enabled": {
+          "default": true,
+          "description": "enable or disable this entity instance",
+          "title": "Entity Enabled",
+          "type": "boolean"
+        },
+        "name": {
+          "default": null,
+          "description": "Name to refer to when making a channel",
+          "title": "Name",
+          "type": "string"
+        },
+        "carrier": {
+          "default": null,
+          "description": "Carrier Board Identifier",
+          "title": "Carrier"
+        },
+        "ip_site_number": {
+          "default": null,
+          "description": "IP Site Number 0=A, 1=B, 2=C, 3=D",
+          "title": "Ip Site Number",
+          "type": "integer"
+        },
+        "vector": {
+          "default": null,
+          "description": "Interrupt Vector",
+          "title": "Vector"
+        },
+        "aitype": {
+          "default": null,
+          "description": "0=differential, 1=single ended, 2=PT100, 3=Thermocouple, 4=PT100 with 8212 Transition Card, 5=Thermocouples with 8212 Transition Card",
+          "title": "Aitype",
+          "type": "integer"
+        },
+        "memsize": {
+          "default": null,
+          "description": "1=1MB memory, 2=2MB memory",
+          "title": "Memsize",
+          "type": "integer"
+        },
+        "clock_source": {
+          "default": null,
+          "description": "0=internal, 1=external",
+          "title": "Clock Source",
+          "type": "integer"
+        },
+        "clock_rate": {
+          "default": null,
+          "description": "Xilinx scanning frequency in Hertz. Valid values: 1,2,5,10,20,50,100 and 200 Hz.",
+          "title": "Clock Rate",
+          "type": "integer"
+        },
+        "gain": {
+          "default": null,
+          "description": "Gain for all ADC inputs. Valid values are: 1,2,4,8,16,32,64, 128",
+          "title": "Gain",
+          "type": "integer"
+        },
+        "vref": {
+          "default": null,
+          "description": "Determine the internal ADC reference voltage: =1: 1.25V =2: 2.5V",
+          "title": "Vref",
+          "type": "integer"
+        },
+        "card_id": {
+          "default": "{{ carrier.slot }}{{ ip_site_number }}",
+          "description": "Card Identifier",
+          "title": "Card Id",
+          "type": "string"
+        }
+      },
+      "title": "Hy8403ip_Hy8403ip",
+      "type": "object"
+    },
+    "PT100_PT100": {
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "const": "PT100.PT100",
+          "default": "PT100.PT100",
+          "description": "The type of this entity",
+          "title": "Type"
+        },
+        "entity_enabled": {
+          "default": true,
+          "description": "enable or disable this entity instance",
+          "title": "Entity Enabled",
+          "type": "boolean"
+        },
+        "PT": {
+          "default": null,
+          "description": "Process Variable prefix",
+          "title": "Pt",
+          "type": "string"
+        },
+        "ADC_REF_CHAN": {
+          "default": null,
+          "description": "adc reference channel PV",
+          "title": "Adc Ref Chan",
+          "type": "string"
+        },
+        "ADC_CHAN": {
+          "default": null,
+          "description": "ADC channel PV",
+          "title": "Adc Chan",
+          "type": "string"
+        },
+        "deadband": {
+          "default": null,
+          "description": "hysteresis value for monitor updates in Deg.C",
+          "title": "Deadband",
+          "type": "number"
+        },
+        "hihi": {
+          "default": null,
+          "description": "hihi alarm",
+          "title": "Hihi",
+          "type": "number"
+        },
+        "hi": {
+          "default": null,
+          "description": "hi alarm",
+          "title": "Hi",
+          "type": "number"
+        },
+        "lo": {
+          "default": null,
+          "description": "lo alarm",
+          "title": "Lo",
+          "type": "number"
+        },
+        "lolo": {
+          "default": null,
+          "description": "lolo alarm",
+          "title": "Lolo",
+          "type": "number"
+        },
+        "scan": {
+          "default": 1.0,
+          "description": "scan period in seconds",
+          "title": "Scan",
+          "type": "number"
+        },
+        "prec": {
+          "default": 0,
+          "description": "record display precision",
+          "title": "Prec",
+          "type": "integer"
+        },
+        "hopr": {
+          "default": 100.0,
+          "description": "high operating range",
+          "title": "Hopr",
+          "type": "number"
+        },
+        "lopr": {
+          "default": 0.0,
+          "description": "low operating range",
+          "title": "Lopr",
+          "type": "number"
+        }
+      },
+      "title": "PT100_PT100",
+      "type": "object"
+    },
+    "TimingTemplates_DefaultEVR": {
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "const": "TimingTemplates.DefaultEVR",
+          "default": "TimingTemplates.DefaultEVR",
+          "description": "The type of this entity",
+          "title": "Type"
+        },
+        "entity_enabled": {
+          "default": true,
+          "description": "enable or disable this entity instance",
+          "title": "Entity Enabled",
+          "type": "boolean"
+        },
+        "device": {
+          "default": null,
+          "description": "The device PV prefix",
+          "title": "Device",
+          "type": "string"
+        },
+        "event_receiver": {
+          "default": null,
+          "description": "reference to EventReceiverPMC entry",
+          "title": "Event Receiver"
+        },
+        "er": {
+          "default": "SET-ER",
+          "description": "Event Receiver record suffix",
+          "title": "Er",
+          "type": "string"
+        }
+      },
+      "title": "TimingTemplates_DefaultEVR",
+      "type": "object"
+    },
+    "TimingTemplates_EvrAlive": {
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "const": "TimingTemplates.EvrAlive",
+          "default": "TimingTemplates.EvrAlive",
+          "description": "The type of this entity",
+          "title": "Type"
+        },
+        "entity_enabled": {
+          "default": true,
+          "description": "enable or disable this entity instance",
+          "title": "Entity Enabled",
+          "type": "boolean"
+        },
+        "default_evr": {
+          "default": null,
+          "description": "reference to DefaultEVR entry",
+          "title": "Default Evr"
+        }
+      },
+      "title": "TimingTemplates_EvrAlive",
+      "type": "object"
+    },
+    "TimingTemplates_GeneralTime": {
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "const": "TimingTemplates.GeneralTime",
+          "default": "TimingTemplates.GeneralTime",
+          "description": "The type of this entity",
+          "title": "Type"
+        },
+        "entity_enabled": {
+          "default": true,
+          "description": "enable or disable this entity instance",
+          "title": "Entity Enabled",
+          "type": "boolean"
+        },
+        "device": {
+          "default": null,
+          "description": "device name",
+          "title": "Device",
+          "type": "string"
+        },
+        "gt": {
+          "default": "GT:",
+          "description": "generalTime PV Prefix",
+          "title": "Gt",
+          "type": "string"
+        },
+        "scan": {
+          "default": "10 second",
+          "description": "scan rate",
+          "title": "Scan",
+          "type": "string"
+        }
+      },
+      "title": "TimingTemplates_GeneralTime",
+      "type": "object"
+    },
+    "asyn_AsynIP": {
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "const": "asyn.AsynIP",
+          "default": "asyn.AsynIP",
+          "description": "The type of this entity",
+          "title": "Type"
+        },
+        "entity_enabled": {
+          "default": true,
+          "description": "enable or disable this entity instance",
+          "title": "Entity Enabled",
+          "type": "boolean"
+        },
+        "port": {
+          "default": null,
+          "description": "Serial port tty name / IP address optionally followed by protocol",
+          "title": "Port",
+          "type": "string"
+        },
+        "name": {
+          "default": null,
+          "description": "Name for the Asyn Port",
+          "title": "Name",
+          "type": "string"
+        },
+        "input_eos": {
+          "default": null,
+          "description": "Input end of string (terminator)",
+          "title": "Input Eos",
+          "type": "string"
+        },
+        "output_eos": {
+          "default": null,
+          "description": "Output end of string (terminator)",
+          "title": "Output Eos",
+          "type": "string"
+        },
+        "priority": {
+          "default": 100,
+          "description": "Priority",
+          "title": "Priority",
+          "type": "integer"
+        },
+        "no_auto_connect": {
+          "default": null,
+          "description": "Set to stop auto connect",
+          "title": "No Auto Connect",
+          "type": "boolean"
+        },
+        "no_process_eos": {
+          "default": null,
+          "description": "Set to avoid processing end of string",
+          "title": "No Process Eos",
+          "type": "boolean"
+        },
+        "simulation": {
+          "default": null,
+          "description": "IP port to connect to if in simulation mode",
+          "title": "Simulation",
+          "type": "string"
+        }
+      },
+      "title": "asyn_AsynIP",
+      "type": "object"
+    },
+    "asyn_AsynSerial": {
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "const": "asyn.AsynSerial",
+          "default": "asyn.AsynSerial",
+          "description": "The type of this entity",
+          "title": "Type"
+        },
+        "entity_enabled": {
+          "default": true,
+          "description": "enable or disable this entity instance",
+          "title": "Entity Enabled",
+          "type": "boolean"
+        },
+        "port": {
+          "default": null,
+          "description": "The port name for this asyn object",
+          "title": "Port",
+          "type": "string"
+        },
+        "input_eos": {
+          "default": null,
+          "description": "Input end of string (terminator)",
+          "title": "Input Eos",
+          "type": "string"
+        },
+        "output_eos": {
+          "default": null,
+          "description": "Output end of string (terminator)",
+          "title": "Output Eos",
+          "type": "string"
+        },
+        "priority": {
+          "default": 100,
+          "description": "Priority",
+          "title": "Priority",
+          "type": "integer"
+        },
+        "no_auto_connect": {
+          "default": null,
+          "description": "Set to stop auto connect",
+          "title": "No Auto Connect",
+          "type": "boolean"
+        },
+        "no_process_eos": {
+          "default": null,
+          "description": "Set to avoid processing end of string",
+          "title": "No Process Eos",
+          "type": "boolean"
+        },
+        "simulation": {
+          "default": null,
+          "description": "IP port to connect to if in simulation mode",
+          "title": "Simulation",
+          "type": "string"
+        },
+        "baud": {
+          "default": null,
+          "description": "Baud Rate",
+          "title": "Baud",
+          "type": "integer"
+        },
+        "bits": {
+          "default": null,
+          "description": "Bits [8,7,6,5]",
+          "title": "Bits",
+          "type": "integer"
+        },
+        "parity": {
+          "default": null,
+          "description": "Parity [null,even,odd]",
+          "title": "Parity",
+          "type": "string"
+        },
+        "stop": {
+          "default": null,
+          "description": "Stop Bits [1,2]",
+          "title": "Stop",
+          "type": "integer"
+        },
+        "crtscts": {
+          "default": null,
+          "description": "Set hardware flow control on",
+          "title": "Crtscts",
+          "type": "boolean"
+        }
+      },
+      "title": "asyn_AsynSerial",
+      "type": "object"
+    },
+    "devIocStats_IocAdminSoft": {
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "const": "devIocStats.IocAdminSoft",
+          "default": "devIocStats.IocAdminSoft",
+          "description": "The type of this entity",
+          "title": "Type"
+        },
+        "entity_enabled": {
+          "default": true,
+          "description": "enable or disable this entity instance",
+          "title": "Entity Enabled",
+          "type": "boolean"
+        },
+        "ioc": {
+          "default": null,
+          "description": "Device Prefix for this IOC",
+          "title": "Ioc",
+          "type": "string"
+        }
+      },
+      "title": "devIocStats_IocAdminSoft",
+      "type": "object"
+    },
+    "epics_Dbpf": {
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "const": "epics.Dbpf",
+          "default": "epics.Dbpf",
+          "description": "The type of this entity",
+          "title": "Type"
+        },
+        "entity_enabled": {
+          "default": true,
+          "description": "enable or disable this entity instance",
+          "title": "Entity Enabled",
+          "type": "boolean"
+        },
+        "pv": {
+          "default": null,
+          "description": "Name of PV",
+          "title": "Pv",
+          "type": "string"
+        },
+        "value": {
+          "default": null,
+          "description": "Value to set",
+          "title": "Value",
+          "type": "string"
+        }
+      },
+      "title": "epics_Dbpf",
+      "type": "object"
+    },
+    "epics_EpicsCaMaxArrayBytes": {
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "const": "epics.EpicsCaMaxArrayBytes",
+          "default": "epics.EpicsCaMaxArrayBytes",
+          "description": "The type of this entity",
+          "title": "Type"
+        },
+        "entity_enabled": {
+          "default": true,
+          "description": "enable or disable this entity instance",
+          "title": "Entity Enabled",
+          "type": "boolean"
+        },
+        "max_bytes": {
+          "default": 6000000,
+          "description": "Max size in bytes for sending arrays over channel access",
+          "title": "Max Bytes",
+          "type": "integer"
+        }
+      },
+      "title": "epics_EpicsCaMaxArrayBytes",
+      "type": "object"
+    },
+    "epics_EpicsEnvSet": {
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "const": "epics.EpicsEnvSet",
+          "default": "epics.EpicsEnvSet",
+          "description": "The type of this entity",
+          "title": "Type"
+        },
+        "entity_enabled": {
+          "default": true,
+          "description": "enable or disable this entity instance",
+          "title": "Entity Enabled",
+          "type": "boolean"
+        },
+        "name": {
+          "default": null,
+          "description": "Name of environment variable",
+          "title": "Name",
+          "type": "string"
+        },
+        "value": {
+          "default": null,
+          "description": "Value of environment variable",
+          "title": "Value",
+          "type": "string"
+        }
+      },
+      "title": "epics_EpicsEnvSet",
+      "type": "object"
+    },
+    "epics_EpicsTsMinWest": {
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "const": "epics.EpicsTsMinWest",
+          "default": "epics.EpicsTsMinWest",
+          "description": "The type of this entity",
+          "title": "Type"
+        },
+        "entity_enabled": {
+          "default": true,
+          "description": "enable or disable this entity instance",
+          "title": "Entity Enabled",
+          "type": "boolean"
+        },
+        "minutes_west": {
+          "default": 0,
+          "description": "relative time zone minutes",
+          "title": "Minutes West",
+          "type": "integer"
+        }
+      },
+      "title": "epics_EpicsTsMinWest",
+      "type": "object"
+    },
+    "epics_InterruptVectorVME": {
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "const": "epics.InterruptVectorVME",
+          "default": "epics.InterruptVectorVME",
+          "description": "The type of this entity",
+          "title": "Type"
+        },
+        "entity_enabled": {
+          "default": true,
+          "description": "enable or disable this entity instance",
+          "title": "Entity Enabled",
+          "type": "boolean"
+        },
+        "name": {
+          "default": null,
+          "description": "A name for an interrupt vector variable",
+          "title": "Name",
+          "type": "string"
+        },
+        "count": {
+          "default": 1,
+          "description": "The number of interrupt vectors to reserve",
+          "title": "Count",
+          "type": "integer"
+        }
+      },
+      "title": "epics_InterruptVectorVME",
+      "type": "object"
+    },
+    "epics_PostStartupCommand": {
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "const": "epics.PostStartupCommand",
+          "default": "epics.PostStartupCommand",
+          "description": "The type of this entity",
+          "title": "Type"
+        },
+        "entity_enabled": {
+          "default": true,
+          "description": "enable or disable this entity instance",
+          "title": "Entity Enabled",
+          "type": "boolean"
+        },
+        "command": {
+          "default": "",
+          "description": "command string",
+          "title": "Command",
+          "type": "string"
+        }
+      },
+      "title": "epics_PostStartupCommand",
+      "type": "object"
+    },
+    "epics_StartupCommand": {
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "const": "epics.StartupCommand",
+          "default": "epics.StartupCommand",
+          "description": "The type of this entity",
+          "title": "Type"
+        },
+        "entity_enabled": {
+          "default": true,
+          "description": "enable or disable this entity instance",
+          "title": "Entity Enabled",
+          "type": "boolean"
+        },
+        "command": {
+          "default": "",
+          "description": "command string",
+          "title": "Command",
+          "type": "string"
+        }
+      },
+      "title": "epics_StartupCommand",
+      "type": "object"
+    },
+    "ipac_Hy8002": {
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "const": "ipac.Hy8002",
+          "default": "ipac.Hy8002",
+          "description": "The type of this entity",
+          "title": "Type"
+        },
+        "entity_enabled": {
+          "default": true,
+          "description": "enable or disable this entity instance",
+          "title": "Entity Enabled",
+          "type": "boolean"
+        },
+        "name": {
+          "default": null,
+          "description": "IPAC identifier (suggested: IPAC<slot>)",
+          "title": "Name",
+          "type": "string"
+        },
+        "slot": {
+          "default": null,
+          "description": "Crate Slot number",
+          "title": "Slot",
+          "type": "integer"
+        },
+        "int_level": {
+          "default": 2,
+          "description": "Interrupt level",
+          "title": "Int Level",
+          "type": "integer"
+        },
+        "card_id": {
+          "default": "{{ __utils__.counter(\"Carriers\", start=0) }}",
+          "description": "Carrier Card Identifier",
+          "title": "Card Id",
+          "type": "string"
+        }
+      },
+      "title": "ipac_Hy8002",
+      "type": "object"
+    },
+    "mrfTiming_EventReceiverInit": {
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "const": "mrfTiming.EventReceiverInit",
+          "default": "mrfTiming.EventReceiverInit",
+          "description": "The type of this entity",
+          "title": "Type"
+        },
+        "entity_enabled": {
+          "default": true,
+          "description": "enable or disable this entity instance",
+          "title": "Entity Enabled",
+          "type": "boolean"
+        },
+        "priority": {
+          "default": 10,
+          "description": "Time provider priority",
+          "title": "Priority",
+          "type": "integer"
+        }
+      },
+      "title": "mrfTiming_EventReceiverInit",
+      "type": "object"
+    },
+    "mrfTiming_EventReceiverPMC": {
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "const": "mrfTiming.EventReceiverPMC",
+          "default": "mrfTiming.EventReceiverPMC",
+          "description": "The type of this entity",
+          "title": "Type"
+        },
+        "entity_enabled": {
+          "default": true,
+          "description": "enable or disable this entity instance",
+          "title": "Entity Enabled",
+          "type": "boolean"
+        },
+        "name": {
+          "default": null,
+          "description": "A name to reference this EVR",
+          "title": "Name",
+          "type": "string"
+        },
+        "card_id": {
+          "default": null,
+          "description": "EPICS Card id",
+          "title": "Card Id",
+          "type": "integer"
+        },
+        "card_index": {
+          "default": 0,
+          "description": "PMC slot number",
+          "title": "Card Index",
+          "type": "integer"
+        }
+      },
+      "title": "mrfTiming_EventReceiverPMC",
+      "type": "object"
+    },
+    "pmac_CS": {
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "const": "pmac.CS",
+          "default": "pmac.CS",
+          "description": "The type of this entity",
+          "title": "Type"
+        },
+        "entity_enabled": {
+          "default": true,
+          "description": "enable or disable this entity instance",
+          "title": "Entity Enabled",
+          "type": "boolean"
+        },
+        "name": {
+          "default": null,
+          "description": "Asyn port name for this object",
+          "title": "Name",
+          "type": "string"
+        },
+        "Controller": {
+          "default": null,
+          "description": "the PMAC Controller",
+          "title": "Controller"
+        },
+        "CS": {
+          "default": null,
+          "description": "Coordinate system number",
+          "title": "Cs",
+          "type": "integer"
+        },
+        "NAxes": {
+          "default": 9,
+          "description": "number of CS axes",
+          "title": "Naxes",
+          "type": "integer"
+        },
+        "Program": {
+          "default": 10,
+          "description": "PROG number for CS motion",
+          "title": "Program",
+          "type": "integer"
+        }
+      },
+      "title": "pmac_CS",
+      "type": "object"
+    },
+    "pmac_DlsCsPmacAsynMotor": {
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "const": "pmac.DlsCsPmacAsynMotor",
+          "default": "pmac.DlsCsPmacAsynMotor",
+          "description": "The type of this entity",
+          "title": "Type"
+        },
+        "entity_enabled": {
+          "default": true,
+          "description": "enable or disable this entity instance",
+          "title": "Entity Enabled",
+          "type": "boolean"
+        },
+        "name": {
+          "default": null,
+          "description": "Object name and gui association name",
+          "title": "Name",
+          "type": "string"
+        },
+        "CsController": {
+          "default": null,
+          "description": "Coordinate system controller to attach to",
+          "title": "Cscontroller"
+        },
+        "axis": {
+          "default": null,
+          "description": "which axis number this motor drives",
+          "title": "Axis",
+          "type": "integer"
+        },
+        "P": {
+          "default": null,
+          "description": "PV prefix name for this motor",
+          "title": "P",
+          "type": "string"
+        },
+        "M": {
+          "default": null,
+          "description": "PV motor name for this motor",
+          "title": "M",
+          "type": "string"
+        },
+        "DESC": {
+          "default": "",
+          "description": "Description, displayed on EDM screen",
+          "title": "Desc",
+          "type": "string"
+        },
+        "MRES": {
+          "default": 0.0001,
+          "description": "Motor Step Size (EGU)",
+          "title": "Mres",
+          "type": "number"
+        },
+        "VELO": {
+          "default": 1.0,
+          "description": "axis Velocity (EGU/s)",
+          "title": "Velo",
+          "type": "number"
+        },
+        "PREC": {
+          "default": 3,
+          "description": "Display Precision",
+          "title": "Prec",
+          "type": "integer"
+        },
+        "EGU": {
+          "default": "mm",
+          "description": "Engineering Units",
+          "title": "Egu",
+          "type": "string"
+        },
+        "TWV": {
+          "default": 1.0,
+          "description": "Tweak Step Size (EGU)",
+          "title": "Twv",
+          "type": "number"
+        },
+        "DTYP": {
+          "default": "asynMotor",
+          "description": "Datatype of record",
+          "title": "Dtyp",
+          "type": "string"
+        },
+        "DIR": {
+          "default": 0,
+          "description": "User direction",
+          "title": "Dir",
+          "type": "integer"
+        },
+        "VBAS": {
+          "default": 1.0,
+          "description": "Base Velocity (EGU/s)",
+          "title": "Vbas",
+          "type": "number"
+        },
+        "VMAX": {
+          "default": "{{VELO}}",
+          "description": "Max Velocity (EGU/s)",
+          "title": "Vmax",
+          "type": "string"
+        },
+        "ACCL": {
+          "default": 0.5,
+          "description": "Seconds to Velocity",
+          "title": "Accl",
+          "type": "number"
+        },
+        "BDST": {
+          "default": 0.0,
+          "description": "BL Distance (EGU)",
+          "title": "Bdst",
+          "type": "number"
+        },
+        "BVEL": {
+          "default": 0.0,
+          "description": "BL Velocity(EGU/s)",
+          "title": "Bvel",
+          "type": "number"
+        },
+        "BACC": {
+          "default": 0.0,
+          "description": "BL Seconds to Veloc",
+          "title": "Bacc",
+          "type": "number"
+        },
+        "DHLM": {
+          "default": 10000.0,
+          "description": "Dial High Limit",
+          "title": "Dhlm",
+          "type": "number"
+        },
+        "DLLM": {
+          "default": -10000.0,
+          "description": "Dial low limit",
+          "title": "Dllm",
+          "type": "number"
+        },
+        "HLM": {
+          "default": 0.0,
+          "description": "User High Limit",
+          "title": "Hlm",
+          "type": "number"
+        },
+        "LLM": {
+          "default": 0.0,
+          "description": "User Low Limit",
+          "title": "Llm",
+          "type": "number"
+        },
+        "HLSV": {
+          "default": "MAJOR",
+          "description": "HW Lim, Violation Svr",
+          "title": "Hlsv",
+          "type": "string"
+        },
+        "INIT": {
+          "default": "",
+          "description": "Startup commands",
+          "title": "Init",
+          "type": "string"
+        },
+        "SREV": {
+          "default": 1000,
+          "description": "Steps per Revolution",
+          "title": "Srev",
+          "type": "integer"
+        },
+        "RRES": {
+          "default": 0.0,
+          "description": "Readback Step Size (EGU",
+          "title": "Rres",
+          "type": "number"
+        },
+        "ERES": {
+          "default": 0.0,
+          "description": "Encoder Step Size (EGU)",
+          "title": "Eres",
+          "type": "number"
+        },
+        "JAR": {
+          "default": 0.0,
+          "description": "Jog Acceleration (EGU/s^2)",
+          "title": "Jar",
+          "type": "number"
+        },
+        "UEIP": {
+          "default": 0,
+          "description": "Use Encoder If Present",
+          "title": "Ueip",
+          "type": "integer"
+        },
+        "URIP": {
+          "default": 0,
+          "description": "Use RDBL If Present",
+          "title": "Urip",
+          "type": "integer"
+        },
+        "RDBL": {
+          "default": "0",
+          "description": "Readback Location, set URIP =1 if you specify this",
+          "title": "Rdbl",
+          "type": "string"
+        },
+        "RLNK": {
+          "default": "",
+          "description": "Readback output link",
+          "title": "Rlnk",
+          "type": "string"
+        },
+        "RTRY": {
+          "default": 0,
+          "description": "Max retry count",
+          "title": "Rtry",
+          "type": "integer"
+        },
+        "DLY": {
+          "default": 0.0,
+          "description": "Readback settle time (s)",
+          "title": "Dly",
+          "type": "number"
+        },
+        "OFF": {
+          "default": 0.0,
+          "description": "User Offset (EGU)",
+          "title": "Off",
+          "type": "number"
+        },
+        "RDBD": {
+          "default": 0.0,
+          "description": "Retry Deadband (EGU)",
+          "title": "Rdbd",
+          "type": "number"
+        },
+        "FOFF": {
+          "default": 0,
+          "description": "Freeze Offset, 0=variable, 1=frozen",
+          "title": "Foff",
+          "type": "integer"
+        },
+        "ADEL": {
+          "default": 0.0,
+          "description": "Alarm monitor deadband (EGU)",
+          "title": "Adel",
+          "type": "number"
+        },
+        "NTM": {
+          "default": 1,
+          "description": "New Target Monitor, only set to 0 for soft motors",
+          "title": "Ntm",
+          "type": "integer"
+        },
+        "FEHEIGH": {
+          "default": 0.0,
+          "description": "HIGH limit for following error",
+          "title": "Feheigh",
+          "type": "number"
+        },
+        "FEHIHI": {
+          "default": 0.0,
+          "description": "HIHI limit for following error",
+          "title": "Fehihi",
+          "type": "number"
+        },
+        "FEHHSV": {
+          "default": "NO_ALARM",
+          "description": "HIHI alarm severity for following error",
+          "title": "Fehhsv",
+          "type": "string"
+        },
+        "FEHSV": {
+          "default": "NO_ALARM",
+          "description": "HIGH alarm severity for following error",
+          "title": "Fehsv",
+          "type": "string"
+        },
+        "SCALE": {
+          "default": 1,
+          "description": "",
+          "title": "Scale",
+          "type": "integer"
+        },
+        "HOMEVIS": {
+          "default": 1,
+          "description": "If 1 then home is visible on the gui",
+          "title": "Homevis",
+          "type": "integer"
+        },
+        "HOMEVISSTR": {
+          "default": "Use motor summary screen",
+          "description": "",
+          "title": "Homevisstr",
+          "type": "string"
+        },
+        "alh": {
+          "default": "",
+          "description": "Set this to alh to add the motor to the alarm handler and send emails",
+          "title": "Alh",
+          "type": "string"
+        },
+        "HOME": {
+          "default": "{{P}}",
+          "description": "Prefix for autohome instance. Defaults to $(P) If unspecified",
+          "title": "Home",
+          "type": "string"
+        },
+        "ALLOW_HOMED_SET": {
+          "default": "#",
+          "description": "Set to a blank to allow this axis to have its homed",
+          "title": "Allow Homed Set",
+          "type": "string"
+        }
+      },
+      "title": "pmac_DlsCsPmacAsynMotor",
+      "type": "object"
+    },
+    "pmac_DlsPmacAsynMotor": {
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "const": "pmac.DlsPmacAsynMotor",
+          "default": "pmac.DlsPmacAsynMotor",
+          "description": "The type of this entity",
+          "title": "Type"
+        },
+        "entity_enabled": {
+          "default": true,
+          "description": "enable or disable this entity instance",
+          "title": "Entity Enabled",
+          "type": "boolean"
+        },
+        "name": {
+          "default": null,
+          "description": "Object name and gui association name",
+          "title": "Name",
+          "type": "string"
+        },
+        "Controller": {
+          "default": null,
+          "description": "PMAC Controller to attach to",
+          "title": "Controller"
+        },
+        "axis": {
+          "default": null,
+          "description": "which axis number this motor drives",
+          "title": "Axis",
+          "type": "integer"
+        },
+        "P": {
+          "default": null,
+          "description": "PV prefix name for this motor",
+          "title": "P",
+          "type": "string"
+        },
+        "M": {
+          "default": null,
+          "description": "PV motor name for this motor",
+          "title": "M",
+          "type": "string"
+        },
+        "DESC": {
+          "default": "",
+          "description": "Description, displayed on EDM screen",
+          "title": "Desc",
+          "type": "string"
+        },
+        "MRES": {
+          "default": 0.0001,
+          "description": "Motor Step Size (EGU)",
+          "title": "Mres",
+          "type": "number"
+        },
+        "VELO": {
+          "default": 1.0,
+          "description": "axis Velocity (EGU/s)",
+          "title": "Velo",
+          "type": "number"
+        },
+        "PREC": {
+          "default": 3,
+          "description": "Display Precision",
+          "title": "Prec",
+          "type": "integer"
+        },
+        "EGU": {
+          "default": "mm",
+          "description": "Engineering Units",
+          "title": "Egu",
+          "type": "string"
+        },
+        "TWV": {
+          "default": 1.0,
+          "description": "Tweak Step Size (EGU)",
+          "title": "Twv",
+          "type": "number"
+        },
+        "DTYP": {
+          "default": "asynMotor",
+          "description": "Datatype of record",
+          "title": "Dtyp",
+          "type": "string"
+        },
+        "DIR": {
+          "default": 0,
+          "description": "User direction",
+          "title": "Dir",
+          "type": "integer"
+        },
+        "VBAS": {
+          "default": 1.0,
+          "description": "Base Velocity (EGU/s)",
+          "title": "Vbas",
+          "type": "number"
+        },
+        "VMAX": {
+          "default": "{{VELO}}",
+          "description": "Max Velocity (EGU/s)",
+          "title": "Vmax",
+          "type": "string"
+        },
+        "ACCL": {
+          "default": 0.5,
+          "description": "Seconds to Velocity",
+          "title": "Accl",
+          "type": "number"
+        },
+        "BDST": {
+          "default": 0.0,
+          "description": "BL Distance (EGU)",
+          "title": "Bdst",
+          "type": "number"
+        },
+        "BVEL": {
+          "default": 0.0,
+          "description": "BL Velocity(EGU/s)",
+          "title": "Bvel",
+          "type": "number"
+        },
+        "BACC": {
+          "default": 0.0,
+          "description": "BL Seconds to Veloc",
+          "title": "Bacc",
+          "type": "number"
+        },
+        "DHLM": {
+          "default": 10000.0,
+          "description": "Dial High Limit",
+          "title": "Dhlm",
+          "type": "number"
+        },
+        "DLLM": {
+          "default": -10000.0,
+          "description": "Dial low limit",
+          "title": "Dllm",
+          "type": "number"
+        },
+        "HLM": {
+          "default": 0.0,
+          "description": "User High Limit",
+          "title": "Hlm",
+          "type": "number"
+        },
+        "LLM": {
+          "default": 0.0,
+          "description": "User Low Limit",
+          "title": "Llm",
+          "type": "number"
+        },
+        "HLSV": {
+          "default": "MAJOR",
+          "description": "HW Lim, Violation Svr",
+          "title": "Hlsv",
+          "type": "string"
+        },
+        "INIT": {
+          "default": "",
+          "description": "Startup commands",
+          "title": "Init",
+          "type": "string"
+        },
+        "SREV": {
+          "default": 1000,
+          "description": "Steps per Revolution",
+          "title": "Srev",
+          "type": "integer"
+        },
+        "RRES": {
+          "default": 0.0,
+          "description": "Readback Step Size (EGU",
+          "title": "Rres",
+          "type": "number"
+        },
+        "ERES": {
+          "default": 0.0,
+          "description": "Encoder Step Size (EGU)",
+          "title": "Eres",
+          "type": "number"
+        },
+        "JAR": {
+          "default": 0.0,
+          "description": "Jog Acceleration (EGU/s^2)",
+          "title": "Jar",
+          "type": "number"
+        },
+        "UEIP": {
+          "default": 0,
+          "description": "Use Encoder If Present",
+          "title": "Ueip",
+          "type": "integer"
+        },
+        "URIP": {
+          "default": 0,
+          "description": "Use RDBL If Present",
+          "title": "Urip",
+          "type": "integer"
+        },
+        "RDBL": {
+          "default": "0",
+          "description": "Readback Location, set URIP =1 if you specify this",
+          "title": "Rdbl",
+          "type": "string"
+        },
+        "RLNK": {
+          "default": "",
+          "description": "Readback output link",
+          "title": "Rlnk",
+          "type": "string"
+        },
+        "RTRY": {
+          "default": 0,
+          "description": "Max retry count",
+          "title": "Rtry",
+          "type": "integer"
+        },
+        "DLY": {
+          "default": 0.0,
+          "description": "Readback settle time (s)",
+          "title": "Dly",
+          "type": "number"
+        },
+        "OFF": {
+          "default": 0.0,
+          "description": "User Offset (EGU)",
+          "title": "Off",
+          "type": "number"
+        },
+        "RDBD": {
+          "default": 0.0,
+          "description": "Retry Deadband (EGU)",
+          "title": "Rdbd",
+          "type": "number"
+        },
+        "FOFF": {
+          "default": 0,
+          "description": "Freeze Offset, 0=variable, 1=frozen",
+          "title": "Foff",
+          "type": "integer"
+        },
+        "ADEL": {
+          "default": 0.0,
+          "description": "Alarm monitor deadband (EGU)",
+          "title": "Adel",
+          "type": "number"
+        },
+        "NTM": {
+          "default": 1,
+          "description": "New Target Monitor, only set to 0 for soft motors",
+          "title": "Ntm",
+          "type": "integer"
+        },
+        "FEHIGH": {
+          "default": 0.0,
+          "description": "HIGH limit for following error",
+          "title": "Fehigh",
+          "type": "number"
+        },
+        "FEHIHI": {
+          "default": 0.0,
+          "description": "HIHI limit for following error",
+          "title": "Fehihi",
+          "type": "number"
+        },
+        "FEHHSV": {
+          "default": "NO_ALARM",
+          "description": "HIHI alarm severity for following error",
+          "title": "Fehhsv",
+          "type": "string"
+        },
+        "FEHSV": {
+          "default": "NO_ALARM",
+          "description": "HIGH alarm severity for following error",
+          "title": "Fehsv",
+          "type": "string"
+        },
+        "SCALE": {
+          "default": 1,
+          "description": "",
+          "title": "Scale",
+          "type": "integer"
+        },
+        "HOMEVIS": {
+          "default": 1,
+          "description": "If 1 then home is visible on the gui",
+          "title": "Homevis",
+          "type": "integer"
+        },
+        "HOMEVISSTR": {
+          "default": "Use motor summary screen",
+          "description": "",
+          "title": "Homevisstr",
+          "type": "string"
+        },
+        "alh": {
+          "default": "",
+          "description": "Set this to alh to add the motor to the alarm handler and send emails",
+          "title": "Alh",
+          "type": "string"
+        },
+        "HOME": {
+          "default": "{{P}}",
+          "description": "Prefix for autohome instance. Defaults to $(P) If unspecified",
+          "title": "Home",
+          "type": "string"
+        },
+        "ALLOW_HOMED_SET": {
+          "default": "#",
+          "description": "Set to a blank to allow this axis to have its homed",
+          "title": "Allow Homed Set",
+          "type": "string"
+        },
+        "RLINK": {
+          "default": "",
+          "description": "not sure what this is",
+          "title": "Rlink",
+          "type": "string"
+        }
+      },
+      "title": "pmac_DlsPmacAsynMotor",
+      "type": "object"
+    },
+    "pmac_Geobrick": {
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "const": "pmac.Geobrick",
+          "default": "pmac.Geobrick",
+          "description": "The type of this entity",
+          "title": "Type"
+        },
+        "entity_enabled": {
+          "default": true,
+          "description": "enable or disable this entity instance",
+          "title": "Entity Enabled",
+          "type": "boolean"
+        },
+        "name": {
+          "default": null,
+          "description": "Name to use for the geobrick's asyn port",
+          "title": "Name",
+          "type": "string"
+        },
+        "PORT": {
+          "default": null,
+          "description": "Asyn port name for PmacAsynIPPort to connect to",
+          "title": "Port"
+        },
+        "P": {
+          "default": null,
+          "description": "PV Prefix for all pmac db templates",
+          "title": "P",
+          "type": "string"
+        },
+        "numAxes": {
+          "default": 8,
+          "description": "number of axes to initialize for the controller",
+          "title": "Numaxes",
+          "type": "integer"
+        },
+        "idlePoll": {
+          "default": 500,
+          "description": "Idle Poll Period in ms",
+          "title": "Idlepoll",
+          "type": "integer"
+        },
+        "movingPoll": {
+          "default": 100,
+          "description": "Moving Poll Period in ms",
+          "title": "Movingpoll",
+          "type": "integer"
+        },
+        "TIMEOUT": {
+          "default": 4,
+          "description": "timeout in seconds for asyn",
+          "title": "Timeout",
+          "type": "integer"
+        },
+        "FEEDRATE": {
+          "default": 100,
+          "description": "feedrate below which we go into error",
+          "title": "Feedrate",
+          "type": "integer"
+        },
+        "CSG0": {
+          "default": "",
+          "description": "Name for Coordinate System Group 0",
+          "title": "Csg0",
+          "type": "string"
+        },
+        "CSG1": {
+          "default": "",
+          "description": "Name for Coordinate System Group 1",
+          "title": "Csg1",
+          "type": "string"
+        },
+        "CSG2": {
+          "default": "",
+          "description": "Name for Coordinate System Group 2",
+          "title": "Csg2",
+          "type": "string"
+        },
+        "CSG3": {
+          "default": "",
+          "description": "Name for Coordinate System Group 3",
+          "title": "Csg3",
+          "type": "string"
+        },
+        "CSG4": {
+          "default": "",
+          "description": "Name for Coordinate System Group 3",
+          "title": "Csg4",
+          "type": "string"
+        }
+      },
+      "title": "pmac_Geobrick",
+      "type": "object"
+    },
+    "pmac_PmacAsynIPPort": {
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "const": "pmac.PmacAsynIPPort",
+          "default": "pmac.PmacAsynIPPort",
+          "description": "The type of this entity",
+          "title": "Type"
+        },
+        "entity_enabled": {
+          "default": true,
+          "description": "enable or disable this entity instance",
+          "title": "Entity Enabled",
+          "type": "boolean"
+        },
+        "name": {
+          "default": null,
+          "description": "Asyn port name",
+          "title": "Name",
+          "type": "string"
+        },
+        "IP": {
+          "default": null,
+          "description": "IP address of pmac",
+          "title": "Ip",
+          "type": "string"
+        },
+        "PORT": {
+          "default": 1025,
+          "description": "TCP port for connection",
+          "title": "Port",
+          "type": "integer"
+        }
+      },
+      "title": "pmac_PmacAsynIPPort",
+      "type": "object"
+    },
+    "pmac_PmacAsynSSHPort": {
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "const": "pmac.PmacAsynSSHPort",
+          "default": "pmac.PmacAsynSSHPort",
+          "description": "The type of this entity",
+          "title": "Type"
+        },
+        "entity_enabled": {
+          "default": true,
+          "description": "enable or disable this entity instance",
+          "title": "Entity Enabled",
+          "type": "boolean"
+        },
+        "name": {
+          "default": null,
+          "description": "Asyn port name",
+          "title": "Name",
+          "type": "string"
+        },
+        "IP": {
+          "default": null,
+          "description": "IP address of Power pmac",
+          "title": "Ip",
+          "type": "string"
+        },
+        "USERNAME": {
+          "default": "root",
+          "description": "Username for login",
+          "title": "Username",
+          "type": "string"
+        },
+        "PASSWORD": {
+          "default": "deltatau",
+          "description": "Password for login",
+          "title": "Password",
+          "type": "string"
+        },
+        "PRIORITY": {
+          "default": 0,
+          "description": "Priority of the port",
+          "title": "Priority",
+          "type": "integer"
+        },
+        "NOAUTOCONNECT": {
+          "default": 0,
+          "description": "Disables autoconnect if set to 1",
+          "title": "Noautoconnect",
+          "type": "integer"
+        },
+        "NOEOS": {
+          "default": 0,
+          "description": "No EOS used if set to 1",
+          "title": "Noeos",
+          "type": "integer"
+        }
+      },
+      "title": "pmac_PmacAsynSSHPort",
+      "type": "object"
+    },
+    "pmac_autohome": {
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "const": "pmac.autohome",
+          "default": "pmac.autohome",
+          "description": "The type of this entity",
+          "title": "Type"
+        },
+        "entity_enabled": {
+          "default": true,
+          "description": "enable or disable this entity instance",
+          "title": "Entity Enabled",
+          "type": "boolean"
+        },
+        "Controller": {
+          "default": null,
+          "description": "the PMAC Controller",
+          "title": "Controller"
+        },
+        "PLC": {
+          "default": null,
+          "description": "PLC number of the auto home PLC",
+          "title": "Plc",
+          "type": "integer"
+        },
+        "P": {
+          "default": null,
+          "description": "Prefix for auto home PVs",
+          "title": "P",
+          "type": "string"
+        },
+        "GRP1": {
+          "default": "All",
+          "description": "name of the 'ALL' group of auto home axes",
+          "title": "Grp1",
+          "type": "string"
+        },
+        "GRP2": {
+          "default": "",
+          "description": "name of the second group of auto home axes",
+          "title": "Grp2",
+          "type": "string"
+        },
+        "GRP3": {
+          "default": "",
+          "description": "name of the third group of auto home axes",
+          "title": "Grp3",
+          "type": "string"
+        },
+        "GRP4": {
+          "default": "",
+          "description": "name of the fourth group of auto home axes",
+          "title": "Grp4",
+          "type": "string"
+        },
+        "GRP5": {
+          "default": "",
+          "description": "name of the fourth group of auto home axes",
+          "title": "Grp5",
+          "type": "string"
+        },
+        "GRP6": {
+          "default": "",
+          "description": "name of the fourth group of auto home axes",
+          "title": "Grp6",
+          "type": "string"
+        },
+        "GRP7": {
+          "default": "",
+          "description": "name of the fourth group of auto home axes",
+          "title": "Grp7",
+          "type": "string"
+        },
+        "GRP8": {
+          "default": "",
+          "description": "name of the fourth group of auto home axes",
+          "title": "Grp8",
+          "type": "string"
+        },
+        "GRP9": {
+          "default": "",
+          "description": "name of the fourth group of auto home axes",
+          "title": "Grp9",
+          "type": "string"
+        }
+      },
+      "title": "pmac_autohome",
+      "type": "object"
+    },
+    "pmac_pmacDisableLimitsCheck": {
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "const": "pmac.pmacDisableLimitsCheck",
+          "default": "pmac.pmacDisableLimitsCheck",
+          "description": "The type of this entity",
+          "title": "Type"
+        },
+        "entity_enabled": {
+          "default": true,
+          "description": "enable or disable this entity instance",
+          "title": "Entity Enabled",
+          "type": "boolean"
+        },
+        "Controller": {
+          "default": null,
+          "description": "Geobrick on which to disable limits",
+          "title": "Controller"
+        },
+        "Axis": {
+          "default": null,
+          "description": "Axis to have limits disabled",
+          "title": "Axis",
+          "type": "integer"
+        }
+      },
+      "title": "pmac_pmacDisableLimitsCheck",
+      "type": "object"
+    },
+    "psc_PscIpModule": {
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "const": "psc.PscIpModule",
+          "default": "psc.PscIpModule",
+          "description": "The type of this entity",
+          "title": "Type"
+        },
+        "entity_enabled": {
+          "default": true,
+          "description": "enable or disable this entity instance",
+          "title": "Entity Enabled",
+          "type": "boolean"
+        },
+        "name": {
+          "default": null,
+          "description": "A name this IP module",
+          "title": "Name",
+          "type": "string"
+        },
+        "carrier": {
+          "default": null,
+          "description": "IPAC carrier name",
+          "title": "Carrier"
+        },
+        "ip_site_number": {
+          "default": null,
+          "description": "Site on the carrier for this IP Module (0=A, 1=B, 2=C, 3=D)",
+          "title": "Ip Site Number",
+          "type": "integer"
+        },
+        "interrupt_vector": {
+          "default": null,
+          "description": "Interrupt Vector reserved with epics.InterruptVectorVME, count=3",
+          "title": "Interrupt Vector"
+        },
+        "link": {
+          "default": 0,
+          "description": "Link number on this IP module (0 or 1)",
+          "title": "Link",
+          "type": "integer"
+        }
+      },
+      "title": "psc_PscIpModule",
+      "type": "object"
+    },
+    "psc_PscTemplate": {
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "const": "psc.PscTemplate",
+          "default": "psc.PscTemplate",
+          "description": "The type of this entity",
+          "title": "Type"
+        },
+        "entity_enabled": {
+          "default": true,
+          "description": "enable or disable this entity instance",
+          "title": "Entity Enabled",
+          "type": "boolean"
+        },
+        "device": {
+          "default": null,
+          "description": "Device Name, PV Suffix",
+          "title": "Device",
+          "type": "string"
+        },
+        "ip_module": {
+          "default": null,
+          "description": "PscIpModule object",
+          "title": "Ip Module"
+        },
+        "link": {
+          "default": null,
+          "description": "Link number on this IP module (0 or 1)",
+          "title": "Link",
+          "type": "integer"
+        },
+        "i_abserr": {
+          "default": 0.0005,
+          "description": "Absolute error limit (TODO what is i_abserr vs abserr ?)",
+          "title": "I Abserr",
+          "type": "number"
+        },
+        "abserr": {
+          "default": 0.0005,
+          "description": "Absolute error limit [0..1]",
+          "title": "Abserr",
+          "type": "number"
+        },
+        "relerr": {
+          "default": 0.0002,
+          "description": "Relative error limit [0..1]",
+          "title": "Relerr",
+          "type": "number"
+        },
+        "controlerr": {
+          "default": 0.0005,
+          "description": "Control Error",
+          "title": "Controlerr",
+          "type": "number"
+        },
+        "startsw_evnt": {
+          "default": 53,
+          "description": "Event to start Soft ramps (ignore)",
+          "title": "Startsw Evnt",
+          "type": "integer"
+        },
+        "syncsw_evnt": {
+          "default": 54,
+          "description": "Event to synchronise Soft ramps (ignore)",
+          "title": "Syncsw Evnt",
+          "type": "integer"
+        },
+        "hyscycle_dly": {
+          "default": 3,
+          "description": "Seconds to wait in hysteresis cycle: time of PS between min and max value\n",
+          "title": "Hyscycle Dly",
+          "type": "integer"
+        },
+        "hyscydir": {
+          "default": 0,
+          "description": "Direction of hysteresis cycle:\napproaching set point from above (-) or below (+) at the end of the cycle\n",
+          "title": "Hyscydir",
+          "type": "integer"
+        },
+        "hyscmask": {
+          "default": 3,
+          "description": "Defines the number of hysteresis cycles to run (for values >1 (3, 7, ...)\nthe seq delay has to be specified in an extra template)\n",
+          "title": "Hyscmask",
+          "type": "integer"
+        },
+        "hyslock": {
+          "default": 0,
+          "description": "The value \"locked\" will force the PS to do a full cycle,\nwhenever the value I-SET is changed in the wrong direction (against HYCDIR)\n",
+          "title": "Hyslock",
+          "type": "integer"
+        },
+        "hysimin": {
+          "default": -3,
+          "description": "Minimum value for hysteresis cycle",
+          "title": "Hysimin",
+          "type": "integer"
+        },
+        "hysimax": {
+          "default": 3,
+          "description": "Maximum value for hysteresis cycle",
+          "title": "Hysimax",
+          "type": "integer"
+        },
+        "oninitcycle": {
+          "default": false,
+          "description": "Flag to determine if power supply should do a hysteresis cycle\nwhen it is switched ON\n",
+          "title": "Oninitcycle",
+          "type": "boolean"
+        },
+        "vdclink_adel": {
+          "default": 0.3,
+          "description": "UNKNOWN",
+          "title": "Vdclink Adel",
+          "type": "number"
+        },
+        "vload_adel": {
+          "default": 0.3,
+          "description": "UNKNOWN",
+          "title": "Vload Adel",
+          "type": "number"
+        },
+        "icharge_adel": {
+          "default": 0.0005,
+          "description": "UNKNOWN",
+          "title": "Icharge Adel",
+          "type": "number"
+        }
+      },
+      "title": "psc_PscTemplate",
+      "type": "object"
+    },
+    "psc_pscHy8401Channel-BS": {
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "const": "psc.pscHy8401Channel-BS",
+          "default": "psc.pscHy8401Channel-BS",
+          "description": "The type of this entity",
+          "title": "Type"
+        },
+        "entity_enabled": {
+          "default": true,
+          "description": "enable or disable this entity instance",
+          "title": "Entity Enabled",
+          "type": "boolean"
+        },
+        "card": {
+          "default": null,
+          "description": "8401 card identifier",
+          "title": "Card"
+        },
+        "psc_template": {
+          "default": null,
+          "description": "The PSC template instance",
+          "title": "Psc Template"
+        },
+        "channel": {
+          "default": null,
+          "description": "8401 channel number (0-7)",
+          "title": "Channel",
+          "type": "integer"
+        },
+        "name": {
+          "default": null,
+          "description": "Suffix for PV name for this channel",
+          "title": "Name",
+          "type": "string"
+        },
+        "cal_m": {
+          "default": null,
+          "description": "Calibrated current multiplier",
+          "title": "Cal M",
+          "type": "number"
+        },
+        "cal_c": {
+          "default": null,
+          "description": "Calibrated current constant",
+          "title": "Cal C",
+          "type": "number"
+        },
+        "adel": {
+          "default": null,
+          "description": "Archive deadband for calibrated current",
+          "title": "Adel",
+          "type": "number"
+        }
+      },
+      "title": "psc_pscHy8401Channel-BS",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
   "properties": {
     "ioc_name": {
-      "type": "string",
-      "description": "Name of IOC instance"
+      "description": "Name of IOC instance",
+      "title": "Ioc Name",
+      "type": "string"
     },
     "description": {
-      "type": "string",
-      "description": "Description of what the IOC does"
-    },
-    "entities": {
-      "type": "array",
-      "items": {
-        "anyOf": [
-          {
-            "type": "object",
-            "properties": {
-              "entity_enabled": {
-                "type": "boolean",
-                "default": true
-              },
-              "PORT": {
-                "type": "string",
-                "description": "Port Name for teh camera",
-                "vscode_ibek_plugin_type": "type_id"
-              },
-              "P": {
-                "type": "string",
-                "description": "The PV prefix"
-              },
-              "R": {
-                "type": "string",
-                "description": "The PV suffix"
-              },
-              "ID": {
-                "type": "string",
-                "description": "Cam ip address, hostname, MAC address, or ID <manufacturer>-<serial>,\n(e.g. Prosilica-02-2166A-06844)\n"
-              },
-              "BUFFERS": {
-                "type": "integer",
-                "description": "Max NDArray buffers to be created for plugin callbacks",
-                "default": 50
-              },
-              "MEMORY": {
-                "type": "integer",
-                "description": "Max memory to allocate, should be maxw*maxh*nbuffer\nfor driver and all attached plugins or -1 for unlimited\n",
-                "default": -1
-              },
-              "TIMEOUT": {
-                "type": "integer",
-                "description": "timeout for communication with camera",
-                "default": 1
-              },
-              "PV_ALIAS": {
-                "type": "string",
-                "description": "TODO this need to look into the purpose of this in builder.py\ndetermine its function and see if we can do the equivalent in ibek\n",
-                "default": ""
-              },
-              "type": {
-                "type": "string",
-                "const": "ADAravis.ADAravis",
-                "default": "ADAravis.ADAravis"
-              }
-            },
-            "required": [
-              "PORT",
-              "P",
-              "R",
-              "ID"
-            ],
-            "additionalProperties": false
-          },
-          {
-            "type": "object",
-            "properties": {
-              "entity_enabled": {
-                "type": "boolean",
-                "default": true
-              },
-              "camera": {
-                "type": "string",
-                "description": "reference to ADAravis.ADAravis instance",
-                "vscode_ibek_plugin_type": "type_object"
-              },
-              "type": {
-                "type": "string",
-                "const": "ADAravis.MantaG235B",
-                "default": "ADAravis.MantaG235B"
-              }
-            },
-            "required": [
-              "camera"
-            ],
-            "additionalProperties": false
-          },
-          {
-            "type": "object",
-            "properties": {
-              "entity_enabled": {
-                "type": "boolean",
-                "default": true
-              },
-              "camera": {
-                "type": "string",
-                "description": "reference to ADAravis.ADAravis instance",
-                "vscode_ibek_plugin_type": "type_object"
-              },
-              "type": {
-                "type": "string",
-                "const": "ADAravis.Mako_G234B",
-                "default": "ADAravis.Mako_G234B"
-              }
-            },
-            "required": [
-              "camera"
-            ],
-            "additionalProperties": false
-          },
-          {
-            "type": "object",
-            "properties": {
-              "entity_enabled": {
-                "type": "boolean",
-                "default": true
-              },
-              "name": {
-                "type": "string",
-                "description": "Name to refer to when making a channel",
-                "vscode_ibek_plugin_type": "type_id"
-              },
-              "carrier": {
-                "type": "string",
-                "description": "Carrier Board Identifier",
-                "vscode_ibek_plugin_type": "type_object"
-              },
-              "ip_site_number": {
-                "type": "integer",
-                "description": "IP Site Number 0=A, 1=B, 2=C, 3=D"
-              },
-              "vector": {
-                "type": "string",
-                "description": "Interrupt Vector",
-                "vscode_ibek_plugin_type": "type_object"
-              },
-              "int_enable": {
-                "type": "boolean",
-                "description": "Interrupt Enable",
-                "default": false
-              },
-              "external_clock": {
-                "type": "boolean",
-                "description": "Use External Clock",
-                "default": false
-              },
-              "clock_rate": {
-                "type": "integer",
-                "description": "Clock Rate",
-                "default": 15
-              },
-              "inhibit": {
-                "type": "boolean",
-                "description": "Enable front panel inhibit signal",
-                "default": false
-              },
-              "sample_size": {
-                "type": "integer",
-                "description": "Number of samples for triggered capture",
-                "default": 0
-              },
-              "card_id": {
-                "type": "string",
-                "description": "Card Identifier",
-                "default": "{{ carrier.slot }}{{ ip_site_number }}"
-              },
-              "type": {
-                "type": "string",
-                "const": "Hy8401ip.Hy8401ip",
-                "default": "Hy8401ip.Hy8401ip"
-              }
-            },
-            "required": [
-              "name",
-              "carrier",
-              "ip_site_number",
-              "vector"
-            ],
-            "additionalProperties": false
-          },
-          {
-            "type": "object",
-            "properties": {
-              "entity_enabled": {
-                "type": "boolean",
-                "default": true
-              },
-              "card": {
-                "type": "string",
-                "description": "8401 card identifier",
-                "vscode_ibek_plugin_type": "type_object"
-              },
-              "signal": {
-                "type": "integer",
-                "description": "8401 signal number (0-7)"
-              },
-              "type": {
-                "type": "string",
-                "const": "Hy8401ip.Hy8401Channel",
-                "default": "Hy8401ip.Hy8401Channel"
-              }
-            },
-            "required": [
-              "card",
-              "signal"
-            ],
-            "additionalProperties": false
-          },
-          {
-            "type": "object",
-            "properties": {
-              "entity_enabled": {
-                "type": "boolean",
-                "default": true
-              },
-              "name": {
-                "type": "string",
-                "description": "Name to refer to when making a channel",
-                "vscode_ibek_plugin_type": "type_id"
-              },
-              "carrier": {
-                "type": "string",
-                "description": "Carrier Board Identifier",
-                "vscode_ibek_plugin_type": "type_object"
-              },
-              "ip_site_number": {
-                "type": "integer",
-                "description": "IP Site Number 0=A, 1=B, 2=C, 3=D"
-              },
-              "vector": {
-                "type": "string",
-                "description": "Interrupt Vector",
-                "vscode_ibek_plugin_type": "type_object"
-              },
-              "aitype": {
-                "type": "integer",
-                "description": "0=differential, 1=single ended, 2=PT100, 3=Thermocouple, 4=PT100 with 8212 Transition Card, 5=Thermocouples with 8212 Transition Card"
-              },
-              "memsize": {
-                "type": "integer",
-                "description": "1=1MB memory, 2=2MB memory"
-              },
-              "clock_source": {
-                "type": "integer",
-                "description": "0=internal, 1=external"
-              },
-              "clock_rate": {
-                "type": "integer",
-                "description": "Xilinx scanning frequency in Hertz. Valid values: 1,2,5,10,20,50,100 and 200 Hz."
-              },
-              "gain": {
-                "type": "integer",
-                "description": "Gain for all ADC inputs. Valid values are: 1,2,4,8,16,32,64, 128"
-              },
-              "vref": {
-                "type": "integer",
-                "description": "Determine the internal ADC reference voltage: =1: 1.25V =2: 2.5V"
-              },
-              "card_id": {
-                "type": "string",
-                "description": "Card Identifier",
-                "default": "{{ carrier.slot }}{{ ip_site_number }}"
-              },
-              "type": {
-                "type": "string",
-                "const": "Hy8403ip.Hy8403ip",
-                "default": "Hy8403ip.Hy8403ip"
-              }
-            },
-            "required": [
-              "name",
-              "carrier",
-              "ip_site_number",
-              "vector",
-              "aitype",
-              "memsize",
-              "clock_source",
-              "clock_rate",
-              "gain",
-              "vref"
-            ],
-            "additionalProperties": false
-          },
-          {
-            "type": "object",
-            "properties": {
-              "entity_enabled": {
-                "type": "boolean",
-                "default": true
-              },
-              "device": {
-                "type": "string",
-                "description": "Device Name, PV Suffix"
-              },
-              "card": {
-                "type": "string",
-                "description": "8403 card identifier",
-                "vscode_ibek_plugin_type": "type_object"
-              },
-              "type": {
-                "type": "string",
-                "const": "Hy8403ip.Hy8403Channel",
-                "default": "Hy8403ip.Hy8403Channel"
-              }
-            },
-            "required": [
-              "device",
-              "card"
-            ],
-            "additionalProperties": false
-          },
-          {
-            "type": "object",
-            "properties": {
-              "entity_enabled": {
-                "type": "boolean",
-                "default": true
-              },
-              "PT": {
-                "type": "string",
-                "description": "Process Variable prefix"
-              },
-              "ADC_REF_CHAN": {
-                "type": "string",
-                "description": "adc reference channel PV"
-              },
-              "ADC_CHAN": {
-                "type": "string",
-                "description": "ADC channel PV"
-              },
-              "deadband": {
-                "type": "number",
-                "description": "hysteresis value for monitor updates in Deg.C"
-              },
-              "hihi": {
-                "type": "number",
-                "description": "hihi alarm"
-              },
-              "hi": {
-                "type": "number",
-                "description": "hi alarm"
-              },
-              "lo": {
-                "type": "number",
-                "description": "lo alarm"
-              },
-              "lolo": {
-                "type": "number",
-                "description": "lolo alarm"
-              },
-              "scan": {
-                "type": "number",
-                "description": "scan period in seconds",
-                "default": 1.0
-              },
-              "prec": {
-                "type": "integer",
-                "description": "record display precision",
-                "default": 0
-              },
-              "hopr": {
-                "type": "number",
-                "description": "high operating range",
-                "default": 100.0
-              },
-              "lopr": {
-                "type": "number",
-                "description": "low operating range",
-                "default": 0.0
-              },
-              "type": {
-                "type": "string",
-                "const": "PT100.PT100",
-                "default": "PT100.PT100"
-              }
-            },
-            "required": [
-              "PT",
-              "ADC_REF_CHAN",
-              "ADC_CHAN",
-              "deadband",
-              "hihi",
-              "hi",
-              "lo",
-              "lolo"
-            ],
-            "additionalProperties": false
-          },
-          {
-            "type": "object",
-            "properties": {
-              "entity_enabled": {
-                "type": "boolean",
-                "default": true
-              },
-              "device": {
-                "type": "string",
-                "description": "The device PV prefix",
-                "vscode_ibek_plugin_type": "type_id"
-              },
-              "event_receiver": {
-                "type": "string",
-                "description": "reference to EventReceiverPMC entry",
-                "vscode_ibek_plugin_type": "type_object"
-              },
-              "er": {
-                "type": "string",
-                "description": "Event Receiver record suffix",
-                "default": "SET-ER"
-              },
-              "type": {
-                "type": "string",
-                "const": "TimingTemplates.DefaultEVR",
-                "default": "TimingTemplates.DefaultEVR"
-              }
-            },
-            "required": [
-              "device",
-              "event_receiver"
-            ],
-            "additionalProperties": false
-          },
-          {
-            "type": "object",
-            "properties": {
-              "entity_enabled": {
-                "type": "boolean",
-                "default": true
-              },
-              "default_evr": {
-                "type": "string",
-                "description": "reference to DefaultEVR entry",
-                "vscode_ibek_plugin_type": "type_object"
-              },
-              "type": {
-                "type": "string",
-                "const": "TimingTemplates.EvrAlive",
-                "default": "TimingTemplates.EvrAlive"
-              }
-            },
-            "required": [
-              "default_evr"
-            ],
-            "additionalProperties": false
-          },
-          {
-            "type": "object",
-            "properties": {
-              "entity_enabled": {
-                "type": "boolean",
-                "default": true
-              },
-              "device": {
-                "type": "string",
-                "description": "device name",
-                "vscode_ibek_plugin_type": "type_id"
-              },
-              "gt": {
-                "type": "string",
-                "description": "generalTime PV Prefix",
-                "default": "GT:"
-              },
-              "scan": {
-                "type": "string",
-                "description": "scan rate",
-                "default": "10 second"
-              },
-              "type": {
-                "type": "string",
-                "const": "TimingTemplates.GeneralTime",
-                "default": "TimingTemplates.GeneralTime"
-              }
-            },
-            "required": [
-              "device"
-            ],
-            "additionalProperties": false
-          },
-          {
-            "type": "object",
-            "properties": {
-              "entity_enabled": {
-                "type": "boolean",
-                "default": true
-              },
-              "ioc": {
-                "type": "string",
-                "description": "Device Prefix for this IOC"
-              },
-              "type": {
-                "type": "string",
-                "const": "devIocStats.IocAdminSoft",
-                "default": "devIocStats.IocAdminSoft"
-              }
-            },
-            "required": [
-              "ioc"
-            ],
-            "additionalProperties": false
-          },
-          {
-            "type": "object",
-            "properties": {
-              "entity_enabled": {
-                "type": "boolean",
-                "default": true
-              },
-              "max_bytes": {
-                "type": "integer",
-                "description": "Max size in bytes for sending arrays over channel access",
-                "default": 6000000
-              },
-              "type": {
-                "type": "string",
-                "const": "epics.EpicsCaMaxArrayBytes",
-                "default": "epics.EpicsCaMaxArrayBytes"
-              }
-            },
-            "additionalProperties": false
-          },
-          {
-            "type": "object",
-            "properties": {
-              "entity_enabled": {
-                "type": "boolean",
-                "default": true
-              },
-              "minutes_west": {
-                "type": "integer",
-                "description": "relative time zone minutes",
-                "default": 0
-              },
-              "type": {
-                "type": "string",
-                "const": "epics.EpicsTsMinWest",
-                "default": "epics.EpicsTsMinWest"
-              }
-            },
-            "additionalProperties": false
-          },
-          {
-            "type": "object",
-            "properties": {
-              "entity_enabled": {
-                "type": "boolean",
-                "default": true
-              },
-              "pv": {
-                "type": "string",
-                "description": "Name of PV"
-              },
-              "value": {
-                "type": "string",
-                "description": "Value to set"
-              },
-              "type": {
-                "type": "string",
-                "const": "epics.Dbpf",
-                "default": "epics.Dbpf"
-              }
-            },
-            "required": [
-              "pv",
-              "value"
-            ],
-            "additionalProperties": false
-          },
-          {
-            "type": "object",
-            "properties": {
-              "entity_enabled": {
-                "type": "boolean",
-                "default": true
-              },
-              "name": {
-                "type": "string",
-                "description": "Name of environment variable"
-              },
-              "value": {
-                "type": "string",
-                "description": "Value of environment variable"
-              },
-              "type": {
-                "type": "string",
-                "const": "epics.EpicsEnvSet",
-                "default": "epics.EpicsEnvSet"
-              }
-            },
-            "required": [
-              "name",
-              "value"
-            ],
-            "additionalProperties": false
-          },
-          {
-            "type": "object",
-            "properties": {
-              "entity_enabled": {
-                "type": "boolean",
-                "default": true
-              },
-              "command": {
-                "type": "string",
-                "description": "command string",
-                "default": ""
-              },
-              "type": {
-                "type": "string",
-                "const": "epics.StartupCommand",
-                "default": "epics.StartupCommand"
-              }
-            },
-            "additionalProperties": false
-          },
-          {
-            "type": "object",
-            "properties": {
-              "entity_enabled": {
-                "type": "boolean",
-                "default": true
-              },
-              "command": {
-                "type": "string",
-                "description": "command string",
-                "default": ""
-              },
-              "type": {
-                "type": "string",
-                "const": "epics.PostStartupCommand",
-                "default": "epics.PostStartupCommand"
-              }
-            },
-            "additionalProperties": false
-          },
-          {
-            "type": "object",
-            "properties": {
-              "entity_enabled": {
-                "type": "boolean",
-                "default": true
-              },
-              "name": {
-                "type": "string",
-                "description": "A name for an interrupt vector variable",
-                "vscode_ibek_plugin_type": "type_id"
-              },
-              "count": {
-                "type": "integer",
-                "description": "The number of interrupt vectors to reserve",
-                "default": 1
-              },
-              "type": {
-                "type": "string",
-                "const": "epics.InterruptVectorVME",
-                "default": "epics.InterruptVectorVME"
-              }
-            },
-            "required": [
-              "name"
-            ],
-            "additionalProperties": false
-          },
-          {
-            "type": "object",
-            "properties": {
-              "entity_enabled": {
-                "type": "boolean",
-                "default": true
-              },
-              "port": {
-                "type": "string",
-                "description": "The port name for this asyn object"
-              },
-              "input_eos": {
-                "type": "string",
-                "description": "Input end of string (terminator)"
-              },
-              "output_eos": {
-                "type": "string",
-                "description": "Output end of string (terminator)"
-              },
-              "priority": {
-                "type": "integer",
-                "description": "Priority",
-                "default": 100
-              },
-              "no_auto_connect": {
-                "type": "boolean",
-                "description": "Set to stop auto connect"
-              },
-              "no_process_eos": {
-                "type": "boolean",
-                "description": "Set to avoid processing end of string"
-              },
-              "simulation": {
-                "type": "string",
-                "description": "IP port to connect to if in simulation mode"
-              },
-              "baud": {
-                "type": "integer",
-                "description": "Baud Rate"
-              },
-              "bits": {
-                "type": "integer",
-                "description": "Bits [8,7,6,5]"
-              },
-              "parity": {
-                "type": "string",
-                "description": "Parity [null,even,odd]"
-              },
-              "stop": {
-                "type": "integer",
-                "description": "Stop Bits [1,2]"
-              },
-              "crtscts": {
-                "type": "boolean",
-                "description": "Set hardware flow control on"
-              },
-              "type": {
-                "type": "string",
-                "const": "asyn.AsynSerial",
-                "default": "asyn.AsynSerial"
-              }
-            },
-            "required": [
-              "port"
-            ],
-            "additionalProperties": false
-          },
-          {
-            "type": "object",
-            "properties": {
-              "entity_enabled": {
-                "type": "boolean",
-                "default": true
-              },
-              "port": {
-                "type": "string",
-                "description": "Serial port tty name / IP address optionally followed by protocol"
-              },
-              "name": {
-                "type": "string",
-                "description": "Name for the Asyn Port"
-              },
-              "input_eos": {
-                "type": "string",
-                "description": "Input end of string (terminator)"
-              },
-              "output_eos": {
-                "type": "string",
-                "description": "Output end of string (terminator)"
-              },
-              "priority": {
-                "type": "integer",
-                "description": "Priority",
-                "default": 100
-              },
-              "no_auto_connect": {
-                "type": "boolean",
-                "description": "Set to stop auto connect"
-              },
-              "no_process_eos": {
-                "type": "boolean",
-                "description": "Set to avoid processing end of string"
-              },
-              "simulation": {
-                "type": "string",
-                "description": "IP port to connect to if in simulation mode"
-              },
-              "type": {
-                "type": "string",
-                "const": "asyn.AsynIP",
-                "default": "asyn.AsynIP"
-              }
-            },
-            "required": [
-              "port",
-              "name"
-            ],
-            "additionalProperties": false
-          },
-          {
-            "type": "object",
-            "properties": {
-              "entity_enabled": {
-                "type": "boolean",
-                "default": true
-              },
-              "name": {
-                "type": "string",
-                "description": "IPAC identifier (suggested: IPAC<slot>)",
-                "vscode_ibek_plugin_type": "type_id"
-              },
-              "slot": {
-                "type": "integer",
-                "description": "Crate Slot number"
-              },
-              "int_level": {
-                "type": "integer",
-                "description": "Interrupt level",
-                "default": 2
-              },
-              "type": {
-                "type": "string",
-                "const": "ipac.Hy8002",
-                "default": "ipac.Hy8002"
-              }
-            },
-            "required": [
-              "name",
-              "slot"
-            ],
-            "additionalProperties": false
-          },
-          {
-            "type": "object",
-            "properties": {
-              "entity_enabled": {
-                "type": "boolean",
-                "default": true
-              },
-              "priority": {
-                "type": "integer",
-                "description": "Time provider priority",
-                "default": 10
-              },
-              "type": {
-                "type": "string",
-                "const": "mrfTiming.EventReceiverInit",
-                "default": "mrfTiming.EventReceiverInit"
-              }
-            },
-            "additionalProperties": false
-          },
-          {
-            "type": "object",
-            "properties": {
-              "entity_enabled": {
-                "type": "boolean",
-                "default": true
-              },
-              "name": {
-                "type": "string",
-                "description": "A name to reference this EVR",
-                "vscode_ibek_plugin_type": "type_id"
-              },
-              "card_id": {
-                "type": "integer",
-                "description": "EPICS Card id"
-              },
-              "card_index": {
-                "type": "integer",
-                "description": "PMC slot number",
-                "default": 0
-              },
-              "type": {
-                "type": "string",
-                "const": "mrfTiming.EventReceiverPMC",
-                "default": "mrfTiming.EventReceiverPMC"
-              }
-            },
-            "required": [
-              "name",
-              "card_id"
-            ],
-            "additionalProperties": false
-          },
-          {
-            "type": "object",
-            "properties": {
-              "entity_enabled": {
-                "type": "boolean",
-                "default": true
-              },
-              "name": {
-                "type": "string",
-                "description": "Asyn port name",
-                "vscode_ibek_plugin_type": "type_id"
-              },
-              "IP": {
-                "type": "string",
-                "description": "IP address of Power pmac"
-              },
-              "USERNAME": {
-                "type": "string",
-                "description": "Username for login",
-                "default": "root"
-              },
-              "PASSWORD": {
-                "type": "string",
-                "description": "Password for login",
-                "default": "deltatau"
-              },
-              "PRIORITY": {
-                "type": "integer",
-                "description": "Priority of the port",
-                "default": 0
-              },
-              "NOAUTOCONNECT": {
-                "type": "integer",
-                "description": "Disables autoconnect if set to 1",
-                "default": 0
-              },
-              "NOEOS": {
-                "type": "integer",
-                "description": "No EOS used if set to 1",
-                "default": 0
-              },
-              "type": {
-                "type": "string",
-                "const": "pmac.PmacAsynSSHPort",
-                "default": "pmac.PmacAsynSSHPort"
-              }
-            },
-            "required": [
-              "name",
-              "IP"
-            ],
-            "additionalProperties": false
-          },
-          {
-            "type": "object",
-            "properties": {
-              "entity_enabled": {
-                "type": "boolean",
-                "default": true
-              },
-              "name": {
-                "type": "string",
-                "description": "Asyn port name",
-                "vscode_ibek_plugin_type": "type_id"
-              },
-              "IP": {
-                "type": "string",
-                "description": "IP address of pmac"
-              },
-              "PORT": {
-                "type": "integer",
-                "description": "TCP port for connection",
-                "default": 1025
-              },
-              "type": {
-                "type": "string",
-                "const": "pmac.PmacAsynIPPort",
-                "default": "pmac.PmacAsynIPPort"
-              }
-            },
-            "required": [
-              "name",
-              "IP"
-            ],
-            "additionalProperties": false
-          },
-          {
-            "type": "object",
-            "properties": {
-              "entity_enabled": {
-                "type": "boolean",
-                "default": true
-              },
-              "name": {
-                "type": "string",
-                "description": "Name to use for the geobrick's asyn port",
-                "vscode_ibek_plugin_type": "type_id"
-              },
-              "PORT": {
-                "type": "string",
-                "description": "Asyn port name for PmacAsynIPPort to connect to",
-                "vscode_ibek_plugin_type": "type_object"
-              },
-              "P": {
-                "type": "string",
-                "description": "PV Prefix for all pmac db templates"
-              },
-              "numAxes": {
-                "type": "integer",
-                "description": "number of axes to initialize for the controller",
-                "default": 8
-              },
-              "idlePoll": {
-                "type": "integer",
-                "description": "Idle Poll Period in ms",
-                "default": 500
-              },
-              "movingPoll": {
-                "type": "integer",
-                "description": "Moving Poll Period in ms",
-                "default": 100
-              },
-              "TIMEOUT": {
-                "type": "integer",
-                "description": "timeout in seconds for asyn",
-                "default": 4
-              },
-              "FEEDRATE": {
-                "type": "integer",
-                "description": "feedrate below which we go into error",
-                "default": 100
-              },
-              "CSG0": {
-                "type": "string",
-                "description": "Name for Coordinate System Group 0",
-                "default": ""
-              },
-              "CSG1": {
-                "type": "string",
-                "description": "Name for Coordinate System Group 1",
-                "default": ""
-              },
-              "CSG2": {
-                "type": "string",
-                "description": "Name for Coordinate System Group 2",
-                "default": ""
-              },
-              "CSG3": {
-                "type": "string",
-                "description": "Name for Coordinate System Group 3",
-                "default": ""
-              },
-              "CSG4": {
-                "type": "string",
-                "description": "Name for Coordinate System Group 3",
-                "default": ""
-              },
-              "type": {
-                "type": "string",
-                "const": "pmac.Geobrick",
-                "default": "pmac.Geobrick"
-              }
-            },
-            "required": [
-              "name",
-              "PORT",
-              "P"
-            ],
-            "additionalProperties": false
-          },
-          {
-            "type": "object",
-            "properties": {
-              "entity_enabled": {
-                "type": "boolean",
-                "default": true
-              },
-              "name": {
-                "type": "string",
-                "description": "Object name and gui association name"
-              },
-              "Controller": {
-                "type": "string",
-                "description": "PMAC Controller to attach to",
-                "vscode_ibek_plugin_type": "type_object"
-              },
-              "axis": {
-                "type": "integer",
-                "description": "which axis number this motor drives"
-              },
-              "P": {
-                "type": "string",
-                "description": "PV prefix name for this motor"
-              },
-              "M": {
-                "type": "string",
-                "description": "PV motor name for this motor"
-              },
-              "DESC": {
-                "type": "string",
-                "description": "Description, displayed on EDM screen",
-                "default": ""
-              },
-              "MRES": {
-                "type": "number",
-                "description": "Motor Step Size (EGU)",
-                "default": 0.0001
-              },
-              "VELO": {
-                "type": "number",
-                "description": "axis Velocity (EGU/s)",
-                "default": 1.0
-              },
-              "PREC": {
-                "type": "integer",
-                "description": "Display Precision",
-                "default": 3
-              },
-              "EGU": {
-                "type": "string",
-                "description": "Engineering Units",
-                "default": "mm"
-              },
-              "TWV": {
-                "type": "number",
-                "description": "Tweak Step Size (EGU)",
-                "default": 1.0
-              },
-              "DTYP": {
-                "type": "string",
-                "description": "Datatype of record",
-                "default": "asynMotor"
-              },
-              "DIR": {
-                "type": "integer",
-                "description": "User direction",
-                "default": 0
-              },
-              "VBAS": {
-                "type": "number",
-                "description": "Base Velocity (EGU/s)",
-                "default": 1.0
-              },
-              "VMAX": {
-                "type": "string",
-                "description": "Max Velocity (EGU/s)",
-                "default": "{{VELO}}"
-              },
-              "ACCL": {
-                "type": "number",
-                "description": "Seconds to Velocity",
-                "default": 0.5
-              },
-              "BDST": {
-                "type": "number",
-                "description": "BL Distance (EGU)",
-                "default": 0.0
-              },
-              "BVEL": {
-                "type": "number",
-                "description": "BL Velocity(EGU/s)",
-                "default": 0.0
-              },
-              "BACC": {
-                "type": "number",
-                "description": "BL Seconds to Veloc",
-                "default": 0.0
-              },
-              "DHLM": {
-                "type": "number",
-                "description": "Dial High Limit",
-                "default": 10000.0
-              },
-              "DLLM": {
-                "type": "number",
-                "description": "Dial low limit",
-                "default": -10000.0
-              },
-              "HLM": {
-                "type": "number",
-                "description": "User High Limit",
-                "default": 0.0
-              },
-              "LLM": {
-                "type": "number",
-                "description": "User Low Limit",
-                "default": 0.0
-              },
-              "HLSV": {
-                "type": "string",
-                "description": "HW Lim, Violation Svr",
-                "default": "MAJOR"
-              },
-              "INIT": {
-                "type": "string",
-                "description": "Startup commands",
-                "default": ""
-              },
-              "SREV": {
-                "type": "integer",
-                "description": "Steps per Revolution",
-                "default": 1000
-              },
-              "RRES": {
-                "type": "number",
-                "description": "Readback Step Size (EGU",
-                "default": 0.0
-              },
-              "ERES": {
-                "type": "number",
-                "description": "Encoder Step Size (EGU)",
-                "default": 0.0
-              },
-              "JAR": {
-                "type": "number",
-                "description": "Jog Acceleration (EGU/s^2)",
-                "default": 0.0
-              },
-              "UEIP": {
-                "type": "integer",
-                "description": "Use Encoder If Present",
-                "default": 0
-              },
-              "URIP": {
-                "type": "integer",
-                "description": "Use RDBL If Present",
-                "default": 0
-              },
-              "RDBL": {
-                "type": "string",
-                "description": "Readback Location, set URIP =1 if you specify this",
-                "default": "0"
-              },
-              "RLNK": {
-                "type": "string",
-                "description": "Readback output link",
-                "default": ""
-              },
-              "RTRY": {
-                "type": "integer",
-                "description": "Max retry count",
-                "default": 0
-              },
-              "DLY": {
-                "type": "number",
-                "description": "Readback settle time (s)",
-                "default": 0.0
-              },
-              "OFF": {
-                "type": "number",
-                "description": "User Offset (EGU)",
-                "default": 0.0
-              },
-              "RDBD": {
-                "type": "number",
-                "description": "Retry Deadband (EGU)",
-                "default": 0.0
-              },
-              "FOFF": {
-                "type": "integer",
-                "description": "Freeze Offset, 0=variable, 1=frozen",
-                "default": 0
-              },
-              "ADEL": {
-                "type": "number",
-                "description": "Alarm monitor deadband (EGU)",
-                "default": 0.0
-              },
-              "NTM": {
-                "type": "integer",
-                "description": "New Target Monitor, only set to 0 for soft motors",
-                "default": 1
-              },
-              "FEHIGH": {
-                "type": "number",
-                "description": "HIGH limit for following error",
-                "default": 0.0
-              },
-              "FEHIHI": {
-                "type": "number",
-                "description": "HIHI limit for following error",
-                "default": 0.0
-              },
-              "FEHHSV": {
-                "type": "string",
-                "description": "HIHI alarm severity for following error",
-                "default": "NO_ALARM"
-              },
-              "FEHSV": {
-                "type": "string",
-                "description": "HIGH alarm severity for following error",
-                "default": "NO_ALARM"
-              },
-              "SCALE": {
-                "type": "integer",
-                "default": 1
-              },
-              "HOMEVIS": {
-                "type": "integer",
-                "description": "If 1 then home is visible on the gui",
-                "default": 1
-              },
-              "HOMEVISSTR": {
-                "type": "string",
-                "default": "Use motor summary screen"
-              },
-              "alh": {
-                "type": "string",
-                "description": "Set this to alh to add the motor to the alarm handler and send emails",
-                "default": ""
-              },
-              "HOME": {
-                "type": "string",
-                "description": "Prefix for autohome instance. Defaults to $(P) If unspecified",
-                "default": "{{P}}"
-              },
-              "ALLOW_HOMED_SET": {
-                "type": "string",
-                "description": "Set to a blank to allow this axis to have its homed",
-                "default": "#"
-              },
-              "RLINK": {
-                "type": "string",
-                "description": "not sure what this is",
-                "default": ""
-              },
-              "type": {
-                "type": "string",
-                "const": "pmac.DlsPmacAsynMotor",
-                "default": "pmac.DlsPmacAsynMotor"
-              }
-            },
-            "required": [
-              "name",
-              "Controller",
-              "axis",
-              "P",
-              "M"
-            ],
-            "additionalProperties": false
-          },
-          {
-            "type": "object",
-            "properties": {
-              "entity_enabled": {
-                "type": "boolean",
-                "default": true
-              },
-              "name": {
-                "type": "string",
-                "description": "Object name and gui association name"
-              },
-              "CsController": {
-                "type": "string",
-                "description": "Coordinate system controller to attach to",
-                "vscode_ibek_plugin_type": "type_object"
-              },
-              "axis": {
-                "type": "integer",
-                "description": "which axis number this motor drives"
-              },
-              "P": {
-                "type": "string",
-                "description": "PV prefix name for this motor"
-              },
-              "M": {
-                "type": "string",
-                "description": "PV motor name for this motor"
-              },
-              "DESC": {
-                "type": "string",
-                "description": "Description, displayed on EDM screen",
-                "default": ""
-              },
-              "MRES": {
-                "type": "number",
-                "description": "Motor Step Size (EGU)",
-                "default": 0.0001
-              },
-              "VELO": {
-                "type": "number",
-                "description": "axis Velocity (EGU/s)",
-                "default": 1.0
-              },
-              "PREC": {
-                "type": "integer",
-                "description": "Display Precision",
-                "default": 3
-              },
-              "EGU": {
-                "type": "string",
-                "description": "Engineering Units",
-                "default": "mm"
-              },
-              "TWV": {
-                "type": "number",
-                "description": "Tweak Step Size (EGU)",
-                "default": 1.0
-              },
-              "DTYP": {
-                "type": "string",
-                "description": "Datatype of record",
-                "default": "asynMotor"
-              },
-              "DIR": {
-                "type": "integer",
-                "description": "User direction",
-                "default": 0
-              },
-              "VBAS": {
-                "type": "number",
-                "description": "Base Velocity (EGU/s)",
-                "default": 1.0
-              },
-              "VMAX": {
-                "type": "string",
-                "description": "Max Velocity (EGU/s)",
-                "default": "{{VELO}}"
-              },
-              "ACCL": {
-                "type": "number",
-                "description": "Seconds to Velocity",
-                "default": 0.5
-              },
-              "BDST": {
-                "type": "number",
-                "description": "BL Distance (EGU)",
-                "default": 0.0
-              },
-              "BVEL": {
-                "type": "number",
-                "description": "BL Velocity(EGU/s)",
-                "default": 0.0
-              },
-              "BACC": {
-                "type": "number",
-                "description": "BL Seconds to Veloc",
-                "default": 0.0
-              },
-              "DHLM": {
-                "type": "number",
-                "description": "Dial High Limit",
-                "default": 10000.0
-              },
-              "DLLM": {
-                "type": "number",
-                "description": "Dial low limit",
-                "default": -10000.0
-              },
-              "HLM": {
-                "type": "number",
-                "description": "User High Limit",
-                "default": 0.0
-              },
-              "LLM": {
-                "type": "number",
-                "description": "User Low Limit",
-                "default": 0.0
-              },
-              "HLSV": {
-                "type": "string",
-                "description": "HW Lim, Violation Svr",
-                "default": "MAJOR"
-              },
-              "INIT": {
-                "type": "string",
-                "description": "Startup commands",
-                "default": ""
-              },
-              "SREV": {
-                "type": "integer",
-                "description": "Steps per Revolution",
-                "default": 1000
-              },
-              "RRES": {
-                "type": "number",
-                "description": "Readback Step Size (EGU",
-                "default": 0.0
-              },
-              "ERES": {
-                "type": "number",
-                "description": "Encoder Step Size (EGU)",
-                "default": 0.0
-              },
-              "JAR": {
-                "type": "number",
-                "description": "Jog Acceleration (EGU/s^2)",
-                "default": 0.0
-              },
-              "UEIP": {
-                "type": "integer",
-                "description": "Use Encoder If Present",
-                "default": 0
-              },
-              "URIP": {
-                "type": "integer",
-                "description": "Use RDBL If Present",
-                "default": 0
-              },
-              "RDBL": {
-                "type": "string",
-                "description": "Readback Location, set URIP =1 if you specify this",
-                "default": "0"
-              },
-              "RLNK": {
-                "type": "string",
-                "description": "Readback output link",
-                "default": ""
-              },
-              "RTRY": {
-                "type": "integer",
-                "description": "Max retry count",
-                "default": 0
-              },
-              "DLY": {
-                "type": "number",
-                "description": "Readback settle time (s)",
-                "default": 0.0
-              },
-              "OFF": {
-                "type": "number",
-                "description": "User Offset (EGU)",
-                "default": 0.0
-              },
-              "RDBD": {
-                "type": "number",
-                "description": "Retry Deadband (EGU)",
-                "default": 0.0
-              },
-              "FOFF": {
-                "type": "integer",
-                "description": "Freeze Offset, 0=variable, 1=frozen",
-                "default": 0
-              },
-              "ADEL": {
-                "type": "number",
-                "description": "Alarm monitor deadband (EGU)",
-                "default": 0.0
-              },
-              "NTM": {
-                "type": "integer",
-                "description": "New Target Monitor, only set to 0 for soft motors",
-                "default": 1
-              },
-              "FEHEIGH": {
-                "type": "number",
-                "description": "HIGH limit for following error",
-                "default": 0.0
-              },
-              "FEHIHI": {
-                "type": "number",
-                "description": "HIHI limit for following error",
-                "default": 0.0
-              },
-              "FEHHSV": {
-                "type": "string",
-                "description": "HIHI alarm severity for following error",
-                "default": "NO_ALARM"
-              },
-              "FEHSV": {
-                "type": "string",
-                "description": "HIGH alarm severity for following error",
-                "default": "NO_ALARM"
-              },
-              "SCALE": {
-                "type": "integer",
-                "default": 1
-              },
-              "HOMEVIS": {
-                "type": "integer",
-                "description": "If 1 then home is visible on the gui",
-                "default": 1
-              },
-              "HOMEVISSTR": {
-                "type": "string",
-                "default": "Use motor summary screen"
-              },
-              "alh": {
-                "type": "string",
-                "description": "Set this to alh to add the motor to the alarm handler and send emails",
-                "default": ""
-              },
-              "HOME": {
-                "type": "string",
-                "description": "Prefix for autohome instance. Defaults to $(P) If unspecified",
-                "default": "{{P}}"
-              },
-              "ALLOW_HOMED_SET": {
-                "type": "string",
-                "description": "Set to a blank to allow this axis to have its homed",
-                "default": "#"
-              },
-              "type": {
-                "type": "string",
-                "const": "pmac.DlsCsPmacAsynMotor",
-                "default": "pmac.DlsCsPmacAsynMotor"
-              }
-            },
-            "required": [
-              "name",
-              "CsController",
-              "axis",
-              "P",
-              "M"
-            ],
-            "additionalProperties": false
-          },
-          {
-            "type": "object",
-            "properties": {
-              "entity_enabled": {
-                "type": "boolean",
-                "default": true
-              },
-              "Controller": {
-                "type": "string",
-                "description": "Geobrick on which to disable limits",
-                "vscode_ibek_plugin_type": "type_object"
-              },
-              "Axis": {
-                "type": "integer",
-                "description": "Axis to have limits disabled"
-              },
-              "type": {
-                "type": "string",
-                "const": "pmac.pmacDisableLimitsCheck",
-                "default": "pmac.pmacDisableLimitsCheck"
-              }
-            },
-            "required": [
-              "Controller",
-              "Axis"
-            ],
-            "additionalProperties": false
-          },
-          {
-            "type": "object",
-            "properties": {
-              "entity_enabled": {
-                "type": "boolean",
-                "default": true
-              },
-              "Controller": {
-                "type": "string",
-                "description": "the PMAC Controller",
-                "vscode_ibek_plugin_type": "type_object"
-              },
-              "PLC": {
-                "type": "integer",
-                "description": "PLC number of the auto home PLC"
-              },
-              "P": {
-                "type": "string",
-                "description": "Prefix for auto home PVs"
-              },
-              "GRP1": {
-                "type": "string",
-                "description": "name of the 'ALL' group of auto home axes",
-                "default": "All"
-              },
-              "GRP2": {
-                "type": "string",
-                "description": "name of the second group of auto home axes",
-                "default": ""
-              },
-              "GRP3": {
-                "type": "string",
-                "description": "name of the third group of auto home axes",
-                "default": ""
-              },
-              "GRP4": {
-                "type": "string",
-                "description": "name of the fourth group of auto home axes",
-                "default": ""
-              },
-              "GRP5": {
-                "type": "string",
-                "description": "name of the fourth group of auto home axes",
-                "default": ""
-              },
-              "GRP6": {
-                "type": "string",
-                "description": "name of the fourth group of auto home axes",
-                "default": ""
-              },
-              "GRP7": {
-                "type": "string",
-                "description": "name of the fourth group of auto home axes",
-                "default": ""
-              },
-              "GRP8": {
-                "type": "string",
-                "description": "name of the fourth group of auto home axes",
-                "default": ""
-              },
-              "GRP9": {
-                "type": "string",
-                "description": "name of the fourth group of auto home axes",
-                "default": ""
-              },
-              "type": {
-                "type": "string",
-                "const": "pmac.autohome",
-                "default": "pmac.autohome"
-              }
-            },
-            "required": [
-              "Controller",
-              "PLC",
-              "P"
-            ],
-            "additionalProperties": false
-          },
-          {
-            "type": "object",
-            "properties": {
-              "entity_enabled": {
-                "type": "boolean",
-                "default": true
-              },
-              "name": {
-                "type": "string",
-                "description": "Asyn port name for this object",
-                "vscode_ibek_plugin_type": "type_id"
-              },
-              "Controller": {
-                "type": "string",
-                "description": "the PMAC Controller",
-                "vscode_ibek_plugin_type": "type_object"
-              },
-              "CS": {
-                "type": "integer",
-                "description": "Coordinate system number"
-              },
-              "NAxes": {
-                "type": "integer",
-                "description": "number of CS axes",
-                "default": 9
-              },
-              "Program": {
-                "type": "integer",
-                "description": "PROG number for CS motion",
-                "default": 10
-              },
-              "type": {
-                "type": "string",
-                "const": "pmac.CS",
-                "default": "pmac.CS"
-              }
-            },
-            "required": [
-              "name",
-              "Controller",
-              "CS"
-            ],
-            "additionalProperties": false
-          },
-          {
-            "type": "object",
-            "properties": {
-              "entity_enabled": {
-                "type": "boolean",
-                "default": true
-              },
-              "name": {
-                "type": "string",
-                "description": "A name this IP module",
-                "vscode_ibek_plugin_type": "type_id"
-              },
-              "carrier": {
-                "type": "string",
-                "description": "IPAC carrier name",
-                "vscode_ibek_plugin_type": "type_object"
-              },
-              "ip_site_number": {
-                "type": "integer",
-                "description": "Site on the carrier for this IP Module (0=A, 1=B, 2=C, 3=D)"
-              },
-              "interrupt_vector": {
-                "type": "string",
-                "description": "Interrupt Vector reserved with epics.InterruptVectorVME, count=3",
-                "vscode_ibek_plugin_type": "type_object"
-              },
-              "link": {
-                "type": "integer",
-                "description": "Link number on this IP module (0 or 1)",
-                "default": 0
-              },
-              "type": {
-                "type": "string",
-                "const": "psc.PscIpModule",
-                "default": "psc.PscIpModule"
-              }
-            },
-            "required": [
-              "name",
-              "carrier",
-              "ip_site_number",
-              "interrupt_vector"
-            ],
-            "additionalProperties": false
-          },
-          {
-            "type": "object",
-            "properties": {
-              "entity_enabled": {
-                "type": "boolean",
-                "default": true
-              },
-              "device": {
-                "type": "string",
-                "description": "Device Name, PV Suffix",
-                "vscode_ibek_plugin_type": "type_id"
-              },
-              "ip_module": {
-                "type": "string",
-                "description": "PscIpModule object",
-                "vscode_ibek_plugin_type": "type_object"
-              },
-              "link": {
-                "type": "integer",
-                "description": "Link number on this IP module (0 or 1)"
-              },
-              "i_abserr": {
-                "type": "number",
-                "description": "Absolute error limit (TODO what is i_abserr vs abserr ?)",
-                "default": 0.0005
-              },
-              "abserr": {
-                "type": "number",
-                "description": "Absolute error limit [0..1]",
-                "default": 0.0005
-              },
-              "relerr": {
-                "type": "number",
-                "description": "Relative error limit [0..1]",
-                "default": 0.0002
-              },
-              "controlerr": {
-                "type": "number",
-                "description": "Control Error",
-                "default": 0.0005
-              },
-              "startsw_evnt": {
-                "type": "integer",
-                "description": "Event to start Soft ramps (ignore)",
-                "default": 53
-              },
-              "syncsw_evnt": {
-                "type": "integer",
-                "description": "Event to synchronise Soft ramps (ignore)",
-                "default": 54
-              },
-              "hyscycle_dly": {
-                "type": "integer",
-                "description": "Seconds to wait in hysteresis cycle: time of PS between min and max value\n",
-                "default": 3
-              },
-              "hyscydir": {
-                "type": "integer",
-                "description": "Direction of hysteresis cycle:\napproaching set point from above (-) or below (+) at the end of the cycle\n",
-                "default": 0
-              },
-              "hyscmask": {
-                "type": "integer",
-                "description": "Defines the number of hysteresis cycles to run (for values >1 (3, 7, ...)\nthe seq delay has to be specified in an extra template)\n",
-                "default": 3
-              },
-              "hyslock": {
-                "type": "integer",
-                "description": "The value \"locked\" will force the PS to do a full cycle,\nwhenever the value I-SET is changed in the wrong direction (against HYCDIR)\n",
-                "default": 0
-              },
-              "hysimin": {
-                "type": "integer",
-                "description": "Minimum value for hysteresis cycle",
-                "default": -3
-              },
-              "hysimax": {
-                "type": "integer",
-                "description": "Maximum value for hysteresis cycle",
-                "default": 3
-              },
-              "oninitcycle": {
-                "type": "boolean",
-                "description": "Flag to determine if power supply should do a hysteresis cycle\nwhen it is switched ON\n",
-                "default": false
-              },
-              "vdclink_adel": {
-                "type": "number",
-                "description": "UNKNOWN",
-                "default": 0.3
-              },
-              "vload_adel": {
-                "type": "number",
-                "description": "UNKNOWN",
-                "default": 0.3
-              },
-              "icharge_adel": {
-                "type": "number",
-                "description": "UNKNOWN",
-                "default": 0.0005
-              },
-              "type": {
-                "type": "string",
-                "const": "psc.PscTemplate",
-                "default": "psc.PscTemplate"
-              }
-            },
-            "required": [
-              "device",
-              "ip_module",
-              "link"
-            ],
-            "additionalProperties": false
-          },
-          {
-            "type": "object",
-            "properties": {
-              "entity_enabled": {
-                "type": "boolean",
-                "default": true
-              },
-              "card": {
-                "type": "string",
-                "description": "8401 card identifier",
-                "vscode_ibek_plugin_type": "type_object"
-              },
-              "psc_template": {
-                "type": "string",
-                "description": "The PSC template instance",
-                "vscode_ibek_plugin_type": "type_object"
-              },
-              "channel": {
-                "type": "integer",
-                "description": "8401 channel number (0-7)"
-              },
-              "name": {
-                "type": "string",
-                "description": "Suffix for PV name for this channel"
-              },
-              "cal_m": {
-                "type": "number",
-                "description": "Calibrated current multiplier"
-              },
-              "cal_c": {
-                "type": "number",
-                "description": "Calibrated current constant"
-              },
-              "adel": {
-                "type": "number",
-                "description": "Archive deadband for calibrated current"
-              },
-              "type": {
-                "type": "string",
-                "const": "psc.pscHy8401Channel-BS",
-                "default": "psc.pscHy8401Channel-BS"
-              }
-            },
-            "required": [
-              "card",
-              "psc_template",
-              "channel",
-              "name",
-              "cal_m",
-              "cal_c",
-              "adel"
-            ],
-            "additionalProperties": false
-          }
-        ]
-      },
-      "description": "List of entities this IOC instantiates"
+      "description": "Description of what the IOC does",
+      "title": "Description",
+      "type": "string"
     },
     "generic_ioc_image": {
-      "type": "string",
-      "description": "The generic IOC container image registry URL"
+      "description": "The generic IOC container image registry URL",
+      "title": "Generic Ioc Image",
+      "type": "string"
+    },
+    "entities": {
+      "description": "List of entities this IOC instantiates",
+      "items": {
+        "$ref": "#/$defs/EntityModel"
+      },
+      "title": "Entities",
+      "type": "array"
     }
   },
   "required": [
     "ioc_name",
     "description",
-    "entities",
-    "generic_ioc_image"
+    "generic_ioc_image",
+    "entities"
   ],
-  "additionalProperties": false,
-  "$schema": "http://json-schema.org/draft-07/schema#"
+  "title": "NewIOC",
+  "type": "object"
 }

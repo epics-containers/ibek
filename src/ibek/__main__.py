@@ -1,24 +1,21 @@
 import json
 from pathlib import Path
-from typing import Any, List, Mapping, Optional
+from typing import List, Optional
 
-import jsonschema
 import typer
-from apischema.json_schema import JsonSchemaVersion, deserialization_schema
 from ruamel.yaml import YAML
 
-from ibek import __version__
-
-from .gen_scripts import create_boot_script, create_db_script, ioc_deserialize
-from .ioc import IOC, make_entity_classes
+from ._version import __version__
+from .gen_scripts import (
+    create_boot_script,
+    create_db_script,
+    ioc_create_model,
+    ioc_deserialize,
+)
 from .support import Support
 
 cli = typer.Typer()
 yaml = YAML()
-
-
-def make_schema(cls: type) -> Mapping[str, Any]:
-    return deserialization_schema(cls, version=JsonSchemaVersion.DRAFT_7)
 
 
 def version_callback(value: bool):
@@ -45,8 +42,7 @@ def ibek_schema(
     output: Path = typer.Argument(..., help="The filename to write the schema to")
 ):
     """Produce JSON global schema for all <support_module>.ibek.support.yaml files"""
-    schema = json.dumps(make_schema(Support), indent=2)
-    output.write_text(schema)
+    output.write_text(Support.get_schema())
 
 
 @cli.command()
@@ -55,24 +51,13 @@ def ioc_schema(
         ..., help="The filepath to a support module definition file"
     ),
     output: Path = typer.Argument(..., help="The filename to write the schema to"),
-    no_schema: bool = typer.Option(False, help="disable schema checking"),
 ):
     """
     Create a json schema from a <support_module>.ibek.support.yaml file
     """
 
-    # first check the definition file with jsonschema since it has more
-    # legible error messages than apischema
-    for definition in definitions:
-        support_dict = YAML(typ="safe").load(definition)
-        if not no_schema:
-            schema_support = make_schema(Support)
-            jsonschema.validate(support_dict, schema_support)
-
-        support = Support.deserialize(support_dict)
-        make_entity_classes(support)
-
-    schema = json.dumps(make_schema(IOC), indent=2)
+    ioc_model = ioc_create_model(definitions)
+    schema = json.dumps(ioc_model.model_json_schema(), indent=2)
     output.write_text(schema)
 
 

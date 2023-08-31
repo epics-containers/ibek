@@ -3,7 +3,7 @@ from pathlib import Path
 from pytest import fixture
 from ruamel.yaml import YAML
 
-from ibek.ioc import clear_entity_classes, make_entity_classes
+from ibek.ioc import clear_entity_model_ids, make_entity_models
 from ibek.support import Support
 
 
@@ -14,7 +14,7 @@ def get_support(samples: Path, yaml_file: str) -> Support:
     # load from file
     d = YAML(typ="safe").load(samples / f"{yaml_file}")
     # create a support object from that dict
-    support = Support.deserialize(d)
+    support = Support(**d)
     return support
 
 
@@ -36,10 +36,10 @@ def pmac_support(ibek_defs):
 @fixture
 def pmac_classes(pmac_support):
     # clear the entity classes to make sure there's nothing left
-    clear_entity_classes()
+    clear_entity_model_ids()
 
     # make entity subclasses for everything defined in it
-    namespace = make_entity_classes(pmac_support)
+    namespace = make_entity_models(pmac_support)
 
     # return the namespace so that callers have access to all of the
     # generated dataclasses
@@ -54,10 +54,10 @@ def epics_support(ibek_defs):
 @fixture
 def epics_classes(epics_support):
     # clear the entity classes to make sure there's nothing left
-    clear_entity_classes()
+    clear_entity_model_ids()
 
     # make entity subclasses for everything defined in it
-    namespace = make_entity_classes(epics_support)
+    namespace = make_entity_models(epics_support)
 
     # return the namespace so that callers have access to all of the
     # generated dataclasses

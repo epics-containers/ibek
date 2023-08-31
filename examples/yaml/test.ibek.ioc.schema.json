@@ -1,0 +1,128 @@
+{
+  "$defs": {
+    "EntityModel": {
+      "discriminator": {
+        "mapping": {
+          "test.e1": "#/$defs/test_e1",
+          "test.e2": "#/$defs/test_e2"
+        },
+        "propertyName": "type"
+      },
+      "oneOf": [
+        {
+          "$ref": "#/$defs/test_e1"
+        },
+        {
+          "$ref": "#/$defs/test_e2"
+        }
+      ],
+      "title": "EntityModel"
+    },
+    "test_e1": {
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "const": "test.e1",
+          "default": "test.e1",
+          "description": "The type of this entity",
+          "title": "Type"
+        },
+        "entity_enabled": {
+          "default": true,
+          "description": "enable or disable this entity instance",
+          "title": "Entity Enabled",
+          "type": "boolean"
+        },
+        "name": {
+          "default": null,
+          "description": "identifier e1",
+          "title": "Name",
+          "type": "string"
+        },
+        "value": {
+          "default": null,
+          "description": "value of e1",
+          "title": "Value",
+          "type": "string"
+        },
+        "ref": {
+          "default": null,
+          "description": "reference to another entity",
+          "title": "Ref"
+        }
+      },
+      "title": "test_e1",
+      "type": "object"
+    },
+    "test_e2": {
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "const": "test.e2",
+          "default": "test.e2",
+          "description": "The type of this entity",
+          "title": "Type"
+        },
+        "entity_enabled": {
+          "default": true,
+          "description": "enable or disable this entity instance",
+          "title": "Entity Enabled",
+          "type": "boolean"
+        },
+        "name": {
+          "default": null,
+          "description": "identifier e2",
+          "title": "Name",
+          "type": "string"
+        },
+        "value": {
+          "default": null,
+          "description": "value of e2",
+          "title": "Value",
+          "type": "string"
+        },
+        "ref": {
+          "default": null,
+          "description": "reference to another entity",
+          "title": "Ref"
+        }
+      },
+      "title": "test_e2",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "ioc_name": {
+      "description": "Name of IOC instance",
+      "title": "Ioc Name",
+      "type": "string"
+    },
+    "description": {
+      "description": "Description of what the IOC does",
+      "title": "Description",
+      "type": "string"
+    },
+    "generic_ioc_image": {
+      "description": "The generic IOC container image registry URL",
+      "title": "Generic Ioc Image",
+      "type": "string"
+    },
+    "entities": {
+      "description": "List of entities this IOC instantiates",
+      "items": {
+        "$ref": "#/$defs/EntityModel"
+      },
+      "title": "Entities",
+      "type": "array"
+    }
+  },
+  "required": [
+    "ioc_name",
+    "description",
+    "generic_ioc_image",
+    "entities"
+  ],
+  "title": "NewIOC",
+  "type": "object"
+}

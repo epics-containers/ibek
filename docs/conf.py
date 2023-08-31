@@ -40,8 +40,6 @@ extensions = [
     "sphinx.ext.viewcode",
     # Adds the inheritance-diagram generation directive
     "sphinx.ext.inheritance_diagram",
-    # Makes autodoc understand apischema annotated classes/functions
-    "sphinx_apischema",
     # Add a copy button to each code block
     "sphinx_copybutton",
     # For the card element
@@ -67,15 +65,16 @@ nitpick_ignore = [
     ("py:class", "typing_extensions.Literal"),
 ]
 
-# Both the class’ and the __init__ method’s docstring are concatenated and
-# inserted into the main body of the autoclass directive
-autoclass_content = "both"
+# Dont use the __init__ docstring because pydantic base classes cause sphinx
+# to generate a lot of warnings
+autoclass_content = "class"
 
 # Order the members by the order they appear in the source code
 autodoc_member_order = "bysource"
 
 # Don't inherit docstrings from baseclasses
 autodoc_inherit_docstrings = False
+
 
 # Output graphviz directive produced images in a scalable format
 graphviz_output_format = "svg"

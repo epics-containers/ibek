@@ -4,12 +4,12 @@ Functions for building the db and boot scripts
 import logging
 import re
 from pathlib import Path
-from typing import List
+from typing import List, Type
 
 from jinja2 import Template
 from ruamel.yaml.main import YAML
 
-from .ioc import IOC, make_entity_classes
+from .ioc import IOC, clear_entity_model_ids, make_entity_models, make_ioc_model
 from .render import Render
 from .support import Support
 
@@ -21,20 +21,44 @@ schema_modeline = re.compile(r"# *yaml-language-server *: *\$schema=([^ ]*)")
 url_f = r"file://"
 
 
+def ioc_create_model(definitions: List[Path]) -> Type[IOC]:
+    """
+    Take a list of definitions YAML and create an IOC model from it
+    """
+    entity_models = []
+
+    clear_entity_model_ids()
+    for definition in definitions:
+        support_dict = YAML(typ="safe").load(definition)
+
+        Support.model_validate(support_dict)
+
+        # deserialize the support module definition file
+        support = Support(**support_dict)
+        # make Entity classes described in the support module definition file
+        entity_models += make_entity_models(support)
+
+    # Save the schema for IOC
+    model = make_ioc_model(entity_models)
+
+    return model
+
+
 def ioc_deserialize(ioc_instance_yaml: Path, definition_yaml: List[Path]) -> IOC:
     """
     Takes an ioc instance entities file, list of generic ioc definitions files.
 
-    Returns an in memory object graph of the resulting ioc instance
+    Returns a model of the resulting ioc instance
     """
+    ioc_model = ioc_create_model(definition_yaml)
 
-    # Read and load the support module definitions
-    for yaml in definition_yaml:
-        support = Support.deserialize(YAML(typ="safe").load(yaml))
-        make_entity_classes(support)
+    # extract the ioc instance yaml into a dict
+    ioc_instance_dict = YAML(typ="safe").load(ioc_instance_yaml)
 
-    # Create an IOC instance from it
-    return IOC.deserialize(YAML(typ="safe").load(ioc_instance_yaml))
+    # Create an IOC instance from the instance dict and the model
+    ioc_instance = ioc_model(**ioc_instance_dict)
+
+    return ioc_instance
 
 
 def create_db_script(ioc_instance: IOC) -> str:

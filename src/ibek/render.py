@@ -4,8 +4,7 @@ Functions for rendering lines in the boot script using Jinja2
 
 from typing import Callable, List, Optional, Union
 
-from jinja2 import Template
-
+from .globals import render_with_utils
 from .ioc import IOC, Entity
 from .support import Comment, Function, Script, Text, When
 
@@ -24,14 +23,14 @@ class Render:
         self, instance: Entity, text: str, when=When.every, suffix=""
     ) -> str:
         """
-        Add in the next line of text, honouring the ``once`` flag which will
+        Add in the next line of text, honouring the once flag which will
         only add the line once per IOC.
 
         Jinja rendering of values/args has already been done in Entity.__post_init__
         but we pass all strings though jinja again to render any other jinja
         in the IOC (e.g. database and function entries)
 
-        ``once`` uses the name of the definition + suffix to track which lines
+        once uses the name of the definition + suffix to track which lines
         have been rendered already. The suffix can be used where a given
         Entity has more than one element to render once (e.g. functions)
         """
@@ -46,8 +45,7 @@ class Render:
             raise NotImplementedError("When.last not yet implemented")
 
         # Render Jinja entries in the text
-        jinja_template = Template(text)
-        result = jinja_template.render(instance.__dict__)  # type: ignore
+        result = render_with_utils(instance, text)  # type: ignore
 
         if result == "":
             return ""
@@ -146,8 +144,7 @@ class Render:
                 f'msi -I${{EPICS_DB_INCLUDE_PATH}} -M"{db_arg_string}" "{db_file}"\n'
             )
 
-        jinja_template = Template(jinja_txt)
-        db_txt = jinja_template.render(instance.__dict__)  # type: ignore
+        db_txt = render_with_utils(instance, jinja_txt)  # type: ignore
 
         return db_txt + "\n"
 
@@ -163,8 +160,8 @@ class Render:
         env_var_txt = ""
         for variable in variables:
             # Substitute the name and value of the environment variable from args
-            env_template = Template(f"epicsEnvSet {variable.name} {variable.value}")
-            env_var_txt += env_template.render(instance.__dict__)
+            env_template = f"epicsEnvSet {variable.name} {variable.value}"
+            env_var_txt += render_with_utils(instance, env_template)  # type: ignore
         return env_var_txt + "\n"
 
     def render_elements(
@@ -174,7 +171,10 @@ class Render:
         Render elements of a given IOC instance based on calling the correct method
         """
         elements = ""
-        for instance in ioc.entities:
+        for entity in ioc.entities:
+            # TODO can we eliminate the need for intermediate root
+            # see definition of EntityModel in ioc.py
+            instance = getattr(entity, "root")
             if instance.entity_enabled:
                 element = method(instance)
                 if element:

@@ -5,184 +5,175 @@ support module definition YAML file
 from __future__ import annotations
 
 import builtins
-import types
-from dataclasses import Field, dataclass, field, make_dataclass
-from typing import Any, Dict, List, Mapping, Sequence, Tuple, Type, cast
+from typing import Any, Dict, Literal, Sequence, Tuple, Type, Union
 
-from apischema import (
-    Undefined,
-    ValidationError,
-    cache,
-    deserialize,
-    deserializer,
-    identity,
-    schema,
-)
-from apischema.conversions import Conversion, reset_deserializers
-from apischema.metadata import conversion
-from jinja2 import Template
-from typing_extensions import Annotated as A
-from typing_extensions import Literal
+from pydantic import Field, RootModel, create_model, field_validator, model_validator
+from pydantic.fields import FieldInfo
 
-from . import modules
-from .globals import T, desc
+from .globals import BaseSettings, render_with_utils
 from .support import Definition, IdArg, ObjectArg, Support
-from .utils import UTILS
-
-
-class Entity:
-    """
-    A baseclass for all generated Entity classes. Provides the
-    deserialize entry point.
-    """
-
-    # a link back to the Definition Object that generated this Definition
-    __definition__: Definition
-
-    entity_enabled: bool
-
-    def __post_init__(self: "Entity"):
-        # If there is an argument which is an id then allow deserialization by that
-        args = self.__definition__.args
-        ids = set(a.name for a in args if isinstance(a, IdArg))
-        assert len(ids) <= 1, f"Multiple id args {list(ids)} defined in {args}"
-        if ids:
-            # A string id, use that
-            inst_id = getattr(self, ids.pop())
-            assert inst_id not in id_to_entity, f"Already got an instance {inst_id}"
-            id_to_entity[inst_id] = self
-
-            # TODO - not working as printing own ID
-            setattr(self, "__str__", inst_id)
-
-        # add in the global __utils__ object for state sharing
-        self.__utils__ = UTILS
-
-        # copy 'values' from the definition into the Entity
-        for value in self.__definition__.values:
-            setattr(self, value.name, value.value)
-
-        # Jinja expansion of any string args/values in the Entity's attributes
-        for arg, value in self.__dict__.items():
-            if isinstance(value, str):
-                jinja_template = Template(value)
-                rendered = jinja_template.render(self.__dict__)
-                setattr(self, arg, rendered)
-
 
 id_to_entity: Dict[str, Entity] = {}
 
 
-def make_entity_class(definition: Definition, support: Support) -> Type[Entity]:
+class Entity(BaseSettings):
     """
-    We can get a set of Definitions by deserializing an ibek
-    support module definition YAML file.
-
-    This function then creates an Entity derived class from each Definition.
-
-    See :ref:`entities`
+    A baseclass for all generated Entity classes.
     """
-    fields: List[Tuple[str, type, Field[Any]]] = []
 
-    # add in each of the arguments
+    type: str = Field(description="The type of this entity")
+    entity_enabled: bool = Field(
+        description="enable or disable this entity instance", default=True
+    )
+    __definition__: Definition
+
+    @model_validator(mode="after")  # type: ignore
+    def add_ibek_attributes(cls, entity: Entity):
+        """
+        Whole Entity model validation
+
+        TODO at present an object reference to an ID where the referred object violates
+        schema is seen as "KeyError: "object XXX not found in [...]" which hides the
+        schema violation error.
+
+        This could potentially be fixed by doing the validation here instead
+        (removing extra:forbid from the model_config). BUT, at present passing
+        the info arg to this function receives a dict of the IOC instance
+        that created this entity, not the entity itself. This may be a
+        pydantic bug?
+        """
+
+        # find the id field in this Entity if it has one
+        ids = set(a.name for a in entity.__definition__.args if isinstance(a, IdArg))
+
+        entity_dict = entity.model_dump()
+        for arg, value in entity_dict.items():
+            if arg in ids:
+                # add this entity to the global id index
+                if value in id_to_entity:
+                    raise ValueError(f"Duplicate id {value} in {list(id_to_entity)}")
+                id_to_entity[value] = entity
+            elif isinstance(value, str):
+                # Jinja expansion of any of the Entity's string args/values
+                setattr(entity, arg, render_with_utils(entity_dict, value))
+        return entity
+
+
+def make_entity_model(definition: Definition, support: Support) -> Type[Entity]:
+    """
+    Create an Entity Model from a Definition instance and a Support instance.
+    """
+
+    def add_arg(name, typ, description, default):
+        args[name] = (
+            typ,
+            FieldInfo(description=description, default=default),
+        )
+
+    args: Dict[str, Tuple[type, Any]] = {}
+    validators: Dict[str, Any] = {}
+
+    # fully qualified name of the Entity class including support module
+    full_name = f"{support.module}.{definition.name}"
+
+    # add in each of the arguments as a Field in the Entity
     for arg in definition.args:
-        # make_dataclass can cope with string types, so cast them here rather
-        # than lookup
-        metadata: Any = None
-        arg_type: Type
+        full_arg_name = f"{full_name}.{arg.name}"
+        arg_type: Any
+
         if isinstance(arg, ObjectArg):
 
-            def lookup_instance(id):
+            @field_validator(arg.name, mode="after")
+            def lookup_instance(cls, id):
                 try:
                     return id_to_entity[id]
                 except KeyError:
-                    raise ValidationError(f"{id} is not in {list(id_to_entity)}")
+                    raise KeyError(f"object {id} not found in {list(id_to_entity)}")
 
-            metadata = conversion(
-                deserialization=Conversion(lookup_instance, str, Entity)
-            ) | schema(extra={"vscode_ibek_plugin_type": "type_object"})
-            arg_type = Entity
+            validators[full_arg_name] = lookup_instance
+            arg_type = object
+
         elif isinstance(arg, IdArg):
             arg_type = str
-            metadata = schema(extra={"vscode_ibek_plugin_type": "type_id"})
+
         else:
             # arg.type is str, int, float, etc.
             arg_type = getattr(builtins, arg.type)
-        if arg.description:
-            arg_type = A[arg_type, desc(arg.description)]  # type: ignore
-        if arg.default is Undefined:
-            fld = field(metadata=metadata)
-        else:
-            fld = field(metadata=metadata, default=arg.default)
-        fields.append((arg.name, arg_type, fld))  # type: ignore
 
-    # put the literal name in as 'type' for this Entity this gives us
-    # a unique key for each of the entity types we may instantiate
-    full_name = f"{support.module}.{definition.name}"
-    fields.append(
-        (
-            "type",
-            Literal[full_name],  # type: ignore
-            field(default=cast(Any, full_name)),
-        )
-    )
+        default = getattr(arg, "default", None)
+        add_arg(arg.name, arg_type, arg.description, default)
 
-    # add a field so we can control rendering of the entity without having to delete
-    # it
-    fields.append(("entity_enabled", bool, field(default=cast(Any, True))))
+    # add in the calculated values Jinja Templates as Fields in the Entity
+    for value in definition.values:
+        add_arg(value.name, str, value.description, value.value)
 
-    namespace = dict(__definition__=definition)
+    # add the type literal which discriminates between the different Entity classes
+    typ = Literal[full_name]  # type: ignore
+    add_arg("type", typ, "The type of this entity", full_name)
 
-    # make the Entity derived dataclass for this EntityClass, with a reference
-    # to the Definition that created it
-    entity_cls = make_dataclass(full_name, fields, bases=(Entity,), namespace=namespace)
-    deserializer(Conversion(identity, source=entity_cls, target=Entity))
+    entity_cls = create_model(
+        full_name.replace(".", "_"),
+        **args,
+        __validators__=validators,
+        __base__=Entity,
+    )  # type: ignore
+
+    # add a link back to the Definition Instance that generated this Entity Class
+    entity_cls.__definition__ = definition
+
     return entity_cls
 
 
-def make_entity_classes(support: Support) -> types.SimpleNamespace:
-    """Create `Entity` subclasses for all `Definition` objects in the given
-    `Support` instance, put them in a namespace in `ibek.modules` and return
-    it"""
-    module = types.SimpleNamespace()
-    assert not hasattr(
-        modules, support.module
-    ), f"Entity classes already created for {support.module}"
-    setattr(modules, support.module, module)
-    modules.__all__.append(support.module)
+def make_entity_models(support: Support):
+    """
+    Create Entity subclasses for all Definition instances in the given
+    Support instance. Returns a list of the Entity subclasses Models.
+    """
+
+    entity_models = []
+    entity_names = []
+
     for definition in support.defs:
-        entity_cls = make_entity_class(definition, support)
-        setattr(module, definition.name, entity_cls)
-    return module
+        entity_models.append(make_entity_model(definition, support))
+        if definition.name in entity_names:
+            raise ValueError(f"Duplicate entity name {definition.name}")
+        entity_names.append(definition.name)
+
+    return entity_models
 
 
-def clear_entity_classes():
-    """Reset the modules namespaces, deserializers and caches of defined Entity
-    subclasses"""
+def make_ioc_model(entity_models: Sequence[Type[Entity]]) -> Type[IOC]:
+    """
+    Create an IOC derived model, by setting its entities attribute to
+    be of type 'list of Entity derived classes'.
+    """
+
+    class EntityModel(RootModel):
+        root: Union[tuple(entity_models)] = Field(discriminator="type")  # type: ignore
+
+    class NewIOC(IOC):
+        entities: Sequence[EntityModel] = Field(  # type: ignore
+            description="List of entities this IOC instantiates"
+        )
+
+    return NewIOC
+
+
+def clear_entity_model_ids():
+    """Resets the global id_to_entity dict."""
+
     id_to_entity.clear()
-    while modules.__all__:
-        delattr(modules, modules.__all__.pop())
-    reset_deserializers(Entity)
-    cache.reset()
 
 
-@dataclass
-class IOC:
+class IOC(BaseSettings):
     """
-    Used to load an IOC instance entities yaml file into memory using
-    IOC.deserialize(YAML().load(ioc_instance_yaml)).
-
-    Before loading the entities file all Entity classes that it contains
-    must be defined in modules.py. This is achieved by deserializing all
-    support module definitions yaml files used by this IOC and calling
-    make_entity_classes(support_module).
+    Used to load an IOC instance entities yaml file into a Pydantic Model.
     """
 
-    ioc_name: A[str, desc("Name of IOC instance")]
-    description: A[str, desc("Description of what the IOC does")]
-    entities: A[Sequence[Entity], desc("List of entities this IOC instantiates")]
-    generic_ioc_image: A[str, desc("The generic IOC container image registry URL")]
-
-    @classmethod
-    def deserialize(cls: Type[T], d: Mapping[str, Any]) -> T:
-        return deserialize(cls, d)
+    ioc_name: str = Field(description="Name of IOC instance")
+    description: str = Field(description="Description of what the IOC does")
+    generic_ioc_image: str = Field(
+        description="The generic IOC container image registry URL"
+    )
+    # this will be replaced in derived classes made by make_ioc_model
+    entities: Sequence[Entity]

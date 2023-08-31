@@ -1,14 +1,26 @@
 """
-A few global defintions
+A few global definitions
 """
-from typing import TypeVar
 
-from apischema import schema
+from typing import Dict
 
-#: A generic Type for use in type hints
-T = TypeVar("T")
+from jinja2 import Template
+from pydantic import BaseModel, ConfigDict
+
+from .utils import UTILS
 
 
-def desc(description: str):
-    """a description Annotation to add to our Entity derived Types"""
-    return schema(description=description)
+class BaseSettings(BaseModel):
+    """A Base class for setting consistent Pydantic model configuration"""
+
+    model_config = ConfigDict(
+        extra="forbid",
+    )
+
+
+def render_with_utils(context: Dict, template_text: str) -> str:
+    """
+    Render a Jinja template with the global __utils__ object in the context
+    """
+    jinja_template = Template(template_text)
+    return jinja_template.render(context, __utils__=UTILS)

@@ -1,890 +1,1084 @@
 {
-  "type": "object",
+  "$defs": {
+    "EntityModel": {
+      "discriminator": {
+        "mapping": {
+          "pmac.CS": "#/$defs/pmac_CS",
+          "pmac.DlsCsPmacAsynMotor": "#/$defs/pmac_DlsCsPmacAsynMotor",
+          "pmac.DlsPmacAsynMotor": "#/$defs/pmac_DlsPmacAsynMotor",
+          "pmac.Geobrick": "#/$defs/pmac_Geobrick",
+          "pmac.PmacAsynIPPort": "#/$defs/pmac_PmacAsynIPPort",
+          "pmac.PmacAsynSSHPort": "#/$defs/pmac_PmacAsynSSHPort",
+          "pmac.autohome": "#/$defs/pmac_autohome",
+          "pmac.pmacDisableLimitsCheck": "#/$defs/pmac_pmacDisableLimitsCheck"
+        },
+        "propertyName": "type"
+      },
+      "oneOf": [
+        {
+          "$ref": "#/$defs/pmac_PmacAsynSSHPort"
+        },
+        {
+          "$ref": "#/$defs/pmac_PmacAsynIPPort"
+        },
+        {
+          "$ref": "#/$defs/pmac_Geobrick"
+        },
+        {
+          "$ref": "#/$defs/pmac_DlsPmacAsynMotor"
+        },
+        {
+          "$ref": "#/$defs/pmac_DlsCsPmacAsynMotor"
+        },
+        {
+          "$ref": "#/$defs/pmac_pmacDisableLimitsCheck"
+        },
+        {
+          "$ref": "#/$defs/pmac_autohome"
+        },
+        {
+          "$ref": "#/$defs/pmac_CS"
+        }
+      ],
+      "title": "EntityModel"
+    },
+    "pmac_CS": {
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "const": "pmac.CS",
+          "default": "pmac.CS",
+          "description": "The type of this entity",
+          "title": "Type"
+        },
+        "entity_enabled": {
+          "default": true,
+          "description": "enable or disable this entity instance",
+          "title": "Entity Enabled",
+          "type": "boolean"
+        },
+        "name": {
+          "default": null,
+          "description": "Asyn port name for this object",
+          "title": "Name",
+          "type": "string"
+        },
+        "Controller": {
+          "default": null,
+          "description": "the PMAC Controller",
+          "title": "Controller"
+        },
+        "CS": {
+          "default": null,
+          "description": "Coordinate system number",
+          "title": "Cs",
+          "type": "integer"
+        },
+        "NAxes": {
+          "default": 9,
+          "description": "number of CS axes",
+          "title": "Naxes",
+          "type": "integer"
+        },
+        "Program": {
+          "default": 10,
+          "description": "PROG number for CS motion",
+          "title": "Program",
+          "type": "integer"
+        }
+      },
+      "title": "pmac_CS",
+      "type": "object"
+    },
+    "pmac_DlsCsPmacAsynMotor": {
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "const": "pmac.DlsCsPmacAsynMotor",
+          "default": "pmac.DlsCsPmacAsynMotor",
+          "description": "The type of this entity",
+          "title": "Type"
+        },
+        "entity_enabled": {
+          "default": true,
+          "description": "enable or disable this entity instance",
+          "title": "Entity Enabled",
+          "type": "boolean"
+        },
+        "name": {
+          "default": null,
+          "description": "Object name and gui association name",
+          "title": "Name",
+          "type": "string"
+        },
+        "CsController": {
+          "default": null,
+          "description": "Coordinate system controller to attach to",
+          "title": "Cscontroller"
+        },
+        "axis": {
+          "default": null,
+          "description": "which axis number this motor drives",
+          "title": "Axis",
+          "type": "integer"
+        },
+        "P": {
+          "default": null,
+          "description": "PV prefix name for this motor",
+          "title": "P",
+          "type": "string"
+        },
+        "M": {
+          "default": null,
+          "description": "PV motor name for this motor",
+          "title": "M",
+          "type": "string"
+        },
+        "DESC": {
+          "default": "",
+          "description": "Description, displayed on EDM screen",
+          "title": "Desc",
+          "type": "string"
+        },
+        "MRES": {
+          "default": 0.0001,
+          "description": "Motor Step Size (EGU)",
+          "title": "Mres",
+          "type": "number"
+        },
+        "VELO": {
+          "default": 1.0,
+          "description": "axis Velocity (EGU/s)",
+          "title": "Velo",
+          "type": "number"
+        },
+        "PREC": {
+          "default": 3,
+          "description": "Display Precision",
+          "title": "Prec",
+          "type": "integer"
+        },
+        "EGU": {
+          "default": "mm",
+          "description": "Engineering Units",
+          "title": "Egu",
+          "type": "string"
+        },
+        "TWV": {
+          "default": 1.0,
+          "description": "Tweak Step Size (EGU)",
+          "title": "Twv",
+          "type": "number"
+        },
+        "DTYP": {
+          "default": "asynMotor",
+          "description": "Datatype of record",
+          "title": "Dtyp",
+          "type": "string"
+        },
+        "DIR": {
+          "default": 0,
+          "description": "User direction",
+          "title": "Dir",
+          "type": "integer"
+        },
+        "VBAS": {
+          "default": 1.0,
+          "description": "Base Velocity (EGU/s)",
+          "title": "Vbas",
+          "type": "number"
+        },
+        "VMAX": {
+          "default": "{{VELO}}",
+          "description": "Max Velocity (EGU/s)",
+          "title": "Vmax",
+          "type": "string"
+        },
+        "ACCL": {
+          "default": 0.5,
+          "description": "Seconds to Velocity",
+          "title": "Accl",
+          "type": "number"
+        },
+        "BDST": {
+          "default": 0.0,
+          "description": "BL Distance (EGU)",
+          "title": "Bdst",
+          "type": "number"
+        },
+        "BVEL": {
+          "default": 0.0,
+          "description": "BL Velocity(EGU/s)",
+          "title": "Bvel",
+          "type": "number"
+        },
+        "BACC": {
+          "default": 0.0,
+          "description": "BL Seconds to Veloc",
+          "title": "Bacc",
+          "type": "number"
+        },
+        "DHLM": {
+          "default": 10000.0,
+          "description": "Dial High Limit",
+          "title": "Dhlm",
+          "type": "number"
+        },
+        "DLLM": {
+          "default": -10000.0,
+          "description": "Dial low limit",
+          "title": "Dllm",
+          "type": "number"
+        },
+        "HLM": {
+          "default": 0.0,
+          "description": "User High Limit",
+          "title": "Hlm",
+          "type": "number"
+        },
+        "LLM": {
+          "default": 0.0,
+          "description": "User Low Limit",
+          "title": "Llm",
+          "type": "number"
+        },
+        "HLSV": {
+          "default": "MAJOR",
+          "description": "HW Lim, Violation Svr",
+          "title": "Hlsv",
+          "type": "string"
+        },
+        "INIT": {
+          "default": "",
+          "description": "Startup commands",
+          "title": "Init",
+          "type": "string"
+        },
+        "SREV": {
+          "default": 1000,
+          "description": "Steps per Revolution",
+          "title": "Srev",
+          "type": "integer"
+        },
+        "RRES": {
+          "default": 0.0,
+          "description": "Readback Step Size (EGU",
+          "title": "Rres",
+          "type": "number"
+        },
+        "ERES": {
+          "default": 0.0,
+          "description": "Encoder Step Size (EGU)",
+          "title": "Eres",
+          "type": "number"
+        },
+        "JAR": {
+          "default": 0.0,
+          "description": "Jog Acceleration (EGU/s^2)",
+          "title": "Jar",
+          "type": "number"
+        },
+        "UEIP": {
+          "default": 0,
+          "description": "Use Encoder If Present",
+          "title": "Ueip",
+          "type": "integer"
+        },
+        "URIP": {
+          "default": 0,
+          "description": "Use RDBL If Present",
+          "title": "Urip",
+          "type": "integer"
+        },
+        "RDBL": {
+          "default": "0",
+          "description": "Readback Location, set URIP =1 if you specify this",
+          "title": "Rdbl",
+          "type": "string"
+        },
+        "RLNK": {
+          "default": "",
+          "description": "Readback output link",
+          "title": "Rlnk",
+          "type": "string"
+        },
+        "RTRY": {
+          "default": 0,
+          "description": "Max retry count",
+          "title": "Rtry",
+          "type": "integer"
+        },
+        "DLY": {
+          "default": 0.0,
+          "description": "Readback settle time (s)",
+          "title": "Dly",
+          "type": "number"
+        },
+        "OFF": {
+          "default": 0.0,
+          "description": "User Offset (EGU)",
+          "title": "Off",
+          "type": "number"
+        },
+        "RDBD": {
+          "default": 0.0,
+          "description": "Retry Deadband (EGU)",
+          "title": "Rdbd",
+          "type": "number"
+        },
+        "FOFF": {
+          "default": 0,
+          "description": "Freeze Offset, 0=variable, 1=frozen",
+          "title": "Foff",
+          "type": "integer"
+        },
+        "ADEL": {
+          "default": 0.0,
+          "description": "Alarm monitor deadband (EGU)",
+          "title": "Adel",
+          "type": "number"
+        },
+        "NTM": {
+          "default": 1,
+          "description": "New Target Monitor, only set to 0 for soft motors",
+          "title": "Ntm",
+          "type": "integer"
+        },
+        "FEHEIGH": {
+          "default": 0.0,
+          "description": "HIGH limit for following error",
+          "title": "Feheigh",
+          "type": "number"
+        },
+        "FEHIHI": {
+          "default": 0.0,
+          "description": "HIHI limit for following error",
+          "title": "Fehihi",
+          "type": "number"
+        },
+        "FEHHSV": {
+          "default": "NO_ALARM",
+          "description": "HIHI alarm severity for following error",
+          "title": "Fehhsv",
+          "type": "string"
+        },
+        "FEHSV": {
+          "default": "NO_ALARM",
+          "description": "HIGH alarm severity for following error",
+          "title": "Fehsv",
+          "type": "string"
+        },
+        "SCALE": {
+          "default": 1,
+          "description": "",
+          "title": "Scale",
+          "type": "integer"
+        },
+        "HOMEVIS": {
+          "default": 1,
+          "description": "If 1 then home is visible on the gui",
+          "title": "Homevis",
+          "type": "integer"
+        },
+        "HOMEVISSTR": {
+          "default": "Use motor summary screen",
+          "description": "",
+          "title": "Homevisstr",
+          "type": "string"
+        },
+        "alh": {
+          "default": "",
+          "description": "Set this to alh to add the motor to the alarm handler and send emails",
+          "title": "Alh",
+          "type": "string"
+        },
+        "HOME": {
+          "default": "{{P}}",
+          "description": "Prefix for autohome instance. Defaults to $(P) If unspecified",
+          "title": "Home",
+          "type": "string"
+        },
+        "ALLOW_HOMED_SET": {
+          "default": "#",
+          "description": "Set to a blank to allow this axis to have its homed",
+          "title": "Allow Homed Set",
+          "type": "string"
+        }
+      },
+      "title": "pmac_DlsCsPmacAsynMotor",
+      "type": "object"
+    },
+    "pmac_DlsPmacAsynMotor": {
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "const": "pmac.DlsPmacAsynMotor",
+          "default": "pmac.DlsPmacAsynMotor",
+          "description": "The type of this entity",
+          "title": "Type"
+        },
+        "entity_enabled": {
+          "default": true,
+          "description": "enable or disable this entity instance",
+          "title": "Entity Enabled",
+          "type": "boolean"
+        },
+        "name": {
+          "default": null,
+          "description": "Object name and gui association name",
+          "title": "Name",
+          "type": "string"
+        },
+        "Controller": {
+          "default": null,
+          "description": "PMAC Controller to attach to",
+          "title": "Controller"
+        },
+        "axis": {
+          "default": null,
+          "description": "which axis number this motor drives",
+          "title": "Axis",
+          "type": "integer"
+        },
+        "P": {
+          "default": null,
+          "description": "PV prefix name for this motor",
+          "title": "P",
+          "type": "string"
+        },
+        "M": {
+          "default": null,
+          "description": "PV motor name for this motor",
+          "title": "M",
+          "type": "string"
+        },
+        "DESC": {
+          "default": "",
+          "description": "Description, displayed on EDM screen",
+          "title": "Desc",
+          "type": "string"
+        },
+        "MRES": {
+          "default": 0.0001,
+          "description": "Motor Step Size (EGU)",
+          "title": "Mres",
+          "type": "number"
+        },
+        "VELO": {
+          "default": 1.0,
+          "description": "axis Velocity (EGU/s)",
+          "title": "Velo",
+          "type": "number"
+        },
+        "PREC": {
+          "default": 3,
+          "description": "Display Precision",
+          "title": "Prec",
+          "type": "integer"
+        },
+        "EGU": {
+          "default": "mm",
+          "description": "Engineering Units",
+          "title": "Egu",
+          "type": "string"
+        },
+        "TWV": {
+          "default": 1.0,
+          "description": "Tweak Step Size (EGU)",
+          "title": "Twv",
+          "type": "number"
+        },
+        "DTYP": {
+          "default": "asynMotor",
+          "description": "Datatype of record",
+          "title": "Dtyp",
+          "type": "string"
+        },
+        "DIR": {
+          "default": 0,
+          "description": "User direction",
+          "title": "Dir",
+          "type": "integer"
+        },
+        "VBAS": {
+          "default": 1.0,
+          "description": "Base Velocity (EGU/s)",
+          "title": "Vbas",
+          "type": "number"
+        },
+        "VMAX": {
+          "default": "{{VELO}}",
+          "description": "Max Velocity (EGU/s)",
+          "title": "Vmax",
+          "type": "string"
+        },
+        "ACCL": {
+          "default": 0.5,
+          "description": "Seconds to Velocity",
+          "title": "Accl",
+          "type": "number"
+        },
+        "BDST": {
+          "default": 0.0,
+          "description": "BL Distance (EGU)",
+          "title": "Bdst",
+          "type": "number"
+        },
+        "BVEL": {
+          "default": 0.0,
+          "description": "BL Velocity(EGU/s)",
+          "title": "Bvel",
+          "type": "number"
+        },
+        "BACC": {
+          "default": 0.0,
+          "description": "BL Seconds to Veloc",
+          "title": "Bacc",
+          "type": "number"
+        },
+        "DHLM": {
+          "default": 10000.0,
+          "description": "Dial High Limit",
+          "title": "Dhlm",
+          "type": "number"
+        },
+        "DLLM": {
+          "default": -10000.0,
+          "description": "Dial low limit",
+          "title": "Dllm",
+          "type": "number"
+        },
+        "HLM": {
+          "default": 0.0,
+          "description": "User High Limit",
+          "title": "Hlm",
+          "type": "number"
+        },
+        "LLM": {
+          "default": 0.0,
+          "description": "User Low Limit",
+          "title": "Llm",
+          "type": "number"
+        },
+        "HLSV": {
+          "default": "MAJOR",
+          "description": "HW Lim, Violation Svr",
+          "title": "Hlsv",
+          "type": "string"
+        },
+        "INIT": {
+          "default": "",
+          "description": "Startup commands",
+          "title": "Init",
+          "type": "string"
+        },
+        "SREV": {
+          "default": 1000,
+          "description": "Steps per Revolution",
+          "title": "Srev",
+          "type": "integer"
+        },
+        "RRES": {
+          "default": 0.0,
+          "description": "Readback Step Size (EGU",
+          "title": "Rres",
+          "type": "number"
+        },
+        "ERES": {
+          "default": 0.0,
+          "description": "Encoder Step Size (EGU)",
+          "title": "Eres",
+          "type": "number"
+        },
+        "JAR": {
+          "default": 0.0,
+          "description": "Jog Acceleration (EGU/s^2)",
+          "title": "Jar",
+          "type": "number"
+        },
+        "UEIP": {
+          "default": 0,
+          "description": "Use Encoder If Present",
+          "title": "Ueip",
+          "type": "integer"
+        },
+        "URIP": {
+          "default": 0,
+          "description": "Use RDBL If Present",
+          "title": "Urip",
+          "type": "integer"
+        },
+        "RDBL": {
+          "default": "0",
+          "description": "Readback Location, set URIP =1 if you specify this",
+          "title": "Rdbl",
+          "type": "string"
+        },
+        "RLNK": {
+          "default": "",
+          "description": "Readback output link",
+          "title": "Rlnk",
+          "type": "string"
+        },
+        "RTRY": {
+          "default": 0,
+          "description": "Max retry count",
+          "title": "Rtry",
+          "type": "integer"
+        },
+        "DLY": {
+          "default": 0.0,
+          "description": "Readback settle time (s)",
+          "title": "Dly",
+          "type": "number"
+        },
+        "OFF": {
+          "default": 0.0,
+          "description": "User Offset (EGU)",
+          "title": "Off",
+          "type": "number"
+        },
+        "RDBD": {
+          "default": 0.0,
+          "description": "Retry Deadband (EGU)",
+          "title": "Rdbd",
+          "type": "number"
+        },
+        "FOFF": {
+          "default": 0,
+          "description": "Freeze Offset, 0=variable, 1=frozen",
+          "title": "Foff",
+          "type": "integer"
+        },
+        "ADEL": {
+          "default": 0.0,
+          "description": "Alarm monitor deadband (EGU)",
+          "title": "Adel",
+          "type": "number"
+        },
+        "NTM": {
+          "default": 1,
+          "description": "New Target Monitor, only set to 0 for soft motors",
+          "title": "Ntm",
+          "type": "integer"
+        },
+        "FEHIGH": {
+          "default": 0.0,
+          "description": "HIGH limit for following error",
+          "title": "Fehigh",
+          "type": "number"
+        },
+        "FEHIHI": {
+          "default": 0.0,
+          "description": "HIHI limit for following error",
+          "title": "Fehihi",
+          "type": "number"
+        },
+        "FEHHSV": {
+          "default": "NO_ALARM",
+          "description": "HIHI alarm severity for following error",
+          "title": "Fehhsv",
+          "type": "string"
+        },
+        "FEHSV": {
+          "default": "NO_ALARM",
+          "description": "HIGH alarm severity for following error",
+          "title": "Fehsv",
+          "type": "string"
+        },
+        "SCALE": {
+          "default": 1,
+          "description": "",
+          "title": "Scale",
+          "type": "integer"
+        },
+        "HOMEVIS": {
+          "default": 1,
+          "description": "If 1 then home is visible on the gui",
+          "title": "Homevis",
+          "type": "integer"
+        },
+        "HOMEVISSTR": {
+          "default": "Use motor summary screen",
+          "description": "",
+          "title": "Homevisstr",
+          "type": "string"
+        },
+        "alh": {
+          "default": "",
+          "description": "Set this to alh to add the motor to the alarm handler and send emails",
+          "title": "Alh",
+          "type": "string"
+        },
+        "HOME": {
+          "default": "{{P}}",
+          "description": "Prefix for autohome instance. Defaults to $(P) If unspecified",
+          "title": "Home",
+          "type": "string"
+        },
+        "ALLOW_HOMED_SET": {
+          "default": "#",
+          "description": "Set to a blank to allow this axis to have its homed",
+          "title": "Allow Homed Set",
+          "type": "string"
+        },
+        "RLINK": {
+          "default": "",
+          "description": "not sure what this is",
+          "title": "Rlink",
+          "type": "string"
+        }
+      },
+      "title": "pmac_DlsPmacAsynMotor",
+      "type": "object"
+    },
+    "pmac_Geobrick": {
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "const": "pmac.Geobrick",
+          "default": "pmac.Geobrick",
+          "description": "The type of this entity",
+          "title": "Type"
+        },
+        "entity_enabled": {
+          "default": true,
+          "description": "enable or disable this entity instance",
+          "title": "Entity Enabled",
+          "type": "boolean"
+        },
+        "name": {
+          "default": null,
+          "description": "Name to use for the geobrick's asyn port",
+          "title": "Name",
+          "type": "string"
+        },
+        "PORT": {
+          "default": null,
+          "description": "Asyn port name for PmacAsynIPPort to connect to",
+          "title": "Port"
+        },
+        "P": {
+          "default": null,
+          "description": "PV Prefix for all pmac db templates",
+          "title": "P",
+          "type": "string"
+        },
+        "numAxes": {
+          "default": 8,
+          "description": "number of axes to initialize for the controller",
+          "title": "Numaxes",
+          "type": "integer"
+        },
+        "idlePoll": {
+          "default": 500,
+          "description": "Idle Poll Period in ms",
+          "title": "Idlepoll",
+          "type": "integer"
+        },
+        "movingPoll": {
+          "default": 100,
+          "description": "Moving Poll Period in ms",
+          "title": "Movingpoll",
+          "type": "integer"
+        },
+        "TIMEOUT": {
+          "default": 4,
+          "description": "timeout in seconds for asyn",
+          "title": "Timeout",
+          "type": "integer"
+        },
+        "FEEDRATE": {
+          "default": 100,
+          "description": "feedrate below which we go into error",
+          "title": "Feedrate",
+          "type": "integer"
+        },
+        "CSG0": {
+          "default": "",
+          "description": "Name for Coordinate System Group 0",
+          "title": "Csg0",
+          "type": "string"
+        },
+        "CSG1": {
+          "default": "",
+          "description": "Name for Coordinate System Group 1",
+          "title": "Csg1",
+          "type": "string"
+        },
+        "CSG2": {
+          "default": "",
+          "description": "Name for Coordinate System Group 2",
+          "title": "Csg2",
+          "type": "string"
+        },
+        "CSG3": {
+          "default": "",
+          "description": "Name for Coordinate System Group 3",
+          "title": "Csg3",
+          "type": "string"
+        },
+        "CSG4": {
+          "default": "",
+          "description": "Name for Coordinate System Group 3",
+          "title": "Csg4",
+          "type": "string"
+        }
+      },
+      "title": "pmac_Geobrick",
+      "type": "object"
+    },
+    "pmac_PmacAsynIPPort": {
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "const": "pmac.PmacAsynIPPort",
+          "default": "pmac.PmacAsynIPPort",
+          "description": "The type of this entity",
+          "title": "Type"
+        },
+        "entity_enabled": {
+          "default": true,
+          "description": "enable or disable this entity instance",
+          "title": "Entity Enabled",
+          "type": "boolean"
+        },
+        "name": {
+          "default": null,
+          "description": "Asyn port name",
+          "title": "Name",
+          "type": "string"
+        },
+        "IP": {
+          "default": null,
+          "description": "IP address of pmac",
+          "title": "Ip",
+          "type": "string"
+        },
+        "PORT": {
+          "default": 1025,
+          "description": "TCP port for connection",
+          "title": "Port",
+          "type": "integer"
+        }
+      },
+      "title": "pmac_PmacAsynIPPort",
+      "type": "object"
+    },
+    "pmac_PmacAsynSSHPort": {
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "const": "pmac.PmacAsynSSHPort",
+          "default": "pmac.PmacAsynSSHPort",
+          "description": "The type of this entity",
+          "title": "Type"
+        },
+        "entity_enabled": {
+          "default": true,
+          "description": "enable or disable this entity instance",
+          "title": "Entity Enabled",
+          "type": "boolean"
+        },
+        "name": {
+          "default": null,
+          "description": "Asyn port name",
+          "title": "Name",
+          "type": "string"
+        },
+        "IP": {
+          "default": null,
+          "description": "IP address of Power pmac",
+          "title": "Ip",
+          "type": "string"
+        },
+        "USERNAME": {
+          "default": "root",
+          "description": "Username for login",
+          "title": "Username",
+          "type": "string"
+        },
+        "PASSWORD": {
+          "default": "deltatau",
+          "description": "Password for login",
+          "title": "Password",
+          "type": "string"
+        },
+        "PRIORITY": {
+          "default": 0,
+          "description": "Priority of the port",
+          "title": "Priority",
+          "type": "integer"
+        },
+        "NOAUTOCONNECT": {
+          "default": 0,
+          "description": "Disables autoconnect if set to 1",
+          "title": "Noautoconnect",
+          "type": "integer"
+        },
+        "NOEOS": {
+          "default": 0,
+          "description": "No EOS used if set to 1",
+          "title": "Noeos",
+          "type": "integer"
+        }
+      },
+      "title": "pmac_PmacAsynSSHPort",
+      "type": "object"
+    },
+    "pmac_autohome": {
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "const": "pmac.autohome",
+          "default": "pmac.autohome",
+          "description": "The type of this entity",
+          "title": "Type"
+        },
+        "entity_enabled": {
+          "default": true,
+          "description": "enable or disable this entity instance",
+          "title": "Entity Enabled",
+          "type": "boolean"
+        },
+        "Controller": {
+          "default": null,
+          "description": "the PMAC Controller",
+          "title": "Controller"
+        },
+        "PLC": {
+          "default": null,
+          "description": "PLC number of the auto home PLC",
+          "title": "Plc",
+          "type": "integer"
+        },
+        "P": {
+          "default": null,
+          "description": "Prefix for auto home PVs",
+          "title": "P",
+          "type": "string"
+        },
+        "GRP1": {
+          "default": "All",
+          "description": "name of the 'ALL' group of auto home axes",
+          "title": "Grp1",
+          "type": "string"
+        },
+        "GRP2": {
+          "default": "",
+          "description": "name of the second group of auto home axes",
+          "title": "Grp2",
+          "type": "string"
+        },
+        "GRP3": {
+          "default": "",
+          "description": "name of the third group of auto home axes",
+          "title": "Grp3",
+          "type": "string"
+        },
+        "GRP4": {
+          "default": "",
+          "description": "name of the fourth group of auto home axes",
+          "title": "Grp4",
+          "type": "string"
+        },
+        "GRP5": {
+          "default": "",
+          "description": "name of the fourth group of auto home axes",
+          "title": "Grp5",
+          "type": "string"
+        },
+        "GRP6": {
+          "default": "",
+          "description": "name of the fourth group of auto home axes",
+          "title": "Grp6",
+          "type": "string"
+        },
+        "GRP7": {
+          "default": "",
+          "description": "name of the fourth group of auto home axes",
+          "title": "Grp7",
+          "type": "string"
+        },
+        "GRP8": {
+          "default": "",
+          "description": "name of the fourth group of auto home axes",
+          "title": "Grp8",
+          "type": "string"
+        },
+        "GRP9": {
+          "default": "",
+          "description": "name of the fourth group of auto home axes",
+          "title": "Grp9",
+          "type": "string"
+        }
+      },
+      "title": "pmac_autohome",
+      "type": "object"
+    },
+    "pmac_pmacDisableLimitsCheck": {
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "const": "pmac.pmacDisableLimitsCheck",
+          "default": "pmac.pmacDisableLimitsCheck",
+          "description": "The type of this entity",
+          "title": "Type"
+        },
+        "entity_enabled": {
+          "default": true,
+          "description": "enable or disable this entity instance",
+          "title": "Entity Enabled",
+          "type": "boolean"
+        },
+        "Controller": {
+          "default": null,
+          "description": "Geobrick on which to disable limits",
+          "title": "Controller"
+        },
+        "Axis": {
+          "default": null,
+          "description": "Axis to have limits disabled",
+          "title": "Axis",
+          "type": "integer"
+        }
+      },
+      "title": "pmac_pmacDisableLimitsCheck",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
   "properties": {
     "ioc_name": {
-      "type": "string",
-      "description": "Name of IOC instance"
+      "description": "Name of IOC instance",
+      "title": "Ioc Name",
+      "type": "string"
     },
     "description": {
-      "type": "string",
-      "description": "Description of what the IOC does"
-    },
-    "entities": {
-      "type": "array",
-      "items": {
-        "anyOf": [
-          {
-            "type": "object",
-            "properties": {
-              "entity_enabled": {
-                "type": "boolean",
-                "default": true
-              },
-              "name": {
-                "type": "string",
-                "description": "Asyn port name",
-                "vscode_ibek_plugin_type": "type_id"
-              },
-              "IP": {
-                "type": "string",
-                "description": "IP address of Power pmac"
-              },
-              "USERNAME": {
-                "type": "string",
-                "description": "Username for login",
-                "default": "root"
-              },
-              "PASSWORD": {
-                "type": "string",
-                "description": "Password for login",
-                "default": "deltatau"
-              },
-              "PRIORITY": {
-                "type": "integer",
-                "description": "Priority of the port",
-                "default": 0
-              },
-              "NOAUTOCONNECT": {
-                "type": "integer",
-                "description": "Disables autoconnect if set to 1",
-                "default": 0
-              },
-              "NOEOS": {
-                "type": "integer",
-                "description": "No EOS used if set to 1",
-                "default": 0
-              },
-              "type": {
-                "type": "string",
-                "const": "pmac.PmacAsynSSHPort",
-                "default": "pmac.PmacAsynSSHPort"
-              }
-            },
-            "required": [
-              "name",
-              "IP"
-            ],
-            "additionalProperties": false
-          },
-          {
-            "type": "object",
-            "properties": {
-              "entity_enabled": {
-                "type": "boolean",
-                "default": true
-              },
-              "name": {
-                "type": "string",
-                "description": "Asyn port name",
-                "vscode_ibek_plugin_type": "type_id"
-              },
-              "IP": {
-                "type": "string",
-                "description": "IP address of pmac"
-              },
-              "PORT": {
-                "type": "integer",
-                "description": "TCP port for connection",
-                "default": 1025
-              },
-              "type": {
-                "type": "string",
-                "const": "pmac.PmacAsynIPPort",
-                "default": "pmac.PmacAsynIPPort"
-              }
-            },
-            "required": [
-              "name",
-              "IP"
-            ],
-            "additionalProperties": false
-          },
-          {
-            "type": "object",
-            "properties": {
-              "entity_enabled": {
-                "type": "boolean",
-                "default": true
-              },
-              "name": {
-                "type": "string",
-                "description": "Name to use for the geobrick's asyn port",
-                "vscode_ibek_plugin_type": "type_id"
-              },
-              "PORT": {
-                "type": "string",
-                "description": "Asyn port name for PmacAsynIPPort to connect to",
-                "vscode_ibek_plugin_type": "type_object"
-              },
-              "P": {
-                "type": "string",
-                "description": "PV Prefix for all pmac db templates"
-              },
-              "numAxes": {
-                "type": "integer",
-                "description": "number of axes to initialize for the controller",
-                "default": 8
-              },
-              "idlePoll": {
-                "type": "integer",
-                "description": "Idle Poll Period in ms",
-                "default": 500
-              },
-              "movingPoll": {
-                "type": "integer",
-                "description": "Moving Poll Period in ms",
-                "default": 100
-              },
-              "TIMEOUT": {
-                "type": "integer",
-                "description": "timeout in seconds for asyn",
-                "default": 4
-              },
-              "FEEDRATE": {
-                "type": "integer",
-                "description": "feedrate below which we go into error",
-                "default": 100
-              },
-              "CSG0": {
-                "type": "string",
-                "description": "Name for Coordinate System Group 0",
-                "default": ""
-              },
-              "CSG1": {
-                "type": "string",
-                "description": "Name for Coordinate System Group 1",
-                "default": ""
-              },
-              "CSG2": {
-                "type": "string",
-                "description": "Name for Coordinate System Group 2",
-                "default": ""
-              },
-              "CSG3": {
-                "type": "string",
-                "description": "Name for Coordinate System Group 3",
-                "default": ""
-              },
-              "CSG4": {
-                "type": "string",
-                "description": "Name for Coordinate System Group 3",
-                "default": ""
-              },
-              "type": {
-                "type": "string",
-                "const": "pmac.Geobrick",
-                "default": "pmac.Geobrick"
-              }
-            },
-            "required": [
-              "name",
-              "PORT",
-              "P"
-            ],
-            "additionalProperties": false
-          },
-          {
-            "type": "object",
-            "properties": {
-              "entity_enabled": {
-                "type": "boolean",
-                "default": true
-              },
-              "name": {
-                "type": "string",
-                "description": "Object name and gui association name"
-              },
-              "Controller": {
-                "type": "string",
-                "description": "PMAC Controller to attach to",
-                "vscode_ibek_plugin_type": "type_object"
-              },
-              "axis": {
-                "type": "integer",
-                "description": "which axis number this motor drives"
-              },
-              "P": {
-                "type": "string",
-                "description": "PV prefix name for this motor"
-              },
-              "M": {
-                "type": "string",
-                "description": "PV motor name for this motor"
-              },
-              "DESC": {
-                "type": "string",
-                "description": "Description, displayed on EDM screen",
-                "default": ""
-              },
-              "MRES": {
-                "type": "number",
-                "description": "Motor Step Size (EGU)",
-                "default": 0.0001
-              },
-              "VELO": {
-                "type": "number",
-                "description": "axis Velocity (EGU/s)",
-                "default": 1.0
-              },
-              "PREC": {
-                "type": "integer",
-                "description": "Display Precision",
-                "default": 3
-              },
-              "EGU": {
-                "type": "string",
-                "description": "Engineering Units",
-                "default": "mm"
-              },
-              "TWV": {
-                "type": "number",
-                "description": "Tweak Step Size (EGU)",
-                "default": 1.0
-              },
-              "DTYP": {
-                "type": "string",
-                "description": "Datatype of record",
-                "default": "asynMotor"
-              },
-              "DIR": {
-                "type": "integer",
-                "description": "User direction",
-                "default": 0
-              },
-              "VBAS": {
-                "type": "number",
-                "description": "Base Velocity (EGU/s)",
-                "default": 1.0
-              },
-              "VMAX": {
-                "type": "string",
-                "description": "Max Velocity (EGU/s)",
-                "default": "{{VELO}}"
-              },
-              "ACCL": {
-                "type": "number",
-                "description": "Seconds to Velocity",
-                "default": 0.5
-              },
-              "BDST": {
-                "type": "number",
-                "description": "BL Distance (EGU)",
-                "default": 0.0
-              },
-              "BVEL": {
-                "type": "number",
-                "description": "BL Velocity(EGU/s)",
-                "default": 0.0
-              },
-              "BACC": {
-                "type": "number",
-                "description": "BL Seconds to Veloc",
-                "default": 0.0
-              },
-              "DHLM": {
-                "type": "number",
-                "description": "Dial High Limit",
-                "default": 10000.0
-              },
-              "DLLM": {
-                "type": "number",
-                "description": "Dial low limit",
-                "default": -10000.0
-              },
-              "HLM": {
-                "type": "number",
-                "description": "User High Limit",
-                "default": 0.0
-              },
-              "LLM": {
-                "type": "number",
-                "description": "User Low Limit",
-                "default": 0.0
-              },
-              "HLSV": {
-                "type": "string",
-                "description": "HW Lim, Violation Svr",
-                "default": "MAJOR"
-              },
-              "INIT": {
-                "type": "string",
-                "description": "Startup commands",
-                "default": ""
-              },
-              "SREV": {
-                "type": "integer",
-                "description": "Steps per Revolution",
-                "default": 1000
-              },
-              "RRES": {
-                "type": "number",
-                "description": "Readback Step Size (EGU",
-                "default": 0.0
-              },
-              "ERES": {
-                "type": "number",
-                "description": "Encoder Step Size (EGU)",
-                "default": 0.0
-              },
-              "JAR": {
-                "type": "number",
-                "description": "Jog Acceleration (EGU/s^2)",
-                "default": 0.0
-              },
-              "UEIP": {
-                "type": "integer",
-                "description": "Use Encoder If Present",
-                "default": 0
-              },
-              "URIP": {
-                "type": "integer",
-                "description": "Use RDBL If Present",
-                "default": 0
-              },
-              "RDBL": {
-                "type": "string",
-                "description": "Readback Location, set URIP =1 if you specify this",
-                "default": "0"
-              },
-              "RLNK": {
-                "type": "string",
-                "description": "Readback output link",
-                "default": ""
-              },
-              "RTRY": {
-                "type": "integer",
-                "description": "Max retry count",
-                "default": 0
-              },
-              "DLY": {
-                "type": "number",
-                "description": "Readback settle time (s)",
-                "default": 0.0
-              },
-              "OFF": {
-                "type": "number",
-                "description": "User Offset (EGU)",
-                "default": 0.0
-              },
-              "RDBD": {
-                "type": "number",
-                "description": "Retry Deadband (EGU)",
-                "default": 0.0
-              },
-              "FOFF": {
-                "type": "integer",
-                "description": "Freeze Offset, 0=variable, 1=frozen",
-                "default": 0
-              },
-              "ADEL": {
-                "type": "number",
-                "description": "Alarm monitor deadband (EGU)",
-                "default": 0.0
-              },
-              "NTM": {
-                "type": "integer",
-                "description": "New Target Monitor, only set to 0 for soft motors",
-                "default": 1
-              },
-              "FEHIGH": {
-                "type": "number",
-                "description": "HIGH limit for following error",
-                "default": 0.0
-              },
-              "FEHIHI": {
-                "type": "number",
-                "description": "HIHI limit for following error",
-                "default": 0.0
-              },
-              "FEHHSV": {
-                "type": "string",
-                "description": "HIHI alarm severity for following error",
-                "default": "NO_ALARM"
-              },
-              "FEHSV": {
-                "type": "string",
-                "description": "HIGH alarm severity for following error",
-                "default": "NO_ALARM"
-              },
-              "SCALE": {
-                "type": "integer",
-                "default": 1
-              },
-              "HOMEVIS": {
-                "type": "integer",
-                "description": "If 1 then home is visible on the gui",
-                "default": 1
-              },
-              "HOMEVISSTR": {
-                "type": "string",
-                "default": "Use motor summary screen"
-              },
-              "alh": {
-                "type": "string",
-                "description": "Set this to alh to add the motor to the alarm handler and send emails",
-                "default": ""
-              },
-              "HOME": {
-                "type": "string",
-                "description": "Prefix for autohome instance. Defaults to $(P) If unspecified",
-                "default": "{{P}}"
-              },
-              "ALLOW_HOMED_SET": {
-                "type": "string",
-                "description": "Set to a blank to allow this axis to have its homed",
-                "default": "#"
-              },
-              "RLINK": {
-                "type": "string",
-                "description": "not sure what this is",
-                "default": ""
-              },
-              "type": {
-                "type": "string",
-                "const": "pmac.DlsPmacAsynMotor",
-                "default": "pmac.DlsPmacAsynMotor"
-              }
-            },
-            "required": [
-              "name",
-              "Controller",
-              "axis",
-              "P",
-              "M"
-            ],
-            "additionalProperties": false
-          },
-          {
-            "type": "object",
-            "properties": {
-              "entity_enabled": {
-                "type": "boolean",
-                "default": true
-              },
-              "name": {
-                "type": "string",
-                "description": "Object name and gui association name"
-              },
-              "CsController": {
-                "type": "string",
-                "description": "Coordinate system controller to attach to",
-                "vscode_ibek_plugin_type": "type_object"
-              },
-              "axis": {
-                "type": "integer",
-                "description": "which axis number this motor drives"
-              },
-              "P": {
-                "type": "string",
-                "description": "PV prefix name for this motor"
-              },
-              "M": {
-                "type": "string",
-                "description": "PV motor name for this motor"
-              },
-              "DESC": {
-                "type": "string",
-                "description": "Description, displayed on EDM screen",
-                "default": ""
-              },
-              "MRES": {
-                "type": "number",
-                "description": "Motor Step Size (EGU)",
-                "default": 0.0001
-              },
-              "VELO": {
-                "type": "number",
-                "description": "axis Velocity (EGU/s)",
-                "default": 1.0
-              },
-              "PREC": {
-                "type": "integer",
-                "description": "Display Precision",
-                "default": 3
-              },
-              "EGU": {
-                "type": "string",
-                "description": "Engineering Units",
-                "default": "mm"
-              },
-              "TWV": {
-                "type": "number",
-                "description": "Tweak Step Size (EGU)",
-                "default": 1.0
-              },
-              "DTYP": {
-                "type": "string",
-                "description": "Datatype of record",
-                "default": "asynMotor"
-              },
-              "DIR": {
-                "type": "integer",
-                "description": "User direction",
-                "default": 0
-              },
-              "VBAS": {
-                "type": "number",
-                "description": "Base Velocity (EGU/s)",
-                "default": 1.0
-              },
-              "VMAX": {
-                "type": "string",
-                "description": "Max Velocity (EGU/s)",
-                "default": "{{VELO}}"
-              },
-              "ACCL": {
-                "type": "number",
-                "description": "Seconds to Velocity",
-                "default": 0.5
-              },
-              "BDST": {
-                "type": "number",
-                "description": "BL Distance (EGU)",
-                "default": 0.0
-              },
-              "BVEL": {
-                "type": "number",
-                "description": "BL Velocity(EGU/s)",
-                "default": 0.0
-              },
-              "BACC": {
-                "type": "number",
-                "description": "BL Seconds to Veloc",
-                "default": 0.0
-              },
-              "DHLM": {
-                "type": "number",
-                "description": "Dial High Limit",
-                "default": 10000.0
-              },
-              "DLLM": {
-                "type": "number",
-                "description": "Dial low limit",
-                "default": -10000.0
-              },
-              "HLM": {
-                "type": "number",
-                "description": "User High Limit",
-                "default": 0.0
-              },
-              "LLM": {
-                "type": "number",
-                "description": "User Low Limit",
-                "default": 0.0
-              },
-              "HLSV": {
-                "type": "string",
-                "description": "HW Lim, Violation Svr",
-                "default": "MAJOR"
-              },
-              "INIT": {
-                "type": "string",
-                "description": "Startup commands",
-                "default": ""
-              },
-              "SREV": {
-                "type": "integer",
-                "description": "Steps per Revolution",
-                "default": 1000
-              },
-              "RRES": {
-                "type": "number",
-                "description": "Readback Step Size (EGU",
-                "default": 0.0
-              },
-              "ERES": {
-                "type": "number",
-                "description": "Encoder Step Size (EGU)",
-                "default": 0.0
-              },
-              "JAR": {
-                "type": "number",
-                "description": "Jog Acceleration (EGU/s^2)",
-                "default": 0.0
-              },
-              "UEIP": {
-                "type": "integer",
-                "description": "Use Encoder If Present",
-                "default": 0
-              },
-              "URIP": {
-                "type": "integer",
-                "description": "Use RDBL If Present",
-                "default": 0
-              },
-              "RDBL": {
-                "type": "string",
-                "description": "Readback Location, set URIP =1 if you specify this",
-                "default": "0"
-              },
-              "RLNK": {
-                "type": "string",
-                "description": "Readback output link",
-                "default": ""
-              },
-              "RTRY": {
-                "type": "integer",
-                "description": "Max retry count",
-                "default": 0
-              },
-              "DLY": {
-                "type": "number",
-                "description": "Readback settle time (s)",
-                "default": 0.0
-              },
-              "OFF": {
-                "type": "number",
-                "description": "User Offset (EGU)",
-                "default": 0.0
-              },
-              "RDBD": {
-                "type": "number",
-                "description": "Retry Deadband (EGU)",
-                "default": 0.0
-              },
-              "FOFF": {
-                "type": "integer",
-                "description": "Freeze Offset, 0=variable, 1=frozen",
-                "default": 0
-              },
-              "ADEL": {
-                "type": "number",
-                "description": "Alarm monitor deadband (EGU)",
-                "default": 0.0
-              },
-              "NTM": {
-                "type": "integer",
-                "description": "New Target Monitor, only set to 0 for soft motors",
-                "default": 1
-              },
-              "FEHEIGH": {
-                "type": "number",
-                "description": "HIGH limit for following error",
-                "default": 0.0
-              },
-              "FEHIHI": {
-                "type": "number",
-                "description": "HIHI limit for following error",
-                "default": 0.0
-              },
-              "FEHHSV": {
-                "type": "string",
-                "description": "HIHI alarm severity for following error",
-                "default": "NO_ALARM"
-              },
-              "FEHSV": {
-                "type": "string",
-                "description": "HIGH alarm severity for following error",
-                "default": "NO_ALARM"
-              },
-              "SCALE": {
-                "type": "integer",
-                "default": 1
-              },
-              "HOMEVIS": {
-                "type": "integer",
-                "description": "If 1 then home is visible on the gui",
-                "default": 1
-              },
-              "HOMEVISSTR": {
-                "type": "string",
-                "default": "Use motor summary screen"
-              },
-              "alh": {
-                "type": "string",
-                "description": "Set this to alh to add the motor to the alarm handler and send emails",
-                "default": ""
-              },
-              "HOME": {
-                "type": "string",
-                "description": "Prefix for autohome instance. Defaults to $(P) If unspecified",
-                "default": "{{P}}"
-              },
-              "ALLOW_HOMED_SET": {
-                "type": "string",
-                "description": "Set to a blank to allow this axis to have its homed",
-                "default": "#"
-              },
-              "type": {
-                "type": "string",
-                "const": "pmac.DlsCsPmacAsynMotor",
-                "default": "pmac.DlsCsPmacAsynMotor"
-              }
-            },
-            "required": [
-              "name",
-              "CsController",
-              "axis",
-              "P",
-              "M"
-            ],
-            "additionalProperties": false
-          },
-          {
-            "type": "object",
-            "properties": {
-              "entity_enabled": {
-                "type": "boolean",
-                "default": true
-              },
-              "Controller": {
-                "type": "string",
-                "description": "Geobrick on which to disable limits",
-                "vscode_ibek_plugin_type": "type_object"
-              },
-              "Axis": {
-                "type": "integer",
-                "description": "Axis to have limits disabled"
-              },
-              "type": {
-                "type": "string",
-                "const": "pmac.pmacDisableLimitsCheck",
-                "default": "pmac.pmacDisableLimitsCheck"
-              }
-            },
-            "required": [
-              "Controller",
-              "Axis"
-            ],
-            "additionalProperties": false
-          },
-          {
-            "type": "object",
-            "properties": {
-              "entity_enabled": {
-                "type": "boolean",
-                "default": true
-              },
-              "Controller": {
-                "type": "string",
-                "description": "the PMAC Controller",
-                "vscode_ibek_plugin_type": "type_object"
-              },
-              "PLC": {
-                "type": "integer",
-                "description": "PLC number of the auto home PLC"
-              },
-              "P": {
-                "type": "string",
-                "description": "Prefix for auto home PVs"
-              },
-              "GRP1": {
-                "type": "string",
-                "description": "name of the 'ALL' group of auto home axes",
-                "default": "All"
-              },
-              "GRP2": {
-                "type": "string",
-                "description": "name of the second group of auto home axes",
-                "default": ""
-              },
-              "GRP3": {
-                "type": "string",
-                "description": "name of the third group of auto home axes",
-                "default": ""
-              },
-              "GRP4": {
-                "type": "string",
-                "description": "name of the fourth group of auto home axes",
-                "default": ""
-              },
-              "GRP5": {
-                "type": "string",
-                "description": "name of the fourth group of auto home axes",
-                "default": ""
-              },
-              "GRP6": {
-                "type": "string",
-                "description": "name of the fourth group of auto home axes",
-                "default": ""
-              },
-              "GRP7": {
-                "type": "string",
-                "description": "name of the fourth group of auto home axes",
-                "default": ""
-              },
-              "GRP8": {
-                "type": "string",
-                "description": "name of the fourth group of auto home axes",
-                "default": ""
-              },
-              "GRP9": {
-                "type": "string",
-                "description": "name of the fourth group of auto home axes",
-                "default": ""
-              },
-              "type": {
-                "type": "string",
-                "const": "pmac.autohome",
-                "default": "pmac.autohome"
-              }
-            },
-            "required": [
-              "Controller",
-              "PLC",
-              "P"
-            ],
-            "additionalProperties": false
-          },
-          {
-            "type": "object",
-            "properties": {
-              "entity_enabled": {
-                "type": "boolean",
-                "default": true
-              },
-              "name": {
-                "type": "string",
-                "description": "Asyn port name for this object",
-                "vscode_ibek_plugin_type": "type_id"
-              },
-              "Controller": {
-                "type": "string",
-                "description": "the PMAC Controller",
-                "vscode_ibek_plugin_type": "type_object"
-              },
-              "CS": {
-                "type": "integer",
-                "description": "Coordinate system number"
-              },
-              "NAxes": {
-                "type": "integer",
-                "description": "number of CS axes",
-                "default": 9
-              },
-              "Program": {
-                "type": "integer",
-                "description": "PROG number for CS motion",
-                "default": 10
-              },
-              "type": {
-                "type": "string",
-                "const": "pmac.CS",
-                "default": "pmac.CS"
-              }
-            },
-            "required": [
-              "name",
-              "Controller",
-              "CS"
-            ],
-            "additionalProperties": false
-          }
-        ]
-      },
-      "description": "List of entities this IOC instantiates"
+      "description": "Description of what the IOC does",
+      "title": "Description",
+      "type": "string"
     },
     "generic_ioc_image": {
-      "type": "string",
-      "description": "The generic IOC container image registry URL"
+      "description": "The generic IOC container image registry URL",
+      "title": "Generic Ioc Image",
+      "type": "string"
+    },
+    "entities": {
+      "description": "List of entities this IOC instantiates",
+      "items": {
+        "$ref": "#/$defs/EntityModel"
+      },
+      "title": "Entities",
+      "type": "array"
     }
   },
   "required": [
     "ioc_name",
     "description",
-    "entities",
-    "generic_ioc_image"
+    "generic_ioc_image",
+    "entities"
   ],
-  "additionalProperties": false,
-  "$schema": "http://json-schema.org/draft-07/schema#"
+  "title": "NewIOC",
+  "type": "object"
 }

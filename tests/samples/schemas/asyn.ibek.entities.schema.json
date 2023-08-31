@@ -1,152 +1,214 @@
 {
-  "type": "object",
+  "$defs": {
+    "EntityModel": {
+      "discriminator": {
+        "mapping": {
+          "asyn.AsynIP": "#/$defs/asyn_AsynIP",
+          "asyn.AsynSerial": "#/$defs/asyn_AsynSerial"
+        },
+        "propertyName": "type"
+      },
+      "oneOf": [
+        {
+          "$ref": "#/$defs/asyn_AsynSerial"
+        },
+        {
+          "$ref": "#/$defs/asyn_AsynIP"
+        }
+      ],
+      "title": "EntityModel"
+    },
+    "asyn_AsynIP": {
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "const": "asyn.AsynIP",
+          "default": "asyn.AsynIP",
+          "description": "The type of this entity",
+          "title": "Type"
+        },
+        "entity_enabled": {
+          "default": true,
+          "description": "enable or disable this entity instance",
+          "title": "Entity Enabled",
+          "type": "boolean"
+        },
+        "port": {
+          "default": null,
+          "description": "Serial port tty name / IP address optionally followed by protocol",
+          "title": "Port",
+          "type": "string"
+        },
+        "name": {
+          "default": null,
+          "description": "Name for the Asyn Port",
+          "title": "Name",
+          "type": "string"
+        },
+        "input_eos": {
+          "default": null,
+          "description": "Input end of string (terminator)",
+          "title": "Input Eos",
+          "type": "string"
+        },
+        "output_eos": {
+          "default": null,
+          "description": "Output end of string (terminator)",
+          "title": "Output Eos",
+          "type": "string"
+        },
+        "priority": {
+          "default": 100,
+          "description": "Priority",
+          "title": "Priority",
+          "type": "integer"
+        },
+        "no_auto_connect": {
+          "default": null,
+          "description": "Set to stop auto connect",
+          "title": "No Auto Connect",
+          "type": "boolean"
+        },
+        "no_process_eos": {
+          "default": null,
+          "description": "Set to avoid processing end of string",
+          "title": "No Process Eos",
+          "type": "boolean"
+        },
+        "simulation": {
+          "default": null,
+          "description": "IP port to connect to if in simulation mode",
+          "title": "Simulation",
+          "type": "string"
+        }
+      },
+      "title": "asyn_AsynIP",
+      "type": "object"
+    },
+    "asyn_AsynSerial": {
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "const": "asyn.AsynSerial",
+          "default": "asyn.AsynSerial",
+          "description": "The type of this entity",
+          "title": "Type"
+        },
+        "entity_enabled": {
+          "default": true,
+          "description": "enable or disable this entity instance",
+          "title": "Entity Enabled",
+          "type": "boolean"
+        },
+        "port": {
+          "default": null,
+          "description": "The port name for this asyn object",
+          "title": "Port",
+          "type": "string"
+        },
+        "input_eos": {
+          "default": null,
+          "description": "Input end of string (terminator)",
+          "title": "Input Eos",
+          "type": "string"
+        },
+        "output_eos": {
+          "default": null,
+          "description": "Output end of string (terminator)",
+          "title": "Output Eos",
+          "type": "string"
+        },
+        "priority": {
+          "default": 100,
+          "description": "Priority",
+          "title": "Priority",
+          "type": "integer"
+        },
+        "no_auto_connect": {
+          "default": null,
+          "description": "Set to stop auto connect",
+          "title": "No Auto Connect",
+          "type": "boolean"
+        },
+        "no_process_eos": {
+          "default": null,
+          "description": "Set to avoid processing end of string",
+          "title": "No Process Eos",
+          "type": "boolean"
+        },
+        "simulation": {
+          "default": null,
+          "description": "IP port to connect to if in simulation mode",
+          "title": "Simulation",
+          "type": "string"
+        },
+        "baud": {
+          "default": null,
+          "description": "Baud Rate",
+          "title": "Baud",
+          "type": "integer"
+        },
+        "bits": {
+          "default": null,
+          "description": "Bits [8,7,6,5]",
+          "title": "Bits",
+          "type": "integer"
+        },
+        "parity": {
+          "default": null,
+          "description": "Parity [null,even,odd]",
+          "title": "Parity",
+          "type": "string"
+        },
+        "stop": {
+          "default": null,
+          "description": "Stop Bits [1,2]",
+          "title": "Stop",
+          "type": "integer"
+        },
+        "crtscts": {
+          "default": null,
+          "description": "Set hardware flow control on",
+          "title": "Crtscts",
+          "type": "boolean"
+        }
+      },
+      "title": "asyn_AsynSerial",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
   "properties": {
     "ioc_name": {
-      "type": "string",
-      "description": "Name of IOC instance"
+      "description": "Name of IOC instance",
+      "title": "Ioc Name",
+      "type": "string"
     },
     "description": {
-      "type": "string",
-      "description": "Description of what the IOC does"
-    },
-    "entities": {
-      "type": "array",
-      "items": {
-        "anyOf": [
-          {
-            "type": "object",
-            "properties": {
-              "entity_enabled": {
-                "type": "boolean",
-                "default": true
-              },
-              "port": {
-                "type": "string",
-                "description": "The port name for this asyn object"
-              },
-              "input_eos": {
-                "type": "string",
-                "description": "Input end of string (terminator)"
-              },
-              "output_eos": {
-                "type": "string",
-                "description": "Output end of string (terminator)"
-              },
-              "priority": {
-                "type": "integer",
-                "description": "Priority",
-                "default": 100
-              },
-              "no_auto_connect": {
-                "type": "boolean",
-                "description": "Set to stop auto connect"
-              },
-              "no_process_eos": {
-                "type": "boolean",
-                "description": "Set to avoid processing end of string"
-              },
-              "simulation": {
-                "type": "string",
-                "description": "IP port to connect to if in simulation mode"
-              },
-              "baud": {
-                "type": "integer",
-                "description": "Baud Rate"
-              },
-              "bits": {
-                "type": "integer",
-                "description": "Bits [8,7,6,5]"
-              },
-              "parity": {
-                "type": "string",
-                "description": "Parity [null,even,odd]"
-              },
-              "stop": {
-                "type": "integer",
-                "description": "Stop Bits [1,2]"
-              },
-              "crtscts": {
-                "type": "boolean",
-                "description": "Set hardware flow control on"
-              },
-              "type": {
-                "type": "string",
-                "const": "asyn.AsynSerial",
-                "default": "asyn.AsynSerial"
-              }
-            },
-            "required": [
-              "port"
-            ],
-            "additionalProperties": false
-          },
-          {
-            "type": "object",
-            "properties": {
-              "entity_enabled": {
-                "type": "boolean",
-                "default": true
-              },
-              "port": {
-                "type": "string",
-                "description": "Serial port tty name / IP address optionally followed by protocol"
-              },
-              "name": {
-                "type": "string",
-                "description": "Name for the Asyn Port"
-              },
-              "input_eos": {
-                "type": "string",
-                "description": "Input end of string (terminator)"
-              },
-              "output_eos": {
-                "type": "string",
-                "description": "Output end of string (terminator)"
-              },
-              "priority": {
-                "type": "integer",
-                "description": "Priority",
-                "default": 100
-              },
-              "no_auto_connect": {
-                "type": "boolean",
-                "description": "Set to stop auto connect"
-              },
-              "no_process_eos": {
-                "type": "boolean",
-                "description": "Set to avoid processing end of string"
-              },
-              "simulation": {
-                "type": "string",
-                "description": "IP port to connect to if in simulation mode"
-              },
-              "type": {
-                "type": "string",
-                "const": "asyn.AsynIP",
-                "default": "asyn.AsynIP"
-              }
-            },
-            "required": [
-              "port",
-              "name"
-            ],
-            "additionalProperties": false
-          }
-        ]
-      },
-      "description": "List of entities this IOC instantiates"
+      "description": "Description of what the IOC does",
+      "title": "Description",
+      "type": "string"
     },
     "generic_ioc_image": {
-      "type": "string",
-      "description": "The generic IOC container image registry URL"
+      "description": "The generic IOC container image registry URL",
+      "title": "Generic Ioc Image",
+      "type": "string"
+    },
+    "entities": {
+      "description": "List of entities this IOC instantiates",
+      "items": {
+        "$ref": "#/$defs/EntityModel"
+      },
+      "title": "Entities",
+      "type": "array"
     }
   },
   "required": [
     "ioc_name",
     "description",
-    "entities",
-    "generic_ioc_image"
+    "generic_ioc_image",
+    "entities"
   ],
-  "additionalProperties": false,
-  "$schema": "http://json-schema.org/draft-07/schema#"
+  "title": "NewIOC",
+  "type": "object"
 }

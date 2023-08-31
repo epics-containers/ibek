@@ -1,0 +1,157 @@
+{
+  "$defs": {
+    "EntityModel": {
+      "discriminator": {
+        "mapping": {
+          "pydantic_test.AnAsynPort": "#/$defs/pydantic_test_AnAsynPort",
+          "pydantic_test.Consumer": "#/$defs/pydantic_test_Consumer",
+          "pydantic_test.ConsumerTwo": "#/$defs/pydantic_test_ConsumerTwo"
+        },
+        "propertyName": "type"
+      },
+      "oneOf": [
+        {
+          "$ref": "#/$defs/pydantic_test_AnAsynPort"
+        },
+        {
+          "$ref": "#/$defs/pydantic_test_Consumer"
+        },
+        {
+          "$ref": "#/$defs/pydantic_test_ConsumerTwo"
+        }
+      ],
+      "title": "EntityModel"
+    },
+    "pydantic_test_AnAsynPort": {
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "const": "pydantic_test.AnAsynPort",
+          "default": "pydantic_test.AnAsynPort",
+          "description": "The type of this entity",
+          "title": "Type"
+        },
+        "entity_enabled": {
+          "default": true,
+          "description": "enable or disable this entity instance",
+          "title": "Entity Enabled",
+          "type": "boolean"
+        },
+        "name": {
+          "default": null,
+          "description": "Asyn port name",
+          "title": "Name",
+          "type": "string"
+        },
+        "IP": {
+          "default": "127.0.0.1",
+          "description": "IP address of port",
+          "title": "Ip",
+          "type": "string"
+        },
+        "test_value": {
+          "default": "{{ name }}.{{ IP }}",
+          "description": "test jinja render of arg values",
+          "title": "Test Value",
+          "type": "string"
+        }
+      },
+      "title": "pydantic_test_AnAsynPort",
+      "type": "object"
+    },
+    "pydantic_test_Consumer": {
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "const": "pydantic_test.Consumer",
+          "default": "pydantic_test.Consumer",
+          "description": "The type of this entity",
+          "title": "Type"
+        },
+        "entity_enabled": {
+          "default": true,
+          "description": "enable or disable this entity instance",
+          "title": "Entity Enabled",
+          "type": "boolean"
+        },
+        "name": {
+          "default": null,
+          "description": "Consumer name",
+          "title": "Name",
+          "type": "string"
+        },
+        "PORT": {
+          "default": null,
+          "description": "a reference to an AnAsynPort",
+          "title": "Port"
+        }
+      },
+      "title": "pydantic_test_Consumer",
+      "type": "object"
+    },
+    "pydantic_test_ConsumerTwo": {
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "const": "pydantic_test.ConsumerTwo",
+          "default": "pydantic_test.ConsumerTwo",
+          "description": "The type of this entity",
+          "title": "Type"
+        },
+        "entity_enabled": {
+          "default": true,
+          "description": "enable or disable this entity instance",
+          "title": "Entity Enabled",
+          "type": "boolean"
+        },
+        "name": {
+          "default": null,
+          "description": "Consumer name",
+          "title": "Name",
+          "type": "string"
+        },
+        "PORT": {
+          "default": null,
+          "description": "a reference to an AnAsynPort",
+          "title": "Port"
+        }
+      },
+      "title": "pydantic_test_ConsumerTwo",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "ioc_name": {
+      "description": "Name of IOC instance",
+      "title": "Ioc Name",
+      "type": "string"
+    },
+    "description": {
+      "description": "Description of what the IOC does",
+      "title": "Description",
+      "type": "string"
+    },
+    "generic_ioc_image": {
+      "description": "The generic IOC container image registry URL",
+      "title": "Generic Ioc Image",
+      "type": "string"
+    },
+    "entities": {
+      "description": "List of entities this IOC instantiates",
+      "items": {
+        "$ref": "#/$defs/EntityModel"
+      },
+      "title": "Entities",
+      "type": "array"
+    }
+  },
+  "required": [
+    "ioc_name",
+    "description",
+    "generic_ioc_image",
+    "entities"
+  ],
+  "title": "NewIOC",
+  "type": "object"
+}
