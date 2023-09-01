@@ -41,7 +41,7 @@
     },
     "Comment": {
       "additionalProperties": false,
-      "description": "\n    A script snippet that will have '# ' prepended to every line\n    for insertion into the startup script\n    ",
+      "description": "A script snippet that will have '# ' prepended to every line\nfor insertion into the startup script",
       "properties": {
         "type": {
           "const": "comment",
@@ -69,7 +69,7 @@
     },
     "Database": {
       "additionalProperties": false,
-      "description": "\n    A database file that should be loaded by the startup script and its args\n    ",
+      "description": "A database file that should be loaded by the startup script and its args",
       "properties": {
         "file": {
           "description": "Filename of the database template in <module_root>/db",
@@ -101,7 +101,7 @@
     },
     "Definition": {
       "additionalProperties": false,
-      "description": "\n    A single definition of a class of Entity that an IOC instance may instantiate\n    ",
+      "description": "A single definition of a class of Entity that an IOC instance may instantiate",
       "properties": {
         "name": {
           "description": "Publish Definition as type <module>.<name> for IOC instances",
@@ -216,7 +216,7 @@
     },
     "EnvironmentVariable": {
       "additionalProperties": false,
-      "description": "\n    An environment variable that should be set in the startup script\n    ",
+      "description": "An environment variable that should be set in the startup script",
       "properties": {
         "name": {
           "description": "Name of environment variable",
@@ -277,7 +277,7 @@
     },
     "Function": {
       "additionalProperties": false,
-      "description": "\n    A script snippet that defines a function to call\n    ",
+      "description": "A script snippet that defines a function to call",
       "properties": {
         "name": {
           "description": "Name of the function to call",
@@ -475,7 +475,7 @@
     },
     "Text": {
       "additionalProperties": false,
-      "description": "\n    A script snippet to insert into the startup script\n    ",
+      "description": "A script snippet to insert into the startup script",
       "properties": {
         "type": {
           "const": "text",
@@ -537,7 +537,7 @@
     }
   },
   "additionalProperties": false,
-  "description": "\n    Lists the definitions for a support module, this defines what Entities it supports\n\n    Provides the deserialize entry point.\n    ",
+  "description": "Lists the definitions for a support module, this defines what Entities it supports\n\nProvides the deserialize entry point.",
   "properties": {
     "module": {
       "description": "Support module name, normally the repo name",

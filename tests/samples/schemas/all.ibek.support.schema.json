@@ -356,28 +356,10 @@
           "$ref": "#/$defs/ADCore_NDStats"
         },
         {
-          "$ref": "#/$defs/Hy8401ip_Hy8401ip"
+          "$ref": "#/$defs/asyn_AsynSerial"
         },
         {
-          "$ref": "#/$defs/Hy8401ip_Hy8401Channel"
-        },
-        {
-          "$ref": "#/$defs/Hy8403ip_Hy8403ip"
-        },
-        {
-          "$ref": "#/$defs/Hy8403ip_Hy8403Channel"
-        },
-        {
-          "$ref": "#/$defs/PT100_PT100"
-        },
-        {
-          "$ref": "#/$defs/TimingTemplates_DefaultEVR"
-        },
-        {
-          "$ref": "#/$defs/TimingTemplates_EvrAlive"
-        },
-        {
-          "$ref": "#/$defs/TimingTemplates_GeneralTime"
+          "$ref": "#/$defs/asyn_AsynIP"
         },
         {
           "$ref": "#/$defs/devIocStats_IocAdminSoft"
@@ -404,10 +386,16 @@
           "$ref": "#/$defs/epics_InterruptVectorVME"
         },
         {
-          "$ref": "#/$defs/asyn_AsynSerial"
+          "$ref": "#/$defs/Hy8401ip_Hy8401ip"
         },
         {
-          "$ref": "#/$defs/asyn_AsynIP"
+          "$ref": "#/$defs/Hy8401ip_Hy8401Channel"
+        },
+        {
+          "$ref": "#/$defs/Hy8403ip_Hy8403ip"
+        },
+        {
+          "$ref": "#/$defs/Hy8403ip_Hy8403Channel"
         },
         {
           "$ref": "#/$defs/ipac_Hy8002"
@@ -450,6 +438,18 @@
         },
         {
           "$ref": "#/$defs/psc_pscHy8401Channel-BS"
+        },
+        {
+          "$ref": "#/$defs/PT100_PT100"
+        },
+        {
+          "$ref": "#/$defs/TimingTemplates_DefaultEVR"
+        },
+        {
+          "$ref": "#/$defs/TimingTemplates_EvrAlive"
+        },
+        {
+          "$ref": "#/$defs/TimingTemplates_GeneralTime"
         }
       ],
       "title": "EntityModel"
