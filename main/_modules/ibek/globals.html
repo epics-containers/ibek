@@ -8,7 +8,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>ibek.globals &#8212; ibek 1.10.2.dev22+gb05d34f documentation</title>
+    <title>ibek.globals &#8212; ibek 1.10.2.dev56+gdd1906b documentation</title>
   
   
   
@@ -417,19 +417,31 @@ document.write(`
                   
   <h1>Source code for ibek.globals</h1><div class="highlight"><pre>
 <span></span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">A few global defintions</span>
+<span class="sd">A few global definitions</span>
 <span class="sd">&quot;&quot;&quot;</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">TypeVar</span>
 
-<span class="kn">from</span> <span class="nn">apischema</span> <span class="kn">import</span> <span class="n">schema</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Dict</span>
 
-<span class="c1">#: A generic Type for use in type hints</span>
-<span class="n">T</span> <span class="o">=</span> <span class="n">TypeVar</span><span class="p">(</span><span class="s2">&quot;T&quot;</span><span class="p">)</span>
+<span class="kn">from</span> <span class="nn">jinja2</span> <span class="kn">import</span> <span class="n">Template</span>
+<span class="kn">from</span> <span class="nn">pydantic</span> <span class="kn">import</span> <span class="n">BaseModel</span><span class="p">,</span> <span class="n">ConfigDict</span>
+
+<span class="kn">from</span> <span class="nn">.utils</span> <span class="kn">import</span> <span class="n">UTILS</span>
 
 
-<div class="viewcode-block" id="desc"><a class="viewcode-back" href="../../user/reference/api.html#ibek.globals.desc">[docs]</a><span class="k">def</span> <span class="nf">desc</span><span class="p">(</span><span class="n">description</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;a description Annotation to add to our Entity derived Types&quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="n">schema</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="n">description</span><span class="p">)</span></div>
+<div class="viewcode-block" id="BaseSettings"><a class="viewcode-back" href="../../user/reference/api.html#ibek.globals.BaseSettings">[docs]</a><span class="k">class</span> <span class="nc">BaseSettings</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A Base class for setting consistent Pydantic model configuration&quot;&quot;&quot;</span>
+
+    <span class="n">model_config</span> <span class="o">=</span> <span class="n">ConfigDict</span><span class="p">(</span>
+        <span class="n">extra</span><span class="o">=</span><span class="s2">&quot;forbid&quot;</span><span class="p">,</span>
+    <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="render_with_utils"><a class="viewcode-back" href="../../user/reference/api.html#ibek.globals.render_with_utils">[docs]</a><span class="k">def</span> <span class="nf">render_with_utils</span><span class="p">(</span><span class="n">context</span><span class="p">:</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">template_text</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Render a Jinja template with the global __utils__ object in the context</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">jinja_template</span> <span class="o">=</span> <span class="n">Template</span><span class="p">(</span><span class="n">template_text</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">jinja_template</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="n">context</span><span class="p">,</span> <span class="n">__utils__</span><span class="o">=</span><span class="n">UTILS</span><span class="p">)</span></div>
 </pre></div>
 
                 </article>

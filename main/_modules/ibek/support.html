@@ -8,7 +8,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>ibek.support &#8212; ibek 1.10.2.dev22+gb05d34f documentation</title>
+    <title>ibek.support &#8212; ibek 1.10.2.dev56+gdd1906b documentation</title>
   
   
   
@@ -418,20 +418,17 @@ document.write(`
   <h1>Source code for ibek.support</h1><div class="highlight"><pre>
 <span></span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">The Support Class represents a deserialized &lt;MODULE_NAME&gt;.ibek.support.yaml file.</span>
-<span class="sd">It contains a hierarchy of Entity dataclasses.</span>
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
 
-<span class="kn">from</span> <span class="nn">dataclasses</span> <span class="kn">import</span> <span class="n">dataclass</span>
+<span class="kn">import</span> <span class="nn">json</span>
 <span class="kn">from</span> <span class="nn">enum</span> <span class="kn">import</span> <span class="n">Enum</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Mapping</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">,</span> <span class="n">Type</span><span class="p">,</span> <span class="n">Union</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">,</span> <span class="n">Union</span>
 
-<span class="kn">from</span> <span class="nn">apischema</span> <span class="kn">import</span> <span class="n">Undefined</span><span class="p">,</span> <span class="n">UndefinedType</span><span class="p">,</span> <span class="n">deserialize</span><span class="p">,</span> <span class="n">deserializer</span><span class="p">,</span> <span class="n">identity</span>
-<span class="kn">from</span> <span class="nn">apischema.conversions</span> <span class="kn">import</span> <span class="n">Conversion</span>
-<span class="kn">from</span> <span class="nn">typing_extensions</span> <span class="kn">import</span> <span class="n">Annotated</span> <span class="k">as</span> <span class="n">A</span>
+<span class="kn">from</span> <span class="nn">pydantic</span> <span class="kn">import</span> <span class="n">Field</span>
 <span class="kn">from</span> <span class="nn">typing_extensions</span> <span class="kn">import</span> <span class="n">Literal</span>
 
-<span class="kn">from</span> <span class="nn">.globals</span> <span class="kn">import</span> <span class="n">T</span><span class="p">,</span> <span class="n">desc</span>
+<span class="kn">from</span> <span class="nn">.globals</span> <span class="kn">import</span> <span class="n">BaseSettings</span>
 
 
 <div class="viewcode-block" id="When"><a class="viewcode-back" href="../../user/reference/api.html#ibek.support.When">[docs]</a><span class="k">class</span> <span class="nc">When</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
@@ -440,156 +437,131 @@ document.write(`
     <span class="n">last</span> <span class="o">=</span> <span class="s2">&quot;last&quot;</span></div>
 
 
-<div class="viewcode-block" id="Arg"><a class="viewcode-back" href="../../user/reference/api.html#ibek.support.Arg">[docs]</a><span class="nd">@dataclass</span>
-<span class="k">class</span> <span class="nc">Arg</span><span class="p">:</span>
+<div class="viewcode-block" id="Arg"><a class="viewcode-back" href="../../user/reference/api.html#ibek.support.Arg">[docs]</a><span class="k">class</span> <span class="nc">Arg</span><span class="p">(</span><span class="n">BaseSettings</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Base class for all Argument Types&quot;&quot;&quot;</span>
 
-    <span class="n">name</span><span class="p">:</span> <span class="n">A</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">desc</span><span class="p">(</span><span class="s2">&quot;Name of the argument that the IOC instance should pass&quot;</span><span class="p">)]</span>
-    <span class="n">description</span><span class="p">:</span> <span class="n">A</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">desc</span><span class="p">(</span><span class="s2">&quot;Description of what the argument will be used for&quot;</span><span class="p">)]</span>
     <span class="nb">type</span><span class="p">:</span> <span class="nb">str</span>
-    <span class="n">default</span><span class="p">:</span> <span class="n">Any</span>
-
-    <span class="c1"># https://wyfo.github.io/apischema/latest/examples/subclass_union/</span>
-    <span class="k">def</span> <span class="nf">__init_subclass__</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
-        <span class="c1"># Deserializers stack directly as a Union</span>
-        <span class="n">deserializer</span><span class="p">(</span><span class="n">Conversion</span><span class="p">(</span><span class="n">identity</span><span class="p">,</span> <span class="n">source</span><span class="o">=</span><span class="bp">cls</span><span class="p">,</span> <span class="n">target</span><span class="o">=</span><span class="n">Arg</span><span class="p">))</span></div>
-
-
-<span class="n">Default</span> <span class="o">=</span> <span class="n">A</span><span class="p">[</span>
-    <span class="n">Union</span><span class="p">[</span><span class="n">Optional</span><span class="p">[</span><span class="n">T</span><span class="p">],</span> <span class="n">UndefinedType</span><span class="p">],</span>
-    <span class="n">desc</span><span class="p">(</span><span class="s2">&quot;If given, and instance doesn&#39;t supply argument, what value should be used&quot;</span><span class="p">),</span>
-<span class="p">]</span>
+    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
+        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Name of the argument that the IOC instance should pass&quot;</span>
+    <span class="p">)</span>
+    <span class="n">description</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
+        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Description of what the argument will be used for&quot;</span>
+    <span class="p">)</span></div>
 
 
-<span class="c1"># FloatArg must be defined before StrArg, otherwise we get:</span>
-<span class="c1">#</span>
-<span class="c1">#    TypeError: Invalid JSON type &lt;class &#39;ruamel.yaml.scalarfloat.ScalarFloat&#39;&gt;</span>
-<span class="c1">#</span>
-<span class="c1"># During Support.deserialize, when default float values in pmac.ibek.support.yaml do not</span>
-<span class="c1"># have a trailing &#39;f&#39;. It is due to the order of declaration of subclasses of</span>
-<span class="c1"># Arg. When StrArg is before FloatArg, apischema attempts to deserialize as a</span>
-<span class="c1"># string first. The coercion from str to number requires a trailing f if there</span>
-<span class="c1"># is a decimal.</span>
-<div class="viewcode-block" id="FloatArg"><a class="viewcode-back" href="../../user/reference/api.html#ibek.support.FloatArg">[docs]</a><span class="nd">@dataclass</span>
-<span class="k">class</span> <span class="nc">FloatArg</span><span class="p">(</span><span class="n">Arg</span><span class="p">):</span>
+<div class="viewcode-block" id="FloatArg"><a class="viewcode-back" href="../../user/reference/api.html#ibek.support.FloatArg">[docs]</a><span class="k">class</span> <span class="nc">FloatArg</span><span class="p">(</span><span class="n">Arg</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;An argument with a float value&quot;&quot;&quot;</span>
 
     <span class="nb">type</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;float&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;float&quot;</span>
-    <span class="n">default</span><span class="p">:</span> <span class="n">Default</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="n">Undefined</span></div>
+    <span class="n">default</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span></div>
 
 
-<div class="viewcode-block" id="StrArg"><a class="viewcode-back" href="../../user/reference/api.html#ibek.support.StrArg">[docs]</a><span class="nd">@dataclass</span>
-<span class="k">class</span> <span class="nc">StrArg</span><span class="p">(</span><span class="n">Arg</span><span class="p">):</span>
+<div class="viewcode-block" id="StrArg"><a class="viewcode-back" href="../../user/reference/api.html#ibek.support.StrArg">[docs]</a><span class="k">class</span> <span class="nc">StrArg</span><span class="p">(</span><span class="n">Arg</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;An argument with a str value&quot;&quot;&quot;</span>
 
     <span class="nb">type</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;str&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;str&quot;</span>
-    <span class="n">default</span><span class="p">:</span> <span class="n">Default</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">Undefined</span></div>
+    <span class="n">default</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span></div>
 
 
-<div class="viewcode-block" id="IntArg"><a class="viewcode-back" href="../../user/reference/api.html#ibek.support.IntArg">[docs]</a><span class="nd">@dataclass</span>
-<span class="k">class</span> <span class="nc">IntArg</span><span class="p">(</span><span class="n">Arg</span><span class="p">):</span>
+<div class="viewcode-block" id="IntArg"><a class="viewcode-back" href="../../user/reference/api.html#ibek.support.IntArg">[docs]</a><span class="k">class</span> <span class="nc">IntArg</span><span class="p">(</span><span class="n">Arg</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;An argument with an int value&quot;&quot;&quot;</span>
 
     <span class="nb">type</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;int&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;int&quot;</span>
-    <span class="n">default</span><span class="p">:</span> <span class="n">Default</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="n">Undefined</span></div>
+    <span class="n">default</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span></div>
 
 
-<div class="viewcode-block" id="BoolArg"><a class="viewcode-back" href="../../user/reference/api.html#ibek.support.BoolArg">[docs]</a><span class="nd">@dataclass</span>
-<span class="k">class</span> <span class="nc">BoolArg</span><span class="p">(</span><span class="n">Arg</span><span class="p">):</span>
+<div class="viewcode-block" id="BoolArg"><a class="viewcode-back" href="../../user/reference/api.html#ibek.support.BoolArg">[docs]</a><span class="k">class</span> <span class="nc">BoolArg</span><span class="p">(</span><span class="n">Arg</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;An argument with an bool value&quot;&quot;&quot;</span>
 
     <span class="nb">type</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;bool&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;bool&quot;</span>
-    <span class="n">default</span><span class="p">:</span> <span class="n">Default</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="n">Undefined</span></div>
+    <span class="n">default</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span></div>
 
 
-<div class="viewcode-block" id="ObjectArg"><a class="viewcode-back" href="../../user/reference/api.html#ibek.support.ObjectArg">[docs]</a><span class="nd">@dataclass</span>
-<span class="k">class</span> <span class="nc">ObjectArg</span><span class="p">(</span><span class="n">Arg</span><span class="p">):</span>
+<div class="viewcode-block" id="ObjectArg"><a class="viewcode-back" href="../../user/reference/api.html#ibek.support.ObjectArg">[docs]</a><span class="k">class</span> <span class="nc">ObjectArg</span><span class="p">(</span><span class="n">Arg</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;A reference to another entity defined in this IOC&quot;&quot;&quot;</span>
 
     <span class="nb">type</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;object&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;object&quot;</span>
-    <span class="n">default</span><span class="p">:</span> <span class="n">Default</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">Undefined</span></div>
+    <span class="n">default</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span></div>
 
 
-<div class="viewcode-block" id="IdArg"><a class="viewcode-back" href="../../user/reference/api.html#ibek.support.IdArg">[docs]</a><span class="nd">@dataclass</span>
-<span class="k">class</span> <span class="nc">IdArg</span><span class="p">(</span><span class="n">Arg</span><span class="p">):</span>
+<div class="viewcode-block" id="IdArg"><a class="viewcode-back" href="../../user/reference/api.html#ibek.support.IdArg">[docs]</a><span class="k">class</span> <span class="nc">IdArg</span><span class="p">(</span><span class="n">Arg</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Explicit ID argument that an object can refer to&quot;&quot;&quot;</span>
 
     <span class="nb">type</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;id&quot;</span>
-    <span class="n">default</span><span class="p">:</span> <span class="n">Default</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">Undefined</span></div>
+    <span class="n">default</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span></div>
 
 
-<div class="viewcode-block" id="Database"><a class="viewcode-back" href="../../user/reference/api.html#ibek.support.Database">[docs]</a><span class="nd">@dataclass</span>
-<span class="k">class</span> <span class="nc">Database</span><span class="p">:</span>
+<div class="viewcode-block" id="Database"><a class="viewcode-back" href="../../user/reference/api.html#ibek.support.Database">[docs]</a><span class="k">class</span> <span class="nc">Database</span><span class="p">(</span><span class="n">BaseSettings</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    A database file that should be loaded by the startup script and its args</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="n">file</span><span class="p">:</span> <span class="n">A</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">desc</span><span class="p">(</span><span class="s2">&quot;Filename of the database template in &lt;module_root&gt;/db&quot;</span><span class="p">)]</span>
-    <span class="n">args</span><span class="p">:</span> <span class="n">A</span><span class="p">[</span>
-        <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]],</span>
-        <span class="n">desc</span><span class="p">(</span>
+    <span class="n">file</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
+        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Filename of the database template in &lt;module_root&gt;/db&quot;</span>
+    <span class="p">)</span>
+
+    <span class="n">args</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
+        <span class="n">description</span><span class="o">=</span><span class="p">(</span>
             <span class="s2">&quot;Dictionary of args and values to pass through to database. &quot;</span>
             <span class="s2">&quot;A value of None is equivalent to ARG: &#39;{{ ARG }}&#39;&quot;</span>
-        <span class="p">),</span>
-    <span class="p">]</span></div>
+        <span class="p">)</span>
+    <span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="EnvironmentVariable"><a class="viewcode-back" href="../../user/reference/api.html#ibek.support.EnvironmentVariable">[docs]</a><span class="nd">@dataclass</span>
-<span class="k">class</span> <span class="nc">EnvironmentVariable</span><span class="p">:</span>
+<div class="viewcode-block" id="EnvironmentVariable"><a class="viewcode-back" href="../../user/reference/api.html#ibek.support.EnvironmentVariable">[docs]</a><span class="k">class</span> <span class="nc">EnvironmentVariable</span><span class="p">(</span><span class="n">BaseSettings</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    An environment variable that should be set in the startup script</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="n">name</span><span class="p">:</span> <span class="n">A</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">desc</span><span class="p">(</span><span class="s2">&quot;Name of environment variable&quot;</span><span class="p">)]</span>
-    <span class="n">value</span><span class="p">:</span> <span class="n">A</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">desc</span><span class="p">(</span><span class="s2">&quot;Value to set&quot;</span><span class="p">)]</span></div>
+    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s2">&quot;Name of environment variable&quot;</span><span class="p">)</span>
+    <span class="n">value</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s2">&quot;Value to set&quot;</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="Function"><a class="viewcode-back" href="../../user/reference/api.html#ibek.support.Function">[docs]</a><span class="nd">@dataclass</span>
-<span class="k">class</span> <span class="nc">Function</span><span class="p">:</span>
+<div class="viewcode-block" id="Function"><a class="viewcode-back" href="../../user/reference/api.html#ibek.support.Function">[docs]</a><span class="k">class</span> <span class="nc">Function</span><span class="p">(</span><span class="n">BaseSettings</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    A script snippet that defines a function to call</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="n">name</span><span class="p">:</span> <span class="n">A</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">desc</span><span class="p">(</span><span class="s2">&quot;Name of the function to call&quot;</span><span class="p">)]</span>
-    <span class="n">args</span><span class="p">:</span> <span class="n">A</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="n">desc</span><span class="p">(</span><span class="s2">&quot;The arguments to pass to the function&quot;</span><span class="p">)]</span>
-    <span class="n">header</span><span class="p">:</span> <span class="n">A</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">desc</span><span class="p">(</span><span class="s2">&quot;commands/comments to appear before the function&quot;</span><span class="p">)]</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
-    <span class="c1"># TODO will be an enum</span>
-    <span class="n">when</span><span class="p">:</span> <span class="n">A</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">desc</span><span class="p">(</span><span class="s2">&quot;one of first / every / last&quot;</span><span class="p">)]</span> <span class="o">=</span> <span class="s2">&quot;every&quot;</span>
+    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s2">&quot;Name of the function to call&quot;</span><span class="p">)</span>
+    <span class="n">args</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s2">&quot;The arguments to pass to the function&quot;</span><span class="p">)</span>
+    <span class="n">header</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
+        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;commands/comments to appear before the function&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="s2">&quot;&quot;</span>
+    <span class="p">)</span>
+    <span class="n">when</span><span class="p">:</span> <span class="n">When</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s2">&quot;one of first / every / last&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="s2">&quot;every&quot;</span><span class="p">)</span>
     <span class="nb">type</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;function&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;function&quot;</span></div>
 
 
-<div class="viewcode-block" id="Comment"><a class="viewcode-back" href="../../user/reference/api.html#ibek.support.Comment">[docs]</a><span class="nd">@dataclass</span>
-<span class="k">class</span> <span class="nc">Comment</span><span class="p">:</span>
+<div class="viewcode-block" id="Comment"><a class="viewcode-back" href="../../user/reference/api.html#ibek.support.Comment">[docs]</a><span class="k">class</span> <span class="nc">Comment</span><span class="p">(</span><span class="n">BaseSettings</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    A script snippet that will have &#39;# &#39; prepended to every line</span>
 <span class="sd">    for insertion into the startup script</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="nb">type</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;comment&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;comment&quot;</span>
-    <span class="c1"># TODO will be an enum</span>
-    <span class="n">when</span><span class="p">:</span> <span class="n">A</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">desc</span><span class="p">(</span><span class="s2">&quot;One of first / every / last&quot;</span><span class="p">)]</span> <span class="o">=</span> <span class="s2">&quot;every&quot;</span>
-    <span class="n">value</span><span class="p">:</span> <span class="n">A</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">desc</span><span class="p">(</span><span class="s2">&quot;A comment to add into the startup script&quot;</span><span class="p">)]</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span></div>
+    <span class="n">when</span><span class="p">:</span> <span class="n">When</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s2">&quot;One of first / every / last&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="s2">&quot;every&quot;</span><span class="p">)</span>
+    <span class="n">value</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
+        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;A comment to add into the startup script&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="s2">&quot;&quot;</span>
+    <span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="Text"><a class="viewcode-back" href="../../user/reference/api.html#ibek.support.Text">[docs]</a><span class="nd">@dataclass</span>
-<span class="k">class</span> <span class="nc">Text</span><span class="p">:</span>
+<div class="viewcode-block" id="Text"><a class="viewcode-back" href="../../user/reference/api.html#ibek.support.Text">[docs]</a><span class="k">class</span> <span class="nc">Text</span><span class="p">(</span><span class="n">BaseSettings</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    A script snippet to insert into the startup script</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="nb">type</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;text&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;text&quot;</span>
-    <span class="c1"># TODO will be an enum</span>
-    <span class="n">when</span><span class="p">:</span> <span class="n">A</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">desc</span><span class="p">(</span><span class="s2">&quot;One of first / every / last&quot;</span><span class="p">)]</span> <span class="o">=</span> <span class="s2">&quot;every&quot;</span>
-    <span class="n">value</span><span class="p">:</span> <span class="n">A</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">desc</span><span class="p">(</span><span class="s2">&quot;raw text to add to the startup script&quot;</span><span class="p">)]</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span></div>
+    <span class="n">when</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s2">&quot;One of first / every / last&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="s2">&quot;every&quot;</span><span class="p">)</span>
+    <span class="n">value</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s2">&quot;raw text to add to the startup script&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="Value"><a class="viewcode-back" href="../../user/reference/api.html#ibek.support.Value">[docs]</a><span class="nd">@dataclass</span>
-<span class="k">class</span> <span class="nc">Value</span><span class="p">:</span>
+<div class="viewcode-block" id="Value"><a class="viewcode-back" href="../../user/reference/api.html#ibek.support.Value">[docs]</a><span class="k">class</span> <span class="nc">Value</span><span class="p">(</span><span class="n">BaseSettings</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;A calculated string value for a definition&quot;&quot;&quot;</span>
 
-    <span class="n">name</span><span class="p">:</span> <span class="n">A</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">desc</span><span class="p">(</span><span class="s2">&quot;Name of the value that the IOC instance will expose&quot;</span><span class="p">)]</span>
-    <span class="n">description</span><span class="p">:</span> <span class="n">A</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">desc</span><span class="p">(</span><span class="s2">&quot;Description of what the value will be used for&quot;</span><span class="p">)]</span>
-    <span class="n">value</span><span class="p">:</span> <span class="n">A</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">desc</span><span class="p">(</span><span class="s2">&quot;The contents of the value&quot;</span><span class="p">)]</span>
+    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s2">&quot;Name of the value that the IOC instance will expose&quot;</span><span class="p">)</span>
+    <span class="n">description</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
+        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Description of what the value will be used for&quot;</span>
+    <span class="p">)</span>
+    <span class="n">value</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s2">&quot;The contents of the value&quot;</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">value</span></div>
@@ -598,48 +570,54 @@ document.write(`
 <span class="n">Script</span> <span class="o">=</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">Function</span><span class="p">,</span> <span class="n">Comment</span><span class="p">,</span> <span class="n">Text</span><span class="p">]]</span>
 
 
-<div class="viewcode-block" id="Definition"><a class="viewcode-back" href="../../user/reference/api.html#ibek.support.Definition">[docs]</a><span class="nd">@dataclass</span>
-<span class="k">class</span> <span class="nc">Definition</span><span class="p">:</span>
+<div class="viewcode-block" id="Definition"><a class="viewcode-back" href="../../user/reference/api.html#ibek.support.Definition">[docs]</a><span class="k">class</span> <span class="nc">Definition</span><span class="p">(</span><span class="n">BaseSettings</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    A single definition of a class of Entity that an IOC instance may instantiate</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="n">name</span><span class="p">:</span> <span class="n">A</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">desc</span><span class="p">(</span><span class="s2">&quot;Publish Definition as type &lt;module&gt;.&lt;name&gt; for IOC instances&quot;</span><span class="p">)]</span>
-    <span class="n">description</span><span class="p">:</span> <span class="n">A</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">desc</span><span class="p">(</span><span class="s2">&quot;Describes the purpose of the definition&quot;</span><span class="p">)]</span>
-    <span class="n">args</span><span class="p">:</span> <span class="n">A</span><span class="p">[</span><span class="n">Sequence</span><span class="p">[</span><span class="n">Arg</span><span class="p">],</span> <span class="n">desc</span><span class="p">(</span><span class="s2">&quot;The arguments IOC instance should supply&quot;</span><span class="p">)]</span> <span class="o">=</span> <span class="p">()</span>
-    <span class="n">values</span><span class="p">:</span> <span class="n">A</span><span class="p">[</span><span class="n">Sequence</span><span class="p">[</span><span class="n">Value</span><span class="p">],</span> <span class="n">desc</span><span class="p">(</span><span class="s2">&quot;The values IOC instance should supply&quot;</span><span class="p">)]</span> <span class="o">=</span> <span class="p">()</span>
-    <span class="n">databases</span><span class="p">:</span> <span class="n">A</span><span class="p">[</span><span class="n">Sequence</span><span class="p">[</span><span class="n">Database</span><span class="p">],</span> <span class="n">desc</span><span class="p">(</span><span class="s2">&quot;Databases to instantiate&quot;</span><span class="p">)]</span> <span class="o">=</span> <span class="p">()</span>
-    <span class="n">pre_init</span><span class="p">:</span> <span class="n">A</span><span class="p">[</span>
-        <span class="n">Script</span><span class="p">,</span>
-        <span class="n">desc</span><span class="p">(</span><span class="s2">&quot;Startup script snippets to add before iocInit()&quot;</span><span class="p">),</span>
-    <span class="p">]</span> <span class="o">=</span> <span class="p">()</span>
-    <span class="n">post_init</span><span class="p">:</span> <span class="n">A</span><span class="p">[</span>
-        <span class="n">Script</span><span class="p">,</span>
-        <span class="n">desc</span><span class="p">(</span><span class="s2">&quot;Startup script snippets to add post iocInit(), such as dbpf&quot;</span><span class="p">),</span>
-    <span class="p">]</span> <span class="o">=</span> <span class="p">()</span>
-    <span class="n">env_vars</span><span class="p">:</span> <span class="n">A</span><span class="p">[</span>
-        <span class="n">Sequence</span><span class="p">[</span><span class="n">EnvironmentVariable</span><span class="p">],</span>
-        <span class="n">desc</span><span class="p">(</span><span class="s2">&quot;Environment variables to set in the boot script&quot;</span><span class="p">),</span>
-    <span class="p">]</span> <span class="o">=</span> <span class="p">()</span></div>
+    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
+        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Publish Definition as type &lt;module&gt;.&lt;name&gt; for IOC instances&quot;</span>
+    <span class="p">)</span>
+    <span class="n">description</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
+        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;A description of the Support module defined here&quot;</span>
+    <span class="p">)</span>
+    <span class="c1"># declare Arg as Union of its subclasses for Pydantic to be able to deserialize</span>
+    <span class="n">args</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">tuple</span><span class="p">(</span><span class="n">Arg</span><span class="o">.</span><span class="n">__subclasses__</span><span class="p">())]]</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>  <span class="c1"># type: ignore</span>
+        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;The arguments IOC instance should supply&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="p">()</span>
+    <span class="p">)</span>
+    <span class="n">values</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Value</span><span class="p">]</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
+        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;The values IOC instance should supply&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="p">()</span>
+    <span class="p">)</span>
+    <span class="n">databases</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Database</span><span class="p">]</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
+        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Databases to instantiate&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="p">()</span>
+    <span class="p">)</span>
+    <span class="n">pre_init</span><span class="p">:</span> <span class="n">Script</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
+        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Startup script snippets to add before iocInit()&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="p">()</span>
+    <span class="p">)</span>
+    <span class="n">post_init</span><span class="p">:</span> <span class="n">Script</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
+        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Startup script snippets to add post iocInit(), such as dbpf&quot;</span><span class="p">,</span>
+        <span class="n">default</span><span class="o">=</span><span class="p">(),</span>
+    <span class="p">)</span>
+    <span class="n">env_vars</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">EnvironmentVariable</span><span class="p">]</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
+        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Environment variables to set in the boot script&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="p">()</span>
+    <span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="Support"><a class="viewcode-back" href="../../user/reference/api.html#ibek.support.Support">[docs]</a><span class="nd">@dataclass</span>
-<span class="k">class</span> <span class="nc">Support</span><span class="p">:</span>
+<div class="viewcode-block" id="Support"><a class="viewcode-back" href="../../user/reference/api.html#ibek.support.Support">[docs]</a><span class="k">class</span> <span class="nc">Support</span><span class="p">(</span><span class="n">BaseSettings</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Lists the definitions for a support module, this defines what Entities it supports</span>
 
 <span class="sd">    Provides the deserialize entry point.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="n">module</span><span class="p">:</span> <span class="n">A</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">desc</span><span class="p">(</span><span class="s2">&quot;Support module name, normally the repo name&quot;</span><span class="p">)]</span>
-    <span class="n">defs</span><span class="p">:</span> <span class="n">A</span><span class="p">[</span>
-        <span class="n">Sequence</span><span class="p">[</span><span class="n">Definition</span><span class="p">],</span>
-        <span class="n">desc</span><span class="p">(</span><span class="s2">&quot;The definitions an IOC can create using this module&quot;</span><span class="p">),</span>
-    <span class="p">]</span>
+    <span class="n">module</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s2">&quot;Support module name, normally the repo name&quot;</span><span class="p">)</span>
+    <span class="n">defs</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Definition</span><span class="p">]</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
+        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;The definitions an IOC can create using this module&quot;</span>
+    <span class="p">)</span>
 
     <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">deserialize</span><span class="p">(</span><span class="bp">cls</span><span class="p">:</span> <span class="n">Type</span><span class="p">[</span><span class="n">T</span><span class="p">],</span> <span class="n">d</span><span class="p">:</span> <span class="n">Mapping</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">T</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">deserialize</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">d</span><span class="p">)</span></div>
+    <span class="k">def</span> <span class="nf">get_schema</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="bp">cls</span><span class="o">.</span><span class="n">model_json_schema</span><span class="p">(),</span> <span class="n">indent</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span></div>
 </pre></div>
 
                 </article>

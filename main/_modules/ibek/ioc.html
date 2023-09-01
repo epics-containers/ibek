@@ -8,7 +8,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>ibek.ioc &#8212; ibek 1.10.2.dev22+gb05d34f documentation</title>
+    <title>ibek.ioc &#8212; ibek 1.10.2.dev56+gdd1906b documentation</title>
   
   
   
@@ -423,187 +423,178 @@ document.write(`
 <span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
 
 <span class="kn">import</span> <span class="nn">builtins</span>
-<span class="kn">import</span> <span class="nn">types</span>
-<span class="kn">from</span> <span class="nn">dataclasses</span> <span class="kn">import</span> <span class="n">Field</span><span class="p">,</span> <span class="n">dataclass</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">make_dataclass</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Mapping</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Type</span><span class="p">,</span> <span class="n">cast</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Literal</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Type</span><span class="p">,</span> <span class="n">Union</span>
 
-<span class="kn">from</span> <span class="nn">apischema</span> <span class="kn">import</span> <span class="p">(</span>
-    <span class="n">Undefined</span><span class="p">,</span>
-    <span class="n">ValidationError</span><span class="p">,</span>
-    <span class="n">cache</span><span class="p">,</span>
-    <span class="n">deserialize</span><span class="p">,</span>
-    <span class="n">deserializer</span><span class="p">,</span>
-    <span class="n">identity</span><span class="p">,</span>
-    <span class="n">schema</span><span class="p">,</span>
-<span class="p">)</span>
-<span class="kn">from</span> <span class="nn">apischema.conversions</span> <span class="kn">import</span> <span class="n">Conversion</span><span class="p">,</span> <span class="n">reset_deserializers</span>
-<span class="kn">from</span> <span class="nn">apischema.metadata</span> <span class="kn">import</span> <span class="n">conversion</span>
-<span class="kn">from</span> <span class="nn">jinja2</span> <span class="kn">import</span> <span class="n">Template</span>
-<span class="kn">from</span> <span class="nn">typing_extensions</span> <span class="kn">import</span> <span class="n">Annotated</span> <span class="k">as</span> <span class="n">A</span>
-<span class="kn">from</span> <span class="nn">typing_extensions</span> <span class="kn">import</span> <span class="n">Literal</span>
+<span class="kn">from</span> <span class="nn">pydantic</span> <span class="kn">import</span> <span class="n">Field</span><span class="p">,</span> <span class="n">RootModel</span><span class="p">,</span> <span class="n">create_model</span><span class="p">,</span> <span class="n">field_validator</span><span class="p">,</span> <span class="n">model_validator</span>
+<span class="kn">from</span> <span class="nn">pydantic.fields</span> <span class="kn">import</span> <span class="n">FieldInfo</span>
 
-<span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">modules</span>
-<span class="kn">from</span> <span class="nn">.globals</span> <span class="kn">import</span> <span class="n">T</span><span class="p">,</span> <span class="n">desc</span>
+<span class="kn">from</span> <span class="nn">.globals</span> <span class="kn">import</span> <span class="n">BaseSettings</span><span class="p">,</span> <span class="n">render_with_utils</span>
 <span class="kn">from</span> <span class="nn">.support</span> <span class="kn">import</span> <span class="n">Definition</span><span class="p">,</span> <span class="n">IdArg</span><span class="p">,</span> <span class="n">ObjectArg</span><span class="p">,</span> <span class="n">Support</span>
-<span class="kn">from</span> <span class="nn">.utils</span> <span class="kn">import</span> <span class="n">UTILS</span>
-
-
-<div class="viewcode-block" id="Entity"><a class="viewcode-back" href="../../user/reference/api.html#ibek.ioc.Entity">[docs]</a><span class="k">class</span> <span class="nc">Entity</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    A baseclass for all generated Entity classes. Provides the</span>
-<span class="sd">    deserialize entry point.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-
-    <span class="c1"># a link back to the Definition Object that generated this Definition</span>
-    <span class="n">__definition__</span><span class="p">:</span> <span class="n">Definition</span>
-
-    <span class="n">entity_enabled</span><span class="p">:</span> <span class="nb">bool</span>
-
-    <span class="k">def</span> <span class="nf">__post_init__</span><span class="p">(</span><span class="bp">self</span><span class="p">:</span> <span class="s2">&quot;Entity&quot;</span><span class="p">):</span>
-        <span class="c1"># If there is an argument which is an id then allow deserialization by that</span>
-        <span class="n">args</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__definition__</span><span class="o">.</span><span class="n">args</span>
-        <span class="n">ids</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">name</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">args</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">IdArg</span><span class="p">))</span>
-        <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">ids</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="mi">1</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;Multiple id args </span><span class="si">{</span><span class="nb">list</span><span class="p">(</span><span class="n">ids</span><span class="p">)</span><span class="si">}</span><span class="s2"> defined in </span><span class="si">{</span><span class="n">args</span><span class="si">}</span><span class="s2">&quot;</span>
-        <span class="k">if</span> <span class="n">ids</span><span class="p">:</span>
-            <span class="c1"># A string id, use that</span>
-            <span class="n">inst_id</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ids</span><span class="o">.</span><span class="n">pop</span><span class="p">())</span>
-            <span class="k">assert</span> <span class="n">inst_id</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">id_to_entity</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;Already got an instance </span><span class="si">{</span><span class="n">inst_id</span><span class="si">}</span><span class="s2">&quot;</span>
-            <span class="n">id_to_entity</span><span class="p">[</span><span class="n">inst_id</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span>
-
-            <span class="c1"># TODO - not working as printing own ID</span>
-            <span class="nb">setattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;__str__&quot;</span><span class="p">,</span> <span class="n">inst_id</span><span class="p">)</span>
-
-        <span class="c1"># add in the global __utils__ object for state sharing</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">__utils__</span> <span class="o">=</span> <span class="n">UTILS</span>
-
-        <span class="c1"># copy &#39;values&#39; from the definition into the Entity</span>
-        <span class="k">for</span> <span class="n">value</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">__definition__</span><span class="o">.</span><span class="n">values</span><span class="p">:</span>
-            <span class="nb">setattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
-
-        <span class="c1"># Jinja expansion of any string args/values in the Entity&#39;s attributes</span>
-        <span class="k">for</span> <span class="n">arg</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
-                <span class="n">jinja_template</span> <span class="o">=</span> <span class="n">Template</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
-                <span class="n">rendered</span> <span class="o">=</span> <span class="n">jinja_template</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">)</span>
-                <span class="nb">setattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">arg</span><span class="p">,</span> <span class="n">rendered</span><span class="p">)</span></div>
-
 
 <span class="n">id_to_entity</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Entity</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
 
 
-<div class="viewcode-block" id="make_entity_class"><a class="viewcode-back" href="../../user/reference/api.html#ibek.ioc.make_entity_class">[docs]</a><span class="k">def</span> <span class="nf">make_entity_class</span><span class="p">(</span><span class="n">definition</span><span class="p">:</span> <span class="n">Definition</span><span class="p">,</span> <span class="n">support</span><span class="p">:</span> <span class="n">Support</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Type</span><span class="p">[</span><span class="n">Entity</span><span class="p">]:</span>
+<div class="viewcode-block" id="Entity"><a class="viewcode-back" href="../../user/reference/api.html#ibek.ioc.Entity">[docs]</a><span class="k">class</span> <span class="nc">Entity</span><span class="p">(</span><span class="n">BaseSettings</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    We can get a set of Definitions by deserializing an ibek</span>
-<span class="sd">    support module definition YAML file.</span>
-
-<span class="sd">    This function then creates an Entity derived class from each Definition.</span>
-
-<span class="sd">    See :ref:`entities`</span>
+<span class="sd">    A baseclass for all generated Entity classes.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">fields</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">type</span><span class="p">,</span> <span class="n">Field</span><span class="p">[</span><span class="n">Any</span><span class="p">]]]</span> <span class="o">=</span> <span class="p">[]</span>
 
-    <span class="c1"># add in each of the arguments</span>
+    <span class="nb">type</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s2">&quot;The type of this entity&quot;</span><span class="p">)</span>
+    <span class="n">entity_enabled</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
+        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;enable or disable this entity instance&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">True</span>
+    <span class="p">)</span>
+    <span class="n">__definition__</span><span class="p">:</span> <span class="n">Definition</span>
+
+<div class="viewcode-block" id="Entity.add_ibek_attributes"><a class="viewcode-back" href="../../user/reference/api.html#ibek.ioc.Entity.add_ibek_attributes">[docs]</a>    <span class="nd">@model_validator</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="s2">&quot;after&quot;</span><span class="p">)</span>  <span class="c1"># type: ignore</span>
+    <span class="k">def</span> <span class="nf">add_ibek_attributes</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">entity</span><span class="p">:</span> <span class="n">Entity</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Whole Entity model validation</span>
+
+<span class="sd">        TODO at present an object reference to an ID where the referred object violates</span>
+<span class="sd">        schema is seen as &quot;KeyError: &quot;object XXX not found in [...]&quot; which hides the</span>
+<span class="sd">        schema violation error.</span>
+
+<span class="sd">        This could potentially be fixed by doing the validation here instead</span>
+<span class="sd">        (removing extra:forbid from the model_config). BUT, at present passing</span>
+<span class="sd">        the info arg to this function receives a dict of the IOC instance</span>
+<span class="sd">        that created this entity, not the entity itself. This may be a</span>
+<span class="sd">        pydantic bug?</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># find the id field in this Entity if it has one</span>
+        <span class="n">ids</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">name</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">entity</span><span class="o">.</span><span class="n">__definition__</span><span class="o">.</span><span class="n">args</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">IdArg</span><span class="p">))</span>
+
+        <span class="n">entity_dict</span> <span class="o">=</span> <span class="n">entity</span><span class="o">.</span><span class="n">model_dump</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">arg</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">entity_dict</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">arg</span> <span class="ow">in</span> <span class="n">ids</span><span class="p">:</span>
+                <span class="c1"># add this entity to the global id index</span>
+                <span class="k">if</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">id_to_entity</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Duplicate id </span><span class="si">{</span><span class="n">value</span><span class="si">}</span><span class="s2"> in </span><span class="si">{</span><span class="nb">list</span><span class="p">(</span><span class="n">id_to_entity</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="n">id_to_entity</span><span class="p">[</span><span class="n">value</span><span class="p">]</span> <span class="o">=</span> <span class="n">entity</span>
+            <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+                <span class="c1"># Jinja expansion of any of the Entity&#39;s string args/values</span>
+                <span class="nb">setattr</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">arg</span><span class="p">,</span> <span class="n">render_with_utils</span><span class="p">(</span><span class="n">entity_dict</span><span class="p">,</span> <span class="n">value</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">entity</span></div></div>
+
+
+<div class="viewcode-block" id="make_entity_model"><a class="viewcode-back" href="../../user/reference/api.html#ibek.ioc.make_entity_model">[docs]</a><span class="k">def</span> <span class="nf">make_entity_model</span><span class="p">(</span><span class="n">definition</span><span class="p">:</span> <span class="n">Definition</span><span class="p">,</span> <span class="n">support</span><span class="p">:</span> <span class="n">Support</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Type</span><span class="p">[</span><span class="n">Entity</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Create an Entity Model from a Definition instance and a Support instance.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">add_arg</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">typ</span><span class="p">,</span> <span class="n">description</span><span class="p">,</span> <span class="n">default</span><span class="p">):</span>
+        <span class="n">args</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">typ</span><span class="p">,</span>
+            <span class="n">FieldInfo</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="n">description</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="n">default</span><span class="p">),</span>
+        <span class="p">)</span>
+
+    <span class="n">args</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">type</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">validators</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+
+    <span class="c1"># fully qualified name of the Entity class including support module</span>
+    <span class="n">full_name</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">support</span><span class="o">.</span><span class="n">module</span><span class="si">}</span><span class="s2">.</span><span class="si">{</span><span class="n">definition</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span>
+
+    <span class="c1"># add in each of the arguments as a Field in the Entity</span>
     <span class="k">for</span> <span class="n">arg</span> <span class="ow">in</span> <span class="n">definition</span><span class="o">.</span><span class="n">args</span><span class="p">:</span>
-        <span class="c1"># make_dataclass can cope with string types, so cast them here rather</span>
-        <span class="c1"># than lookup</span>
-        <span class="n">metadata</span><span class="p">:</span> <span class="n">Any</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="n">arg_type</span><span class="p">:</span> <span class="n">Type</span>
+        <span class="n">full_arg_name</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">full_name</span><span class="si">}</span><span class="s2">.</span><span class="si">{</span><span class="n">arg</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="n">arg_type</span><span class="p">:</span> <span class="n">Any</span>
+
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">arg</span><span class="p">,</span> <span class="n">ObjectArg</span><span class="p">):</span>
 
-            <span class="k">def</span> <span class="nf">lookup_instance</span><span class="p">(</span><span class="nb">id</span><span class="p">):</span>
+            <span class="nd">@field_validator</span><span class="p">(</span><span class="n">arg</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;after&quot;</span><span class="p">)</span>
+            <span class="k">def</span> <span class="nf">lookup_instance</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="nb">id</span><span class="p">):</span>
                 <span class="k">try</span><span class="p">:</span>
                     <span class="k">return</span> <span class="n">id_to_entity</span><span class="p">[</span><span class="nb">id</span><span class="p">]</span>
                 <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
-                    <span class="k">raise</span> <span class="n">ValidationError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="nb">id</span><span class="si">}</span><span class="s2"> is not in </span><span class="si">{</span><span class="nb">list</span><span class="p">(</span><span class="n">id_to_entity</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                    <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;object </span><span class="si">{</span><span class="nb">id</span><span class="si">}</span><span class="s2"> not found in </span><span class="si">{</span><span class="nb">list</span><span class="p">(</span><span class="n">id_to_entity</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
-            <span class="n">metadata</span> <span class="o">=</span> <span class="n">conversion</span><span class="p">(</span>
-                <span class="n">deserialization</span><span class="o">=</span><span class="n">Conversion</span><span class="p">(</span><span class="n">lookup_instance</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="n">Entity</span><span class="p">)</span>
-            <span class="p">)</span> <span class="o">|</span> <span class="n">schema</span><span class="p">(</span><span class="n">extra</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;vscode_ibek_plugin_type&quot;</span><span class="p">:</span> <span class="s2">&quot;type_object&quot;</span><span class="p">})</span>
-            <span class="n">arg_type</span> <span class="o">=</span> <span class="n">Entity</span>
+            <span class="n">validators</span><span class="p">[</span><span class="n">full_arg_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">lookup_instance</span>
+            <span class="n">arg_type</span> <span class="o">=</span> <span class="nb">object</span>
+
         <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">arg</span><span class="p">,</span> <span class="n">IdArg</span><span class="p">):</span>
             <span class="n">arg_type</span> <span class="o">=</span> <span class="nb">str</span>
-            <span class="n">metadata</span> <span class="o">=</span> <span class="n">schema</span><span class="p">(</span><span class="n">extra</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;vscode_ibek_plugin_type&quot;</span><span class="p">:</span> <span class="s2">&quot;type_id&quot;</span><span class="p">})</span>
+
         <span class="k">else</span><span class="p">:</span>
             <span class="c1"># arg.type is str, int, float, etc.</span>
             <span class="n">arg_type</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">builtins</span><span class="p">,</span> <span class="n">arg</span><span class="o">.</span><span class="n">type</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">arg</span><span class="o">.</span><span class="n">description</span><span class="p">:</span>
-            <span class="n">arg_type</span> <span class="o">=</span> <span class="n">A</span><span class="p">[</span><span class="n">arg_type</span><span class="p">,</span> <span class="n">desc</span><span class="p">(</span><span class="n">arg</span><span class="o">.</span><span class="n">description</span><span class="p">)]</span>  <span class="c1"># type: ignore</span>
-        <span class="k">if</span> <span class="n">arg</span><span class="o">.</span><span class="n">default</span> <span class="ow">is</span> <span class="n">Undefined</span><span class="p">:</span>
-            <span class="n">fld</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">metadata</span><span class="o">=</span><span class="n">metadata</span><span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">fld</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">metadata</span><span class="o">=</span><span class="n">metadata</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="n">arg</span><span class="o">.</span><span class="n">default</span><span class="p">)</span>
-        <span class="n">fields</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">arg</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">arg_type</span><span class="p">,</span> <span class="n">fld</span><span class="p">))</span>  <span class="c1"># type: ignore</span>
 
-    <span class="c1"># put the literal name in as &#39;type&#39; for this Entity this gives us</span>
-    <span class="c1"># a unique key for each of the entity types we may instantiate</span>
-    <span class="n">full_name</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">support</span><span class="o">.</span><span class="n">module</span><span class="si">}</span><span class="s2">.</span><span class="si">{</span><span class="n">definition</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span>
-    <span class="n">fields</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
-        <span class="p">(</span>
-            <span class="s2">&quot;type&quot;</span><span class="p">,</span>
-            <span class="n">Literal</span><span class="p">[</span><span class="n">full_name</span><span class="p">],</span>  <span class="c1"># type: ignore</span>
-            <span class="n">field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="n">cast</span><span class="p">(</span><span class="n">Any</span><span class="p">,</span> <span class="n">full_name</span><span class="p">)),</span>
-        <span class="p">)</span>
-    <span class="p">)</span>
+        <span class="n">default</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">arg</span><span class="p">,</span> <span class="s2">&quot;default&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="n">add_arg</span><span class="p">(</span><span class="n">arg</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">arg_type</span><span class="p">,</span> <span class="n">arg</span><span class="o">.</span><span class="n">description</span><span class="p">,</span> <span class="n">default</span><span class="p">)</span>
 
-    <span class="c1"># add a field so we can control rendering of the entity without having to delete</span>
-    <span class="c1"># it</span>
-    <span class="n">fields</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="s2">&quot;entity_enabled&quot;</span><span class="p">,</span> <span class="nb">bool</span><span class="p">,</span> <span class="n">field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="n">cast</span><span class="p">(</span><span class="n">Any</span><span class="p">,</span> <span class="kc">True</span><span class="p">))))</span>
+    <span class="c1"># add in the calculated values Jinja Templates as Fields in the Entity</span>
+    <span class="k">for</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">definition</span><span class="o">.</span><span class="n">values</span><span class="p">:</span>
+        <span class="n">add_arg</span><span class="p">(</span><span class="n">value</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="n">value</span><span class="o">.</span><span class="n">description</span><span class="p">,</span> <span class="n">value</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
 
-    <span class="n">namespace</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">__definition__</span><span class="o">=</span><span class="n">definition</span><span class="p">)</span>
+    <span class="c1"># add the type literal which discriminates between the different Entity classes</span>
+    <span class="n">typ</span> <span class="o">=</span> <span class="n">Literal</span><span class="p">[</span><span class="n">full_name</span><span class="p">]</span>  <span class="c1"># type: ignore</span>
+    <span class="n">add_arg</span><span class="p">(</span><span class="s2">&quot;type&quot;</span><span class="p">,</span> <span class="n">typ</span><span class="p">,</span> <span class="s2">&quot;The type of this entity&quot;</span><span class="p">,</span> <span class="n">full_name</span><span class="p">)</span>
 
-    <span class="c1"># make the Entity derived dataclass for this EntityClass, with a reference</span>
-    <span class="c1"># to the Definition that created it</span>
-    <span class="n">entity_cls</span> <span class="o">=</span> <span class="n">make_dataclass</span><span class="p">(</span><span class="n">full_name</span><span class="p">,</span> <span class="n">fields</span><span class="p">,</span> <span class="n">bases</span><span class="o">=</span><span class="p">(</span><span class="n">Entity</span><span class="p">,),</span> <span class="n">namespace</span><span class="o">=</span><span class="n">namespace</span><span class="p">)</span>
-    <span class="n">deserializer</span><span class="p">(</span><span class="n">Conversion</span><span class="p">(</span><span class="n">identity</span><span class="p">,</span> <span class="n">source</span><span class="o">=</span><span class="n">entity_cls</span><span class="p">,</span> <span class="n">target</span><span class="o">=</span><span class="n">Entity</span><span class="p">))</span>
+    <span class="n">entity_cls</span> <span class="o">=</span> <span class="n">create_model</span><span class="p">(</span>
+        <span class="n">full_name</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">,</span> <span class="s2">&quot;_&quot;</span><span class="p">),</span>
+        <span class="o">**</span><span class="n">args</span><span class="p">,</span>
+        <span class="n">__validators__</span><span class="o">=</span><span class="n">validators</span><span class="p">,</span>
+        <span class="n">__base__</span><span class="o">=</span><span class="n">Entity</span><span class="p">,</span>
+    <span class="p">)</span>  <span class="c1"># type: ignore</span>
+
+    <span class="c1"># add a link back to the Definition Instance that generated this Entity Class</span>
+    <span class="n">entity_cls</span><span class="o">.</span><span class="n">__definition__</span> <span class="o">=</span> <span class="n">definition</span>
+
     <span class="k">return</span> <span class="n">entity_cls</span></div>
 
 
-<div class="viewcode-block" id="make_entity_classes"><a class="viewcode-back" href="../../user/reference/api.html#ibek.ioc.make_entity_classes">[docs]</a><span class="k">def</span> <span class="nf">make_entity_classes</span><span class="p">(</span><span class="n">support</span><span class="p">:</span> <span class="n">Support</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">types</span><span class="o">.</span><span class="n">SimpleNamespace</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Create `Entity` subclasses for all `Definition` objects in the given</span>
-<span class="sd">    `Support` instance, put them in a namespace in `ibek.modules` and return</span>
-<span class="sd">    it&quot;&quot;&quot;</span>
-    <span class="n">module</span> <span class="o">=</span> <span class="n">types</span><span class="o">.</span><span class="n">SimpleNamespace</span><span class="p">()</span>
-    <span class="k">assert</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span>
-        <span class="n">modules</span><span class="p">,</span> <span class="n">support</span><span class="o">.</span><span class="n">module</span>
-    <span class="p">),</span> <span class="sa">f</span><span class="s2">&quot;Entity classes already created for </span><span class="si">{</span><span class="n">support</span><span class="o">.</span><span class="n">module</span><span class="si">}</span><span class="s2">&quot;</span>
-    <span class="nb">setattr</span><span class="p">(</span><span class="n">modules</span><span class="p">,</span> <span class="n">support</span><span class="o">.</span><span class="n">module</span><span class="p">,</span> <span class="n">module</span><span class="p">)</span>
-    <span class="n">modules</span><span class="o">.</span><span class="n">__all__</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">support</span><span class="o">.</span><span class="n">module</span><span class="p">)</span>
-    <span class="k">for</span> <span class="n">definition</span> <span class="ow">in</span> <span class="n">support</span><span class="o">.</span><span class="n">defs</span><span class="p">:</span>
-        <span class="n">entity_cls</span> <span class="o">=</span> <span class="n">make_entity_class</span><span class="p">(</span><span class="n">definition</span><span class="p">,</span> <span class="n">support</span><span class="p">)</span>
-        <span class="nb">setattr</span><span class="p">(</span><span class="n">module</span><span class="p">,</span> <span class="n">definition</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">entity_cls</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">module</span></div>
-
-
-<div class="viewcode-block" id="clear_entity_classes"><a class="viewcode-back" href="../../user/reference/api.html#ibek.ioc.clear_entity_classes">[docs]</a><span class="k">def</span> <span class="nf">clear_entity_classes</span><span class="p">():</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Reset the modules namespaces, deserializers and caches of defined Entity</span>
-<span class="sd">    subclasses&quot;&quot;&quot;</span>
-    <span class="n">id_to_entity</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
-    <span class="k">while</span> <span class="n">modules</span><span class="o">.</span><span class="n">__all__</span><span class="p">:</span>
-        <span class="nb">delattr</span><span class="p">(</span><span class="n">modules</span><span class="p">,</span> <span class="n">modules</span><span class="o">.</span><span class="n">__all__</span><span class="o">.</span><span class="n">pop</span><span class="p">())</span>
-    <span class="n">reset_deserializers</span><span class="p">(</span><span class="n">Entity</span><span class="p">)</span>
-    <span class="n">cache</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span></div>
-
-
-<div class="viewcode-block" id="IOC"><a class="viewcode-back" href="../../user/reference/api.html#ibek.ioc.IOC">[docs]</a><span class="nd">@dataclass</span>
-<span class="k">class</span> <span class="nc">IOC</span><span class="p">:</span>
+<div class="viewcode-block" id="make_entity_models"><a class="viewcode-back" href="../../user/reference/api.html#ibek.ioc.make_entity_models">[docs]</a><span class="k">def</span> <span class="nf">make_entity_models</span><span class="p">(</span><span class="n">support</span><span class="p">:</span> <span class="n">Support</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Used to load an IOC instance entities yaml file into memory using</span>
-<span class="sd">    IOC.deserialize(YAML().load(ioc_instance_yaml)).</span>
-
-<span class="sd">    Before loading the entities file all Entity classes that it contains</span>
-<span class="sd">    must be defined in modules.py. This is achieved by deserializing all</span>
-<span class="sd">    support module definitions yaml files used by this IOC and calling</span>
-<span class="sd">    make_entity_classes(support_module).</span>
+<span class="sd">    Create Entity subclasses for all Definition instances in the given</span>
+<span class="sd">    Support instance. Returns a list of the Entity subclasses Models.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="n">ioc_name</span><span class="p">:</span> <span class="n">A</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">desc</span><span class="p">(</span><span class="s2">&quot;Name of IOC instance&quot;</span><span class="p">)]</span>
-    <span class="n">description</span><span class="p">:</span> <span class="n">A</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">desc</span><span class="p">(</span><span class="s2">&quot;Description of what the IOC does&quot;</span><span class="p">)]</span>
-    <span class="n">entities</span><span class="p">:</span> <span class="n">A</span><span class="p">[</span><span class="n">Sequence</span><span class="p">[</span><span class="n">Entity</span><span class="p">],</span> <span class="n">desc</span><span class="p">(</span><span class="s2">&quot;List of entities this IOC instantiates&quot;</span><span class="p">)]</span>
-    <span class="n">generic_ioc_image</span><span class="p">:</span> <span class="n">A</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">desc</span><span class="p">(</span><span class="s2">&quot;The generic IOC container image registry URL&quot;</span><span class="p">)]</span>
+    <span class="n">entity_models</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">entity_names</span> <span class="o">=</span> <span class="p">[]</span>
 
-    <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">deserialize</span><span class="p">(</span><span class="bp">cls</span><span class="p">:</span> <span class="n">Type</span><span class="p">[</span><span class="n">T</span><span class="p">],</span> <span class="n">d</span><span class="p">:</span> <span class="n">Mapping</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">T</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">deserialize</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">d</span><span class="p">)</span></div>
+    <span class="k">for</span> <span class="n">definition</span> <span class="ow">in</span> <span class="n">support</span><span class="o">.</span><span class="n">defs</span><span class="p">:</span>
+        <span class="n">entity_models</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">make_entity_model</span><span class="p">(</span><span class="n">definition</span><span class="p">,</span> <span class="n">support</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">definition</span><span class="o">.</span><span class="n">name</span> <span class="ow">in</span> <span class="n">entity_names</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Duplicate entity name </span><span class="si">{</span><span class="n">definition</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">entity_names</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">definition</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">entity_models</span></div>
+
+
+<div class="viewcode-block" id="make_ioc_model"><a class="viewcode-back" href="../../user/reference/api.html#ibek.ioc.make_ioc_model">[docs]</a><span class="k">def</span> <span class="nf">make_ioc_model</span><span class="p">(</span><span class="n">entity_models</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Type</span><span class="p">[</span><span class="n">Entity</span><span class="p">]])</span> <span class="o">-&gt;</span> <span class="n">Type</span><span class="p">[</span><span class="n">IOC</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Create an IOC derived model, by setting its entities attribute to</span>
+<span class="sd">    be of type &#39;list of Entity derived classes&#39;.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">class</span> <span class="nc">EntityModel</span><span class="p">(</span><span class="n">RootModel</span><span class="p">):</span>
+        <span class="n">root</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">tuple</span><span class="p">(</span><span class="n">entity_models</span><span class="p">)]</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">discriminator</span><span class="o">=</span><span class="s2">&quot;type&quot;</span><span class="p">)</span>  <span class="c1"># type: ignore</span>
+
+    <span class="k">class</span> <span class="nc">NewIOC</span><span class="p">(</span><span class="n">IOC</span><span class="p">):</span>
+        <span class="n">entities</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">EntityModel</span><span class="p">]</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>  <span class="c1"># type: ignore</span>
+            <span class="n">description</span><span class="o">=</span><span class="s2">&quot;List of entities this IOC instantiates&quot;</span>
+        <span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">NewIOC</span></div>
+
+
+<div class="viewcode-block" id="clear_entity_model_ids"><a class="viewcode-back" href="../../user/reference/api.html#ibek.ioc.clear_entity_model_ids">[docs]</a><span class="k">def</span> <span class="nf">clear_entity_model_ids</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Resets the global id_to_entity dict.&quot;&quot;&quot;</span>
+
+    <span class="n">id_to_entity</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="IOC"><a class="viewcode-back" href="../../user/reference/api.html#ibek.ioc.IOC">[docs]</a><span class="k">class</span> <span class="nc">IOC</span><span class="p">(</span><span class="n">BaseSettings</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Used to load an IOC instance entities yaml file into a Pydantic Model.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">ioc_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s2">&quot;Name of IOC instance&quot;</span><span class="p">)</span>
+    <span class="n">description</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s2">&quot;Description of what the IOC does&quot;</span><span class="p">)</span>
+    <span class="n">generic_ioc_image</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
+        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;The generic IOC container image registry URL&quot;</span>
+    <span class="p">)</span>
+    <span class="c1"># this will be replaced in derived classes made by make_ioc_model</span>
+    <span class="n">entities</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Entity</span><span class="p">]</span></div>
 </pre></div>
 
                 </article>
