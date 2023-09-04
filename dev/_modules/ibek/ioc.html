@@ -8,7 +8,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>ibek.ioc &#8212; ibek 1.10.2.dev56+ge921794 documentation</title>
+    <title>ibek.ioc &#8212; ibek 1.10.2.dev57+ge9ba220 documentation</title>
   
   
   
@@ -511,7 +511,7 @@ document.write(`
                 <span class="k">try</span><span class="p">:</span>
                     <span class="k">return</span> <span class="n">id_to_entity</span><span class="p">[</span><span class="nb">id</span><span class="p">]</span>
                 <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
-                    <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;object </span><span class="si">{</span><span class="nb">id</span><span class="si">}</span><span class="s2"> not found in </span><span class="si">{</span><span class="nb">list</span><span class="p">(</span><span class="n">id_to_entity</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;object </span><span class="si">{</span><span class="nb">id</span><span class="si">}</span><span class="s2"> not found in </span><span class="si">{</span><span class="nb">list</span><span class="p">(</span><span class="n">id_to_entity</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
             <span class="n">validators</span><span class="p">[</span><span class="n">full_arg_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">lookup_instance</span>
             <span class="n">arg_type</span> <span class="o">=</span> <span class="nb">object</span>
