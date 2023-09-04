@@ -93,7 +93,7 @@ def make_entity_model(definition: Definition, support: Support) -> Type[Entity]:
                 try:
                     return id_to_entity[id]
                 except KeyError:
-                    raise KeyError(f"object {id} not found in {list(id_to_entity)}")
+                    raise ValueError(f"object {id} not found in {list(id_to_entity)}")
 
             validators[full_arg_name] = lookup_instance
             arg_type = object
