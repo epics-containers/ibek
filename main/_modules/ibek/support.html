@@ -8,7 +8,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>ibek.support &#8212; ibek 1.10.2.dev56+gdd1906b documentation</title>
+    <title>ibek.support &#8212; ibek 1.10.2.dev59+gf30006f documentation</title>
   
   
   
@@ -600,7 +600,14 @@ document.write(`
     <span class="p">)</span>
     <span class="n">env_vars</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">EnvironmentVariable</span><span class="p">]</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
         <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Environment variables to set in the boot script&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="p">()</span>
-    <span class="p">)</span></div>
+    <span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_get_id_arg</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns the name of the ID argument for this definition, if it exists&quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">arg</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">args</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">arg</span><span class="p">,</span> <span class="n">IdArg</span><span class="p">):</span>
+                <span class="k">return</span> <span class="n">arg</span><span class="o">.</span><span class="n">name</span>
+        <span class="k">return</span> <span class="kc">None</span></div>
 
 
 <div class="viewcode-block" id="Support"><a class="viewcode-back" href="../../user/reference/api.html#ibek.support.Support">[docs]</a><span class="k">class</span> <span class="nc">Support</span><span class="p">(</span><span class="n">BaseSettings</span><span class="p">):</span>
