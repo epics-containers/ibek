@@ -184,6 +184,13 @@ class Definition(BaseSettings):
         description="Environment variables to set in the boot script", default=()
     )
 
+    def _get_id_arg(self):
+        """Returns the name of the ID argument for this definition, if it exists"""
+        for arg in self.args:
+            if isinstance(arg, IdArg):
+                return arg.name
+        return None
+
 
 class Support(BaseSettings):
     """

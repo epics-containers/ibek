@@ -20,7 +20,7 @@ At present for the incorrect schema in entity e1 ibek reports:
 KeyError: 'object one not found in []'
 ```
 
-And test_refs4.py reports
+And test_refs1.py reports
 
 ```
 Extra inputs are not permitted [type=extra_forbidden, input_value='bad argument', input_type=str]
@@ -28,11 +28,17 @@ Extra inputs are not permitted [type=extra_forbidden, input_value='bad argument'
 
 The latter is the useful error that points you at the root cause.
 
-Resolution
-==========
+Example Issue
+=============
 
-The simplest test_refs1.py has been updated to demo the issue (forgot that
-entity "one" already existed in model1!).
+The test_refs1.py demonstrates the issue
 
 I've posted a discussion on the subject here
 https://github.com/pydantic/pydantic/discussions/6731
+
+Resolution
+==========
+
+Resolved here https://github.com/pydantic/pydantic/issues/7304
+
+Simply Throw a ValueError instead of a KeyError in the custom validator.
