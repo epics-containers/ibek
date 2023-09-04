@@ -8,7 +8,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>ibek.ioc &#8212; ibek 1.10.2.dev55+g34adca0 documentation</title>
+    <title>ibek.ioc &#8212; ibek 1.10.2.dev56+ge921794 documentation</title>
   
   
   
@@ -474,7 +474,12 @@ document.write(`
             <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
                 <span class="c1"># Jinja expansion of any of the Entity&#39;s string args/values</span>
                 <span class="nb">setattr</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">arg</span><span class="p">,</span> <span class="n">render_with_utils</span><span class="p">(</span><span class="n">entity_dict</span><span class="p">,</span> <span class="n">value</span><span class="p">))</span>
-        <span class="k">return</span> <span class="n">entity</span></div></div>
+        <span class="k">return</span> <span class="n">entity</span></div>
+
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># if this entity has an id then its string representation is the value of id</span>
+        <span class="n">id_name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__definition__</span><span class="o">.</span><span class="n">_get_id_arg</span><span class="p">()</span>
+        <span class="k">return</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">id_name</span><span class="p">)</span> <span class="k">if</span> <span class="n">id_name</span> <span class="k">else</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__str__</span><span class="p">()</span></div>
 
 
 <div class="viewcode-block" id="make_entity_model"><a class="viewcode-back" href="../../user/reference/api.html#ibek.ioc.make_entity_model">[docs]</a><span class="k">def</span> <span class="nf">make_entity_model</span><span class="p">(</span><span class="n">definition</span><span class="p">:</span> <span class="n">Definition</span><span class="p">,</span> <span class="n">support</span><span class="p">:</span> <span class="n">Support</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Type</span><span class="p">[</span><span class="n">Entity</span><span class="p">]:</span>
