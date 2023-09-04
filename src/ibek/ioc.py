@@ -58,6 +58,11 @@ class Entity(BaseSettings):
                 setattr(entity, arg, render_with_utils(entity_dict, value))
         return entity
 
+    def __str__(self):
+        # if this entity has an id then its string representation is the value of id
+        id_name = self.__definition__._get_id_arg()
+        return getattr(self, id_name) if id_name else super().__str__()
+
 
 def make_entity_model(definition: Definition, support: Support) -> Type[Entity]:
     """

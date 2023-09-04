@@ -56,4 +56,5 @@ defs:
         args:
           AsynPortIP: IP:{{ PORT.IP }}
           Name: name:'{{ name }}'
+          Port: port:'{{ PORT }}' # defaults to the id of PORT, i.e. PORT.name
           Value: Value:{{ PORT.test_value }}

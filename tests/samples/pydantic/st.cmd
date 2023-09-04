@@ -9,9 +9,9 @@ ioc_registerRecordDeviceDriver pdbbase
 testValues test_value:AsynPort1.127.0.0.1
 testValues test_value:AsynPort2.10.0.0.2
 
-# exampleTestFunction AsynPortIP Name Value
-exampleTestFunction IP:10.0.0.2 name:'Consumer of another port' Value:AsynPort2.10.0.0.2
-exampleTestFunction IP:10.0.0.2 name:'Another Consumer of the 2nd port' Value:AsynPort2.10.0.0.2
+# exampleTestFunction AsynPortIP Name Port Value
+exampleTestFunction IP:10.0.0.2 name:'Consumer of another port' port:'AsynPort2' Value:AsynPort2.10.0.0.2
+exampleTestFunction IP:10.0.0.2 name:'Another Consumer of the 2nd port' port:'AsynPort2' Value:AsynPort2.10.0.0.2
 
 dbLoadRecords /tmp/ioc.db
 iocInit
