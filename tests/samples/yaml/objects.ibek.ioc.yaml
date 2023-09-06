@@ -1,0 +1,29 @@
+# yaml-language-server: $schema=../schemas/objects.ibek.ioc.schema.json
+
+ioc_name: test-object-ioc
+description: a basic example for testing ioc-template
+generic_ioc_image: ghcr.io/epics-containers/ioc-template:23.3.2
+
+entities:
+  - type: object_module.RefObject
+    name: AsynPort1
+
+  - type: object_module.RefObject
+    name: AsynPort2
+    IP: 10.0.0.2
+
+  - type: object_module.Consumer
+    name: A Consumer
+    PORT: AsynPort1
+
+  - type: object_module.Consumer
+    name: Another Consumer of same port
+    PORT: AsynPort1
+
+  - type: object_module.ConsumerTwo
+    name: Consumer of another port
+    PORT: AsynPort2
+
+  - type: object_module.ConsumerTwo
+    name: Another Consumer of the 2nd port
+    PORT: AsynPort2

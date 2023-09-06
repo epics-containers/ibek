@@ -1,3 +1,7 @@
+"""
+Some unit tests for ibek.
+"""
+
 from ibek.ioc import (
     clear_entity_model_ids,
     id_to_entity,
@@ -7,7 +11,10 @@ from ibek.ioc import (
 from ibek.support import Definition, IdArg, ObjectArg, Support
 
 
-def test_conversion_classes():
+def test_object_references():
+    """
+    Verify the object references are correctly resolved
+    """
     clear_entity_model_ids()
 
     support = Support(

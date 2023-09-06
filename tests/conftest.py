@@ -2,9 +2,20 @@ from pathlib import Path
 
 from pytest import fixture
 from ruamel.yaml import YAML
+from typer.testing import CliRunner
 
+from ibek.__main__ import cli
 from ibek.ioc import clear_entity_model_ids, make_entity_models
 from ibek.support import Support
+
+runner = CliRunner()
+
+
+def run_cli(*args):
+    result = runner.invoke(cli, [str(x) for x in args])
+    if result.exception:
+        raise result.exception
+    assert result.exit_code == 0, result
 
 
 def get_support(samples: Path, yaml_file: str) -> Support:

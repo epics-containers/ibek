@@ -1,0 +1,221 @@
+{
+  "$defs": {
+    "EntityModel": {
+      "discriminator": {
+        "mapping": {
+          "module.AllObject": "#/$defs/module_AllObject",
+          "object_module.Consumer": "#/$defs/object_module_Consumer",
+          "object_module.ConsumerTwo": "#/$defs/object_module_ConsumerTwo",
+          "object_module.RefObject": "#/$defs/object_module_RefObject"
+        },
+        "propertyName": "type"
+      },
+      "oneOf": [
+        {
+          "$ref": "#/$defs/object_module_RefObject"
+        },
+        {
+          "$ref": "#/$defs/object_module_Consumer"
+        },
+        {
+          "$ref": "#/$defs/object_module_ConsumerTwo"
+        },
+        {
+          "$ref": "#/$defs/module_AllObject"
+        }
+      ],
+      "title": "EntityModel"
+    },
+    "module_AllObject": {
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "const": "module.AllObject",
+          "default": "module.AllObject",
+          "description": "The type of this entity",
+          "title": "Type"
+        },
+        "entity_enabled": {
+          "default": true,
+          "description": "enable or disable this entity instance",
+          "title": "Entity Enabled",
+          "type": "boolean"
+        },
+        "name": {
+          "default": null,
+          "description": "identifier",
+          "title": "Name",
+          "type": "string"
+        },
+        "my_str": {
+          "default": "default",
+          "description": "string arg",
+          "title": "My Str",
+          "type": "string"
+        },
+        "my_int": {
+          "default": 1,
+          "description": "integer arg",
+          "title": "My Int",
+          "type": "integer"
+        },
+        "my_object": {
+          "default": null,
+          "description": "object arg",
+          "title": "My Object"
+        },
+        "my_float": {
+          "default": 1.0,
+          "description": "float arg",
+          "title": "My Float",
+          "type": "number"
+        },
+        "my_bool": {
+          "default": true,
+          "description": "bool arg",
+          "title": "My Bool",
+          "type": "boolean"
+        },
+        "a value calculated from args": {
+          "default": "{{ name }}.{{ my_str }}.{{ my_int }}.{{ my_float }}.{{ my_bool }}",
+          "description": "test jinja render of arg values",
+          "title": "A Value Calculated From Args",
+          "type": "string"
+        }
+      },
+      "title": "module_AllObject",
+      "type": "object"
+    },
+    "object_module_Consumer": {
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "const": "object_module.Consumer",
+          "default": "object_module.Consumer",
+          "description": "The type of this entity",
+          "title": "Type"
+        },
+        "entity_enabled": {
+          "default": true,
+          "description": "enable or disable this entity instance",
+          "title": "Entity Enabled",
+          "type": "boolean"
+        },
+        "name": {
+          "default": null,
+          "description": "Consumer name",
+          "title": "Name",
+          "type": "string"
+        },
+        "PORT": {
+          "default": null,
+          "description": "a reference to an RefObject",
+          "title": "Port"
+        }
+      },
+      "title": "object_module_Consumer",
+      "type": "object"
+    },
+    "object_module_ConsumerTwo": {
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "const": "object_module.ConsumerTwo",
+          "default": "object_module.ConsumerTwo",
+          "description": "The type of this entity",
+          "title": "Type"
+        },
+        "entity_enabled": {
+          "default": true,
+          "description": "enable or disable this entity instance",
+          "title": "Entity Enabled",
+          "type": "boolean"
+        },
+        "name": {
+          "default": null,
+          "description": "Consumer name",
+          "title": "Name",
+          "type": "string"
+        },
+        "PORT": {
+          "default": null,
+          "description": "a reference to an RefObject",
+          "title": "Port"
+        }
+      },
+      "title": "object_module_ConsumerTwo",
+      "type": "object"
+    },
+    "object_module_RefObject": {
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "const": "object_module.RefObject",
+          "default": "object_module.RefObject",
+          "description": "The type of this entity",
+          "title": "Type"
+        },
+        "entity_enabled": {
+          "default": true,
+          "description": "enable or disable this entity instance",
+          "title": "Entity Enabled",
+          "type": "boolean"
+        },
+        "name": {
+          "default": null,
+          "description": "Port name",
+          "title": "Name",
+          "type": "string"
+        },
+        "IP": {
+          "default": "127.0.0.1",
+          "description": "IP address of port",
+          "title": "Ip",
+          "type": "string"
+        },
+        "test_value": {
+          "default": "{{ name }}.{{ IP }}",
+          "description": "test jinja render of arg values",
+          "title": "Test Value",
+          "type": "string"
+        }
+      },
+      "title": "object_module_RefObject",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "ioc_name": {
+      "description": "Name of IOC instance",
+      "title": "Ioc Name",
+      "type": "string"
+    },
+    "description": {
+      "description": "Description of what the IOC does",
+      "title": "Description",
+      "type": "string"
+    },
+    "generic_ioc_image": {
+      "description": "The generic IOC container image registry URL",
+      "title": "Generic Ioc Image",
+      "type": "string"
+    },
+    "entities": {
+      "description": "List of entities this IOC instantiates",
+      "items": {
+        "$ref": "#/$defs/EntityModel"
+      },
+      "title": "Entities",
+      "type": "array"
+    }
+  },
+  "required": [
+    "ioc_name",
+    "description",
+    "generic_ioc_image",
+    "entities"
+  ],
+  "title": "NewIOC",
+  "type": "object"
+}

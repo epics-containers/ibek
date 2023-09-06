@@ -9,7 +9,6 @@ from ibek.render import Render
 
 
 def find_entity_class(entity_classes, entity_type):
-    # TODO is this the easiest way to find the entity class?
     for entity_class in entity_classes:
         literal = Literal[entity_type]  # type: ignore
         if entity_class.model_fields["type"].annotation == literal:

@@ -1,14 +1,18 @@
-# yaml-language-server: $schema=../schemas/ibek.defs.schema.json
-module: pydantic_test
+# yaml-language-server: $schema=../schemas/ibek.support.schema.json
+
+################################################################################
+### ibek support YAML to demonstrate the use of object references
+################################################################################
+module: object_module
 
 defs:
-  - name: AnAsynPort
+  - name: RefObject
     description: |
-      Example
+      Example object for reference from Consumer
     args:
       - type: id
         name: name
-        description: Asyn port name
+        description: Port name
 
       - type: str
         name: IP
@@ -28,7 +32,7 @@ defs:
 
   - name: Consumer
     description: |
-      A class that uses AnAsynPort
+      A class that uses RefObject
     args:
       - type: id
         name: name
@@ -36,11 +40,11 @@ defs:
 
       - type: object
         name: PORT
-        description: a reference to an AnAsynPort
+        description: a reference to an RefObject
 
   - name: ConsumerTwo
     description: |
-      Another class that uses AnAsynPort
+      Another class that uses RefObject
     args:
       - type: id
         name: name
@@ -48,7 +52,7 @@ defs:
 
       - type: object
         name: PORT
-        description: a reference to an AnAsynPort
+        description: a reference to an RefObject
 
     pre_init:
       - type: function

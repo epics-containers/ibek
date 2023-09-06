@@ -5,11 +5,15 @@ dbLoadDatabase dbd/ioc.dbd
 ioc_registerRecordDeviceDriver pdbbase
 
 
+# testValues TestValue
+testValues test_value:Ref1.127.0.0.1
+
+# testPreInit identifier TestValue
+testPreInit A Consumer test_value:
+
 dbLoadRecords /tmp/ioc.db
 iocInit
 
 
-
-# dbpf pv value
-dbpf BL45P-MO-THIN-01:Y1.TWV 0.5
+testPostInit A Consumer test_value:
 
