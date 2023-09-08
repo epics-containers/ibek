@@ -122,7 +122,7 @@ jobs:
         run: python -m $(ls src | head -1) --version
 
   container:
-    needs: [lint, dist, test, system-test]
+    needs: [lint, dist, test]
     runs-on: ubuntu-latest
 
     permissions:
@@ -211,7 +211,7 @@ jobs:
 
   release:
     # upload to PyPI and make a release on every tag
-    needs: [lint, dist, test, system-test]
+    needs: [lint, dist, test]
     if: ${{ github.event_name == 'push' && github.ref_type == 'tag' }}
     runs-on: ubuntu-latest
     env:
