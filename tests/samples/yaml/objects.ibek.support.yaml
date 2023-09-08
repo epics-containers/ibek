@@ -24,11 +24,15 @@ defs:
         value: "{{ name }}.{{ IP }}"
         description: test jinja render of arg values
 
+    env_vars:
+      - name: REF_OBJECT_NAME
+        value: "{{ name }}"
+
     pre_init:
       - type: function
-        name: testValues
+        name: TestValues
         args:
-          TestValue: test_value:{{ test_value }}
+          testValue: "{{ test_value }}"
 
   - name: Consumer
     description: |
@@ -56,9 +60,16 @@ defs:
 
     pre_init:
       - type: function
-        name: exampleTestFunction
+        name: ExampleTestFunction
         args:
-          AsynPortIP: IP:{{ PORT.IP }}
-          Name: name:'{{ name }}'
-          Port: port:'{{ PORT }}' # defaults to the id of PORT, i.e. PORT.name
-          Value: Value:{{ PORT.test_value }}
+          asynPortIP: "{{ PORT.IP }}"
+          name: "{{ name }}"
+          port: "{{ PORT }}" # defaults to the id of PORT, i.e. PORT.name
+          value: "{{ PORT.test_value }}"
+
+    databases:
+      - file: test.db
+        args:
+          name:
+          ip: "{{ PORT.IP }}"
+          value: "{{ PORT.test_value }}"

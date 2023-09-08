@@ -18,20 +18,15 @@ def run_cli(*args):
     assert result.exit_code == 0, result
 
 
-def get_support(samples: Path, yaml_file: str) -> Support:
+def get_support(yaml_file: str) -> Support:
     """
     Get a support object from the sample YAML directory
     """
     # load from file
-    d = YAML(typ="safe").load(samples / f"{yaml_file}")
+    d = YAML(typ="safe").load(yaml_file)
     # create a support object from that dict
     support = Support(**d)
     return support
-
-
-@fixture
-def ibek_defs():
-    return Path(__file__).parent.parent / "ibek-defs"
 
 
 @fixture
@@ -40,17 +35,19 @@ def samples():
 
 
 @fixture
-def pmac_support(ibek_defs):
-    return get_support(ibek_defs / "pmac", "pmac.ibek.support.yaml")
+def yaml_defs(samples):
+    return samples / "yaml"
 
 
 @fixture
-def pmac_classes(pmac_support):
+def objects_classes(yaml_defs):
     # clear the entity classes to make sure there's nothing left
     clear_entity_model_ids()
 
+    objects_support = get_support(yaml_defs / "objects.ibek.support.yaml")
+
     # make entity subclasses for everything defined in it
-    namespace = make_entity_models(pmac_support)
+    namespace = make_entity_models(objects_support)
 
     # return the namespace so that callers have access to all of the
     # generated dataclasses

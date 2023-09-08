@@ -11,3 +11,12 @@ entities:
   - type: module.AllObject
     name: A Consumer
     my_object: Ref1
+
+  - type: object_module.ConsumerTwo
+    name: Disabled Consumer
+    PORT: Ref1
+    entity_enabled: false
+
+  - type: object_module.RefObject
+    name: Disabled RefObject
+    entity_enabled: false
