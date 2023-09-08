@@ -71,14 +71,14 @@ Each Definition describes a class of Entity by providing:
     the above arguments
 
 
-Expand below for the example pmac **support module definition file**:
+Expand below for the example **support module definition file**:
 
     .. raw:: html
 
         <details>
-        <summary><a>pmac.ibek.support.yaml</a></summary>
+        <summary><a>objects.ibek.support.yaml</a></summary>
 
-    .. include:: ../../../ibek-defs/pmac/pmac.ibek.support.yaml
+    .. include:: ../../../tests/samples/yaml/objects.ibek.support.yaml
         :literal:
 
     .. raw:: html
