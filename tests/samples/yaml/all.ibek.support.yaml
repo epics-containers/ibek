@@ -1,0 +1,59 @@
+# yaml-language-server: $schema=../schemas/ibek.support.schema.json
+
+################################################################################
+### ibek support YAML to demonstrate all arg types and definition outputs
+################################################################################
+module: module
+
+defs:
+  - name: AllObject
+    description: |
+      Example object that has one of each arg type
+    args:
+      - type: id
+        name: name
+        description: identifier
+
+      - type: str
+        name: my_str
+        description: string arg
+        default: "default"
+
+      - type: int
+        name: my_int
+        description: integer arg
+        default: 1
+
+      # non-defaulted arg in the middle demonstrates pydantic's ability to cope
+      - type: object
+        name: my_object
+        description: object arg
+
+      - type: float
+        name: my_float
+        description: float arg
+        default: 1.0
+
+      - type: bool
+        name: my_bool
+        description: bool arg
+        default: true
+
+    values:
+      - name: a value calculated from args
+        value: "{{ name }}.{{ my_str }}.{{ my_int }}.{{ my_float }}.{{ my_bool }}"
+        description: test jinja render of arg values
+
+    pre_init:
+      - type: function
+        name: testPreInit
+        args:
+          identifier: "{{ name }}"
+          TestValue: test_value:{{ test_value }}
+
+    post_init:
+      - type: function
+        name: testPostInit
+        args:
+          identifier: "{{ name }}"
+          TestValue: test_value:{{ test_value }}

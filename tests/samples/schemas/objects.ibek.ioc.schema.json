@@ -3,31 +3,31 @@
     "EntityModel": {
       "discriminator": {
         "mapping": {
-          "pydantic_test.AnAsynPort": "#/$defs/pydantic_test_AnAsynPort",
-          "pydantic_test.Consumer": "#/$defs/pydantic_test_Consumer",
-          "pydantic_test.ConsumerTwo": "#/$defs/pydantic_test_ConsumerTwo"
+          "object_module.Consumer": "#/$defs/object_module_Consumer",
+          "object_module.ConsumerTwo": "#/$defs/object_module_ConsumerTwo",
+          "object_module.RefObject": "#/$defs/object_module_RefObject"
         },
         "propertyName": "type"
       },
       "oneOf": [
         {
-          "$ref": "#/$defs/pydantic_test_AnAsynPort"
+          "$ref": "#/$defs/object_module_RefObject"
         },
         {
-          "$ref": "#/$defs/pydantic_test_Consumer"
+          "$ref": "#/$defs/object_module_Consumer"
         },
         {
-          "$ref": "#/$defs/pydantic_test_ConsumerTwo"
+          "$ref": "#/$defs/object_module_ConsumerTwo"
         }
       ],
       "title": "EntityModel"
     },
-    "pydantic_test_AnAsynPort": {
+    "object_module_Consumer": {
       "additionalProperties": false,
       "properties": {
         "type": {
-          "const": "pydantic_test.AnAsynPort",
-          "default": "pydantic_test.AnAsynPort",
+          "const": "object_module.Consumer",
+          "default": "object_module.Consumer",
           "description": "The type of this entity",
           "title": "Type"
         },
@@ -39,7 +39,67 @@
         },
         "name": {
           "default": null,
-          "description": "Asyn port name",
+          "description": "Consumer name",
+          "title": "Name",
+          "type": "string"
+        },
+        "PORT": {
+          "default": null,
+          "description": "a reference to an RefObject",
+          "title": "Port"
+        }
+      },
+      "title": "object_module_Consumer",
+      "type": "object"
+    },
+    "object_module_ConsumerTwo": {
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "const": "object_module.ConsumerTwo",
+          "default": "object_module.ConsumerTwo",
+          "description": "The type of this entity",
+          "title": "Type"
+        },
+        "entity_enabled": {
+          "default": true,
+          "description": "enable or disable this entity instance",
+          "title": "Entity Enabled",
+          "type": "boolean"
+        },
+        "name": {
+          "default": null,
+          "description": "Consumer name",
+          "title": "Name",
+          "type": "string"
+        },
+        "PORT": {
+          "default": null,
+          "description": "a reference to an RefObject",
+          "title": "Port"
+        }
+      },
+      "title": "object_module_ConsumerTwo",
+      "type": "object"
+    },
+    "object_module_RefObject": {
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "const": "object_module.RefObject",
+          "default": "object_module.RefObject",
+          "description": "The type of this entity",
+          "title": "Type"
+        },
+        "entity_enabled": {
+          "default": true,
+          "description": "enable or disable this entity instance",
+          "title": "Entity Enabled",
+          "type": "boolean"
+        },
+        "name": {
+          "default": null,
+          "description": "Port name",
           "title": "Name",
           "type": "string"
         },
@@ -56,67 +116,7 @@
           "type": "string"
         }
       },
-      "title": "pydantic_test_AnAsynPort",
-      "type": "object"
-    },
-    "pydantic_test_Consumer": {
-      "additionalProperties": false,
-      "properties": {
-        "type": {
-          "const": "pydantic_test.Consumer",
-          "default": "pydantic_test.Consumer",
-          "description": "The type of this entity",
-          "title": "Type"
-        },
-        "entity_enabled": {
-          "default": true,
-          "description": "enable or disable this entity instance",
-          "title": "Entity Enabled",
-          "type": "boolean"
-        },
-        "name": {
-          "default": null,
-          "description": "Consumer name",
-          "title": "Name",
-          "type": "string"
-        },
-        "PORT": {
-          "default": null,
-          "description": "a reference to an AnAsynPort",
-          "title": "Port"
-        }
-      },
-      "title": "pydantic_test_Consumer",
-      "type": "object"
-    },
-    "pydantic_test_ConsumerTwo": {
-      "additionalProperties": false,
-      "properties": {
-        "type": {
-          "const": "pydantic_test.ConsumerTwo",
-          "default": "pydantic_test.ConsumerTwo",
-          "description": "The type of this entity",
-          "title": "Type"
-        },
-        "entity_enabled": {
-          "default": true,
-          "description": "enable or disable this entity instance",
-          "title": "Entity Enabled",
-          "type": "boolean"
-        },
-        "name": {
-          "default": null,
-          "description": "Consumer name",
-          "title": "Name",
-          "type": "string"
-        },
-        "PORT": {
-          "default": null,
-          "description": "a reference to an AnAsynPort",
-          "title": "Port"
-        }
-      },
-      "title": "pydantic_test_ConsumerTwo",
+      "title": "object_module_RefObject",
       "type": "object"
     }
   },

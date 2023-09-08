@@ -1,0 +1,22 @@
+# yaml-language-server: $schema=../schemas/multiple.ibek.ioc.schema.json
+
+ioc_name: test-multiple-ioc
+description: a basic example for testing multiple support definitions
+generic_ioc_image: ghcr.io/epics-containers/ioc-template:23.3.2
+
+entities:
+  - type: object_module.RefObject
+    name: Ref1
+
+  - type: module.AllObject
+    name: A Consumer
+    my_object: Ref1
+
+  - type: object_module.ConsumerTwo
+    name: Disabled Consumer
+    PORT: Ref1
+    entity_enabled: false
+
+  - type: object_module.RefObject
+    name: Disabled RefObject
+    entity_enabled: false

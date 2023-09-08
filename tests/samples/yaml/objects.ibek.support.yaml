@@ -1,0 +1,75 @@
+# yaml-language-server: $schema=../schemas/ibek.support.schema.json
+
+################################################################################
+### ibek support YAML to demonstrate the use of object references
+################################################################################
+module: object_module
+
+defs:
+  - name: RefObject
+    description: |
+      Example object for reference from Consumer
+    args:
+      - type: id
+        name: name
+        description: Port name
+
+      - type: str
+        name: IP
+        description: IP address of port
+        default: 127.0.0.1
+
+    values:
+      - name: test_value
+        value: "{{ name }}.{{ IP }}"
+        description: test jinja render of arg values
+
+    env_vars:
+      - name: REF_OBJECT_NAME
+        value: "{{ name }}"
+
+    pre_init:
+      - type: function
+        name: TestValues
+        args:
+          testValue: "{{ test_value }}"
+
+  - name: Consumer
+    description: |
+      A class that uses RefObject
+    args:
+      - type: id
+        name: name
+        description: Consumer name
+
+      - type: object
+        name: PORT
+        description: a reference to an RefObject
+
+  - name: ConsumerTwo
+    description: |
+      Another class that uses RefObject
+    args:
+      - type: id
+        name: name
+        description: Consumer name
+
+      - type: object
+        name: PORT
+        description: a reference to an RefObject
+
+    pre_init:
+      - type: function
+        name: ExampleTestFunction
+        args:
+          asynPortIP: "{{ PORT.IP }}"
+          name: "{{ name }}"
+          port: "{{ PORT }}" # defaults to the id of PORT, i.e. PORT.name
+          value: "{{ PORT.test_value }}"
+
+    databases:
+      - file: test.db
+        args:
+          name:
+          ip: "{{ PORT.IP }}"
+          value: "{{ PORT.test_value }}"

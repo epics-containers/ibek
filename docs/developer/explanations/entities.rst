@@ -71,14 +71,14 @@ Each Definition describes a class of Entity by providing:
     the above arguments
 
 
-Expand below for the example pmac **support module definition file**:
+Expand below for the example **support module definition file**:
 
     .. raw:: html
 
         <details>
-        <summary><a>pmac.ibek.support.yaml</a></summary>
+        <summary><a>objects.ibek.support.yaml</a></summary>
 
-    .. include:: ../../../ibek-defs/pmac/pmac.ibek.support.yaml
+    .. include:: ../../../tests/samples/yaml/objects.ibek.support.yaml
         :literal:
 
     .. raw:: html
@@ -147,9 +147,9 @@ Click the arrows to reveal the files.
     .. raw:: html
 
         <details>
-        <summary><a>bl45p-mo-ioc-02.ibek.ioc.yaml</a></summary>
+        <summary><a>all.ibek.ioc.yaml</a></summary>
 
-    .. include:: ../../../tests/samples/yaml/bl45p-mo-ioc-02.ibek.ioc.yaml
+    .. include:: ../../../tests/samples/yaml/all.ibek.ioc.yaml
         :literal:
 
     .. raw:: html
@@ -158,7 +158,7 @@ Click the arrows to reveal the files.
         <details>
         <summary><a>st.cmd</a></summary>
 
-    .. include:: ../../../tests/samples/boot_scripts/st.cmd
+    .. include:: ../../../tests/samples/outputs/all.st.cmd
         :literal:
 
     .. raw:: html
@@ -209,18 +209,18 @@ The Global Schema and example IOC instance schema are below:
     .. raw:: html
 
         <details>
-        <summary><a>ibek.defs.schema.json</a></summary>
+        <summary><a>ibek.support.schema.json</a></summary>
 
-    .. include:: ../../../tests/samples/schemas/ibek.defs.schema.json
+    .. include:: ../../../tests/samples/schemas/ibek.support.schema.json
         :literal:
 
     .. raw:: html
 
         </details>
         <details>
-        <summary><a>pmac.ibek.entities.schema.json</a></summary>
+        <summary><a>multiple.ibek.ioc.schema.json</a></summary>
 
-    .. include:: ../../../tests/samples/schemas/pmac.ibek.entities.schema.json
+    .. include:: ../../../tests/samples/schemas/multiple.ibek.ioc.schema.json
         :literal:
 
     .. raw:: html
