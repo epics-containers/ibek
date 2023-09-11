@@ -12,17 +12,23 @@ ioc_registerRecordDeviceDriver pdbbase
 TestValues Ref1.127.0.0.1
 
 # testPreInit identifier TestValue
-testPreInit A Consumer test_value:
-The value of my_inferred_enum is third
-The value of clock_rate is dummy
-testPreInit Another Consumer test_value:
-The value of my_inferred_enum is hello
-The value of clock_rate is 1
+testPreInit AllObject One 'AllObject One String'
+my_str =                    AllObject One String
+my_inferred_enum =          third
+clock_rate =                dummy
+my_mixed_enum_no_default =  
+.
+testPreInit AllObject Two 'AllObject Two String'
+my_str =                    AllObject Two String
+my_inferred_enum =          hello
+clock_rate =                1
+my_mixed_enum_no_default =  
+.
 
 dbLoadRecords /tmp/ioc.db
 iocInit
 
 
-testPostInit A Consumer test_value:
-testPostInit Another Consumer test_value:
+testPostInit AllObject One test_value:
+testPostInit AllObject Two test_value:
 

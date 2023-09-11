@@ -10,6 +10,7 @@ from typing import Any, Dict, Literal, Sequence, Tuple, Type, Union
 
 from pydantic import Field, RootModel, create_model, field_validator, model_validator
 from pydantic.fields import FieldInfo
+from pydantic_core import PydanticUndefined
 
 from .globals import BaseSettings, render_with_utils
 from .support import Definition, EnumArg, IdArg, ObjectArg, Support
@@ -69,10 +70,12 @@ def make_entity_model(definition: Definition, support: Support) -> Type[Entity]:
     Create an Entity Model from a Definition instance and a Support instance.
     """
 
-    def add_arg(name, typ, description, default, options=None):
+    def add_arg(name, typ, description, default):
+        if default is None:
+            default = PydanticUndefined
         args[name] = (
             typ,
-            FieldInfo(description=description, default=default, options=options),
+            FieldInfo(description=description, default=default),
         )
 
     args: Dict[str, Tuple[type, Any]] = {}

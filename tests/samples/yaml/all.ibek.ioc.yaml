@@ -9,18 +9,20 @@ entities:
     name: Ref1
 
   - type: module.AllObject
-    name: A Consumer
+    name: AllObject One
     my_object: Ref1
     my_int_enum: full_speed
     my_inferred_enum: third
     clock_rate: dummy
+    my_str: AllObject One String
 
   - type: module.AllObject
-    name: Another Consumer
+    name: AllObject Two
     my_object: Ref1
     my_int_enum: all_ahead
     my_inferred_enum: first
     clock_rate: 2Hz
+    my_str: AllObject Two String
 
   - type: object_module.ConsumerTwo
     name: Disabled Consumer

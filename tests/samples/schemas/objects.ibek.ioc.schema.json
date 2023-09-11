@@ -38,17 +38,19 @@
           "type": "boolean"
         },
         "name": {
-          "default": null,
           "description": "Consumer name",
           "title": "Name",
           "type": "string"
         },
         "PORT": {
-          "default": null,
           "description": "a reference to an RefObject",
           "title": "Port"
         }
       },
+      "required": [
+        "name",
+        "PORT"
+      ],
       "title": "object_module_Consumer",
       "type": "object"
     },
@@ -68,17 +70,19 @@
           "type": "boolean"
         },
         "name": {
-          "default": null,
           "description": "Consumer name",
           "title": "Name",
           "type": "string"
         },
         "PORT": {
-          "default": null,
           "description": "a reference to an RefObject",
           "title": "Port"
         }
       },
+      "required": [
+        "name",
+        "PORT"
+      ],
       "title": "object_module_ConsumerTwo",
       "type": "object"
     },
@@ -98,7 +102,6 @@
           "type": "boolean"
         },
         "name": {
-          "default": null,
           "description": "Port name",
           "title": "Name",
           "type": "string"
@@ -116,6 +119,9 @@
           "type": "string"
         }
       },
+      "required": [
+        "name"
+      ],
       "title": "object_module_RefObject",
       "type": "object"
     }
