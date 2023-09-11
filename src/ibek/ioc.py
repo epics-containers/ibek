@@ -5,13 +5,14 @@ support module definition YAML file
 from __future__ import annotations
 
 import builtins
+from enum import Enum
 from typing import Any, Dict, Literal, Sequence, Tuple, Type, Union
 
 from pydantic import Field, RootModel, create_model, field_validator, model_validator
 from pydantic.fields import FieldInfo
 
 from .globals import BaseSettings, render_with_utils
-from .support import Definition, IdArg, ObjectArg, Support
+from .support import Definition, EnumArg, IdArg, ObjectArg, Support
 
 id_to_entity: Dict[str, Entity] = {}
 
@@ -31,16 +32,6 @@ class Entity(BaseSettings):
     def add_ibek_attributes(cls, entity: Entity):
         """
         Whole Entity model validation
-
-        TODO at present an object reference to an ID where the referred object violates
-        schema is seen as "KeyError: "object XXX not found in [...]" which hides the
-        schema violation error.
-
-        This could potentially be fixed by doing the validation here instead
-        (removing extra:forbid from the model_config). BUT, at present passing
-        the info arg to this function receives a dict of the IOC instance
-        that created this entity, not the entity itself. This may be a
-        pydantic bug?
         """
 
         # find the id field in this Entity if it has one
@@ -69,10 +60,10 @@ def make_entity_model(definition: Definition, support: Support) -> Type[Entity]:
     Create an Entity Model from a Definition instance and a Support instance.
     """
 
-    def add_arg(name, typ, description, default):
+    def add_arg(name, typ, description, default, options=None):
         args[name] = (
             typ,
-            FieldInfo(description=description, default=default),
+            FieldInfo(description=description, default=default, options=options),
         )
 
     args: Dict[str, Tuple[type, Any]] = {}
@@ -101,10 +92,14 @@ def make_entity_model(definition: Definition, support: Support) -> Type[Entity]:
         elif isinstance(arg, IdArg):
             arg_type = str
 
+        elif isinstance(arg, EnumArg):
+            values = getattr(arg, "values", None)
+            val_enum = Enum(arg.name + "Enum", values)  # type: ignore
+            arg_type = val_enum
+
         else:
             # arg.type is str, int, float, etc.
             arg_type = getattr(builtins, arg.type)
-
         default = getattr(arg, "default", None)
         add_arg(arg.name, arg_type, arg.description, default)
 

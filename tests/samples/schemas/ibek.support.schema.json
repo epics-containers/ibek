@@ -135,6 +135,9 @@
               },
               {
                 "$ref": "#/$defs/IdArg"
+              },
+              {
+                "$ref": "#/$defs/EnumArg"
               }
             ]
           },
@@ -212,6 +215,56 @@
         "description"
       ],
       "title": "Definition",
+      "type": "object"
+    },
+    "EnumArg": {
+      "additionalProperties": false,
+      "description": "An argument with an enum value",
+      "properties": {
+        "type": {
+          "const": "enum",
+          "default": "enum",
+          "title": "Type"
+        },
+        "name": {
+          "description": "Name of the argument that the IOC instance should pass",
+          "title": "Name",
+          "type": "string"
+        },
+        "description": {
+          "description": "Description of what the argument will be used for",
+          "title": "Description",
+          "type": "string"
+        },
+        "default": {
+          "anyOf": [
+            {},
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Default"
+        },
+        "values": {
+          "anyOf": [
+            {
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "provides a list of values to make this argument an Enum",
+          "title": "Values"
+        }
+      },
+      "required": [
+        "name",
+        "description"
+      ],
+      "title": "EnumArg",
       "type": "object"
     },
     "EnvironmentVariable": {

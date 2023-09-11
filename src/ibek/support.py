@@ -73,6 +73,18 @@ class IdArg(Arg):
     default: Optional[str] = None
 
 
+class EnumArg(Arg):
+    """An argument with an enum value"""
+
+    type: Literal["enum"] = "enum"
+    default: Optional[Any] = None
+
+    values: Optional[Dict[str, Any]] = Field(
+        description="provides a list of values to make this argument an Enum",
+        default=(None),
+    )
+
+
 class Database(BaseSettings):
     """
     A database file that should be loaded by the startup script and its args

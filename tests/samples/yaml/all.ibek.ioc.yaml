@@ -11,6 +11,7 @@ entities:
   - type: module.AllObject
     name: A Consumer
     my_object: Ref1
+    my_int_enum: 3
 
   - type: object_module.ConsumerTwo
     name: Disabled Consumer

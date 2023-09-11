@@ -14,10 +14,27 @@ defs:
         name: name
         description: identifier
 
+      - type: enum
+        name: my_int_enum
+        description: integer enumerated type
+        default: 2
+        values:
+          all_ahead: 1
+          full_speed: 2
+          ramming_speed: 3
+          stop: 0
+
+      - type: enum
+        name: my_mixed_enum
+        description: integer enumerated type
+        values:
+          first: hello
+          second: world
+          third: 3.0
+
       - type: str
         name: my_str
         description: string arg
-        default: "default"
 
       - type: int
         name: my_int

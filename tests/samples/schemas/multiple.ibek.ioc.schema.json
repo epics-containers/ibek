@@ -47,8 +47,26 @@
           "title": "Name",
           "type": "string"
         },
+        "my_int_enum": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/my_int_enumEnum"
+            }
+          ],
+          "default": 2,
+          "description": "integer enumerated type"
+        },
+        "my_mixed_enum": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/my_mixed_enumEnum"
+            }
+          ],
+          "default": null,
+          "description": "integer enumerated type"
+        },
         "my_str": {
-          "default": "default",
+          "default": null,
           "description": "string arg",
           "title": "My Str",
           "type": "string"
@@ -85,6 +103,24 @@
       },
       "title": "module_AllObject",
       "type": "object"
+    },
+    "my_int_enumEnum": {
+      "enum": [
+        1,
+        2,
+        3,
+        0
+      ],
+      "title": "my_int_enumEnum",
+      "type": "integer"
+    },
+    "my_mixed_enumEnum": {
+      "enum": [
+        "hello",
+        "world",
+        3.0
+      ],
+      "title": "my_mixed_enumEnum"
     },
     "object_module_Consumer": {
       "additionalProperties": false,
