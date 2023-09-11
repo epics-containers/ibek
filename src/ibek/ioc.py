@@ -102,13 +102,11 @@ def make_entity_model(definition: Definition, support: Support) -> Type[Entity]:
             arg_type = str
 
         elif isinstance(arg, EnumArg):
-            values = getattr(arg, "values")
-            assert isinstance(values, dict)
             # Pydantic uses the values of the Enum as the options in the schema.
             # Here we arrange for the keys to be in the schema (what a user supplies)
             # but the values to be what is rendered when jinja refers to the enum
             enum_swapped = {}
-            for k, v in values.items():
+            for k, v in arg.values.items():
                 enum_swapped[str(v) if v else str(k)] = k
             val_enum = EnumVal(arg.name, enum_swapped)  # type: ignore
             arg_type = val_enum

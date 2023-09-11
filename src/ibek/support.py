@@ -79,7 +79,7 @@ class EnumArg(Arg):
     type: Literal["enum"] = "enum"
     default: Optional[Any] = None
 
-    values: Optional[Dict[str, Any]] = Field(
+    values: Dict[str, Any] = Field(
         description="provides a list of values to make this argument an Enum",
         default=(None),
     )

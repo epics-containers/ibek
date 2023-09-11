@@ -247,17 +247,10 @@
           "title": "Default"
         },
         "values": {
-          "anyOf": [
-            {
-              "type": "object"
-            },
-            {
-              "type": "null"
-            }
-          ],
           "default": null,
           "description": "provides a list of values to make this argument an Enum",
-          "title": "Values"
+          "title": "Values",
+          "type": "object"
         }
       },
       "required": [
