@@ -11,7 +11,15 @@ entities:
   - type: module.AllObject
     name: A Consumer
     my_object: Ref1
-    my_int_enum: 0
+    my_int_enum: full_speed
+    my_inferred_enum: third
+
+  - type: module.AllObject
+    name: Another Consumer
+    my_object: Ref1
+    my_int_enum: all_ahead
+    my_inferred_enum: first
+    clock_rate: 2Hz
 
   - type: object_module.ConsumerTwo
     name: Disabled Consumer

@@ -17,6 +17,15 @@ from .support import Definition, EnumArg, IdArg, ObjectArg, Support
 id_to_entity: Dict[str, Entity] = {}
 
 
+class EnumVal(Enum):
+    """
+    An enum that is printed as its name only
+    """
+
+    def __str__(self):
+        return self.name
+
+
 class Entity(BaseSettings):
     """
     A baseclass for all generated Entity classes.
@@ -93,8 +102,15 @@ def make_entity_model(definition: Definition, support: Support) -> Type[Entity]:
             arg_type = str
 
         elif isinstance(arg, EnumArg):
-            values = getattr(arg, "values", None)
-            val_enum = Enum(arg.name + "Enum", values)  # type: ignore
+            values = getattr(arg, "values")
+            assert isinstance(values, dict)
+            # Pydantic uses the values of the Enum as the options in the schema.
+            # Here we arrange for the keys to be in the schema (what a user supplies)
+            # but the values to be what is rendered when jinja refers to the enum
+            enum_swapped = {}
+            for k, v in values.items():
+                enum_swapped[str(v) if v else str(k)] = k
+            val_enum = EnumVal(arg.name, enum_swapped)  # type: ignore
             arg_type = val_enum
 
         else:

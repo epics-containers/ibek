@@ -26,11 +26,30 @@ defs:
 
       - type: enum
         name: my_mixed_enum
-        description: integer enumerated type
+        description: mixed enumerated type
+        values:
+          first: start
+          second: stop
+          third: 3.0
+
+      - type: enum
+        name: my_inferred_enum
+        description: integer enumerated type with inferred value
         values:
           first: hello
           second: world
-          third: 3.0
+          third:
+
+      - type: enum
+        name: clock_rate
+        description: |
+          demonstrates use of VME clock rates as an enum
+          this is an example of an 'illegal' python enum
+        values:
+          1Hz: 0
+          2Hz: 1
+          5Hz: 2
+          10Hz: 3
 
       - type: str
         name: my_str
@@ -67,6 +86,11 @@ defs:
         args:
           identifier: "{{ name }}"
           TestValue: test_value:{{ test_value }}
+
+      - type: text
+        value: |
+          The value of my_inferred_enum is {{ my_inferred_enum }}
+          The value of clock_rate is {{ clock_rate }}
 
     post_init:
       - type: function
