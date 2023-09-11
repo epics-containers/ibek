@@ -8,7 +8,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>ibek.ioc &#8212; ibek 1.10.2.dev67+g27bc903 documentation</title>
+    <title>ibek.ioc &#8212; ibek 1.10.2.dev73+gf808b72 documentation</title>
   
   
   
@@ -423,15 +423,25 @@ document.write(`
 <span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
 
 <span class="kn">import</span> <span class="nn">builtins</span>
+<span class="kn">from</span> <span class="nn">enum</span> <span class="kn">import</span> <span class="n">Enum</span>
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Literal</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Type</span><span class="p">,</span> <span class="n">Union</span>
 
 <span class="kn">from</span> <span class="nn">pydantic</span> <span class="kn">import</span> <span class="n">Field</span><span class="p">,</span> <span class="n">RootModel</span><span class="p">,</span> <span class="n">create_model</span><span class="p">,</span> <span class="n">field_validator</span><span class="p">,</span> <span class="n">model_validator</span>
 <span class="kn">from</span> <span class="nn">pydantic.fields</span> <span class="kn">import</span> <span class="n">FieldInfo</span>
 
 <span class="kn">from</span> <span class="nn">.globals</span> <span class="kn">import</span> <span class="n">BaseSettings</span><span class="p">,</span> <span class="n">render_with_utils</span>
-<span class="kn">from</span> <span class="nn">.support</span> <span class="kn">import</span> <span class="n">Definition</span><span class="p">,</span> <span class="n">IdArg</span><span class="p">,</span> <span class="n">ObjectArg</span><span class="p">,</span> <span class="n">Support</span>
+<span class="kn">from</span> <span class="nn">.support</span> <span class="kn">import</span> <span class="n">Definition</span><span class="p">,</span> <span class="n">EnumArg</span><span class="p">,</span> <span class="n">IdArg</span><span class="p">,</span> <span class="n">ObjectArg</span><span class="p">,</span> <span class="n">Support</span>
 
 <span class="n">id_to_entity</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Entity</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+
+
+<div class="viewcode-block" id="EnumVal"><a class="viewcode-back" href="../../user/reference/api.html#ibek.ioc.EnumVal">[docs]</a><span class="k">class</span> <span class="nc">EnumVal</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    An enum that is printed as its name only</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span></div>
 
 
 <div class="viewcode-block" id="Entity"><a class="viewcode-back" href="../../user/reference/api.html#ibek.ioc.Entity">[docs]</a><span class="k">class</span> <span class="nc">Entity</span><span class="p">(</span><span class="n">BaseSettings</span><span class="p">):</span>
@@ -449,16 +459,6 @@ document.write(`
     <span class="k">def</span> <span class="nf">add_ibek_attributes</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">entity</span><span class="p">:</span> <span class="n">Entity</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Whole Entity model validation</span>
-
-<span class="sd">        TODO at present an object reference to an ID where the referred object violates</span>
-<span class="sd">        schema is seen as &quot;KeyError: &quot;object XXX not found in [...]&quot; which hides the</span>
-<span class="sd">        schema violation error.</span>
-
-<span class="sd">        This could potentially be fixed by doing the validation here instead</span>
-<span class="sd">        (removing extra:forbid from the model_config). BUT, at present passing</span>
-<span class="sd">        the info arg to this function receives a dict of the IOC instance</span>
-<span class="sd">        that created this entity, not the entity itself. This may be a</span>
-<span class="sd">        pydantic bug?</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="c1"># find the id field in this Entity if it has one</span>
@@ -487,10 +487,10 @@ document.write(`
 <span class="sd">    Create an Entity Model from a Definition instance and a Support instance.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="nf">add_arg</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">typ</span><span class="p">,</span> <span class="n">description</span><span class="p">,</span> <span class="n">default</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">add_arg</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">typ</span><span class="p">,</span> <span class="n">description</span><span class="p">,</span> <span class="n">default</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="n">args</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
             <span class="n">typ</span><span class="p">,</span>
-            <span class="n">FieldInfo</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="n">description</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="n">default</span><span class="p">),</span>
+            <span class="n">FieldInfo</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="n">description</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="n">default</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="n">options</span><span class="p">),</span>
         <span class="p">)</span>
 
     <span class="n">args</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">type</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span> <span class="o">=</span> <span class="p">{}</span>
@@ -519,10 +519,19 @@ document.write(`
         <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">arg</span><span class="p">,</span> <span class="n">IdArg</span><span class="p">):</span>
             <span class="n">arg_type</span> <span class="o">=</span> <span class="nb">str</span>
 
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">arg</span><span class="p">,</span> <span class="n">EnumArg</span><span class="p">):</span>
+            <span class="c1"># Pydantic uses the values of the Enum as the options in the schema.</span>
+            <span class="c1"># Here we arrange for the keys to be in the schema (what a user supplies)</span>
+            <span class="c1"># but the values to be what is rendered when jinja refers to the enum</span>
+            <span class="n">enum_swapped</span> <span class="o">=</span> <span class="p">{}</span>
+            <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">arg</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="n">enum_swapped</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="k">if</span> <span class="n">v</span> <span class="k">else</span> <span class="nb">str</span><span class="p">(</span><span class="n">k</span><span class="p">)]</span> <span class="o">=</span> <span class="n">k</span>
+            <span class="n">val_enum</span> <span class="o">=</span> <span class="n">EnumVal</span><span class="p">(</span><span class="n">arg</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">enum_swapped</span><span class="p">)</span>  <span class="c1"># type: ignore</span>
+            <span class="n">arg_type</span> <span class="o">=</span> <span class="n">val_enum</span>
+
         <span class="k">else</span><span class="p">:</span>
             <span class="c1"># arg.type is str, int, float, etc.</span>
             <span class="n">arg_type</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">builtins</span><span class="p">,</span> <span class="n">arg</span><span class="o">.</span><span class="n">type</span><span class="p">)</span>
-
         <span class="n">default</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">arg</span><span class="p">,</span> <span class="s2">&quot;default&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
         <span class="n">add_arg</span><span class="p">(</span><span class="n">arg</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">arg_type</span><span class="p">,</span> <span class="n">arg</span><span class="o">.</span><span class="n">description</span><span class="p">,</span> <span class="n">default</span><span class="p">)</span>
 
