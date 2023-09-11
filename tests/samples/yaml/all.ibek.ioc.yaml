@@ -13,6 +13,7 @@ entities:
     my_object: Ref1
     my_int_enum: full_speed
     my_inferred_enum: third
+    clock_rate: dummy
 
   - type: module.AllObject
     name: Another Consumer
