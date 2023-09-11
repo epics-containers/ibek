@@ -9,7 +9,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
-    <title>Modules, Definitions and Entities &#8212; ibek 1.10.2.dev68+g2729612 documentation</title>
+    <title>Modules, Definitions and Entities &#8212; ibek 1.10.2.dev69+g85ba8d6 documentation</title>
   
   
   
@@ -671,7 +671,15 @@ file that ibek will generate from it.</p>
   <span class="o">-</span> <span class="nb">type</span><span class="p">:</span> <span class="n">module</span><span class="o">.</span><span class="n">AllObject</span>
     <span class="n">name</span><span class="p">:</span> <span class="n">A</span> <span class="n">Consumer</span>
     <span class="n">my_object</span><span class="p">:</span> <span class="n">Ref1</span>
-    <span class="n">my_int_enum</span><span class="p">:</span> <span class="mi">0</span>
+    <span class="n">my_int_enum</span><span class="p">:</span> <span class="n">full_speed</span>
+    <span class="n">my_inferred_enum</span><span class="p">:</span> <span class="n">third</span>
+
+  <span class="o">-</span> <span class="nb">type</span><span class="p">:</span> <span class="n">module</span><span class="o">.</span><span class="n">AllObject</span>
+    <span class="n">name</span><span class="p">:</span> <span class="n">Another</span> <span class="n">Consumer</span>
+    <span class="n">my_object</span><span class="p">:</span> <span class="n">Ref1</span>
+    <span class="n">my_int_enum</span><span class="p">:</span> <span class="n">all_ahead</span>
+    <span class="n">my_inferred_enum</span><span class="p">:</span> <span class="n">first</span>
+    <span class="n">clock_rate</span><span class="p">:</span> <span class="mi">2</span><span class="n">Hz</span>
 
   <span class="o">-</span> <span class="nb">type</span><span class="p">:</span> <span class="n">object_module</span><span class="o">.</span><span class="n">ConsumerTwo</span>
     <span class="n">name</span><span class="p">:</span> <span class="n">Disabled</span> <span class="n">Consumer</span>
@@ -700,12 +708,18 @@ file that ibek will generate from it.</p>
 
 <span class="c1"># testPreInit identifier TestValue</span>
 <span class="n">testPreInit</span> <span class="n">A</span> <span class="n">Consumer</span> <span class="n">test_value</span><span class="p">:</span>
+<span class="n">The</span> <span class="n">value</span> <span class="n">of</span> <span class="n">my_inferred_enum</span> <span class="ow">is</span> <span class="n">third</span>
+<span class="n">The</span> <span class="n">value</span> <span class="n">of</span> <span class="n">clock_rate</span> <span class="ow">is</span> <span class="kc">None</span>
+<span class="n">testPreInit</span> <span class="n">Another</span> <span class="n">Consumer</span> <span class="n">test_value</span><span class="p">:</span>
+<span class="n">The</span> <span class="n">value</span> <span class="n">of</span> <span class="n">my_inferred_enum</span> <span class="ow">is</span> <span class="n">hello</span>
+<span class="n">The</span> <span class="n">value</span> <span class="n">of</span> <span class="n">clock_rate</span> <span class="ow">is</span> <span class="mi">1</span>
 
 <span class="n">dbLoadRecords</span> <span class="o">/</span><span class="n">tmp</span><span class="o">/</span><span class="n">ioc</span><span class="o">.</span><span class="n">db</span>
 <span class="n">iocInit</span>
 
 
 <span class="n">testPostInit</span> <span class="n">A</span> <span class="n">Consumer</span> <span class="n">test_value</span><span class="p">:</span>
+<span class="n">testPostInit</span> <span class="n">Another</span> <span class="n">Consumer</span> <span class="n">test_value</span><span class="p">:</span>
 
 </pre></div>
 </div>
@@ -1408,6 +1422,16 @@ the container or during container development.</p>
       <span class="p">],</span>
       <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;EntityModel&quot;</span>
     <span class="p">},</span>
+    <span class="s2">&quot;clock_rate&quot;</span><span class="p">:</span> <span class="p">{</span>
+      <span class="s2">&quot;enum&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="s2">&quot;1Hz&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;2Hz&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;5Hz&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;10Hz&quot;</span>
+      <span class="p">],</span>
+      <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;clock_rate&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
+    <span class="p">},</span>
     <span class="s2">&quot;module_AllObject&quot;</span><span class="p">:</span> <span class="p">{</span>
       <span class="s2">&quot;additionalProperties&quot;</span><span class="p">:</span> <span class="n">false</span><span class="p">,</span>
       <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span>
@@ -1432,7 +1456,7 @@ the container or during container development.</p>
         <span class="s2">&quot;my_int_enum&quot;</span><span class="p">:</span> <span class="p">{</span>
           <span class="s2">&quot;allOf&quot;</span><span class="p">:</span> <span class="p">[</span>
             <span class="p">{</span>
-              <span class="s2">&quot;$ref&quot;</span><span class="p">:</span> <span class="s2">&quot;#/$defs/my_int_enumEnum&quot;</span>
+              <span class="s2">&quot;$ref&quot;</span><span class="p">:</span> <span class="s2">&quot;#/$defs/my_int_enum&quot;</span>
             <span class="p">}</span>
           <span class="p">],</span>
           <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
@@ -1441,11 +1465,29 @@ the container or during container development.</p>
         <span class="s2">&quot;my_mixed_enum&quot;</span><span class="p">:</span> <span class="p">{</span>
           <span class="s2">&quot;allOf&quot;</span><span class="p">:</span> <span class="p">[</span>
             <span class="p">{</span>
-              <span class="s2">&quot;$ref&quot;</span><span class="p">:</span> <span class="s2">&quot;#/$defs/my_mixed_enumEnum&quot;</span>
+              <span class="s2">&quot;$ref&quot;</span><span class="p">:</span> <span class="s2">&quot;#/$defs/my_mixed_enum&quot;</span>
             <span class="p">}</span>
           <span class="p">],</span>
           <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="n">null</span><span class="p">,</span>
-          <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;integer enumerated type&quot;</span>
+          <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;mixed enumerated type&quot;</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;my_inferred_enum&quot;</span><span class="p">:</span> <span class="p">{</span>
+          <span class="s2">&quot;allOf&quot;</span><span class="p">:</span> <span class="p">[</span>
+            <span class="p">{</span>
+              <span class="s2">&quot;$ref&quot;</span><span class="p">:</span> <span class="s2">&quot;#/$defs/my_inferred_enum&quot;</span>
+            <span class="p">}</span>
+          <span class="p">],</span>
+          <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="n">null</span><span class="p">,</span>
+          <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;integer enumerated type with inferred value&quot;</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;clock_rate&quot;</span><span class="p">:</span> <span class="p">{</span>
+          <span class="s2">&quot;allOf&quot;</span><span class="p">:</span> <span class="p">[</span>
+            <span class="p">{</span>
+              <span class="s2">&quot;$ref&quot;</span><span class="p">:</span> <span class="s2">&quot;#/$defs/clock_rate&quot;</span>
+            <span class="p">}</span>
+          <span class="p">],</span>
+          <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="n">null</span><span class="p">,</span>
+          <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;demonstrates use of VME clock rates as an enum</span><span class="se">\n</span><span class="s2">this is an example of an &#39;illegal&#39; python enum</span><span class="se">\n</span><span class="s2">&quot;</span>
         <span class="p">},</span>
         <span class="s2">&quot;my_str&quot;</span><span class="p">:</span> <span class="p">{</span>
           <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="n">null</span><span class="p">,</span>
@@ -1486,23 +1528,33 @@ the container or during container development.</p>
       <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;module_AllObject&quot;</span><span class="p">,</span>
       <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span>
     <span class="p">},</span>
-    <span class="s2">&quot;my_int_enumEnum&quot;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="s2">&quot;my_inferred_enum&quot;</span><span class="p">:</span> <span class="p">{</span>
       <span class="s2">&quot;enum&quot;</span><span class="p">:</span> <span class="p">[</span>
-        <span class="mi">1</span><span class="p">,</span>
-        <span class="mi">2</span><span class="p">,</span>
-        <span class="mi">3</span><span class="p">,</span>
-        <span class="mi">0</span>
+        <span class="s2">&quot;first&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;second&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;third&quot;</span>
       <span class="p">],</span>
-      <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;my_int_enumEnum&quot;</span><span class="p">,</span>
-      <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;integer&quot;</span>
+      <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;my_inferred_enum&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
     <span class="p">},</span>
-    <span class="s2">&quot;my_mixed_enumEnum&quot;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="s2">&quot;my_int_enum&quot;</span><span class="p">:</span> <span class="p">{</span>
       <span class="s2">&quot;enum&quot;</span><span class="p">:</span> <span class="p">[</span>
-        <span class="s2">&quot;hello&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;world&quot;</span><span class="p">,</span>
-        <span class="mf">3.0</span>
+        <span class="s2">&quot;all_ahead&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;full_speed&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;ramming_speed&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;stop&quot;</span>
       <span class="p">],</span>
-      <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;my_mixed_enumEnum&quot;</span>
+      <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;my_int_enum&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
+    <span class="p">},</span>
+    <span class="s2">&quot;my_mixed_enum&quot;</span><span class="p">:</span> <span class="p">{</span>
+      <span class="s2">&quot;enum&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="s2">&quot;first&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;second&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;third&quot;</span>
+      <span class="p">],</span>
+      <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;my_mixed_enum&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
     <span class="p">},</span>
     <span class="s2">&quot;object_module_Consumer&quot;</span><span class="p">:</span> <span class="p">{</span>
       <span class="s2">&quot;additionalProperties&quot;</span><span class="p">:</span> <span class="n">false</span><span class="p">,</span>
