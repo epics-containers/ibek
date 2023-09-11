@@ -8,7 +8,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>ibek.support &#8212; ibek 1.10.2.dev70+g95d3c03 documentation</title>
+    <title>ibek.support &#8212; ibek 1.10.2.dev71+g69da8ff documentation</title>
   
   
   
@@ -423,12 +423,18 @@ document.write(`
 
 <span class="kn">import</span> <span class="nn">json</span>
 <span class="kn">from</span> <span class="nn">enum</span> <span class="kn">import</span> <span class="n">Enum</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">,</span> <span class="n">Union</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">ForwardRef</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">,</span> <span class="n">TypeVar</span><span class="p">,</span> <span class="n">Union</span>
 
 <span class="kn">from</span> <span class="nn">pydantic</span> <span class="kn">import</span> <span class="n">Field</span>
 <span class="kn">from</span> <span class="nn">typing_extensions</span> <span class="kn">import</span> <span class="n">Literal</span>
 
 <span class="kn">from</span> <span class="nn">.globals</span> <span class="kn">import</span> <span class="n">BaseSettings</span>
+
+<span class="n">UndefinedType</span> <span class="o">=</span> <span class="n">ForwardRef</span><span class="p">(</span><span class="s2">&quot;UndefinedType&quot;</span><span class="p">)</span>
+
+<span class="n">T</span> <span class="o">=</span> <span class="n">TypeVar</span><span class="p">(</span><span class="s2">&quot;T&quot;</span><span class="p">)</span>
+
+<span class="n">Default</span> <span class="o">=</span> <span class="n">Union</span><span class="p">[</span><span class="n">Optional</span><span class="p">[</span><span class="n">T</span><span class="p">],</span> <span class="n">UndefinedType</span><span class="p">]</span>
 
 
 <div class="viewcode-block" id="When"><a class="viewcode-back" href="../../user/reference/api.html#ibek.support.When">[docs]</a><span class="k">class</span> <span class="nc">When</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
@@ -497,7 +503,7 @@ document.write(`
     <span class="nb">type</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;enum&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;enum&quot;</span>
     <span class="n">default</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
 
-    <span class="n">values</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
+    <span class="n">values</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
         <span class="n">description</span><span class="o">=</span><span class="s2">&quot;provides a list of values to make this argument an Enum&quot;</span><span class="p">,</span>
         <span class="n">default</span><span class="o">=</span><span class="p">(</span><span class="kc">None</span><span class="p">),</span>
     <span class="p">)</span></div>

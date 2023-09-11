@@ -8,7 +8,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>ibek.ioc &#8212; ibek 1.10.2.dev70+g95d3c03 documentation</title>
+    <title>ibek.ioc &#8212; ibek 1.10.2.dev71+g69da8ff documentation</title>
   
   
   
@@ -520,13 +520,11 @@ document.write(`
             <span class="n">arg_type</span> <span class="o">=</span> <span class="nb">str</span>
 
         <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">arg</span><span class="p">,</span> <span class="n">EnumArg</span><span class="p">):</span>
-            <span class="n">values</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">arg</span><span class="p">,</span> <span class="s2">&quot;values&quot;</span><span class="p">)</span>
-            <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">values</span><span class="p">,</span> <span class="nb">dict</span><span class="p">)</span>
             <span class="c1"># Pydantic uses the values of the Enum as the options in the schema.</span>
             <span class="c1"># Here we arrange for the keys to be in the schema (what a user supplies)</span>
             <span class="c1"># but the values to be what is rendered when jinja refers to the enum</span>
             <span class="n">enum_swapped</span> <span class="o">=</span> <span class="p">{}</span>
-            <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">values</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">arg</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
                 <span class="n">enum_swapped</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="k">if</span> <span class="n">v</span> <span class="k">else</span> <span class="nb">str</span><span class="p">(</span><span class="n">k</span><span class="p">)]</span> <span class="o">=</span> <span class="n">k</span>
             <span class="n">val_enum</span> <span class="o">=</span> <span class="n">EnumVal</span><span class="p">(</span><span class="n">arg</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">enum_swapped</span><span class="p">)</span>  <span class="c1"># type: ignore</span>
             <span class="n">arg_type</span> <span class="o">=</span> <span class="n">val_enum</span>
