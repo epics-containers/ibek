@@ -14,10 +14,47 @@ defs:
         name: name
         description: identifier
 
+      - type: enum
+        name: my_int_enum
+        description: integer enumerated type
+        default: 2
+        values:
+          all_ahead: 1
+          full_speed: 2
+          ramming_speed: 3
+          stop: 0
+
+      - type: enum
+        name: my_mixed_enum
+        description: mixed enumerated type
+        values:
+          first: start
+          second: stop
+          third: 3.0
+
+      - type: enum
+        name: my_inferred_enum
+        description: integer enumerated type with inferred value
+        values:
+          first: hello
+          second: world
+          third:
+
+      - type: enum
+        name: clock_rate
+        description: |
+          demonstrates use of VME clock rates as an enum
+          this is an example of an 'illegal' python enum
+        values:
+          1Hz: 0
+          2Hz: 1
+          5Hz: 2
+          10Hz: 3
+          dummy:
+
       - type: str
         name: my_str
         description: string arg
-        default: "default"
 
       - type: int
         name: my_int
@@ -50,6 +87,11 @@ defs:
         args:
           identifier: "{{ name }}"
           TestValue: test_value:{{ test_value }}
+
+      - type: text
+        value: |
+          The value of my_inferred_enum is {{ my_inferred_enum }}
+          The value of clock_rate is {{ clock_rate }}
 
     post_init:
       - type: function

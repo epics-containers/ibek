@@ -26,6 +26,17 @@
       ],
       "title": "EntityModel"
     },
+    "clock_rate": {
+      "enum": [
+        "1Hz",
+        "2Hz",
+        "5Hz",
+        "10Hz",
+        "dummy"
+      ],
+      "title": "clock_rate",
+      "type": "string"
+    },
     "module_AllObject": {
       "additionalProperties": false,
       "properties": {
@@ -47,8 +58,44 @@
           "title": "Name",
           "type": "string"
         },
+        "my_int_enum": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/my_int_enum"
+            }
+          ],
+          "default": 2,
+          "description": "integer enumerated type"
+        },
+        "my_mixed_enum": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/my_mixed_enum"
+            }
+          ],
+          "default": null,
+          "description": "mixed enumerated type"
+        },
+        "my_inferred_enum": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/my_inferred_enum"
+            }
+          ],
+          "default": null,
+          "description": "integer enumerated type with inferred value"
+        },
+        "clock_rate": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/clock_rate"
+            }
+          ],
+          "default": null,
+          "description": "demonstrates use of VME clock rates as an enum\nthis is an example of an 'illegal' python enum\n"
+        },
         "my_str": {
-          "default": "default",
+          "default": null,
           "description": "string arg",
           "title": "My Str",
           "type": "string"
@@ -85,6 +132,34 @@
       },
       "title": "module_AllObject",
       "type": "object"
+    },
+    "my_inferred_enum": {
+      "enum": [
+        "first",
+        "second",
+        "third"
+      ],
+      "title": "my_inferred_enum",
+      "type": "string"
+    },
+    "my_int_enum": {
+      "enum": [
+        "all_ahead",
+        "full_speed",
+        "ramming_speed",
+        "stop"
+      ],
+      "title": "my_int_enum",
+      "type": "string"
+    },
+    "my_mixed_enum": {
+      "enum": [
+        "first",
+        "second",
+        "third"
+      ],
+      "title": "my_mixed_enum",
+      "type": "string"
     },
     "object_module_Consumer": {
       "additionalProperties": false,
