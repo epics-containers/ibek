@@ -8,7 +8,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>ibek.ioc &#8212; ibek 1.10.2.dev73+gf808b72 documentation</title>
+    <title>ibek.ioc &#8212; ibek 1.10.2.dev75+g7831c58 documentation</title>
   
   
   
@@ -428,6 +428,7 @@ document.write(`
 
 <span class="kn">from</span> <span class="nn">pydantic</span> <span class="kn">import</span> <span class="n">Field</span><span class="p">,</span> <span class="n">RootModel</span><span class="p">,</span> <span class="n">create_model</span><span class="p">,</span> <span class="n">field_validator</span><span class="p">,</span> <span class="n">model_validator</span>
 <span class="kn">from</span> <span class="nn">pydantic.fields</span> <span class="kn">import</span> <span class="n">FieldInfo</span>
+<span class="kn">from</span> <span class="nn">pydantic_core</span> <span class="kn">import</span> <span class="n">PydanticUndefined</span>
 
 <span class="kn">from</span> <span class="nn">.globals</span> <span class="kn">import</span> <span class="n">BaseSettings</span><span class="p">,</span> <span class="n">render_with_utils</span>
 <span class="kn">from</span> <span class="nn">.support</span> <span class="kn">import</span> <span class="n">Definition</span><span class="p">,</span> <span class="n">EnumArg</span><span class="p">,</span> <span class="n">IdArg</span><span class="p">,</span> <span class="n">ObjectArg</span><span class="p">,</span> <span class="n">Support</span>
@@ -487,10 +488,12 @@ document.write(`
 <span class="sd">    Create an Entity Model from a Definition instance and a Support instance.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="nf">add_arg</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">typ</span><span class="p">,</span> <span class="n">description</span><span class="p">,</span> <span class="n">default</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">add_arg</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">typ</span><span class="p">,</span> <span class="n">description</span><span class="p">,</span> <span class="n">default</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">default</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">default</span> <span class="o">=</span> <span class="n">PydanticUndefined</span>
         <span class="n">args</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
             <span class="n">typ</span><span class="p">,</span>
-            <span class="n">FieldInfo</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="n">description</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="n">default</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="n">options</span><span class="p">),</span>
+            <span class="n">FieldInfo</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="n">description</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="n">default</span><span class="p">),</span>
         <span class="p">)</span>
 
     <span class="n">args</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">type</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span> <span class="o">=</span> <span class="p">{}</span>
