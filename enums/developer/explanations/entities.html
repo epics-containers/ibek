@@ -9,7 +9,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
-    <title>Modules, Definitions and Entities &#8212; ibek 1.10.2.dev69+g85ba8d6 documentation</title>
+    <title>Modules, Definitions and Entities &#8212; ibek 1.10.2.dev70+g95d3c03 documentation</title>
   
   
   
@@ -673,6 +673,7 @@ file that ibek will generate from it.</p>
     <span class="n">my_object</span><span class="p">:</span> <span class="n">Ref1</span>
     <span class="n">my_int_enum</span><span class="p">:</span> <span class="n">full_speed</span>
     <span class="n">my_inferred_enum</span><span class="p">:</span> <span class="n">third</span>
+    <span class="n">clock_rate</span><span class="p">:</span> <span class="n">dummy</span>
 
   <span class="o">-</span> <span class="nb">type</span><span class="p">:</span> <span class="n">module</span><span class="o">.</span><span class="n">AllObject</span>
     <span class="n">name</span><span class="p">:</span> <span class="n">Another</span> <span class="n">Consumer</span>
@@ -709,7 +710,7 @@ file that ibek will generate from it.</p>
 <span class="c1"># testPreInit identifier TestValue</span>
 <span class="n">testPreInit</span> <span class="n">A</span> <span class="n">Consumer</span> <span class="n">test_value</span><span class="p">:</span>
 <span class="n">The</span> <span class="n">value</span> <span class="n">of</span> <span class="n">my_inferred_enum</span> <span class="ow">is</span> <span class="n">third</span>
-<span class="n">The</span> <span class="n">value</span> <span class="n">of</span> <span class="n">clock_rate</span> <span class="ow">is</span> <span class="kc">None</span>
+<span class="n">The</span> <span class="n">value</span> <span class="n">of</span> <span class="n">clock_rate</span> <span class="ow">is</span> <span class="n">dummy</span>
 <span class="n">testPreInit</span> <span class="n">Another</span> <span class="n">Consumer</span> <span class="n">test_value</span><span class="p">:</span>
 <span class="n">The</span> <span class="n">value</span> <span class="n">of</span> <span class="n">my_inferred_enum</span> <span class="ow">is</span> <span class="n">hello</span>
 <span class="n">The</span> <span class="n">value</span> <span class="n">of</span> <span class="n">clock_rate</span> <span class="ow">is</span> <span class="mi">1</span>
@@ -1427,7 +1428,8 @@ the container or during container development.</p>
         <span class="s2">&quot;1Hz&quot;</span><span class="p">,</span>
         <span class="s2">&quot;2Hz&quot;</span><span class="p">,</span>
         <span class="s2">&quot;5Hz&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;10Hz&quot;</span>
+        <span class="s2">&quot;10Hz&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;dummy&quot;</span>
       <span class="p">],</span>
       <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;clock_rate&quot;</span><span class="p">,</span>
       <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
