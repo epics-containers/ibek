@@ -1,0 +1,10 @@
+# yaml-language-server: $schema=../schemas/objects.ibek.ioc.schema.json
+
+ioc_name: test-bad-defaults-ioc
+description: a basic example for testing multiple support definitions
+generic_ioc_image: ghcr.io/epics-containers/ioc-template:23.3.2
+
+entities:
+  # deliberately do not specify name to test failure case for no default
+  # my_str: AllObject One String
+  - type: object_module.RefObject

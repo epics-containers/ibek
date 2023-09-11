@@ -25,14 +25,6 @@ defs:
           stop: 0
 
       - type: enum
-        name: my_mixed_enum
-        description: mixed enumerated type
-        values:
-          first: start
-          second: stop
-          third: 3.0
-
-      - type: enum
         name: my_inferred_enum
         description: integer enumerated type with inferred value
         values:
@@ -52,6 +44,8 @@ defs:
           10Hz: 3
           dummy:
 
+      # string demonstrates the use of no default to force user to specify
+      # values in the IOC YAML
       - type: str
         name: my_str
         description: string arg
@@ -86,12 +80,15 @@ defs:
         name: testPreInit
         args:
           identifier: "{{ name }}"
-          TestValue: test_value:{{ test_value }}
+          TestValue: "'{{ my_str }}'"
 
       - type: text
         value: |
-          The value of my_inferred_enum is {{ my_inferred_enum }}
-          The value of clock_rate is {{ clock_rate }}
+          my_str =                    {{ my_str }}
+          my_inferred_enum =          {{ my_inferred_enum }}
+          clock_rate =                {{ clock_rate }}
+          my_mixed_enum_no_default =  {{ my_mixed_enum_no_default }}
+          .
 
     post_init:
       - type: function
