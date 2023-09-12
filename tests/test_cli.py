@@ -91,7 +91,7 @@ def test_build_startup_single(tmp_path: Path, samples: Path):
     actual_boot = out_file.read_text()
     assert example_boot == actual_boot
 
-    example_db = (samples / "outputs" / "objects.make_db.sh").read_text()
+    example_db = (samples / "outputs" / "objects.db.subst").read_text()
     actual_db = out_db.read_text()
     assert example_db == actual_db
 
@@ -126,6 +126,6 @@ def test_build_startup_multiple(tmp_path: Path, samples: Path):
     actual_boot = out_file.read_text()
     assert example_boot == actual_boot
 
-    example_db = (samples / "outputs" / "all.make_db.sh").read_text()
+    example_db = (samples / "outputs" / "all.db.subst").read_text()
     actual_db = out_db.read_text()
     assert example_db == actual_db

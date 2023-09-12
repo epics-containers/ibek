@@ -74,7 +74,7 @@ def build_startup(
         help="Path to output startup script",
     ),
     db_out: Path = typer.Option(
-        default="config/make_db.sh",
+        default="config/db.subst",
         help="Path to output database expansion shell script",
     ),
 ):

@@ -52,7 +52,8 @@ class RenderDb:
         Gather the database template instantiations from all entities
         while validating the arguments
         """
-        for entity in self.ioc_instance.entities:
+        for entity_root in self.ioc_instance.entities:
+            entity = entity_root.root
             templates = entity.__definition__.databases
 
             # Not all entities instantiate database templates
@@ -80,11 +81,14 @@ class RenderDb:
         # first calculate the column width for each template
         # including escaping spaces and quotes
         for template in self.render_templates.values():
-            for row in template.rows:
+            for n, row in enumerate(template.rows):
                 for i, arg in enumerate(row):
-                    row[i] = row[i].replace('"', r"\"")
-                    row[i] = f'"{row[i]}"' if " " in arg else row[i]
-                    template.columns[i] = max(template.columns[i], len(arg) + 1)
+                    row[i] = arg.replace(",", r"\,")
+                    if n > 0:
+                        row[i] = f'"{row[i]}"'
+                    if i < len(template.columns) - 1:
+                        row[i] += ","
+                        template.columns[i] = max(template.columns[i], len(row[i]) + 1)
 
         # now pad each column to the maximum width
         for template in self.render_templates.values():
@@ -102,6 +106,6 @@ class RenderDb:
         results = {}
 
         for template in self.render_templates.values():
-            results[template.filename] = ["".join(row) + "\n" for row in template.rows]
+            results[template.filename] = ["".join(row) for row in template.rows]
 
         return results

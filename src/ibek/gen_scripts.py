@@ -66,7 +66,7 @@ def create_db_script(ioc_instance: IOC) -> str:
     """
     Create make_db.sh script for expanding the database templates
     """
-    with open(TEMPLATES / "make_db.jinja", "r") as f:
+    with open(TEMPLATES / "db.subst.jinja", "r") as f:
         jinja_txt = f.read()
 
         renderer = RenderDb(ioc_instance)
