@@ -4,7 +4,7 @@
 {% for template_file, rows in templates.items() %}
 file "{{ template_file }}" {
 pattern {% for row in rows %}
-{{"\t"}}{ {{ row }}} {% endfor %}
+{{"\t"}}{ {{ row }} } {% endfor %}
 }
 
 {% endfor %}

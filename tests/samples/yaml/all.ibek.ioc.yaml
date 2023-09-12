@@ -25,6 +25,10 @@ entities:
     my_str: AllObject Two String
 
   - type: object_module.ConsumerTwo
+    name: Consumer Two With DB
+    PORT: Ref1
+
+  - type: object_module.ConsumerTwo
     name: Disabled Consumer
     PORT: Ref1
     entity_enabled: false

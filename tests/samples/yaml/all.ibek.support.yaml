@@ -71,7 +71,7 @@ defs:
         default: true
 
     values:
-      - name: a value calculated from args
+      - name: calculated_one
         value: "{{ name }}.{{ my_str }}.{{ my_int }}.{{ my_float }}.{{ my_bool }}"
         description: test jinja render of arg values
 
@@ -96,3 +96,18 @@ defs:
         args:
           identifier: "{{ name }}"
           TestValue: test_value:{{ test_value }}
+
+    databases:
+      - file: another_test.db
+        args:
+          name:
+          my_int_enum:
+          clock_rate:
+          db_calculated: "HELLO {{ name }}"
+          calculated_one:
+      - file: yet_another.db
+        args:
+          name:
+          my_object:
+          my_float:
+          my_bool:

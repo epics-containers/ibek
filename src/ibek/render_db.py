@@ -37,8 +37,10 @@ class RenderDb:
                 columns=[0] * len(args),
             )
 
-        # add a new row of argument values
-        row = [str(i) for i in args.values()]
+        # Add a new row of argument values.
+        # Note the case where no value was specified for the argument
+        # meaning that the name is to be rendered in Jinja
+        row = ["{{ %s }}" % k if v is None else v for k, v in args.items()]
 
         # render any Jinja fields in the arguments
         for i, line in enumerate(row):
@@ -53,7 +55,15 @@ class RenderDb:
         while validating the arguments
         """
         for entity_root in self.ioc_instance.entities:
-            entity = entity_root.root
+            # TODO this is a highly suspect way of coping with the difference
+            # between deserialized entities and the original entity class.
+            # The deserializer inserts an extra layer of nesting
+            # with "root". This issue comes up because test_database_render
+            # directly creates an IOC object and does not get the extra "root".
+            #
+            # see definition of EntityModel in ioc.py
+            entity = getattr(entity_root, "root", entity_root)
+
             templates = entity.__definition__.databases
 
             # Not all entities instantiate database templates

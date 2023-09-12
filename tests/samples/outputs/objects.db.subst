@@ -4,8 +4,8 @@
 
 file "test.db" {
 pattern 
-	{ name,   ip,         value} 
-	{ "None", "10.0.0.2", "AsynPort2.10.0.0.2"} 
-	{ "None", "10.0.0.2", "AsynPort2.10.0.0.2"} 
+	{ name,                               ip,         value } 
+	{ "Consumer of another port",         "10.0.0.2", "AsynPort2.10.0.0.2" } 
+	{ "Another Consumer of the 2nd port", "10.0.0.2", "AsynPort2.10.0.0.2" } 
 }
 

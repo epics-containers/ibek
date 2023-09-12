@@ -24,8 +24,6 @@ def test_ibek_schema(tmp_path: Path, samples: Path):
     expected = json.loads(
         (samples / "schemas" / "ibek.support.schema.json").read_text()
     )
-    # Don't care if version number didn't update to match if the rest is the same
-    # expected["title"] = mock.ANY
 
     actual = json.loads((schema_path).read_text())
     assert expected == actual
@@ -75,7 +73,7 @@ def test_build_startup_single(tmp_path: Path, samples: Path):
     ioc_yaml = samples / "yaml" / "objects.ibek.ioc.yaml"
     support_yaml = samples / "yaml" / "objects.ibek.support.yaml"
     out_file = tmp_path / "new_dir" / "st.cmd"
-    out_db = tmp_path / "new_dir" / "make_db.sh"
+    out_db = tmp_path / "new_dir" / "objects.db.subst"
 
     run_cli(
         "build-startup",
@@ -109,7 +107,7 @@ def test_build_startup_multiple(tmp_path: Path, samples: Path):
     support_yaml = samples / "yaml" / "objects.ibek.support.yaml"
     support_yaml2 = samples / "yaml" / "all.ibek.support.yaml"
     out_file = tmp_path / "st.cmd"
-    out_db = tmp_path / "make_db.sh"
+    out_db = tmp_path / "all.db.subst"
 
     run_cli(
         "build-startup",
