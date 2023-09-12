@@ -1,3 +1,7 @@
+"""
+System tests that run the CLI commands and compare the output to expected
+results.
+"""
 import json
 import subprocess
 import sys
@@ -96,6 +100,9 @@ def test_build_startup_multiple(tmp_path: Path, samples: Path):
     """
     build an ioc startup script from an IOC instance entity file
     and multiple support module definition files
+
+    Also verifies database subst file generation for multiple
+    entity instantiations.
     """
     clear_entity_model_ids()
     ioc_yaml = samples / "yaml" / "all.ibek.ioc.yaml"

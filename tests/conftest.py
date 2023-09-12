@@ -30,6 +30,11 @@ def get_support(yaml_file: str) -> Support:
 
 
 @fixture
+def templates():
+    return Path(__file__).parent.parent / "src" / "ibek" / "templates"
+
+
+@fixture
 def samples():
     return Path(__file__).parent / "samples"
 
