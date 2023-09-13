@@ -12,4 +12,4 @@ To pull the container from github container registry and run::
 
     $ docker run ghcr.io/epics-containers/ibek:main --version
 
-To get a released version, use a numbered release instead of ``main``.
+To get a released version, use a numbered release instead of ``change_linter_to_ruff``.

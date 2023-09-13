@@ -9,7 +9,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
-    <title>Make a release &#8212; ibek 1.10.2.dev75+g7831c58 documentation</title>
+    <title>Make a release &#8212; ibek 1.10.2.dev88+ge8ab04d documentation</title>
   
   
   
@@ -394,7 +394,7 @@ document.write(`
 <ul class="nav bd-sidenav">
 <li class="toctree-l1 has-children"><a class="reference internal" href="../explanations/decisions.html">Architectural Decision Records</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="../explanations/decisions/0001-record-architecture-decisions.html">1. Record architecture decisions</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../explanations/decisions/0002-switched-to-pip-skeleton.html">2. Adopt python3-pip-skeleton for project structure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../explanations/decisions/0002-switched-to-pip-skeleton.html">2. Adopt ibek for project structure</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../explanations/entities.html">Modules, Definitions and Entities</a></li>
@@ -464,13 +464,13 @@ document.write(`
 <p>To make a new release, please follow this checklist:</p>
 <ul class="simple">
 <li><p>Choose a new PEP440 compliant release number (see <a class="reference external" href="https://peps.python.org/pep-0440/">https://peps.python.org/pep-0440/</a>)</p></li>
-<li><p>Go to the GitHub <a class="reference external" href="https://github.com/DiamondLightSource/python3-pip-skeleton/releases">release</a> page</p></li>
+<li><p>Go to the GitHub <a class="reference external" href="https://github.com/epics-containers/ibek/releases">release</a> page</p></li>
 <li><p>Choose <code class="docutils literal notranslate"><span class="pre">Draft</span> <span class="pre">New</span> <span class="pre">Release</span></code></p></li>
 <li><p>Click <code class="docutils literal notranslate"><span class="pre">Choose</span> <span class="pre">Tag</span></code> and supply the new tag you chose (click create new tag)</p></li>
 <li><p>Click <code class="docutils literal notranslate"><span class="pre">Generate</span> <span class="pre">release</span> <span class="pre">notes</span></code>, review and edit these notes</p></li>
 <li><p>Choose a title and click <code class="docutils literal notranslate"><span class="pre">Publish</span> <span class="pre">Release</span></code></p></li>
 </ul>
-<p>Note that tagging and pushing to the main branch has the same effect except that
+<p>Note that tagging and pushing to the change_linter_to_ruff branch has the same effect except that
 you will not get the option to edit the release notes.</p>
 </section>
 

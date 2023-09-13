@@ -9,7 +9,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
-    <title>Modules, Definitions and Entities &#8212; ibek 1.10.2.dev75+g7831c58 documentation</title>
+    <title>Modules, Definitions and Entities &#8212; ibek 1.10.2.dev88+ge8ab04d documentation</title>
   
   
   
@@ -53,7 +53,7 @@
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="Standards" href="../reference/standards.html" />
-    <link rel="prev" title="2. Adopt python3-pip-skeleton for project structure" href="decisions/0002-switched-to-pip-skeleton.html" />
+    <link rel="prev" title="2. Adopt ibek for project structure" href="decisions/0002-switched-to-pip-skeleton.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -394,7 +394,7 @@ document.write(`
 <ul class="current nav bd-sidenav">
 <li class="toctree-l1 has-children"><a class="reference internal" href="decisions.html">Architectural Decision Records</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="decisions/0001-record-architecture-decisions.html">1. Record architecture decisions</a></li>
-<li class="toctree-l2"><a class="reference internal" href="decisions/0002-switched-to-pip-skeleton.html">2. Adopt python3-pip-skeleton for project structure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="decisions/0002-switched-to-pip-skeleton.html">2. Adopt ibek for project structure</a></li>
 </ul>
 </li>
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">Modules, Definitions and Entities</a></li>
@@ -685,6 +685,10 @@ file that ibek will generate from it.</p>
     <span class="n">my_str</span><span class="p">:</span> <span class="n">AllObject</span> <span class="n">Two</span> <span class="n">String</span>
 
   <span class="o">-</span> <span class="nb">type</span><span class="p">:</span> <span class="n">object_module</span><span class="o">.</span><span class="n">ConsumerTwo</span>
+    <span class="n">name</span><span class="p">:</span> <span class="n">Consumer</span> <span class="n">Two</span> <span class="n">With</span> <span class="n">DB</span>
+    <span class="n">PORT</span><span class="p">:</span> <span class="n">Ref1</span>
+
+  <span class="o">-</span> <span class="nb">type</span><span class="p">:</span> <span class="n">object_module</span><span class="o">.</span><span class="n">ConsumerTwo</span>
     <span class="n">name</span><span class="p">:</span> <span class="n">Disabled</span> <span class="n">Consumer</span>
     <span class="n">PORT</span><span class="p">:</span> <span class="n">Ref1</span>
     <span class="n">entity_enabled</span><span class="p">:</span> <span class="n">false</span>
@@ -722,6 +726,9 @@ file that ibek will generate from it.</p>
 <span class="n">clock_rate</span> <span class="o">=</span>                <span class="mi">1</span>
 <span class="n">my_mixed_enum_no_default</span> <span class="o">=</span>  
 <span class="o">.</span>
+
+<span class="c1"># ExampleTestFunction asynPortIP name port value</span>
+<span class="n">ExampleTestFunction</span> <span class="mf">127.0.0.1</span> <span class="n">Consumer</span> <span class="n">Two</span> <span class="n">With</span> <span class="n">DB</span> <span class="n">Ref1</span> <span class="n">Ref1</span><span class="mf">.127.0.0.1</span>
 
 <span class="n">dbLoadRecords</span> <span class="o">/</span><span class="n">tmp</span><span class="o">/</span><span class="n">ioc</span><span class="o">.</span><span class="n">db</span>
 <span class="n">iocInit</span>
@@ -1507,10 +1514,10 @@ the container or during container development.</p>
           <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;My Bool&quot;</span><span class="p">,</span>
           <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;boolean&quot;</span>
         <span class="p">},</span>
-        <span class="s2">&quot;a value calculated from args&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;calculated_one&quot;</span><span class="p">:</span> <span class="p">{</span>
           <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="s2">&quot;{{ name }}.{{ my_str }}.{{ my_int }}.{{ my_float }}.{{ my_bool }}&quot;</span><span class="p">,</span>
           <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;test jinja render of arg values&quot;</span><span class="p">,</span>
-          <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;A Value Calculated From Args&quot;</span><span class="p">,</span>
+          <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Calculated One&quot;</span><span class="p">,</span>
           <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
         <span class="p">}</span>
       <span class="p">},</span>
@@ -1764,7 +1771,7 @@ container. <code class="docutils literal notranslate"><span class="pre">...</spa
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">2. Adopt python3-pip-skeleton for project structure</p>
+        <p class="prev-next-title">2. Adopt ibek for project structure</p>
       </div>
     </a>
     <a class="right-next"

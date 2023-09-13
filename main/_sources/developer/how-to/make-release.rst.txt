@@ -10,7 +10,7 @@ To make a new release, please follow this checklist:
 - Click ``Generate release notes``, review and edit these notes
 - Choose a title and click ``Publish Release``
 
-Note that tagging and pushing to the main branch has the same effect except that
+Note that tagging and pushing to the change_linter_to_ruff branch has the same effect except that
 you will not get the option to edit the release notes.
 
-.. _release: https://github.com/DiamondLightSource/python3-pip-skeleton/releases
+.. _release: https://github.com/epics-containers/ibek/releases

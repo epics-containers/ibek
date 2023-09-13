@@ -9,7 +9,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
-    <title>API &#8212; ibek 1.10.2.dev75+g7831c58 documentation</title>
+    <title>API &#8212; ibek 1.10.2.dev88+ge8ab04d documentation</title>
   
   
   
@@ -688,14 +688,6 @@ from an entity with the arguments from an Entity</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="ibek.render.Render.render_database">
-<span class="sig-name descname"><span class="pre">render_database</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">instance</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#ibek.ioc.Entity" title="ibek.ioc.Entity"><span class="pre">Entity</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.11)"><span class="pre">None</span></a></span></span><a class="reference internal" href="../../_modules/ibek/render.html#Render.render_database"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ibek.render.Render.render_database" title="Permalink to this definition">#</a></dt>
-<dd><p>render the lines required to instantiate database by combining the
-templates from the Entity’s database list with the arguments from
-an Entity</p>
-</dd></dl>
-
-<dl class="py method">
 <dt class="sig sig-object py" id="ibek.render.Render.render_environment_variables">
 <span class="sig-name descname"><span class="pre">render_environment_variables</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">instance</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#ibek.ioc.Entity" title="ibek.ioc.Entity"><span class="pre">Entity</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.11)"><span class="pre">None</span></a></span></span><a class="reference internal" href="../../_modules/ibek/render.html#Render.render_environment_variables"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ibek.render.Render.render_environment_variables" title="Permalink to this definition">#</a></dt>
 <dd><p>render the environment variable elements by combining the jinja template
@@ -718,12 +710,6 @@ from an entity with the arguments from an Entity</p>
 <dt class="sig sig-object py" id="ibek.render.Render.render_post_ioc_init_elements">
 <span class="sig-name descname"><span class="pre">render_post_ioc_init_elements</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ioc</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#ibek.ioc.IOC" title="ibek.ioc.IOC"><span class="pre">IOC</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a></span></span><a class="reference internal" href="../../_modules/ibek/render.html#Render.render_post_ioc_init_elements"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ibek.render.Render.render_post_ioc_init_elements" title="Permalink to this definition">#</a></dt>
 <dd><p>Render all of the post-iocInit elements for a given IOC instance</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="ibek.render.Render.render_database_elements">
-<span class="sig-name descname"><span class="pre">render_database_elements</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ioc</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#ibek.ioc.IOC" title="ibek.ioc.IOC"><span class="pre">IOC</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a></span></span><a class="reference internal" href="../../_modules/ibek/render.html#Render.render_database_elements"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ibek.render.Render.render_database_elements" title="Permalink to this definition">#</a></dt>
-<dd><p>Render all of the DBLoadRecords entries for a given IOC instance</p>
 </dd></dl>
 
 <dl class="py method">
@@ -877,12 +863,10 @@ we pass a single instance of this class into all Jinja contexts.</p>
 <li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#ibek.render.Render.render_function"><code class="docutils literal notranslate"><span class="pre">Render.render_function()</span></code></a></li>
 <li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#ibek.render.Render.render_pre_ioc_init"><code class="docutils literal notranslate"><span class="pre">Render.render_pre_ioc_init()</span></code></a></li>
 <li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#ibek.render.Render.render_post_ioc_init"><code class="docutils literal notranslate"><span class="pre">Render.render_post_ioc_init()</span></code></a></li>
-<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#ibek.render.Render.render_database"><code class="docutils literal notranslate"><span class="pre">Render.render_database()</span></code></a></li>
 <li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#ibek.render.Render.render_environment_variables"><code class="docutils literal notranslate"><span class="pre">Render.render_environment_variables()</span></code></a></li>
 <li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#ibek.render.Render.render_elements"><code class="docutils literal notranslate"><span class="pre">Render.render_elements()</span></code></a></li>
 <li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#ibek.render.Render.render_pre_ioc_init_elements"><code class="docutils literal notranslate"><span class="pre">Render.render_pre_ioc_init_elements()</span></code></a></li>
 <li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#ibek.render.Render.render_post_ioc_init_elements"><code class="docutils literal notranslate"><span class="pre">Render.render_post_ioc_init_elements()</span></code></a></li>
-<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#ibek.render.Render.render_database_elements"><code class="docutils literal notranslate"><span class="pre">Render.render_database_elements()</span></code></a></li>
 <li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#ibek.render.Render.render_environment_variable_elements"><code class="docutils literal notranslate"><span class="pre">Render.render_environment_variable_elements()</span></code></a></li>
 </ul>
 </li>

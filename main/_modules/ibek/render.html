@@ -8,7 +8,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>ibek.render &#8212; ibek 1.10.2.dev75+g7831c58 documentation</title>
+    <title>ibek.render &#8212; ibek 1.10.2.dev88+ge8ab04d documentation</title>
   
   
   
@@ -529,43 +529,6 @@ document.write(`
         <span class="n">post_init</span> <span class="o">=</span> <span class="n">instance</span><span class="o">.</span><span class="n">__definition__</span><span class="o">.</span><span class="n">post_init</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">render_script</span><span class="p">(</span><span class="n">instance</span><span class="p">,</span> <span class="n">post_init</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="Render.render_database"><a class="viewcode-back" href="../../user/reference/api.html#ibek.render.Render.render_database">[docs]</a>    <span class="k">def</span> <span class="nf">render_database</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">instance</span><span class="p">:</span> <span class="n">Entity</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        render the lines required to instantiate database by combining the</span>
-<span class="sd">        templates from the Entity&#39;s database list with the arguments from</span>
-<span class="sd">        an Entity</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">templates</span> <span class="o">=</span> <span class="n">instance</span><span class="o">.</span><span class="n">__definition__</span><span class="o">.</span><span class="n">databases</span>
-        <span class="c1"># The entity may not instantiate any database templates</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="n">templates</span><span class="p">:</span>
-            <span class="k">return</span> <span class="kc">None</span>
-        <span class="n">jinja_txt</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
-
-        <span class="k">for</span> <span class="n">template</span> <span class="ow">in</span> <span class="n">templates</span><span class="p">:</span>
-            <span class="n">db_file</span> <span class="o">=</span> <span class="n">template</span><span class="o">.</span><span class="n">file</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
-
-            <span class="n">macros</span> <span class="o">=</span> <span class="p">[]</span>
-            <span class="k">for</span> <span class="n">arg</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">template</span><span class="o">.</span><span class="n">args</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-                <span class="k">if</span> <span class="n">value</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-                    <span class="k">if</span> <span class="n">arg</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">instance</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">:</span>
-                        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                            <span class="sa">f</span><span class="s2">&quot;database arg &#39;</span><span class="si">{</span><span class="n">arg</span><span class="si">}</span><span class="s2">&#39; in database template &quot;</span>
-                            <span class="sa">f</span><span class="s2">&quot;&#39;</span><span class="si">{</span><span class="n">template</span><span class="o">.</span><span class="n">file</span><span class="si">}</span><span class="s2">&#39; not found in context&quot;</span>
-                        <span class="p">)</span>
-                    <span class="n">macros</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">arg</span><span class="si">}</span><span class="s2">=</span><span class="se">{{{{</span><span class="s2"> </span><span class="si">{</span><span class="n">arg</span><span class="si">}</span><span class="s2"> </span><span class="se">}}}}</span><span class="s2">&quot;</span><span class="p">)</span>
-                <span class="k">else</span><span class="p">:</span>
-                    <span class="n">macros</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">arg</span><span class="si">}</span><span class="s2">=</span><span class="si">{</span><span class="n">value</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-
-            <span class="n">db_arg_string</span> <span class="o">=</span> <span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">macros</span><span class="p">)</span>
-
-            <span class="n">jinja_txt</span> <span class="o">+=</span> <span class="p">(</span>
-                <span class="sa">f</span><span class="s1">&#39;msi -I$</span><span class="se">{{</span><span class="s1">EPICS_DB_INCLUDE_PATH</span><span class="se">}}</span><span class="s1"> -M&quot;</span><span class="si">{</span><span class="n">db_arg_string</span><span class="si">}</span><span class="s1">&quot; &quot;</span><span class="si">{</span><span class="n">db_file</span><span class="si">}</span><span class="s1">&quot;</span><span class="se">\n</span><span class="s1">&#39;</span>
-            <span class="p">)</span>
-
-        <span class="n">db_txt</span> <span class="o">=</span> <span class="n">render_with_utils</span><span class="p">(</span><span class="n">instance</span><span class="p">,</span> <span class="n">jinja_txt</span><span class="p">)</span>  <span class="c1"># type: ignore</span>
-
-        <span class="k">return</span> <span class="n">db_txt</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span></div>
-
 <div class="viewcode-block" id="Render.render_environment_variables"><a class="viewcode-back" href="../../user/reference/api.html#ibek.render.Render.render_environment_variables">[docs]</a>    <span class="k">def</span> <span class="nf">render_environment_variables</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">instance</span><span class="p">:</span> <span class="n">Entity</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        render the environment variable elements by combining the jinja template</span>
@@ -610,12 +573,6 @@ document.write(`
 <span class="sd">        Render all of the post-iocInit elements for a given IOC instance</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">render_elements</span><span class="p">(</span><span class="n">ioc</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">render_post_ioc_init</span><span class="p">)</span></div>
-
-<div class="viewcode-block" id="Render.render_database_elements"><a class="viewcode-back" href="../../user/reference/api.html#ibek.render.Render.render_database_elements">[docs]</a>    <span class="k">def</span> <span class="nf">render_database_elements</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ioc</span><span class="p">:</span> <span class="n">IOC</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Render all of the DBLoadRecords entries for a given IOC instance</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">render_elements</span><span class="p">(</span><span class="n">ioc</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">render_database</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="Render.render_environment_variable_elements"><a class="viewcode-back" href="../../user/reference/api.html#ibek.render.Render.render_environment_variable_elements">[docs]</a>    <span class="k">def</span> <span class="nf">render_environment_variable_elements</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ioc</span><span class="p">:</span> <span class="n">IOC</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
