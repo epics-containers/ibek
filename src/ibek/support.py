@@ -157,9 +157,6 @@ class Value(BaseSettings):
     )
     value: str = Field(description="The contents of the value")
 
-    def __str__(self):
-        return self.value
-
 
 Script = Sequence[Union[Function, Comment, Text]]
 
@@ -201,7 +198,6 @@ class Definition(BaseSettings):
         for arg in self.args:
             if isinstance(arg, IdArg):
                 return arg.name
-        return None
 
 
 class Support(BaseSettings):

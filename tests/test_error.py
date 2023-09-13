@@ -58,6 +58,20 @@ def test_bad_ref(tmp_path: Path, samples: Path):
     assert "object Ref2 not found" in str(ctx.value)
 
 
+def test_bad_db(tmp_path: Path, samples: Path):
+    """
+    Check bad database args are caught
+    """
+    UTILS.__reset__()
+
+    entity_file = samples / "yaml" / "bad_db.ibek.ioc.yaml"
+    definition_file1 = samples / "yaml" / "bad_db.ibek.support.yaml"
+
+    with pytest.raises(ValueError) as ctx:
+        run_cli("build-startup", entity_file, definition_file1)
+    assert "'non-existant' in database template 'test.db' not found" in str(ctx.value)
+
+
 def test_loading_module_twice(tmp_path: Path, samples: Path):
     """
     Verify we get a sensible error if we try to load a module twice

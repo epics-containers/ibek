@@ -1,3 +1,5 @@
+# yaml-language-server: $schema=../schemas/ibek.support.schema.json
+
 ################################################################################
 ### ibek support YAML to demonstrate use of __utils__ global context
 ################################################################################
@@ -12,9 +14,25 @@ defs:
         name: name
         description: A name for an interrupt vector variable
 
+    values:
+      - name: test_global_var
+        description: test global variable setter
+        value: '{{  __utils__.set_var("magic_global", 42) }}'
+      - name: get_global
+        description: test global variable getter
+        value: '{{  __utils__.get_var("magic_global") }}'
+
     env_vars:
       - name: "{{ name }}"
         value: '{{  __utils__.counter("InterruptVector", start=192, stop=255) }}'
+
+    pre_init:
+      - type: comment
+        value: global "magic" is {{ get_global }}
+      - type: comment
+        value: counter "InterruptVector" is now {{ __utils__.counter("InterruptVector", start=192, stop=255) }}
+      - type: comment
+        value: counter "InterruptVector" is now {{ __utils__.counter("InterruptVector", start=192, stop=255) }}
 
   - name: InterruptVectorVME2
     description: naughty second use of same counter
