@@ -71,7 +71,7 @@ def test_database_render(objects_classes, templates):
 
     assert templates == {
         "test.db": [
-            "name,            ip,          value",
+            '"name",          "ip",        "value"                    ',
             '"test_consumer", "127.0.0.1", "test_ref_object.127.0.0.1"',
         ]
     }

@@ -8,17 +8,18 @@ from ruamel.yaml import YAML
 
 from ibek.ioc import clear_entity_model_ids, make_entity_models, make_ioc_model
 from ibek.support import Support
+from ibek.utils import UTILS
 from tests.conftest import run_cli
 
 
-def test_counter(tmp_path: Path, samples: Path):
+def test_counter_reuse(tmp_path: Path, samples: Path):
     """
     Check you cannot redefine a counter with the same name and different params
     """
+    UTILS.__reset__()
 
-    clear_entity_model_ids()
     entity_file = samples / "yaml" / "bad_counter.ibek.ioc.yaml"
-    definition_file1 = samples / "yaml" / "bad_counter.ibek.support.yaml"
+    definition_file1 = samples / "yaml" / "utils.ibek.support.yaml"
 
     with pytest.raises(ValueError) as ctx:
         run_cli("build-startup", entity_file, definition_file1)
@@ -26,6 +27,35 @@ def test_counter(tmp_path: Path, samples: Path):
         str(ctx.value)
         == "Redefining counter InterruptVector with different start/stop values"
     )
+
+
+def test_counter_overuse(tmp_path: Path, samples: Path):
+    """
+    Check that counter limits are enforced
+    """
+    UTILS.__reset__()
+
+    entity_file = samples / "yaml" / "bad_counter2.ibek.ioc.yaml"
+    definition_file1 = samples / "yaml" / "utils.ibek.support.yaml"
+
+    with pytest.raises(ValueError) as ctx:
+        run_cli("build-startup", entity_file, definition_file1)
+    assert str(ctx.value) == "Counter 195 exceeded stop value of 194"
+
+
+def test_bad_ref(tmp_path: Path, samples: Path):
+    """
+    Check bad object references are caught
+    """
+    UTILS.__reset__()
+
+    entity_file = samples / "yaml" / "bad_ref.ibek.ioc.yaml"
+    definition_file1 = samples / "yaml" / "objects.ibek.support.yaml"
+    definition_file2 = samples / "yaml" / "all.ibek.support.yaml"
+
+    with pytest.raises(ValueError) as ctx:
+        run_cli("build-startup", entity_file, definition_file1, definition_file2)
+    assert "object Ref2 not found" in str(ctx.value)
 
 
 def test_loading_module_twice(tmp_path: Path, samples: Path):

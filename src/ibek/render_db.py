@@ -93,12 +93,10 @@ class RenderDb:
         for template in self.render_templates.values():
             for n, row in enumerate(template.rows):
                 for i, arg in enumerate(row):
-                    row[i] = arg.replace(",", r"\,")
-                    if n > 0:
-                        row[i] = f'"{row[i]}"'
+                    row[i] = f'"{row[i]}"'
                     if i < len(template.columns) - 1:
-                        row[i] += ","
-                        template.columns[i] = max(template.columns[i], len(row[i]) + 1)
+                        row[i] += ", "
+                    template.columns[i] = max(template.columns[i], len(row[i]))
 
         # now pad each column to the maximum width
         for template in self.render_templates.values():

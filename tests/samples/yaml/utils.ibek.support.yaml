@@ -1,5 +1,5 @@
 ################################################################################
-### ibek support YAML to demonstrate incorrect use of counter helper function
+### ibek support YAML to demonstrate use of __utils__ global context
 ################################################################################
 
 module: epics
@@ -15,5 +15,14 @@ defs:
     env_vars:
       - name: "{{ name }}"
         value: '{{  __utils__.counter("InterruptVector", start=192, stop=255) }}'
+
+  - name: InterruptVectorVME2
+    description: naughty second use of same counter
+    args:
+      - type: id
+        name: name
+        description: A name for an interrupt vector variable
+
+    env_vars:
       - name: "second_{{ name }}"
-        value: '{{  __utils__.counter("InterruptVector", start=193, stop=255) }}'
+        value: '{{  __utils__.counter("InterruptVector", start=193, stop=194) }}'

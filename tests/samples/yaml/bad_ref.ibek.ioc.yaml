@@ -1,0 +1,16 @@
+# yaml-language-server: $schema=../schemas/multiple.ibek.ioc.schema.json
+
+ioc_name: test-multiple-ioc
+description: demo bad object reference
+generic_ioc_image: ghcr.io/epics-containers/ioc-template:23.3.2
+
+entities:
+  - type: object_module.RefObject
+    name: Ref1
+
+  - type: module.AllObject
+    name: AllObject One
+    my_object: Ref2
+    my_str: hello
+    my_inferred_enum: third
+    clock_rate: dummy
