@@ -32,11 +32,6 @@ This is the internal API reference for ibek
 .. automodule:: ibek.ioc
     :members:
 
-``ibek.modules``
-------------------
-
-.. automodule:: ibek.modules
-    :members:
 
 ``ibek.render``
 ---------------
