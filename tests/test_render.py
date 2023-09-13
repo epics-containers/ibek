@@ -4,7 +4,9 @@ Entity classes
 """
 from typing import Literal
 
+from ibek.ioc import IOC, clear_entity_model_ids
 from ibek.render import Render
+from ibek.render_db import RenderDb
 
 
 def find_entity_class(entity_classes, entity_type):
@@ -45,20 +47,34 @@ def test_obj_ref_script(objects_classes):
     )
 
 
-def test_database_render(objects_classes):
+def test_database_render(objects_classes, templates):
     ref_cls = find_entity_class(objects_classes, "object_module.RefObject")
     consumer = find_entity_class(objects_classes, "object_module.ConsumerTwo")
 
     ref_cls(name="test_ref_object")
     my_consumer = consumer(name="test_consumer", PORT="test_ref_object")
 
-    render = Render()
-    db_txt = render.render_database(my_consumer)
+    # make a dummy IOC with two entities as database render works against
+    # a whole IOC rather than a single entity at a time.
+    clear_entity_model_ids()
 
-    assert (
-        db_txt == 'msi -I${EPICS_DB_INCLUDE_PATH} -M"name=test_consumer, '
-        'ip=127.0.0.1, value=test_ref_object.127.0.0.1" "test.db"\n'
+    ioc = IOC(
+        ioc_name="test_ioc",
+        description="for testing",
+        generic_ioc_image="test_ioc_img",
+        entities=[],
     )
+
+    ioc.entities.append(my_consumer)
+    render_db = RenderDb(ioc)
+    templates = render_db.render_database()
+
+    assert templates == {
+        "test.db": [
+            "name,            ip,          value",
+            '"test_consumer", "127.0.0.1", "test_ref_object.127.0.0.1"',
+        ]
+    }
 
 
 def test_environment_variables(objects_classes):

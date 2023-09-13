@@ -111,43 +111,6 @@ class Render:
         post_init = instance.__definition__.post_init
         return self.render_script(instance, post_init)
 
-    def render_database(self, instance: Entity) -> Optional[str]:
-        """
-        render the lines required to instantiate database by combining the
-        templates from the Entity's database list with the arguments from
-        an Entity
-        """
-        templates = instance.__definition__.databases
-        # The entity may not instantiate any database templates
-        if not templates:
-            return None
-        jinja_txt = ""
-
-        for template in templates:
-            db_file = template.file.strip("\n")
-
-            macros = []
-            for arg, value in template.args.items():
-                if value is None:
-                    if arg not in instance.__dict__:
-                        raise ValueError(
-                            f"database arg '{arg}' in database template "
-                            f"'{template.file}' not found in context"
-                        )
-                    macros.append(f"{arg}={{{{ {arg} }}}}")
-                else:
-                    macros.append(f"{arg}={value}")
-
-            db_arg_string = ", ".join(macros)
-
-            jinja_txt += (
-                f'msi -I${{EPICS_DB_INCLUDE_PATH}} -M"{db_arg_string}" "{db_file}"\n'
-            )
-
-        db_txt = render_with_utils(instance, jinja_txt)  # type: ignore
-
-        return db_txt + "\n"
-
     def render_environment_variables(self, instance: Entity) -> Optional[str]:
         """
         render the environment variable elements by combining the jinja template
@@ -192,12 +155,6 @@ class Render:
         Render all of the post-iocInit elements for a given IOC instance
         """
         return self.render_elements(ioc, self.render_post_ioc_init)
-
-    def render_database_elements(self, ioc: IOC) -> str:
-        """
-        Render all of the DBLoadRecords entries for a given IOC instance
-        """
-        return self.render_elements(ioc, self.render_database)
 
     def render_environment_variable_elements(self, ioc: IOC) -> str:
         """

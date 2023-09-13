@@ -1,3 +1,7 @@
+"""
+System tests that run the CLI commands and compare the output to expected
+results.
+"""
 import json
 import subprocess
 import sys
@@ -20,8 +24,6 @@ def test_ibek_schema(tmp_path: Path, samples: Path):
     expected = json.loads(
         (samples / "schemas" / "ibek.support.schema.json").read_text()
     )
-    # Don't care if version number didn't update to match if the rest is the same
-    # expected["title"] = mock.ANY
 
     actual = json.loads((schema_path).read_text())
     assert expected == actual
@@ -71,7 +73,7 @@ def test_build_startup_single(tmp_path: Path, samples: Path):
     ioc_yaml = samples / "yaml" / "objects.ibek.ioc.yaml"
     support_yaml = samples / "yaml" / "objects.ibek.support.yaml"
     out_file = tmp_path / "new_dir" / "st.cmd"
-    out_db = tmp_path / "new_dir" / "make_db.sh"
+    out_db = tmp_path / "new_dir" / "objects.db.subst"
 
     run_cli(
         "build-startup",
@@ -87,7 +89,7 @@ def test_build_startup_single(tmp_path: Path, samples: Path):
     actual_boot = out_file.read_text()
     assert example_boot == actual_boot
 
-    example_db = (samples / "outputs" / "objects.make_db.sh").read_text()
+    example_db = (samples / "outputs" / "objects.db.subst").read_text()
     actual_db = out_db.read_text()
     assert example_db == actual_db
 
@@ -96,13 +98,16 @@ def test_build_startup_multiple(tmp_path: Path, samples: Path):
     """
     build an ioc startup script from an IOC instance entity file
     and multiple support module definition files
+
+    Also verifies database subst file generation for multiple
+    entity instantiations.
     """
     clear_entity_model_ids()
     ioc_yaml = samples / "yaml" / "all.ibek.ioc.yaml"
     support_yaml = samples / "yaml" / "objects.ibek.support.yaml"
     support_yaml2 = samples / "yaml" / "all.ibek.support.yaml"
     out_file = tmp_path / "st.cmd"
-    out_db = tmp_path / "make_db.sh"
+    out_db = tmp_path / "all.db.subst"
 
     run_cli(
         "build-startup",
@@ -119,6 +124,6 @@ def test_build_startup_multiple(tmp_path: Path, samples: Path):
     actual_boot = out_file.read_text()
     assert example_boot == actual_boot
 
-    example_db = (samples / "outputs" / "all.make_db.sh").read_text()
+    example_db = (samples / "outputs" / "all.db.subst").read_text()
     actual_db = out_db.read_text()
     assert example_db == actual_db

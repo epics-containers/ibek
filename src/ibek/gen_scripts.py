@@ -11,6 +11,7 @@ from ruamel.yaml.main import YAML
 
 from .ioc import IOC, clear_entity_model_ids, make_entity_models, make_ioc_model
 from .render import Render
+from .render_db import RenderDb
 from .support import Support
 
 log = logging.getLogger(__name__)
@@ -65,14 +66,14 @@ def create_db_script(ioc_instance: IOC) -> str:
     """
     Create make_db.sh script for expanding the database templates
     """
-    with open(TEMPLATES / "make_db.jinja", "r") as f:
-        template = Template(f.read())
+    with open(TEMPLATES / "db.subst.jinja", "r") as f:
+        jinja_txt = f.read()
 
-    renderer = Render()
+        renderer = RenderDb(ioc_instance)
 
-    return template.render(
-        database_elements=renderer.render_database_elements(ioc_instance),
-    )
+        templates = renderer.render_database()
+
+        return Template(jinja_txt).render(templates=templates)
 
 
 def create_boot_script(ioc_instance: IOC) -> str:

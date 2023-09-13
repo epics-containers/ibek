@@ -25,6 +25,9 @@ clock_rate =                1
 my_mixed_enum_no_default =  
 .
 
+# ExampleTestFunction asynPortIP name port value
+ExampleTestFunction 127.0.0.1 Consumer Two With DB Ref1 Ref1.127.0.0.1
+
 dbLoadRecords /tmp/ioc.db
 iocInit
 

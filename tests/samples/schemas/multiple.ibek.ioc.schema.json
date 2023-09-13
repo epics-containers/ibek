@@ -109,10 +109,10 @@
           "title": "My Bool",
           "type": "boolean"
         },
-        "a value calculated from args": {
+        "calculated_one": {
           "default": "{{ name }}.{{ my_str }}.{{ my_int }}.{{ my_float }}.{{ my_bool }}",
           "description": "test jinja render of arg values",
-          "title": "A Value Calculated From Args",
+          "title": "Calculated One",
           "type": "string"
         }
       },
