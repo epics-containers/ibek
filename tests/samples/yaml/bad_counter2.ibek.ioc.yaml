@@ -3,7 +3,11 @@ ioc_name: counter
 description: an example motion ioc for ibek testing
 generic_ioc_image: ghcr.io/epics-containers/ioc-pmac:main.run
 entities:
-  - type: epics.InterruptVectorVME
-    name: Vec0
   - type: epics.InterruptVectorVME2
     name: Vec1
+  - type: epics.InterruptVectorVME2
+    name: Vec2
+  - type: epics.InterruptVectorVME2
+    name: Vec3
+  - type: epics.InterruptVectorVME2
+    name: Vec4

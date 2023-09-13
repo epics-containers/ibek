@@ -22,6 +22,9 @@ ibek ibek-schema schemas/ibek.support.schema.json
 echo making an ioc schema using object support yaml
 ibek ioc-schema yaml/objects.ibek.support.yaml schemas/objects.ibek.ioc.schema.json
 
+echo making an ioc schema using utils support yaml
+ibek ioc-schema yaml/utils.ibek.support.yaml schemas/utils.ibek.ioc.schema.json
+
 echo making an ioc schema using multiple support yaml files
 ibek ioc-schema yaml/objects.ibek.support.yaml yaml/all.ibek.support.yaml schemas/multiple.ibek.ioc.schema.json
 
