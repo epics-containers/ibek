@@ -63,11 +63,12 @@ nitpick_ignore = [
     ("py:class", "'object'"),
     ("py:class", "'id'"),
     ("py:class", "typing_extensions.Literal"),
+    ("py:class", "type"),
 ]
 
 # Both the class’ and the __init__ method’s docstring are concatenated and
 # inserted into the change_linter_to_ruff body of the autoclass directive
-autoclass_content = "both"
+autoclass_content = "class"
 
 # Order the members by the order they appear in the source code
 autodoc_member_order = "bysource"
