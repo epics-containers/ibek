@@ -52,7 +52,7 @@ nitpicky = False
 
 # A list of (type, target) tuples (by default empty) that should be ignored when
 # generating warnings in "nitpicky mode". Note that type should include the
-# domain name if present. Example entries would be ('py:func', 'int') or
+# dochange_linter_to_ruff name if present. Example entries would be ('py:func', 'int') or
 # ('envvar', 'LD_LIBRARY_PATH').
 nitpick_ignore = [
     ("py:class", "NoneType"),
@@ -65,9 +65,9 @@ nitpick_ignore = [
     ("py:class", "typing_extensions.Literal"),
 ]
 
-# Dont use the __init__ docstring because pydantic base classes cause sphinx
-# to generate a lot of warnings
-autoclass_content = "class"
+# Both the class’ and the __init__ method’s docstring are concatenated and
+# inserted into the change_linter_to_ruff body of the autoclass directive
+autoclass_content = "both"
 
 # Order the members by the order they appear in the source code
 autodoc_member_order = "bysource"
@@ -108,8 +108,7 @@ inheritance_graph_attrs = dict(rankdir="TB")
 rst_epilog = """
 .. _Diamond Light Source: http://www.diamond.ac.uk
 .. _black: https://github.com/psf/black
-.. _flake8: https://flake8.pycqa.org/en/latest/
-.. _isort: https://github.com/PyCQA/isort
+.. _ruff: https://beta.ruff.rs/docs/
 .. _mypy: http://mypy-lang.org/
 .. _pre-commit: https://pre-commit.com/
 """
@@ -130,7 +129,6 @@ copybutton_prompt_is_regexp = True
 html_theme = "pydata_sphinx_theme"
 github_repo = project
 github_user = "epics-containers"
-
 switcher_json = f"https://{github_user}.github.io/{github_repo}/switcher.json"
 switcher_exists = requests.get(switcher_json).ok
 if not switcher_exists:

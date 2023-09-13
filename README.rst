@@ -1,5 +1,5 @@
 ibek
-====
+===========================
 
 |code_ci| |docs_ci| |coverage| |pypi_version| |license|
 
@@ -27,31 +27,25 @@ TODO
 
 This project is approaching completion. The following items are still to do:
 
-    - Complete documentation in general
+    from ibek import __version__
 
-    - Add a diagram and more details. Use draw.io for image, and save as SVG
-      with source embed in it, save as something.draw.io.svg
+    print(f"Hello ibek {__version__}")
 
     - DONE: Add ability to define embedded objects e.g. AsynIp and AsynSerial would
       both be defined by embedding AsynPort (so similar to how original builder.py
       works)
 
-    - Add support for enums where you define the possible values inline
+    $ python -m ibek --version
 
-    - DONE: update helm-template/config/start.sh to call 'ibek build-startup' when it
-      sees a st.cmd.yaml file in the startup directory. This change requires
-      embedding ibek into the epics-base container image.
-
-
-.. |code_ci| image:: https://github.com/epics-containers/ibek/actions/workflows/code.yml/badge.svg?branch=main
+.. |code_ci| image:: https://github.com/epics-containers/ibek/actions/workflows/code.yml/badge.svg?branch=change_linter_to_ruff
     :target: https://github.com/epics-containers/ibek/actions/workflows/code.yml
     :alt: Code CI
 
-.. |docs_ci| image:: https://github.com/epics-containers/ibek/actions/workflows/docs.yml/badge.svg?branch=main
+.. |docs_ci| image:: https://github.com/epics-containers/ibek/actions/workflows/docs.yml/badge.svg?branch=change_linter_to_ruff
     :target: https://github.com/epics-containers/ibek/actions/workflows/docs.yml
     :alt: Docs CI
 
-.. |coverage| image:: https://codecov.io/gh/epics-containers/ibek/branch/master/graph/badge.svg
+.. |coverage| image:: https://codecov.io/gh/epics-containers/ibek/branch/change_linter_to_ruff/graph/badge.svg
     :target: https://codecov.io/gh/epics-containers/ibek
     :alt: Test Coverage
 

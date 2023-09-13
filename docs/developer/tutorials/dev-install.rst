@@ -65,4 +65,4 @@ This will run in parallel the following checks:
 - `../how-to/lint`
 
 
-.. _epics-containers: https://epics-containers.github.io/main/user/tutorials/devcontainer.html
+.. _epics-containers: https://epics-containers.github.io/change_linter_to_ruff/user/tutorials/devcontainer.html
