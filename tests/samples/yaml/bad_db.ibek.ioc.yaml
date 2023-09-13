@@ -1,0 +1,7 @@
+ioc_name: test-bad-db-ioc
+description: demo bad database definition
+generic_ioc_image: ghcr.io/epics-containers/ioc-template:23.3.2
+
+entities:
+  - type: object_module.RefObject
+    name: Ref1

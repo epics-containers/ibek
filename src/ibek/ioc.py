@@ -153,6 +153,7 @@ def make_entity_models(support: Support):
     for definition in support.defs:
         entity_models.append(make_entity_model(definition, support))
         if definition.name in entity_names:
+            # not tested because schema validation will always catch this first
             raise ValueError(f"Duplicate entity name {definition.name}")
         entity_names.append(definition.name)
 

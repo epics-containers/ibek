@@ -127,3 +127,32 @@ def test_build_startup_multiple(tmp_path: Path, samples: Path):
     example_db = (samples / "outputs" / "all.db.subst").read_text()
     actual_db = out_db.read_text()
     assert example_db == actual_db
+
+
+def test_build_utils_features(tmp_path: Path, samples: Path):
+    """
+    build an ioc startup script to verify utils features
+    """
+    clear_entity_model_ids()
+    ioc_yaml = samples / "yaml" / "utils.ibek.ioc.yaml"
+    support_yaml = samples / "yaml" / "utils.ibek.support.yaml"
+    out_file = tmp_path / "st.cmd"
+    out_db = tmp_path / "db.subst"
+
+    run_cli(
+        "build-startup",
+        ioc_yaml,
+        support_yaml,
+        "--out",
+        out_file,
+        "--db-out",
+        out_db,
+    )
+
+    example_boot = (samples / "outputs" / "utils.st.cmd").read_text()
+    actual_boot = out_file.read_text()
+    assert example_boot == actual_boot
+
+    example_db = (samples / "outputs" / "utils.db.subst").read_text()
+    actual_db = out_db.read_text()
+    assert example_db == actual_db
