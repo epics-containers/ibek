@@ -43,9 +43,9 @@ def get_versions(ref: str, add: Optional[str], remove: Optional[str]) -> List[st
     # Get a sorted list of tags
     tags = get_sorted_tags_list()
 
-    # Make the sorted versions list from main branches and tags
+    # Make the sorted versions list from change_linter_to_ruff branches and tags
     versions: List[str] = []
-    for version in ["master", "main"] + tags:
+    for version in ["master", "change_linter_to_ruff"] + tags:
         if version in builds:
             versions.append(version)
             builds.remove(version)
@@ -67,7 +67,7 @@ def write_json(path: Path, repository: str, versions: str):
     path.write_text(text, encoding="utf-8")
 
 
-def main(args=None):
+def change_linter_to_ruff(args=None):
     parser = ArgumentParser(
         description="Make a versions.txt file from gh-pages directories"
     )
@@ -95,5 +95,5 @@ def main(args=None):
     write_json(args.output, args.repository, versions)
 
 
-if __name__ == "__main__":
-    main()
+if __name__ == "__change_linter_to_ruff__":
+    change_linter_to_ruff()
