@@ -8,7 +8,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>ibek.ioc &#8212; ibek 1.10.2.dev79+g6bcbe49 documentation</title>
+    <title>ibek.ioc &#8212; ibek 1.10.2.dev89+gb50e670 documentation</title>
   
   
   
@@ -463,7 +463,7 @@ document.write(`
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="c1"># find the id field in this Entity if it has one</span>
-        <span class="n">ids</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">name</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">entity</span><span class="o">.</span><span class="n">__definition__</span><span class="o">.</span><span class="n">args</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">IdArg</span><span class="p">))</span>
+        <span class="n">ids</span> <span class="o">=</span> <span class="p">{</span><span class="n">a</span><span class="o">.</span><span class="n">name</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">entity</span><span class="o">.</span><span class="n">__definition__</span><span class="o">.</span><span class="n">args</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">IdArg</span><span class="p">)}</span>
 
         <span class="n">entity_dict</span> <span class="o">=</span> <span class="n">entity</span><span class="o">.</span><span class="n">model_dump</span><span class="p">()</span>
         <span class="k">for</span> <span class="n">arg</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">entity_dict</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
