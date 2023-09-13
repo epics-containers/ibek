@@ -8,7 +8,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>ibek.ioc &#8212; ibek 1.10.2.dev93+g1717476 documentation</title>
+    <title>ibek.ioc &#8212; ibek 1.10.2.dev97+gea0d3e8 documentation</title>
   
   
   
@@ -571,6 +571,7 @@ document.write(`
     <span class="k">for</span> <span class="n">definition</span> <span class="ow">in</span> <span class="n">support</span><span class="o">.</span><span class="n">defs</span><span class="p">:</span>
         <span class="n">entity_models</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">make_entity_model</span><span class="p">(</span><span class="n">definition</span><span class="p">,</span> <span class="n">support</span><span class="p">))</span>
         <span class="k">if</span> <span class="n">definition</span><span class="o">.</span><span class="n">name</span> <span class="ow">in</span> <span class="n">entity_names</span><span class="p">:</span>
+            <span class="c1"># not tested because schema validation will always catch this first</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Duplicate entity name </span><span class="si">{</span><span class="n">definition</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
         <span class="n">entity_names</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">definition</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
 
