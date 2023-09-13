@@ -43,6 +43,21 @@ def test_counter_overuse(tmp_path: Path, samples: Path):
     assert str(ctx.value) == "Counter 195 exceeded stop value of 194"
 
 
+def test_bad_ref(tmp_path: Path, samples: Path):
+    """
+    Check bad object references are caught
+    """
+    UTILS.__reset__()
+
+    entity_file = samples / "yaml" / "bad_ref.ibek.ioc.yaml"
+    definition_file1 = samples / "yaml" / "objects.ibek.support.yaml"
+    definition_file2 = samples / "yaml" / "all.ibek.support.yaml"
+
+    with pytest.raises(ValueError) as ctx:
+        run_cli("build-startup", entity_file, definition_file1, definition_file2)
+    assert "object Ref2 not found" in str(ctx.value)
+
+
 def test_loading_module_twice(tmp_path: Path, samples: Path):
     """
     Verify we get a sensible error if we try to load a module twice

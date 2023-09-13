@@ -76,6 +76,10 @@ defs:
         description: test jinja render of arg values
 
     pre_init:
+      - type: comment
+        value: |
+          this is a comment
+          that spans multiple lines
       - type: function
         name: testPreInit
         args:

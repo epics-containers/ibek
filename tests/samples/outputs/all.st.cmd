@@ -10,6 +10,9 @@ ioc_registerRecordDeviceDriver pdbbase
 
 # TestValues testValue
 TestValues Ref1.127.0.0.1
+# this is a comment
+# that spans multiple lines
+# 
 
 # testPreInit identifier TestValue
 testPreInit AllObject One 'AllObject One String'
@@ -18,6 +21,9 @@ my_inferred_enum =          third
 clock_rate =                dummy
 my_mixed_enum_no_default =  
 .
+# this is a comment
+# that spans multiple lines
+# 
 testPreInit AllObject Two 'AllObject Two String'
 my_str =                    AllObject Two String
 my_inferred_enum =          hello
