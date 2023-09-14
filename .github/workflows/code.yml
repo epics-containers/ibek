@@ -214,9 +214,12 @@ jobs:
         uses: softprops/action-gh-release@de2c0eb89ae2a093876385947365aca7b0e5f844 # v0.1.15
         with:
           prerelease: ${{ contains(github.ref_name, 'a') || contains(github.ref_name, 'b') || contains(github.ref_name, 'rc') }}
+          # upload distribution files and lockfiles plus the support YAML schema
+          # note that the 'sample' has been checked to be current by the tests
           files: |
             dist/*
             lockfiles/*
+            tests/samples/schemas/ibek.support.schema.json
           generate_release_notes: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
