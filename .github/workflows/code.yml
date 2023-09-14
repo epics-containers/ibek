@@ -96,6 +96,12 @@ jobs:
           name: dist
           path: dist
 
+      - name: Upload support yaml schema
+        uses: actions/upload-artifact@v3
+        with:
+          name: ibek.support.schema.json
+          path: tests/samples/schemas/ibek.support.schema.json
+
       - name: Check for packaging errors
         run: pipx run twine check --strict dist/*
 
@@ -136,7 +142,7 @@ jobs:
           files: |
             dist/*
             lockfiles/*
-            tests/samples/schemas/ibek.support.schema.json
+            ibek.support.schema.json
           generate_release_notes: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
