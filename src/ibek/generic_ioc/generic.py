@@ -1,3 +1,8 @@
+#!/usr/bin/env python
+"""
+Provide a basic CLI for managing a set of EPICS support modules
+"""
+
 import os
 import re
 from pathlib import Path
@@ -7,7 +12,7 @@ import typer
 from jinja2 import Template
 from typing_extensions import Annotated
 
-from ibek.support import Support
+from .commands import support_cli
 
 # note requirement for environment variable EPICS_BASE
 EPICS_BASE = Path(str(os.getenv("EPICS_BASE")))
@@ -36,22 +41,11 @@ SHELLIFY_FIND = re.compile(r"\$\(([^\)]*)\)")
 SHELLIFY_REPLACE = r"${\1}"
 
 
-support_cli = typer.Typer()
-
-
-@support_cli.command()
-def generate_schema(
-    output: Path = typer.Argument(..., help="The filename to write the schema to")
-):
-    """Produce JSON global schema for all <support_module>.ibek.support.yaml files"""
-    output.write_text(Support.get_schema())
-
-
 @support_cli.command()
 def add_macro(
     macro: str = typer.Argument(..., help="macro name to update"),
     value: str = typer.Argument("", help="value to set for the macro"),
-    file: Annotated[Path, typer.Option()] = RELEASE,
+    file: Annotated[Optional[Path], typer.Option()] = RELEASE,
     replace: bool = typer.Option(True, help="overwrite previous value"),
 ):
     text = file.read_text()
@@ -67,9 +61,9 @@ def add_macro(
 
 
 @support_cli.command()
-def register(
+def add_module_to_release(
     name: str = typer.Argument(..., help="the name of the support module"),
-    path: Annotated[Optional[Path], typer.Option()] = None,
+    value: Path = typer.Argument(None, help="The path to the support module"),
     macro: Optional[str] = typer.Option(None, help="Macro name for the module"),
 ):
     """
@@ -77,18 +71,18 @@ def register(
     inside an epics-containers build
     """
     macro = name.upper() if macro is None else macro
-    path = EPICS_ROOT / "support" / name if (path is None) else path
+    value = EPICS_ROOT / "support" / name if (value is None) else value
 
     # add or replace the macro for this module in the global RELEASE file
-    add_macro(macro, str(path))
+    add_macro(macro, value)
 
     # bring the global release file into this module with a symlink
-    local = path / "configure" / "RELEASE.local"
+    local = value / "configure" / "RELEASE.local"
     local.unlink(missing_ok=True)
     local.symlink_to(RELEASE)
 
     # make sure this module uses RELEASE.local
-    verify_release_includes_local(path / "configure")
+    verify_release_includes_local(value / "configure")
 
     do_dependencies()
 
