@@ -5,6 +5,8 @@ from typing import List, Optional
 import typer
 from ruamel.yaml import YAML
 
+from ibek.generic_ioc.commands import support_cli
+
 from ._version import __version__
 from .gen_scripts import (
     create_boot_script,
@@ -12,9 +14,28 @@ from .gen_scripts import (
     ioc_create_model,
     ioc_deserialize,
 )
-from .support import Support
 
 cli = typer.Typer()
+startup_cli = typer.Typer()
+ioc_cli = typer.Typer()
+
+
+cli.add_typer(
+    support_cli,
+    name="support",
+    help="Commands for building support modules during container build",
+)
+cli.add_typer(
+    ioc_cli,
+    name="ioc",
+    help="Commands for building generic IOCs during container build",
+)
+cli.add_typer(
+    startup_cli,
+    name="startup",
+    help="Commands for building IOC instance startup files at container runtime",
+)
+
 yaml = YAML()
 
 
@@ -34,19 +55,15 @@ def main(
         help="Print the version of ibek and exit",
     )
 ):
-    """Do 3 things..."""
+    """IOC Builder for EPICS and Kubernetes
+
+    Provides support for building generic EPICS IOC container images and for
+    running IOC instances in a Kubernetes cluster.
+    """
 
 
-@cli.command()
-def ibek_schema(
-    output: Path = typer.Argument(..., help="The filename to write the schema to")
-):
-    """Produce JSON global schema for all <support_module>.ibek.support.yaml files"""
-    output.write_text(Support.get_schema())
-
-
-@cli.command()
-def ioc_schema(
+@ioc_cli.command()
+def generate_schema(
     definitions: List[Path] = typer.Argument(
         ..., help="The filepath to a support module definition file"
     ),
@@ -61,8 +78,8 @@ def ioc_schema(
     output.write_text(schema)
 
 
-@cli.command()
-def build_startup(
+@startup_cli.command()
+def generate(
     instance: Path = typer.Argument(
         ..., help="The filepath to the ioc instance entity file"
     ),
