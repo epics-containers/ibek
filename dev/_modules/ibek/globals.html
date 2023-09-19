@@ -8,7 +8,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>ibek.globals &#8212; ibek 0.11.1.dev11+g1d270c2 documentation</title>
+    <title>ibek.globals &#8212; ibek 0.11.1.dev12+g74cf00a documentation</title>
   
   
   
@@ -436,12 +436,31 @@ document.write(`
 <span class="sd">A few global definitions</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Dict</span>
 
 <span class="kn">from</span> <span class="nn">jinja2</span> <span class="kn">import</span> <span class="n">Template</span>
 <span class="kn">from</span> <span class="nn">pydantic</span> <span class="kn">import</span> <span class="n">BaseModel</span><span class="p">,</span> <span class="n">ConfigDict</span>
 
 <span class="kn">from</span> <span class="nn">.utils</span> <span class="kn">import</span> <span class="n">UTILS</span>
+
+<span class="c1"># note requirement for environment variable EPICS_BASE</span>
+<span class="n">EPICS_BASE</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;EPICS_BASE&quot;</span><span class="p">)))</span>
+<span class="n">EPICS_ROOT</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;EPICS_ROOT&quot;</span><span class="p">)))</span>
+
+<span class="c1"># all support modules will reside under this directory</span>
+<span class="n">SUPPORT</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;SUPPORT&quot;</span><span class="p">)))</span>
+<span class="c1"># the global RELEASE file which lists all support modules</span>
+<span class="n">RELEASE</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">SUPPORT</span><span class="si">}</span><span class="s2">/configure/RELEASE&quot;</span><span class="p">)</span>
+<span class="c1"># a bash script to export the macros defined in RELEASE as environment vars</span>
+<span class="n">RELEASE_SH</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">SUPPORT</span><span class="si">}</span><span class="s2">/configure/RELEASE.shell&quot;</span><span class="p">)</span>
+<span class="c1"># global MODULES file used to determine order of build</span>
+<span class="n">MODULES</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">SUPPORT</span><span class="si">}</span><span class="s2">/configure/MODULES&quot;</span><span class="p">)</span>
+<span class="c1"># Folder containing Makefile.jinja</span>
+<span class="n">MAKE_FOLDER</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;IOC&quot;</span><span class="p">)))</span> <span class="o">/</span> <span class="s2">&quot;iocApp/src&quot;</span>
+<span class="c1"># Folder containing ibek support scripts</span>
+<span class="n">SCRIPTS_FOLDER</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s2">&quot;/workspaces/ibek-support&quot;</span><span class="p">)</span>
 
 
 <div class="viewcode-block" id="BaseSettings"><a class="viewcode-back" href="../../user/reference/api.html#ibek.globals.BaseSettings">[docs]</a><span class="k">class</span> <span class="nc">BaseSettings</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
