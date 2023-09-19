@@ -1,6 +1,8 @@
 import re
 from pathlib import Path
-from typing import List, Optional
+import subprocess
+from typing import Dict, List, Optional
+from shutil import rmtree
 
 import typer
 from git import Repo
@@ -37,7 +39,9 @@ def add_macro(
     file: Annotated[Path, typer.Option()] = RELEASE,
     replace: bool = typer.Option(True, help="overwrite previous value"),
 ):
-    """add or replace a macro in a RELEASE file"""
+    """
+    add or replace a macro in a RELEASE file
+    """
     text = file.read_text()
 
     find_m = re.compile(f"^({macro}[ \t]*=[ \t]*)(.*)$", flags=re.M)
@@ -131,18 +135,32 @@ def do_dependencies():
     RELEASE_SH.write_text(shell_text)
 
 
-@support_cli.command()
+@support_cli.command(
+    context_settings={"allow_extra_args": True, "ignore_unknown_options": True}
+)
 def git_clone(
+    ctx: typer.Context,
     repo_name: str = typer.Argument(..., help="repo to clone"),
     version: str = typer.Argument(..., help="tag to clone"),
-    # git_args: List[str] = typer.Argument([], help="additional git arguments"),
     org: str = typer.Option(
         "https://github.com/epics-modules/", help="repo organization URL"
     ),
+    force: bool = typer.Option(False, help="overwrite existing clone"),
 ):
-    """clone a support module from a remote repository"""
+    """
+    clone a support module from a remote repository
+    """
     url = org + repo_name
-    Repo.clone_from(url, SUPPORT / repo_name, branch=version)  # **git_args)
+    location = SUPPORT / repo_name
+    if location.exists() and not force:
+        print(f"skipping {location}, already cloned")
+        return
+    else:
+        rmtree(location, ignore_errors=True)
+
+    Repo.clone_from(
+        url, SUPPORT / repo_name, branch=version, depth=1, multi_options=ctx.args
+    )
 
 
 @support_cli.command()
@@ -150,7 +168,10 @@ def add_libs(
     module: str = typer.Argument(..., help="support module name"),
     libs: List[str] = typer.Argument(..., help="list of libraries to add"),
 ):
-    """declare the libraries for this support module for inclusion in IOC Makefile"""
+    """
+    declare the libraries for this support module for inclusion in IOC Makefile
+    """
+    # TODO
 
 
 @support_cli.command()
@@ -158,18 +179,35 @@ def add_dbds(
     module: str = typer.Argument(..., help="support module name"),
     dbds: List[str] = typer.Argument(..., help="list of dbd files to add"),
 ):
-    """declare the dbd files for this support module for inclusion in IOC Makefile"""
+    """
+    declare the dbd files for this support module for inclusion in IOC Makefile
+    """
+    # TODO
 
 
-@support_cli.command()
+@support_cli.command(
+    context_settings={"allow_extra_args": True, "ignore_unknown_options": True}
+)
 def compile(
+    ctx: typer.Context,
     module: str = typer.Argument(..., help="support module name"),
 ):
-    """compile a support module after preparation with `ibek support register` etc."""
+    """
+    compile a support module after preparation with `ibek support register` etc.
+    """
+    path = SUPPORT / module
+
+    command = f"make -C {path} -j $(nproc) " + " ".join(ctx.args)
+    command_list = ["bash","-c", command]
+
+    process = subprocess.call(command_list)
 
 
 @support_cli.command()
 def generate_links(
     module: str = typer.Argument(..., help="list of libraries to add"),
 ):
-    """generate symlinks to the bob, pvi and support YAML for a compiled IOC"""
+    """
+    generate symlinks to the bob, pvi and support YAML for a compiled IOC
+    """
+    # TODO
