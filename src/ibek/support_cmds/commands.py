@@ -1,30 +1,13 @@
-import os
 import re
 from pathlib import Path
-from typing import Optional
+from typing import List, Optional
 
 import typer
-from jinja2 import Template
+from git import Repo
 from typing_extensions import Annotated
 
+from ibek.globals import EPICS_ROOT, MODULES, RELEASE, RELEASE_SH, SUPPORT
 from ibek.support import Support
-
-# note requirement for environment variable EPICS_BASE
-EPICS_BASE = Path(str(os.getenv("EPICS_BASE")))
-EPICS_ROOT = Path(str(os.getenv("EPICS_ROOT")))
-
-# all support modules will reside under this directory
-SUPPORT = Path(str(os.getenv("SUPPORT")))
-# the global RELEASE file which lists all support modules
-RELEASE = Path(f"{SUPPORT}/configure/RELEASE")
-# a bash script to export the macros defined in RELEASE as environment vars
-RELEASE_SH = Path(f"{SUPPORT}/configure/RELEASE.shell")
-# global MODULES file used to determine order of build
-MODULES = Path(f"{SUPPORT}/configure/MODULES")
-# Folder containing Makefile.jinja
-MAKE_FOLDER = Path(str(os.getenv("IOC"))) / "iocApp/src"
-# Folder containing ibek support scripts
-SCRIPTS_FOLDER = Path("/workspaces/ibek-support")
 
 # find macro name and macro value in a RELEASE file
 # only include values with at least one / (attempt to match filepaths only)
@@ -54,6 +37,7 @@ def add_macro(
     file: Annotated[Path, typer.Option()] = RELEASE,
     replace: bool = typer.Option(True, help="overwrite previous value"),
 ):
+    """add or replace a macro in a RELEASE file"""
     text = file.read_text()
 
     find_m = re.compile(f"^({macro}[ \t]*=[ \t]*)(.*)$", flags=re.M)
@@ -148,47 +132,44 @@ def do_dependencies():
 
 
 @support_cli.command()
-def makefile():
-    """
-    get the dbd and lib files from all support modules and generate
-    iocApp/src/Makefile from iocApp/src/Makefile.jinja
-    """
-
-    # use modules file to get a list of all support module folders
-    # in the order of build (and hence dependency)
-    modules = MODULES.read_text().split()[2:]
-    # remove the IOC folder from the list
-    if "IOC" in modules:
-        modules.remove("IOC")
-
-    # get all the dbd and lib files from each support module
-    dbds = []
-    libs = []
-    for module in modules:
-        folder = SCRIPTS_FOLDER / module
-        dbd_file = folder / "dbd"
-        if dbd_file.exists():
-            dbds.extend(dbd_file.read_text().split())
-        lib_file = folder / "lib"
-        if lib_file.exists():
-            libs.extend(lib_file.read_text().split())
-
-    # generate the Makefile from the template
-    template = Template((MAKE_FOLDER / "Makefile.jinja").read_text())
-    # libraries are listed in reverse order of dependency
-    libs.reverse()
-    text = template.render(dbds=dbds, libs=libs)
-
-    with (MAKE_FOLDER / "Makefile").open("w") as stream:
-        stream.write(text)
+def git_clone(
+    repo_name: str = typer.Argument(..., help="repo to clone"),
+    version: str = typer.Argument(..., help="tag to clone"),
+    # git_args: List[str] = typer.Argument([], help="additional git arguments"),
+    org: str = typer.Option(
+        "https://github.com/epics-modules/", help="repo organization URL"
+    ),
+):
+    """clone a support module from a remote repository"""
+    url = org + repo_name
+    Repo.clone_from(url, SUPPORT / repo_name, branch=version)  # **git_args)
 
 
-# @support_cli.command
-# def git_clone(
-#     repo_name: str = typer.Argument(..., help="repo to clone"),
-#     version: str  = typer.Argument(..., help="tag to clone"),
-#     org: Optional[str] = typer.Option(
-#         "https://github.com/epics-modules/", help="repo organization URL"),
-#     git_args:
-# ):
-#     url = org + repo_name
+@support_cli.command()
+def add_libs(
+    module: str = typer.Argument(..., help="support module name"),
+    libs: List[str] = typer.Argument(..., help="list of libraries to add"),
+):
+    """declare the libraries for this support module for inclusion in IOC Makefile"""
+
+
+@support_cli.command()
+def add_dbds(
+    module: str = typer.Argument(..., help="support module name"),
+    dbds: List[str] = typer.Argument(..., help="list of dbd files to add"),
+):
+    """declare the dbd files for this support module for inclusion in IOC Makefile"""
+
+
+@support_cli.command()
+def compile(
+    module: str = typer.Argument(..., help="support module name"),
+):
+    """compile a support module after preparation with `ibek support register` etc."""
+
+
+@support_cli.command()
+def generate_links(
+    module: str = typer.Argument(..., help="list of libraries to add"),
+):
+    """generate symlinks to the bob, pvi and support YAML for a compiled IOC"""
