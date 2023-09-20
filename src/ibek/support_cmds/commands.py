@@ -1,17 +1,16 @@
 import re
-from pathlib import Path
 import subprocess
-from typing import Dict, List, Optional
+from pathlib import Path
 from shutil import rmtree
+from typing import List, Optional
 
 import typer
 from git import Repo
 from typing_extensions import Annotated
 
+from ibek.files import Arch, add_text_once, get_config_site_file
 from ibek.globals import EPICS_ROOT, MODULES, RELEASE, RELEASE_SH, SUPPORT
 from ibek.support import Support
-
-from ibek.files import Arch, add_text_once, get_config_site_file
 
 # find macro name and macro value in a RELEASE file
 # only include values with at least one / (attempt to match filepaths only)

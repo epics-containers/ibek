@@ -4,13 +4,14 @@ Functions for inserting snippets into files in an idempotent fashion
 
 from enum import Enum
 from pathlib import Path
-from typing import Optional
 
 from ibek.globals import SUPPORT
+
 
 class Local(str, Enum):
     non_local = ""
     local = ".local"
+
 
 class Arch(str, Enum):
     none = ""
@@ -34,6 +35,7 @@ def get_config_site_file(
     filepath = SUPPORT / module / "configure" / name
 
     return filepath
+
 
 def get_release_file(
     module: str,
