@@ -1,7 +1,7 @@
 ibek
 ===========================
 
-|code_ci| |docs_ci| |coverage| |pypi_version| |license|
+|code_ci| |docs_ci| |coverage| |pypi_version| |black| |license|
 
 IOC Builder for EPICS and Kubernetes:
 
@@ -52,6 +52,9 @@ This project is approaching completion. The following items are still to do:
 .. |pypi_version| image:: https://img.shields.io/pypi/v/ibek.svg
     :target: https://pypi.org/project/ibek
     :alt: Latest PyPI version
+
+.. |black| image:: https://img.shields.io/badge/code%20style-black-000000.svg
+    :target: https://github.com/psf/black
 
 .. |license| image:: https://img.shields.io/badge/License-Apache%202.0-blue.svg
     :target: https://opensource.org/licenses/Apache-2.0

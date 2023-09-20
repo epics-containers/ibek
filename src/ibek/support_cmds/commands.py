@@ -11,6 +11,8 @@ from typing_extensions import Annotated
 from ibek.globals import EPICS_ROOT, MODULES, RELEASE, RELEASE_SH, SUPPORT
 from ibek.support import Support
 
+from ibek.files import Arch, add_text_once, get_config_site_file
+
 # find macro name and macro value in a RELEASE file
 # only include values with at least one / (attempt to match filepaths only)
 PARSE_MACROS = re.compile(r"^([A-Z_a-z0-9]*)\s*=\s*(.*/.*)$", flags=re.M)
@@ -92,7 +94,7 @@ def verify_release_includes_local(configure_folder: Path):
 
     if "RELEASE.local" not in text:
         print(f"WARNING: {configure_folder}/RELEASE does not include RELEASE.local")
-        text += "# PATCHED BY IBEK-SUPPORT\n-include $(TOP)/configure/RELEASE.local\n"
+        text += "# PATCHED BY IBEK\n-include $(TOP)/configure/RELEASE.local\n"
         release.write_text(text)
 
 
@@ -198,16 +200,35 @@ def compile(
     path = SUPPORT / module
 
     command = f"make -C {path} -j $(nproc) " + " ".join(ctx.args)
-    command_list = ["bash","-c", command]
+    command_list = ["bash", "-c", command]
 
-    process = subprocess.call(command_list)
+    result = subprocess.call(command_list)
+
+    exit(result)
 
 
 @support_cli.command()
 def generate_links(
-    module: str = typer.Argument(..., help="list of libraries to add"),
+    module: str = typer.Argument(..., help="support module name"),
 ):
     """
     generate symlinks to the bob, pvi and support YAML for a compiled IOC
     """
     # TODO
+
+
+@support_cli.command()
+def add_to_config_site(
+    module: str = typer.Argument(..., help="support module name"),
+    text: str = typer.Argument(..., help="text to add in an idempotent fashion"),
+    host: Annotated[Arch, typer.Option(case_sensitive=False)] = Arch.x86_64,
+    target: Annotated[Arch, typer.Option(case_sensitive=False)] = Arch.common,
+):
+    """
+    add some text to a support module's CONFIG_SITE file
+    """
+
+    # nothing to do if text is blank
+    if text != "":
+        config_site = get_config_site_file(module, host, target)
+        add_text_once(config_site, text)
