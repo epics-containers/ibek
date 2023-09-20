@@ -8,13 +8,17 @@ import typer
 from git import Repo
 from typing_extensions import Annotated
 
-from ibek.files import Arch, add_text_once, get_config_site_file
-from ibek.globals import EPICS_ROOT, MODULES, RELEASE, RELEASE_SH, SUPPORT
+from ibek.files import Arch, add_list_to_file, add_text_once, get_config_site_file
+from ibek.globals import (
+    EPICS_ROOT,
+    IOC_DBDS,
+    IOC_LIBS,
+    MODULES,
+    RELEASE,
+    RELEASE_SH,
+    SUPPORT,
+)
 from ibek.support import Support
-
-from ibek.globals import IOC_LIBS, IOC_DBDS
-
-from ibek.files import add_list_to_file
 
 # find macro name and macro value in a RELEASE file
 # only include values with at least one / (attempt to match filepaths only)
@@ -188,7 +192,6 @@ def add_dbds(
     declare the dbd files for this support module for inclusion in IOC Makefile
     """
     add_list_to_file(IOC_DBDS, dbds)
-
 
 
 @support_cli.command(

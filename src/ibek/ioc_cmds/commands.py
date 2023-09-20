@@ -6,7 +6,7 @@ import typer
 from jinja2 import Template
 
 from ibek.gen_scripts import ioc_create_model
-from ibek.globals import IOC_DBDS, IOC_LIBS, MAKE_FOLDER, MODULES, SCRIPTS_FOLDER
+from ibek.globals import IOC_DBDS, IOC_LIBS, MAKE_FOLDER, MODULES
 
 ioc_cli = typer.Typer()
 
