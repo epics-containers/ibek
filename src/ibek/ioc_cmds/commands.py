@@ -36,14 +36,14 @@ def generate_makefile():
 
     # use modules file to get a list of all support module folders
     # in the order of build (and hence dependency)
-    modules = MODULES.read_text().split()[2:]
+    modules: List[str] = MODULES.read_text().split()[2:]
     # remove the IOC folder from the list
     if "IOC" in modules:
         modules.remove("IOC")
 
     # get all the dbd and lib files gathered from each support module
-    dbds = IOC_DBDS.read_text().split()
-    libs = IOC_LIBS.read_text().split()
+    dbds = [dbd.strip() for dbd in IOC_DBDS.read_text().split()]
+    libs = [lib.strip() for lib in IOC_LIBS.read_text().split()]
 
     # generate the Makefile from the template
     template = Template((MAKE_FOLDER / "Makefile.jinja").read_text())
