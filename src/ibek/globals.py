@@ -18,15 +18,18 @@ EPICS_ROOT = Path(str(os.getenv("EPICS_ROOT")))
 # all support modules will reside under this directory
 SUPPORT = Path(str(os.getenv("SUPPORT")))
 # the global RELEASE file which lists all support modules
-RELEASE = Path(f"{SUPPORT}/configure/RELEASE")
+RELEASE = SUPPORT / "configure/RELEASE"
 # a bash script to export the macros defined in RELEASE as environment vars
-RELEASE_SH = Path(f"{SUPPORT}/configure/RELEASE.shell")
+RELEASE_SH = SUPPORT / "configure/RELEASE.shell"
 # global MODULES file used to determine order of build
-MODULES = Path(f"{SUPPORT}/configure/MODULES")
+MODULES = SUPPORT / "configure/MODULES"
 # Folder containing Makefile.jinja
 MAKE_FOLDER = Path(str(os.getenv("IOC"))) / "iocApp/src"
 # Folder containing ibek support scripts
 SCRIPTS_FOLDER = Path("/workspaces/ibek-support")
+
+IOC_DBDS = SUPPORT / "configure/dbd_list"
+IOC_LIBS = SUPPORT / "configure/lib_list"
 
 
 class BaseSettings(BaseModel):

@@ -6,7 +6,7 @@ import typer
 from jinja2 import Template
 
 from ibek.gen_scripts import ioc_create_model
-from ibek.globals import MAKE_FOLDER, MODULES, SCRIPTS_FOLDER
+from ibek.globals import IOC_DBDS, IOC_LIBS, MAKE_FOLDER, MODULES, SCRIPTS_FOLDER
 
 ioc_cli = typer.Typer()
 
@@ -41,17 +41,9 @@ def generate_makefile():
     if "IOC" in modules:
         modules.remove("IOC")
 
-    # get all the dbd and lib files from each support module
-    dbds = []
-    libs = []
-    for module in modules:
-        folder = SCRIPTS_FOLDER / module
-        dbd_file = folder / "dbd"
-        if dbd_file.exists():
-            dbds.extend(dbd_file.read_text().split())
-        lib_file = folder / "lib"
-        if lib_file.exists():
-            libs.extend(lib_file.read_text().split())
+    # get all the dbd and lib files gathered from each support module
+    dbds = IOC_DBDS.read_text().split()
+    libs = IOC_LIBS.read_text().split()
 
     # generate the Makefile from the template
     template = Template((MAKE_FOLDER / "Makefile.jinja").read_text())

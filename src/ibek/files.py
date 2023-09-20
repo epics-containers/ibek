@@ -4,6 +4,7 @@ Functions for inserting snippets into files in an idempotent fashion
 
 from enum import Enum
 from pathlib import Path
+from typing import List
 
 from ibek.globals import SUPPORT
 
@@ -53,6 +54,22 @@ def get_release_file(
     return filepath
 
 
+def add_list_to_file(file: Path, text_list: List[str]):
+    """
+    add a sequence of strings into a file, leaving previously existing
+    strings where they are
+    """
+    if len(text_list) == 0:
+        return
+
+    print(f"ADD LINE {text_list}")
+    for line in text_list:
+        # skip blanks and comments
+        if line.startswith("#") or line == "":
+            continue
+        add_text_once(file, line)
+
+
 def add_text_once(file: Path, text: str):
     """
     Idempotent add of text to a file.
@@ -61,7 +78,7 @@ def add_text_once(file: Path, text: str):
 
     if not file.exists():
         file.parent.mkdir(parents=True, exist_ok=True)
-        file.write_text(text)
+        file.write_text(text + "\n")
     else:
         current = file.read_text()
         if text not in current:

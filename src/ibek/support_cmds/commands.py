@@ -12,6 +12,10 @@ from ibek.files import Arch, add_text_once, get_config_site_file
 from ibek.globals import EPICS_ROOT, MODULES, RELEASE, RELEASE_SH, SUPPORT
 from ibek.support import Support
 
+from ibek.globals import IOC_LIBS, IOC_DBDS
+
+from ibek.files import add_list_to_file
+
 # find macro name and macro value in a RELEASE file
 # only include values with at least one / (attempt to match filepaths only)
 PARSE_MACROS = re.compile(r"^([A-Z_a-z0-9]*)\s*=\s*(.*/.*)$", flags=re.M)
@@ -168,22 +172,23 @@ def git_clone(
 def add_libs(
     module: str = typer.Argument(..., help="support module name"),
     libs: List[str] = typer.Argument(..., help="list of libraries to add"),
-):
+) -> None:
     """
     declare the libraries for this support module for inclusion in IOC Makefile
     """
-    # TODO
+    add_list_to_file(IOC_LIBS, libs)
 
 
 @support_cli.command()
 def add_dbds(
     module: str = typer.Argument(..., help="support module name"),
     dbds: List[str] = typer.Argument(..., help="list of dbd files to add"),
-):
+) -> None:
     """
     declare the dbd files for this support module for inclusion in IOC Makefile
     """
-    # TODO
+    add_list_to_file(IOC_DBDS, dbds)
+
 
 
 @support_cli.command(
