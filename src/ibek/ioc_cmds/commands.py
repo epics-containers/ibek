@@ -1,4 +1,5 @@
 import json
+import subprocess
 from pathlib import Path
 from typing import Annotated, List
 
@@ -6,9 +7,14 @@ import typer
 from jinja2 import Template
 
 from ibek.gen_scripts import ioc_create_model
-from ibek.globals import IOC_DBDS, IOC_LIBS, MAKE_FOLDER, MODULES
-
-from ibek.globals import PROJECT_ROOT_FOLDER
+from ibek.globals import (
+    IOC_DBDS,
+    IOC_FOLDER,
+    IOC_LIBS,
+    MAKE_FOLDER,
+    MODULES,
+    PROJECT_ROOT_FOLDER,
+)
 from ibek.ioc_cmds.docker import build_dockerfile
 
 ioc_cli = typer.Typer()
@@ -58,11 +64,19 @@ def generate_makefile():
         stream.write(text)
 
 
-@ioc_cli.command()
-def compile():
+@ioc_cli.command(
+    context_settings={"allow_extra_args": True, "ignore_unknown_options": True}
+)
+def compile(
+    ctx: typer.Context,
+):
     """
     Compile a generic IOC after support modules are registered and compiled
     """
+    path = IOC_FOLDER
+
+    command = f"make -C {path} -j $(nproc) " + " ".join(ctx.args)
+    exit(subprocess.call(["bash", "-c", command]))
 
 
 @ioc_cli.command()
@@ -80,5 +94,7 @@ def build(
 
     Useful for debugging the Dockerfile without having to build the whole
     container from outside of the IOC devcontainer.
+
+    EXPERIMENTAL FEATURE
     """
     build_dockerfile(dockerfile, start, stop)

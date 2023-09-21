@@ -1,8 +1,8 @@
-from pathlib import Path
 import os
-import subprocess
-from typing import List
 import shutil
+import subprocess
+from pathlib import Path
+from typing import List
 
 from ibek.globals import PROJECT_ROOT_FOLDER
 
@@ -52,7 +52,7 @@ def handle_command(tokens: List[str], step, start):
 
 def build_dockerfile(dockerfile: Path, start: int, stop: int):
     index = 0
-    step = start
+    step = 1
     dockerfile_lines: List[str] = dockerfile.read_text().split("\n")
 
     stop = min(stop, len(dockerfile_lines))

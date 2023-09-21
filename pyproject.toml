@@ -19,6 +19,7 @@ dependencies = [
     "ruamel.yaml",
     "jinja2",
     "GitPython",
+    "rich",
 ] # Add project dependencies here, e.g. ["click", "numpy"]
 dynamic = ["version"]
 license.file = "LICENSE"
