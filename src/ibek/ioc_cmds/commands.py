@@ -1,12 +1,15 @@
 import json
 from pathlib import Path
-from typing import List
+from typing import Annotated, List
 
 import typer
 from jinja2 import Template
 
 from ibek.gen_scripts import ioc_create_model
 from ibek.globals import IOC_DBDS, IOC_LIBS, MAKE_FOLDER, MODULES
+
+from ibek.globals import PROJECT_ROOT_FOLDER
+from ibek.ioc_cmds.docker import build_dockerfile
 
 ioc_cli = typer.Typer()
 
@@ -57,4 +60,25 @@ def generate_makefile():
 
 @ioc_cli.command()
 def compile():
-    """Compile a generic IOC once all support modules are registered and compiled"""
+    """
+    Compile a generic IOC after support modules are registered and compiled
+    """
+
+
+@ioc_cli.command()
+def build(
+    start: int = typer.Option(1, help="The step to start at in the Dockerfile"),
+    stop: int = typer.Option(999, help="The step to stop at in the Dockerfile"),
+    dockerfile: Annotated[
+        Path, typer.Option(help="The filepath to the Dockerfile to build")
+    ] = PROJECT_ROOT_FOLDER
+    / "Dockerfile",
+):
+    """
+    Attempt to interpret the Dockerfile and run the commands inside the
+    developer container.
+
+    Useful for debugging the Dockerfile without having to build the whole
+    container from outside of the IOC devcontainer.
+    """
+    build_dockerfile(dockerfile, start, stop)
