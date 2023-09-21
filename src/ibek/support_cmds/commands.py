@@ -1,5 +1,6 @@
 import re
 import subprocess
+from enum import Enum
 from pathlib import Path
 from shutil import rmtree
 from typing import List, Optional
@@ -184,12 +185,21 @@ def add_to_config_site(
         add_text_once(config_site, text)
 
 
+class AptWhen(str, Enum):
+    dev = "dev"
+    runtime = "runtime"
+    both = "both"
+
+
 @support_cli.command(
-    context_settings={"allow_extra_args": True, "ignore_unknown_options": True}
+    # context_settings={"allow_extra_args": True, "ignore_unknown_options": True}
 )
 def apt_install(
     ctx: typer.Context,
     debs: List[str] = typer.Argument(None, help="list of debian packages to install"),
+    only: AptWhen = typer.Option(
+        AptWhen.both, help="which container build stage to install in"
+    ),
     runtime: bool = typer.Option(False, help="install list of runtime packages"),
 ):
     """
@@ -197,6 +207,11 @@ def apt_install(
     prefix then they will be downloaded and installed from file.
     """
     temp = Path("/tmp")
+
+    if only is AptWhen.runtime or AptWhen.both:
+        add_list_to_file(RUNTIME_DEBS, debs)
+    if only is AptWhen.runtime:
+        return
 
     if runtime:
         debs += RUNTIME_DEBS.read_text().split()
@@ -207,17 +222,10 @@ def apt_install(
             subprocess.call(["wget", pkg, "-O", str(pkg_file)])
             debs[i] = str(pkg_file)
 
+    # TODO extra args not working with --only - for investigation
     command = (
         "apt-get install -y --no-install-recommends "
         + " ".join(debs)
-        + " ".join(ctx.args)
+        # + " ".join(ctx.args)
     )
-
     exit(subprocess.call(["bash", "-c", command]))
-
-
-@support_cli.command()
-def apt_add_runtime(
-    debs: List[str] = typer.Argument(None, help="list of debian packages to install"),
-):
-    add_list_to_file(RUNTIME_DEBS, debs)

@@ -26,6 +26,7 @@ def verify_release_includes_local(configure_folder: Path):
 
     if "RELEASE.local" not in text:
         print(f"WARNING: {configure_folder}/RELEASE does not include RELEASE.local")
+        print(f"WARNING: {configure_folder}/RELEASE will be patched.")
         text += "# PATCHED BY IBEK\n-include $(TOP)/configure/RELEASE.local\n"
         release.write_text(text)
 
@@ -51,7 +52,7 @@ def do_dependencies():
     mod_list = f'MODULES := {" ".join(paths)}\n'
     MODULES.write_text(mod_list)
 
-    # generate RELEASE.sh file for inclusion into the ioc launch shell script.
+    # generate RELEASE.shell file for inclusion into the ioc launch shell script.
     # This adds all module paths to the environment and also adds their db
     # folders to the database search path env variable EPICS_DB_INCLUDE_PATH
     release_sh = []
