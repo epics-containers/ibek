@@ -188,3 +188,31 @@ def add_to_config_site(
     if text != "":
         config_site = get_config_site_file(module, host, target)
         add_text_once(config_site, text)
+
+
+@support_cli.command(
+    context_settings={"allow_extra_args": True, "ignore_unknown_options": True}
+)
+def apt_install(
+    ctx: typer.Context,
+    debs: List[str] = typer.Argument(..., help="list of debian packages to install"),
+):
+    """
+    Install debian packages into the container. If they have an http:// or https://
+    prefix then they will be downloaded and installed from file.
+    """
+    temp = Path("/tmp")
+
+    for i, pkg in enumerate(debs):
+        if pkg.startswith("http://") or pkg.startswith("https://"):
+            pkg_file = temp / pkg.split("/")[-1]
+            subprocess.call(["wget", pkg, "-O", str(pkg_file)])
+            debs[i] = str(pkg_file)
+
+    command = (
+        "apt-get install -y --no-install-recommends "
+        + " ".join(debs)
+        + " ".join(ctx.args)
+    )
+
+    exit(subprocess.call(["bash", "-c", command]))
