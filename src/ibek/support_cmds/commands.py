@@ -6,7 +6,12 @@ from shutil import rmtree
 from typing import List, Optional
 
 import typer
-from git import Repo
+
+try:
+    from git import Repo
+except ImportError:
+    print("Git Python is not needed for runtime ibek usage")
+
 from typing_extensions import Annotated
 
 from ibek.globals import EPICS_ROOT, IOC_DBDS, IOC_LIBS, RELEASE, RUNTIME_DEBS, SUPPORT
