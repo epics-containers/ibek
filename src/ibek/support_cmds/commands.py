@@ -213,7 +213,7 @@ def apt_install(
     """
     temp = Path("/tmp")
 
-    if only is AptWhen.run or AptWhen.both:
+    if (only is AptWhen.run) or (only is AptWhen.both):
         add_list_to_file(RUNTIME_DEBS, debs)
     if only is AptWhen.run:
         return
@@ -228,6 +228,7 @@ def apt_install(
             debs[i] = str(pkg_file)
 
     command = (
+        "apt-get update && apt-get upgrade -y && "
         "apt-get install -y --no-install-recommends "
         + " ".join(debs)
         + " ".join(ctx.args)
