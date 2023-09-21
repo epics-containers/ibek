@@ -1,7 +1,7 @@
 import json
 import subprocess
 from pathlib import Path
-from typing import Annotated, List
+from typing import Annotated, List, Optional
 
 import typer
 from jinja2 import Template
@@ -14,26 +14,11 @@ from ibek.globals import (
     MAKE_FOLDER,
     MODULES,
     PROJECT_ROOT_FOLDER,
+    NaturalOrderGroup,
 )
 from ibek.ioc_cmds.docker import build_dockerfile
 
-ioc_cli = typer.Typer()
-
-
-@ioc_cli.command()
-def generate_schema(
-    definitions: List[Path] = typer.Argument(
-        ..., help="The filepath to a support module definition file"
-    ),
-    output: Path = typer.Argument(..., help="The filename to write the schema to"),
-):
-    """
-    Create a json schema from a <support_module>.ibek.support.yaml file
-    """
-
-    ioc_model = ioc_create_model(definitions)
-    schema = json.dumps(ioc_model.model_json_schema(), indent=2)
-    output.write_text(schema)
+ioc_cli = typer.Typer(cls=NaturalOrderGroup)
 
 
 @ioc_cli.command()
@@ -89,12 +74,33 @@ def build(
     / "Dockerfile",
 ):
     """
-    Attempt to interpret the Dockerfile and run the commands inside the
-    developer container.
+    EXPERIMENTAL: Attempt to interpret the Dockerfile and run it's commands
+    inside the devcontainer. For internal, incremental builds of the Dockerfile.
 
     Useful for debugging the Dockerfile without having to build the whole
     container from outside of the IOC devcontainer.
-
-    EXPERIMENTAL FEATURE
     """
     build_dockerfile(dockerfile, start, stop)
+
+
+@ioc_cli.command()
+def generate_schema(
+    definitions: List[Path] = typer.Argument(
+        ..., help="File paths to one or more support module YAML files"
+    ),
+    output: Annotated[
+        Optional[Path],
+        typer.Option(help="The file path to the schema file to be written"),
+    ] = None,
+):
+    """
+    Create a json schema from a number of support_module.ibek.support.yaml
+    files
+    """
+
+    ioc_model = ioc_create_model(definitions)
+    schema = json.dumps(ioc_model.model_json_schema(), indent=2)
+    if output is None:
+        print(schema)
+    else:
+        output.write_text(schema)

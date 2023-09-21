@@ -8,8 +8,9 @@ from ibek.startup_cmds.commands import startup_cli
 from ibek.support_cmds.commands import support_cli
 
 from ._version import __version__
+from .globals import NaturalOrderGroup
 
-cli = typer.Typer()
+cli = typer.Typer(cls=NaturalOrderGroup)
 
 
 cli.add_typer(

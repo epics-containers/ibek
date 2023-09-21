@@ -8,8 +8,9 @@ from ibek.gen_scripts import (
     create_db_script,
     ioc_deserialize,
 )
+from ibek.globals import NaturalOrderGroup
 
-startup_cli = typer.Typer()
+startup_cli = typer.Typer(cls=NaturalOrderGroup)
 
 
 @startup_cli.command()

@@ -8,6 +8,7 @@ from typing import Dict
 
 from jinja2 import Template
 from pydantic import BaseModel, ConfigDict
+from typer.core import TyperGroup
 
 from .utils import UTILS
 
@@ -43,6 +44,11 @@ class BaseSettings(BaseModel):
     model_config = ConfigDict(
         extra="forbid",
     )
+
+
+class NaturalOrderGroup(TyperGroup):
+    def list_commands(self, ctx):
+        return self.commands.keys()
 
 
 def render_with_utils(context: Dict, template_text: str) -> str:
