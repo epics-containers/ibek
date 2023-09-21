@@ -192,12 +192,12 @@ def add_to_config_site(
 
 class AptWhen(str, Enum):
     dev = "dev"
-    runtime = "runtime"
+    run = "run"
     both = "both"
 
 
 @support_cli.command(
-    # context_settings={"allow_extra_args": True, "ignore_unknown_options": True}
+    context_settings={"allow_extra_args": True, "ignore_unknown_options": True}
 )
 def apt_install(
     ctx: typer.Context,
@@ -213,9 +213,9 @@ def apt_install(
     """
     temp = Path("/tmp")
 
-    if only is AptWhen.runtime or AptWhen.both:
+    if only is AptWhen.run or AptWhen.both:
         add_list_to_file(RUNTIME_DEBS, debs)
-    if only is AptWhen.runtime:
+    if only is AptWhen.run:
         return
 
     if runtime:
@@ -227,10 +227,9 @@ def apt_install(
             subprocess.call(["wget", pkg, "-O", str(pkg_file)])
             debs[i] = str(pkg_file)
 
-    # TODO extra args not working with --only - for investigation
     command = (
         "apt-get install -y --no-install-recommends "
         + " ".join(debs)
-        # + " ".join(ctx.args)
+        + " ".join(ctx.args)
     )
     exit(subprocess.call(["bash", "-c", command]))
