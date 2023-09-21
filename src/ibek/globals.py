@@ -34,6 +34,7 @@ PROJECT_ROOT_FOLDER = Path("/workspaces") / PROJECT_NAME
 
 IOC_DBDS = SUPPORT / "configure/dbd_list"
 IOC_LIBS = SUPPORT / "configure/lib_list"
+RUNTIME_DEBS = SUPPORT / "configure/runtime_debs"
 
 
 class BaseSettings(BaseModel):

@@ -62,7 +62,6 @@ def add_list_to_file(file: Path, text_list: List[str]):
     if len(text_list) == 0:
         return
 
-    print(f"ADD LINE {text_list}")
     for line in text_list:
         # skip blanks and comments
         if line.startswith("#") or line == "":

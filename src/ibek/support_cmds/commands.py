@@ -8,13 +8,7 @@ import typer
 from git import Repo
 from typing_extensions import Annotated
 
-from ibek.globals import (
-    EPICS_ROOT,
-    IOC_DBDS,
-    IOC_LIBS,
-    RELEASE,
-    SUPPORT,
-)
+from ibek.globals import EPICS_ROOT, IOC_DBDS, IOC_LIBS, RELEASE, RUNTIME_DEBS, SUPPORT
 from ibek.support import Support
 from ibek.support_cmds.checks import (
     add_macro,
@@ -129,7 +123,7 @@ def git_clone(
 
 @support_cli.command()
 def add_libs(
-    libs: List[str] = typer.Argument(..., help="list of libraries to add"),
+    libs: List[str] = typer.Argument(None, help="list of libraries to add"),
 ) -> None:
     """
     declare the libraries for this support module for inclusion in IOC Makefile
@@ -139,7 +133,7 @@ def add_libs(
 
 @support_cli.command()
 def add_dbds(
-    dbds: List[str] = typer.Argument(..., help="list of dbd files to add"),
+    dbds: List[str] = typer.Argument(None, help="list of dbd files to add"),
 ) -> None:
     """
     declare the dbd files for this support module for inclusion in IOC Makefile
@@ -195,13 +189,17 @@ def add_to_config_site(
 )
 def apt_install(
     ctx: typer.Context,
-    debs: List[str] = typer.Argument(..., help="list of debian packages to install"),
+    debs: List[str] = typer.Argument(None, help="list of debian packages to install"),
+    runtime: bool = typer.Option(False, help="install list of runtime packages"),
 ):
     """
     Install debian packages into the container. If they have an http:// or https://
     prefix then they will be downloaded and installed from file.
     """
     temp = Path("/tmp")
+
+    if runtime:
+        debs += RUNTIME_DEBS.read_text().split()
 
     for i, pkg in enumerate(debs):
         if pkg.startswith("http://") or pkg.startswith("https://"):
@@ -216,3 +214,10 @@ def apt_install(
     )
 
     exit(subprocess.call(["bash", "-c", command]))
+
+
+@support_cli.command()
+def apt_add_runtime(
+    debs: List[str] = typer.Argument(None, help="list of debian packages to install"),
+):
+    add_list_to_file(RUNTIME_DEBS, debs)
