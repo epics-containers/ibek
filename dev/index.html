@@ -9,7 +9,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
-    <title>ibek &#8212; ibek 0.11.1.dev13+gb134bbf documentation</title>
+    <title>ibek: IOC Builder for EPICS and Kubernetes &#8212; ibek 0.11.1.dev31+g4207515 documentation</title>
   
   
   
@@ -19,12 +19,12 @@
   </script>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="_static/styles/theme.css?digest=927b94d3fcb96560df09" rel="stylesheet" />
-<link href="_static/styles/bootstrap.css?digest=927b94d3fcb96560df09" rel="stylesheet" />
-<link href="_static/styles/pydata-sphinx-theme.css?digest=927b94d3fcb96560df09" rel="stylesheet" />
+  <link href="_static/styles/theme.css?digest=ac02cc09edc035673794" rel="stylesheet" />
+<link href="_static/styles/bootstrap.css?digest=ac02cc09edc035673794" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=ac02cc09edc035673794" rel="stylesheet" />
 
   
-  <link href="_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=927b94d3fcb96560df09" rel="stylesheet" />
+  <link href="_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=ac02cc09edc035673794" rel="stylesheet" />
   <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
@@ -35,9 +35,9 @@
     <link rel="stylesheet" type="text/css" href="_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=927b94d3fcb96560df09" />
-<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=927b94d3fcb96560df09" />
-  <script src="_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=927b94d3fcb96560df09"></script>
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=ac02cc09edc035673794" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=ac02cc09edc035673794" />
+  <script src="_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=ac02cc09edc035673794"></script>
 
     <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
     <script src="_static/doctools.js"></script>
@@ -47,7 +47,7 @@
     <script src="_static/design-tabs.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'index';</script>
     <script>
-        DOCUMENTATION_OPTIONS.theme_version = '0.14.0';
+        DOCUMENTATION_OPTIONS.theme_version = '0.14.1';
         DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://epics-containers.github.io/ibek/switcher.json';
         DOCUMENTATION_OPTIONS.theme_switcher_version_match = 'dev';
         DOCUMENTATION_OPTIONS.show_version_warning_banner = false;
@@ -188,8 +188,8 @@
  document.write(`
    <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
     <i class="fa-solid fa-magnifying-glass"></i>
-    <span class="search-button__kbd-shortcut">Search</span>
-    <span><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
    </button>
  `);
  </script>
@@ -240,7 +240,7 @@ document.write(`
 document.write(`
   <div class="version-switcher__container dropdown">
     <button id="versionswitcherbutton" type="button" role="button" class="version-switcher__button btn btn-sm navbar-btn dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="listbox" aria-controls="versionswitcherlist" aria-label="Version switcher list">
-      dev  <!-- this text may get changed later by javascript -->
+      Choose version  <!-- this text may get changed later by javascript -->
       <span class="caret"></span>
     </button>
     <div id="versionswitcherlist" class="version-switcher__menu dropdown-menu list-group-flush py-0" role="listbox" aria-labelledby="versionswitcherbutton">
@@ -260,8 +260,8 @@ document.write(`
  document.write(`
    <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
     <i class="fa-solid fa-magnifying-glass"></i>
-    <span class="search-button__kbd-shortcut">Search</span>
-    <span><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
    </button>
  `);
  </script>
@@ -367,7 +367,7 @@ document.write(`
 document.write(`
   <div class="version-switcher__container dropdown">
     <button id="versionswitcherbutton" type="button" role="button" class="version-switcher__button btn btn-sm navbar-btn dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="listbox" aria-controls="versionswitcherlist" aria-label="Version switcher list">
-      dev  <!-- this text may get changed later by javascript -->
+      Choose version  <!-- this text may get changed later by javascript -->
       <span class="caret"></span>
     </button>
     <div id="versionswitcherlist" class="version-switcher__menu dropdown-menu list-group-flush py-0" role="listbox" aria-labelledby="versionswitcherbutton">
@@ -404,22 +404,15 @@ document.write(`
 <div id="searchbox"></div>
                 <article class="bd-article" role="main">
                   
-  <section id="ibek">
-<h1>ibek<a class="headerlink" href="#ibek" title="Permalink to this heading">#</a></h1>
-<p><a class="reference external" href="https://github.com/epics-containers/ibek/actions/workflows/code.yml"><img alt="Code CI" src="https://github.com/epics-containers/ibek/actions/workflows/code.yml/badge.svg?branch=change_linter_to_ruff" /></a> <a class="reference external" href="https://github.com/epics-containers/ibek/actions/workflows/docs.yml"><img alt="Docs CI" src="https://github.com/epics-containers/ibek/actions/workflows/docs.yml/badge.svg?branch=change_linter_to_ruff" /></a> <a class="reference external" href="https://codecov.io/gh/epics-containers/ibek"><img alt="Test Coverage" src="https://codecov.io/gh/epics-containers/ibek/branch/change_linter_to_ruff/graph/badge.svg" /></a> <a class="reference external" href="https://pypi.org/project/ibek"><img alt="Latest PyPI version" src="https://img.shields.io/pypi/v/ibek.svg" /></a> <a class="reference external" href="https://opensource.org/licenses/Apache-2.0"><img alt="Apache License" src="https://img.shields.io/badge/License-Apache%202.0-blue.svg" /></a></p>
-<p>IOC Builder for EPICS and Kubernetes:</p>
-<ul class="simple">
-<li><p>In an EPICS support module describe what entities an IOC using it can create,
-what arguments they take, and what database and st.cmd snippets it should
-generate in a <code class="docutils literal notranslate"><span class="pre">builder.yaml</span></code> file</p></li>
-<li><p>Build support modules together in a container image and use <code class="docutils literal notranslate"><span class="pre">ibek</span></code> in the
-image to create a JSON schema of what an IOC using that image can contain</p></li>
-<li><p>Write an <code class="docutils literal notranslate"><span class="pre">ioc.yaml</span></code> file against that schema listing instances of the
-entities with arguments</p></li>
-<li><p>Use <code class="docutils literal notranslate"><span class="pre">ibek</span></code> to generate a startup script and database that runs
-up the IOC contained in the image with them</p></li>
-</ul>
-<table class="table">
+  <section id="ibek-ioc-builder-for-epics-and-kubernetes">
+<h1>ibek: IOC Builder for EPICS and Kubernetes<a class="headerlink" href="#ibek-ioc-builder-for-epics-and-kubernetes" title="Permalink to this heading">#</a></h1>
+<p><a class="reference external" href="https://github.com/epics-containers/ibek/actions/workflows/code.yml"><img alt="Code CI" src="https://github.com/epics-containers/ibek/actions/workflows/code.yml/badge.svg?branch=change_linter_to_ruff" /></a> <a class="reference external" href="https://github.com/epics-containers/ibek/actions/workflows/docs.yml"><img alt="Docs CI" src="https://github.com/epics-containers/ibek/actions/workflows/docs.yml/badge.svg?branch=change_linter_to_ruff" /></a> <a class="reference external" href="https://codecov.io/gh/epics-containers/ibek"><img alt="Test Coverage" src="https://codecov.io/gh/epics-containers/ibek/branch/change_linter_to_ruff/graph/badge.svg" /></a> <a class="reference external" href="https://pypi.org/project/ibek"><img alt="Latest PyPI version" src="https://img.shields.io/pypi/v/ibek.svg" /></a> <a class="reference external" href="https://github.com/psf/black"><img alt="black" src="https://img.shields.io/badge/code%20style-black-000000.svg" /></a> <a class="reference external" href="https://opensource.org/licenses/Apache-2.0"><img alt="Apache License" src="https://img.shields.io/badge/License-Apache%202.0-blue.svg" /></a></p>
+<p>This tool supports building container images for Generic EPICS IOCs and
+generating IOC Instances from those Generic IOCs at container runtime. It is
+targetted at running IOCs in Kubernetes, but the images it
+creates can execute in any container runtime, such as docker or podman.</p>
+<blockquote>
+<div><table class="table">
 <tbody>
 <tr class="row-odd"><td><p>PyPI</p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">ibek</span></code></p></td>
@@ -435,20 +428,95 @@ up the IOC contained in the image with them</p></li>
 </tr>
 </tbody>
 </table>
-<section id="todo">
-<h2>TODO<a class="headerlink" href="#todo" title="Permalink to this heading">#</a></h2>
-<p>This project is approaching completion. The following items are still to do:</p>
-<blockquote>
-<div><p>from ibek import __version__</p>
-<p>print(f”Hello ibek {__version__}”)</p>
-<ul class="simple">
-<li><p>DONE: Add ability to define embedded objects e.g. AsynIp and AsynSerial would
-both be defined by embedding AsynPort (so similar to how original builder.py
-works)</p></li>
-</ul>
-<p>$ python -m ibek –version</p>
 </div></blockquote>
-</section>
+<p>The documentation is still under construction. For the moment the best
+pages to read are the following:</p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://epics-containers.github.io/ibek/main/developer/explanations/entities.html//">Modules, Definitions and Entities</a>
+A description of the basic concepts of ibek.</p></li>
+<li><p><a class="reference external" href="https://epics-containers.github.io/ibek/main/user/reference/naming.html">naming conventions in support YAML</a>
+Conventions for the YAML that ibek consumes.</p></li>
+<li><p><a class="reference external" href="https://epics-containers.github.io">epics-containers documentation</a>
+Documentation and tutorials for the epics-containers suite of tools.</p></li>
+</ul>
+<p>The command line interface for ibek is as follows. The most up to date version
+of this can be found by running <code class="docutils literal notranslate"><span class="pre">ibek</span> <span class="pre">--help</span></code>.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>Usage: ibek [OPTIONS] COMMAND [ARGS]...
+
+IOC Builder for EPICS and Kubernetes
+Provides support for building generic EPICS IOC container images and for running IOC instances
+in a Kubernetes cluster.
+
+╭─ Options ─────────────────────────────────────────────────────────────────────────────────────╮
+│ --version                     Print the version of ibek and exit                              │
+│ --install-completion          Install completion for the current shell.                       │
+│ --show-completion             Show completion for the current shell, to copy it or customize  │
+│                               the installation.                                               │
+│ --help                        Show this message and exit.                                     │
+╰───────────────────────────────────────────────────────────────────────────────────────────────╯
+╭─ Commands ────────────────────────────────────────────────────────────────────────────────────╮
+│ support    Commands for building support modules during container build                       │
+│ ioc        Commands for building generic IOCs during container build                          │
+│ startup    Commands for building IOC instance startup files at container runtime              │
+╰───────────────────────────────────────────────────────────────────────────────────────────────╯
+
+Usage: ibek support [OPTIONS] COMMAND [ARGS]...
+
+Commands for building support modules during container build
+
+╭─ Options ─────────────────────────────────────────────────────────────────────────────────────╮
+│ --help          Show this message and exit.                                                   │
+╰───────────────────────────────────────────────────────────────────────────────────────────────╯
+╭─ Commands ────────────────────────────────────────────────────────────────────────────────────╮
+│ apt-install         Install debian packages into the container. If they have an http:// or    │
+│                     https:// prefix then they will be downloaded and installed from file.     │
+│ git-clone           clone a support module from a remote repository                           │
+│ register            prepare the configure RELEASE files to build a support module inside an   │
+│                     epics-containers build                                                    │
+│ add-libs            declare the libraries for this support module for inclusion in IOC        │
+│                     Makefile                                                                  │
+│ add-dbds            declare the dbd files for this support module for inclusion in IOC        │
+│                     Makefile                                                                  │
+│ add-release-macro   add or replace a macro the global RELEASE file                            │
+│ add-config-macro    add or replace a macro in CONFIG_SITE.linux-x86_64.Common file            │
+│ add-to-config-site  add some text to a support module&#39;s CONFIG_SITE file                      │
+│ compile             compile a support module after preparation with `ibek support register`   │
+│                     etc.                                                                      │
+│ generate-links      generate symlinks to the bob, pvi and support YAML for a compiled IOC     │
+│ generate-schema     Produce JSON global schema for all &lt;support_module&gt;.ibek.support.yaml     │
+│                     files                                                                     │
+╰───────────────────────────────────────────────────────────────────────────────────────────────╯
+
+Usage: ibek ioc [OPTIONS] COMMAND [ARGS]...
+
+Commands for building generic IOCs during container build
+
+╭─ Options ─────────────────────────────────────────────────────────────────────────────────────╮
+│ --help          Show this message and exit.                                                   │
+╰───────────────────────────────────────────────────────────────────────────────────────────────╯
+╭─ Commands ────────────────────────────────────────────────────────────────────────────────────╮
+│ generate-makefile  get the dbd and lib files from all support modules and generate            │
+│                    iocApp/src/Makefile from iocApp/src/Makefile.jinja                         │
+│ compile            Compile a generic IOC after support modules are registered and compiled    │
+│ build              EXPERIMENTAL: Attempt to interpret the Dockerfile and run it&#39;s commands    │
+│                    inside the devcontainer. For internal, incremental builds of the           │
+│                    Dockerfile.                                                                │
+│ generate-schema    Create a json schema from a number of support_module.ibek.support.yaml     │
+│                    files                                                                      │
+╰───────────────────────────────────────────────────────────────────────────────────────────────╯
+
+Usage: ibek startup [OPTIONS] COMMAND [ARGS]...
+
+Commands for building IOC instance startup files at container runtime
+
+╭─ Options ─────────────────────────────────────────────────────────────────────────────────────╮
+│ --help          Show this message and exit.                                                   │
+╰───────────────────────────────────────────────────────────────────────────────────────────────╯
+╭─ Commands ────────────────────────────────────────────────────────────────────────────────────╮
+│ generate          Build a startup script for an IOC instance                                  │
+╰───────────────────────────────────────────────────────────────────────────────────────────────╯
+</pre></div>
+</div>
 <section id="how-the-documentation-is-structured">
 <h2>How the documentation is structured<a class="headerlink" href="#how-the-documentation-is-structured" title="Permalink to this heading">#</a></h2>
 <p>The documentation is split into 2 sections:</p>
@@ -516,8 +584,8 @@ works)</p></li>
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script src="_static/scripts/bootstrap.js?digest=927b94d3fcb96560df09"></script>
-<script src="_static/scripts/pydata-sphinx-theme.js?digest=927b94d3fcb96560df09"></script>
+  <script src="_static/scripts/bootstrap.js?digest=ac02cc09edc035673794"></script>
+<script src="_static/scripts/pydata-sphinx-theme.js?digest=ac02cc09edc035673794"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">
@@ -527,7 +595,7 @@ works)</p></li>
     <div class="footer-items__end">
       
         <div class="footer-item"><p class="theme-version">
-  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.14.0.
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.14.1.
 </p></div>
       
     </div>
