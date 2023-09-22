@@ -1,5 +1,5 @@
 [build-system]
-requires = ["setuptools>=64", "setuptools_scm[toml]>=6.2", "wheel"]
+requires = ["setuptools>=64", "setuptools_scm[toml]==7.1.0", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
@@ -18,6 +18,8 @@ dependencies = [
     "typer",
     "ruamel.yaml",
     "jinja2",
+    "GitPython",
+    "rich",
 ] # Add project dependencies here, e.g. ["click", "numpy"]
 dynamic = ["version"]
 license.file = "LICENSE"

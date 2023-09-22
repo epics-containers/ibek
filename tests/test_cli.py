@@ -20,7 +20,7 @@ def test_cli_version():
 def test_ibek_schema(tmp_path: Path, samples: Path):
     """generate the global ibek schema"""
     schema_path = tmp_path / "schema.json"
-    run_cli("ibek-schema", schema_path)
+    run_cli("support", "generate-schema", "--output", schema_path)
     expected = json.loads(
         (samples / "schemas" / "ibek.support.schema.json").read_text()
     )
@@ -35,7 +35,7 @@ def test_object_schema(tmp_path: Path, samples: Path):
 
     schema_path = tmp_path / "objects.ibek.support.schema.json"
     yaml_path = samples / "yaml" / "objects.ibek.support.yaml"
-    run_cli("ioc-schema", yaml_path, schema_path)
+    run_cli("ioc", "generate-schema", yaml_path, "--output", schema_path)
 
     expected = json.loads(
         (samples / "schemas" / "objects.ibek.ioc.schema.json").read_text()
@@ -52,7 +52,9 @@ def test_ioc_schema(tmp_path: Path, samples: Path):
     schema_combined = tmp_path / "multiple.ibek.ioc.schema.json"
     yaml_path1 = samples / "yaml" / "objects.ibek.support.yaml"
     yaml_path2 = samples / "yaml" / "all.ibek.support.yaml"
-    run_cli("ioc-schema", yaml_path1, yaml_path2, schema_combined)
+    run_cli(
+        "ioc", "generate-schema", yaml_path1, yaml_path2, "--output", schema_combined
+    )
 
     expected = json.loads(
         (samples / "schemas" / "multiple.ibek.ioc.schema.json").read_text()
@@ -76,7 +78,8 @@ def test_build_startup_single(tmp_path: Path, samples: Path):
     out_db = tmp_path / "new_dir" / "objects.db.subst"
 
     run_cli(
-        "build-startup",
+        "startup",
+        "generate",
         ioc_yaml,
         support_yaml,
         "--out",
@@ -110,7 +113,8 @@ def test_build_startup_multiple(tmp_path: Path, samples: Path):
     out_db = tmp_path / "all.db.subst"
 
     run_cli(
-        "build-startup",
+        "startup",
+        "generate",
         ioc_yaml,
         support_yaml,
         support_yaml2,
@@ -140,7 +144,8 @@ def test_build_utils_features(tmp_path: Path, samples: Path):
     out_db = tmp_path / "db.subst"
 
     run_cli(
-        "build-startup",
+        "startup",
+        "generate",
         ioc_yaml,
         support_yaml,
         "--out",
