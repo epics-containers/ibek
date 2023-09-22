@@ -130,9 +130,6 @@ jobs:
 
       - uses: actions/download-artifact@v3
 
-      - name: Checkout
-        uses: actions/checkout@v4
-
       - name: Fixup blank lockfiles
         # Github release artifacts can't be blank
         run: for f in lockfiles/*; do [ -s $f ] || echo '# No requirements' >> $f; done
