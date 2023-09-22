@@ -73,7 +73,7 @@ def apt_install(
     if only is AptWhen.run:
         return
 
-    if runtime:
+    if runtime and RUNTIME_DEBS.exists():
         debs += RUNTIME_DEBS.read_text().split()
 
     for i, pkg in enumerate(debs):
