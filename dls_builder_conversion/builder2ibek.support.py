@@ -25,7 +25,7 @@ require("iocbuilder")
 require("dls_dependency_tree")
 require("ruamel.yaml")
 require("mock")
-
+from ruamel.yaml.scalarstring import PreservedScalarString
 
 from dls_dependency_tree import dependency_tree  # noqa: E402 isort:skip
 from iocbuilder import ParseEtcArgs, configure, device  # noqa: E402 isort:skip
@@ -248,7 +248,7 @@ class Builder2Support:
 
         return databases
 
-    def _make_init_script(self, builder_object, func_name, typ, script):
+    def _make_init_script(self, builder_object, func_name, typ, script, when=None):
         """
         Find the source code for a builder class method and create an object
         graph representing as script entries in the ibek YAML file.
@@ -257,17 +257,19 @@ class Builder2Support:
         if func:
             script_item = ordereddict()
             script_item["type"] = typ
+            if when:
+                script_item["when"] = when
             func_text = inspect.getsource(func)
             print_strings = func_text.split("print")[1:]
 
-            script_item["value"] = []
+            commands = ""
             for print_string in print_strings:
                 matches = extract_printed_strings_re.findall(print_string)
                 if matches:
                     line = macros_re.sub(macro_to_jinja_re, matches[0][1])
-                    script_item["value"].append(line)
-
-            if len(script_item["value"]) > 0:
+                    commands += line + "\n"
+            if commands:
+                script_item["value"] = PreservedScalarString(commands)
                 script.append(script_item)
 
     def _call_initialise(self, builder_object):
@@ -279,14 +281,15 @@ class Builder2Support:
         and InitialiseOnce() methods.
 
         """
-        script = []
-        self._make_init_script(builder_object, "InitialiseOnce", "once", script)
-        self._make_init_script(builder_object, "Initialise", "text", script)
+        pre_init = []
+        post_init = []
         self._make_init_script(
-            builder_object, "PostIocInitialise", "post_ioc_init", script
+            builder_object, "InitialiseOnce", "text", pre_init, when="first"
         )
+        self._make_init_script(builder_object, "Initialise", "text", pre_init)
+        self._make_init_script(builder_object, "PostIocInitialise", "text", post_init)
 
-        return script
+        return pre_init, post_init
 
     def dump_subst_file(self):
         """
@@ -313,9 +316,11 @@ class Builder2Support:
             yaml_defs.append(one_def)
             builder_objects.append(builder_object)
             one_def["databases"] = self._extract_substitutions()
-            pre_init_script = self._call_initialise(builder_object)
-            if pre_init_script:
-                one_def["pre_init"] = pre_init_script
+            pre_init, post_init = self._call_initialise(builder_object)
+            if len(pre_init) > 0:
+                one_def["pre_init"] = pre_init
+            if len(post_init) > 0:
+                one_def["post_init"] = post_init
 
     def write_yaml_tree(self, filename):
         """
