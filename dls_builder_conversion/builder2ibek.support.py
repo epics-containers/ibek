@@ -110,7 +110,7 @@ class Builder2Support:
             desc = builder_class.__doc__.strip()
         else:
             desc = "TODO:ADD DESCRIPTION"
-        this_def["description"] = desc
+        this_def["description"] = PreservedScalarString(desc)
         args = this_def["args"] = []
 
         for arg_name in builder_class.ArgInfo.required_names:
@@ -169,7 +169,11 @@ class Builder2Support:
 
         # Create the object representing a YAML argument
         arg = ordereddict()
-        arg["type"], arg["name"], arg["description"] = typ, arg_name, description
+        arg["type"], arg["name"], arg["description"] = (
+            typ,
+            arg_name,
+            description,
+        )
         if default is not None:
             arg["default"] = default
 
