@@ -42,6 +42,8 @@ is_int_re = re.compile(r"[-+]?\d+$")
 is_float_re = re.compile(r"[-+]?\d*\.\d+([eE][-+]?\d+)?$")
 # this monster regex finds strings between '' or "" (just wow!)
 extract_printed_strings_re = re.compile(r"([\"'])((?:\\\1|(?:(?!\1))[\S\s])*)(?:\1)")
+macros_re = re.compile(r"%\((.*?)\).|\n")
+macro_to_jinja_re = r"{{\1}}"
 
 
 class Builder2Support:
@@ -262,7 +264,8 @@ class Builder2Support:
             for print_string in print_strings:
                 matches = extract_printed_strings_re.findall(print_string)
                 if matches:
-                    script_item["value"].append(matches[0][1])
+                    line = macros_re.sub(macro_to_jinja_re, matches[0][1])
+                    script_item["value"].append(line)
 
             if len(script_item["value"]) > 0:
                 script.append(script_item)
@@ -322,14 +325,14 @@ class Builder2Support:
         def tidy_up(yaml):
             # add blank lines between major fields
             for field in [
-                "- type:",
-                "- file:",
                 "- name:",
-                "databases:",
-                "pre_init:",
+                "  databases:",
+                "  pre_init:",
                 "module",
+                "defs",
+                "  args",
             ]:
-                yaml = re.sub(r"(\s*%s)" % field, "\n\\g<1>", yaml)
+                yaml = re.sub(r"(\n%s)" % field, "\n\\g<1>", yaml)
 
             return yaml
 

@@ -11,7 +11,7 @@
             "type": "python",
             "python": "/dls_sw/prod/tools/RHEL7-x86_64/defaults/bin/dls-python",
             "request": "launch",
-            "program": "builder2ibek.support.py",
+            "program": "dls_builder_conversion/builder2ibek.support.py",
             "console": "integratedTerminal",
             "args": [
                 "/dls_sw/prod/R3.14.12.7/support/ADCore/3-9dls2",
