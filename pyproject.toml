@@ -119,4 +119,4 @@ select = [
     "I001", # isort
 ]
 [tool.ruff.per-file-ignores]
-"dls_builder_conversion/builder2ibek.support.py" = ["E402"]
+"builder2ibek.support.py" = ["E402"]

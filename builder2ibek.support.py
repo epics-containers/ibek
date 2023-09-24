@@ -54,6 +54,7 @@ class Builder2Support:
         Builder2Support.arg_value_overrides = arg_value_overrides
         self.yaml_tree = ordereddict()
         self.builder_module, self.builder_classes = self._configure()
+        self.def_args = {}  # Dict[def name: [Arg names]]
 
     def _configure(self):
         """
@@ -220,7 +221,7 @@ class Builder2Support:
         # instantiate a builder object using our mock arguments
         return builder_class(**args_dict)
 
-    def _extract_substitutions(self):
+    def _extract_substitutions(self, name):
         """
         Extract all of the database substitutions from the builder class
         and populate the ibek YAML database object graph.
@@ -250,9 +251,15 @@ class Builder2Support:
 
             database["args"] = {a[0]: None for a in first_substitution.args.items()}
 
+            missing = set(database["args"].keys()) - set(self.def_args[name])
+            if len(missing) > 0:
+                missed = ", ".join(missing)
+                database["warning"] = "MACROS missing from args: " + missed
         return databases
 
-    def _make_init_script(self, builder_object, func_name, typ, script, when=None):
+    def _make_init_script(
+        self, builder_object, func_name, typ, script, name, when=None
+    ):
         """
         Find the source code for a builder class method and create an object
         graph representing as script entries in the ibek YAML file.
@@ -276,7 +283,7 @@ class Builder2Support:
                 script_item["value"] = PreservedScalarString(commands)
                 script.append(script_item)
 
-    def _call_initialise(self, builder_object):
+    def _call_initialise(self, builder_object, name):
         """
         Extract the code from the builder class Initialise() method
         to insert into the ibek YAML script object graph.
@@ -288,10 +295,14 @@ class Builder2Support:
         pre_init = []
         post_init = []
         self._make_init_script(
-            builder_object, "InitialiseOnce", "text", pre_init, when="first"
+            builder_object, "InitialiseOnce", "text", pre_init, when="first", name=name
         )
-        self._make_init_script(builder_object, "Initialise", "text", pre_init)
-        self._make_init_script(builder_object, "PostIocInitialise", "text", post_init)
+        self._make_init_script(
+            builder_object, "Initialise", "text", pre_init, name=name
+        )
+        self._make_init_script(
+            builder_object, "PostIocInitialise", "text", post_init, name=name
+        )
 
         return pre_init, post_init
 
@@ -317,10 +328,16 @@ class Builder2Support:
 
         for name, builder_class in self.builder_classes.items():
             one_def, builder_object = self._make_builder_object(name, builder_class)
+            self.def_args[name] = [arg["name"] for arg in one_def["args"]]
+
             yaml_defs.append(one_def)
             builder_objects.append(builder_object)
-            one_def["databases"] = self._extract_substitutions()
-            pre_init, post_init = self._call_initialise(builder_object)
+
+            databases = self._extract_substitutions(name)
+            if len(databases) > 0:
+                one_def["databases"] = databases
+            pre_init, post_init = self._call_initialise(builder_object, name)
+
             if len(pre_init) > 0:
                 one_def["pre_init"] = pre_init
             if len(post_init) > 0:
