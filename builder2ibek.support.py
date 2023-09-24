@@ -35,14 +35,22 @@ from ruamel.yaml import YAML  # noqa: E402 isort:skip
 from ruamel.yaml.comments import CommentedMap as ordereddict  # noqa: E402 isort:skip
 
 
+# regular expressions for extracting information from builder classes
+# regular expressions for extracting information from builder classes
 class_name_re = re.compile(r"class '.*\.(.*)'")
 description_re = re.compile(r"(.*)\n<(?:type|class)")
 arg_values_re = re.compile(r"(\d*):(.*)")
 is_int_re = re.compile(r"[-+]?\d+$")
 is_float_re = re.compile(r"[-+]?\d*\.\d+([eE][-+]?\d+)?$")
+
+# this monster regex finds strings between '' or "" (oh boy!)
 # this monster regex finds strings between '' or "" (just wow!)
+
+# this monster regex finds strings between '' or "" (oh boy!)
 extract_printed_strings_re = re.compile(r"([\"'])((?:\\\1|(?:(?!\1))[\S\s])*)(?:\1)")
-macros_re = re.compile(r"%\((.*?)\).|\n")
+# match substitution fields in print statements e.g. %(name)s or {name:s} etc
+macros_re = re.compile(r"%\((.*?)\).|{(.*?)(?:\:.)?}")
+# replace matched fields with jinja2 style macros
 macro_to_jinja_re = r"{{\1}}"
 
 
@@ -279,6 +287,10 @@ class Builder2Support:
             for print_string in print_strings:
                 matches = extract_printed_strings_re.findall(print_string)
                 if matches:
+                    # TODO this fails because we have two mutually exclusive
+                    # groups in the regex so we get a tuple with one blanks string
+                    # I could fix this niavely but want my regex to do the work for
+                    # me
                     command_args += macros_re.findall(matches[0][1])
                     line = macros_re.sub(macro_to_jinja_re, matches[0][1])
                     commands += line + "\n"
