@@ -254,7 +254,7 @@ class Builder2Support:
             missing = set(database["args"].keys()) - set(self.def_args[name])
             if len(missing) > 0:
                 missed = ", ".join(missing)
-                database["warning"] = "MACROS missing from args: " + missed
+                database["warning"] = "Database Args missing: " + missed
         return databases
 
     def _make_init_script(
@@ -273,15 +273,22 @@ class Builder2Support:
             func_text = inspect.getsource(func)
             print_strings = func_text.split("print")[1:]
 
+            command_args = []
+
             commands = ""
             for print_string in print_strings:
                 matches = extract_printed_strings_re.findall(print_string)
                 if matches:
+                    command_args += macros_re.findall(matches[0][1])
                     line = macros_re.sub(macro_to_jinja_re, matches[0][1])
                     commands += line + "\n"
             if commands:
                 script_item["value"] = PreservedScalarString(commands)
                 script.append(script_item)
+                missing = set(command_args) - set(self.def_args[name])
+                if len(missing) > 0:
+                    missed = ", ".join(missing)
+                    script_item["warning"] = "function Args missing: " + missed
 
     def _call_initialise(self, builder_object, name):
         """
