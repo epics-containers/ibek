@@ -29,8 +29,7 @@ defs:
         value: "{{ name }}"
 
     pre_init:
-      - type: text
-        value: |
+      - value: |
           # TestValues testValue
           TestValues {{ test_value }}
 
@@ -59,8 +58,7 @@ defs:
         description: a reference to an RefObject
 
     pre_init:
-      - type: text
-        value: |-
+      - value: |
           # ExampleTestFunction asynPortIP name port value
           ExampleTestFunction {{ PORT.IP }} {{ name }} {{ PORT }} {{ PORT.test_value }}
           # PORT defaults to the id of PORT, i.e. PORT.name

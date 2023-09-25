@@ -84,8 +84,8 @@ defs:
         value: |-
           testPreInit "{{ name }}" "'{{ my_str }}'"
 
-      - type: text
-        value: |
+      # default type is text
+      - value: |
           my_str =                    {{ my_str }}
           my_inferred_enum =          {{ my_inferred_enum }}
           clock_rate =                {{ clock_rate }}
