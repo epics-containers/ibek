@@ -5,12 +5,24 @@ from __future__ import annotations
 
 import json
 from enum import Enum
-from typing import Any, Dict, Optional, Sequence, Union
+from typing import Any, Dict, ForwardRef, Optional, Sequence, Union
 
-from pydantic import Field
+from pydantic import Field, PydanticUndefinedAnnotation
 from typing_extensions import Literal
 
 from .globals import BaseSettings
+
+UndefinedType = ForwardRef("UndefinedType")
+
+
+def default(T: type):
+    """
+    defines a default type which may be
+    """
+    return Field(
+        Union[Optional[T], PydanticUndefinedAnnotation],
+        description="If given, instance doesn't supply argument, what value should be used",
+    )
 
 
 class When(Enum):

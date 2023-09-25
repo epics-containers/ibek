@@ -44,14 +44,13 @@ is_int_re = re.compile(r"[-+]?\d+$")
 is_float_re = re.compile(r"[-+]?\d*\.\d+([eE][-+]?\d+)?$")
 
 # this monster regex finds strings between '' or "" (oh boy!)
-# this monster regex finds strings between '' or "" (just wow!)
-
-# this monster regex finds strings between '' or "" (oh boy!)
 extract_printed_strings_re = re.compile(r"([\"'])((?:\\\1|(?:(?!\1))[\S\s])*)(?:\1)")
 # match substitution fields in print statements e.g. %(name)s or {name:s} etc
-macros_re = re.compile(r"%\((.*?)\).|{(.*?)(?:\:.)?}")
+macros_re = re.compile(r"(?:(?:{)|(?:%\())([^:\)}]*)(?:(?:(?::.)?})|(?:\).))")
 # replace matched fields with jinja2 style macros
 macro_to_jinja_re = r"{{\1}}"
+
+MISSING = "TODO - MISSING ARGS: "
 
 
 class Builder2Support:
@@ -257,12 +256,12 @@ class Builder2Support:
 
             database["file"] = template
 
-            database["args"] = {a[0]: None for a in first_substitution.args.items()}
+            db_args = {a[0]: None for a in first_substitution.args.items()}
+            missing = set(db_args) - set(self.def_args[name])
+            comment = MISSING + ", ".join(missing) if missing else None
 
-            missing = set(database["args"].keys()) - set(self.def_args[name])
-            if len(missing) > 0:
-                missed = ", ".join(missing)
-                database["warning"] = "Database Args missing: " + missed
+            database.insert(3, "args", db_args, comment=comment)
+
         return databases
 
     def _make_init_script(
@@ -295,12 +294,13 @@ class Builder2Support:
                     line = macros_re.sub(macro_to_jinja_re, matches[0][1])
                     commands += line + "\n"
             if commands:
-                script_item["value"] = PreservedScalarString(commands)
-                script.append(script_item)
+                script_text = PreservedScalarString(commands)
                 missing = set(command_args) - set(self.def_args[name])
-                if len(missing) > 0:
-                    missed = ", ".join(missing)
-                    script_item["warning"] = "function Args missing: " + missed
+                comment = MISSING + ", ".join(missing) if missing else None
+
+                script_item.insert(3, "value", script_text, comment=comment)
+
+            script.append(script_item)
 
     def _call_initialise(self, builder_object, name):
         """
