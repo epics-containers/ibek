@@ -62,6 +62,7 @@ class Builder2Support:
         self.yaml_tree = ordereddict()
         self.builder_module, self.builder_classes = self._configure()
         self.def_args = {}  # Dict[def name: [Arg names]]
+        self.arg_num = 0  # we number args so that users can choose to override them
 
     def _configure(self):
         """
@@ -188,10 +189,11 @@ class Builder2Support:
         return arg
 
     def _instantiate_builder_objects(self, args, builder_class):
+        # Mock up a set of args with which to instantiate a builder object
         args_dict = {}
 
-        # Mock up a set of args with which to instantiate a builder object
         for arg in args:
+            self.arg_num += 1
             arg_name = arg["name"]
 
             # use this flag to put a real value into an arg instead of MockArg
@@ -225,19 +227,17 @@ class Builder2Support:
             else:
                 assert 0, "Unknown type %s" % arg["type"]
 
-            magic_arg = MockArg(wraps=value, name=arg_name)
-
             if use_native:
                 # If the type is well known then use the native type
                 args_dict[arg_name] = value
-                print("NATIVE: %s, %s" % (arg_name, magic_arg._mock_wraps))
+                arg_type = type(value)
             else:
-                # for objects we use MockArg
-                if magic_arg.overridden:
-                    print("OVERRIDDEN: %s, %s" % (arg_name, magic_arg._mock_wraps))
-                    args_dict[arg_name] = magic_arg._mock_wraps
-                else:
-                    args_dict[arg_name] = magic_arg
+                magic_arg = MockArg(wraps=value, arg_num=self.arg_num, name=arg_name)
+                args_dict[arg_name] = magic_arg
+                arg_type = "Mock" + str(type(value))
+
+            # this print shows the arg numbers for overriding in the command line
+            print("ARG %d: %s, %s, %s" % (self.arg_num, arg_name, value, arg_type))
 
         # instantiate a builder object using our mock arguments
         return builder_class(**args_dict)
@@ -419,32 +419,10 @@ class MockArg(Mock):
     the mock object "wraps" to store a value for the argument.
     """
 
-    ARG_NUM = 0
-
-    def __init__(self, wraps=None, name="", *args, **kwargs):
-        MockArg.ARG_NUM += 1
-
-        # override the wrapped value if a command line override was specified
-        new_wrap = Builder2Support.arg_value_overrides.get(str(MockArg.ARG_NUM))
-        if new_wrap is not None:
-            wraps = new_wrap
-            overridden = True
-        else:
-            overridden = False
-
+    def __init__(self, wraps=None, arg_num=0, name="", *args, **kwargs):
         super(MockArg, self).__init__(wraps=wraps, name=name, *args, **kwargs)
 
-        # this print is required to assist users in deciding which numbered
-        # MockArg to override on the command line when an error occurs without
-        # overrides
-        print(
-            "MockArg: %s, %s, %s, %s"
-            % (MockArg.ARG_NUM, name, wraps, type(wraps).__name__)
-        )
-
-        self.arg_num = MockArg.ARG_NUM
-        self.overridden = overridden
-        self.repr = "MockArg(%s, %s, %s)" % (self.arg_num, name, wraps)
+        self.repr = "MockArg(%d, %s, %s)" % (arg_num, name, wraps)
 
     def __repr__(self):
         return str(self.repr)
