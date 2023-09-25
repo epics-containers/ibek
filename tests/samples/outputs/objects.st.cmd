@@ -8,6 +8,7 @@ epicsEnvSet REF_OBJECT_NAME AsynPort2
 dbLoadDatabase dbd/ioc.dbd
 ioc_registerRecordDeviceDriver pdbbase
 
+# This line should appear once only in the pre_init section
 # TestValues testValue
 TestValues AsynPort1.127.0.0.1
 # TestValues testValue

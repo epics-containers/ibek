@@ -35,13 +35,13 @@ class Render:
         Entity has more than one element to render once (e.g. functions)
         """
 
-        if when == When.first:
+        if when == When.first.value:
             name = instance.__definition__.name + suffix
             if name not in self.once_done:
                 self.once_done.append(name)
             else:
                 return ""
-        elif when == When.last:
+        elif when == When.last.value:
             raise NotImplementedError("When.last not yet implemented")
 
         # Render Jinja entries in the text

@@ -29,6 +29,9 @@ defs:
         value: "{{ name }}"
 
     pre_init:
+      - when: first
+        value: |
+          # This line should appear once only in the pre_init section
       - value: |
           # TestValues testValue
           TestValues {{ test_value }}

@@ -7,6 +7,7 @@ epicsEnvSet REF_OBJECT_NAME Ref1
 dbLoadDatabase dbd/ioc.dbd
 ioc_registerRecordDeviceDriver pdbbase
 
+# This line should appear once only in the pre_init section
 # TestValues testValue
 TestValues Ref1.127.0.0.1
 # this is a comment
