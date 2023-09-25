@@ -9,7 +9,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
-    <title>Modules, Definitions and Entities &#8212; ibek 0.0.14.dev14+g44c4045 documentation</title>
+    <title>Modules, Definitions and Entities &#8212; ibek 0.0.14.dev15+g3997a00 documentation</title>
   
   
   
@@ -564,6 +564,9 @@ the above arguments</p></li>
         <span class="n">value</span><span class="p">:</span> <span class="s2">&quot;{{ name }}&quot;</span>
 
     <span class="n">pre_init</span><span class="p">:</span>
+      <span class="o">-</span> <span class="n">when</span><span class="p">:</span> <span class="n">first</span>
+        <span class="n">value</span><span class="p">:</span> <span class="o">|</span>
+          <span class="c1"># This line should appear once only in the pre_init section</span>
       <span class="o">-</span> <span class="n">value</span><span class="p">:</span> <span class="o">|</span>
           <span class="c1"># TestValues testValue</span>
           <span class="n">TestValues</span> <span class="p">{{</span> <span class="n">test_value</span> <span class="p">}}</span>
@@ -721,6 +724,7 @@ file that ibek will generate from it.</p>
 <span class="n">dbLoadDatabase</span> <span class="n">dbd</span><span class="o">/</span><span class="n">ioc</span><span class="o">.</span><span class="n">dbd</span>
 <span class="n">ioc_registerRecordDeviceDriver</span> <span class="n">pdbbase</span>
 
+<span class="c1"># This line should appear once only in the pre_init section</span>
 <span class="c1"># TestValues testValue</span>
 <span class="n">TestValues</span> <span class="n">Ref1</span><span class="mf">.127.0.0.1</span>
 <span class="c1"># this is a comment</span>
