@@ -411,9 +411,14 @@ class MockArg(Mock):
         MockArg.ARG_NUM += 1
 
         # override the wrapped value if a command line override was specified
-        new_wrap = Builder2Support.arg_value_overrides.get(str(MockArg.ARG_NUM), wraps)
+        new_wrap = Builder2Support.arg_value_overrides.get(str(MockArg.ARG_NUM))
+        if new_wrap is not None:
+            wraps = new_wrap
+            overridden = True
+        else:
+            overridden = False
 
-        super(MockArg, self).__init__(wraps=new_wrap, name=name, *args, **kwargs)
+        super(MockArg, self).__init__(wraps=wraps, name=name, *args, **kwargs)
 
         # this print is required to assist users in deciding which numbered
         # MockArg to override on the command line when an error occurs without
@@ -424,14 +429,14 @@ class MockArg(Mock):
         )
 
         self.arg_num = MockArg.ARG_NUM
-        self.overridden = new_wrap != wraps
+        self.overridden = overridden
         self.repr = "MockArg(%s, %s, %s)" % (self.arg_num, name, new_wrap)
 
     def __repr__(self):
-        return self.repr
+        return str(self.repr)
 
     def __str__(self):
-        return self.repr
+        return str(self.repr)
 
     ############################################################################
     # BELOW - we override methods that are called by builder.py on the builder
