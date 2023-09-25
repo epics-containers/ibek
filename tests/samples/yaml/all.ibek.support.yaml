@@ -80,11 +80,9 @@ defs:
         value: |
           this is a comment
           that spans multiple lines
-      - type: function
-        name: testPreInit
-        args:
-          identifier: "{{ name }}"
-          TestValue: "'{{ my_str }}'"
+      - type: text
+        value: |-
+          testPreInit "{{ name }}" "'{{ my_str }}'"
 
       - type: text
         value: |
@@ -95,11 +93,9 @@ defs:
           .
 
     post_init:
-      - type: function
-        name: testPostInit
-        args:
-          identifier: "{{ name }}"
-          TestValue: test_value:{{ test_value }}
+      - type: text
+        value: |-
+          testPostInit "{{ name }}" test_value:{{ test_value }}
 
     databases:
       - file: another_test.db

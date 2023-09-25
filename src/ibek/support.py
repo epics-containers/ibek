@@ -123,20 +123,6 @@ class EnvironmentVariable(BaseSettings):
     value: str = Field(description="Value to set")
 
 
-class Function(BaseSettings):
-    """
-    A script snippet that defines a function to call
-    """
-
-    name: str = Field(description="Name of the function to call")
-    args: Dict[str, Any] = Field(description="The arguments to pass to the function")
-    header: str = Field(
-        description="commands/comments to appear before the function", default=""
-    )
-    when: When = Field(description="one of first / every / last", default="every")
-    type: Literal["function"] = "function"
-
-
 class Comment(BaseSettings):
     """
     A script snippet that will have '# ' prepended to every line
@@ -170,7 +156,7 @@ class Value(BaseSettings):
     value: str = Field(description="The contents of the value")
 
 
-Script = Sequence[Union[Function, Comment, Text]]
+Script = Sequence[Union[Text, Comment]]
 
 
 class Definition(BaseSettings):
