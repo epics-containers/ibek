@@ -9,7 +9,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
-    <title>Modules, Definitions and Entities &#8212; ibek 0.0.14.dev9+g3b76cd2 documentation</title>
+    <title>Modules, Definitions and Entities &#8212; ibek 0.0.14.dev10+gaa78a0e documentation</title>
   
   
   
@@ -564,10 +564,10 @@ the above arguments</p></li>
         <span class="n">value</span><span class="p">:</span> <span class="s2">&quot;{{ name }}&quot;</span>
 
     <span class="n">pre_init</span><span class="p">:</span>
-      <span class="o">-</span> <span class="nb">type</span><span class="p">:</span> <span class="n">function</span>
-        <span class="n">name</span><span class="p">:</span> <span class="n">TestValues</span>
-        <span class="n">args</span><span class="p">:</span>
-          <span class="n">testValue</span><span class="p">:</span> <span class="s2">&quot;{{ test_value }}&quot;</span>
+      <span class="o">-</span> <span class="nb">type</span><span class="p">:</span> <span class="n">text</span>
+        <span class="n">value</span><span class="p">:</span> <span class="o">|</span>
+          <span class="c1"># TestValues testValue</span>
+          <span class="n">TestValues</span> <span class="p">{{</span> <span class="n">test_value</span> <span class="p">}}</span>
 
   <span class="o">-</span> <span class="n">name</span><span class="p">:</span> <span class="n">Consumer</span>
     <span class="n">description</span><span class="p">:</span> <span class="o">|</span>
@@ -594,13 +594,11 @@ the above arguments</p></li>
         <span class="n">description</span><span class="p">:</span> <span class="n">a</span> <span class="n">reference</span> <span class="n">to</span> <span class="n">an</span> <span class="n">RefObject</span>
 
     <span class="n">pre_init</span><span class="p">:</span>
-      <span class="o">-</span> <span class="nb">type</span><span class="p">:</span> <span class="n">function</span>
-        <span class="n">name</span><span class="p">:</span> <span class="n">ExampleTestFunction</span>
-        <span class="n">args</span><span class="p">:</span>
-          <span class="n">asynPortIP</span><span class="p">:</span> <span class="s2">&quot;{{ PORT.IP }}&quot;</span>
-          <span class="n">name</span><span class="p">:</span> <span class="s2">&quot;{{ name }}&quot;</span>
-          <span class="n">port</span><span class="p">:</span> <span class="s2">&quot;{{ PORT }}&quot;</span> <span class="c1"># defaults to the id of PORT, i.e. PORT.name</span>
-          <span class="n">value</span><span class="p">:</span> <span class="s2">&quot;{{ PORT.test_value }}&quot;</span>
+      <span class="o">-</span> <span class="nb">type</span><span class="p">:</span> <span class="n">text</span>
+        <span class="n">value</span><span class="p">:</span> <span class="o">|-</span>
+          <span class="c1"># ExampleTestFunction asynPortIP name port value</span>
+          <span class="n">ExampleTestFunction</span> <span class="p">{{</span> <span class="n">PORT</span><span class="o">.</span><span class="n">IP</span> <span class="p">}}</span> <span class="p">{{</span> <span class="n">name</span> <span class="p">}}</span> <span class="p">{{</span> <span class="n">PORT</span> <span class="p">}}</span> <span class="p">{{</span> <span class="n">PORT</span><span class="o">.</span><span class="n">test_value</span> <span class="p">}}</span>
+          <span class="c1"># PORT defaults to the id of PORT, i.e. PORT.name</span>
 
     <span class="n">databases</span><span class="p">:</span>
       <span class="o">-</span> <span class="n">file</span><span class="p">:</span> <span class="n">test</span><span class="o">.</span><span class="n">db</span>
@@ -725,15 +723,11 @@ file that ibek will generate from it.</p>
 <span class="n">dbLoadDatabase</span> <span class="n">dbd</span><span class="o">/</span><span class="n">ioc</span><span class="o">.</span><span class="n">dbd</span>
 <span class="n">ioc_registerRecordDeviceDriver</span> <span class="n">pdbbase</span>
 
-
-<span class="c1"># TestValues testValue</span>
-<span class="n">TestValues</span> <span class="n">Ref1</span><span class="mf">.127.0.0.1</span>
+<span class="n">testValue</span><span class="p">:</span> <span class="n">TestValues</span> <span class="n">Ref1</span><span class="mf">.127.0.0.1</span>
 <span class="c1"># this is a comment</span>
 <span class="c1"># that spans multiple lines</span>
 <span class="c1"># </span>
-
-<span class="c1"># testPreInit identifier TestValue</span>
-<span class="n">testPreInit</span> <span class="n">AllObject</span> <span class="n">One</span> <span class="s1">&#39;AllObject One String&#39;</span>
+<span class="n">testPreInit</span> <span class="s2">&quot;AllObject One&quot;</span> <span class="s2">&quot;&#39;AllObject One String&#39;&quot;</span>
 <span class="n">my_str</span> <span class="o">=</span>                    <span class="n">AllObject</span> <span class="n">One</span> <span class="n">String</span>
 <span class="n">my_inferred_enum</span> <span class="o">=</span>          <span class="n">third</span>
 <span class="n">clock_rate</span> <span class="o">=</span>                <span class="n">dummy</span>
@@ -742,22 +736,21 @@ file that ibek will generate from it.</p>
 <span class="c1"># this is a comment</span>
 <span class="c1"># that spans multiple lines</span>
 <span class="c1"># </span>
-<span class="n">testPreInit</span> <span class="n">AllObject</span> <span class="n">Two</span> <span class="s1">&#39;AllObject Two String&#39;</span>
+<span class="n">testPreInit</span> <span class="s2">&quot;AllObject Two&quot;</span> <span class="s2">&quot;&#39;AllObject Two String&#39;&quot;</span>
 <span class="n">my_str</span> <span class="o">=</span>                    <span class="n">AllObject</span> <span class="n">Two</span> <span class="n">String</span>
 <span class="n">my_inferred_enum</span> <span class="o">=</span>          <span class="n">hello</span>
 <span class="n">clock_rate</span> <span class="o">=</span>                <span class="mi">1</span>
 <span class="n">my_mixed_enum_no_default</span> <span class="o">=</span>  
 <span class="o">.</span>
-
-<span class="c1"># ExampleTestFunction asynPortIP name port value</span>
 <span class="n">ExampleTestFunction</span> <span class="mf">127.0.0.1</span> <span class="n">Consumer</span> <span class="n">Two</span> <span class="n">With</span> <span class="n">DB</span> <span class="n">Ref1</span> <span class="n">Ref1</span><span class="mf">.127.0.0.1</span>
+<span class="c1"># PORT defaults to the id of PORT, i.e. PORT.name</span>
 
 <span class="n">dbLoadRecords</span> <span class="o">/</span><span class="n">tmp</span><span class="o">/</span><span class="n">ioc</span><span class="o">.</span><span class="n">db</span>
 <span class="n">iocInit</span>
 
 
-<span class="n">testPostInit</span> <span class="n">AllObject</span> <span class="n">One</span> <span class="n">test_value</span><span class="p">:</span>
-<span class="n">testPostInit</span> <span class="n">AllObject</span> <span class="n">Two</span> <span class="n">test_value</span><span class="p">:</span>
+<span class="n">testPostInit</span> <span class="s2">&quot;AllObject One&quot;</span> <span class="n">test_value</span><span class="p">:</span>
+<span class="n">testPostInit</span> <span class="s2">&quot;AllObject Two&quot;</span> <span class="n">test_value</span><span class="p">:</span>
 
 </pre></div>
 </div>
@@ -983,13 +976,10 @@ the container or during container development.</p>
           <span class="s2">&quot;items&quot;</span><span class="p">:</span> <span class="p">{</span>
             <span class="s2">&quot;anyOf&quot;</span><span class="p">:</span> <span class="p">[</span>
               <span class="p">{</span>
-                <span class="s2">&quot;$ref&quot;</span><span class="p">:</span> <span class="s2">&quot;#/$defs/Function&quot;</span>
+                <span class="s2">&quot;$ref&quot;</span><span class="p">:</span> <span class="s2">&quot;#/$defs/Text&quot;</span>
               <span class="p">},</span>
               <span class="p">{</span>
                 <span class="s2">&quot;$ref&quot;</span><span class="p">:</span> <span class="s2">&quot;#/$defs/Comment&quot;</span>
-              <span class="p">},</span>
-              <span class="p">{</span>
-                <span class="s2">&quot;$ref&quot;</span><span class="p">:</span> <span class="s2">&quot;#/$defs/Text&quot;</span>
               <span class="p">}</span>
             <span class="p">]</span>
           <span class="p">},</span>
@@ -1002,13 +992,10 @@ the container or during container development.</p>
           <span class="s2">&quot;items&quot;</span><span class="p">:</span> <span class="p">{</span>
             <span class="s2">&quot;anyOf&quot;</span><span class="p">:</span> <span class="p">[</span>
               <span class="p">{</span>
-                <span class="s2">&quot;$ref&quot;</span><span class="p">:</span> <span class="s2">&quot;#/$defs/Function&quot;</span>
+                <span class="s2">&quot;$ref&quot;</span><span class="p">:</span> <span class="s2">&quot;#/$defs/Text&quot;</span>
               <span class="p">},</span>
               <span class="p">{</span>
                 <span class="s2">&quot;$ref&quot;</span><span class="p">:</span> <span class="s2">&quot;#/$defs/Comment&quot;</span>
-              <span class="p">},</span>
-              <span class="p">{</span>
-                <span class="s2">&quot;$ref&quot;</span><span class="p">:</span> <span class="s2">&quot;#/$defs/Text&quot;</span>
               <span class="p">}</span>
             <span class="p">]</span>
           <span class="p">},</span>
@@ -1134,48 +1121,6 @@ the container or during container development.</p>
         <span class="s2">&quot;description&quot;</span>
       <span class="p">],</span>
       <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;FloatArg&quot;</span><span class="p">,</span>
-      <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span>
-    <span class="p">},</span>
-    <span class="s2">&quot;Function&quot;</span><span class="p">:</span> <span class="p">{</span>
-      <span class="s2">&quot;additionalProperties&quot;</span><span class="p">:</span> <span class="n">false</span><span class="p">,</span>
-      <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;A script snippet that defines a function to call&quot;</span><span class="p">,</span>
-      <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span>
-        <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="p">{</span>
-          <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Name of the function to call&quot;</span><span class="p">,</span>
-          <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Name&quot;</span><span class="p">,</span>
-          <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
-        <span class="p">},</span>
-        <span class="s2">&quot;args&quot;</span><span class="p">:</span> <span class="p">{</span>
-          <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;The arguments to pass to the function&quot;</span><span class="p">,</span>
-          <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Args&quot;</span><span class="p">,</span>
-          <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span>
-        <span class="p">},</span>
-        <span class="s2">&quot;header&quot;</span><span class="p">:</span> <span class="p">{</span>
-          <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
-          <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;commands/comments to appear before the function&quot;</span><span class="p">,</span>
-          <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Header&quot;</span><span class="p">,</span>
-          <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
-        <span class="p">},</span>
-        <span class="s2">&quot;when&quot;</span><span class="p">:</span> <span class="p">{</span>
-          <span class="s2">&quot;allOf&quot;</span><span class="p">:</span> <span class="p">[</span>
-            <span class="p">{</span>
-              <span class="s2">&quot;$ref&quot;</span><span class="p">:</span> <span class="s2">&quot;#/$defs/When&quot;</span>
-            <span class="p">}</span>
-          <span class="p">],</span>
-          <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="s2">&quot;every&quot;</span><span class="p">,</span>
-          <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;one of first / every / last&quot;</span>
-        <span class="p">},</span>
-        <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="p">{</span>
-          <span class="s2">&quot;const&quot;</span><span class="p">:</span> <span class="s2">&quot;function&quot;</span><span class="p">,</span>
-          <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="s2">&quot;function&quot;</span><span class="p">,</span>
-          <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Type&quot;</span>
-        <span class="p">}</span>
-      <span class="p">},</span>
-      <span class="s2">&quot;required&quot;</span><span class="p">:</span> <span class="p">[</span>
-        <span class="s2">&quot;name&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;args&quot;</span>
-      <span class="p">],</span>
-      <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Function&quot;</span><span class="p">,</span>
       <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span>
     <span class="p">},</span>
     <span class="s2">&quot;IdArg&quot;</span><span class="p">:</span> <span class="p">{</span>
