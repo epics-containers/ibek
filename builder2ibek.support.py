@@ -194,6 +194,9 @@ class Builder2Support:
         for arg in args:
             arg_name = arg["name"]
 
+            # use this flag to put a real value into an arg instead of MockArg
+            use_native = False
+
             # if the arg is a Choice then use the first Choice as the value
             desc = builder_class.ArgInfo.descriptions[arg_name]
 
@@ -213,17 +216,27 @@ class Builder2Support:
                 value = False
             elif arg["type"] == "str":
                 value = arg_name + "_STRING"
+                use_native = True
             elif arg["type"] == "id":
                 value = arg_name + "_ID"
             else:
                 assert 0, "Unknown type %s" % arg["type"]
 
             magic_arg = MockArg(wraps=value, name=arg_name)
-            if magic_arg.overridden:
-                print("OVERRIDDEN: %s, %s" % (arg_name, magic_arg._mock_wraps))
-                args_dict[arg_name] = magic_arg._mock_wraps
+
+            if True:
+                # Currently using native for all types
+                # I can't recall why Mock was needed - it probably was
+                # a prelude to setting the type explicitly above
+                # TODO review if MockArg is still needed
+                args_dict[arg_name] = value
+                print("NATIVE: %s, %s" % (arg_name, magic_arg._mock_wraps))
             else:
-                args_dict[arg_name] = magic_arg
+                if magic_arg.overridden:
+                    print("OVERRIDDEN: %s, %s" % (arg_name, magic_arg._mock_wraps))
+                    args_dict[arg_name] = magic_arg._mock_wraps
+                else:
+                    args_dict[arg_name] = magic_arg
 
         # instantiate a builder object using our mock arguments
         return builder_class(**args_dict)
@@ -425,12 +438,12 @@ class MockArg(Mock):
         # overrides
         print(
             "MockArg: %s, %s, %s, %s"
-            % (MockArg.ARG_NUM, name, new_wrap, type(new_wrap).__name__)
+            % (MockArg.ARG_NUM, name, wraps, type(wraps).__name__)
         )
 
         self.arg_num = MockArg.ARG_NUM
         self.overridden = overridden
-        self.repr = "MockArg(%s, %s, %s)" % (self.arg_num, name, new_wrap)
+        self.repr = "MockArg(%s, %s, %s)" % (self.arg_num, name, wraps)
 
     def __repr__(self):
         return str(self.repr)
