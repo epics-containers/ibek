@@ -210,10 +210,13 @@ class Builder2Support:
                 value = arg["default"]
             elif arg["type"] == "int":
                 value = 1
+                use_native = True
             elif arg["type"] == "float":
                 value = 1.0
+                use_native = True
             elif arg["type"] == "bool":
                 value = False
+                use_native = True
             elif arg["type"] == "str":
                 value = arg_name + "_STRING"
                 use_native = True
@@ -224,14 +227,12 @@ class Builder2Support:
 
             magic_arg = MockArg(wraps=value, name=arg_name)
 
-            if True:
-                # Currently using native for all types
-                # I can't recall why Mock was needed - it probably was
-                # a prelude to setting the type explicitly above
-                # TODO review if MockArg is still needed
+            if use_native:
+                # If the type is well known then use the native type
                 args_dict[arg_name] = value
                 print("NATIVE: %s, %s" % (arg_name, magic_arg._mock_wraps))
             else:
+                # for objects we use MockArg
                 if magic_arg.overridden:
                     print("OVERRIDDEN: %s, %s" % (arg_name, magic_arg._mock_wraps))
                     args_dict[arg_name] = magic_arg._mock_wraps
