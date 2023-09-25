@@ -97,6 +97,9 @@ defs:
           testPostInit "{{ name }}" test_value:{{ test_value }}
       - value: this should appear once only in the post_init section
         when: first
+      - type: comment
+        value: |-
+          post init comment
 
     databases:
       - file: another_test.db
