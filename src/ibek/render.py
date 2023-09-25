@@ -6,7 +6,7 @@ from typing import Callable, List, Optional, Union
 
 from .globals import render_with_utils
 from .ioc import IOC, Entity
-from .support import Comment, Function, Script, Text, When
+from .support import Comment, Script, Text, When
 
 
 class Render:
@@ -35,13 +35,13 @@ class Render:
         Entity has more than one element to render once (e.g. functions)
         """
 
-        if when == When.first:
+        if when == When.first.value:
             name = instance.__definition__.name + suffix
             if name not in self.once_done:
                 self.once_done.append(name)
             else:
                 return ""
-        elif when == When.last:
+        elif when == When.last.value:
             raise NotImplementedError("When.last not yet implemented")
 
         # Render Jinja entries in the text
@@ -51,31 +51,6 @@ class Render:
             return ""
 
         return result + "\n"
-
-    def render_function(self, instance: Entity, function: Function) -> str:
-        """
-        render a Function object that represents a function call in the IOC
-        startup script
-        """
-
-        # initial function comment appears after newline for prettier formatting
-        comment = f"\n# {function.name} "
-        call = f"{function.name} "
-        for name, value in function.args.items():
-            comment += f"{name} "
-            call += f"{value} "
-
-        text = (
-            self.render_text(
-                instance, comment.strip(" "), when=When.first, suffix="func"
-            )
-            + self.render_text(
-                instance, function.header, when=When.first, suffix="func_hdr"
-            )
-            + self.render_text(instance, call.strip(" "), when=function.when)
-        )
-
-        return text
 
     def render_script(self, instance: Entity, script_items: Script) -> Optional[str]:
         script = ""
@@ -90,8 +65,6 @@ class Render:
                 script += self.render_text(
                     instance, item.value, item.when, suffix="text"
                 )
-            elif isinstance(item, Function):
-                script += self.render_function(instance, item)
 
         return script
 

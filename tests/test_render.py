@@ -26,7 +26,9 @@ def test_pre_init_script(objects_classes):
     render = Render()
     script_txt = render.render_script(my_ref, my_ref.__definition__.pre_init)
     assert script_txt == (
-        "\n# TestValues testValue\n" "TestValues test_ref_object.127.0.0.1\n"
+        "# This line should appear once only in the pre_init section\n"
+        "# TestValues testValue\n"
+        "TestValues test_ref_object.127.0.0.1\n"
     )
 
 
@@ -41,9 +43,10 @@ def test_obj_ref_script(objects_classes):
     script_txt = render.render_script(my_consumer, my_consumer.__definition__.pre_init)
 
     assert (
-        script_txt == "\n# ExampleTestFunction asynPortIP name port value\n"
+        script_txt == "# ExampleTestFunction asynPortIP name port value\n"
         "ExampleTestFunction 127.0.0.1 test_consumer test_ref_object "
         "test_ref_object.127.0.0.1\n"
+        "# PORT defaults to the id of PORT, i.e. PORT.name\n"
     )
 
 

@@ -7,15 +7,13 @@ epicsEnvSet REF_OBJECT_NAME Ref1
 dbLoadDatabase dbd/ioc.dbd
 ioc_registerRecordDeviceDriver pdbbase
 
-
+# This line should appear once only in the pre_init section
 # TestValues testValue
 TestValues Ref1.127.0.0.1
 # this is a comment
 # that spans multiple lines
 # 
-
-# testPreInit identifier TestValue
-testPreInit AllObject One 'AllObject One String'
+testPreInit "AllObject One" "'AllObject One String'"
 my_str =                    AllObject One String
 my_inferred_enum =          third
 clock_rate =                dummy
@@ -24,20 +22,23 @@ my_mixed_enum_no_default =
 # this is a comment
 # that spans multiple lines
 # 
-testPreInit AllObject Two 'AllObject Two String'
+testPreInit "AllObject Two" "'AllObject Two String'"
 my_str =                    AllObject Two String
 my_inferred_enum =          hello
 clock_rate =                1
 my_mixed_enum_no_default =  
 .
-
 # ExampleTestFunction asynPortIP name port value
 ExampleTestFunction 127.0.0.1 Consumer Two With DB Ref1 Ref1.127.0.0.1
+# PORT defaults to the id of PORT, i.e. PORT.name
 
 dbLoadRecords /tmp/ioc.db
 iocInit
 
 
-testPostInit AllObject One test_value:
-testPostInit AllObject Two test_value:
+testPostInit "AllObject One" test_value:
+this should appear once only in the post_init section
+# post init comment
+testPostInit "AllObject Two" test_value:
+# post init comment
 

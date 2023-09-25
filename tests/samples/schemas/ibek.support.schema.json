@@ -168,13 +168,10 @@
           "items": {
             "anyOf": [
               {
-                "$ref": "#/$defs/Function"
+                "$ref": "#/$defs/Text"
               },
               {
                 "$ref": "#/$defs/Comment"
-              },
-              {
-                "$ref": "#/$defs/Text"
               }
             ]
           },
@@ -187,13 +184,10 @@
           "items": {
             "anyOf": [
               {
-                "$ref": "#/$defs/Function"
+                "$ref": "#/$defs/Text"
               },
               {
                 "$ref": "#/$defs/Comment"
-              },
-              {
-                "$ref": "#/$defs/Text"
               }
             ]
           },
@@ -319,48 +313,6 @@
         "description"
       ],
       "title": "FloatArg",
-      "type": "object"
-    },
-    "Function": {
-      "additionalProperties": false,
-      "description": "A script snippet that defines a function to call",
-      "properties": {
-        "name": {
-          "description": "Name of the function to call",
-          "title": "Name",
-          "type": "string"
-        },
-        "args": {
-          "description": "The arguments to pass to the function",
-          "title": "Args",
-          "type": "object"
-        },
-        "header": {
-          "default": "",
-          "description": "commands/comments to appear before the function",
-          "title": "Header",
-          "type": "string"
-        },
-        "when": {
-          "allOf": [
-            {
-              "$ref": "#/$defs/When"
-            }
-          ],
-          "default": "every",
-          "description": "one of first / every / last"
-        },
-        "type": {
-          "const": "function",
-          "default": "function",
-          "title": "Type"
-        }
-      },
-      "required": [
-        "name",
-        "args"
-      ],
-      "title": "Function",
       "type": "object"
     },
     "IdArg": {

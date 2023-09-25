@@ -29,10 +29,12 @@ defs:
         value: "{{ name }}"
 
     pre_init:
-      - type: function
-        name: TestValues
-        args:
-          testValue: "{{ test_value }}"
+      - when: first
+        value: |
+          # This line should appear once only in the pre_init section
+      - value: |
+          # TestValues testValue
+          TestValues {{ test_value }}
 
   - name: Consumer
     description: |
@@ -59,13 +61,10 @@ defs:
         description: a reference to an RefObject
 
     pre_init:
-      - type: function
-        name: ExampleTestFunction
-        args:
-          asynPortIP: "{{ PORT.IP }}"
-          name: "{{ name }}"
-          port: "{{ PORT }}" # defaults to the id of PORT, i.e. PORT.name
-          value: "{{ PORT.test_value }}"
+      - value: |
+          # ExampleTestFunction asynPortIP name port value
+          ExampleTestFunction {{ PORT.IP }} {{ name }} {{ PORT }} {{ PORT.test_value }}
+          # PORT defaults to the id of PORT, i.e. PORT.name
 
     databases:
       - file: test.db

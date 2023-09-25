@@ -80,14 +80,12 @@ defs:
         value: |
           this is a comment
           that spans multiple lines
-      - type: function
-        name: testPreInit
-        args:
-          identifier: "{{ name }}"
-          TestValue: "'{{ my_str }}'"
-
       - type: text
-        value: |
+        value: |-
+          testPreInit "{{ name }}" "'{{ my_str }}'"
+
+      # default type is text
+      - value: |
           my_str =                    {{ my_str }}
           my_inferred_enum =          {{ my_inferred_enum }}
           clock_rate =                {{ clock_rate }}
@@ -95,11 +93,13 @@ defs:
           .
 
     post_init:
-      - type: function
-        name: testPostInit
-        args:
-          identifier: "{{ name }}"
-          TestValue: test_value:{{ test_value }}
+      - value: |-
+          testPostInit "{{ name }}" test_value:{{ test_value }}
+      - value: this should appear once only in the post_init section
+        when: first
+      - type: comment
+        value: |-
+          post init comment
 
     databases:
       - file: another_test.db

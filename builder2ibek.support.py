@@ -2,7 +2,15 @@
 
 """
 Diamond Light Source specific script to convert IOC builder classes from
-etc/builder.py into **ibek.support.yaml files
+etc/builder.py into **ibek.support.yaml files.
+
+TO work on this project it is very helpful to be able to run in the vscode
+debugger. HOW TO DO THIS:
+
+- Downgrade the Python Extension in vscode to 2021.9.1246542782
+- Use the debug launcher called builder2ibek
+- change the filename (and other args)that is passed in the debug launcher
+  - by editing .vscode/launch.json
 """
 
 import argparse
@@ -17,9 +25,7 @@ require("iocbuilder")
 require("dls_dependency_tree")
 require("ruamel.yaml")
 require("mock")
-
-UNDEFINED = "UNDEFINED"
-
+from ruamel.yaml.scalarstring import PreservedScalarString
 
 from dls_dependency_tree import dependency_tree  # noqa: E402 isort:skip
 from iocbuilder import ParseEtcArgs, configure, device  # noqa: E402 isort:skip
@@ -29,11 +35,22 @@ from ruamel.yaml import YAML  # noqa: E402 isort:skip
 from ruamel.yaml.comments import CommentedMap as ordereddict  # noqa: E402 isort:skip
 
 
+# regular expressions for extracting information from builder classes
+# regular expressions for extracting information from builder classes
 class_name_re = re.compile(r"class '.*\.(.*)'")
-description_re = re.compile(r"(.*)\n<type")
+description_re = re.compile(r"(.*)\n<(?:type|class)")
 arg_values_re = re.compile(r"(\d*):(.*)")
 is_int_re = re.compile(r"[-+]?\d+$")
 is_float_re = re.compile(r"[-+]?\d*\.\d+([eE][-+]?\d+)?$")
+
+# this monster regex finds strings between '' or "" (oh boy!)
+extract_printed_strings_re = re.compile(r"([\"'])((?:\\\1|(?:(?!\1))[\S\s])*)(?:\1)")
+# match substitution fields in print statements e.g. %(name)s or {name:s} etc
+macros_re = re.compile(r"(?:(?:{)|(?:%\())([^:\)}]*)(?:(?:(?::.)?})|(?:\).))")
+# replace matched fields with jinja2 style macros
+macro_to_jinja_re = r"{{\1}}"
+
+MISSING = "TODO - MISSING ARGS: "
 
 
 class Builder2Support:
@@ -44,6 +61,7 @@ class Builder2Support:
         Builder2Support.arg_value_overrides = arg_value_overrides
         self.yaml_tree = ordereddict()
         self.builder_module, self.builder_classes = self._configure()
+        self.def_args = {}  # Dict[def name: [Arg names]]
 
     def _configure(self):
         """
@@ -99,21 +117,21 @@ class Builder2Support:
         if builder_class.__doc__:
             desc = builder_class.__doc__.strip()
         else:
-            desc = "TODO ------ NO DESCRIPTION -------"
-        this_def["description"] = desc
+            desc = "TODO:ADD DESCRIPTION"
+        this_def["description"] = PreservedScalarString(desc)
         args = this_def["args"] = []
 
         for arg_name in builder_class.ArgInfo.required_names:
             args.append(self._make_arg(arg_name, builder_class))
 
         for arg_name in builder_class.ArgInfo.optional_names:
-            args.append(self._make_arg(arg_name, builder_class, UNDEFINED))
+            args.append(self._make_arg(arg_name, builder_class))
 
         for index, arg_name in enumerate(builder_class.ArgInfo.default_names):
             if builder_class.ArgInfo.default_values[index] is not None:
                 default = builder_class.ArgInfo.default_values[index]
             else:
-                default = UNDEFINED
+                default = None
             args.append(self._make_arg(arg_name, builder_class, default))
 
         return this_def, self._instantiate_builder_objects(args, builder_class)
@@ -125,31 +143,32 @@ class Builder2Support:
         arg_info = builder_class.ArgInfo.descriptions[arg_name]
 
         matches = description_re.findall(arg_info.desc)
-        description = (
-            matches[0] if len(matches) > 0 else "TODO ------ NO DESCRIPTION -------"
-        )
+        if len(matches) > 0:
+            description = matches[0]
+        else:
+            description = "TODO: ADD DESCRIPTION"
 
         # create a YAML type for the argument
         if arg_name == getattr(builder_class, "UniqueName", "name"):
             typ = "id"
+            if default == "":
+                default = None
         elif arg_info.typ == str:
             typ = "str"
+            if default == "":
+                default = None
         elif arg_info.typ == int:
             typ = "int"
-            if default == UNDEFINED:
+            if default == "":
                 default = 0
         elif arg_info.typ == bool:
             typ = "bool"
-            if default == UNDEFINED:
-                default = False
         elif arg_info.typ == float:
             typ = "float"
-            if default == UNDEFINED:
-                default = 0
         elif "iocbuilder.modules" in str(arg_info.typ):
             typ = "object"
         else:
-            typ = "UNKNOWN"
+            typ = "UNKNOWN TODO TODO"
 
         # Special case for the CS ArgInfo which is failing to show as int
         # in the pmac builder class CS (maybe because class==ArgInfo name ?)
@@ -158,7 +177,11 @@ class Builder2Support:
 
         # Create the object representing a YAML argument
         arg = ordereddict()
-        arg["type"], arg["name"], arg["description"] = typ, arg_name, description
+        arg["type"], arg["name"], arg["description"] = (
+            typ,
+            arg_name,
+            description,
+        )
         if default is not None:
             arg["default"] = default
 
@@ -205,7 +228,7 @@ class Builder2Support:
         # instantiate a builder object using our mock arguments
         return builder_class(**args_dict)
 
-    def _extract_substitutions(self):
+    def _extract_substitutions(self, name):
         """
         Extract all of the database substitutions from the builder class
         and populate the ibek YAML database object graph.
@@ -233,11 +256,17 @@ class Builder2Support:
 
             database["file"] = template
 
-            database["args"] = {a[0]: None for a in first_substitution.args.items()}
+            db_args = {a[0]: None for a in first_substitution.args.items()}
+            missing = set(db_args) - set(self.def_args[name])
+            comment = MISSING + ", ".join(missing) if missing else None
+
+            database.insert(3, "args", db_args, comment=comment)
 
         return databases
 
-    def _make_init_script(self, builder_object, func_name, typ, script):
+    def _make_init_script(
+        self, builder_object, func_name, typ, script, name, when=None
+    ):
         """
         Find the source code for a builder class method and create an object
         graph representing as script entries in the ibek YAML file.
@@ -246,11 +275,34 @@ class Builder2Support:
         if func:
             script_item = ordereddict()
             script_item["type"] = typ
+            if when:
+                script_item["when"] = when
             func_text = inspect.getsource(func)
-            script_item["value"] = func_text
+            print_strings = func_text.split("print")[1:]
+
+            command_args = []
+
+            commands = ""
+            for print_string in print_strings:
+                matches = extract_printed_strings_re.findall(print_string)
+                if matches:
+                    # TODO this fails because we have two mutually exclusive
+                    # groups in the regex so we get a tuple with one blanks string
+                    # I could fix this niavely but want my regex to do the work for
+                    # me
+                    command_args += macros_re.findall(matches[0][1])
+                    line = macros_re.sub(macro_to_jinja_re, matches[0][1])
+                    commands += line + "\n"
+            if commands:
+                script_text = PreservedScalarString(commands)
+                missing = set(command_args) - set(self.def_args[name])
+                comment = MISSING + ", ".join(missing) if missing else None
+
+                script_item.insert(3, "value", script_text, comment=comment)
+
             script.append(script_item)
 
-    def _call_initialise(self, builder_object):
+    def _call_initialise(self, builder_object, name):
         """
         Extract the code from the builder class Initialise() method
         to insert into the ibek YAML script object graph.
@@ -259,19 +311,19 @@ class Builder2Support:
         and InitialiseOnce() methods.
 
         """
-        # TODO - get the Initialise source code if Initialise() fails
-        script = []
-        self._make_init_script(builder_object, "InitialiseOnce", "once", script)
-        self._make_init_script(builder_object, "Initialise", "text", script)
+        pre_init = []
+        post_init = []
         self._make_init_script(
-            builder_object, "PostIocInitialise", "post_ioc_init", script
+            builder_object, "InitialiseOnce", "text", pre_init, when="first", name=name
+        )
+        self._make_init_script(
+            builder_object, "Initialise", "text", pre_init, name=name
+        )
+        self._make_init_script(
+            builder_object, "PostIocInitialise", "text", post_init, name=name
         )
 
-        # TODO - disabled for schema checking DATABASE section changes
-        # TODO delete this line
-        script = []
-
-        return script
+        return pre_init, post_init
 
     def dump_subst_file(self):
         """
@@ -295,50 +347,53 @@ class Builder2Support:
 
         for name, builder_class in self.builder_classes.items():
             one_def, builder_object = self._make_builder_object(name, builder_class)
+            self.def_args[name] = [arg["name"] for arg in one_def["args"]]
+
             yaml_defs.append(one_def)
             builder_objects.append(builder_object)
-            one_def["databases"] = self._extract_substitutions()
-            one_def["script"] = self._call_initialise(builder_object)
+
+            databases = self._extract_substitutions(name)
+            if len(databases) > 0:
+                one_def["databases"] = databases
+            pre_init, post_init = self._call_initialise(builder_object, name)
+
+            if len(pre_init) > 0:
+                one_def["pre_init"] = pre_init
+            if len(post_init) > 0:
+                one_def["post_init"] = post_init
 
     def write_yaml_tree(self, filename):
         """
         Convert the yaml object graph into a YAML file
         """
 
-        def add_blank_lines(yaml):
+        def tidy_up(yaml):
             # add blank lines between major fields
-            for field in ["- type:", "- file:", "- name:", "databases:"]:
-                yaml = re.sub(r"(\s*%s)" % field, "\n\\g<1>", yaml)
+            for field in [
+                "- name:",
+                "  databases:",
+                "  pre_init:",
+                "module",
+                "defs",
+                "  args",
+            ]:
+                yaml = re.sub(r"(\n%s)" % field, "\n\\g<1>", yaml)
 
-            # cheesy way to make multiline Init Function strings readable in YAML
-            # because ruamel quotes them and escapes newlines
-            yaml = re.sub(r"(\\ *\n *\\?)", "", yaml, flags=re.MULTILINE)
-            yaml = re.sub(r"(\\n)", "\n      # ", yaml, flags=re.MULTILINE)
-            yaml = re.sub(r"\\\"", '"', yaml, flags=re.MULTILINE)
-            yaml = re.sub(
-                r"value: \"",
-                "value:\n      # "
-                + "TODO --- CONVERT THE FOLLOWING TO AN IBEK FUNCTION"
-                + "\n      # ",
-                yaml,
-                flags=re.MULTILINE,
-            )
-            yaml = re.sub(r"      # \"", "", yaml, flags=re.MULTILINE)
             return yaml
 
         yaml = YAML()
 
         yaml.default_flow_style = False
 
-        # add a placeholder for the schema using a relative path
-        # this is more useful than the URL during support yaml development
+        # add support yaml schema
         self.yaml_tree.yaml_add_eol_comment(
-            "yaml-language-server: $schema=../_global/ibek.defs.schema.json"
+            "yaml-language-server: $schema=https://github.com/epics-"
+            "containers/ibek/releases/download/0.0.13/ibek.support.schema.json"
         )
 
         print("\nWriting YAML output to %s ..." % filename)
         with open(filename, "wb") as f:
-            yaml.dump(self.yaml_tree, f, transform=add_blank_lines)
+            yaml.dump(self.yaml_tree, f, transform=tidy_up)
 
 
 class MockArg(Mock):

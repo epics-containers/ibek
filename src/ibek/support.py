@@ -5,12 +5,24 @@ from __future__ import annotations
 
 import json
 from enum import Enum
-from typing import Any, Dict, Optional, Sequence, Union
+from typing import Any, Dict, ForwardRef, Optional, Sequence, Union
 
-from pydantic import Field
+from pydantic import Field, PydanticUndefinedAnnotation
 from typing_extensions import Literal
 
 from .globals import BaseSettings
+
+UndefinedType = ForwardRef("UndefinedType")
+
+
+def default(T: type):
+    """
+    defines a default type which may be
+    """
+    return Field(
+        Union[Optional[T], PydanticUndefinedAnnotation],
+        description="If given, instance doesn't supply argument, what value should be used",
+    )
 
 
 class When(Enum):
@@ -111,20 +123,6 @@ class EnvironmentVariable(BaseSettings):
     value: str = Field(description="Value to set")
 
 
-class Function(BaseSettings):
-    """
-    A script snippet that defines a function to call
-    """
-
-    name: str = Field(description="Name of the function to call")
-    args: Dict[str, Any] = Field(description="The arguments to pass to the function")
-    header: str = Field(
-        description="commands/comments to appear before the function", default=""
-    )
-    when: When = Field(description="one of first / every / last", default="every")
-    type: Literal["function"] = "function"
-
-
 class Comment(BaseSettings):
     """
     A script snippet that will have '# ' prepended to every line
@@ -158,7 +156,7 @@ class Value(BaseSettings):
     value: str = Field(description="The contents of the value")
 
 
-Script = Sequence[Union[Function, Comment, Text]]
+Script = Sequence[Union[Text, Comment]]
 
 
 class Definition(BaseSettings):
