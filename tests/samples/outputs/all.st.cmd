@@ -37,5 +37,6 @@ iocInit
 
 
 testPostInit "AllObject One" test_value:
+this should appear once only in the post_init section
 testPostInit "AllObject Two" test_value:
 
