@@ -8,7 +8,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>ibek.support &#8212; ibek 1.0.1.dev2+g20a5e58 documentation</title>
+    <title>ibek.support &#8212; ibek 0.0.14.dev18+gff32750 documentation</title>
   
   
   
@@ -439,12 +439,24 @@ document.write(`
 
 <span class="kn">import</span> <span class="nn">json</span>
 <span class="kn">from</span> <span class="nn">enum</span> <span class="kn">import</span> <span class="n">Enum</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">,</span> <span class="n">Union</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">ForwardRef</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">,</span> <span class="n">Union</span>
 
-<span class="kn">from</span> <span class="nn">pydantic</span> <span class="kn">import</span> <span class="n">Field</span>
+<span class="kn">from</span> <span class="nn">pydantic</span> <span class="kn">import</span> <span class="n">Field</span><span class="p">,</span> <span class="n">PydanticUndefinedAnnotation</span>
 <span class="kn">from</span> <span class="nn">typing_extensions</span> <span class="kn">import</span> <span class="n">Literal</span>
 
 <span class="kn">from</span> <span class="nn">.globals</span> <span class="kn">import</span> <span class="n">BaseSettings</span>
+
+<span class="n">UndefinedType</span> <span class="o">=</span> <span class="n">ForwardRef</span><span class="p">(</span><span class="s2">&quot;UndefinedType&quot;</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="default"><a class="viewcode-back" href="../../user/reference/api.html#ibek.support.default">[docs]</a><span class="k">def</span> <span class="nf">default</span><span class="p">(</span><span class="n">T</span><span class="p">:</span> <span class="nb">type</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    defines a default type which may be</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">Field</span><span class="p">(</span>
+        <span class="n">Union</span><span class="p">[</span><span class="n">Optional</span><span class="p">[</span><span class="n">T</span><span class="p">],</span> <span class="n">PydanticUndefinedAnnotation</span><span class="p">],</span>
+        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;If given, instance doesn&#39;t supply argument, what value should be used&quot;</span><span class="p">,</span>
+    <span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="When"><a class="viewcode-back" href="../../user/reference/api.html#ibek.support.When">[docs]</a><span class="k">class</span> <span class="nc">When</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
@@ -545,20 +557,6 @@ document.write(`
     <span class="n">value</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s2">&quot;Value to set&quot;</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="Function"><a class="viewcode-back" href="../../user/reference/api.html#ibek.support.Function">[docs]</a><span class="k">class</span> <span class="nc">Function</span><span class="p">(</span><span class="n">BaseSettings</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    A script snippet that defines a function to call</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-
-    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s2">&quot;Name of the function to call&quot;</span><span class="p">)</span>
-    <span class="n">args</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s2">&quot;The arguments to pass to the function&quot;</span><span class="p">)</span>
-    <span class="n">header</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
-        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;commands/comments to appear before the function&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="s2">&quot;&quot;</span>
-    <span class="p">)</span>
-    <span class="n">when</span><span class="p">:</span> <span class="n">When</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s2">&quot;one of first / every / last&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="s2">&quot;every&quot;</span><span class="p">)</span>
-    <span class="nb">type</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;function&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;function&quot;</span></div>
-
-
 <div class="viewcode-block" id="Comment"><a class="viewcode-back" href="../../user/reference/api.html#ibek.support.Comment">[docs]</a><span class="k">class</span> <span class="nc">Comment</span><span class="p">(</span><span class="n">BaseSettings</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    A script snippet that will have &#39;# &#39; prepended to every line</span>
@@ -592,7 +590,7 @@ document.write(`
     <span class="n">value</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s2">&quot;The contents of the value&quot;</span><span class="p">)</span></div>
 
 
-<span class="n">Script</span> <span class="o">=</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">Function</span><span class="p">,</span> <span class="n">Comment</span><span class="p">,</span> <span class="n">Text</span><span class="p">]]</span>
+<span class="n">Script</span> <span class="o">=</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">Text</span><span class="p">,</span> <span class="n">Comment</span><span class="p">]]</span>
 
 
 <div class="viewcode-block" id="Definition"><a class="viewcode-back" href="../../user/reference/api.html#ibek.support.Definition">[docs]</a><span class="k">class</span> <span class="nc">Definition</span><span class="p">(</span><span class="n">BaseSettings</span><span class="p">):</span>
