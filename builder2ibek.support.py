@@ -30,7 +30,7 @@ from ruamel.yaml.scalarstring import PreservedScalarString
 from dls_dependency_tree import dependency_tree  # noqa: E402 isort:skip
 from iocbuilder import ParseEtcArgs, configure, device  # noqa: E402 isort:skip
 from iocbuilder.recordset import RecordsSubstitutionSet  # noqa: E402 isort:skip
-from mock import Mock  # noqa: E402 isort:skip
+from mock import MagicMock  # noqa: E402 isort:skip
 from ruamel.yaml import YAML  # noqa: E402 isort:skip
 from ruamel.yaml.comments import CommentedMap as ordereddict  # noqa: E402 isort:skip
 
@@ -188,15 +188,6 @@ class Builder2Support:
 
         return arg
 
-    def _arg_type(self, value):
-        if isinstance(value, MockArg):
-            typ = str(type(value.wraps))
-            arg_type = "Mock " + value.typ
-        else:
-            typ = str(type(value))
-            arg_type = class_name_re.findall(typ)[0]
-        return arg_type
-
     def _instantiate_builder_objects(self, args, builder_class):
         # Mock up a set of args with which to instantiate a builder object
         args_dict = {}
@@ -214,14 +205,12 @@ class Builder2Support:
 
             # pick a sensible value for the argument to builder object's __init__
             if hasattr(desc, "labels"):
-                wraps = arg["default"] if "default" in arg else desc.labels[0]
-                typ = "enum"
-                value = MockArg(wraps=wraps, name=arg_name, typ=typ)
+                value = arg["default"] if "default" in arg else desc.labels[0]
+                arg["type"] = "enum"
             elif hasattr(desc, "ident"):
-                # wrapping None means that this behaves as a Mock
-                # this represents the identifier to another builder object
-                wraps = None
-                value = MockArg(wraps=wraps, name=arg_name, typ="object")
+                # this represents a reference to another builder object
+                # use Mock so that any references into it appear to work
+                value = MagicMock()
             elif "default" in arg:
                 value = arg["default"]
             elif arg["type"] == "int":
@@ -242,9 +231,11 @@ class Builder2Support:
             args_dict[arg_name] = value
 
             # this print shows the arg numbers for overriding in the command line
+            if isinstance(value, MagicMock):
+                value = "Object" + str(self.arg_num)
             print(
                 "    ARG {:3} {:20} {:<20} {}".format(
-                    self.arg_num, arg_name, value, self._arg_type(value)
+                    self.arg_num, arg_name, value, arg["type"]
                 )
             )
 
@@ -419,71 +410,6 @@ class Builder2Support:
             yaml.dump(self.yaml_tree, f, transform=tidy_up)
 
 
-class MockArg(Mock):
-    """
-    A mock object that can be used to represent an argument to a builder class
-    __init__ method.
-
-    We use the mock object "name" to store the name of the argument and
-    the mock object "wraps" to store a value for the argument.
-    """
-
-    def __init__(self, wraps=None, name="", typ="None", *args, **kwargs):
-        super(MockArg, self).__init__(wraps=wraps, name=name, *args, **kwargs)
-
-        self.typ = typ
-        self.wraps = wraps
-        self.repr=repr(wraps)
-
-    def __repr__(self):
-        return self.repr
-
-    def __str__(self):
-        return str(self.repr)
-
-    ############################################################################
-    # BELOW - we override methods that are called by builder.py on the builder
-    # object's (Mock) arguments.
-    ############################################################################
-
-    def __add__(self, other):
-        try:
-            return self._mock_wraps + other
-        except TypeError:
-            return "%s + %s" % (self._mock_wraps, other)
-
-    def __int__(self):
-        try:
-            return int(self._mock_wraps)
-        except ValueError:
-            pass
-
-        try:
-            return int(bool(self._mock_wraps))
-        except ValueError:
-            pass
-
-        return 1
-
-    def __iter__(self):
-        return iter(self._mock_wraps)
-
-    def __setitem__(self, _key, _value):
-        pass
-
-    def __getitem__(self, key):
-        return "%s[%s]" % (self, key)
-
-    def __lt__(self, other):
-        return self._mock_wraps < other
-
-    def __gt__(self, other):
-        return self._mock_wraps > other
-
-    def __eq__(self, other):
-        return self._mock_wraps == other
-
-
 def parse_args():
     """
     Parse the command line arguments
@@ -510,15 +436,16 @@ def parse_args():
     args = parser.parse_args()
 
     arg_overrides = {}
-    for o in args.overrides.split(" ") or []:
-        m = arg_values_re.match(o)
-        assert len(m.groups()) == 2, "Invalid argument format %s" % o
-        value = m.group(2)
-        if re.match(is_int_re, value):
-            value = int(value)
-        elif re.match(is_float_re, value):
-            value = float(value)
-        arg_overrides[int(m.group(1))] = value
+    if args.overrides:
+        for o in args.overrides.split(" "):
+            m = arg_values_re.match(o)
+            assert len(m.groups()) == 2, "Invalid argument format %s" % o
+            value = m.group(2)
+            if re.match(is_int_re, value):
+                value = int(value)
+            elif re.match(is_float_re, value):
+                value = float(value)
+            arg_overrides[int(m.group(1))] = value
 
     yaml_file = args.yaml
 
