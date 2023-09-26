@@ -62,18 +62,45 @@ class ArgInfo:
     """
 
     description_re = re.compile(r"(.*)\n<(?:type|class)")
+    name_re = re.compile(r"iocbuilder\.modules\.(.*)")
     arg_num = 1
 
-    def __init__(self, arginfo, unique_name):
-        # The arginfo we will consume
-        self.arginfo = arginfo
+    def __init__(self, name, unique_name, description):
+        """
+        Unique name is the argument that uniquely identifies
+        """
+        # The arginfo we will consume when calling add_arg_info
+        self.arginfo = None
         # unique name for the builder class
         self.unique_name = unique_name
         # list of ordereddict args to be used in the YAML
         self.yaml_args = []
+        # the root of the definition in yaml that holds above yaml_args
+        self.yaml_defs = ordereddict()
+        self.yaml_defs["args"] = self.yaml_args
         # set of args and values to use for instantiating a builder object
         self.builder_args = {}
+        # list of all the arg names only (across multiple add_arg_info)
+        self.all_args = []
 
+        self.yaml_defs["name"] = self.name_re.findall(name)[0]
+
+        if description:
+            desc = description.strip()
+        else:
+            desc = "TODO:ADD DESCRIPTION"
+        self.yaml_defs["description"] = PreservedScalarString(desc)
+
+    def add_arg_info(self, arginfo):
+        """
+        Consume an ArgInfo object
+        """
+        self.arginfo = arginfo
+        # we reset builder args for each new ArgInfo - this is because
+        # we call once for builder object __init__ and once for each
+        # database substitution template. For each we want to record the
+        # args for that particular item.
+        self.builder_args = {}
         self._interpret()
 
     def _interpret(self):
@@ -107,7 +134,6 @@ class ArgInfo:
                 description_str = "TODO: ADD DESCRIPTION"
 
             if True:
-                # TODO do overrides here and PRINTs
                 new_yaml_arg = ordereddict()
                 new_yaml_arg["type"] = typ
                 new_yaml_arg["name"] = arg_name
@@ -116,6 +142,7 @@ class ArgInfo:
                     new_yaml_arg["default"] = default
 
                 self.yaml_args.append(new_yaml_arg)
+                self.all_args.append(arg_name)
 
     def make_arg(self, name, details, default=None):
         """
@@ -159,12 +186,15 @@ class ArgInfo:
 
         if name not in self.builder_args:
             self.builder_args[name] = value
-            self.arg_num += 1
 
+            # TODO OVERRIDES
             if isinstance(value, MagicMock):
                 value = "Object" + str(self.arg_num)
             print("    ARG {:3} {:20} {:<20} {}".format(self.arg_num, name, value, typ))
-        return typ, default
+
+            self.arg_num += 1
+
+            return typ, default
 
 
 class Builder2Support:
@@ -175,8 +205,6 @@ class Builder2Support:
         Builder2Support.arg_value_overrides = arg_value_overrides
         self.yaml_tree = ordereddict()
         self.builder_module, self.builder_classes = self._configure()
-        self.def_args = {}  # Dict[def name: [Arg names]]
-        self.arg_num = 0  # we number args so that users can choose to override them
         self.dbds = set()
         self.libs = set()
 
@@ -226,22 +254,17 @@ class Builder2Support:
         set of arguments to the builder class __init__ method.
 
         Returns:
-            A tuple containing the generated arguments as an ibek.support.yaml
-            definition object graph, plus the instantiated builder object.
+            A tuple containing ArgInfo object that describes the arguments
+            plus the instantiated builder object.
         """
         print("\nObject %s :" % builder_class.__name__)
 
-        this_def = ordereddict()
-        this_def["name"] = name
-        if builder_class.__doc__:
-            desc = builder_class.__doc__.strip()
-        else:
-            desc = "TODO:ADD DESCRIPTION"
-        this_def["description"] = PreservedScalarString(desc)
-
         arg_info = ArgInfo(
-            builder_class.ArgInfo, getattr(builder_class, "UniqueName", "name")
+            name,
+            getattr(builder_class, "UniqueName", "name"),
+            getattr(builder_class, "__doc__"),
         )
+        arg_info.add_arg_info(builder_class.ArgInfo)
 
         if hasattr(builder_class, "LibFileList"):
             self.libs |= set(builder_class.LibFileList)
@@ -250,9 +273,9 @@ class Builder2Support:
 
         builder_object = builder_class(**arg_info.builder_args)
 
-        return this_def, builder_object
+        return arg_info, builder_object
 
-    def _extract_substitutions(self, name):
+    def _extract_substitutions(self, arginfo):
         """
         Extract all of the database substitutions from the builder class
         and populate the ibek YAML database object graph.
@@ -269,7 +292,6 @@ class Builder2Support:
         all_substitutions = RecordsSubstitutionSet._SubstitutionSet__Substitutions
 
         databases = []
-        extra_args = []
 
         # extract the set of templates with substitutions for the new builder object
         while all_substitutions:
@@ -281,43 +303,26 @@ class Builder2Support:
 
             database["file"] = template
 
-            db_args = {a[0]: None for a in first_substitution.args.items()}
+            arginfo.add_arg_info(first_substitution.ArgInfo)
 
-            # TODO consider a refactor where we have a ArgInfo -> YamlArg
-            # function and use it for DB and __init__ args
-            for arg_name in db_args.keys():
-                # do we already have an arg entry for this arg name from __init__?
-                if arg_name not in self.def_args[name]:
-                    # we need a new arg entry for this arg name in the YAML
-                    # its defined in the database template but not in __init__
-                    default = first_substitution.args.get(arg_name)
-                    description = first_substitution.ArgInfo.descriptions.get(
-                        arg_name,
-                    ).desc
-                    arg_from_db = ordereddict()
-                    arg_from_db["type"] = "str"
-                    arg_from_db["name"] = arg_name
-                    arg_from_db["default"] = default
-                    arg_from_db["description"] = description.split(",")[0]
-                    extra_args.append(arg_from_db)
+            database.insert(3, "args", arginfo.builder_args)
 
-            database.insert(3, "args", db_args)
+        if len(databases) > 0:
+            arginfo.yaml_defs["databases"] = databases
 
-        return databases, extra_args
-
-    def _make_init_script(
-        self, builder_object, func_name, typ, script, name, when=None
-    ):
+    def _make_init_script(self, builder_object, func_name, script, arginfo, when=None):
         """
         Find the source code for a builder class method and create an object
         graph representing as script entries in the ibek YAML file.
         """
         func = getattr(builder_object, func_name, None)
         if func:
+            # prepare the YAML for the script entry
             script_item = ordereddict()
-            script_item["type"] = typ
             if when:
                 script_item["when"] = when
+
+            # extract the print statements from the functions in the source code
             func_text = inspect.getsource(func)
             print_strings = func_text.split("print")[1:]
 
@@ -327,23 +332,19 @@ class Builder2Support:
             for print_string in print_strings:
                 matches = extract_printed_strings_re.findall(print_string)
                 if matches:
-                    # TODO this fails because we have two mutually exclusive
-                    # groups in the regex so we get a tuple with one blanks string
-                    # I could fix this niavely but want my regex to do the work for
-                    # me
                     command_args += macros_re.findall(matches[0][1])
                     line = macros_re.sub(macro_to_jinja_re, matches[0][1])
                     commands += line + "\n"
             if commands:
                 script_text = PreservedScalarString(commands)
-                missing = set(command_args) - set(self.def_args[name])
+                missing = set(command_args) - set(arginfo.all_args)
                 comment = MISSING + ", ".join(missing) if missing else None
 
                 script_item.insert(3, "value", script_text, comment=comment)
 
             script.append(script_item)
 
-    def _call_initialise(self, builder_object, name):
+    def parse_initialise_functions(self, builder_object, arginfo):
         """
         Extract the code from the builder class Initialise() method
         to insert into the ibek YAML script object graph.
@@ -355,16 +356,15 @@ class Builder2Support:
         pre_init = []
         post_init = []
         self._make_init_script(
-            builder_object, "InitialiseOnce", "text", pre_init, when="first", name=name
+            builder_object, "InitialiseOnce", pre_init, arginfo, when="first"
         )
-        self._make_init_script(
-            builder_object, "Initialise", "text", pre_init, name=name
-        )
-        self._make_init_script(
-            builder_object, "PostIocInitialise", "text", post_init, name=name
-        )
+        self._make_init_script(builder_object, "Initialise", pre_init, arginfo)
+        self._make_init_script(builder_object, "PostIocInitialise", post_init, arginfo)
 
-        return pre_init, post_init
+        if len(pre_init) > 0:
+            arginfo.yaml_defs["pre_init"] = pre_init
+        if len(post_init) > 0:
+            arginfo.yaml_defs["post_init"] = post_init
 
     def make_yaml_tree(self):
         """
@@ -373,33 +373,22 @@ class Builder2Support:
         """
         builder_objects = []
         self.yaml_tree["module"] = self.builder_module.Name()
-
-        yaml_defs = self.yaml_tree["defs"] = []
+        self.yaml_tree["defs"] = []
 
         for name, builder_class in self.builder_classes.items():
-            one_def, builder_object = self._make_builder_object(name, builder_class)
+            # make an instance of the builder class and an ArgInfo that
+            # describes all its arguments
+            arginfo, builder_object = self._make_builder_object(name, builder_class)
 
-            self.def_args[name] = [arg["name"] for arg in one_def["args"]]
+            # Go and find all the arguments for all the database templates
+            # and insert them plus DB file names into the YAML
+            self._extract_substitutions(arginfo)
 
-            builder_objects.append(builder_object)
+            # Extract all initialise functions and make script entries
+            # for them
+            self.parse_initialise_functions(builder_object, arginfo)
 
-            databases, more_args = self._extract_substitutions(name)
-
-            one_def["args"] += [
-                arg for arg in more_args if arg["name"] not in self.def_args
-            ]
-            self.def_args[name] = [arg["name"] for arg in one_def["args"]]
-
-            yaml_defs.append(one_def)
-
-            if len(databases) > 0:
-                one_def["databases"] = databases
-            pre_init, post_init = self._call_initialise(builder_object, name)
-
-            if len(pre_init) > 0:
-                one_def["pre_init"] = pre_init
-            if len(post_init) > 0:
-                one_def["post_init"] = post_init
+            self.yaml_tree["defs"].append(arginfo.yaml_defs)
 
     def write_yaml_tree(self, filename):
         """
