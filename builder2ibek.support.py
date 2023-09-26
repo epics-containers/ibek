@@ -37,7 +37,7 @@ from ruamel.yaml.comments import CommentedMap as ordereddict  # noqa: E402 isort
 
 # regular expressions for extracting information from builder classes
 # regular expressions for extracting information from builder classes
-class_name_re = re.compile(r"class '.*\.(.*)'")
+class_name_re = re.compile(r"(?:type|class) '(.*)'")
 description_re = re.compile(r"(.*)\n<(?:type|class)")
 arg_values_re = re.compile(r"(\d*):(.*)")
 is_int_re = re.compile(r"[-+]?\d+$")
@@ -188,10 +188,20 @@ class Builder2Support:
 
         return arg
 
+    def _arg_type(self, value):
+        if isinstance(value, MockArg):
+            typ = str(type(value.wraps))
+            arg_type = "Mock " + value.typ
+        else:
+            typ = str(type(value))
+            arg_type = class_name_re.findall(typ)[0]
+        return arg_type
+
     def _instantiate_builder_objects(self, args, builder_class):
         # Mock up a set of args with which to instantiate a builder object
         args_dict = {}
 
+        print("\nObject %s :" % builder_class.__name__)
         for arg in args:
             self.arg_num += 1
             arg_name = arg["name"]
@@ -204,40 +214,39 @@ class Builder2Support:
 
             # pick a sensible value for the argument to builder object's __init__
             if hasattr(desc, "labels"):
-                value = desc.labels[0]
+                wraps = arg["default"] if "default" in arg else desc.labels[0]
+                typ = "enum"
+                value = MockArg(wraps=wraps, name=arg_name, typ=typ)
             elif hasattr(desc, "ident"):
                 # wrapping None means that this behaves as a Mock
-                value = None
+                # this represents the identifier to another builder object
+                wraps = None
+                value = MockArg(wraps=wraps, name=arg_name, typ="object")
             elif "default" in arg:
                 value = arg["default"]
             elif arg["type"] == "int":
                 value = 1
-                use_native = True
             elif arg["type"] == "float":
                 value = 1.0
-                use_native = True
             elif arg["type"] == "bool":
                 value = False
-                use_native = True
             elif arg["type"] == "str":
                 value = arg_name + "_STRING"
-                use_native = True
             elif arg["type"] == "id":
-                value = arg_name + "_ID"
+                value = "ID_" + str(self.arg_num)
             else:
                 assert 0, "Unknown type %s" % arg["type"]
 
-            if use_native:
-                # If the type is well known then use the native type
-                args_dict[arg_name] = value
-                arg_type = type(value)
-            else:
-                magic_arg = MockArg(wraps=value, arg_num=self.arg_num, name=arg_name)
-                args_dict[arg_name] = magic_arg
-                arg_type = "Mock" + str(type(value))
+            if self.arg_num in self.arg_value_overrides:
+                value = self.arg_value_overrides[self.arg_num]
+            args_dict[arg_name] = value
 
             # this print shows the arg numbers for overriding in the command line
-            print("ARG %d: %s, %s, %s" % (self.arg_num, arg_name, value, arg_type))
+            print(
+                "    ARG {:3} {:20} {:<20} {}".format(
+                    self.arg_num, arg_name, value, self._arg_type(value)
+                )
+            )
 
         # instantiate a builder object using our mock arguments
         return builder_class(**args_dict)
@@ -419,13 +428,15 @@ class MockArg(Mock):
     the mock object "wraps" to store a value for the argument.
     """
 
-    def __init__(self, wraps=None, arg_num=0, name="", *args, **kwargs):
+    def __init__(self, wraps=None, name="", typ="None", *args, **kwargs):
         super(MockArg, self).__init__(wraps=wraps, name=name, *args, **kwargs)
 
-        self.repr = "MockArg(%d, %s, %s)" % (arg_num, name, wraps)
+        self.typ = typ
+        self.wraps = wraps
+        self.repr=repr(wraps)
 
     def __repr__(self):
-        return str(self.repr)
+        return self.repr
 
     def __str__(self):
         return str(self.repr)
@@ -484,14 +495,13 @@ def parse_args():
     parser.add_argument("path", help="path to the support module")
     parser.add_argument(
         "yaml",
-        help="path to the YAML file to be generated",
-        default=None,
+        help="path to the YAML file to be generated (default: ibek.support.yaml)",
+        default="ibek.support.yaml",
         nargs="?",
     )
     parser.add_argument(
         "-o",
         "--overrides",
-        action="append",
         help=(
             "override a MockArg argument value in the builder class"
             " using the form 'arg_num:value'"
@@ -500,7 +510,7 @@ def parse_args():
     args = parser.parse_args()
 
     arg_overrides = {}
-    for o in args.overrides or []:
+    for o in args.overrides.split(" ") or []:
         m = arg_values_re.match(o)
         assert len(m.groups()) == 2, "Invalid argument format %s" % o
         value = m.group(2)
@@ -508,9 +518,9 @@ def parse_args():
             value = int(value)
         elif re.match(is_float_re, value):
             value = float(value)
-        arg_overrides[m.group(1)] = value
+        arg_overrides[int(m.group(1))] = value
 
-    yaml_file = args.yaml or "ibek.support.yaml"
+    yaml_file = args.yaml
 
     return args.path, yaml_file, arg_overrides
 
