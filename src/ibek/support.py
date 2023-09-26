@@ -91,7 +91,6 @@ class EnumArg(Arg):
 
     values: Dict[str, Any] = Field(
         description="provides a list of values to make this argument an Enum",
-        json_schema_extra={"required": ["values"]},
     )
 
 
