@@ -8,7 +8,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>ibek.support &#8212; ibek 0.0.14.dev18+gff32750 documentation</title>
+    <title>ibek.support &#8212; ibek 1.1.1.dev16+g56d503f documentation</title>
   
   
   
@@ -439,14 +439,12 @@ document.write(`
 
 <span class="kn">import</span> <span class="nn">json</span>
 <span class="kn">from</span> <span class="nn">enum</span> <span class="kn">import</span> <span class="n">Enum</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">ForwardRef</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">,</span> <span class="n">Union</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">,</span> <span class="n">Union</span>
 
 <span class="kn">from</span> <span class="nn">pydantic</span> <span class="kn">import</span> <span class="n">Field</span><span class="p">,</span> <span class="n">PydanticUndefinedAnnotation</span>
 <span class="kn">from</span> <span class="nn">typing_extensions</span> <span class="kn">import</span> <span class="n">Literal</span>
 
 <span class="kn">from</span> <span class="nn">.globals</span> <span class="kn">import</span> <span class="n">BaseSettings</span>
-
-<span class="n">UndefinedType</span> <span class="o">=</span> <span class="n">ForwardRef</span><span class="p">(</span><span class="s2">&quot;UndefinedType&quot;</span><span class="p">)</span>
 
 
 <div class="viewcode-block" id="default"><a class="viewcode-back" href="../../user/reference/api.html#ibek.support.default">[docs]</a><span class="k">def</span> <span class="nf">default</span><span class="p">(</span><span class="n">T</span><span class="p">:</span> <span class="nb">type</span><span class="p">):</span>
@@ -527,7 +525,7 @@ document.write(`
 
     <span class="n">values</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
         <span class="n">description</span><span class="o">=</span><span class="s2">&quot;provides a list of values to make this argument an Enum&quot;</span><span class="p">,</span>
-        <span class="n">default</span><span class="o">=</span><span class="p">(</span><span class="kc">None</span><span class="p">),</span>
+        <span class="n">json_schema_extra</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;required&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;values&quot;</span><span class="p">]},</span>
     <span class="p">)</span></div>
 
 
