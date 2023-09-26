@@ -75,8 +75,6 @@ class ArgInfo:
         self.yaml_args = []
         # the root of the definition in yaml that holds above yaml_args
         self.yaml_defs = ordereddict()
-        self.yaml_defs["name"] = self.name_re.findall(name)[0]
-        self.yaml_defs["args"] = self.yaml_args
         # set of args and values to use for instantiating a builder object
         self.builder_args = {}
         # list of all the arg names only (across multiple add_arg_info)
@@ -89,7 +87,10 @@ class ArgInfo:
             desc = description.strip()
         else:
             desc = "TODO:ADD DESCRIPTION"
+
+        self.yaml_defs["name"] = self.name_re.findall(name)[0]
         self.yaml_defs["description"] = PreservedScalarString(desc)
+        self.yaml_defs["args"] = self.yaml_args
 
     def add_arg_info(self, arginfo):
         """
@@ -180,7 +181,7 @@ class ArgInfo:
         else:
             typ = "UNKNOWN TODO TODO"
 
-        if hasattr(details, "labels"):
+        if hasattr(details, "labels") and typ is not "bool":
             value = default or details.labels[0]
             typ = "enum"
 
