@@ -5,14 +5,12 @@ from __future__ import annotations
 
 import json
 from enum import Enum
-from typing import Any, Dict, ForwardRef, Optional, Sequence, Union
+from typing import Any, Dict, Optional, Sequence, Union
 
 from pydantic import Field, PydanticUndefinedAnnotation
 from typing_extensions import Literal
 
 from .globals import BaseSettings
-
-UndefinedType = ForwardRef("UndefinedType")
 
 
 def default(T: type):
@@ -93,7 +91,7 @@ class EnumArg(Arg):
 
     values: Dict[str, Any] = Field(
         description="provides a list of values to make this argument an Enum",
-        default=(None),
+        json_schema_extra={"required": ["values"]},
     )
 
 

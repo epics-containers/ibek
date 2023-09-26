@@ -140,6 +140,8 @@ class ArgInfo:
                 new_yaml_arg["description"] = PreservedScalarString(description_str)
                 if default:
                     new_yaml_arg["default"] = default
+                if typ == "enum":
+                    new_yaml_arg["values"] = {label: None for label in details.labels}
 
                 self.yaml_args.append(new_yaml_arg)
                 self.all_args.append(arg_name)
@@ -426,7 +428,7 @@ class Builder2Support:
         # add support yaml schema
         self.yaml_tree.yaml_add_eol_comment(
             "yaml-language-server: $schema=https://github.com/epics-"
-            "containers/ibek/releases/download/1.1.0/ibek.support.schema.json"
+            "containers/ibek/releases/download/1.1.1/ibek.support.schema.json"
         )
 
         print("\nWriting YAML output to %s ..." % filename)
