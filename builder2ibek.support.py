@@ -54,8 +54,8 @@ MISSING = "TODO - MISSING ARGS: "
 
 class ArgInfo:
     """
-    A class to consume a builder ArgInfo object and extract useful information
-    for constructing ibek YAML arguments.
+    A class to consume builder ArgInfo objects and extract useful information
+    to construct an equivalent ibek definition YAML tree.
     """
 
     description_re = re.compile(r"(.*)\n<(?:type|class)")
@@ -75,6 +75,7 @@ class ArgInfo:
         self.yaml_args = []
         # the root of the definition in yaml that holds above yaml_args
         self.yaml_defs = ordereddict()
+        self.yaml_defs["name"] = self.name_re.findall(name)[0]
         self.yaml_defs["args"] = self.yaml_args
         # set of args and values to use for instantiating a builder object
         self.builder_args = {}
@@ -84,7 +85,6 @@ class ArgInfo:
         # The arginfo we will consume when calling add_arg_info
         self.arginfo = None
 
-        self.yaml_defs["name"] = self.name_re.findall(name)[0]
 
         if description:
             desc = description.strip()
@@ -411,9 +411,9 @@ class Builder2Support:
                 "- name:",
                 "  databases:",
                 "  pre_init:",
+                "  post_init:",
                 "module",
-                "defs",
-                "  args",
+                "defs"
             ]:
                 yaml = re.sub(r"(\n%s)" % field, "\n\\g<1>", yaml)
 
