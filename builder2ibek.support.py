@@ -133,11 +133,11 @@ class ArgInfo:
             else:
                 description_str = "TODO: ADD DESCRIPTION"
 
-            if True:
+            if arg_name not in self.all_args:
                 new_yaml_arg = ordereddict()
                 new_yaml_arg["type"] = typ
                 new_yaml_arg["name"] = arg_name
-                new_yaml_arg["description"] = description_str
+                new_yaml_arg["description"] = PreservedScalarString(description_str)
                 if default:
                     new_yaml_arg["default"] = default
 
@@ -303,9 +303,11 @@ class Builder2Support:
 
             database["file"] = template
 
-            arginfo.add_arg_info(first_substitution.ArgInfo)
+            print("\nDB Template %s :" % template)
 
-            database.insert(3, "args", arginfo.builder_args)
+            arginfo.add_arg_info(first_substitution.ArgInfo)
+            no_vals = {k: None for k in arginfo.builder_args}
+            database.insert(3, "args", no_vals)
 
         if len(databases) > 0:
             arginfo.yaml_defs["databases"] = databases
