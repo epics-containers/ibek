@@ -241,15 +241,18 @@
           "title": "Default"
         },
         "values": {
-          "default": null,
           "description": "provides a list of values to make this argument an Enum",
+          "required": [
+            "values"
+          ],
           "title": "Values",
           "type": "object"
         }
       },
       "required": [
         "name",
-        "description"
+        "description",
+        "values"
       ],
       "title": "EnumArg",
       "type": "object"
