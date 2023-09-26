@@ -85,7 +85,6 @@ class ArgInfo:
         # The arginfo we will consume when calling add_arg_info
         self.arginfo = None
 
-
         if description:
             desc = description.strip()
         else:
@@ -197,7 +196,9 @@ class ArgInfo:
 
             if isinstance(value, MagicMock):
                 value = "Object" + str(ArgInfo.arg_num)
-            print("    ARG {:3} {:20} {:<20} {}".format(ArgInfo.arg_num, name, value, typ))
+            print(
+                "    ARG {:3} {:20} {:<20} {}".format(ArgInfo.arg_num, name, value, typ)
+            )
 
             ArgInfo.arg_num += 1
 
@@ -270,7 +271,7 @@ class Builder2Support:
             name,
             getattr(builder_class, "UniqueName", "name"),
             getattr(builder_class, "__doc__"),
-            self.arg_value_overrides
+            self.arg_value_overrides,
         )
         arg_info.add_arg_info(builder_class.ArgInfo)
 
@@ -381,7 +382,6 @@ class Builder2Support:
         Main entry point: generate the ibek YAML object graph from
         builder classes.
         """
-        builder_objects = []
         self.yaml_tree["module"] = self.builder_module.Name()
         self.yaml_tree["defs"] = []
 
@@ -413,7 +413,7 @@ class Builder2Support:
                 "  pre_init:",
                 "  post_init:",
                 "module",
-                "defs"
+                "defs",
             ]:
                 yaml = re.sub(r"(\n%s)" % field, "\n\\g<1>", yaml)
 
