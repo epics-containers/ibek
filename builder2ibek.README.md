@@ -25,7 +25,7 @@ ARGUMENT_NO:VALUE pairs. For example this is the command that works with a
 recent version of the pmac module:
 
 ```bash
-./builder2ibek.support.py /dls_sw/prod/R3.14.12.7/support/pmac/2-5-23beta1/ -o '245:A+B 407:1 410:1'
+./builder2ibek.support.py /dls_sw/prod/R3.14.12.7/support/pmac/2-5-23beta1/ -o '14:A+B 474:A+B 801:1 805:1.0 804:1.0'
 ```
 
 Without the 3 overrides the tools will fail as builder.py tries to convert

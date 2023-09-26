@@ -13,9 +13,6 @@ debugger. HOW TO DO THIS:
   - by editing .vscode/launch.json
 """
 
-# if arg_name == "CS":
-#     typ = "int"
-
 import argparse
 import inspect
 import re
@@ -65,14 +62,15 @@ class ArgInfo:
     name_re = re.compile(r"iocbuilder\.modules\.(.*)")
     arg_num = 1
 
-    def __init__(self, name, unique_name, description):
+    def __init__(self, name, unique_name, description, overrides):
         """
         Unique name is the argument that uniquely identifies
         """
-        # The arginfo we will consume when calling add_arg_info
-        self.arginfo = None
         # unique name for the builder class
         self.unique_name = unique_name
+        # value overrides for arguments
+        self.overrides = overrides
+
         # list of ordereddict args to be used in the YAML
         self.yaml_args = []
         # the root of the definition in yaml that holds above yaml_args
@@ -82,6 +80,9 @@ class ArgInfo:
         self.builder_args = {}
         # list of all the arg names only (across multiple add_arg_info)
         self.all_args = []
+
+        # The arginfo we will consume when calling add_arg_info
+        self.arginfo = None
 
         self.yaml_defs["name"] = self.name_re.findall(name)[0]
 
@@ -150,11 +151,12 @@ class ArgInfo:
         Create a builder object arg entry with best guess for a value.
         Support overriding of the guessed values from the command line.
         """
+
         if name == self.unique_name:
             typ = "id"
             if default == "":
                 default = None
-            value = default or "ID_" + str(self.arg_num)
+            value = default or "ID_" + str(ArgInfo.arg_num)
         elif details.typ == str:
             typ = "str"
             if default == "":
@@ -181,20 +183,25 @@ class ArgInfo:
             value = default or details.labels[0]
             typ = "enum"
 
-        if self.arg_num in Builder2Support.arg_value_overrides:
-            pass
+        # special case because CS in pmac comes in as even though it is an int
+        # TODO needs more investigation
+        if name == "CS":
+            typ = "int"
+            value = MagicMock()
 
         if name not in self.builder_args:
+            if ArgInfo.arg_num in self.overrides:
+                value = self.overrides[ArgInfo.arg_num]
+
             self.builder_args[name] = value
 
-            # TODO OVERRIDES
             if isinstance(value, MagicMock):
-                value = "Object" + str(self.arg_num)
-            print("    ARG {:3} {:20} {:<20} {}".format(self.arg_num, name, value, typ))
+                value = "Object" + str(ArgInfo.arg_num)
+            print("    ARG {:3} {:20} {:<20} {}".format(ArgInfo.arg_num, name, value, typ))
 
-            self.arg_num += 1
+            ArgInfo.arg_num += 1
 
-            return typ, default
+        return typ, default
 
 
 class Builder2Support:
@@ -263,6 +270,7 @@ class Builder2Support:
             name,
             getattr(builder_class, "UniqueName", "name"),
             getattr(builder_class, "__doc__"),
+            self.arg_value_overrides
         )
         arg_info.add_arg_info(builder_class.ArgInfo)
 
