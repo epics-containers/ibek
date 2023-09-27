@@ -60,7 +60,7 @@ class ArgInfo:
     """
 
     description_re = re.compile(r"(.*)\n<(?:type|class)")
-    name_re = re.compile(r"iocbuilder\.modules\.(.*)")
+    name_re = re.compile(r"iocbuilder\.modules\.(?:.*)\.(.*)")
     arg_num = 1
 
     def __init__(self, name, unique_name, description, overrides):
@@ -89,6 +89,7 @@ class ArgInfo:
         else:
             desc = "TODO:ADD DESCRIPTION"
 
+        print(name)
         self.yaml_defs["name"] = self.name_re.findall(name)[0]
         self.yaml_defs["description"] = PreservedScalarString(desc)
         self.yaml_defs["args"] = self.yaml_args
@@ -427,6 +428,7 @@ class Builder2Support:
                 "  post_init:",
                 "module",
                 "defs",
+                "  - type:",
             ]:
                 yaml = re.sub(r"(\n%s)" % field, "\n\\g<1>", yaml)
 
