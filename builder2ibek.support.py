@@ -17,6 +17,7 @@ import argparse
 import inspect
 import re
 import sys
+import os
 
 # import required modules
 from pkg_resources import require
@@ -276,12 +277,14 @@ class Builder2Support:
             getattr(builder_class, "__doc__"),
             self.arg_value_overrides,
         )
-        arg_info.add_arg_info(builder_class.ArgInfo)
 
-        if hasattr(builder_class, "LibFileList"):
-            self.libs |= set(builder_class.LibFileList)
-        if hasattr(builder_class, "DbdFileList"):
-            self.dbds |= set(builder_class.DbdFileList)
+        for a_cls in (builder_class,) + builder_class.Dependencies:
+            if hasattr(a_cls, "ArgInfo"):
+                arg_info.add_arg_info(a_cls.ArgInfo)
+            if hasattr(a_cls, "LibFileList"):
+                self.libs |= set(a_cls.LibFileList)
+            if hasattr(a_cls, "DbdFileList"):
+                self.dbds |= set(a_cls.DbdFileList)
 
         builder_object = builder_class(**arg_info.builder_args)
 
@@ -317,9 +320,16 @@ class Builder2Support:
 
             print("\nDB Template %s :" % template)
 
-            arginfo.add_arg_info(first_substitution.ArgInfo)
-            no_vals = {k: None for k in arginfo.builder_args}
-            database.insert(3, "args", no_vals)
+            if hasattr(first_substitution, "ArgInfo"):
+                arginfo.add_arg_info(first_substitution.ArgInfo)
+                # the DB Arg entries in the YAML are Dictionary entries with no value
+                no_values = {k: None for k in arginfo.builder_args}
+            elif hasattr(first_substitution, "Arguments"):
+                no_values = {k: None for k in first_substitution.Arguments}
+            else:
+                no_values = {"TODO": "No args for this template"}
+
+            database.insert(3, "args", no_values)
 
         if len(databases) > 0:
             arginfo.yaml_defs["databases"] = databases
@@ -481,6 +491,11 @@ def parse_args():
 
 if __name__ == "__main__":
     support_module_path, filename, arg_value_overrides = parse_args()
+
+    etc_folder = support_module_path + "/etc"
+    if not os.path.exists(etc_folder):
+        raise ValueError("The support module path must contain an etc folder")
+
     builder2support = Builder2Support(support_module_path, arg_value_overrides)
     # builder2support.dump_subst_file()
     builder2support.make_yaml_tree()
