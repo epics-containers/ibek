@@ -8,14 +8,14 @@
 #
 # STEPS:
 # 1. Launch the ioc-template container in the background with these mounts:
-#    example-ibek-config -> /repos/epics/ioc/config
+#    example-ibek-config -> /epics/ioc/config
 #        brings in the config files for the IOC
-#    this repo root -> /repos/ibek
+#    this repo root -> /ibek
 #        mounts the same
 #    this repo root/ibek-defs -> /ctools
 # 2. Install this instance of ibek into the container's global venv
-#    using /repos/ibek
-# 3. Launch the IOC by running /repos/epics/ioc/start_ioc.sh
+#    using /ibek
+# 3. Launch the IOC by running /epics/ioc/start_ioc.sh
 #    (backgrounded)
 # 4. Use the epics-base container to check the IOC is
 #    working as expected by invoking caget and caput.
@@ -61,7 +61,7 @@ check_ioc() {
 }
 
 cont="ibek-test-container"
-config="/repos/epics/ioc/config"
+config="/epics/ioc/config"
 ioc_args=(
 --security-opt label=disable
 --network podman
@@ -72,7 +72,7 @@ ghcr.io/epics-containers/ioc-template-linux-developer:23.3.1
 )
 mounts=(
 -v ${THIS_DIR}/samples/example-ibek-config:${config}
--v ${ROOT}:/repos/ibek
+-v ${ROOT}:/ibek
 -v ${ROOT}/ibek-defs:/ctools
 )
 
@@ -86,9 +86,9 @@ fi
 # launch epics-base container in the background
 podman run  ${mounts[@]} ${ioc_args[@]}
 # install the this ibek into it's global venv
-podman exec ${cont} pip install /repos/ibek
+podman exec ${cont} pip install /ibek
 # launch the IOC
-podman exec -dit ${cont} bash -c "/repos/epics/ioc/start.sh >> /repos/ibek/start.log 2>&1"
+podman exec -dit ${cont} bash -c "/epics/ioc/start.sh >> /ibek/start.log 2>&1"
 # wait for ibek to get the IOC up and running.
 for retry in {1..10} ; do
     if check_pv 'test-ibek-ioc:EPICS_VERS' 'R7.0.7'; then break; fi

@@ -144,7 +144,9 @@ class ArgInfo:
                 if default:
                     new_yaml_arg["default"] = default
                 if typ == "enum":
-                    new_yaml_arg["values"] = {str(label): None for label in details.labels}
+                    new_yaml_arg["values"] = {
+                        str(label): None for label in details.labels
+                    }
 
                 self.yaml_args.append(new_yaml_arg)
                 self.all_args.append(arg_name)
@@ -501,7 +503,7 @@ if __name__ == "__main__":
     builder2support = Builder2Support(support_module_path, arg_value_overrides)
     # builder2support.dump_subst_file()
     builder2support.make_yaml_tree()
-    if len (builder2support.yaml_tree["defs"]) > 0:
+    if len(builder2support.yaml_tree["defs"]) > 0:
         builder2support.write_yaml_tree(filename)
     else:
         print("\nNo definitions - no YAML file needed for %s" % support_module_path)
