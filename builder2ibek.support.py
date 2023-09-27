@@ -15,9 +15,9 @@ debugger. HOW TO DO THIS:
 
 import argparse
 import inspect
+import os
 import re
 import sys
-import os
 
 # import required modules
 from pkg_resources import require
@@ -143,7 +143,7 @@ class ArgInfo:
                 if default:
                     new_yaml_arg["default"] = default
                 if typ == "enum":
-                    new_yaml_arg["values"] = {label: None for label in details.labels}
+                    new_yaml_arg["values"] = {str(label): None for label in details.labels}
 
                 self.yaml_args.append(new_yaml_arg)
                 self.all_args.append(arg_name)
@@ -182,7 +182,7 @@ class ArgInfo:
         else:
             typ = "UNKNOWN TODO TODO"
 
-        if hasattr(details, "labels") and typ is not "bool":
+        if hasattr(details, "labels") and typ != "bool":
             value = default or details.labels[0]
             typ = "enum"
 
@@ -499,7 +499,10 @@ if __name__ == "__main__":
     builder2support = Builder2Support(support_module_path, arg_value_overrides)
     # builder2support.dump_subst_file()
     builder2support.make_yaml_tree()
-    builder2support.write_yaml_tree(filename)
+    if len (builder2support.yaml_tree["defs"]) > 0:
+        builder2support.write_yaml_tree(filename)
+    else:
+        print("\nNo definitions - no YAML file needed for %s" % support_module_path)
 
     print("\nYou will require the following to make the Generic IOC Dockerfile:\n")
     print("DBD files: " + ", ".join(builder2support.dbds))

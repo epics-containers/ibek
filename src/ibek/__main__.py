@@ -12,6 +12,14 @@ from .globals import NaturalOrderGroup
 
 cli = typer.Typer(cls=NaturalOrderGroup)
 
+# TODO too much trace output but this docmented way to suppress it doesn't work
+try:
+    from rich.traceback import install
+
+    install(suppress=[typer])
+    install(show_locals=False)
+except ImportError:
+    pass  # we often uninstall rich because of the above not working
 
 cli.add_typer(
     support_cli,
