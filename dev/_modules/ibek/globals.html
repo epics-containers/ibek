@@ -8,7 +8,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>ibek.globals &#8212; ibek 0.0.14.dev42+ge89c92b documentation</title>
+    <title>ibek.globals &#8212; ibek 0.0.14.dev43+ga1f363a documentation</title>
   
   
   
@@ -465,6 +465,7 @@ document.write(`
 <span class="c1"># Folder containing ibek support scripts</span>
 <span class="c1"># WARNING: this will only work if PROJECT_ROOT has been set in devcontainer.json</span>
 <span class="n">PROJECT_ROOT_FOLDER</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;PROJECT_ROOT&quot;</span><span class="p">,</span> <span class="s2">&quot;&gt;not-in-container&lt;&quot;</span><span class="p">))</span>
+<span class="n">IBEK_SUPPORT</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">PROJECT_ROOT_FOLDER</span> <span class="o">/</span> <span class="s2">&quot;ibek-support&quot;</span><span class="p">)</span>
 
 <span class="n">IOC_DBDS</span> <span class="o">=</span> <span class="n">SUPPORT</span> <span class="o">/</span> <span class="s2">&quot;configure/dbd_list&quot;</span>
 <span class="n">IOC_LIBS</span> <span class="o">=</span> <span class="n">SUPPORT</span> <span class="o">/</span> <span class="s2">&quot;configure/lib_list&quot;</span>
