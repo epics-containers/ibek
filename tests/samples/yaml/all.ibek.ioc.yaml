@@ -2,7 +2,6 @@
 
 ioc_name: test-multiple-ioc
 description: a basic example for testing multiple support definitions
-generic_ioc_image: ghcr.io/epics-containers/ioc-template:23.3.2
 
 entities:
   - type: object_module.RefObject

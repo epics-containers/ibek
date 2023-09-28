@@ -64,7 +64,6 @@ def test_database_render(objects_classes, templates):
     ioc = IOC(
         ioc_name="test_ioc",
         description="for testing",
-        generic_ioc_image="test_ioc_img",
         entities=[],
     )
 
