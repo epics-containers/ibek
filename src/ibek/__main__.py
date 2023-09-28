@@ -4,7 +4,7 @@ import typer
 from ruamel.yaml import YAML
 
 from ibek.ioc_cmds.commands import ioc_cli
-from ibek.startup_cmds.commands import startup_cli
+from ibek.runtime_cmds.commands import startup_cli
 from ibek.support_cmds.commands import support_cli
 
 from ._version import __version__

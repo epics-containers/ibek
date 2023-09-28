@@ -29,9 +29,8 @@ IOC_FOLDER = Path(str(os.getenv("IOC")))
 # Folder containing Makefile.jinja
 MAKE_FOLDER = IOC_FOLDER / "iocApp/src"
 # Folder containing ibek support scripts
-# WARNING: this will only work if PROJECT NAME has been set in devcontainer.json
-PROJECT_NAME = os.getenv("PROJECT_NAME", "no-project-name")
-PROJECT_ROOT_FOLDER = Path("/workspaces") / PROJECT_NAME
+# WARNING: this will only work if PROJECT_ROOT has been set in devcontainer.json
+PROJECT_ROOT_FOLDER = Path(os.getenv("PROJECT_ROOT", ">not-in-container<"))
 
 IOC_DBDS = SUPPORT / "configure/dbd_list"
 IOC_LIBS = SUPPORT / "configure/lib_list"

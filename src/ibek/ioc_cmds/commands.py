@@ -8,6 +8,7 @@ from jinja2 import Template
 
 from ibek.gen_scripts import ioc_create_model
 from ibek.globals import (
+    EPICS_ROOT,
     IOC_DBDS,
     IOC_FOLDER,
     IOC_LIBS,
@@ -22,7 +23,7 @@ ioc_cli = typer.Typer(cls=NaturalOrderGroup)
 
 
 @ioc_cli.command()
-def generate_makefile():
+def generate_makefile() -> None:
     """
     get the dbd and lib files from all support modules and generate
     iocApp/src/Makefile from iocApp/src/Makefile.jinja
@@ -104,3 +105,59 @@ def generate_schema(
         print(schema)
     else:
         output.write_text(schema)
+
+
+@ioc_cli.command()
+def extract_runtime_assets(
+    destination: Path = typer.Argument(
+        ..., help="The root folder to extract assets into"
+    ),
+    source: Path = typer.Option(
+        EPICS_ROOT,
+        help="The root folders to extract assets from",
+    ),
+    extras=Annotated[
+        Optional[Path], typer.Option(None, help="list of files to also extract")
+    ],
+):
+    """
+    Find all the runtime assets in an EPICS installation and copy them to a
+    new folder hierarchy for packaging into a container runtime stage.
+
+    This should be performed in a throw away container stage (runtime_prep)
+    as it is desctructive of the source folder, because it uses move for speed.
+    """
+    assets = "bin|configure|db|dbd|include|lib|template"
+    just_copy = [source / "configure", Path("/venv")]
+    # identify EPICS modules as folders with binary output folders
+    binary = ["bin", "lib"]
+
+    binaries: List[Path] = []
+    for find in binary:
+        # only look two levels deep
+        binaries.extend(source.glob(f"*/*/{find}"))
+        binaries.extend(source.glob(f"*/{find}"))
+
+    modules = [binary.parent for binary in binaries]
+
+    destination.mkdir(exist_ok=True, parents=True)
+    for module in modules:
+        # make sure dest folder exists
+        destination_module = destination / module.relative_to(source)
+        destination_module.mkdir(exist_ok=True, parents=True)
+
+        for asset in [module / asset for asset in assets.split("|")]:
+            src = module / asset
+            if src.exists():
+                dest_file: Path = destination_module / asset.relative_to(module)
+                src.rename(dest_file)
+                if dest_file.name in binary:
+                    # strip the symbols from the binary
+                    subprocess.call(["bash", "-c", f"strip {str(dest_file)}/**"])
+
+    extra_files = just_copy + extras
+    for asset in extra_files:
+        src = source / asset
+        if src.exists():
+            dest = destination / asset
+            src.rename(dest)
