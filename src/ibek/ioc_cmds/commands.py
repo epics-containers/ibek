@@ -87,7 +87,8 @@ def build(
 @ioc_cli.command()
 def generate_schema(
     definitions: List[Path] = typer.Argument(
-        ..., help="File paths to one or more support module YAML files"
+        ...,
+        help="File paths to one or more support module YAML files",
     ),
     output: Annotated[
         Optional[Path],
@@ -110,10 +111,11 @@ def generate_schema(
 @ioc_cli.command()
 def extract_runtime_assets(
     destination: Path = typer.Argument(
-        ..., help="The root folder to extract assets into"
+        ...,
+        help="The root folder to extract assets into",
     ),
     source: Path = typer.Option(
-        EPICS_ROOT,
+        Path("/epics"),
         help="The root folders to extract assets from",
     ),
     extras: List[Path] = typer.Option(None, help="list of files to also extract"),
@@ -151,7 +153,8 @@ def extract_runtime_assets(
                 subprocess.call(["bash", "-c", f"mv {src} {dest_file}"])
                 if dest_file.name in binary:
                     # strip the symbols from the binary
-                    subprocess.call(["bash", "-c", f"strip {str(dest_file)}*/*"])
+                    cmd = f"strip $(find {dest_file} -type f) &> /dev/null"
+                    subprocess.call(["bash", "-c", cmd])
 
     extra_files = just_copy + extras
     for asset in extra_files:
