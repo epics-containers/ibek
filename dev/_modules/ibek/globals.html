@@ -8,7 +8,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>ibek.globals &#8212; ibek 0.0.14.dev39+gead95da documentation</title>
+    <title>ibek.globals &#8212; ibek 0.0.14.dev40+ge737368 documentation</title>
   
   
   
@@ -463,9 +463,8 @@ document.write(`
 <span class="c1"># Folder containing Makefile.jinja</span>
 <span class="n">MAKE_FOLDER</span> <span class="o">=</span> <span class="n">IOC_FOLDER</span> <span class="o">/</span> <span class="s2">&quot;iocApp/src&quot;</span>
 <span class="c1"># Folder containing ibek support scripts</span>
-<span class="c1"># WARNING: this will only work if PROJECT NAME has been set in devcontainer.json</span>
-<span class="n">PROJECT_NAME</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;PROJECT_NAME&quot;</span><span class="p">,</span> <span class="s2">&quot;no-project-name&quot;</span><span class="p">)</span>
-<span class="n">PROJECT_ROOT_FOLDER</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s2">&quot;/workspaces&quot;</span><span class="p">)</span> <span class="o">/</span> <span class="n">PROJECT_NAME</span>
+<span class="c1"># WARNING: this will only work if PROJECT_ROOT has been set in devcontainer.json</span>
+<span class="n">PROJECT_ROOT_FOLDER</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;PROJECT_ROOT&quot;</span><span class="p">,</span> <span class="s2">&quot;&gt;not-in-container&lt;&quot;</span><span class="p">))</span>
 
 <span class="n">IOC_DBDS</span> <span class="o">=</span> <span class="n">SUPPORT</span> <span class="o">/</span> <span class="s2">&quot;configure/dbd_list&quot;</span>
 <span class="n">IOC_LIBS</span> <span class="o">=</span> <span class="n">SUPPORT</span> <span class="o">/</span> <span class="s2">&quot;configure/lib_list&quot;</span>
