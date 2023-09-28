@@ -8,7 +8,6 @@ from jinja2 import Template
 
 from ibek.gen_scripts import ioc_create_model
 from ibek.globals import (
-    EPICS_ROOT,
     IOC_DBDS,
     IOC_FOLDER,
     IOC_LIBS,

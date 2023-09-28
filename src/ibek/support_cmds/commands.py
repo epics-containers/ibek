@@ -16,6 +16,7 @@ from typing_extensions import Annotated
 
 from ibek.globals import (
     EPICS_ROOT,
+    IBEK_SUPPORT,
     IOC_DBDS,
     IOC_LIBS,
     RELEASE,
@@ -234,7 +235,14 @@ def generate_links(
     """
     generate symlinks to the bob, pvi and support YAML for a compiled IOC
     """
-    # TODO
+    # symlink the support YAML
+    support_yaml = IBEK_SUPPORT.glob("*.ibek.support.yaml")
+    for yaml in support_yaml:
+        yaml.symlink_to(EPICS_ROOT / "ibek" / yaml.name)
+
+    # symlink the bob YAML
+    # TODO TODO
+    # symlink the pvi YAML
 
 
 @support_cli.command()

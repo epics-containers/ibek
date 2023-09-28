@@ -31,6 +31,7 @@ MAKE_FOLDER = IOC_FOLDER / "iocApp/src"
 # Folder containing ibek support scripts
 # WARNING: this will only work if PROJECT_ROOT has been set in devcontainer.json
 PROJECT_ROOT_FOLDER = Path(os.getenv("PROJECT_ROOT", ">not-in-container<"))
+IBEK_SUPPORT = Path(PROJECT_ROOT_FOLDER / "ibek-support")
 
 IOC_DBDS = SUPPORT / "configure/dbd_list"
 IOC_LIBS = SUPPORT / "configure/lib_list"
