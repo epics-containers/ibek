@@ -116,9 +116,7 @@ def extract_runtime_assets(
         EPICS_ROOT,
         help="The root folders to extract assets from",
     ),
-    extras=Annotated[
-        Optional[Path], typer.Option(None, help="list of files to also extract")
-    ],
+    extras: List[Path] = typer.Option(None, help="list of files to also extract"),
 ):
     """
     Find all the runtime assets in an EPICS installation and copy them to a
@@ -149,15 +147,15 @@ def extract_runtime_assets(
         for asset in [module / asset for asset in assets.split("|")]:
             src = module / asset
             if src.exists():
-                dest_file: Path = destination_module / asset.relative_to(module)
-                src.rename(dest_file)
+                dest_file = destination_module / asset.relative_to(module)
+                subprocess.call(["bash", "-c", f"mv {src} {dest_file}"])
                 if dest_file.name in binary:
                     # strip the symbols from the binary
-                    subprocess.call(["bash", "-c", f"strip {str(dest_file)}/**"])
+                    subprocess.call(["bash", "-c", f"strip {str(dest_file)}*/*"])
 
     extra_files = just_copy + extras
     for asset in extra_files:
         src = source / asset
         if src.exists():
-            dest = destination / asset
-            src.rename(dest)
+            dest_file = destination / asset.relative_to("/")
+            subprocess.call(["bash", "-c", f"mv {src} {dest_file}"])
