@@ -1,4 +1,5 @@
 import json
+import shutil
 import subprocess
 from pathlib import Path
 from typing import Annotated, List, Optional
@@ -12,6 +13,7 @@ from ibek.globals import (
     IOC_FOLDER,
     IOC_LIBS,
     MAKE_FOLDER,
+    TEMPLATES,
     NaturalOrderGroup,
 )
 from ibek.ioc_cmds.docker import build_dockerfile
@@ -116,3 +118,29 @@ def extract_runtime_assets(
     extras: List[Path] = typer.Option(None, help="list of files to also extract"),
 ):
     extract_assets(destination, source, extras)
+
+
+@ioc_cli.command()
+def make_source_template(
+    destination: Path = typer.Argument(
+        Path.cwd().parent / "ioc",
+        help="The root folder in which to place the IOC boilerplate",
+    )
+):
+    """
+    Create a new IOC boilerplate source tree in the given folder.
+    Default is ../ioc. Typically call this when CWD is
+    <generic_ioc_root>/ibek-support as this is the standard
+    Dockerfile WORKDIR.
+    """
+    if destination.exists():
+        typer.echo(f"{destination} IOC source exists, skipping ...")
+    else:
+        shutil.copytree(TEMPLATES / "ioc", destination)
+        typer.echo(f"Created IOC source tree in {destination}")
+
+    try:
+        IOC_FOLDER.unlink(missing_ok=True)
+    except IsADirectoryError:
+        shutil.rmtree(IOC_FOLDER)
+    IOC_FOLDER.symlink_to(destination)
