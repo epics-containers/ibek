@@ -12,23 +12,33 @@ from ibek.globals import (
     IOC_DBDS,
     IOC_FOLDER,
     IOC_LIBS,
-    MAKE_FOLDER,
     TEMPLATES,
     NaturalOrderGroup,
 )
 from ibek.ioc_cmds.docker import build_dockerfile
 
-from .assets import extract_assets
+from .assets import extract_assets, get_ioc_src
 
 ioc_cli = typer.Typer(cls=NaturalOrderGroup)
 
 
 @ioc_cli.command()
-def generate_makefile() -> None:
+def generate_makefile(
+    folder_override: Annotated[
+        Optional[Path],
+        typer.Option(
+            help="Where to find the Makefile.jinja template.",
+        ),
+    ] = None
+):
     """
     get the dbd and lib files from all support modules and generate
     iocApp/src/Makefile from iocApp/src/Makefile.jinja
     """
+
+    # Folder containing Makefile.jinja
+    make_folder = folder_override or get_ioc_src() / "ioc/iocApp/src"
+
     # get all the dbd and lib files gathered from each support module
     dbds: List[str] = []
     libs: List[str] = []
@@ -38,12 +48,12 @@ def generate_makefile() -> None:
         libs = [lib.strip() for lib in IOC_LIBS.read_text().split()]
 
     # generate the Makefile from the template
-    template = Template((MAKE_FOLDER / "Makefile.jinja").read_text())
+    template = Template((make_folder / "Makefile.jinja").read_text())
     # libraries are listed in reverse order of dependency
     libs.reverse()
     text = template.render(dbds=dbds, libs=libs)
 
-    with (MAKE_FOLDER / "Makefile").open("w") as stream:
+    with (make_folder / "Makefile").open("w") as stream:
         stream.write(text)
 
 
@@ -57,6 +67,11 @@ def compile(
     Compile a generic IOC after support modules are registered and compiled
     """
     path = IOC_FOLDER
+
+    # for developer convenience in a devcontainer we also call the idempotent
+    # functions that compile requires
+    make_source_template()
+    generate_makefile()
 
     command = f"make -C {path} -j $(nproc) " + " ".join(ctx.args)
     exit(subprocess.call(["bash", "-c", command]))
@@ -100,7 +115,7 @@ def generate_schema(
     ioc_model = ioc_create_model(definitions)
     schema = json.dumps(ioc_model.model_json_schema(), indent=2)
     if output is None:
-        print(schema)
+        typer.echo(schema)
     else:
         output.write_text(schema)
 
@@ -130,22 +145,25 @@ def extract_runtime_assets(
 
 @ioc_cli.command()
 def make_source_template(
-    destination: Path = typer.Argument(
-        Path.cwd().parent / "ioc",
-        help="The root folder in which to place the IOC boilerplate",
-    )
+    destination: Annotated[
+        Optional[Path],
+        typer.Option(
+            help="Where to make the ioc folder. Defaults to under the "
+            "generic IOC source folder",
+        ),
+    ] = None
 ):
     """
     Create a new IOC boilerplate source tree in the given folder.
-    Default is ../ioc. Typically call this when CWD is
-    <generic_ioc_root>/ibek-support as this is the standard
-    Dockerfile WORKDIR.
+    Default is ioc source repo / ioc .
     """
-    if destination.exists():
-        typer.echo(f"{destination} IOC source exists, skipping ...")
-    else:
+    if destination is None:
+        destination = get_ioc_src() / "ioc"
+
+    if not destination.exists():
+        if destination.is_symlink():
+            destination.unlink()
         shutil.copytree(TEMPLATES / "ioc", destination)
-        typer.echo(f"Created IOC source tree in {destination}")
 
     try:
         IOC_FOLDER.unlink(missing_ok=True)

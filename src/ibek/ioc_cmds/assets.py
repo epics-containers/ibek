@@ -8,6 +8,27 @@ import typer
 from ibek.globals import EPICS_ROOT, IOC_FOLDER, SYMLINKS
 
 
+def get_ioc_src():
+    """
+    The generic ioc source folder is mounted into the container at
+    /epics/ioc-XXXXX and should always contain the ibek-support
+    submodule. Therefore we can find the ibek-support folder by looking
+    for the ibek-support folder.
+
+    Functions that use this should provide an override variable that allows
+    the ibek caller to specify the location.
+    """
+    try:
+        ibek_support = list(EPICS_ROOT.glob("*/ibek-support"))[0]
+    except IndexError:
+        raise RuntimeError(
+            f"Could not find ibek-support in {EPICS_ROOT}."
+            "ibek should be run from inside a container with"
+            "a generic ioc source folder mounted at /epics/ioc-XXXXX"
+        )
+    return (ibek_support / "..").resolve()
+
+
 def move_file(src: Path, dest: Path, binary: List[str]):
     """
     Move a file / tree / symlink from src to dest, stripping symbols from
@@ -37,10 +58,7 @@ def extract_assets(destination: Path, source: Path, extras: List[Path], defaults
     """
     asset_matches = "bin|configure|db|dbd|include|lib|template|config|*.sh"
 
-    try:
-        ibek_support = list(EPICS_ROOT.glob("*/ibek-support"))[0]
-    except IndexError:
-        raise RuntimeError(f"Could not find ibek-support in {EPICS_ROOT}")
+    ibek_support = get_ioc_src()
 
     just_copy = (
         [

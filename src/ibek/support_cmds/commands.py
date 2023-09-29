@@ -7,10 +7,12 @@ from typing import List, Optional
 
 import typer
 
+from ibek.ioc_cmds.assets import get_ioc_src
+
 try:
     from git import Repo
 except ImportError:
-    print("Git Python is not needed for runtime ibek usage")
+    pass  # Git Python is not needed for runtime (container build time only)
 
 from typing_extensions import Annotated
 
@@ -229,24 +231,29 @@ def compile(
 
 @support_cli.command()
 def generate_links(
-    module: str = typer.Argument(..., help="support module name"),
     ibek_support: Annotated[
-        Path, typer.Option(help="Filepath to ibek-support root")
-    ] = Path.cwd(),
+        Optional[Path],
+        typer.Option(
+            help="Filepath to ibek-support root"
+            "defaults to <generic IOC source folder>/ibek-support"
+        ),
+    ] = None,
 ):
     """
     generate symlinks to the bob, pvi and support YAML for a compiled IOC
     """
     # symlink the support YAML
-    from_path = ibek_support / module
-    support_yaml = from_path.glob("*.ibek.support.yaml")
-    print(f"looking for some support YAML in {ibek_support}, found {support_yaml}")
+    from_path = ibek_support or get_ioc_src() / "ibek-support"
+
+    support_yaml = from_path.glob("*/*.ibek.support.yaml")
 
     to_path = SYMLINKS / "ibek"
     to_path.mkdir(parents=True, exist_ok=True)
     for yaml in support_yaml:
+        link_from = to_path / yaml.name
+        link_from.unlink(missing_ok=True)
         typer.echo(f"symlinking {yaml} to {to_path}")
-        (to_path / yaml.name).symlink_to(yaml)
+        link_from.symlink_to(yaml)
 
     # symlink the bob YAML
     # TODO TODO
@@ -261,6 +268,6 @@ def generate_schema(
 ):
     """Produce JSON global schema for all <support_module>.ibek.support.yaml files"""
     if output is None:
-        print(Support.get_schema())
+        typer.echo(Support.get_schema())
     else:
         output.write_text(Support.get_schema())
