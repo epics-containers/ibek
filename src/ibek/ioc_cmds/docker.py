@@ -4,8 +4,6 @@ import subprocess
 from pathlib import Path
 from typing import List
 
-from ibek.globals import PROJECT_ROOT_FOLDER
-
 
 def expand_env_vars(tokens: List[str]):
     for i in range(len(tokens)):
@@ -34,7 +32,7 @@ def handle_command(tokens: List[str], step, start):
             folder.mkdir(parents=True, exist_ok=True)
         os.chdir(tokens[1])
     elif docker_action == "COPY":
-        src = (PROJECT_ROOT_FOLDER / Path(tokens[1])).absolute()
+        src = (Path(tokens[1])).absolute()
         dest = (Path.cwd() / Path(tokens[2])).absolute()
         if src == dest:
             print("SKIPPING copy of same path")
@@ -53,6 +51,12 @@ def handle_command(tokens: List[str], step, start):
 def build_dockerfile(dockerfile: Path, start: int, stop: int):
     index = 0
     step = 1
+
+    if not dockerfile.exists():
+        raise FileNotFoundError(
+            "No Dockerfile. Run this command in the generic ioc root folder."
+        )
+
     dockerfile_lines: List[str] = dockerfile.read_text().split("\n")
 
     stop = min(stop, len(dockerfile_lines))

@@ -97,11 +97,6 @@
       "title": "Description",
       "type": "string"
     },
-    "generic_ioc_image": {
-      "description": "The generic IOC container image registry URL",
-      "title": "Generic Ioc Image",
-      "type": "string"
-    },
     "entities": {
       "description": "List of entities this IOC instantiates",
       "items": {
@@ -114,7 +109,6 @@
   "required": [
     "ioc_name",
     "description",
-    "generic_ioc_image",
     "entities"
   ],
   "title": "NewIOC",

@@ -190,8 +190,4 @@ class IOC(BaseSettings):
 
     ioc_name: str = Field(description="Name of IOC instance")
     description: str = Field(description="Description of what the IOC does")
-    generic_ioc_image: str = Field(
-        description="The generic IOC container image registry URL"
-    )
-    # this will be replaced in derived classes made by make_ioc_model
     entities: Sequence[Entity]

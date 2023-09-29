@@ -1,0 +1,24 @@
+{# Jinja template for building the IOC Makefile #}
+
+# Makefile automatically generated using
+# git@github.com:epics-containers/ibek-support.git
+
+TOP = ../..
+include $(TOP)/configure/CONFIG
+
+PROD_IOC = ioc
+DBD += ioc.dbd
+ioc_DBD += base.dbd
+
+{% for dbd in dbds %}ioc_DBD += {{dbd}}
+{% endfor %}
+
+ioc_SRCS += ioc_registerRecordDeviceDriver.cpp
+
+{% for lib in libs %}ioc_LIBS += {{lib}}
+{% endfor %}
+
+ioc_LIBS += $(EPICS_BASE_IOC_LIBS)
+ioc_SRCS += iocMain.cpp
+
+include $(TOP)/configure/RULES

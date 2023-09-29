@@ -1,4 +1,5 @@
 import json
+import shutil
 import subprocess
 from pathlib import Path
 from typing import Annotated, List, Optional
@@ -12,32 +13,29 @@ from ibek.globals import (
     IOC_FOLDER,
     IOC_LIBS,
     MAKE_FOLDER,
-    MODULES,
-    PROJECT_ROOT_FOLDER,
+    TEMPLATES,
     NaturalOrderGroup,
 )
 from ibek.ioc_cmds.docker import build_dockerfile
+
+from .assets import extract_assets
 
 ioc_cli = typer.Typer(cls=NaturalOrderGroup)
 
 
 @ioc_cli.command()
-def generate_makefile():
+def generate_makefile() -> None:
     """
     get the dbd and lib files from all support modules and generate
     iocApp/src/Makefile from iocApp/src/Makefile.jinja
     """
-
-    # use modules file to get a list of all support module folders
-    # in the order of build (and hence dependency)
-    modules: List[str] = MODULES.read_text().split()[2:]
-    # remove the IOC folder from the list
-    if "IOC" in modules:
-        modules.remove("IOC")
-
     # get all the dbd and lib files gathered from each support module
-    dbds = [dbd.strip() for dbd in IOC_DBDS.read_text().split()]
-    libs = [lib.strip() for lib in IOC_LIBS.read_text().split()]
+    dbds: List[str] = []
+    libs: List[str] = []
+    if IOC_DBDS.exists():
+        dbds = [dbd.strip() for dbd in IOC_DBDS.read_text().split()]
+    if IOC_LIBS.exists():
+        libs = [lib.strip() for lib in IOC_LIBS.read_text().split()]
 
     # generate the Makefile from the template
     template = Template((MAKE_FOLDER / "Makefile.jinja").read_text())
@@ -70,7 +68,7 @@ def build(
     stop: int = typer.Option(999, help="The step to stop at in the Dockerfile"),
     dockerfile: Annotated[
         Path, typer.Option(help="The filepath to the Dockerfile to build")
-    ] = PROJECT_ROOT_FOLDER
+    ] = Path.cwd()
     / "Dockerfile",
 ):
     """
@@ -86,7 +84,8 @@ def build(
 @ioc_cli.command()
 def generate_schema(
     definitions: List[Path] = typer.Argument(
-        ..., help="File paths to one or more support module YAML files"
+        ...,
+        help="File paths to one or more support module YAML files",
     ),
     output: Annotated[
         Optional[Path],
@@ -104,3 +103,45 @@ def generate_schema(
         print(schema)
     else:
         output.write_text(schema)
+
+
+@ioc_cli.command()
+def extract_runtime_assets(
+    destination: Path = typer.Argument(
+        ...,
+        help="The root folder to extract assets into",
+    ),
+    source: Path = typer.Option(
+        Path("/epics"),
+        help="The root folder to extract assets from",
+    ),
+    extras: List[Path] = typer.Option(None, help="list of files to also extract"),
+    defaults: bool = typer.Option(True, help="copy the default assets"),
+):
+    extract_assets(destination, source, extras, defaults)
+
+
+@ioc_cli.command()
+def make_source_template(
+    destination: Path = typer.Argument(
+        Path.cwd().parent / "ioc",
+        help="The root folder in which to place the IOC boilerplate",
+    )
+):
+    """
+    Create a new IOC boilerplate source tree in the given folder.
+    Default is ../ioc. Typically call this when CWD is
+    <generic_ioc_root>/ibek-support as this is the standard
+    Dockerfile WORKDIR.
+    """
+    if destination.exists():
+        typer.echo(f"{destination} IOC source exists, skipping ...")
+    else:
+        shutil.copytree(TEMPLATES / "ioc", destination)
+        typer.echo(f"Created IOC source tree in {destination}")
+
+    try:
+        IOC_FOLDER.unlink(missing_ok=True)
+    except IsADirectoryError:
+        shutil.rmtree(IOC_FOLDER)
+    IOC_FOLDER.symlink_to(destination)

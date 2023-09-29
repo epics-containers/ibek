@@ -15,6 +15,7 @@ debugger. HOW TO DO THIS:
 
 import argparse
 import inspect
+import os
 import re
 import sys
 
@@ -59,7 +60,7 @@ class ArgInfo:
     """
 
     description_re = re.compile(r"(.*)\n<(?:type|class)")
-    name_re = re.compile(r"iocbuilder\.modules\.(.*)")
+    name_re = re.compile(r"iocbuilder\.modules\.(?:.*)\.(.*)")
     arg_num = 1
 
     def __init__(self, name, unique_name, description, overrides):
@@ -75,8 +76,6 @@ class ArgInfo:
         self.yaml_args = []
         # the root of the definition in yaml that holds above yaml_args
         self.yaml_defs = ordereddict()
-        self.yaml_defs["name"] = self.name_re.findall(name)[0]
-        self.yaml_defs["args"] = self.yaml_args
         # set of args and values to use for instantiating a builder object
         self.builder_args = {}
         # list of all the arg names only (across multiple add_arg_info)
@@ -89,7 +88,11 @@ class ArgInfo:
             desc = description.strip()
         else:
             desc = "TODO:ADD DESCRIPTION"
+
+        print(name)
+        self.yaml_defs["name"] = self.name_re.findall(name)[0]
         self.yaml_defs["description"] = PreservedScalarString(desc)
+        self.yaml_defs["args"] = self.yaml_args
 
     def add_arg_info(self, arginfo):
         """
@@ -141,7 +144,9 @@ class ArgInfo:
                 if default:
                     new_yaml_arg["default"] = default
                 if typ == "enum":
-                    new_yaml_arg["values"] = {label: None for label in details.labels}
+                    new_yaml_arg["values"] = {
+                        str(label): None for label in details.labels
+                    }
 
                 self.yaml_args.append(new_yaml_arg)
                 self.all_args.append(arg_name)
@@ -180,7 +185,7 @@ class ArgInfo:
         else:
             typ = "UNKNOWN TODO TODO"
 
-        if hasattr(details, "labels"):
+        if hasattr(details, "labels") and typ != "bool":
             value = default or details.labels[0]
             typ = "enum"
 
@@ -275,12 +280,14 @@ class Builder2Support:
             getattr(builder_class, "__doc__"),
             self.arg_value_overrides,
         )
-        arg_info.add_arg_info(builder_class.ArgInfo)
 
-        if hasattr(builder_class, "LibFileList"):
-            self.libs |= set(builder_class.LibFileList)
-        if hasattr(builder_class, "DbdFileList"):
-            self.dbds |= set(builder_class.DbdFileList)
+        for a_cls in (builder_class,) + builder_class.Dependencies:
+            if hasattr(a_cls, "ArgInfo"):
+                arg_info.add_arg_info(a_cls.ArgInfo)
+            if hasattr(a_cls, "LibFileList"):
+                self.libs |= set(a_cls.LibFileList)
+            if hasattr(a_cls, "DbdFileList"):
+                self.dbds |= set(a_cls.DbdFileList)
 
         builder_object = builder_class(**arg_info.builder_args)
 
@@ -316,9 +323,16 @@ class Builder2Support:
 
             print("\nDB Template %s :" % template)
 
-            arginfo.add_arg_info(first_substitution.ArgInfo)
-            no_vals = {k: None for k in arginfo.builder_args}
-            database.insert(3, "args", no_vals)
+            if hasattr(first_substitution, "ArgInfo"):
+                arginfo.add_arg_info(first_substitution.ArgInfo)
+                # the DB Arg entries in the YAML are Dictionary entries with no value
+                no_values = {k: None for k in arginfo.builder_args}
+            elif hasattr(first_substitution, "Arguments"):
+                no_values = {k: None for k in first_substitution.Arguments}
+            else:
+                no_values = {"TODO": "No args for this template"}
+
+            database.insert(3, "args", no_values)
 
         if len(databases) > 0:
             arginfo.yaml_defs["databases"] = databases
@@ -416,6 +430,7 @@ class Builder2Support:
                 "  post_init:",
                 "module",
                 "defs",
+                "  - type:",
             ]:
                 yaml = re.sub(r"(\n%s)" % field, "\n\\g<1>", yaml)
 
@@ -480,10 +495,18 @@ def parse_args():
 
 if __name__ == "__main__":
     support_module_path, filename, arg_value_overrides = parse_args()
+
+    etc_folder = support_module_path + "/etc"
+    if not os.path.exists(etc_folder):
+        raise ValueError("The support module path must contain an etc folder")
+
     builder2support = Builder2Support(support_module_path, arg_value_overrides)
     # builder2support.dump_subst_file()
     builder2support.make_yaml_tree()
-    builder2support.write_yaml_tree(filename)
+    if len(builder2support.yaml_tree["defs"]) > 0:
+        builder2support.write_yaml_tree(filename)
+    else:
+        print("\nNo definitions - no YAML file needed for %s" % support_module_path)
 
     print("\nYou will require the following to make the Generic IOC Dockerfile:\n")
     print("DBD files: " + ", ".join(builder2support.dbds))

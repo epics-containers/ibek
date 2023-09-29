@@ -45,7 +45,6 @@ def test_object_references():
             dict(type="mymodule.port", name="PORT"),
             dict(type="mymodule.device", port="PORT"),
         ],
-        generic_ioc_image="",
     )
     ioc = ioc_model(**d)
     port, device = ioc.entities

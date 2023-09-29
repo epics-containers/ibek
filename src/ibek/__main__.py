@@ -4,7 +4,7 @@ import typer
 from ruamel.yaml import YAML
 
 from ibek.ioc_cmds.commands import ioc_cli
-from ibek.startup_cmds.commands import startup_cli
+from ibek.runtime_cmds.commands import startup_cli
 from ibek.support_cmds.commands import support_cli
 
 from ._version import __version__
@@ -12,6 +12,14 @@ from .globals import NaturalOrderGroup
 
 cli = typer.Typer(cls=NaturalOrderGroup)
 
+# TODO too much trace output but this docmented way to suppress it doesn't work
+try:
+    from rich.traceback import install
+
+    install(suppress=[typer])
+    install(show_locals=False)
+except ImportError:
+    pass  # we often uninstall rich because of the above not working
 
 cli.add_typer(
     support_cli,
