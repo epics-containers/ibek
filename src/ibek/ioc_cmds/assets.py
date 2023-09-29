@@ -5,7 +5,7 @@ from typing import List
 
 import typer
 
-from ibek.globals import IOC_FOLDER, SYMLINKS
+from ibek.globals import EPICS_ROOT, IOC_FOLDER, SYMLINKS
 
 
 def move_file(src: Path, dest: Path, binary: List[str]):
@@ -41,8 +41,14 @@ def extract_assets(destination: Path, source: Path, extras: List[Path], defaults
     """
     asset_matches = "bin|configure|db|dbd|include|lib|template|config|*.sh"
 
+    try:
+        ibek_support = list(EPICS_ROOT.glob("*/ibek-support"))[0]
+    except IndexError:
+        raise RuntimeError(f"Could not find ibek-support in {EPICS_ROOT}")
+
     just_copy = (
         [
+            ibek_support,
             source / "support" / "configure",
             SYMLINKS,
             IOC_FOLDER,
