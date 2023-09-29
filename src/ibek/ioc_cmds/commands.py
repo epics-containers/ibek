@@ -113,11 +113,12 @@ def extract_runtime_assets(
     ),
     source: Path = typer.Option(
         Path("/epics"),
-        help="The root folders to extract assets from",
+        help="The root folder to extract assets from",
     ),
     extras: List[Path] = typer.Option(None, help="list of files to also extract"),
+    defaults: bool = typer.Option(True, help="copy the default assets"),
 ):
-    extract_assets(destination, source, extras)
+    extract_assets(destination, source, extras, defaults)
 
 
 @ioc_cli.command()

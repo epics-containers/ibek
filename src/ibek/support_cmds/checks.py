@@ -3,9 +3,12 @@ Helper functions for the ibek support commands.
 """
 
 import re
+import shutil
 from pathlib import Path
 
-from ibek.globals import MODULES, RELEASE, RELEASE_SH, SUPPORT
+import typer
+
+from ibek.globals import MODULES, RELEASE, RELEASE_SH, SUPPORT, TEMPLATES
 
 # turn RELEASE macros into bash macros
 SHELL_FIND = re.compile(r"\$\(([^\)]*)\)")
@@ -21,17 +24,26 @@ def verify_release_includes_local(configure_folder: Path):
 
     A git-dirtying patch is required if not.
     """
+    validate_support()
+
     release = configure_folder / "RELEASE"
     text = release.read_text()
 
     if "RELEASE.local" not in text:
-        print(f"WARNING: {configure_folder}/RELEASE does not include RELEASE.local")
-        print(f"WARNING: {configure_folder}/RELEASE will be patched.")
+        typer.echo(
+            f"WARNING: {configure_folder}/RELEASE does not include RELEASE.local"
+        )
+        typer.echo(f"WARNING: {configure_folder}/RELEASE will be patched.")
         text += "# PATCHED BY IBEK\n-include $(TOP)/configure/RELEASE.local\n"
         release.write_text(text)
 
 
 def do_dependencies():
+    """
+    Fix up the global release file to include all support modules registered
+    """
+    validate_support()
+
     # parse the global release file
     global_release_paths = {}
     text = RELEASE.read_text()
@@ -74,6 +86,8 @@ def add_macro(macro: str, value: str, file: Path, replace: bool = True):
     """
     add or replace a macro in a RELEASE or CONFIG file
     """
+    validate_support()
+
     if not file.exists():
         file.parent.mkdir(parents=True, exist_ok=True)
         file.touch()
@@ -88,3 +102,22 @@ def add_macro(macro: str, value: str, file: Path, replace: bool = True):
         text = find_m.sub(r"\1" + str(value), text)
 
     file.write_text(text)
+
+
+def validate_support():
+    """
+    Validate that the support folder exists and setup initial template files
+    if required
+    """
+    template_support = TEMPLATES / "support"
+    release = Path("configure") / "RELEASE"
+    global_release = SUPPORT / release
+
+    if not SUPPORT.exists():
+        typer.echo(f"INITIALIZING {SUPPORT} folder with template")
+        shutil.copytree(template_support, SUPPORT)
+    else:
+        if not global_release.exists():
+            global_release.parent.mkdir(parents=True, exist_ok=True)
+            typer.echo(f"INITIALIZING {SUPPORT / release} folder with template")
+            shutil.copy2(template_support / release, global_release)

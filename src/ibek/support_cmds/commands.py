@@ -15,12 +15,12 @@ except ImportError:
 from typing_extensions import Annotated
 
 from ibek.globals import (
-    EPICS_ROOT,
     IOC_DBDS,
     IOC_LIBS,
     RELEASE,
     RUNTIME_DEBS,
     SUPPORT,
+    SYMLINKS,
     NaturalOrderGroup,
 )
 from ibek.support import Support
@@ -122,7 +122,7 @@ def git_clone(
 @support_cli.command()
 def register(
     name: str = typer.Argument(..., help="the name of the support module"),
-    path: Annotated[Optional[Path], typer.Option()] = None,
+    path: Annotated[Optional[Path], typer.Option(help="path to support module")] = None,
     macro: Optional[str] = typer.Option(None, help="Macro name for the module"),
 ):
     """
@@ -130,7 +130,7 @@ def register(
     inside an epics-containers build
     """
     macro = name.upper() if macro is None else macro
-    path = EPICS_ROOT / "support" / name if (path is None) else path
+    path = SUPPORT / name if (path is None) else path
 
     # add or replace the macro for this module in the global RELEASE file
     add_macro(macro, str(path), RELEASE)
@@ -230,17 +230,19 @@ def compile(
 @support_cli.command()
 def generate_links(
     module: str = typer.Argument(..., help="support module name"),
-    generic_src: Annotated[
-        Path, typer.Option(help="Filepath to the generic ioc src")
+    ibek_support: Annotated[
+        Path, typer.Option(help="Filepath to ibek-support root")
     ] = Path.cwd(),
 ):
     """
     generate symlinks to the bob, pvi and support YAML for a compiled IOC
     """
     # symlink the support YAML
-    support_yaml = (generic_src / "ibek-support").glob("*.ibek.support.yaml")
+    support_yaml = ibek_support.glob("*.ibek.support.yaml")
+    to_path = SYMLINKS / "ibek"
+    to_path.mkdir(parents=True, exist_ok=True)
     for yaml in support_yaml:
-        yaml.symlink_to(EPICS_ROOT / "ibek" / yaml.name)
+        yaml.symlink_to(SYMLINKS / "ibek" / yaml.name)
 
     # symlink the bob YAML
     # TODO TODO

@@ -9,6 +9,12 @@ from ibek.globals import IOC_FOLDER, SYMLINKS
 
 
 def move_file(src: Path, dest: Path, binary: List[str]):
+    """
+    Move a file / tree / symlink from src to dest, stripping symbols from
+    binaries if they are in the binary list.
+    """
+    dest.parent.mkdir(exist_ok=True, parents=True)
+
     if src.is_symlink():
         # copy the symlink
         shutil.rmtree(dest, ignore_errors=True)
@@ -25,7 +31,7 @@ def move_file(src: Path, dest: Path, binary: List[str]):
         subprocess.call(["bash", "-c", cmd])
 
 
-def extract_assets(destination: Path, source: Path, extras: List[Path]):
+def extract_assets(destination: Path, source: Path, extras: List[Path], defaults: bool):
     """
     Find all the runtime assets in an EPICS installation and copy them to a
     new folder hierarchy for packaging into a container runtime stage.
@@ -34,12 +40,18 @@ def extract_assets(destination: Path, source: Path, extras: List[Path]):
     as it is destructive of the source folder, because it uses move for speed.
     """
     asset_matches = "bin|configure|db|dbd|include|lib|template|config|*.sh"
-    just_copy = [
-        source / "support" / "configure",
-        SYMLINKS,
-        IOC_FOLDER,
-        Path("/venv"),
-    ]
+
+    just_copy = (
+        [
+            source / "support" / "configure",
+            SYMLINKS,
+            IOC_FOLDER,
+            Path("/venv"),
+        ]
+        if defaults
+        else []
+    )
+
     # identify EPICS modules as folders with binary output folders
     binary = ["bin", "lib"]
 
@@ -55,7 +67,6 @@ def extract_assets(destination: Path, source: Path, extras: List[Path]):
     for module in modules:
         # make sure dest folder exists
         destination_module = destination / module.relative_to("/")
-        destination_module.mkdir(exist_ok=True, parents=True)
 
         # use globs to make a list of the things we want to copy
         asset_globs = [module.glob(match) for match in asset_matches.split("|")]
@@ -75,3 +86,5 @@ def extract_assets(destination: Path, source: Path, extras: List[Path]):
         if src.exists():
             dest_file = destination / asset.relative_to("/")
             move_file(src, dest_file, binary)
+        else:
+            raise RuntimeError(f"extra runtime asset {src} missing")
