@@ -238,11 +238,15 @@ def generate_links(
     generate symlinks to the bob, pvi and support YAML for a compiled IOC
     """
     # symlink the support YAML
-    support_yaml = ibek_support.glob("*.ibek.support.yaml")
+    from_path = ibek_support / module
+    support_yaml = from_path.glob("*.ibek.support.yaml")
+    print(f"looking for some support YAML in {ibek_support}, found {support_yaml}")
+
     to_path = SYMLINKS / "ibek"
     to_path.mkdir(parents=True, exist_ok=True)
     for yaml in support_yaml:
-        yaml.symlink_to(SYMLINKS / "ibek" / yaml.name)
+        typer.echo(f"symlinking {yaml} to {to_path}")
+        (to_path / yaml.name).symlink_to(yaml)
 
     # symlink the bob YAML
     # TODO TODO

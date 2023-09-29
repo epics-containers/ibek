@@ -30,7 +30,7 @@ MAKE_FOLDER = IOC_FOLDER / "iocApp/src"
 # Folder containing templates for IOC src etc.
 TEMPLATES = Path(__file__).parent / "templates"
 # Folder containing symlinks to useful files
-SYMLINKS = IOC_FOLDER / EPICS_ROOT / "links"
+SYMLINKS = EPICS_ROOT / "links"
 
 IOC_DBDS = SUPPORT / "configure/dbd_list"
 IOC_LIBS = SUPPORT / "configure/lib_list"
