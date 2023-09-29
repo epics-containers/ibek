@@ -12,26 +12,25 @@ from typer.core import TyperGroup
 
 from .utils import UTILS
 
-# note requirement for environment variable EPICS_BASE
-EPICS_BASE = Path(str(os.getenv("EPICS_BASE")))
-EPICS_ROOT = Path(str(os.getenv("EPICS_ROOT")))
+# get the container paths from environment variables
+EPICS_BASE = Path(os.getenv("EPICS_BASE", "/epics/epics-base"))
+EPICS_ROOT = Path(os.getenv("EPICS_ROOT", "/epics/"))
+IOC_FOLDER = Path(os.getenv("IOC", "/epics/ioc"))
+SUPPORT = Path(os.getenv("SUPPORT", "/epics/support"))
 
-# all support modules will reside under this directory
-SUPPORT = Path(str(os.getenv("SUPPORT")))
 # the global RELEASE file which lists all support modules
 RELEASE = SUPPORT / "configure/RELEASE"
 # a bash script to export the macros defined in RELEASE as environment vars
 RELEASE_SH = SUPPORT / "configure/RELEASE.shell"
 # global MODULES file used to determine order of build
 MODULES = SUPPORT / "configure/MODULES"
-# the root IOC folder
-IOC_FOLDER = Path(str(os.getenv("IOC")))
+
 # Folder containing Makefile.jinja
 MAKE_FOLDER = IOC_FOLDER / "iocApp/src"
-# Folder containing ibek support scripts
-# WARNING: this will only work if PROJECT_ROOT has been set in devcontainer.json
-PROJECT_ROOT_FOLDER = Path(os.getenv("PROJECT_ROOT", ">not-in-container<"))
-IBEK_SUPPORT = Path(PROJECT_ROOT_FOLDER / "ibek-support")
+# Folder containing templates for IOC src etc.
+TEMPLATES = Path(__file__).parent / "templates"
+# Folder containing symlinks to useful files
+SYMLINKS = IOC_FOLDER / EPICS_ROOT / "links"
 
 IOC_DBDS = SUPPORT / "configure/dbd_list"
 IOC_LIBS = SUPPORT / "configure/lib_list"

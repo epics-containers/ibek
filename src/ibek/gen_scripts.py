@@ -9,6 +9,7 @@ from typing import List, Type
 from jinja2 import Template
 from ruamel.yaml.main import YAML
 
+from .globals import TEMPLATES
 from .ioc import IOC, clear_entity_model_ids, make_entity_models, make_ioc_model
 from .render import Render
 from .render_db import RenderDb
@@ -16,7 +17,6 @@ from .support import Support
 
 log = logging.getLogger(__name__)
 
-TEMPLATES = Path(__file__).parent / "templates"
 
 schema_modeline = re.compile(r"# *yaml-language-server *: *\$schema=([^ ]*)")
 url_f = r"file://"

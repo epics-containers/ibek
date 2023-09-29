@@ -16,7 +16,6 @@ from typing_extensions import Annotated
 
 from ibek.globals import (
     EPICS_ROOT,
-    IBEK_SUPPORT,
     IOC_DBDS,
     IOC_LIBS,
     RELEASE,
@@ -231,12 +230,15 @@ def compile(
 @support_cli.command()
 def generate_links(
     module: str = typer.Argument(..., help="support module name"),
+    generic_src: Annotated[
+        Path, typer.Option(help="Filepath to the generic ioc src")
+    ] = Path.cwd(),
 ):
     """
     generate symlinks to the bob, pvi and support YAML for a compiled IOC
     """
     # symlink the support YAML
-    support_yaml = IBEK_SUPPORT.glob("*.ibek.support.yaml")
+    support_yaml = (generic_src / "ibek-support").glob("*.ibek.support.yaml")
     for yaml in support_yaml:
         yaml.symlink_to(EPICS_ROOT / "ibek" / yaml.name)
 

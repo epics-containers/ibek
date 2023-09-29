@@ -72,3 +72,7 @@ lockfiles/
 
 # default filename for builder2ibek
 **/ibek.support.yaml
+
+# the ioc source tree is created here from a template inside ibek
+# remove from .gitignore if you want to customize the template.
+ioc/

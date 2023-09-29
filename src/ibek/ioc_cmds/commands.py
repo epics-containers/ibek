@@ -12,11 +12,11 @@ from ibek.globals import (
     IOC_FOLDER,
     IOC_LIBS,
     MAKE_FOLDER,
-    MODULES,
-    PROJECT_ROOT_FOLDER,
     NaturalOrderGroup,
 )
 from ibek.ioc_cmds.docker import build_dockerfile
+
+from .assets import extract_assets
 
 ioc_cli = typer.Typer(cls=NaturalOrderGroup)
 
@@ -27,17 +27,13 @@ def generate_makefile() -> None:
     get the dbd and lib files from all support modules and generate
     iocApp/src/Makefile from iocApp/src/Makefile.jinja
     """
-
-    # use modules file to get a list of all support module folders
-    # in the order of build (and hence dependency)
-    modules: List[str] = MODULES.read_text().split()[2:]
-    # remove the IOC folder from the list
-    if "IOC" in modules:
-        modules.remove("IOC")
-
     # get all the dbd and lib files gathered from each support module
-    dbds = [dbd.strip() for dbd in IOC_DBDS.read_text().split()]
-    libs = [lib.strip() for lib in IOC_LIBS.read_text().split()]
+    dbds: List[str] = []
+    libs: List[str] = []
+    if IOC_DBDS.exists():
+        dbds = [dbd.strip() for dbd in IOC_DBDS.read_text().split()]
+    if IOC_LIBS.exists():
+        libs = [lib.strip() for lib in IOC_LIBS.read_text().split()]
 
     # generate the Makefile from the template
     template = Template((MAKE_FOLDER / "Makefile.jinja").read_text())
@@ -70,7 +66,7 @@ def build(
     stop: int = typer.Option(999, help="The step to stop at in the Dockerfile"),
     dockerfile: Annotated[
         Path, typer.Option(help="The filepath to the Dockerfile to build")
-    ] = PROJECT_ROOT_FOLDER
+    ] = Path.cwd()
     / "Dockerfile",
 ):
     """
@@ -119,45 +115,4 @@ def extract_runtime_assets(
     ),
     extras: List[Path] = typer.Option(None, help="list of files to also extract"),
 ):
-    """
-    Find all the runtime assets in an EPICS installation and copy them to a
-    new folder hierarchy for packaging into a container runtime stage.
-
-    This should be performed in a throw away container stage (runtime_prep)
-    as it is desctructive of the source folder, because it uses move for speed.
-    """
-    assets = "bin|configure|db|dbd|include|lib|template"
-    just_copy = [source / "configure", Path("/venv")]
-    # identify EPICS modules as folders with binary output folders
-    binary = ["bin", "lib"]
-
-    binaries: List[Path] = []
-    for find in binary:
-        # only look two levels deep
-        binaries.extend(source.glob(f"*/*/{find}"))
-        binaries.extend(source.glob(f"*/{find}"))
-
-    modules = [binary.parent for binary in binaries]
-
-    destination.mkdir(exist_ok=True, parents=True)
-    for module in modules:
-        # make sure dest folder exists
-        destination_module = destination / module.relative_to(source)
-        destination_module.mkdir(exist_ok=True, parents=True)
-
-        for asset in [module / asset for asset in assets.split("|")]:
-            src = module / asset
-            if src.exists():
-                dest_file = destination_module / asset.relative_to(module)
-                subprocess.call(["bash", "-c", f"mv {src} {dest_file}"])
-                if dest_file.name in binary:
-                    # strip the symbols from the binary
-                    cmd = f"strip $(find {dest_file} -type f) &> /dev/null"
-                    subprocess.call(["bash", "-c", cmd])
-
-    extra_files = just_copy + extras
-    for asset in extra_files:
-        src = source / asset
-        if src.exists():
-            dest_file = destination / asset.relative_to("/")
-            subprocess.call(["bash", "-c", f"mv {src} {dest_file}"])
+    extract_assets(destination, source, extras)
