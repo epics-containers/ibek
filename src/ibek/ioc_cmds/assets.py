@@ -33,11 +33,7 @@ def move_file(src: Path, dest: Path, binary: List[str]):
 
 def extract_assets(destination: Path, source: Path, extras: List[Path], defaults: bool):
     """
-    Find all the runtime assets in an EPICS installation and copy them to a
-    new folder hierarchy for packaging into a container runtime stage.
-
-    This should be performed in a throw away container stage (runtime_prep)
-    as it is destructive of the source folder, because it uses move for speed.
+    extract and copy runtime assets
     """
     asset_matches = "bin|configure|db|dbd|include|lib|template|config|*.sh"
 
