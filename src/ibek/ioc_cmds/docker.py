@@ -11,10 +11,12 @@ def expand_env_vars(tokens: List[str]):
     return tokens
 
 
-def handle_command(tokens: List[str], step, start):
+def handle_command(context: Path, tokens: List[str], step, start):
     msg = f'step {step} {" ".join(tokens)}'
     docker_action = tokens[0]
     tokens = expand_env_vars(tokens)
+
+    print("context,", context)
 
     if step < start and docker_action != "WORKDIR":
         print("SKIPPING: " + msg)
@@ -27,12 +29,13 @@ def handle_command(tokens: List[str], step, start):
         if result > 0:
             raise RuntimeError("RUN command failed")
     elif docker_action == "WORKDIR":
-        folder = Path(tokens[1])
+        folder = Path.cwd() / Path(tokens[1])
         if not folder.exists():
             folder.mkdir(parents=True, exist_ok=True)
         os.chdir(tokens[1])
     elif docker_action == "COPY":
-        src = (Path(tokens[1])).absolute()
+        print("COPY", tokens)
+        src = context / (Path(tokens[1]))
         dest = (Path.cwd() / Path(tokens[2])).absolute()
         if src == dest:
             print("SKIPPING copy of same path")
@@ -56,6 +59,7 @@ def build_dockerfile(dockerfile: Path, start: int, stop: int):
         raise FileNotFoundError(
             "No Dockerfile. Run this command in the generic ioc root folder."
         )
+    context = dockerfile.parent
 
     dockerfile_lines: List[str] = dockerfile.read_text().split("\n")
 
@@ -70,7 +74,7 @@ def build_dockerfile(dockerfile: Path, start: int, stop: int):
         if command == "" or command.startswith("#"):
             continue
 
-        handle_command(command.split(), step, start)
+        handle_command(context, command.split(), step, start)
         step = step + 1
         if step > stop:
             break

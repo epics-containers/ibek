@@ -7,7 +7,7 @@ from typing import List, Optional
 
 import typer
 
-from ibek.ioc_cmds.assets import get_ioc_src
+from ibek.ioc_cmds.assets import get_ioc_source
 
 try:
     from git import Repo
@@ -243,7 +243,7 @@ def generate_links(
     generate symlinks to the bob, pvi and support YAML for a compiled IOC
     """
     # symlink the support YAML
-    from_path = ibek_support or get_ioc_src() / "ibek-support"
+    from_path = ibek_support or get_ioc_source() / "ibek-support"
 
     support_yaml = from_path.glob("*/*.ibek.support.yaml")
 
