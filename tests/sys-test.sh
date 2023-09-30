@@ -41,7 +41,7 @@ base_args=(
     --rm
     --network podman
     -e EPICS_CA_SERVER_PORT=7064
-    ghcr.io/epics-containers/epics-base-linux-runtime:23.3.1
+    ghcr.io/epics-containers/epics-base-linux-runtime:7.0.7ec2
 )
 
 check_pv () {
@@ -63,17 +63,17 @@ check_ioc() {
 cont="ibek-test-container"
 config="/epics/ioc/config"
 ioc_args=(
---security-opt label=disable
---network podman
---name ${cont}
---entrypoint bash
--dit
-ghcr.io/epics-containers/ioc-template-linux-developer:23.3.1
+    --security-opt label=disable
+    --network podman
+    --name ${cont}
+    --entrypoint bash
+    -dit
+    ghcr.io/epics-containers/ioc-template-linux-developer:23.3.1
 )
 mounts=(
--v ${THIS_DIR}/samples/example-ibek-config:${config}
--v ${ROOT}:/ibek
--v ${ROOT}/ibek-defs:/ctools
+    -v ${THIS_DIR}/samples/example-ibek-config:${config}
+    -v ${ROOT}:/ibek
+    -v ${ROOT}/ibek-defs:/ctools
 )
 
 cd ${ROOT}
