@@ -1,3 +1,4 @@
+import os
 import shutil
 import subprocess
 from pathlib import Path
@@ -6,6 +7,29 @@ from typing import List
 import typer
 
 from ibek.globals import EPICS_ROOT, IOC_FOLDER, SYMLINKS
+
+
+def get_ioc_source() -> Path:
+    """
+    The generic ioc source folder is mounted into the container at
+    /epics/ioc-XXXXX and should always contain the ibek-support
+    submodule. Therefore we can find the ibek-support folder by looking
+    for the ibek-support folder.
+
+    Functions that use this should provide an override variable that allows
+    the ibek caller to specify the location.
+    """
+    try:
+        ibek_support = (
+            list(EPICS_ROOT.glob("*/ibek-support"))
+            or list(Path("..").glob("/**/ibek-support"))
+        )[0]
+    except IndexError:
+        raise RuntimeError(
+            "Could NOT find a suitable location for the IOC source folder. "
+            "ibek must be run in a container with the generic IOC source folder"
+        )
+    return (ibek_support / "..").resolve()
 
 
 def move_file(src: Path, dest: Path, binary: List[str]):
@@ -33,30 +57,24 @@ def move_file(src: Path, dest: Path, binary: List[str]):
 
 def extract_assets(destination: Path, source: Path, extras: List[Path], defaults: bool):
     """
-    Find all the runtime assets in an EPICS installation and copy them to a
-    new folder hierarchy for packaging into a container runtime stage.
-
-    This should be performed in a throw away container stage (runtime_prep)
-    as it is destructive of the source folder, because it uses move for speed.
+    extract and copy runtime assets from a completed developer stage container
     """
     asset_matches = "bin|configure|db|dbd|include|lib|template|config|*.sh"
 
-    try:
-        ibek_support = list(EPICS_ROOT.glob("*/ibek-support"))[0]
-    except IndexError:
-        raise RuntimeError(f"Could not find ibek-support in {EPICS_ROOT}")
+    # chdir out of the folders we will move
+    os.chdir(source)
 
-    just_copy = (
-        [
-            ibek_support,
+    # a default set of assets that all IOCs will need at runtime
+    if defaults:
+        default_assets = [
+            get_ioc_source() / "ibek-support",
             source / "support" / "configure",
             SYMLINKS,
             IOC_FOLDER,
             Path("/venv"),
         ]
-        if defaults
-        else []
-    )
+    else:
+        default_assets = []
 
     # identify EPICS modules as folders with binary output folders
     binary = ["bin", "lib"]
@@ -86,7 +104,7 @@ def extract_assets(destination: Path, source: Path, extras: List[Path], defaults
                 dest_file = destination_module / asset.relative_to(module)
                 move_file(src, dest_file, binary)
 
-    extra_files = just_copy + extras
+    extra_files = default_assets + extras
     for asset in extra_files:
         src = source / asset
         if src.exists():

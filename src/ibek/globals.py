@@ -25,8 +25,6 @@ RELEASE_SH = SUPPORT / "configure/RELEASE.shell"
 # global MODULES file used to determine order of build
 MODULES = SUPPORT / "configure/MODULES"
 
-# Folder containing Makefile.jinja
-MAKE_FOLDER = IOC_FOLDER / "iocApp/src"
 # Folder containing templates for IOC src etc.
 TEMPLATES = Path(__file__).parent / "templates"
 # Folder containing symlinks to useful files
