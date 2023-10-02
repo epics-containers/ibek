@@ -20,10 +20,13 @@ def get_ioc_source() -> Path:
     the ibek caller to specify the location.
     """
     try:
-        ibek_support = list(EPICS_ROOT.glob("*/ibek-support"))[0]
+        ibek_support = (
+            list(EPICS_ROOT.glob("*/ibek-support"))
+            or list(Path("..").glob("/**/ibek-support"))
+        )[0]
     except IndexError:
         raise RuntimeError(
-            "Could not find a suitable location for the IOC source folder. "
+            "Could NOT find a suitable location for the IOC source folder. "
             "ibek must be run in a container with the generic IOC source folder"
         )
     return (ibek_support / "..").resolve()
