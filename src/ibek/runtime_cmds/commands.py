@@ -10,10 +10,10 @@ from ibek.gen_scripts import (
 )
 from ibek.globals import NaturalOrderGroup
 
-startup_cli = typer.Typer(cls=NaturalOrderGroup)
+runtime_cli = typer.Typer(cls=NaturalOrderGroup)
 
 
-@startup_cli.command()
+@runtime_cli.command()
 def generate(
     instance: Path = typer.Argument(
         ..., help="The filepath to the ioc instance entity file"
@@ -33,6 +33,13 @@ def generate(
     """
     Build a startup script for an IOC instance
     """
+
+    ## TODO TODO
+    # here we want add generation of bob files from PVI files
+    # and also make a bob index file of buttons
+    #
+    # you can access the 'opi' definition like this:
+    # ioc_instance.entities[0].root.__definition__.opis()
 
     ioc_instance = ioc_deserialize(instance, definitions)
 

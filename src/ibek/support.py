@@ -156,6 +156,21 @@ class Value(BaseSettings):
 Script = Sequence[Union[Text, Comment]]
 
 
+class OpiType(Enum):
+    pvi = "pvi"
+    """declares a PVI YAML file that generates bob GUI at runtime"""
+    bob = "bob"
+    """declares a hand crafted bob file"""
+
+
+class Opi(BaseSettings):
+    """Describes one PVI YAML file"""
+
+    type: OpiType = Field(description="bob or pvi")
+    file: str = Field(description="filename of bob or pvi")
+    prefix: str = Field(description="Args to make unique screen")
+
+
 class Definition(BaseSettings):
     """
     A single definition of a class of Entity that an IOC instance may instantiate
@@ -186,6 +201,9 @@ class Definition(BaseSettings):
     )
     env_vars: Sequence[EnvironmentVariable] = Field(
         description="Environment variables to set in the boot script", default=()
+    )
+    opis: Sequence[Opi] = Field(
+        description="Declares the PVI YAML for generating screens", default=()
     )
 
     def _get_id_arg(self):

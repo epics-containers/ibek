@@ -242,6 +242,15 @@ def generate_links(
     """
     generate symlinks to the bob, pvi and support YAML for a compiled IOC
     """
+
+    # symlink the bob YAML
+    # TODO TODO
+    # symlink the pvi YAML
+
+    # TODO ALSO symlink pvi YAML and read the bobs out of e.g. links/ibek/ADCore.ibek.support.yaml
+    # and link them too
+    # see line 33 gen_scripts.py
+
     # symlink the support YAML
     from_path = ibek_support or get_ioc_source() / "ibek-support"
 
@@ -254,10 +263,6 @@ def generate_links(
         link_from.unlink(missing_ok=True)
         typer.echo(f"symlinking {yaml} to {to_path}")
         link_from.symlink_to(yaml)
-
-    # symlink the bob YAML
-    # TODO TODO
-    # symlink the pvi YAML
 
 
 @support_cli.command()
