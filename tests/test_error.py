@@ -22,7 +22,7 @@ def test_counter_reuse(tmp_path: Path, samples: Path):
     definition_file1 = samples / "yaml" / "utils.ibek.support.yaml"
 
     with pytest.raises(ValueError) as ctx:
-        run_cli("startup", "generate", entity_file, definition_file1)
+        run_cli("runtime", "generate", entity_file, definition_file1)
     assert (
         str(ctx.value)
         == "Redefining counter InterruptVector with different start/stop values"
@@ -39,7 +39,7 @@ def test_counter_overuse(tmp_path: Path, samples: Path):
     definition_file1 = samples / "yaml" / "utils.ibek.support.yaml"
 
     with pytest.raises(ValueError) as ctx:
-        run_cli("startup", "generate", entity_file, definition_file1)
+        run_cli("runtime", "generate", entity_file, definition_file1)
     assert str(ctx.value) == "Counter 195 exceeded stop value of 194"
 
 
@@ -54,7 +54,7 @@ def test_bad_ref(tmp_path: Path, samples: Path):
     definition_file2 = samples / "yaml" / "all.ibek.support.yaml"
 
     with pytest.raises(ValueError) as ctx:
-        run_cli("startup", "generate", entity_file, definition_file1, definition_file2)
+        run_cli("runtime", "generate", entity_file, definition_file1, definition_file2)
     assert "object Ref2 not found" in str(ctx.value)
 
 
@@ -68,7 +68,7 @@ def test_bad_db(tmp_path: Path, samples: Path):
     definition_file1 = samples / "yaml" / "bad_db.ibek.support.yaml"
 
     with pytest.raises(ValueError) as ctx:
-        run_cli("startup", "generate", entity_file, definition_file1)
+        run_cli("runtime", "generate", entity_file, definition_file1)
     assert "'non-existant' in database template 'test.db' not found" in str(ctx.value)
 
 
@@ -108,7 +108,7 @@ def test_defaults(tmp_path: Path, samples: Path):
     definition_file1 = samples / "yaml" / "objects.ibek.support.yaml"
 
     with pytest.raises(ValueError) as ctx:
-        run_cli("startup", "generate", entity_file, definition_file1)
+        run_cli("runtime", "generate", entity_file, definition_file1)
 
     assert "Field required [type=missing" in str(ctx.value)
     assert "entities.0.`object_module.RefObject`.name" in str(ctx.value)
