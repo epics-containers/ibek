@@ -64,9 +64,9 @@ def test_ioc_schema(tmp_path: Path, samples: Path):
     assert expected == actual
 
 
-def test_build_startup_single(tmp_path: Path, samples: Path):
+def test_build_runtime_single(tmp_path: Path, samples: Path):
     """
-    build an ioc startup script from an IOC instance entity file
+    build an ioc runtime script from an IOC instance entity file
     and a single support module definition file
 
     Also ensure output directory gets generated if it doesn't pre-exist
@@ -78,7 +78,7 @@ def test_build_startup_single(tmp_path: Path, samples: Path):
     out_db = tmp_path / "new_dir" / "objects.db.subst"
 
     run_cli(
-        "startup",
+        "runtime",
         "generate",
         ioc_yaml,
         support_yaml,
@@ -97,9 +97,9 @@ def test_build_startup_single(tmp_path: Path, samples: Path):
     assert example_db == actual_db
 
 
-def test_build_startup_multiple(tmp_path: Path, samples: Path):
+def test_build_runtime_multiple(tmp_path: Path, samples: Path):
     """
-    build an ioc startup script from an IOC instance entity file
+    build an ioc runtime script from an IOC instance entity file
     and multiple support module definition files
 
     Also verifies database subst file generation for multiple
@@ -113,7 +113,7 @@ def test_build_startup_multiple(tmp_path: Path, samples: Path):
     out_db = tmp_path / "all.db.subst"
 
     run_cli(
-        "startup",
+        "runtime",
         "generate",
         ioc_yaml,
         support_yaml,
@@ -135,7 +135,7 @@ def test_build_startup_multiple(tmp_path: Path, samples: Path):
 
 def test_build_utils_features(tmp_path: Path, samples: Path):
     """
-    build an ioc startup script to verify utils features
+    build an ioc runtime script to verify utils features
     """
     clear_entity_model_ids()
     ioc_yaml = samples / "yaml" / "utils.ibek.ioc.yaml"
@@ -144,7 +144,7 @@ def test_build_utils_features(tmp_path: Path, samples: Path):
     out_db = tmp_path / "db.subst"
 
     run_cli(
-        "startup",
+        "runtime",
         "generate",
         ioc_yaml,
         support_yaml,

@@ -29,10 +29,10 @@ echo making an ioc schema using multiple support yaml files
 ibek ioc generate-schema yaml/objects.ibek.support.yaml yaml/all.ibek.support.yaml --output schemas/multiple.ibek.ioc.schema.json
 
 echo making ioc based on objects support yaml
-ibek startup generate yaml/objects.ibek.ioc.yaml yaml/objects.ibek.support.yaml --out outputs/objects.st.cmd --db-out outputs/objects.db.subst
+ibek runtime generate yaml/objects.ibek.ioc.yaml yaml/objects.ibek.support.yaml --out outputs/objects.st.cmd --db-out outputs/objects.db.subst
 
 echo making ioc based on utils support yaml
-ibek startup generate yaml/utils.ibek.ioc.yaml yaml/utils.ibek.support.yaml --out outputs/utils.st.cmd --db-out outputs/utils.db.subst
+ibek runtime generate yaml/utils.ibek.ioc.yaml yaml/utils.ibek.support.yaml --out outputs/utils.st.cmd --db-out outputs/utils.db.subst
 
 echo making ioc based on mutiple support yaml
-ibek startup generate yaml/all.ibek.ioc.yaml yaml/objects.ibek.support.yaml yaml/all.ibek.support.yaml --out outputs/all.st.cmd --db-out outputs/all.db.subst
+ibek runtime generate yaml/all.ibek.ioc.yaml yaml/objects.ibek.support.yaml yaml/all.ibek.support.yaml --out outputs/all.st.cmd --db-out outputs/all.db.subst

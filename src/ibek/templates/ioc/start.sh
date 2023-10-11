@@ -75,7 +75,7 @@ if [ -f ${ibek_src} ]; then
 
     # get ibek the support yaml files this ioc's support modules
     defs=/epics/links/ibek/*.ibek.support.yaml
-    ibek startup generate ${ibek_src} ${defs} --out ${final_ioc_startup} --db-out ${db_src}
+    ibek runtime generate ${ibek_src} ${defs} --out ${final_ioc_startup} --db-out ${db_src}
 
     # build expanded database using msi
     if [ -f ${db_src} ]; then

@@ -4,7 +4,7 @@ import typer
 from ruamel.yaml import YAML
 
 from ibek.ioc_cmds.commands import ioc_cli
-from ibek.runtime_cmds.commands import startup_cli
+from ibek.runtime_cmds.commands import runtime_cli
 from ibek.support_cmds.commands import support_cli
 
 from ._version import __version__
@@ -23,8 +23,8 @@ cli.add_typer(
     help="Commands for building generic IOCs during container build",
 )
 cli.add_typer(
-    startup_cli,
-    name="startup",
+    runtime_cli,
+    name="runtime",
     help="Commands for building IOC instance startup files at container runtime",
 )
 
