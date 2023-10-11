@@ -23,7 +23,7 @@ ioc_cli = typer.Typer(cls=NaturalOrderGroup)
 
 
 @ioc_cli.command()
-def build(
+def build_docker(
     start: int = typer.Option(1, help="The step to start at in the Dockerfile"),
     stop: int = typer.Option(999, help="The step to stop at in the Dockerfile"),
     dockerfile: Annotated[
@@ -127,18 +127,11 @@ def generate_makefile(
             help="Where to find the Makefile.jinja template.",
         ),
     ] = None,
-    call_make_source: Annotated[
-        bool, typer.Option(help="Call make_source_template")
-    ] = False,
 ):
     """
     get the dbd and lib files from all support modules and generate
     iocApp/src/Makefile from iocApp/src/Makefile.jinja
     """
-
-    if call_make_source:
-        make_source_template()
-
     # Folder containing Makefile.jinja
     make_folder = folder_override or get_ioc_source() / "ioc" / "iocApp" / "src"
 
@@ -165,17 +158,26 @@ def generate_makefile(
 )
 def compile(
     ctx: typer.Context,
-    call_generate_makefile: bool = typer.Option(True, help="Call generate_makefile"),
 ):
     """
     Compile a generic IOC after support modules are registered and compiled
     """
     path = IOC_FOLDER
 
-    # for developer convenience in we also call the idempotent functions that
-    # compile depends upon as it is benign to call them multiple times
-    if call_generate_makefile:
-        generate_makefile(call_make_source=True)
-
     command = f"make -C {path} -j $(nproc) " + " ".join(ctx.args)
     exit(subprocess.call(["bash", "-c", command]))
+
+
+@ioc_cli.command(
+    context_settings={"allow_extra_args": True, "ignore_unknown_options": True}
+)
+def build(
+    ctx: typer.Context,
+):
+    """
+    A convenience function that calls make-source-template, generate-makefile,
+    compile
+    """
+    make_source_template()
+    generate_makefile()
+    compile(ctx)

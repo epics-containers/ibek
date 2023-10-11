@@ -72,3 +72,6 @@ lockfiles/
 
 # default filename for builder2ibek
 **/ibek.support.yaml
+# this file may be created accidentally by ibek being run in its own directory
+# so we ignore it
+confg/
