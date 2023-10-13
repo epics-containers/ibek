@@ -9,7 +9,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
-    <title>Modules, Definitions and Entities &#8212; ibek 1.4.1.dev8+g8d2f575 documentation</title>
+    <title>Modules, Definitions and Entities &#8212; ibek 1.4.1.dev9+g6b65c43 documentation</title>
   
   
   
@@ -1664,7 +1664,16 @@ the container or during container development.</p>
     <span class="s2">&quot;entities&quot;</span><span class="p">:</span> <span class="p">{</span>
       <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;List of entities this IOC instantiates&quot;</span><span class="p">,</span>
       <span class="s2">&quot;items&quot;</span><span class="p">:</span> <span class="p">{</span>
-        <span class="s2">&quot;anyOf&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="s2">&quot;discriminator&quot;</span><span class="p">:</span> <span class="p">{</span>
+          <span class="s2">&quot;mapping&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;module.AllObject&quot;</span><span class="p">:</span> <span class="s2">&quot;#/$defs/module_AllObject&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;object_module.Consumer&quot;</span><span class="p">:</span> <span class="s2">&quot;#/$defs/object_module_Consumer&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;object_module.ConsumerTwo&quot;</span><span class="p">:</span> <span class="s2">&quot;#/$defs/object_module_ConsumerTwo&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;object_module.RefObject&quot;</span><span class="p">:</span> <span class="s2">&quot;#/$defs/object_module_RefObject&quot;</span>
+          <span class="p">},</span>
+          <span class="s2">&quot;propertyName&quot;</span><span class="p">:</span> <span class="s2">&quot;type&quot;</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;oneOf&quot;</span><span class="p">:</span> <span class="p">[</span>
           <span class="p">{</span>
             <span class="s2">&quot;$ref&quot;</span><span class="p">:</span> <span class="s2">&quot;#/$defs/object_module_RefObject&quot;</span>
           <span class="p">},</span>
