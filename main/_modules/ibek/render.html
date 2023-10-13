@@ -8,7 +8,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>ibek.render &#8212; ibek 1.4.1.dev8+ga952fc0 documentation</title>
+    <title>ibek.render &#8212; ibek 1.4.1.dev11+g0c7f6b9 documentation</title>
   
   
   
@@ -542,11 +542,8 @@ document.write(`
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">elements</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
         <span class="k">for</span> <span class="n">entity</span> <span class="ow">in</span> <span class="n">ioc</span><span class="o">.</span><span class="n">entities</span><span class="p">:</span>
-            <span class="c1"># TODO can we eliminate the need for intermediate root</span>
-            <span class="c1"># see definition of EntityModel in ioc.py</span>
-            <span class="n">instance</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="s2">&quot;root&quot;</span><span class="p">)</span>
-            <span class="k">if</span> <span class="n">instance</span><span class="o">.</span><span class="n">entity_enabled</span><span class="p">:</span>
-                <span class="n">element</span> <span class="o">=</span> <span class="n">method</span><span class="p">(</span><span class="n">instance</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">entity</span><span class="o">.</span><span class="n">entity_enabled</span><span class="p">:</span>
+                <span class="n">element</span> <span class="o">=</span> <span class="n">method</span><span class="p">(</span><span class="n">entity</span><span class="p">)</span>
                 <span class="k">if</span> <span class="n">element</span><span class="p">:</span>
                     <span class="n">elements</span> <span class="o">+=</span> <span class="n">element</span>
         <span class="k">return</span> <span class="n">elements</span></div>

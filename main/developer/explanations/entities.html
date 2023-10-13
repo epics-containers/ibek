@@ -9,7 +9,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
-    <title>Modules, Definitions and Entities &#8212; ibek 1.4.1.dev8+ga952fc0 documentation</title>
+    <title>Modules, Definitions and Entities &#8212; ibek 1.4.1.dev11+g0c7f6b9 documentation</title>
   
   
   
@@ -1426,32 +1426,6 @@ the container or during container development.</p>
 <details>
 <summary><a>multiple.ibek.ioc.schema.json</a></summary><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
   <span class="s2">&quot;$defs&quot;</span><span class="p">:</span> <span class="p">{</span>
-    <span class="s2">&quot;EntityModel&quot;</span><span class="p">:</span> <span class="p">{</span>
-      <span class="s2">&quot;discriminator&quot;</span><span class="p">:</span> <span class="p">{</span>
-        <span class="s2">&quot;mapping&quot;</span><span class="p">:</span> <span class="p">{</span>
-          <span class="s2">&quot;module.AllObject&quot;</span><span class="p">:</span> <span class="s2">&quot;#/$defs/module_AllObject&quot;</span><span class="p">,</span>
-          <span class="s2">&quot;object_module.Consumer&quot;</span><span class="p">:</span> <span class="s2">&quot;#/$defs/object_module_Consumer&quot;</span><span class="p">,</span>
-          <span class="s2">&quot;object_module.ConsumerTwo&quot;</span><span class="p">:</span> <span class="s2">&quot;#/$defs/object_module_ConsumerTwo&quot;</span><span class="p">,</span>
-          <span class="s2">&quot;object_module.RefObject&quot;</span><span class="p">:</span> <span class="s2">&quot;#/$defs/object_module_RefObject&quot;</span>
-        <span class="p">},</span>
-        <span class="s2">&quot;propertyName&quot;</span><span class="p">:</span> <span class="s2">&quot;type&quot;</span>
-      <span class="p">},</span>
-      <span class="s2">&quot;oneOf&quot;</span><span class="p">:</span> <span class="p">[</span>
-        <span class="p">{</span>
-          <span class="s2">&quot;$ref&quot;</span><span class="p">:</span> <span class="s2">&quot;#/$defs/object_module_RefObject&quot;</span>
-        <span class="p">},</span>
-        <span class="p">{</span>
-          <span class="s2">&quot;$ref&quot;</span><span class="p">:</span> <span class="s2">&quot;#/$defs/object_module_Consumer&quot;</span>
-        <span class="p">},</span>
-        <span class="p">{</span>
-          <span class="s2">&quot;$ref&quot;</span><span class="p">:</span> <span class="s2">&quot;#/$defs/object_module_ConsumerTwo&quot;</span>
-        <span class="p">},</span>
-        <span class="p">{</span>
-          <span class="s2">&quot;$ref&quot;</span><span class="p">:</span> <span class="s2">&quot;#/$defs/module_AllObject&quot;</span>
-        <span class="p">}</span>
-      <span class="p">],</span>
-      <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;EntityModel&quot;</span>
-    <span class="p">},</span>
     <span class="s2">&quot;clock_rate&quot;</span><span class="p">:</span> <span class="p">{</span>
       <span class="s2">&quot;enum&quot;</span><span class="p">:</span> <span class="p">[</span>
         <span class="s2">&quot;1Hz&quot;</span><span class="p">,</span>
@@ -1690,7 +1664,29 @@ the container or during container development.</p>
     <span class="s2">&quot;entities&quot;</span><span class="p">:</span> <span class="p">{</span>
       <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;List of entities this IOC instantiates&quot;</span><span class="p">,</span>
       <span class="s2">&quot;items&quot;</span><span class="p">:</span> <span class="p">{</span>
-        <span class="s2">&quot;$ref&quot;</span><span class="p">:</span> <span class="s2">&quot;#/$defs/EntityModel&quot;</span>
+        <span class="s2">&quot;discriminator&quot;</span><span class="p">:</span> <span class="p">{</span>
+          <span class="s2">&quot;mapping&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;module.AllObject&quot;</span><span class="p">:</span> <span class="s2">&quot;#/$defs/module_AllObject&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;object_module.Consumer&quot;</span><span class="p">:</span> <span class="s2">&quot;#/$defs/object_module_Consumer&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;object_module.ConsumerTwo&quot;</span><span class="p">:</span> <span class="s2">&quot;#/$defs/object_module_ConsumerTwo&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;object_module.RefObject&quot;</span><span class="p">:</span> <span class="s2">&quot;#/$defs/object_module_RefObject&quot;</span>
+          <span class="p">},</span>
+          <span class="s2">&quot;propertyName&quot;</span><span class="p">:</span> <span class="s2">&quot;type&quot;</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;oneOf&quot;</span><span class="p">:</span> <span class="p">[</span>
+          <span class="p">{</span>
+            <span class="s2">&quot;$ref&quot;</span><span class="p">:</span> <span class="s2">&quot;#/$defs/object_module_RefObject&quot;</span>
+          <span class="p">},</span>
+          <span class="p">{</span>
+            <span class="s2">&quot;$ref&quot;</span><span class="p">:</span> <span class="s2">&quot;#/$defs/object_module_Consumer&quot;</span>
+          <span class="p">},</span>
+          <span class="p">{</span>
+            <span class="s2">&quot;$ref&quot;</span><span class="p">:</span> <span class="s2">&quot;#/$defs/object_module_ConsumerTwo&quot;</span>
+          <span class="p">},</span>
+          <span class="p">{</span>
+            <span class="s2">&quot;$ref&quot;</span><span class="p">:</span> <span class="s2">&quot;#/$defs/module_AllObject&quot;</span>
+          <span class="p">}</span>
+        <span class="p">]</span>
       <span class="p">},</span>
       <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Entities&quot;</span><span class="p">,</span>
       <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;array&quot;</span>
