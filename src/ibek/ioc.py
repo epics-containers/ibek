@@ -6,9 +6,14 @@ from __future__ import annotations
 
 import builtins
 from enum import Enum
-from typing import Any, Dict, Literal, Sequence, Tuple, Type, Union
+from typing import Annotated, Any, Dict, Literal, Sequence, Tuple, Type, Union
 
-from pydantic import Field, RootModel, create_model, field_validator, model_validator
+from pydantic import (
+    Field,
+    create_model,
+    field_validator,
+    model_validator,
+)
 from pydantic.fields import FieldInfo
 from pydantic_core import PydanticUndefined
 
@@ -166,11 +171,11 @@ def make_ioc_model(entity_models: Sequence[Type[Entity]]) -> Type[IOC]:
     be of type 'list of Entity derived classes'.
     """
 
-    class EntityModel(RootModel):
-        root: Union[tuple(entity_models)] = Field(discriminator="type")  # type: ignore
+    entity_union = Union[tuple(entity_models)]  # type: ignore
+    discriminated = Annotated[entity_union, Field(discriminator="type")]  # type: ignore
 
     class NewIOC(IOC):
-        entities: Sequence[EntityModel] = Field(  # type: ignore
+        entities: Sequence[discriminated] = Field(
             description="List of entities this IOC instantiates"
         )
 

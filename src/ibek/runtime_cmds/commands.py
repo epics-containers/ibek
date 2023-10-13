@@ -39,7 +39,7 @@ def generate(
     # and also make a bob index file of buttons
     #
     # you can access the 'opi' definition like this:
-    # ioc_instance.entities[0].root.__definition__.opis()
+    # ioc_instance.entities[0].__definition__.opis()
 
     ioc_instance = ioc_deserialize(instance, definitions)
 

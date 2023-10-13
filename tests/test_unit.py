@@ -48,8 +48,8 @@ def test_object_references():
     )
     ioc = ioc_model(**d)
     port, device = ioc.entities
-    # TODO try to get rid of the need for '.root'
-    assert port.root.type == "mymodule.port"
-    assert device.root.type == "mymodule.device"
-    assert device.root.port is port.root
-    assert id_to_entity == {"PORT": port.root}
+    # TODO try to get rid of the need for ''
+    assert port.type == "mymodule.port"
+    assert device.type == "mymodule.device"
+    assert device.port is port
+    assert id_to_entity == {"PORT": port}

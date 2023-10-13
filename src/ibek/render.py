@@ -108,11 +108,8 @@ class Render:
         """
         elements = ""
         for entity in ioc.entities:
-            # TODO can we eliminate the need for intermediate root
-            # see definition of EntityModel in ioc.py
-            instance = getattr(entity, "root")
-            if instance.entity_enabled:
-                element = method(instance)
+            if entity.entity_enabled:
+                element = method(entity)
                 if element:
                     elements += element
         return elements
