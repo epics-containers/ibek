@@ -1,31 +1,5 @@
 {
   "$defs": {
-    "EntityModel": {
-      "discriminator": {
-        "mapping": {
-          "module.AllObject": "#/$defs/module_AllObject",
-          "object_module.Consumer": "#/$defs/object_module_Consumer",
-          "object_module.ConsumerTwo": "#/$defs/object_module_ConsumerTwo",
-          "object_module.RefObject": "#/$defs/object_module_RefObject"
-        },
-        "propertyName": "type"
-      },
-      "oneOf": [
-        {
-          "$ref": "#/$defs/object_module_RefObject"
-        },
-        {
-          "$ref": "#/$defs/object_module_Consumer"
-        },
-        {
-          "$ref": "#/$defs/object_module_ConsumerTwo"
-        },
-        {
-          "$ref": "#/$defs/module_AllObject"
-        }
-      ],
-      "title": "EntityModel"
-    },
     "clock_rate": {
       "enum": [
         "1Hz",
@@ -264,7 +238,20 @@
     "entities": {
       "description": "List of entities this IOC instantiates",
       "items": {
-        "$ref": "#/$defs/EntityModel"
+        "anyOf": [
+          {
+            "$ref": "#/$defs/object_module_RefObject"
+          },
+          {
+            "$ref": "#/$defs/object_module_Consumer"
+          },
+          {
+            "$ref": "#/$defs/object_module_ConsumerTwo"
+          },
+          {
+            "$ref": "#/$defs/module_AllObject"
+          }
+        ]
       },
       "title": "Entities",
       "type": "array"

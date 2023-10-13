@@ -1,23 +1,5 @@
 {
   "$defs": {
-    "EntityModel": {
-      "discriminator": {
-        "mapping": {
-          "epics.InterruptVectorVME": "#/$defs/epics_InterruptVectorVME",
-          "epics.InterruptVectorVME2": "#/$defs/epics_InterruptVectorVME2"
-        },
-        "propertyName": "type"
-      },
-      "oneOf": [
-        {
-          "$ref": "#/$defs/epics_InterruptVectorVME"
-        },
-        {
-          "$ref": "#/$defs/epics_InterruptVectorVME2"
-        }
-      ],
-      "title": "EntityModel"
-    },
     "epics_InterruptVectorVME": {
       "additionalProperties": false,
       "properties": {
@@ -100,7 +82,14 @@
     "entities": {
       "description": "List of entities this IOC instantiates",
       "items": {
-        "$ref": "#/$defs/EntityModel"
+        "anyOf": [
+          {
+            "$ref": "#/$defs/epics_InterruptVectorVME"
+          },
+          {
+            "$ref": "#/$defs/epics_InterruptVectorVME2"
+          }
+        ]
       },
       "title": "Entities",
       "type": "array"

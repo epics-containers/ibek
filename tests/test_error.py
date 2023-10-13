@@ -111,4 +111,3 @@ def test_defaults(tmp_path: Path, samples: Path):
         run_cli("runtime", "generate", entity_file, definition_file1)
 
     assert "Field required [type=missing" in str(ctx.value)
-    assert "entities.0.`object_module.RefObject`.name" in str(ctx.value)

@@ -54,16 +54,7 @@ class RenderDb:
         Gather the database template instantiations from all entities
         while validating the arguments
         """
-        for entity_root in self.ioc_instance.entities:
-            # TODO this is a highly suspect way of coping with the difference
-            # between deserialized entities and the original entity class.
-            # The deserializer inserts an extra layer of nesting
-            # with "root". This issue comes up because test_database_render
-            # directly creates an IOC object and does not get the extra "root".
-            #
-            # see definition of EntityModel in ioc.py
-            entity = getattr(entity_root, "root", entity_root)
-
+        for entity in self.ioc_instance.entities:
             templates = entity.__definition__.databases
 
             # Not all entities instantiate database templates
