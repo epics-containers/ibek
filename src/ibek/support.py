@@ -5,7 +5,7 @@ from __future__ import annotations
 
 import json
 from enum import Enum
-from typing import Any, Dict, Optional, Sequence, Union
+from typing import Any, Dict, Mapping, Optional, Sequence, Union
 
 from pydantic import Field, PydanticUndefinedAnnotation
 from typing_extensions import Literal
@@ -103,7 +103,7 @@ class Database(BaseSettings):
         description="Filename of the database template in <module_root>/db"
     )
 
-    args: Dict[str, Optional[str]] = Field(
+    args: Mapping[str, Optional[str]] = Field(
         description=(
             "Dictionary of args and values to pass through to database. "
             "A value of None is equivalent to ARG: '{{ ARG }}'"
@@ -156,19 +156,19 @@ class Value(BaseSettings):
 Script = Sequence[Union[Text, Comment]]
 
 
-class OpiType(Enum):
-    pvi = "pvi"
-    """declares a PVI YAML file that generates bob GUI at runtime"""
-    bob = "bob"
-    """declares a hand crafted bob file"""
+class EntityPVI(BaseSettings):
+    """Entity PVI definition"""
 
-
-class Opi(BaseSettings):
-    """Describes one PVI YAML file"""
-
-    type: OpiType = Field(description="bob or pvi")
-    file: str = Field(description="filename of bob or pvi")
-    prefix: str = Field(description="Args to make unique screen")
+    yaml_path: str = Field(
+        description="Path to .pvi.device.yaml - absolute or relative to PVI_DEFS"
+    )
+    index: bool = Field(
+        description="Whether to add generated UI to index for Entity", default=True
+    )
+    prefix: str = Field(description="PV prefix to pass as $(prefix) on index button")
+    pva: bool = Field(
+        description="Whether to generate PVA structure template", default=False
+    )
 
 
 class Definition(BaseSettings):
@@ -190,7 +190,7 @@ class Definition(BaseSettings):
         description="The values IOC instance should supply", default=()
     )
     databases: Sequence[Database] = Field(
-        description="Databases to instantiate", default=()
+        description="Databases to instantiate", default=[]
     )
     pre_init: Script = Field(
         description="Startup script snippets to add before iocInit()", default=()
@@ -202,9 +202,7 @@ class Definition(BaseSettings):
     env_vars: Sequence[EnvironmentVariable] = Field(
         description="Environment variables to set in the boot script", default=()
     )
-    opis: Sequence[Opi] = Field(
-        description="Declares the PVI YAML for generating screens", default=()
-    )
+    pvi: EntityPVI = Field(description="PVI definition for Entity", default=None)
 
     def _get_id_arg(self):
         """Returns the name of the ID argument for this definition, if it exists"""

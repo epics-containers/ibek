@@ -32,6 +32,10 @@ TEMPLATES = Path(__file__).parent / "templates"
 IBEK_DEFS = EPICS_ROOT / "ibek-defs"
 PVI_DEFS = EPICS_ROOT / "pvi-defs"
 
+# UIs and templates generated at runtime
+OPI_OUTPUT_PATH = EPICS_ROOT / "opi"
+PVI_OUTPUT_PATH = EPICS_ROOT / "pvi"
+
 IOC_DBDS = SUPPORT / "configure/dbd_list"
 IOC_LIBS = SUPPORT / "configure/lib_list"
 RUNTIME_DEBS = SUPPORT / "configure/runtime_debs"

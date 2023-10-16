@@ -4,10 +4,11 @@ support module definitions
 """
 
 from dataclasses import dataclass
-from typing import Any, Dict, List
+from typing import Any, Dict, List, Mapping, Optional, Tuple
 
 from ibek.globals import render_with_utils
 from ibek.ioc import IOC, Entity
+from ibek.support import Database
 
 
 class RenderDb:
@@ -22,7 +23,7 @@ class RenderDb:
         # a mapping from template file name to details of instances of that template
         self.render_templates: Dict[str, RenderDb.RenderDbTemplate] = {}
 
-    def add_row(self, filename: str, args: Dict[str, Any], entity: Entity) -> None:
+    def add_row(self, filename: str, args: Mapping[str, Any], entity: Entity) -> None:
         """
         Accumulate rows of arguments for each template file,
         Adding a new template file if it does not already exist.
@@ -57,23 +58,42 @@ class RenderDb:
         while validating the arguments
         """
         for entity in self.ioc_instance.entities:
-            templates = entity.__definition__.databases
+            databases = entity.__definition__.databases
 
             # Not all entities instantiate database templates
-            if templates is None or not entity.entity_enabled:
-                continue
+            if entity.entity_enabled and databases is not None:
+                for database in databases:
+                    self.add_database(database, entity)
 
-            for template in templates:
-                template.file = template.file.strip("\n")
+    def add_database(self, database: Database, entity: Entity) -> None:
+        """Validate database and add row using entity as context.
 
-                for arg, value in template.args.items():
-                    if value is None:
-                        if arg not in entity.__dict__:
-                            raise ValueError(
-                                f"database arg '{arg}' in database template "
-                                f"'{template.file}' not found in context"
-                            )
-                self.add_row(template.file, template.args, entity)
+        Args:
+            database: Database to add row for
+            entity: Entity to use as context for Jinja template expansion
+
+        """
+        database.file = database.file.strip("\n")
+
+        for arg, value in database.args.items():
+            if value is None:
+                if arg not in entity.__dict__:
+                    raise ValueError(
+                        f"database arg '{arg}' in database template "
+                        f"'{database.file}' not found in context"
+                    )
+
+        self.add_row(database.file, database.args, entity)
+
+    def add_extra_databases(self, databases: List[Tuple[Database, Entity]]) -> None:
+        """Add databases that are not part of Entity definitions
+
+        Args:
+            databases: Databases to add, each mapped against an Entity to use as context
+
+        """
+        for database, entity in databases:
+            self.add_database(database, entity)
 
     def align_columns(self) -> None:
         """
@@ -97,11 +117,19 @@ class RenderDb:
                 for i, arg in enumerate(row):
                     row[i] = arg.ljust(template.columns[i])
 
-    def render_database(self) -> Dict[str, List[str]]:
+    def render_database(
+        self, extra_databases: Optional[List[Tuple[Database, Entity]]] = None
+    ) -> Dict[str, List[str]]:
+        """Render a database substitution file.
+
+        Args:
+            extra_databases: Databases to add that are not included on an Entity
+
         """
-        Render a database substitution file
-        """
+        extra_databases = [] if extra_databases is None else extra_databases
+
         self.parse_instances()
+        self.add_extra_databases(extra_databases)
         self.align_columns()
 
         results = {}

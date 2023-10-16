@@ -36,6 +36,10 @@ defs:
           # TestValues testValue
           TestValues {{ test_value }}
 
+    pvi:
+      yaml_path: simple.pvi.device.yaml
+      prefix: "{{ name }}"
+
   - name: Consumer
     description: |
       A class that uses RefObject

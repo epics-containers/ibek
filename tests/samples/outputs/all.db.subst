@@ -21,3 +21,12 @@ pattern
 	{ "name",                 "ip",        "value"          }
 	{ "Consumer Two With DB", "127.0.0.1", "Ref1.127.0.0.1" }
 }
+
+file "/epics/pvi/simple.pvi.template" {
+pattern 
+	{ "prefix"             }
+	{ "Ref1"               }
+	{ "AllObject One"      }
+	{ "AllObject Two"      }
+	{ "Disabled RefObject" }
+}
