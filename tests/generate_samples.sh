@@ -16,7 +16,11 @@ cd $SAMPLES_DIR
 mkdir -p schemas
 mkdir -p outputs
 
-set -x
+set -ex
+
+mkdir -p epics/pvi-defs
+cp yaml/simple.pvi.device.yaml  epics/pvi-defs/simple.pvi.device.yaml
+
 echo making the support yaml schema
 ibek support generate-schema --output schemas/ibek.support.schema.json
 
@@ -37,3 +41,4 @@ ibek runtime generate yaml/utils.ibek.ioc.yaml yaml/utils.ibek.support.yaml --ou
 
 echo making ioc based on mutiple support yaml
 ibek runtime generate yaml/all.ibek.ioc.yaml yaml/objects.ibek.support.yaml yaml/all.ibek.support.yaml --out outputs/all.st.cmd --db-out outputs/all.ioc.subst
+cp epics/opi/* outputs/

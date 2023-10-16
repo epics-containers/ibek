@@ -136,6 +136,14 @@ def test_build_runtime_multiple(tmp_path: Path, samples: Path):
     actual_db = out_db.read_text()
     assert example_db == actual_db
 
+    example_index = (samples / "outputs" / "index.bob").read_text()
+    actual_index = (samples / "epics" / "opi" / "index.bob").read_text()
+    assert example_index == actual_index
+
+    example_pvi = (samples / "outputs" / "simple.pvi.bob").read_text()
+    actual_pvi = (samples / "epics" / "opi" / "simple.pvi.bob").read_text()
+    assert example_pvi == actual_pvi
+
 
 def test_build_utils_features(tmp_path: Path, samples: Path):
     """

@@ -6,7 +6,7 @@ from typing import List
 
 import typer
 
-from ibek.globals import EPICS_ROOT, IBEK_DEFS, IOC_FOLDER
+from ibek.globals import EPICS_ROOT, IBEK_DEFS, IOC_FOLDER, PVI_DEFS
 
 
 def get_ioc_source() -> Path:
@@ -69,6 +69,7 @@ def extract_assets(destination: Path, source: Path, extras: List[Path], defaults
         default_assets = [
             get_ioc_source() / "ibek-support",
             source / "support" / "configure",
+            PVI_DEFS,
             IBEK_DEFS,
             IOC_FOLDER,
             Path("/venv"),
