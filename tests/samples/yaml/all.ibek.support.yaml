@@ -118,3 +118,8 @@ defs:
       - file: jinjified{{ my_int }}.db
         args:
           name:
+
+    pvi:
+      yaml_path: simple.pvi.device.yaml
+      prefix: "{{ name }}"
+      pva: true

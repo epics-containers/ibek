@@ -19,6 +19,7 @@ dependencies = [
     "ruamel.yaml",
     "jinja2",
     "GitPython",
+    "pvi>=0.6",
 ] # Add project dependencies here, e.g. ["click", "numpy"]
 dynamic = ["version"]
 license.file = "LICENSE"
@@ -72,10 +73,6 @@ addopts = """
 filterwarnings = ["error", "ignore::pytest_cov.plugin.CovDisabledWarning"]
 # Doctest python code in docs, python code in src docstrings, test functions in tests
 testpaths = "docs src tests"
-
-env = [
-    "EPICS_ROOT=/tmp"
-]
 
 [tool.coverage.run]
 data_file = "/tmp/ibek.coverage"

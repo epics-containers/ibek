@@ -39,6 +39,7 @@ SUPPORT_YAML_PATTERN = "*ibek.support.yaml"
 
 # Assets generated at runtime
 RUNTIME_OUTPUT_PATH = EPICS_ROOT / "runtime"
+OPI_OUTPUT_PATH = EPICS_ROOT / "opi"
 
 IOC_DBDS = SUPPORT / "configure/dbd_list"
 IOC_LIBS = SUPPORT / "configure/lib_list"

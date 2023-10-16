@@ -28,3 +28,10 @@ pattern
 	{ "name",                 "ip",        "value"          }
 	{ "Consumer Two With DB", "127.0.0.1", "Ref1.127.0.0.1" }
 }
+
+file "simple.pvi.template" {
+pattern 
+	{ "prefix"        }
+	{ "AllObject One" }
+	{ "AllObject Two" }
+}

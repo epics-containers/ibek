@@ -203,14 +203,14 @@
           "title": "Env Vars",
           "type": "array"
         },
-        "opis": {
-          "default": [],
-          "description": "Declares the PVI YAML for generating screens",
-          "items": {
-            "$ref": "#/$defs/Opi"
-          },
-          "title": "Opis",
-          "type": "array"
+        "pvi": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/EntityPVI"
+            }
+          ],
+          "default": null,
+          "description": "PVI definition for Entity"
         }
       },
       "required": [
@@ -218,6 +218,40 @@
         "description"
       ],
       "title": "Definition",
+      "type": "object"
+    },
+    "EntityPVI": {
+      "additionalProperties": false,
+      "description": "Entity PVI definition",
+      "properties": {
+        "yaml_path": {
+          "description": "Path to .pvi.device.yaml - absolute or relative to PVI_DEFS",
+          "title": "Yaml Path",
+          "type": "string"
+        },
+        "index": {
+          "default": true,
+          "description": "Whether to add generated UI to index for Entity",
+          "title": "Index",
+          "type": "boolean"
+        },
+        "prefix": {
+          "description": "PV prefix to pass as $(prefix) on index button",
+          "title": "Prefix",
+          "type": "string"
+        },
+        "pva": {
+          "default": false,
+          "description": "Whether to generate PVA structure template",
+          "title": "Pva",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "yaml_path",
+        "prefix"
+      ],
+      "title": "EntityPVI",
       "type": "object"
     },
     "EnumArg": {
@@ -440,45 +474,6 @@
       ],
       "title": "ObjectArg",
       "type": "object"
-    },
-    "Opi": {
-      "additionalProperties": false,
-      "description": "Describes one PVI YAML file",
-      "properties": {
-        "type": {
-          "allOf": [
-            {
-              "$ref": "#/$defs/OpiType"
-            }
-          ],
-          "description": "bob or pvi"
-        },
-        "file": {
-          "description": "filename of bob or pvi",
-          "title": "File",
-          "type": "string"
-        },
-        "prefix": {
-          "description": "Args to make unique screen",
-          "title": "Prefix",
-          "type": "string"
-        }
-      },
-      "required": [
-        "type",
-        "file",
-        "prefix"
-      ],
-      "title": "Opi",
-      "type": "object"
-    },
-    "OpiType": {
-      "enum": [
-        "pvi",
-        "bob"
-      ],
-      "title": "OpiType",
-      "type": "string"
     },
     "StrArg": {
       "additionalProperties": false,
