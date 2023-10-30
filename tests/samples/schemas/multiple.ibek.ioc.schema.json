@@ -238,16 +238,7 @@
     "entities": {
       "description": "List of entities this IOC instantiates",
       "items": {
-        "discriminator": {
-          "mapping": {
-            "module.AllObject": "#/$defs/module_AllObject",
-            "object_module.Consumer": "#/$defs/object_module_Consumer",
-            "object_module.ConsumerTwo": "#/$defs/object_module_ConsumerTwo",
-            "object_module.RefObject": "#/$defs/object_module_RefObject"
-          },
-          "propertyName": "type"
-        },
-        "oneOf": [
+        "anyOf": [
           {
             "$ref": "#/$defs/object_module_RefObject"
           },
