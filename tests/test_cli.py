@@ -75,7 +75,7 @@ def test_build_runtime_single(tmp_path: Path, samples: Path):
     ioc_yaml = samples / "yaml" / "objects.ibek.ioc.yaml"
     support_yaml = samples / "yaml" / "objects.ibek.support.yaml"
     out_file = tmp_path / "new_dir" / "st.cmd"
-    out_db = tmp_path / "new_dir" / "objects.db.subst"
+    out_db = tmp_path / "new_dir" / "objects.ioc.subst"
 
     run_cli(
         "runtime",
@@ -92,7 +92,7 @@ def test_build_runtime_single(tmp_path: Path, samples: Path):
     actual_boot = out_file.read_text()
     assert example_boot == actual_boot
 
-    example_db = (samples / "outputs" / "objects.db.subst").read_text()
+    example_db = (samples / "outputs" / "objects.ioc.subst").read_text()
     actual_db = out_db.read_text()
     assert example_db == actual_db
 
@@ -110,7 +110,7 @@ def test_build_runtime_multiple(tmp_path: Path, samples: Path):
     support_yaml = samples / "yaml" / "objects.ibek.support.yaml"
     support_yaml2 = samples / "yaml" / "all.ibek.support.yaml"
     out_file = tmp_path / "st.cmd"
-    out_db = tmp_path / "all.db.subst"
+    out_db = tmp_path / "all.ioc.subst"
 
     run_cli(
         "runtime",
@@ -128,7 +128,7 @@ def test_build_runtime_multiple(tmp_path: Path, samples: Path):
     actual_boot = out_file.read_text()
     assert example_boot == actual_boot
 
-    example_db = (samples / "outputs" / "all.db.subst").read_text()
+    example_db = (samples / "outputs" / "all.ioc.subst").read_text()
     actual_db = out_db.read_text()
     assert example_db == actual_db
 
@@ -141,7 +141,7 @@ def test_build_utils_features(tmp_path: Path, samples: Path):
     ioc_yaml = samples / "yaml" / "utils.ibek.ioc.yaml"
     support_yaml = samples / "yaml" / "utils.ibek.support.yaml"
     out_file = tmp_path / "st.cmd"
-    out_db = tmp_path / "db.subst"
+    out_db = tmp_path / "ioc.subst"
 
     run_cli(
         "runtime",
@@ -158,6 +158,6 @@ def test_build_utils_features(tmp_path: Path, samples: Path):
     actual_boot = out_file.read_text()
     assert example_boot == actual_boot
 
-    example_db = (samples / "outputs" / "utils.db.subst").read_text()
+    example_db = (samples / "outputs" / "utils.ioc.subst").read_text()
     actual_db = out_db.read_text()
     assert example_db == actual_db

@@ -74,7 +74,7 @@ if [ -f ${ibek_src} ]; then
     final_ioc_startup=/tmp/st.cmd
 
     # get ibek the support yaml files this ioc's support modules
-    defs=/epics/links/ibek/*.ibek.support.yaml
+    defs=/epics/ibek/*.ibek.support.yaml
     ibek runtime generate ${ibek_src} ${defs} --out ${final_ioc_startup} --db-out ${db_src}
 
     # build expanded database using msi
@@ -83,13 +83,13 @@ if [ -f ${ibek_src} ]; then
         bash -c "msi -o${epics_db} ${includes} -S${db_src}"
     fi
 
-# 2. st.cmd + ioc.substitutions ************************************************
+# 2. st.cmd + ioc.subst ************************************************
 elif [ -f ${ioc_startup} ] ; then
 
-    if [ -f ${CONFIG_DIR}/ioc.substitutions ]; then
-        # generate ioc.db from ioc.substitutions, including all templates from SUPPORT
+    if [ -f ${CONFIG_DIR}/ioc.subst ]; then
+        # generate ioc.db from ioc.subst, including all templates from SUPPORT
         includes=$(for i in ${SUPPORT}/*/db; do echo -n "-I $i "; done)
-        msi ${includes} -S ${CONFIG_DIR}/ioc.substitutions -o ${epics_db}
+        msi ${includes} -S ${CONFIG_DIR}/ioc.subst -o ${epics_db}
     fi
     final_ioc_startup=${ioc_startup}
 

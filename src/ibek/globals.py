@@ -27,8 +27,7 @@ MODULES = SUPPORT / "configure/MODULES"
 
 # Folder containing templates for IOC src etc.
 TEMPLATES = Path(__file__).parent / "templates"
-# Folder containing symlinks to useful files
-SYMLINKS = EPICS_ROOT / "links"
+IBEK_FILES = EPICS_ROOT / "ibek"
 
 IOC_DBDS = SUPPORT / "configure/dbd_list"
 IOC_LIBS = SUPPORT / "configure/lib_list"

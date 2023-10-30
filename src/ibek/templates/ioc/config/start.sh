@@ -34,6 +34,10 @@ Choices of contents of the config folder are:
   - send a reboot command to the RTEMS crate
   - start a telnet session to the RTEMS IOC console
 
-
-
 '
+
+# This is a placeholder script, but we still need keep the container running.
+# Wait indefinitely so the container does not exit and restart continually.
+while true; do
+    sleep 1
+done
