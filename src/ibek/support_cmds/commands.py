@@ -17,12 +17,12 @@ except ImportError:
 from typing_extensions import Annotated
 
 from ibek.globals import (
+    IBEK_FILES,
     IOC_DBDS,
     IOC_LIBS,
     RELEASE,
     RUNTIME_DEBS,
     SUPPORT,
-    SYMLINKS,
     NaturalOrderGroup,
 )
 from ibek.support import Support
@@ -256,7 +256,7 @@ def generate_links(
 
     support_yaml = from_path.glob("*/*.ibek.support.yaml")
 
-    to_path = SYMLINKS / "ibek"
+    to_path = IBEK_FILES
     to_path.mkdir(parents=True, exist_ok=True)
     for yaml in support_yaml:
         link_from = to_path / yaml.name
