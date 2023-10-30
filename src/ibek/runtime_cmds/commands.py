@@ -26,7 +26,7 @@ def generate(
         help="Path to output startup script",
     ),
     db_out: Path = typer.Option(
-        default="config/db.subst",
+        default="config/ioc.subst",
         help="Path to output database expansion shell script",
     ),
 ):
