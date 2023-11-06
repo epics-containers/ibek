@@ -28,6 +28,8 @@ class RenderDb:
         Adding a new template file if it does not already exist.
         Convert all arguments to strings.
         """
+        filename = render_with_utils(dict(entity), filename)
+
         if filename not in self.render_templates:
             # for new filenames create a new RenderDbTemplate entry
             headings = [str(i) for i in list(args.keys())]

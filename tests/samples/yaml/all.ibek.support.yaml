@@ -115,3 +115,6 @@ defs:
           my_object:
           my_float:
           my_bool:
+      - file: jinjified{{ my_int }}.db
+        args:
+          name:
