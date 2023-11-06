@@ -82,14 +82,7 @@
     "entities": {
       "description": "List of entities this IOC instantiates",
       "items": {
-        "discriminator": {
-          "mapping": {
-            "epics.InterruptVectorVME": "#/$defs/epics_InterruptVectorVME",
-            "epics.InterruptVectorVME2": "#/$defs/epics_InterruptVectorVME2"
-          },
-          "propertyName": "type"
-        },
-        "oneOf": [
+        "anyOf": [
           {
             "$ref": "#/$defs/epics_InterruptVectorVME"
           },

@@ -16,6 +16,13 @@ pattern
 	{ "AllObject Two", "Ref1",      "1.0",      "True"    }
 }
 
+file "jinjified1.db" {
+pattern 
+	{ "name"          }
+	{ "AllObject One" }
+	{ "AllObject Two" }
+}
+
 file "test.db" {
 pattern 
 	{ "name",                 "ip",        "value"          }
