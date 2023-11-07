@@ -30,6 +30,7 @@ TEMPLATES = Path(__file__).parent / "templates"
 
 # Definitions populated at container build time
 IBEK_DEFS = EPICS_ROOT / "ibek-defs"
+PVI_DEFS = EPICS_ROOT / "pvi-defs"
 
 # Paths for ibek-support
 IBEK_SUPPORT = Path("ibek-support")

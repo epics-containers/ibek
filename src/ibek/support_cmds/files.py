@@ -6,6 +6,8 @@ from enum import Enum
 from pathlib import Path
 from typing import List
 
+import typer
+
 from ibek.globals import SUPPORT
 
 
@@ -82,3 +84,21 @@ def add_text_once(file: Path, text: str):
         current = file.read_text()
         if text not in current:
             file.write_text(current + text + "\n")
+
+
+def symlink_files(source_directory: Path, file_pattern: str, target_directory: Path):
+    """Symlink files patching the given pattern in source directory to target directory.
+
+    Args:
+        source_directory: Directory containing source files
+        file_patterm: Pattern of files in source directory to be symlinked
+        target_directory: Directory to create symlinks in
+
+    """
+    typer.echo(f"Symlinking {file_pattern} files:")
+    target_directory.mkdir(parents=True, exist_ok=True)
+    for yaml in source_directory.glob(file_pattern):
+        typer.echo(f" {target_directory / yaml.name} -> {yaml}")
+        target = target_directory / yaml.name
+        target.unlink(missing_ok=True)
+        target.symlink_to(yaml)
