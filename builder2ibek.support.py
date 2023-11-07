@@ -381,6 +381,8 @@ class Builder2Support:
                 missing = set(command_args) - set(arginfo.all_args)
                 comment = MISSING + ", ".join(missing) if missing else None
 
+                # remove spurious \n from the script text (not newlines)
+                script_text = script_text.replace(r"\n", "")
                 script_item.insert(3, "value", script_text, comment=comment)
 
             script.append(script_item)
