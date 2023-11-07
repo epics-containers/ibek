@@ -7,9 +7,13 @@ import subprocess
 import sys
 from pathlib import Path
 
+from pytest_mock import MockerFixture
+
 from ibek import __version__
+from ibek.globals import IBEK_DEFS, PVI_DEFS
 from ibek.ioc import clear_entity_model_ids
-from tests.conftest import run_cli
+from ibek.support_cmds.commands import generate_links
+from tests.conftest import PviDefs, run_cli
 
 
 def test_cli_version():
@@ -64,7 +68,7 @@ def test_ioc_schema(tmp_path: Path, samples: Path):
     assert expected == actual
 
 
-def test_build_runtime_single(tmp_path: Path, samples: Path):
+def test_build_runtime_single(tmp_path: Path, samples: Path, pvi_defs: PviDefs):
     """
     build an ioc runtime script from an IOC instance entity file
     and a single support module definition file
@@ -76,6 +80,8 @@ def test_build_runtime_single(tmp_path: Path, samples: Path):
     support_yaml = samples / "yaml" / "objects.ibek.support.yaml"
     out_file = tmp_path / "new_dir" / "st.cmd"
     out_db = tmp_path / "new_dir" / "objects.ioc.subst"
+
+    pvi_defs.link_files([samples / "yaml" / "simple.pvi.device.yaml"])
 
     run_cli(
         "runtime",
@@ -97,7 +103,7 @@ def test_build_runtime_single(tmp_path: Path, samples: Path):
     assert example_db == actual_db
 
 
-def test_build_runtime_multiple(tmp_path: Path, samples: Path):
+def test_build_runtime_multiple(tmp_path: Path, samples: Path, pvi_defs: PviDefs):
     """
     build an ioc runtime script from an IOC instance entity file
     and multiple support module definition files
@@ -111,6 +117,8 @@ def test_build_runtime_multiple(tmp_path: Path, samples: Path):
     support_yaml2 = samples / "yaml" / "all.ibek.support.yaml"
     out_file = tmp_path / "st.cmd"
     out_db = tmp_path / "all.ioc.subst"
+
+    pvi_defs.link_files([samples / "yaml" / "simple.pvi.device.yaml"])
 
     run_cli(
         "runtime",
@@ -161,3 +169,12 @@ def test_build_utils_features(tmp_path: Path, samples: Path):
     example_db = (samples / "outputs" / "utils.ioc.subst").read_text()
     actual_db = out_db.read_text()
     assert example_db == actual_db
+
+
+def test_generate_links_ibek(samples: Path, mocker: MockerFixture):
+    symlink_mock = mocker.patch("ibek.support_cmds.commands.symlink_files")
+
+    generate_links(Path("yaml"), samples)
+
+    symlink_mock.assert_any_call(samples / "yaml", "*pvi.device.yaml", PVI_DEFS)
+    symlink_mock.assert_any_call(samples / "yaml", "*ibek.support.yaml", IBEK_DEFS)

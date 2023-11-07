@@ -27,7 +27,10 @@ MODULES = SUPPORT / "configure/MODULES"
 
 # Folder containing templates for IOC src etc.
 TEMPLATES = Path(__file__).parent / "templates"
-IBEK_FILES = EPICS_ROOT / "ibek"
+
+# Definitions populated at container build time
+IBEK_DEFS = EPICS_ROOT / "ibek-defs"
+PVI_DEFS = EPICS_ROOT / "pvi-defs"
 
 IOC_DBDS = SUPPORT / "configure/dbd_list"
 IOC_LIBS = SUPPORT / "configure/lib_list"
