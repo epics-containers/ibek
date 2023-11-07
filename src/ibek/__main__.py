@@ -3,12 +3,11 @@ from typing import Optional
 import typer
 from ruamel.yaml import YAML
 
+from ibek._version import __version__
+from ibek.globals import NaturalOrderGroup
 from ibek.ioc_cmds.commands import ioc_cli
 from ibek.runtime_cmds.commands import runtime_cli
 from ibek.support_cmds.commands import support_cli
-
-from ._version import __version__
-from .globals import NaturalOrderGroup
 
 cli = typer.Typer(cls=NaturalOrderGroup)
 
