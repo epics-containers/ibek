@@ -20,6 +20,7 @@ from ibek.globals import (
     IBEK_DEFS,
     IOC_DBDS,
     IOC_LIBS,
+    PVI_DEFS,
     RELEASE,
     RUNTIME_DEBS,
     SUPPORT,
@@ -36,6 +37,7 @@ from ibek.support_cmds.files import (
     add_list_to_file,
     add_text_once,
     get_config_site_file,
+    symlink_files,
 )
 
 
@@ -231,6 +233,12 @@ def compile(
 
 @support_cli.command()
 def generate_links(
+    support_module: Annotated[
+        Path,
+        typer.Argument(
+            help="Support module to generate links for (directory in ibek-support)"
+        ),
+    ],
     ibek_support: Annotated[
         Optional[Path],
         typer.Option(
@@ -239,30 +247,17 @@ def generate_links(
         ),
     ] = None,
 ):
+    """Generate symlinks to the ibek and pvi YAML files for a compiled IOC.
+
+    Args:
+        support_module: Support module to generate links for
+        ibek_support: Root of ibek support to find support module directory in
+
     """
-    generate symlinks to the bob, pvi and support YAML for a compiled IOC
-    """
+    support_defs = (ibek_support or get_ioc_source() / "ibek-support") / support_module
 
-    # symlink the bob YAML
-    # TODO TODO
-    # symlink the pvi YAML
-
-    # TODO ALSO symlink pvi YAML and read the bobs out of e.g. links/ibek/ADCore.ibek.support.yaml
-    # and link them too
-    # see line 33 gen_scripts.py
-
-    # symlink the support YAML
-    from_path = ibek_support or get_ioc_source() / "ibek-support"
-
-    support_yaml = from_path.glob("*/*.ibek.support.yaml")
-
-    to_path = IBEK_DEFS
-    to_path.mkdir(parents=True, exist_ok=True)
-    for yaml in support_yaml:
-        link_from = to_path / yaml.name
-        link_from.unlink(missing_ok=True)
-        typer.echo(f"symlinking {yaml} to {to_path}")
-        link_from.symlink_to(yaml)
+    symlink_files(support_defs, "*ibek.support.yaml", IBEK_DEFS)
+    symlink_files(support_defs, "*pvi.device.yaml", PVI_DEFS)
 
 
 @support_cli.command()

@@ -34,6 +34,8 @@ dev = [
     "pydata-sphinx-theme>=0.12",
     "pytest",
     "pytest-cov",
+    "pytest-mock",
+    "pytest-env",
     "ruff",
     "Sphinx==6.2.1",
     "sphinx-autobuild",
@@ -71,6 +73,10 @@ filterwarnings = ["error", "ignore::pytest_cov.plugin.CovDisabledWarning"]
 # Doctest python code in docs, python code in src docstrings, test functions in tests
 testpaths = "docs src tests"
 
+env = [
+    "EPICS_ROOT=/tmp"
+]
+
 [tool.coverage.run]
 data_file = "/tmp/ibek.coverage"
 
@@ -101,7 +107,6 @@ commands =
     pre-commit: pre-commit run --all-files {posargs}
     docs: sphinx-{posargs:build -EW --keep-going} -T docs build/html
 """
-
 
 [tool.ruff]
 src = ["src", "tests"]
