@@ -141,12 +141,25 @@ class ArgInfo:
                 new_yaml_arg["type"] = typ
                 new_yaml_arg["name"] = arg_name
                 new_yaml_arg["description"] = PreservedScalarString(description_str)
-                if default:
+                if default is not None:
                     new_yaml_arg["default"] = default
                 if typ == "enum":
                     new_yaml_arg["values"] = {
                         str(label): None for label in details.labels
                     }
+                # coerce type of args that have default strings which are ints or reals
+                if typ == "str" and default:
+                    try:
+                        i = int(default)
+                        new_yaml_arg["default"] = i
+                        new_yaml_arg["type"] = "int"
+                    except ValueError:
+                        try:
+                            f = float(default)
+                            new_yaml_arg["default"] = f
+                            new_yaml_arg["type"] = "float"
+                        except ValueError:
+                            pass
 
                 self.yaml_args.append(new_yaml_arg)
                 self.all_args.append(arg_name)
@@ -424,16 +437,17 @@ class Builder2Support:
         def tidy_up(yaml):
             # add blank lines between major fields
             for field in [
-                "- name:",
-                "  databases:",
-                "  pre_init:",
-                "  post_init:",
+                "  - name:",
+                "    databases:",
+                "    pre_init:",
+                "    post_init:",
                 "module",
                 "defs",
-                "  - type:",
+                "      - type:",
+                "      - file:",
+                "      - value:",
             ]:
                 yaml = re.sub(r"(\n%s)" % field, "\n\\g<1>", yaml)
-
             return yaml
 
         yaml = YAML()
@@ -443,11 +457,13 @@ class Builder2Support:
         # add support yaml schema
         self.yaml_tree.yaml_add_eol_comment(
             "yaml-language-server: $schema=https://github.com/epics-"
-            "containers/ibek/releases/download/1.2.0/ibek.support.schema.json"
+            "containers/ibek/releases/download/1.2.0/ibek.support.schema.json",
+            column=0,
         )
 
         print("\nWriting YAML output to %s ..." % filename)
         with open(filename, "wb") as f:
+            yaml.indent(mapping=2, sequence=4, offset=2)
             yaml.dump(self.yaml_tree, f, transform=tidy_up)
 
 
