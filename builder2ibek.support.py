@@ -211,6 +211,7 @@ class ArgInfo:
         if name not in self.builder_args:
             if ArgInfo.arg_num in self.overrides:
                 value = self.overrides[ArgInfo.arg_num]
+                typ = type(value).__name__
 
             self.builder_args[name] = value
 
