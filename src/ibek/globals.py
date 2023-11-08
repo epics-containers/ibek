@@ -36,6 +36,7 @@ PVI_DEFS = EPICS_ROOT / "pvi-defs"
 IBEK_SUPPORT = Path("ibek-support")
 IBEK_GLOBALS = Path("_global")
 SUPPORT_YAML_PATTERN = "*ibek.support.yaml"
+PVI_YAML_PATTERN = "*pvi.device.yaml"
 
 # Assets generated at runtime
 RUNTIME_OUTPUT_PATH = EPICS_ROOT / "runtime"
