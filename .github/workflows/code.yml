@@ -37,7 +37,7 @@ jobs:
         # Make one version be non-editable to test both paths of version code
         include:
           - os: "ubuntu-latest"
-            python: "3.9"
+            python: "3.10"
             install: ".[dev]"
 
     runs-on: ${{ matrix.os }}
