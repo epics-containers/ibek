@@ -95,7 +95,9 @@ def symlink_files(source_directory: Path, file_pattern: str, target_directory: P
         target_directory: Directory to create symlinks in
 
     """
-    typer.echo(f"Symlinking {file_pattern} files:")
+    typer.echo(
+        f"Symlinking {file_pattern} from {source_directory} to {target_directory}:"
+    )
     target_directory.mkdir(parents=True, exist_ok=True)
     for yaml in source_directory.glob(file_pattern):
         typer.echo(f" {target_directory / yaml.name} -> {yaml}")

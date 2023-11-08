@@ -10,7 +10,7 @@ from pathlib import Path
 from pytest_mock import MockerFixture
 
 from ibek import __version__
-from ibek.globals import IBEK_DEFS, PVI_DEFS
+from ibek.globals import IBEK_DEFS, PVI_DEFS, PVI_YAML_PATTERN, SUPPORT_YAML_PATTERN
 from ibek.ioc import clear_entity_model_ids
 from ibek.support_cmds.commands import generate_links
 from tests.conftest import PviDefs, run_cli
@@ -176,5 +176,5 @@ def test_generate_links_ibek(samples: Path, mocker: MockerFixture):
 
     generate_links(Path("yaml"), samples)
 
-    symlink_mock.assert_any_call(samples / "yaml", "*pvi.device.yaml", PVI_DEFS)
-    symlink_mock.assert_any_call(samples / "yaml", "*ibek.support.yaml", IBEK_DEFS)
+    symlink_mock.assert_any_call(samples / "yaml", PVI_YAML_PATTERN, PVI_DEFS)
+    symlink_mock.assert_any_call(samples / "yaml", SUPPORT_YAML_PATTERN, IBEK_DEFS)

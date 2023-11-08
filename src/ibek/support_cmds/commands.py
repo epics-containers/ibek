@@ -18,12 +18,16 @@ from typing_extensions import Annotated
 
 from ibek.globals import (
     IBEK_DEFS,
+    IBEK_GLOBALS,
+    IBEK_SUPPORT,
     IOC_DBDS,
     IOC_LIBS,
     PVI_DEFS,
+    PVI_YAML_PATTERN,
     RELEASE,
     RUNTIME_DEBS,
     SUPPORT,
+    SUPPORT_YAML_PATTERN,
     NaturalOrderGroup,
 )
 from ibek.support import Support
@@ -254,10 +258,12 @@ def generate_links(
         ibek_support: Root of ibek support to find support module directory in
 
     """
-    support_defs = (ibek_support or get_ioc_source() / "ibek-support") / support_module
+    support_defs = (ibek_support or get_ioc_source() / IBEK_SUPPORT) / support_module
+    support_globals = (ibek_support or get_ioc_source() / IBEK_SUPPORT) / IBEK_GLOBALS
 
-    symlink_files(support_defs, "*ibek.support.yaml", IBEK_DEFS)
-    symlink_files(support_defs, "*pvi.device.yaml", PVI_DEFS)
+    symlink_files(support_defs, SUPPORT_YAML_PATTERN, IBEK_DEFS)
+    symlink_files(support_globals, SUPPORT_YAML_PATTERN, IBEK_DEFS)
+    symlink_files(support_defs, PVI_YAML_PATTERN, PVI_DEFS)
 
 
 @support_cli.command()
