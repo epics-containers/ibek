@@ -1,3 +1,4 @@
+import os
 import shutil
 from pathlib import Path
 from typing import List
@@ -6,10 +7,12 @@ from pytest import fixture
 from ruamel.yaml import YAML
 from typer.testing import CliRunner
 
-from ibek.__main__ import cli
-from ibek.globals import PVI_DEFS
-from ibek.ioc import clear_entity_model_ids, make_entity_models
-from ibek.support import Support
+os.environ["EPICS_ROOT"] = str(Path(__file__).parent / "samples" / "epics")
+
+from ibek.__main__ import cli  # noqa: E402
+from ibek.globals import PVI_DEFS  # noqa: E402
+from ibek.ioc import clear_entity_model_ids, make_entity_models  # noqa: E402
+from ibek.support import Support  # noqa: E402
 
 runner = CliRunner()
 
@@ -78,22 +81,3 @@ def epics_classes(epics_support):
     # return the namespace so that callers have access to all of the
     # generated dataclasses
     return namespace
-
-
-class PviDefs:
-    @staticmethod
-    def link_files(files: List[Path]):
-        PVI_DEFS.mkdir()
-        for f in files:
-            (PVI_DEFS / f.name).symlink_to(f)
-
-    @staticmethod
-    def rm():
-        shutil.rmtree(PVI_DEFS, ignore_errors=True)
-
-
-@fixture
-def pvi_defs():
-    pvi_defs = PviDefs()
-    yield pvi_defs
-    pvi_defs.rm()

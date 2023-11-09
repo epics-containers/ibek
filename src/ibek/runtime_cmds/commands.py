@@ -14,6 +14,7 @@ from ibek.globals import (
     PVI_DEFS,
     RUNTIME_OUTPUT_PATH,
     NaturalOrderGroup,
+    render_with_utils,
 )
 from ibek.ioc import IOC, Entity
 from ibek.support import Database
@@ -98,7 +99,10 @@ def generate_pvi(ioc: IOC) -> Tuple[List[IndexEntry], List[Tuple[Database, Entit
             device = Device.deserialize(pvi_yaml)
             device.deserialize_parents([PVI_DEFS])
 
-            macros = {"prefix": entity_pvi.prefix}
+            # render the prefix value for the device from the instance parameters
+            prefix_value = render_with_utils(entity, entity_pvi.prefix)
+
+            macros = {"prefix": prefix_value}
 
             if entity_pvi.pva:
                 # Create a template with the V4 structure defining a PVI interface

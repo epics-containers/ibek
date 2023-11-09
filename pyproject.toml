@@ -72,10 +72,6 @@ filterwarnings = ["error", "ignore::pytest_cov.plugin.CovDisabledWarning"]
 # Doctest python code in docs, python code in src docstrings, test functions in tests
 testpaths = "docs src tests"
 
-env = [
-    "EPICS_ROOT=/tmp"
-]
-
 [tool.coverage.run]
 data_file = "/tmp/ibek.coverage"
 
