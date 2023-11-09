@@ -42,9 +42,9 @@ def generate(
 
     # Clear out generated files so developers know if something stop being generated
     shutil.rmtree(PVI_OUTPUT_PATH, ignore_errors=True)
-    PVI_OUTPUT_PATH.mkdir()
+    PVI_OUTPUT_PATH.mkdir(exist_ok=True)
     shutil.rmtree(OPI_OUTPUT_PATH, ignore_errors=True)
-    OPI_OUTPUT_PATH.mkdir()
+    OPI_OUTPUT_PATH.mkdir(exist_ok=True)
 
     pvi_index_entries, pvi_databases = generate_pvi(ioc_instance)
     generate_index(ioc_instance.ioc_name, pvi_index_entries)
