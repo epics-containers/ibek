@@ -107,7 +107,7 @@ def generate_pvi(ioc: IOC) -> Tuple[List[IndexEntry], List[Tuple[Database, Entit
 
                 # Add to extra databases to be added into substitution file
                 databases.append(
-                    (Database(file=output_template.as_posix(), args=macros), entity)
+                    (Database(file=output_template.name, args=macros), entity)
                 )
 
             if device_name not in formatted_pvi_devices:

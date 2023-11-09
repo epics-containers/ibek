@@ -83,7 +83,7 @@ if [ -f ${ibek_src} ]; then
     # build expanded database using msi
     if [ -f ${db_src} ]; then
         includes=$(for i in ${SUPPORT}/*/db; do echo -n "-I $i "; done)
-        bash -c "msi -o${epics_db} ${includes} -S${db_src}"
+        bash -c "msi -o${epics_db} ${includes} -I${RUNTIME_DIR} -S${db_src}"
     fi
 
 # 2. st.cmd + ioc.subst ************************************************
@@ -92,7 +92,7 @@ elif [ -f ${ioc_startup} ] ; then
     if [ -f ${CONFIG_DIR}/ioc.subst ]; then
         # generate ioc.db from ioc.subst, including all templates from SUPPORT
         includes=$(for i in ${SUPPORT}/*/db; do echo -n "-I $i "; done)
-        msi ${includes} -S ${CONFIG_DIR}/ioc.subst -o ${epics_db}
+        msi ${includes} -I${RUNTIME_DIR} -S ${CONFIG_DIR}/ioc.subst -o ${epics_db}
     fi
     final_ioc_startup=${ioc_startup}
 
