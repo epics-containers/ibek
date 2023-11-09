@@ -1,4 +1,5 @@
 import json
+import logging
 import shutil
 import subprocess
 from pathlib import Path
@@ -9,9 +10,11 @@ from jinja2 import Template
 
 from ibek.gen_scripts import ioc_create_model
 from ibek.globals import (
+    IBEK_DEFS,
     IOC_DBDS,
     IOC_FOLDER,
     IOC_LIBS,
+    SUPPORT_YAML_PATTERN,
     TEMPLATES,
     NaturalOrderGroup,
 )
@@ -19,6 +22,7 @@ from ibek.ioc_cmds.docker import build_dockerfile
 
 from .assets import extract_assets, get_ioc_source
 
+log = logging.getLogger(__name__)
 ioc_cli = typer.Typer(cls=NaturalOrderGroup)
 
 
@@ -44,18 +48,33 @@ def build_docker(
 @ioc_cli.command()
 def generate_schema(
     definitions: List[Path] = typer.Argument(
-        ...,
+        None,  # Note: typer converts None to an empty list because the type is List
         help="File paths to one or more support module YAML files",
     ),
     output: Annotated[
         Optional[Path],
         typer.Option(help="The file path to the schema file to be written"),
     ] = None,
+    ibek_defs: bool = typer.Option(
+        True, help=f"Include definitions in {IBEK_DEFS} in generated schema"
+    ),
 ):
     """
     Create a json schema from a number of support_module.ibek.support.yaml
     files
     """
+    if not (definitions or ibek_defs):
+        log.error("One or more `definitions` required with `--no-ibek-defs`")
+        raise typer.Exit(1)
+
+    if ibek_defs:
+        # this allows us to use the definitions inside the container
+        # which are in a known location after the container is built
+        definitions += IBEK_DEFS.glob(SUPPORT_YAML_PATTERN)
+
+    if not definitions:
+        log.error(f"No `definitions` given and none found in {IBEK_DEFS}")
+        raise typer.Exit(1)
 
     ioc_model = ioc_create_model(definitions)
     schema = json.dumps(ioc_model.model_json_schema(), indent=2)
@@ -96,7 +115,7 @@ def make_source_template(
             help="Where to make the ioc folder. Defaults to under the "
             "generic IOC source folder",
         ),
-    ] = None
+    ] = None,
 ):
     """
     Create a new IOC boilerplate source tree in the given folder.

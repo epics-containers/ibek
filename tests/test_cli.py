@@ -57,7 +57,13 @@ def test_ioc_schema(tmp_path: Path, samples: Path):
     yaml_path1 = samples / "yaml" / "objects.ibek.support.yaml"
     yaml_path2 = samples / "yaml" / "all.ibek.support.yaml"
     run_cli(
-        "ioc", "generate-schema", yaml_path1, yaml_path2, "--output", schema_combined
+        "ioc",
+        "generate-schema",
+        "--no-ibek-defs",
+        yaml_path1,
+        yaml_path2,
+        "--output",
+        schema_combined,
     )
 
     expected = json.loads(
