@@ -9,6 +9,7 @@
 
 export SAMPLES_DIR=$(realpath $(dirname "${BASH_SOURCE[0]}"))/samples
 
+export EPICS_ROOT=${SAMPLES_DIR}/epics
 
 # this is so relative schema mode lines work
 cd $SAMPLES_DIR

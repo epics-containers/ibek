@@ -3,12 +3,8 @@ from typing import List
 
 import typer
 
-from ibek.gen_scripts import (
-    create_boot_script,
-    create_db_script,
-    ioc_deserialize,
-)
-from ibek.globals import NaturalOrderGroup
+from ibek.gen_scripts import create_boot_script, create_db_script, ioc_deserialize
+from ibek.globals import RUNTIME_OUTPUT_PATH, NaturalOrderGroup
 
 runtime_cli = typer.Typer(cls=NaturalOrderGroup)
 
@@ -22,11 +18,11 @@ def generate(
         ..., help="The filepath to a support module definition file"
     ),
     out: Path = typer.Option(
-        default="config/st.cmd",
+        default=RUNTIME_OUTPUT_PATH / "st.cmd",
         help="Path to output startup script",
     ),
     db_out: Path = typer.Option(
-        default="config/ioc.subst",
+        default=RUNTIME_OUTPUT_PATH / "ioc.subst",
         help="Path to output database expansion shell script",
     ),
 ):

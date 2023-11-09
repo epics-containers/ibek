@@ -1,12 +1,15 @@
+import os
 from pathlib import Path
 
 from pytest import fixture
 from ruamel.yaml import YAML
 from typer.testing import CliRunner
 
-from ibek.__main__ import cli
-from ibek.ioc import clear_entity_model_ids, make_entity_models
-from ibek.support import Support
+os.environ["EPICS_ROOT"] = str(Path(__file__).parent / "samples" / "epics")
+
+from ibek.__main__ import cli  # noqa: E402
+from ibek.ioc import clear_entity_model_ids, make_entity_models  # noqa: E402
+from ibek.support import Support  # noqa: E402
 
 runner = CliRunner()
 
