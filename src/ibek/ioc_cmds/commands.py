@@ -1,4 +1,5 @@
 import json
+import logging
 import shutil
 import subprocess
 from pathlib import Path
@@ -9,9 +10,11 @@ from jinja2 import Template
 
 from ibek.gen_scripts import ioc_create_model
 from ibek.globals import (
+    IBEK_DEFS,
     IOC_DBDS,
     IOC_FOLDER,
     IOC_LIBS,
+    SUPPORT_YAML_PATTERN,
     TEMPLATES,
     NaturalOrderGroup,
 )
@@ -19,6 +22,7 @@ from ibek.ioc_cmds.docker import build_dockerfile
 
 from .assets import extract_assets, get_ioc_source
 
+log = logging.getLogger(__name__)
 ioc_cli = typer.Typer(cls=NaturalOrderGroup)
 
 
@@ -44,18 +48,27 @@ def build_docker(
 @ioc_cli.command()
 def generate_schema(
     definitions: List[Path] = typer.Argument(
-        ...,
+        None,
         help="File paths to one or more support module YAML files",
     ),
     output: Annotated[
         Optional[Path],
         typer.Option(help="The file path to the schema file to be written"),
     ] = None,
+    use_defs: bool = typer.Option(False, help="Use definitions inside the container"),
 ):
     """
     Create a json schema from a number of support_module.ibek.support.yaml
     files
     """
+    if use_defs:
+        # this allows us to use the definitions inside the container
+        # which are in a known location after the container is built
+        definitions += IBEK_DEFS.glob(SUPPORT_YAML_PATTERN)
+    else:
+        if len(definitions) == 0:
+            log.error("Provide support YAML definitions or --use-defs")
+            raise typer.Exit(1)
 
     ioc_model = ioc_create_model(definitions)
     schema = json.dumps(ioc_model.model_json_schema(), indent=2)
@@ -96,7 +109,7 @@ def make_source_template(
             help="Where to make the ioc folder. Defaults to under the "
             "generic IOC source folder",
         ),
-    ] = None
+    ] = None,
 ):
     """
     Create a new IOC boilerplate source tree in the given folder.
