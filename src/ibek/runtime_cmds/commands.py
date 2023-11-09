@@ -9,7 +9,12 @@ from pvi._format.template import format_template
 from pvi.device import Device
 
 from ibek.gen_scripts import create_boot_script, create_db_script, ioc_deserialize
-from ibek.globals import OPI_OUTPUT_PATH, PVI_DEFS, PVI_OUTPUT_PATH, NaturalOrderGroup
+from ibek.globals import (
+    OPI_OUTPUT_PATH,
+    PVI_DEFS,
+    RUNTIME_OUTPUT_PATH,
+    NaturalOrderGroup,
+)
 from ibek.ioc import IOC, Entity
 from ibek.support import Database
 
@@ -27,11 +32,11 @@ def generate(
         ..., help="The filepath to a support module definition file"
     ),
     out: Path = typer.Option(
-        default="config/st.cmd",
+        default=RUNTIME_OUTPUT_PATH / "st.cmd",
         help="Path to output startup script",
     ),
     db_out: Path = typer.Option(
-        default="config/ioc.subst",
+        default=RUNTIME_OUTPUT_PATH / "ioc.subst",
         help="Path to output database expansion shell script",
     ),
 ):
@@ -41,8 +46,8 @@ def generate(
     ioc_instance = ioc_deserialize(instance, definitions)
 
     # Clear out generated files so developers know if something stop being generated
-    shutil.rmtree(PVI_OUTPUT_PATH, ignore_errors=True)
-    PVI_OUTPUT_PATH.mkdir(exist_ok=True)
+    shutil.rmtree(RUNTIME_OUTPUT_PATH, ignore_errors=True)
+    RUNTIME_OUTPUT_PATH.mkdir(exist_ok=True)
     shutil.rmtree(OPI_OUTPUT_PATH, ignore_errors=True)
     OPI_OUTPUT_PATH.mkdir(exist_ok=True)
 
@@ -97,7 +102,7 @@ def generate_pvi(ioc: IOC) -> Tuple[List[IndexEntry], List[Tuple[Database, Entit
 
             if entity_pvi.pva:
                 # Create a template with the V4 structure defining a PVI interface
-                output_template = PVI_OUTPUT_PATH / f"{device_name}.pvi.template"
+                output_template = RUNTIME_OUTPUT_PATH / f"{device_name}.pvi.template"
                 format_template(device, PVI_PV_PREFIX, output_template)
 
                 # Add to extra databases to be added into substitution file

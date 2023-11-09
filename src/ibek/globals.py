@@ -40,7 +40,7 @@ PVI_YAML_PATTERN = "*pvi.device.yaml"
 
 # UIs and templates generated at runtime
 OPI_OUTPUT_PATH = EPICS_ROOT / "opi"
-PVI_OUTPUT_PATH = EPICS_ROOT / "pvi"
+RUNTIME_OUTPUT_PATH = EPICS_ROOT / "runtime"
 
 IOC_DBDS = SUPPORT / "configure/dbd_list"
 IOC_LIBS = SUPPORT / "configure/lib_list"

@@ -20,6 +20,6 @@ ExampleTestFunction 10.0.0.2 Consumer of another port AsynPort2 AsynPort2.10.0.0
 ExampleTestFunction 10.0.0.2 Another Consumer of the 2nd port AsynPort2 AsynPort2.10.0.0.2
 # PORT defaults to the id of PORT, i.e. PORT.name
 
-dbLoadRecords /tmp/ioc.db
+dbLoadRecords $(RUNTIME_DIR)/ioc.db
 iocInit
 
