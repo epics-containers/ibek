@@ -27,7 +27,17 @@ MODULES = SUPPORT / "configure/MODULES"
 
 # Folder containing templates for IOC src etc.
 TEMPLATES = Path(__file__).parent / "templates"
-IBEK_FILES = EPICS_ROOT / "ibek"
+
+# Definitions populated at container build time
+IBEK_DEFS = EPICS_ROOT / "ibek-defs"
+
+# Paths for ibek-support
+IBEK_SUPPORT = Path("ibek-support")
+IBEK_GLOBALS = Path("_global")
+SUPPORT_YAML_PATTERN = "*ibek.support.yaml"
+
+# Assets generated at runtime
+RUNTIME_OUTPUT_PATH = EPICS_ROOT / "runtime"
 
 IOC_DBDS = SUPPORT / "configure/dbd_list"
 IOC_LIBS = SUPPORT / "configure/lib_list"

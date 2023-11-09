@@ -9,7 +9,7 @@ dbLoadDatabase dbd/ioc.dbd
 ioc_registerRecordDeviceDriver pdbbase
 
 {{ script_elements }}
-dbLoadRecords /tmp/ioc.db
+dbLoadRecords $(RUNTIME_DIR)/ioc.db
 iocInit
 
 {% if post_ioc_init_elements %}
