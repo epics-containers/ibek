@@ -8,7 +8,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>ibek.support &#8212; ibek 1.4.3.dev9+g511b71b2 documentation</title>
+    <title>ibek.support &#8212; ibek 1.4.3.dev9+gc12b33f7 documentation</title>
   
   
   
@@ -619,8 +619,12 @@ document.write(`
         <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Whether to add generated UI to index for Entity&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">True</span>
     <span class="p">)</span>
     <span class="n">prefix</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s2">&quot;PV prefix to pass as $(prefix) on index button&quot;</span><span class="p">)</span>
-    <span class="n">pva</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
-        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Whether to generate PVA structure template&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">False</span>
+    <span class="n">pva_template</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
+        <span class="n">description</span><span class="o">=</span><span class="p">(</span>
+            <span class="s2">&quot;Whether to generate a database template with info tags that create a &quot;</span>
+            <span class="s2">&quot;PVAccess structure defining the PV interface (PVI) for this entity&quot;</span>
+        <span class="p">),</span>
+        <span class="n">default</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
     <span class="p">)</span></div>
 
 
