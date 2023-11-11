@@ -4,16 +4,16 @@ Functions for building the db and boot scripts
 import logging
 import re
 from pathlib import Path
-from typing import List, Type
+from typing import List, Tuple, Type
 
 from jinja2 import Template
 from ruamel.yaml.main import YAML
 
 from .globals import TEMPLATES
-from .ioc import IOC, clear_entity_model_ids, make_entity_models, make_ioc_model
+from .ioc import IOC, Entity, clear_entity_model_ids, make_entity_models, make_ioc_model
 from .render import Render
 from .render_db import RenderDb
-from .support import Support
+from .support import Database, Support
 
 log = logging.getLogger(__name__)
 
@@ -62,7 +62,9 @@ def ioc_deserialize(ioc_instance_yaml: Path, definition_yaml: List[Path]) -> IOC
     return ioc_instance
 
 
-def create_db_script(ioc_instance: IOC) -> str:
+def create_db_script(
+    ioc_instance: IOC, extra_databases: List[Tuple[Database, Entity]]
+) -> str:
     """
     Create make_db.sh script for expanding the database templates
     """
@@ -71,7 +73,7 @@ def create_db_script(ioc_instance: IOC) -> str:
 
         renderer = RenderDb(ioc_instance)
 
-        templates = renderer.render_database()
+        templates = renderer.render_database(extra_databases)
 
         return Template(jinja_txt).render(templates=templates)
 

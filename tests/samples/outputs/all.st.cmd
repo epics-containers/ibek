@@ -32,7 +32,7 @@ my_mixed_enum_no_default =
 ExampleTestFunction 127.0.0.1 Consumer Two With DB Ref1 Ref1.127.0.0.1
 # PORT defaults to the id of PORT, i.e. PORT.name
 
-dbLoadRecords /tmp/ioc.db
+dbLoadRecords $(RUNTIME_DIR)/ioc.db
 iocInit
 
 

@@ -7,8 +7,12 @@ import subprocess
 import sys
 from pathlib import Path
 
+from pytest_mock import MockerFixture
+
 from ibek import __version__
+from ibek.globals import IBEK_DEFS, PVI_DEFS, PVI_YAML_PATTERN, SUPPORT_YAML_PATTERN
 from ibek.ioc import clear_entity_model_ids
+from ibek.support_cmds.commands import generate_links
 from tests.conftest import run_cli
 
 
@@ -53,7 +57,13 @@ def test_ioc_schema(tmp_path: Path, samples: Path):
     yaml_path1 = samples / "yaml" / "objects.ibek.support.yaml"
     yaml_path2 = samples / "yaml" / "all.ibek.support.yaml"
     run_cli(
-        "ioc", "generate-schema", yaml_path1, yaml_path2, "--output", schema_combined
+        "ioc",
+        "generate-schema",
+        "--no-ibek-defs",
+        yaml_path1,
+        yaml_path2,
+        "--output",
+        schema_combined,
     )
 
     expected = json.loads(
@@ -132,6 +142,14 @@ def test_build_runtime_multiple(tmp_path: Path, samples: Path):
     actual_db = out_db.read_text()
     assert example_db == actual_db
 
+    example_index = (samples / "outputs" / "index.bob").read_text()
+    actual_index = (samples / "epics" / "opi" / "index.bob").read_text()
+    assert example_index == actual_index
+
+    example_pvi = (samples / "outputs" / "simple.pvi.bob").read_text()
+    actual_pvi = (samples / "epics" / "opi" / "simple.pvi.bob").read_text()
+    assert example_pvi == actual_pvi
+
 
 def test_build_utils_features(tmp_path: Path, samples: Path):
     """
@@ -161,3 +179,12 @@ def test_build_utils_features(tmp_path: Path, samples: Path):
     example_db = (samples / "outputs" / "utils.ioc.subst").read_text()
     actual_db = out_db.read_text()
     assert example_db == actual_db
+
+
+def test_generate_links_ibek(samples: Path, mocker: MockerFixture):
+    symlink_mock = mocker.patch("ibek.support_cmds.commands.symlink_files")
+
+    generate_links(Path("yaml"), samples)
+
+    symlink_mock.assert_any_call(samples / "yaml", PVI_YAML_PATTERN, PVI_DEFS)
+    symlink_mock.assert_any_call(samples / "yaml", SUPPORT_YAML_PATTERN, IBEK_DEFS)
