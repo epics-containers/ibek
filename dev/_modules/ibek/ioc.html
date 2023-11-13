@@ -8,7 +8,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>ibek.ioc &#8212; ibek 1.4.2.dev7+gab560a6e documentation</title>
+    <title>ibek.ioc &#8212; ibek 1.5.1.dev1+g52233540 documentation</title>
   
   
   
@@ -470,8 +470,9 @@ document.write(`
 <span class="kn">from</span> <span class="nn">pydantic.fields</span> <span class="kn">import</span> <span class="n">FieldInfo</span>
 <span class="kn">from</span> <span class="nn">pydantic_core</span> <span class="kn">import</span> <span class="n">PydanticUndefined</span>
 
-<span class="kn">from</span> <span class="nn">.globals</span> <span class="kn">import</span> <span class="n">BaseSettings</span><span class="p">,</span> <span class="n">render_with_utils</span>
+<span class="kn">from</span> <span class="nn">.globals</span> <span class="kn">import</span> <span class="n">BaseSettings</span>
 <span class="kn">from</span> <span class="nn">.support</span> <span class="kn">import</span> <span class="n">Definition</span><span class="p">,</span> <span class="n">EnumArg</span><span class="p">,</span> <span class="n">IdArg</span><span class="p">,</span> <span class="n">ObjectArg</span><span class="p">,</span> <span class="n">Support</span>
+<span class="kn">from</span> <span class="nn">.utils</span> <span class="kn">import</span> <span class="n">UTILS</span>
 
 <span class="n">id_to_entity</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Entity</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
 
@@ -514,7 +515,7 @@ document.write(`
                 <span class="n">id_to_entity</span><span class="p">[</span><span class="n">value</span><span class="p">]</span> <span class="o">=</span> <span class="n">entity</span>
             <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
                 <span class="c1"># Jinja expansion of any of the Entity&#39;s string args/values</span>
-                <span class="nb">setattr</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">arg</span><span class="p">,</span> <span class="n">render_with_utils</span><span class="p">(</span><span class="n">entity_dict</span><span class="p">,</span> <span class="n">value</span><span class="p">))</span>
+                <span class="nb">setattr</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">arg</span><span class="p">,</span> <span class="n">UTILS</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="n">entity_dict</span><span class="p">,</span> <span class="n">value</span><span class="p">))</span>
         <span class="k">return</span> <span class="n">entity</span></div>
 
     <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>

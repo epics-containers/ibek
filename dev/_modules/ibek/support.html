@@ -8,7 +8,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>ibek.support &#8212; ibek 1.4.2.dev7+gab560a6e documentation</title>
+    <title>ibek.support &#8212; ibek 1.5.1.dev1+g52233540 documentation</title>
   
   
   
@@ -458,7 +458,7 @@ document.write(`
 
 <span class="kn">import</span> <span class="nn">json</span>
 <span class="kn">from</span> <span class="nn">enum</span> <span class="kn">import</span> <span class="n">Enum</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">,</span> <span class="n">Union</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Mapping</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">,</span> <span class="n">Union</span>
 
 <span class="kn">from</span> <span class="nn">pydantic</span> <span class="kn">import</span> <span class="n">Field</span><span class="p">,</span> <span class="n">PydanticUndefinedAnnotation</span>
 <span class="kn">from</span> <span class="nn">typing_extensions</span> <span class="kn">import</span> <span class="n">Literal</span>
@@ -556,7 +556,7 @@ document.write(`
         <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Filename of the database template in &lt;module_root&gt;/db&quot;</span>
     <span class="p">)</span>
 
-    <span class="n">args</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
+    <span class="n">args</span><span class="p">:</span> <span class="n">Mapping</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
         <span class="n">description</span><span class="o">=</span><span class="p">(</span>
             <span class="s2">&quot;Dictionary of args and values to pass through to database. &quot;</span>
             <span class="s2">&quot;A value of None is equivalent to ARG: &#39;{{ ARG }}&#39;&quot;</span>
@@ -609,19 +609,23 @@ document.write(`
 <span class="n">Script</span> <span class="o">=</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">Text</span><span class="p">,</span> <span class="n">Comment</span><span class="p">]]</span>
 
 
-<div class="viewcode-block" id="OpiType"><a class="viewcode-back" href="../../user/reference/api.html#ibek.support.OpiType">[docs]</a><span class="k">class</span> <span class="nc">OpiType</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
-    <span class="n">pvi</span> <span class="o">=</span> <span class="s2">&quot;pvi&quot;</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;declares a PVI YAML file that generates bob GUI at runtime&quot;&quot;&quot;</span>
-    <span class="n">bob</span> <span class="o">=</span> <span class="s2">&quot;bob&quot;</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;declares a hand crafted bob file&quot;&quot;&quot;</span></div>
+<div class="viewcode-block" id="EntityPVI"><a class="viewcode-back" href="../../user/reference/api.html#ibek.support.EntityPVI">[docs]</a><span class="k">class</span> <span class="nc">EntityPVI</span><span class="p">(</span><span class="n">BaseSettings</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Entity PVI definition&quot;&quot;&quot;</span>
 
-
-<div class="viewcode-block" id="Opi"><a class="viewcode-back" href="../../user/reference/api.html#ibek.support.Opi">[docs]</a><span class="k">class</span> <span class="nc">Opi</span><span class="p">(</span><span class="n">BaseSettings</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Describes one PVI YAML file&quot;&quot;&quot;</span>
-
-    <span class="nb">type</span><span class="p">:</span> <span class="n">OpiType</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s2">&quot;bob or pvi&quot;</span><span class="p">)</span>
-    <span class="n">file</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s2">&quot;filename of bob or pvi&quot;</span><span class="p">)</span>
-    <span class="n">prefix</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s2">&quot;Args to make unique screen&quot;</span><span class="p">)</span></div>
+    <span class="n">yaml_path</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
+        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Path to .pvi.device.yaml - absolute or relative to PVI_DEFS&quot;</span>
+    <span class="p">)</span>
+    <span class="n">index</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
+        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Whether to add generated UI to index for Entity&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">True</span>
+    <span class="p">)</span>
+    <span class="n">prefix</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s2">&quot;PV prefix to pass as $(prefix) on index button&quot;</span><span class="p">)</span>
+    <span class="n">pva_template</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
+        <span class="n">description</span><span class="o">=</span><span class="p">(</span>
+            <span class="s2">&quot;Whether to generate a database template with info tags that create a &quot;</span>
+            <span class="s2">&quot;PVAccess structure defining the PV interface (PVI) for this entity&quot;</span>
+        <span class="p">),</span>
+        <span class="n">default</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="Definition"><a class="viewcode-back" href="../../user/reference/api.html#ibek.support.Definition">[docs]</a><span class="k">class</span> <span class="nc">Definition</span><span class="p">(</span><span class="n">BaseSettings</span><span class="p">):</span>
@@ -643,7 +647,7 @@ document.write(`
         <span class="n">description</span><span class="o">=</span><span class="s2">&quot;The values IOC instance should supply&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="p">()</span>
     <span class="p">)</span>
     <span class="n">databases</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Database</span><span class="p">]</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
-        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Databases to instantiate&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="p">()</span>
+        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Databases to instantiate&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="p">[]</span>
     <span class="p">)</span>
     <span class="n">pre_init</span><span class="p">:</span> <span class="n">Script</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
         <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Startup script snippets to add before iocInit()&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="p">()</span>
@@ -655,9 +659,7 @@ document.write(`
     <span class="n">env_vars</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">EnvironmentVariable</span><span class="p">]</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
         <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Environment variables to set in the boot script&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="p">()</span>
     <span class="p">)</span>
-    <span class="n">opis</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Opi</span><span class="p">]</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
-        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Declares the PVI YAML for generating screens&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="p">()</span>
-    <span class="p">)</span>
+    <span class="n">pvi</span><span class="p">:</span> <span class="n">EntityPVI</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s2">&quot;PVI definition for Entity&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">_get_id_arg</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns the name of the ID argument for this definition, if it exists&quot;&quot;&quot;</span>
