@@ -17,8 +17,9 @@ from pydantic import (
 from pydantic.fields import FieldInfo
 from pydantic_core import PydanticUndefined
 
-from .globals import BaseSettings, render_with_utils
+from .globals import BaseSettings
 from .support import Definition, EnumArg, IdArg, ObjectArg, Support
+from .utils import UTILS
 
 id_to_entity: Dict[str, Entity] = {}
 
@@ -61,7 +62,7 @@ class Entity(BaseSettings):
                 id_to_entity[value] = entity
             elif isinstance(value, str):
                 # Jinja expansion of any of the Entity's string args/values
-                setattr(entity, arg, render_with_utils(entity_dict, value))
+                setattr(entity, arg, UTILS.render(entity_dict, value))
         return entity
 
     def __str__(self):

@@ -4,9 +4,9 @@ Functions for rendering lines in the boot script using Jinja2
 
 from typing import Callable, List, Optional, Union
 
-from .globals import render_with_utils
 from .ioc import IOC, Entity
 from .support import Comment, Script, Text, When
+from .utils import UTILS
 
 
 class Render:
@@ -45,7 +45,7 @@ class Render:
             raise NotImplementedError("When.last not yet implemented")
 
         # Render Jinja entries in the text
-        result = render_with_utils(instance, text)  # type: ignore
+        result = UTILS.render(instance, text)  # type: ignore
 
         if result == "":
             return ""
@@ -97,7 +97,10 @@ class Render:
         for variable in variables:
             # Substitute the name and value of the environment variable from args
             env_template = f"epicsEnvSet {variable.name} {variable.value}"
-            env_var_txt += render_with_utils(instance, env_template)  # type: ignore
+            env_var_txt += UTILS.render(
+                instance,
+                env_template,
+            )  # type: ignore
         return env_var_txt + "\n"
 
     def render_elements(
