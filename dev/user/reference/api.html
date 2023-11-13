@@ -9,7 +9,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
-    <title>API &#8212; ibek 1.5.1.dev1+g52233540 documentation</title>
+    <title>API &#8212; ibek 1.5.1.dev3+g653c00e5 documentation</title>
   
   
   
@@ -504,6 +504,12 @@ document.write(`
 <dd><p>A Base class for setting consistent Pydantic model configuration</p>
 </dd></dl>
 
+<dl class="py function">
+<dt class="sig sig-object py" id="ibek.globals.render_with_utils">
+<span class="sig-prename descclassname"><span class="pre">ibek.globals.</span></span><span class="sig-name descname"><span class="pre">render_with_utils</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">context</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.12)"><span class="pre">Dict</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">template_text</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><span class="pre">str</span></a></span></span><a class="reference internal" href="../../_modules/ibek/globals.html#render_with_utils"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ibek.globals.render_with_utils" title="Permalink to this definition">#</a></dt>
+<dd><p>Render a Jinja template with the global __utils__ object in the context</p>
+</dd></dl>
+
 </section>
 <section id="module-ibek.support">
 <span id="ibek-support"></span><h3><code class="docutils literal notranslate"><span class="pre">ibek.support</span></code><a class="headerlink" href="#module-ibek.support" title="Permalink to this heading">#</a></h3>
@@ -762,18 +768,6 @@ we pass a single instance of this class into all Jinja contexts.</p>
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ibek.utils.</span></span><span class="sig-name descname"><span class="pre">Utils</span></span><a class="reference internal" href="../../_modules/ibek/utils.html#Utils"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ibek.utils.Utils" title="Permalink to this definition">#</a></dt>
 <dd><p>A Utility class for adding functions to the Jinja context</p>
 <dl class="py method">
-<dt class="sig sig-object py" id="ibek.utils.Utils.set_file_name">
-<span class="sig-name descname"><span class="pre">set_file_name</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.12)"><span class="pre">Path</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ibek/utils.html#Utils.set_file_name"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ibek.utils.Utils.set_file_name" title="Permalink to this definition">#</a></dt>
-<dd><p>Set the ioc name based on the file name of the instance definition</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="ibek.utils.Utils.set_ioc_name">
-<span class="sig-name descname"><span class="pre">set_ioc_name</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ibek/utils.html#Utils.set_ioc_name"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ibek.utils.Utils.set_ioc_name" title="Permalink to this definition">#</a></dt>
-<dd><p>Set the ioc name based on the file name of the instance definition</p>
-</dd></dl>
-
-<dl class="py method">
 <dt class="sig sig-object py" id="ibek.utils.Utils.set_var">
 <span class="sig-name descname"><span class="pre">set_var</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.12)"><span class="pre">Any</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/ibek/utils.html#Utils.set_var"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ibek.utils.Utils.set_var" title="Permalink to this definition">#</a></dt>
 <dd><p>create a global variable for our jinja context</p>
@@ -790,12 +784,6 @@ we pass a single instance of this class into all Jinja contexts.</p>
 <span class="sig-name descname"><span class="pre">counter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">start</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><span class="pre">int</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stop</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><span class="pre">int</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">65535</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inc</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><span class="pre">int</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><span class="pre">int</span></a></span></span><a class="reference internal" href="../../_modules/ibek/utils.html#Utils.counter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ibek.utils.Utils.counter" title="Permalink to this definition">#</a></dt>
 <dd><p>get a named counter that increments by inc each time it is called</p>
 <p>creates a new counter if it does not yet exist</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="ibek.utils.Utils.render">
-<span class="sig-name descname"><span class="pre">render</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">context</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.12)"><span class="pre">Any</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">template_text</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><span class="pre">str</span></a></span></span><a class="reference internal" href="../../_modules/ibek/utils.html#Utils.render"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ibek.utils.Utils.render" title="Permalink to this definition">#</a></dt>
-<dd><p>Render a Jinja template with the global __utils__ object in the context</p>
 </dd></dl>
 
 </dd></dl>
@@ -857,6 +845,7 @@ we pass a single instance of this class into all Jinja contexts.</p>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ibek.__version__"><code class="docutils literal notranslate"><span class="pre">ibek.__version__</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#module-ibek.globals"><code class="docutils literal notranslate"><span class="pre">ibek.globals</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#ibek.globals.BaseSettings"><code class="docutils literal notranslate"><span class="pre">BaseSettings</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#ibek.globals.render_with_utils"><code class="docutils literal notranslate"><span class="pre">render_with_utils()</span></code></a></li>
 </ul>
 </li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#module-ibek.support"><code class="docutils literal notranslate"><span class="pre">ibek.support</span></code></a><ul class="nav section-nav flex-column">
@@ -910,12 +899,9 @@ we pass a single instance of this class into all Jinja contexts.</p>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#module-ibek.utils"><code class="docutils literal notranslate"><span class="pre">ibek.utils</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#ibek.utils.Counter"><code class="docutils literal notranslate"><span class="pre">Counter</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#ibek.utils.Utils"><code class="docutils literal notranslate"><span class="pre">Utils</span></code></a><ul class="nav section-nav flex-column">
-<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#ibek.utils.Utils.set_file_name"><code class="docutils literal notranslate"><span class="pre">Utils.set_file_name()</span></code></a></li>
-<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#ibek.utils.Utils.set_ioc_name"><code class="docutils literal notranslate"><span class="pre">Utils.set_ioc_name()</span></code></a></li>
 <li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#ibek.utils.Utils.set_var"><code class="docutils literal notranslate"><span class="pre">Utils.set_var()</span></code></a></li>
 <li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#ibek.utils.Utils.get_var"><code class="docutils literal notranslate"><span class="pre">Utils.get_var()</span></code></a></li>
 <li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#ibek.utils.Utils.counter"><code class="docutils literal notranslate"><span class="pre">Utils.counter()</span></code></a></li>
-<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#ibek.utils.Utils.render"><code class="docutils literal notranslate"><span class="pre">Utils.render()</span></code></a></li>
 </ul>
 </li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#ibek.utils.apischema.types.UndefinedType"><code class="docutils literal notranslate"><span class="pre">apischema.types.UndefinedType</span></code></a></li>
