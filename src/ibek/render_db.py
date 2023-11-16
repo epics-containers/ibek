@@ -6,9 +6,9 @@ support module definitions
 from dataclasses import dataclass
 from typing import Any, Dict, List, Mapping, Optional, Tuple
 
-from ibek.globals import render_with_utils
 from ibek.ioc import IOC, Entity
 from ibek.support import Database
+from ibek.utils import UTILS
 
 
 class RenderDb:
@@ -29,7 +29,7 @@ class RenderDb:
         Adding a new template file if it does not already exist.
         Convert all arguments to strings.
         """
-        filename = render_with_utils(dict(entity), filename)
+        filename = UTILS.render(dict(entity), filename)
 
         if filename not in self.render_templates:
             # for new filenames create a new RenderDbTemplate entry
@@ -47,7 +47,7 @@ class RenderDb:
 
         # render any Jinja fields in the arguments
         for i, line in enumerate(row):
-            row[i] = render_with_utils(dict(entity), row[i])
+            row[i] = UTILS.render(dict(entity), row[i])
 
         # save the new row
         self.render_templates[filename].rows.append(row)

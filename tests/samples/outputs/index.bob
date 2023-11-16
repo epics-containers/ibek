@@ -9,7 +9,7 @@
   <widget type="label" version="2.0.0">
     <name>Title</name>
     <class>TITLE</class>
-    <text>test-multiple-ioc - Index</text>
+    <text>{{ ioc_yaml_file_name }} - Index</text>
     <x use_class="true">0</x>
     <y use_class="true">0</y>
     <width>273</width>
@@ -68,7 +68,7 @@
         <target>tab</target>
         <description>Open Display</description>
         <macros>
-          <prefix>AllObject One</prefix>
+          <prefix>ioc_name={{ ioc_name }}</prefix>
         </macros>
       </action>
     </actions>

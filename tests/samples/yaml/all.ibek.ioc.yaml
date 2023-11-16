@@ -1,6 +1,6 @@
 # yaml-language-server: $schema=../schemas/multiple.ibek.ioc.schema.json
 
-ioc_name: test-multiple-ioc
+ioc_name: "{{ ioc_yaml_file_name }}"
 description: a basic example for testing multiple support definitions
 
 entities:
@@ -8,7 +8,7 @@ entities:
     name: Ref1
 
   - type: module.AllObject
-    name: AllObject One
+    name: ioc_name={{ ioc_name }}
     my_object: Ref1
     my_int_enum: full_speed
     my_inferred_enum: third

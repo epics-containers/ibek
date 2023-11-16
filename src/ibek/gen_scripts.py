@@ -9,6 +9,8 @@ from typing import List, Tuple, Type
 from jinja2 import Template
 from ruamel.yaml.main import YAML
 
+from ibek.utils import UTILS
+
 from .globals import TEMPLATES
 from .ioc import IOC, Entity, clear_entity_model_ids, make_entity_models, make_ioc_model
 from .render import Render
@@ -55,6 +57,10 @@ def ioc_deserialize(ioc_instance_yaml: Path, definition_yaml: List[Path]) -> IOC
 
     # extract the ioc instance yaml into a dict
     ioc_instance_dict = YAML(typ="safe").load(ioc_instance_yaml)
+
+    # extract the ioc name into UTILS for use in jinja renders
+    name = UTILS.render({}, ioc_instance_dict["ioc_name"])
+    UTILS.set_ioc_name(name)
 
     # Create an IOC instance from the instance dict and the model
     ioc_instance = ioc_model(**ioc_instance_dict)

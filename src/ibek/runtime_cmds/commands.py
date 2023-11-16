@@ -14,10 +14,10 @@ from ibek.globals import (
     PVI_DEFS,
     RUNTIME_OUTPUT_PATH,
     NaturalOrderGroup,
-    render_with_utils,
 )
 from ibek.ioc import IOC, Entity
 from ibek.support import Database
+from ibek.utils import UTILS
 
 runtime_cli = typer.Typer(cls=NaturalOrderGroup)
 
@@ -44,9 +44,12 @@ def generate(
     """
     Build a startup script for an IOC instance
     """
+    # the file name under of the instance definition provides the IOC name
+    UTILS.set_file_name(instance)
+
     ioc_instance = ioc_deserialize(instance, definitions)
 
-    # Clear out generated files so developers know if something stops being generated
+    # Clear out generated files so developers know if something stop being generated
     shutil.rmtree(RUNTIME_OUTPUT_PATH, ignore_errors=True)
     RUNTIME_OUTPUT_PATH.mkdir(exist_ok=True)
     shutil.rmtree(OPI_OUTPUT_PATH, ignore_errors=True)
@@ -100,9 +103,7 @@ def generate_pvi(ioc: IOC) -> Tuple[List[IndexEntry], List[Tuple[Database, Entit
             device.deserialize_parents([PVI_DEFS])
 
             # Render the prefix value for the device from the instance parameters
-            macros = {
-                "prefix": render_with_utils(entity.model_dump(), entity_pvi.prefix)
-            }
+            macros = {"prefix": UTILS.render(entity.model_dump(), entity_pvi.prefix)}
 
             if entity_pvi.pva_template:
                 # Create a template with the V4 structure defining a PVI interface

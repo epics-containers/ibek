@@ -4,23 +4,23 @@
 
 file "another_test.db" {
 pattern 
-	{ "name",          "my_int_enum", "clock_rate", "db_calculated",       "calculated_one"                                }
-	{ "AllObject One", "2",           "dummy",      "HELLO AllObject One", "AllObject One.AllObject One String.1.1.0.True" }
-	{ "AllObject Two", "1",           "1",          "HELLO AllObject Two", "AllObject Two.AllObject Two String.1.1.0.True" }
+	{ "name",                    "my_int_enum", "clock_rate", "db_calculated",                 "calculated_one"                                          }
+	{ "ioc_name={{ ioc_name }}", "2",           "dummy",      "HELLO ioc_name={{ ioc_name }}", "ioc_name={{ ioc_name }}.AllObject One String.1.1.0.True" }
+	{ "AllObject Two",           "1",           "1",          "HELLO AllObject Two",           "AllObject Two.AllObject Two String.1.1.0.True"           }
 }
 
 file "yet_another.db" {
 pattern 
-	{ "name",          "my_object", "my_float", "my_bool" }
-	{ "AllObject One", "Ref1",      "1.0",      "True"    }
-	{ "AllObject Two", "Ref1",      "1.0",      "True"    }
+	{ "name",                    "my_object", "my_float", "my_bool" }
+	{ "ioc_name={{ ioc_name }}", "Ref1",      "1.0",      "True"    }
+	{ "AllObject Two",           "Ref1",      "1.0",      "True"    }
 }
 
 file "jinjified1.db" {
 pattern 
-	{ "name"          }
-	{ "AllObject One" }
-	{ "AllObject Two" }
+	{ "name"                    }
+	{ "ioc_name={{ ioc_name }}" }
+	{ "AllObject Two"           }
 }
 
 file "test.db" {
@@ -31,7 +31,7 @@ pattern
 
 file "simple.pvi.template" {
 pattern 
-	{ "prefix"        }
-	{ "AllObject One" }
-	{ "AllObject Two" }
+	{ "prefix"                }
+	{ "ioc_name=all.ibek.ioc" }
+	{ "AllObject Two"         }
 }
