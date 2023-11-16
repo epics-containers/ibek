@@ -8,7 +8,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>ibek.utils &#8212; ibek 1.5.1.dev3+g653c00e5 documentation</title>
+    <title>ibek.utils &#8212; ibek 1.5.1.dev5+g7c8593d5 documentation</title>
   
   
   
@@ -461,7 +461,10 @@ document.write(`
 <span class="sd">&quot;&quot;&quot;</span>
 
 <span class="kn">from</span> <span class="nn">dataclasses</span> <span class="kn">import</span> <span class="n">dataclass</span>
+<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span>
+
+<span class="kn">from</span> <span class="nn">jinja2</span> <span class="kn">import</span> <span class="n">Template</span>
 
 
 <div class="viewcode-block" id="Counter"><a class="viewcode-back" href="../../user/reference/api.html#ibek.utils.Counter">[docs]</a><span class="nd">@dataclass</span>
@@ -488,6 +491,8 @@ document.write(`
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">:</span> <span class="s2">&quot;Utils&quot;</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">file_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ioc_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__reset__</span><span class="p">()</span>
 
     <span class="k">def</span> <span class="nf">__reset__</span><span class="p">(</span><span class="bp">self</span><span class="p">:</span> <span class="s2">&quot;Utils&quot;</span><span class="p">):</span>
@@ -497,6 +502,18 @@ document.write(`
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">variables</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">counters</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Counter</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+
+<div class="viewcode-block" id="Utils.set_file_name"><a class="viewcode-back" href="../../user/reference/api.html#ibek.utils.Utils.set_file_name">[docs]</a>    <span class="k">def</span> <span class="nf">set_file_name</span><span class="p">(</span><span class="bp">self</span><span class="p">:</span> <span class="s2">&quot;Utils&quot;</span><span class="p">,</span> <span class="n">file</span><span class="p">:</span> <span class="n">Path</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Set the ioc name based on the file name of the instance definition</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">file_name</span> <span class="o">=</span> <span class="n">file</span><span class="o">.</span><span class="n">stem</span></div>
+
+<div class="viewcode-block" id="Utils.set_ioc_name"><a class="viewcode-back" href="../../user/reference/api.html#ibek.utils.Utils.set_ioc_name">[docs]</a>    <span class="k">def</span> <span class="nf">set_ioc_name</span><span class="p">(</span><span class="bp">self</span><span class="p">:</span> <span class="s2">&quot;Utils&quot;</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Set the ioc name based on the file name of the instance definition</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ioc_name</span> <span class="o">=</span> <span class="n">name</span></div>
 
 <div class="viewcode-block" id="Utils.set_var"><a class="viewcode-back" href="../../user/reference/api.html#ibek.utils.Utils.set_var">[docs]</a>    <span class="k">def</span> <span class="nf">set_var</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">Any</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;create a global variable for our jinja context&quot;&quot;&quot;</span>
@@ -528,7 +545,19 @@ document.write(`
         <span class="n">counter</span><span class="o">.</span><span class="n">increment</span><span class="p">(</span><span class="n">inc</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">counters</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">counter</span>
 
-        <span class="k">return</span> <span class="n">result</span></div></div>
+        <span class="k">return</span> <span class="n">result</span></div>
+
+<div class="viewcode-block" id="Utils.render"><a class="viewcode-back" href="../../user/reference/api.html#ibek.utils.Utils.render">[docs]</a>    <span class="k">def</span> <span class="nf">render</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">context</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">template_text</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Render a Jinja template with the global __utils__ object in the context</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">jinja_template</span> <span class="o">=</span> <span class="n">Template</span><span class="p">(</span><span class="n">template_text</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">jinja_template</span><span class="o">.</span><span class="n">render</span><span class="p">(</span>
+            <span class="n">context</span><span class="p">,</span>
+            <span class="n">__utils__</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span>
+            <span class="n">ioc_yaml_file_name</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">file_name</span><span class="p">,</span>
+            <span class="n">ioc_name</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ioc_name</span><span class="p">,</span>
+        <span class="p">)</span></div></div>
 
 
 <span class="c1"># a singleton Utility object for sharing state across all Entity renders</span>
