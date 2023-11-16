@@ -9,7 +9,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
-    <title>Modules, Definitions and Entities &#8212; ibek 1.5.1.dev3+g653c00e5 documentation</title>
+    <title>Modules, Definitions and Entities &#8212; ibek 1.5.1.dev4+g01ed99d8 documentation</title>
   
   
   
@@ -698,7 +698,7 @@ file that ibek will generate from it.</p>
 <div><details>
 <summary><a>all.ibek.ioc.yaml</a></summary><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># yaml-language-server: $schema=../schemas/multiple.ibek.ioc.schema.json</span>
 
-<span class="n">ioc_name</span><span class="p">:</span> <span class="n">test</span><span class="o">-</span><span class="n">multiple</span><span class="o">-</span><span class="n">ioc</span>
+<span class="n">ioc_name</span><span class="p">:</span> <span class="s2">&quot;{{ ioc_yaml_file_name }}&quot;</span>
 <span class="n">description</span><span class="p">:</span> <span class="n">a</span> <span class="n">basic</span> <span class="n">example</span> <span class="k">for</span> <span class="n">testing</span> <span class="n">multiple</span> <span class="n">support</span> <span class="n">definitions</span>
 
 <span class="n">entities</span><span class="p">:</span>
@@ -706,7 +706,7 @@ file that ibek will generate from it.</p>
     <span class="n">name</span><span class="p">:</span> <span class="n">Ref1</span>
 
   <span class="o">-</span> <span class="nb">type</span><span class="p">:</span> <span class="n">module</span><span class="o">.</span><span class="n">AllObject</span>
-    <span class="n">name</span><span class="p">:</span> <span class="n">AllObject</span> <span class="n">One</span>
+    <span class="n">name</span><span class="p">:</span> <span class="n">ioc_name</span><span class="o">=</span><span class="p">{{</span> <span class="n">ioc_name</span> <span class="p">}}</span>
     <span class="n">my_object</span><span class="p">:</span> <span class="n">Ref1</span>
     <span class="n">my_int_enum</span><span class="p">:</span> <span class="n">full_speed</span>
     <span class="n">my_inferred_enum</span><span class="p">:</span> <span class="n">third</span>
@@ -752,7 +752,7 @@ TestValues Ref1.127.0.0.1
 # this is a comment
 # that spans multiple lines
 # 
-testPreInit &quot;AllObject One&quot; &quot;&#39;AllObject One String&#39;&quot;
+testPreInit &quot;ioc_name={{ ioc_name }}&quot; &quot;&#39;AllObject One String&#39;&quot;
 my_str =                    AllObject One String
 my_inferred_enum =          third
 clock_rate =                dummy
@@ -775,7 +775,7 @@ dbLoadRecords $(RUNTIME_DIR)/ioc.db
 iocInit
 
 
-testPostInit &quot;AllObject One&quot; test_value:
+testPostInit &quot;ioc_name={{ ioc_name }}&quot; test_value:
 this should appear once only in the post_init section
 # post init comment
 testPostInit &quot;AllObject Two&quot; test_value:
