@@ -61,6 +61,7 @@ def ioc_deserialize(ioc_instance_yaml: Path, definition_yaml: List[Path]) -> IOC
     # extract the ioc name into UTILS for use in jinja renders
     name = UTILS.render({}, ioc_instance_dict["ioc_name"])
     UTILS.set_ioc_name(name)
+    ioc_instance_dict["ioc_name"] = name
 
     # Create an IOC instance from the instance dict and the model
     ioc_instance = ioc_model(**ioc_instance_dict)
