@@ -13,7 +13,7 @@ TestValues Ref1.127.0.0.1
 # this is a comment
 # that spans multiple lines
 # 
-testPreInit "AllObject One" "'AllObject One String'"
+testPreInit "ioc_name={{ ioc_name }}" "'AllObject One String'"
 my_str =                    AllObject One String
 my_inferred_enum =          third
 clock_rate =                dummy
@@ -36,7 +36,7 @@ dbLoadRecords $(RUNTIME_DIR)/ioc.db
 iocInit
 
 
-testPostInit "AllObject One" test_value:
+testPostInit "ioc_name={{ ioc_name }}" test_value:
 this should appear once only in the post_init section
 # post init comment
 testPostInit "AllObject Two" test_value:

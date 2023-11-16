@@ -8,7 +8,10 @@ we pass a single instance of this class into all Jinja contexts.
 """
 
 from dataclasses import dataclass
+from pathlib import Path
 from typing import Any, Dict
+
+from jinja2 import Template
 
 
 @dataclass
@@ -35,6 +38,8 @@ class Utils:
     """
 
     def __init__(self: "Utils"):
+        self.file_name: str = ""
+        self.ioc_name: str = ""
         self.__reset__()
 
     def __reset__(self: "Utils"):
@@ -44,6 +49,18 @@ class Utils:
         """
         self.variables: Dict[str, Any] = {}
         self.counters: Dict[str, Counter] = {}
+
+    def set_file_name(self: "Utils", file: Path):
+        """
+        Set the ioc name based on the file name of the instance definition
+        """
+        self.file_name = file.stem
+
+    def set_ioc_name(self: "Utils", name: str):
+        """
+        Set the ioc name based on the file name of the instance definition
+        """
+        self.ioc_name = name
 
     def set_var(self, key: str, value: Any):
         """create a global variable for our jinja context"""
@@ -76,6 +93,18 @@ class Utils:
         self.counters[name] = counter
 
         return result
+
+    def render(self, context: Any, template_text: str) -> str:
+        """
+        Render a Jinja template with the global __utils__ object in the context
+        """
+        jinja_template = Template(template_text)
+        return jinja_template.render(
+            context,
+            __utils__=self,
+            ioc_yaml_file_name=self.file_name,
+            ioc_name=self.ioc_name,
+        )
 
 
 # a singleton Utility object for sharing state across all Entity renders
