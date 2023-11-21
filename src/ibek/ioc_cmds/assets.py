@@ -1,3 +1,4 @@
+import logging
 import os
 import shutil
 import subprocess
@@ -7,6 +8,8 @@ from typing import List
 import typer
 
 from ibek.globals import EPICS_ROOT, IBEK_DEFS, IOC_FOLDER, PVI_DEFS
+
+log = logging.getLogger(__name__)
 
 
 def get_ioc_source() -> Path:
@@ -19,17 +22,22 @@ def get_ioc_source() -> Path:
     Functions that use this should provide an override variable that allows
     the ibek caller to specify the location.
     """
-    try:
-        ibek_support = (
-            list(EPICS_ROOT.glob("*/ibek-support"))
-            or list(Path("..").glob("/**/ibek-support"))
-        )[0]
-    except IndexError:
-        raise RuntimeError(
-            "Could NOT find a suitable location for the IOC source folder. "
+    ibek_supports = list(EPICS_ROOT.glob("*/ibek-support"))
+
+    if len(ibek_supports) > 1:
+        log.error(
+            "Found more than one ibek-support folder. "
+            "ibek must be run in a container a single generic IOC source folder"
+        )
+        raise typer.Exit(1)
+    elif len(ibek_supports) == 0:
+        log.error(
+            "Could NOT find a generic IOC source folder containing ibek-support. "
             "ibek must be run in a container with the generic IOC source folder"
         )
-    return (ibek_support / "..").resolve()
+        raise typer.Exit(1)
+
+    return (ibek_supports[0] / "..").resolve()
 
 
 def move_file(src: Path, dest: Path, binary: List[str]):

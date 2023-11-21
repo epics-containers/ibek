@@ -4,6 +4,7 @@ import typer
 from ruamel.yaml import YAML
 
 from ibek._version import __version__
+from ibek.dev_cmds.commands import dev_cli
 from ibek.globals import NaturalOrderGroup
 from ibek.ioc_cmds.commands import ioc_cli
 from ibek.runtime_cmds.commands import runtime_cli
@@ -25,6 +26,11 @@ cli.add_typer(
     runtime_cli,
     name="runtime",
     help="Commands for building IOC instance startup files at container runtime",
+)
+cli.add_typer(
+    dev_cli,
+    name="dev",
+    help="Commands for working inside Generic IOC development containers",
 )
 
 yaml = YAML()

@@ -13,6 +13,8 @@ EPICS_BASE = Path(os.getenv("EPICS_BASE", "/epics/epics-base"))
 EPICS_ROOT = Path(os.getenv("EPICS_ROOT", "/epics/"))
 IOC_FOLDER = Path(os.getenv("IOC", "/epics/ioc"))
 SUPPORT = Path(os.getenv("SUPPORT", "/epics/support"))
+CONFIG_DIR_NAME = "config"
+IOC_DIR_NAME = "ioc"
 
 # the global RELEASE file which lists all support modules
 RELEASE = SUPPORT / "configure/RELEASE"

@@ -124,10 +124,14 @@ def make_source_template(
     if destination is None:
         destination = get_ioc_source() / "ioc"
 
-    if not destination.exists():
+    # use a known file to check if the destination is already an IOC
+    # because an empty folder can be created by 'ibek dev instance'
+    dest_release = destination / "configure" / "RELEASE"
+
+    if not dest_release.exists():
         if destination.is_symlink():
             destination.unlink()
-        shutil.copytree(TEMPLATES / "ioc", destination)
+        shutil.copytree(TEMPLATES / "ioc", destination, dirs_exist_ok=True)
 
     # make a symlink to the ioc folder in the root of the epics folder
     # this becomes the standard place for code to look for the IOC
