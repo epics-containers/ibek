@@ -1,0 +1,16 @@
+# yaml-language-server: $schema=../schemas/multiple.ibek.ioc.schema.json
+
+ioc_name: "{{ ioc_yaml_file_name }}"
+description: a basic example for testing db disable
+
+entities:
+  - type: object_module.RefObject
+    name: Ref1
+
+  - type: module.AllObject
+    name: ioc_name={{ ioc_name }}
+    do_database: false
+    my_object: Ref1
+    my_inferred_enum: third
+    clock_rate: dummy
+    my_str: AllObject One String

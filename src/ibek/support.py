@@ -103,6 +103,10 @@ class Database(BaseSettings):
         description="Filename of the database template in <module_root>/db"
     )
 
+    enabled: str = Field(
+        description="Set to False to disable loading this database", default="True"
+    )
+
     args: Mapping[str, Optional[str]] = Field(
         description=(
             "Dictionary of args and values to pass through to database. "

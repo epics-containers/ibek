@@ -76,6 +76,12 @@
           "title": "File",
           "type": "string"
         },
+        "enabled": {
+          "default": "True",
+          "description": "Set to False to disable loading this database",
+          "title": "Enabled",
+          "type": "string"
+        },
         "args": {
           "additionalProperties": {
             "anyOf": [

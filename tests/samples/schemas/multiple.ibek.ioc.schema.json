@@ -31,6 +31,12 @@
           "title": "Name",
           "type": "string"
         },
+        "do_database": {
+          "default": true,
+          "description": "don't render DB if this is false",
+          "title": "Do Database",
+          "type": "boolean"
+        },
         "my_int_enum": {
           "allOf": [
             {

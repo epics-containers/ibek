@@ -14,6 +14,11 @@ defs:
         name: name
         description: identifier
 
+      - type: bool
+        name: do_database
+        description: don't render DB if this is false
+        default: true
+
       - type: enum
         name: my_int_enum
         description: integer enumerated type
@@ -103,6 +108,7 @@ defs:
 
     databases:
       - file: another_test.db
+        enabled: "{{ do_database }}"
         args:
           name:
           my_int_enum:
