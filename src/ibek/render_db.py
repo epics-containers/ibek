@@ -11,6 +11,10 @@ from ibek.support import Database
 from ibek.utils import UTILS
 
 
+def str_to_bool(v):
+    return v.lower() in ("yes", "true", "1")
+
+
 class RenderDb:
     @dataclass
     class RenderDbTemplate:
@@ -73,17 +77,18 @@ class RenderDb:
             entity: Entity to use as context for Jinja template expansion
 
         """
-        database.file = database.file.strip("\n")
+        if str_to_bool(UTILS.render(entity, database.enabled)):
+            database.file = database.file.strip("\n")
 
-        for arg, value in database.args.items():
-            if value is None:
-                if arg not in entity.__dict__:
-                    raise ValueError(
-                        f"database arg '{arg}' in database template "
-                        f"'{database.file}' not found in context"
-                    )
+            for arg, value in database.args.items():
+                if value is None:
+                    if arg not in entity.__dict__:
+                        raise ValueError(
+                            f"database arg '{arg}' in database template "
+                            f"'{database.file}' not found in context"
+                        )
 
-        self.add_row(database.file, database.args, entity)
+            self.add_row(database.file, database.args, entity)
 
     def add_extra_databases(self, databases: List[Tuple[Database, Entity]]) -> None:
         """Add databases that are not part of Entity definitions

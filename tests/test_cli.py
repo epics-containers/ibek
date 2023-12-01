@@ -151,6 +151,38 @@ def test_build_runtime_multiple(tmp_path: Path, samples: Path):
     assert example_pvi == actual_pvi
 
 
+def test_build_no_db(tmp_path: Path, samples: Path):
+    """
+    build an ioc runtime script from an IOC instance entity file
+    and multiple support module definition files
+
+    Also verifies database subst file generation for multiple
+    entity instantiations.
+    """
+    clear_entity_model_ids()
+    ioc_yaml = samples / "yaml" / "all.nodb.ibek.ioc.yaml"
+    support_yaml = samples / "yaml" / "objects.ibek.support.yaml"
+    support_yaml2 = samples / "yaml" / "all.ibek.support.yaml"
+    out_file = tmp_path / "st.cmd"
+    out_db = tmp_path / "all.nodb.ioc.subst"
+
+    run_cli(
+        "runtime",
+        "generate",
+        ioc_yaml,
+        support_yaml,
+        support_yaml2,
+        "--out",
+        out_file,
+        "--db-out",
+        out_db,
+    )
+
+    example_db = (samples / "outputs" / "all.nodb.ioc.subst").read_text()
+    actual_db = out_db.read_text()
+    assert example_db == actual_db
+
+
 def test_build_utils_features(tmp_path: Path, samples: Path):
     """
     build an ioc runtime script to verify utils features

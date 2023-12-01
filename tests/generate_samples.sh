@@ -42,3 +42,7 @@ ibek runtime generate yaml/utils.ibek.ioc.yaml yaml/utils.ibek.support.yaml --ou
 echo making ioc based on mutiple support yaml
 ibek runtime generate yaml/all.ibek.ioc.yaml yaml/objects.ibek.support.yaml yaml/all.ibek.support.yaml --out outputs/all.st.cmd --db-out outputs/all.ioc.subst
 cp epics/opi/* outputs/
+
+echo making ioc with no DB based on mutiple support yaml
+ibek runtime generate yaml/all.nodb.ibek.ioc.yaml yaml/objects.ibek.support.yaml yaml/all.ibek.support.yaml --out outputs/all.nodb.st.cmd --db-out outputs/all.nodb.ioc.subst
+
