@@ -18,8 +18,8 @@ def test_counter_reuse(tmp_path: Path, samples: Path):
     """
     UTILS.__reset__()
 
-    entity_file = samples / "yaml" / "bad_counter.ibek.ioc.yaml"
-    definition_file1 = samples / "yaml" / "utils.ibek.support.yaml"
+    entity_file = samples / "iocs" / "bad_counter.ibek.ioc.yaml"
+    definition_file1 = samples / "support" / "utils.ibek.support.yaml"
 
     with pytest.raises(ValueError) as ctx:
         run_cli("runtime", "generate", entity_file, definition_file1)
@@ -35,8 +35,8 @@ def test_counter_overuse(tmp_path: Path, samples: Path):
     """
     UTILS.__reset__()
 
-    entity_file = samples / "yaml" / "bad_counter2.ibek.ioc.yaml"
-    definition_file1 = samples / "yaml" / "utils.ibek.support.yaml"
+    entity_file = samples / "iocs" / "bad_counter2.ibek.ioc.yaml"
+    definition_file1 = samples / "support" / "utils.ibek.support.yaml"
 
     with pytest.raises(ValueError) as ctx:
         run_cli("runtime", "generate", entity_file, definition_file1)
@@ -49,13 +49,13 @@ def test_bad_ref(tmp_path: Path, samples: Path):
     """
     UTILS.__reset__()
 
-    entity_file = samples / "yaml" / "bad_ref.ibek.ioc.yaml"
-    definition_file1 = samples / "yaml" / "objects.ibek.support.yaml"
-    definition_file2 = samples / "yaml" / "all.ibek.support.yaml"
+    entity_file = samples / "iocs" / "bad_ref.ibek.ioc.yaml"
+    definition_file1 = samples / "support" / "asyn.ibek.support.yaml"
+    definition_file2 = samples / "support" / "motorSim.ibek.support.yaml"
 
     with pytest.raises(ValueError) as ctx:
         run_cli("runtime", "generate", entity_file, definition_file1, definition_file2)
-    assert "object Ref2 not found" in str(ctx.value)
+    assert "object controllerOnePort_BAD_REF not found" in str(ctx.value)
 
 
 def test_bad_db(tmp_path: Path, samples: Path):
@@ -64,8 +64,8 @@ def test_bad_db(tmp_path: Path, samples: Path):
     """
     UTILS.__reset__()
 
-    entity_file = samples / "yaml" / "bad_db.ibek.ioc.yaml"
-    definition_file1 = samples / "yaml" / "bad_db.ibek.support.yaml"
+    entity_file = samples / "iocs" / "bad_db.ibek.ioc.yaml"
+    definition_file1 = samples / "support" / "bad_db.ibek.support.yaml"
 
     with pytest.raises(ValueError) as ctx:
         run_cli("runtime", "generate", entity_file, definition_file1)
@@ -80,8 +80,8 @@ def test_loading_module_twice(tmp_path: Path, samples: Path):
 
     clear_entity_model_ids()
 
-    definition_file = samples / "yaml" / "objects.ibek.support.yaml"
-    instance_file = samples / "yaml" / "objects.ibek.ioc.yaml"
+    definition_file = samples / "support" / "utils.ibek.support.yaml"
+    instance_file = samples / "iocs" / "utils.ibek.ioc.yaml"
 
     support = Support(**YAML(typ="safe").load(definition_file))
     entities1 = make_entity_models(support)
@@ -104,8 +104,8 @@ def test_defaults(tmp_path: Path, samples: Path):
     """
 
     clear_entity_model_ids()
-    entity_file = samples / "yaml" / "bad_default.ibek.ioc.yaml"
-    definition_file1 = samples / "yaml" / "objects.ibek.support.yaml"
+    entity_file = samples / "iocs" / "bad_default.ibek.ioc.yaml"
+    definition_file1 = samples / "support" / "asyn.ibek.support.yaml"
 
     with pytest.raises(ValueError) as ctx:
         run_cli("runtime", "generate", entity_file, definition_file1)

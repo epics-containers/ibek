@@ -19,30 +19,24 @@ mkdir -p outputs
 set -ex
 
 mkdir -p epics/pvi-defs
-cp yaml/simple.pvi.device.yaml  epics/pvi-defs/simple.pvi.device.yaml
+cp support/simple.pvi.device.yaml  epics/pvi-defs/simple.pvi.device.yaml
 
 echo making the support yaml schema
 ibek support generate-schema --output schemas/ibek.support.schema.json
 
-echo making an ioc schema using object support yaml
-ibek ioc generate-schema --no-ibek-defs yaml/objects.ibek.support.yaml --output schemas/objects.ibek.ioc.schema.json
+echo making an ioc schema using just motorSim support yaml
+ibek ioc generate-schema --no-ibek-defs support/motorSim.ibek.support.yaml --output schemas/single.ibek.ioc.schema.json
+
+echo making an ioc schema using motorSim and Asyn support yaml
+ibek ioc generate-schema --no-ibek-defs support/asyn.ibek.support.yaml support/motorSim.ibek.support.yaml --output schemas/motorSim.ibek.ioc.schema.json
 
 echo making an ioc schema using utils support yaml
-ibek ioc generate-schema --no-ibek-defs yaml/utils.ibek.support.yaml --output schemas/utils.ibek.ioc.schema.json
+ibek ioc generate-schema --no-ibek-defs support/utils.ibek.support.yaml --output schemas/utils.ibek.ioc.schema.json
 
-echo making an ioc schema using multiple support yaml files
-ibek ioc generate-schema --no-ibek-defs yaml/objects.ibek.support.yaml yaml/all.ibek.support.yaml --output schemas/multiple.ibek.ioc.schema.json
-
-echo making ioc based on objects support yaml
-ibek runtime generate yaml/objects.ibek.ioc.yaml yaml/objects.ibek.support.yaml --out outputs/objects.st.cmd --db-out outputs/objects.ioc.subst
+echo making ioc based on ibek-mo-ioc-01.yaml
+ibek runtime generate iocs/ibek-mo-ioc-01.yaml support/asyn.ibek.support.yaml support/motorSim.ibek.support.yaml --out outputs/motorSim.st.cmd --db-out outputs/motorSim.ioc.subst
+cp ${EPICS_ROOT}/opi/* outputs/
 
 echo making ioc based on utils support yaml
-ibek runtime generate yaml/utils.ibek.ioc.yaml yaml/utils.ibek.support.yaml --out outputs/utils.st.cmd --db-out outputs/utils.ioc.subst
-
-echo making ioc based on mutiple support yaml
-ibek runtime generate yaml/all.ibek.ioc.yaml yaml/objects.ibek.support.yaml yaml/all.ibek.support.yaml --out outputs/all.st.cmd --db-out outputs/all.ioc.subst
-cp epics/opi/* outputs/
-
-echo making ioc with no DB based on mutiple support yaml
-ibek runtime generate yaml/all.nodb.ibek.ioc.yaml yaml/objects.ibek.support.yaml yaml/all.ibek.support.yaml --out outputs/all.nodb.st.cmd --db-out outputs/all.nodb.ioc.subst
+ibek runtime generate iocs/utils.ibek.ioc.yaml support/utils.ibek.support.yaml --out outputs/utils.st.cmd --db-out outputs/utils.ioc.subst
 

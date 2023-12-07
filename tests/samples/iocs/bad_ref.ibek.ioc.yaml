@@ -1,0 +1,15 @@
+# yaml-language-server: $schema=../schemas/motorSim.ibek.ioc.schema.json
+
+ioc_name: test-multiple-ioc
+description: demo bad object reference
+
+entities:
+  - type: asyn.AsynIP
+    name: controllerOnePort
+    port: 192.168.0.55:2002
+
+  - type: motorSim.simMotorController
+    port: controllerOnePort_BAD_REF
+    controllerName: controllerOne
+    numAxes: 4
+    P: "IBEK-MO-TST-01:"

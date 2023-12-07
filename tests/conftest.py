@@ -46,19 +46,24 @@ def samples():
 
 
 @fixture
-def yaml_defs(samples):
-    return samples / "yaml"
+def support_defs(samples):
+    return samples / "support"
 
 
 @fixture
-def objects_classes(yaml_defs):
+def ioc_defs(samples):
+    return samples / "iocs"
+
+
+@fixture
+def asyn_classes(support_defs):
     # clear the entity classes to make sure there's nothing left
     clear_entity_model_ids()
 
-    objects_support = get_support(yaml_defs / "objects.ibek.support.yaml")
+    asyn_support = get_support(support_defs / "asyn.ibek.support.yaml")
 
     # make entity subclasses for everything defined in it
-    namespace = make_entity_models(objects_support)
+    namespace = make_entity_models(asyn_support)
 
     # return the namespace so that callers have access to all of the
     # generated dataclasses
@@ -66,17 +71,16 @@ def objects_classes(yaml_defs):
 
 
 @fixture
-def epics_support(ibek_defs):
-    return get_support(ibek_defs / "_global", "epics.ibek.support.yaml")
-
-
-@fixture
-def epics_classes(epics_support):
+def motor_classes(support_defs):
     # clear the entity classes to make sure there's nothing left
     clear_entity_model_ids()
 
+    asyn_support = get_support(support_defs / "asyn.ibek.support.yaml")
+    motor_support = get_support(support_defs / "motorSim.ibek.support.yaml")
+
     # make entity subclasses for everything defined in it
-    namespace = make_entity_models(epics_support)
+    namespace = make_entity_models(asyn_support)
+    namespace.extend(make_entity_models(motor_support))
 
     # return the namespace so that callers have access to all of the
     # generated dataclasses

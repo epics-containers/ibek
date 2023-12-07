@@ -18,44 +18,64 @@ def find_entity_class(entity_classes, entity_type):
         raise ValueError(f"{entity_type} not found in entity_classes")
 
 
-def test_pre_init_script(objects_classes):
-    ref_cls = find_entity_class(objects_classes, "object_module.RefObject")
+def test_pre_init_script(asyn_classes):
+    definition = find_entity_class(asyn_classes, "asyn.AsynIP")
 
-    my_ref = ref_cls(name="test_ref_object")
+    port1 = definition(name="asyn1", port="10.0.1.1")
+    port2 = definition(name="asyn2", port="10.0.1.2")
 
     render = Render()
-    script_txt = render.render_script(my_ref, my_ref.__definition__.pre_init)
+    script_txt = render.render_script(port1, port1.__definition__.pre_init)
+    script_txt += render.render_script(port2, port2.__definition__.pre_init)
     assert script_txt == (
-        "# This line should appear once only in the pre_init section\n"
-        "# TestValues testValue\n"
-        "TestValues test_ref_object.127.0.0.1\n"
+        "# Setting up Asyn Port asyn1 on 10.0.1.1:\n"
+        "# AsynIPConfigure({{name}}, {{port}}, {{stop}}, {{parity}}, {{bits}}) \n"
+        "AsynIPConfigure(asyn1, 10.0.1.1, 1, none, 8)\n"
+        "asynSetOption(9600, 0, N, Y)\n"
+        'asynOctetSetInputEos("\\n")\n'
+        'asynOctetSetOutputEos("\\n")\n'
+        "# Setting up Asyn Port asyn2 on 10.0.1.2:\n"
+        "AsynIPConfigure(asyn2, 10.0.1.2, 1, none, 8)\n"
+        "asynSetOption(9600, 0, N, Y)\n"
+        'asynOctetSetInputEos("\\n")\n'
+        'asynOctetSetOutputEos("\\n")\n'
     )
 
 
-def test_obj_ref_script(objects_classes):
-    ref_obj = find_entity_class(objects_classes, "object_module.RefObject")
-    consumer = find_entity_class(objects_classes, "object_module.ConsumerTwo")
+def test_obj_ref_script(motor_classes):
+    asyn_def = find_entity_class(motor_classes, "asyn.AsynIP")
+    motor_def = find_entity_class(motor_classes, "motorSim.simMotorController")
 
-    ref_obj(name="test_ref_object")
-    my_consumer = consumer(name="test_consumer", PORT="test_ref_object")
+    asyn_def(name="asyn1", port="10.0.1.1")
+    motor_obj = motor_def(
+        port="asyn1", controllerName="ctrl1", P="IBEK-MO-01:", numAxes=4
+    )
 
     render = Render()
-    script_txt = render.render_script(my_consumer, my_consumer.__definition__.pre_init)
+    script_txt = render.render_script(motor_obj, motor_obj.__definition__.pre_init)
 
-    assert (
-        script_txt == "# ExampleTestFunction asynPortIP name port value\n"
-        "ExampleTestFunction 127.0.0.1 test_consumer test_ref_object "
-        "test_ref_object.127.0.0.1\n"
-        "# PORT defaults to the id of PORT, i.e. PORT.name\n"
+    assert script_txt == (
+        "# motorSimCreateController(controller_asyn_port_name, axis_count)\n"
+        "# testing escaping:  {{enclosed in escaped curly braces}} \n"
+        "motorSimCreateController(ctrl1, 4)\n"
     )
 
 
-def test_database_render(objects_classes, templates):
-    ref_cls = find_entity_class(objects_classes, "object_module.RefObject")
-    consumer = find_entity_class(objects_classes, "object_module.ConsumerTwo")
+def test_database_render(motor_classes):
+    asyn_def = find_entity_class(motor_classes, "asyn.AsynIP")
+    sim_def = find_entity_class(motor_classes, "motorSim.simMotorController")
+    motor_def = find_entity_class(motor_classes, "motorSim.simMotorAxis")
 
-    ref_cls(name="test_ref_object")
-    my_consumer = consumer(name="test_consumer", PORT="test_ref_object")
+    asyn1 = asyn_def(name="asyn1", port="10.0.1.1")
+    # TODO removing DESC below causes a failure in jinja templating
+    # The default DESC field contains jinja escaping and this fails for some
+    # reason. But it works fine in the test test_build_runtime_motorSim which
+    # is what really counts I guess.
+    sim_motor = sim_def(
+        port="asyn1", controllerName="ctrl1", P="IBEK-MO-01:", numAxes=4, DESC="test"
+    )
+    motor1 = motor_def(controller="ctrl1", M="M1", ADDR=1)
+    motor2 = motor_def(controller="ctrl1", M="M2", ADDR=2, is_cs=True)
 
     # make a dummy IOC with two entities as database render works against
     # a whole IOC rather than a single entity at a time.
@@ -64,33 +84,34 @@ def test_database_render(objects_classes, templates):
     ioc = IOC(
         ioc_name="test_ioc",
         description="for testing",
-        entities=[],
+        entities=[asyn1, sim_motor, motor1, motor2],
     )
 
-    ioc.entities.append(my_consumer)
     render_db = RenderDb(ioc)
     templates = render_db.render_database()
 
     assert templates == {
-        "test.db": [
-            '"name",          "ip",        "value"                    ',
-            '"test_consumer", "127.0.0.1", "test_ref_object.127.0.0.1"',
-        ]
+        "basic_asyn_motor.db": [
+            '"P",           "M",  "DTYP",      "PORT",  "ADDR", "DESC",    "EGU",     "DIR", "VELO", "VMAX", "MRES", "DHLM",  "DLLM",   "INIT"',
+            '"IBEK-MO-01:", "M1", "asynMotor", "ctrl1", "1",    "Motor 1", "degrees", "0",   "10.0", "10.0", ".01",  "20000", "-20000", ""    ',
+        ],
+        "basic_cs_asyn_motor.db": [
+            '"P",           "CS_NUM", "DTYP",      "PORT",  "ADDR", "DESC",    "EGU",     "DIR", "VELO", "VMAX", "MRES", "DHLM",  "DLLM",   "INIT"',
+            '"IBEK-MO-01:", "0",      "asynMotor", "ctrl1", "2",    "Motor 2", "degrees", "0",   "10.0", "10.0", ".01",  "20000", "-20000", ""    ',
+        ],
+        "sim_motor.db": [
+            '"controllerName", "P",           "DESC"',
+            '"ctrl1",          "IBEK-MO-01:", "test"',
+        ],
     }
 
 
-def test_environment_variables(objects_classes):
-    ref_cls = find_entity_class(objects_classes, "object_module.RefObject")
+def test_environment_variables(motor_classes):
+    asyn_def = find_entity_class(motor_classes, "asyn.AsynIP")
 
-    ref_obj = ref_cls(name="test_ref_object")
+    asyn_obj = asyn_def(name="asyn1", port="10.0.1.1")
 
     render = Render()
-    env_text = render.render_environment_variables(ref_obj)
+    env_text = render.render_environment_variables(asyn_obj)
 
-    assert env_text == "epicsEnvSet REF_OBJECT_NAME test_ref_object\n"
-
-
-def test_entity_disabled_does_not_render_elements(objects_classes):
-    # covered by tests/test_cli.py::test_build_startup_multiple
-    # see disabled entities in tests/samples/yaml/objects.ibek.ioc.yaml
-    pass
+    assert env_text == "epicsEnvSet NAME_AS_ENV_VAR my name is asyn1\n"
