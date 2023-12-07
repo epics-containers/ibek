@@ -9,7 +9,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
-    <title>Modules, Definitions and Entities &#8212; ibek 1.5.1.dev9+gd8da032a documentation</title>
+    <title>Modules, Definitions and Entities &#8212; ibek 1.5.1.dev10+g858582d8 documentation</title>
   
   
   
@@ -562,82 +562,189 @@ the above arguments</p></li>
 <div><details>
 <summary><a>objects.ibek.support.yaml</a></summary><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># yaml-language-server: $schema=../schemas/ibek.support.schema.json</span>
 
-<span class="c1">################################################################################</span>
-<span class="c1">### ibek support YAML to demonstrate the use of object references</span>
-<span class="c1">################################################################################</span>
-<span class="n">module</span><span class="p">:</span> <span class="n">object_module</span>
+<span class="c1"># slightly extended version of motorMotorSim.ibek.support.yaml from ibek-support.</span>
+<span class="c1"># the extra things are fictitious but are here to exercise all of the features</span>
+<span class="c1"># of the ibek.support schema</span>
+<span class="n">module</span><span class="p">:</span> <span class="n">motorSim</span>
 
 <span class="n">defs</span><span class="p">:</span>
-  <span class="o">-</span> <span class="n">name</span><span class="p">:</span> <span class="n">RefObject</span>
-    <span class="n">description</span><span class="p">:</span> <span class="o">|</span>
-      <span class="n">Example</span> <span class="nb">object</span> <span class="k">for</span> <span class="n">reference</span> <span class="kn">from</span> <span class="nn">Consumer</span>
+  <span class="o">-</span> <span class="n">name</span><span class="p">:</span> <span class="n">simMotorController</span>
+    <span class="n">description</span><span class="p">:</span> <span class="o">|-</span>
+      <span class="n">Creates</span> <span class="n">a</span> <span class="n">simulation</span> <span class="n">motion</span> <span class="n">controller</span>
+
     <span class="n">args</span><span class="p">:</span>
       <span class="o">-</span> <span class="nb">type</span><span class="p">:</span> <span class="nb">id</span>
-        <span class="n">name</span><span class="p">:</span> <span class="n">name</span>
-        <span class="n">description</span><span class="p">:</span> <span class="n">Port</span> <span class="n">name</span>
+        <span class="n">name</span><span class="p">:</span> <span class="n">controllerName</span>
+        <span class="n">description</span><span class="p">:</span> <span class="o">|-</span>
+          <span class="n">The</span> <span class="n">name</span> <span class="n">of</span> <span class="n">the</span> <span class="n">controller</span> <span class="ow">and</span> <span class="n">its</span> <span class="n">Asyn</span> <span class="n">Port</span> <span class="n">Name</span>
 
       <span class="o">-</span> <span class="nb">type</span><span class="p">:</span> <span class="nb">str</span>
-        <span class="n">name</span><span class="p">:</span> <span class="n">IP</span>
-        <span class="n">description</span><span class="p">:</span> <span class="n">IP</span> <span class="n">address</span> <span class="n">of</span> <span class="n">port</span>
-        <span class="n">default</span><span class="p">:</span> <span class="mf">127.0.0.1</span>
+        <span class="n">name</span><span class="p">:</span> <span class="n">P</span>
+        <span class="n">description</span><span class="p">:</span> <span class="o">|-</span>
+          <span class="n">Device</span> <span class="n">PV</span> <span class="n">Prefix</span>
 
-    <span class="n">values</span><span class="p">:</span>
-      <span class="o">-</span> <span class="n">name</span><span class="p">:</span> <span class="n">test_value</span>
-        <span class="n">value</span><span class="p">:</span> <span class="s2">&quot;{{ name }}.{{ IP }}&quot;</span>
-        <span class="n">description</span><span class="p">:</span> <span class="n">test</span> <span class="n">jinja</span> <span class="n">render</span> <span class="n">of</span> <span class="n">arg</span> <span class="n">values</span>
+      <span class="o">-</span> <span class="nb">type</span><span class="p">:</span> <span class="nb">int</span>
+        <span class="n">name</span><span class="p">:</span> <span class="n">numAxes</span>
+        <span class="n">description</span><span class="p">:</span> <span class="o">|-</span>
+          <span class="n">The</span> <span class="n">number</span> <span class="n">of</span> <span class="n">axes</span> <span class="n">to</span> <span class="n">create</span>
 
-    <span class="n">env_vars</span><span class="p">:</span>
-      <span class="o">-</span> <span class="n">name</span><span class="p">:</span> <span class="n">REF_OBJECT_NAME</span>
-        <span class="n">value</span><span class="p">:</span> <span class="s2">&quot;{{ name }}&quot;</span>
+      <span class="o">-</span> <span class="nb">type</span><span class="p">:</span> <span class="nb">object</span>
+        <span class="n">name</span><span class="p">:</span> <span class="n">port</span>
+        <span class="n">description</span><span class="p">:</span> <span class="o">|-</span>
+          <span class="n">a</span> <span class="n">reference</span> <span class="n">to</span> <span class="n">the</span> <span class="n">asyn</span> <span class="n">port</span> <span class="k">for</span> <span class="n">communication</span> <span class="k">with</span> <span class="n">the</span> <span class="n">controller</span>
+
+      <span class="o">-</span> <span class="nb">type</span><span class="p">:</span> <span class="nb">str</span>
+        <span class="n">name</span><span class="p">:</span> <span class="n">DESC</span>
+        <span class="n">description</span><span class="p">:</span> <span class="o">|-</span>
+          <span class="n">The</span> <span class="n">description</span> <span class="n">of</span> <span class="n">the</span> <span class="n">controller</span>
+        <span class="n">default</span><span class="p">:</span> <span class="s2">&quot;Simulated Motion Controller testing escaping: {</span><span class="si">% r</span><span class="s2">aw %} {{enclosed in escaped curly braces}} {</span><span class="si">% e</span><span class="s2">ndraw %}&quot;</span>
 
     <span class="n">pre_init</span><span class="p">:</span>
-      <span class="o">-</span> <span class="n">when</span><span class="p">:</span> <span class="n">first</span>
-        <span class="n">value</span><span class="p">:</span> <span class="o">|</span>
-          <span class="c1"># This line should appear once only in the pre_init section</span>
       <span class="o">-</span> <span class="n">value</span><span class="p">:</span> <span class="o">|</span>
-          <span class="c1"># TestValues testValue</span>
-          <span class="n">TestValues</span> <span class="p">{{</span> <span class="n">test_value</span> <span class="p">}}</span>
+          <span class="c1"># motorSimCreateController(controller_asyn_port_name, axis_count)</span>
+          <span class="c1"># testing escaping: {% raw %} {{enclosed in escaped curly braces}} {% endraw %}</span>
+          <span class="n">motorSimCreateController</span><span class="p">({{</span><span class="n">controllerName</span><span class="p">}},</span> <span class="p">{{</span><span class="n">numAxes</span><span class="p">}})</span>
+
+    <span class="n">databases</span><span class="p">:</span>
+      <span class="o">-</span> <span class="n">file</span><span class="p">:</span> <span class="n">sim_motor</span><span class="o">.</span><span class="n">db</span>
+        <span class="n">args</span><span class="p">:</span>
+          <span class="n">controllerName</span><span class="p">:</span>
+          <span class="n">P</span><span class="p">:</span>
+          <span class="n">DESC</span><span class="p">:</span>
 
     <span class="n">pvi</span><span class="p">:</span>
       <span class="n">yaml_path</span><span class="p">:</span> <span class="n">simple</span><span class="o">.</span><span class="n">pvi</span><span class="o">.</span><span class="n">device</span><span class="o">.</span><span class="n">yaml</span>
-      <span class="n">prefix</span><span class="p">:</span> <span class="s2">&quot;{{ name }}&quot;</span>
+      <span class="n">prefix</span><span class="p">:</span> <span class="s2">&quot;{{P}}:&quot;</span>
+      <span class="n">pva_template</span><span class="p">:</span> <span class="n">true</span>
+      <span class="n">index</span><span class="p">:</span> <span class="n">true</span>
 
-  <span class="o">-</span> <span class="n">name</span><span class="p">:</span> <span class="n">Consumer</span>
-    <span class="n">description</span><span class="p">:</span> <span class="o">|</span>
-      <span class="n">A</span> <span class="k">class</span> <span class="nc">that</span> <span class="n">uses</span> <span class="n">RefObject</span>
+  <span class="o">-</span> <span class="n">name</span><span class="p">:</span> <span class="n">simMotorAxis</span>
+    <span class="n">description</span><span class="p">:</span> <span class="o">|-</span>
+      <span class="n">Creates</span> <span class="n">a</span> <span class="n">simulation</span> <span class="n">motor</span> <span class="n">axis</span>
+
     <span class="n">args</span><span class="p">:</span>
-      <span class="o">-</span> <span class="nb">type</span><span class="p">:</span> <span class="nb">id</span>
-        <span class="n">name</span><span class="p">:</span> <span class="n">name</span>
-        <span class="n">description</span><span class="p">:</span> <span class="n">Consumer</span> <span class="n">name</span>
-
       <span class="o">-</span> <span class="nb">type</span><span class="p">:</span> <span class="nb">object</span>
-        <span class="n">name</span><span class="p">:</span> <span class="n">PORT</span>
-        <span class="n">description</span><span class="p">:</span> <span class="n">a</span> <span class="n">reference</span> <span class="n">to</span> <span class="n">an</span> <span class="n">RefObject</span>
+        <span class="n">name</span><span class="p">:</span> <span class="n">controller</span>
+        <span class="n">description</span><span class="p">:</span> <span class="o">|-</span>
+          <span class="n">a</span> <span class="n">reference</span> <span class="n">to</span> <span class="n">the</span> <span class="n">motion</span> <span class="n">controller</span>
 
-  <span class="o">-</span> <span class="n">name</span><span class="p">:</span> <span class="n">ConsumerTwo</span>
-    <span class="n">description</span><span class="p">:</span> <span class="o">|</span>
-      <span class="n">Another</span> <span class="k">class</span> <span class="nc">that</span> <span class="n">uses</span> <span class="n">RefObject</span>
-    <span class="n">args</span><span class="p">:</span>
-      <span class="o">-</span> <span class="nb">type</span><span class="p">:</span> <span class="nb">id</span>
-        <span class="n">name</span><span class="p">:</span> <span class="n">name</span>
-        <span class="n">description</span><span class="p">:</span> <span class="n">Consumer</span> <span class="n">name</span>
+      <span class="o">-</span> <span class="nb">type</span><span class="p">:</span> <span class="nb">str</span>
+        <span class="n">name</span><span class="p">:</span> <span class="n">M</span>
+        <span class="n">description</span><span class="p">:</span> <span class="o">|-</span>
+          <span class="n">PV</span> <span class="n">suffix</span> <span class="k">for</span> <span class="n">the</span> <span class="n">motor</span> <span class="n">record</span>
 
-      <span class="o">-</span> <span class="nb">type</span><span class="p">:</span> <span class="nb">object</span>
-        <span class="n">name</span><span class="p">:</span> <span class="n">PORT</span>
-        <span class="n">description</span><span class="p">:</span> <span class="n">a</span> <span class="n">reference</span> <span class="n">to</span> <span class="n">an</span> <span class="n">RefObject</span>
+      <span class="o">-</span> <span class="nb">type</span><span class="p">:</span> <span class="nb">int</span>
+        <span class="n">name</span><span class="p">:</span> <span class="n">ADDR</span>
+        <span class="n">description</span><span class="p">:</span> <span class="o">|-</span>
+          <span class="n">The</span> <span class="n">axis</span> <span class="n">number</span> <span class="p">(</span><span class="n">allowed</span> <span class="n">to</span> <span class="n">be</span> <span class="kn">from</span> <span class="mi">0</span> <span class="n">to</span> <span class="n">controller</span><span class="o">.</span><span class="n">numAxes</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
 
-    <span class="n">pre_init</span><span class="p">:</span>
+      <span class="o">-</span> <span class="nb">type</span><span class="p">:</span> <span class="nb">str</span>
+        <span class="n">name</span><span class="p">:</span> <span class="n">DESC</span>
+        <span class="n">description</span><span class="p">:</span> <span class="o">|-</span>
+          <span class="n">The</span> <span class="n">description</span> <span class="n">of</span> <span class="n">the</span> <span class="n">axis</span>
+        <span class="n">default</span><span class="p">:</span> <span class="s2">&quot;Motor {{ADDR}}&quot;</span>
+
+      <span class="o">-</span> <span class="nb">type</span><span class="p">:</span> <span class="nb">int</span>
+        <span class="n">name</span><span class="p">:</span> <span class="n">DLLM</span>
+        <span class="n">description</span><span class="p">:</span> <span class="o">|-</span>
+          <span class="n">The</span> <span class="n">low</span> <span class="n">limit</span> <span class="n">of</span> <span class="n">the</span> <span class="n">axis</span> <span class="p">(</span><span class="ow">in</span> <span class="n">counts</span><span class="p">)</span>
+        <span class="n">default</span><span class="p">:</span> <span class="o">-</span><span class="mi">20000</span>
+
+      <span class="o">-</span> <span class="nb">type</span><span class="p">:</span> <span class="nb">int</span>
+        <span class="n">name</span><span class="p">:</span> <span class="n">DHLM</span>
+        <span class="n">description</span><span class="p">:</span> <span class="o">|-</span>
+          <span class="n">The</span> <span class="n">high</span> <span class="n">limit</span> <span class="n">of</span> <span class="n">the</span> <span class="n">axis</span> <span class="p">(</span><span class="ow">in</span> <span class="n">counts</span><span class="p">)</span>
+        <span class="n">default</span><span class="p">:</span> <span class="mi">20000</span>
+
+      <span class="o">-</span> <span class="nb">type</span><span class="p">:</span> <span class="nb">int</span>
+        <span class="n">name</span><span class="p">:</span> <span class="n">home</span>
+        <span class="n">description</span><span class="p">:</span> <span class="o">|-</span>
+          <span class="n">The</span> <span class="n">home</span> <span class="n">position</span> <span class="n">of</span> <span class="n">the</span> <span class="n">axis</span> <span class="p">(</span><span class="ow">in</span> <span class="n">counts</span><span class="p">)</span>
+        <span class="n">default</span><span class="p">:</span> <span class="mi">0</span>
+
+      <span class="o">-</span> <span class="nb">type</span><span class="p">:</span> <span class="nb">str</span> <span class="c1"># int or jinja string</span>
+        <span class="n">name</span><span class="p">:</span> <span class="n">start</span>
+        <span class="n">description</span><span class="p">:</span> <span class="o">|-</span>
+          <span class="n">The</span> <span class="n">starting</span> <span class="n">position</span> <span class="n">of</span> <span class="n">the</span> <span class="n">axis</span> <span class="p">(</span><span class="ow">in</span> <span class="n">counts</span><span class="p">)</span>
+        <span class="n">default</span><span class="p">:</span> <span class="s2">&quot;{{home}}&quot;</span>
+
+      <span class="o">-</span> <span class="nb">type</span><span class="p">:</span> <span class="n">enum</span>
+        <span class="n">name</span><span class="p">:</span> <span class="n">DIR</span>
+        <span class="n">description</span><span class="p">:</span> <span class="o">|-</span>
+          <span class="n">The</span> <span class="n">direction</span> <span class="n">of</span> <span class="n">the</span> <span class="n">axis</span>
+        <span class="n">default</span><span class="p">:</span> <span class="mi">0</span>
+        <span class="n">values</span><span class="p">:</span>
+          <span class="n">Pos</span><span class="p">:</span> <span class="mi">0</span>
+          <span class="n">Neg</span><span class="p">:</span> <span class="mi">1</span>
+
+      <span class="o">-</span> <span class="nb">type</span><span class="p">:</span> <span class="nb">float</span>
+        <span class="n">name</span><span class="p">:</span> <span class="n">VELO</span>
+        <span class="n">description</span><span class="p">:</span> <span class="o">|-</span>
+          <span class="n">The</span> <span class="n">velocity</span> <span class="n">of</span> <span class="n">the</span> <span class="n">axis</span> <span class="p">(</span><span class="ow">in</span> <span class="n">counts</span><span class="o">/</span><span class="n">sec</span><span class="p">)</span>
+        <span class="n">default</span><span class="p">:</span> <span class="mf">10.0</span>
+
+      <span class="o">-</span> <span class="nb">type</span><span class="p">:</span> <span class="nb">str</span> <span class="c1"># float or jinja string</span>
+        <span class="n">name</span><span class="p">:</span> <span class="n">VMAX</span>
+        <span class="n">description</span><span class="p">:</span> <span class="o">|-</span>
+          <span class="n">The</span> <span class="n">maximum</span> <span class="n">velocity</span> <span class="n">of</span> <span class="n">the</span> <span class="n">axis</span> <span class="p">(</span><span class="ow">in</span> <span class="n">counts</span><span class="o">/</span><span class="n">sec</span><span class="p">)</span>
+        <span class="n">default</span><span class="p">:</span> <span class="s2">&quot;{{VELO}}&quot;</span>
+
+      <span class="o">-</span> <span class="nb">type</span><span class="p">:</span> <span class="nb">bool</span>
+        <span class="n">name</span><span class="p">:</span> <span class="n">is_cs</span>
+        <span class="n">description</span><span class="p">:</span> <span class="o">|-</span>
+          <span class="n">Set</span> <span class="n">to</span> <span class="kc">True</span> <span class="k">if</span> <span class="n">this</span> <span class="n">axis</span> <span class="n">a</span> <span class="n">coordinate</span> <span class="n">system</span> <span class="n">axis</span>
+        <span class="n">default</span><span class="p">:</span> <span class="n">false</span>
+
+      <span class="o">-</span> <span class="nb">type</span><span class="p">:</span> <span class="nb">int</span>
+        <span class="n">name</span><span class="p">:</span> <span class="n">CS_NUM</span>
+        <span class="n">description</span><span class="p">:</span> <span class="o">|-</span>
+          <span class="n">The</span> <span class="n">coordinate</span> <span class="n">system</span> <span class="n">number</span> <span class="k">for</span> <span class="n">this</span> <span class="n">axis</span>
+        <span class="n">default</span><span class="p">:</span> <span class="mi">0</span>
+
+    <span class="n">post_init</span><span class="p">:</span>
+      <span class="o">-</span> <span class="n">when</span><span class="p">:</span> <span class="n">once</span>
+        <span class="n">value</span><span class="p">:</span> <span class="o">|</span>
+          <span class="c1"># motorSimCreateAxis(controller_asyn_port_name, axis, axis_description)</span>
+
       <span class="o">-</span> <span class="n">value</span><span class="p">:</span> <span class="o">|</span>
-          <span class="c1"># ExampleTestFunction asynPortIP name port value</span>
-          <span class="n">ExampleTestFunction</span> <span class="p">{{</span> <span class="n">PORT</span><span class="o">.</span><span class="n">IP</span> <span class="p">}}</span> <span class="p">{{</span> <span class="n">name</span> <span class="p">}}</span> <span class="p">{{</span> <span class="n">PORT</span> <span class="p">}}</span> <span class="p">{{</span> <span class="n">PORT</span><span class="o">.</span><span class="n">test_value</span> <span class="p">}}</span>
-          <span class="c1"># PORT defaults to the id of PORT, i.e. PORT.name</span>
+          <span class="n">motorSimConfigAxis</span><span class="p">({{</span><span class="n">controller</span><span class="p">}},</span> <span class="p">{{</span><span class="n">ADDR</span><span class="p">}},</span> <span class="p">{{</span><span class="n">DHLM</span><span class="p">}},</span> <span class="p">{{</span><span class="n">DLLM</span><span class="p">}},</span> <span class="p">{{</span><span class="n">home</span><span class="p">}},</span> <span class="p">{{</span><span class="n">start</span><span class="p">}})</span>
 
     <span class="n">databases</span><span class="p">:</span>
-      <span class="o">-</span> <span class="n">file</span><span class="p">:</span> <span class="n">test</span><span class="o">.</span><span class="n">db</span>
+      <span class="o">-</span> <span class="n">file</span><span class="p">:</span> <span class="n">basic_asyn_motor</span><span class="o">.</span><span class="n">db</span>
+        <span class="n">enabled</span><span class="p">:</span> <span class="s2">&quot;{{not is_cs}}&quot;</span>
         <span class="n">args</span><span class="p">:</span>
-          <span class="n">name</span><span class="p">:</span>
-          <span class="n">ip</span><span class="p">:</span> <span class="s2">&quot;{{ PORT.IP }}&quot;</span>
-          <span class="n">value</span><span class="p">:</span> <span class="s2">&quot;{{ PORT.test_value }}&quot;</span>
+          <span class="n">P</span><span class="p">:</span> <span class="s2">&quot;{{controller.P}}&quot;</span>
+          <span class="n">M</span><span class="p">:</span>
+          <span class="n">DTYP</span><span class="p">:</span> <span class="s2">&quot;asynMotor&quot;</span>
+          <span class="n">PORT</span><span class="p">:</span> <span class="s2">&quot;{{controller}}&quot;</span>
+          <span class="n">ADDR</span><span class="p">:</span>
+          <span class="n">DESC</span><span class="p">:</span>
+          <span class="n">EGU</span><span class="p">:</span> <span class="s2">&quot;degrees&quot;</span>
+          <span class="n">DIR</span><span class="p">:</span>
+          <span class="n">VELO</span><span class="p">:</span>
+          <span class="n">VMAX</span><span class="p">:</span>
+          <span class="n">MRES</span><span class="p">:</span> <span class="s2">&quot;.01&quot;</span>
+          <span class="n">DHLM</span><span class="p">:</span>
+          <span class="n">DLLM</span><span class="p">:</span>
+          <span class="n">INIT</span><span class="p">:</span> <span class="s2">&quot;&quot;</span>
+
+      <span class="o">-</span> <span class="n">file</span><span class="p">:</span> <span class="n">basic_cs_asyn_motor</span><span class="o">.</span><span class="n">db</span>
+        <span class="n">enabled</span><span class="p">:</span> <span class="s2">&quot;{{is_cs}}&quot;</span>
+        <span class="n">args</span><span class="p">:</span>
+          <span class="n">P</span><span class="p">:</span> <span class="s2">&quot;{{controller.P}}&quot;</span>
+          <span class="n">CS_NUM</span><span class="p">:</span>
+          <span class="n">DTYP</span><span class="p">:</span> <span class="s2">&quot;asynMotor&quot;</span>
+          <span class="n">PORT</span><span class="p">:</span> <span class="s2">&quot;{{controller}}&quot;</span>
+          <span class="n">ADDR</span><span class="p">:</span>
+          <span class="n">DESC</span><span class="p">:</span>
+          <span class="n">EGU</span><span class="p">:</span> <span class="s2">&quot;degrees&quot;</span>
+          <span class="n">DIR</span><span class="p">:</span>
+          <span class="n">VELO</span><span class="p">:</span>
+          <span class="n">VMAX</span><span class="p">:</span>
+          <span class="n">MRES</span><span class="p">:</span> <span class="s2">&quot;.01&quot;</span>
+          <span class="n">DHLM</span><span class="p">:</span>
+          <span class="n">DLLM</span><span class="p">:</span>
+          <span class="n">INIT</span><span class="p">:</span> <span class="s2">&quot;&quot;</span>
 </pre></div>
 </div>
 </details></div></blockquote>
@@ -704,43 +811,70 @@ file that ibek will generate from it.</p>
 <p>Click the arrows to reveal the files.</p>
 <blockquote>
 <div><details>
-<summary><a>all.ibek.ioc.yaml</a></summary><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># yaml-language-server: $schema=../schemas/multiple.ibek.ioc.schema.json</span>
+<summary><a>all.ibek.ioc.yaml</a></summary><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># yaml-language-server: $schema=../schemas/motorSim.ibek.ioc.schema.json</span>
 
 <span class="n">ioc_name</span><span class="p">:</span> <span class="s2">&quot;{{ ioc_yaml_file_name }}&quot;</span>
-<span class="n">description</span><span class="p">:</span> <span class="n">a</span> <span class="n">basic</span> <span class="n">example</span> <span class="k">for</span> <span class="n">testing</span> <span class="n">multiple</span> <span class="n">support</span> <span class="n">definitions</span>
+<span class="n">description</span><span class="p">:</span> <span class="n">Example</span> <span class="n">simulated</span> <span class="n">motion</span> <span class="n">IOC</span> <span class="k">for</span> <span class="n">Testing</span> <span class="n">ibek</span>
 
 <span class="n">entities</span><span class="p">:</span>
-  <span class="o">-</span> <span class="nb">type</span><span class="p">:</span> <span class="n">object_module</span><span class="o">.</span><span class="n">RefObject</span>
-    <span class="n">name</span><span class="p">:</span> <span class="n">Ref1</span>
+  <span class="o">-</span> <span class="nb">type</span><span class="p">:</span> <span class="n">asyn</span><span class="o">.</span><span class="n">AsynIP</span>
+    <span class="n">name</span><span class="p">:</span> <span class="n">controllerOnePort</span>
+    <span class="n">port</span><span class="p">:</span> <span class="mf">192.168.0.55</span><span class="p">:</span><span class="mi">2002</span>
 
-  <span class="o">-</span> <span class="nb">type</span><span class="p">:</span> <span class="n">module</span><span class="o">.</span><span class="n">AllObject</span>
-    <span class="n">name</span><span class="p">:</span> <span class="n">ioc_name</span><span class="o">=</span><span class="p">{{</span> <span class="n">ioc_name</span> <span class="p">}}</span>
-    <span class="n">my_object</span><span class="p">:</span> <span class="n">Ref1</span>
-    <span class="n">my_int_enum</span><span class="p">:</span> <span class="n">full_speed</span>
-    <span class="n">my_inferred_enum</span><span class="p">:</span> <span class="n">third</span>
-    <span class="n">clock_rate</span><span class="p">:</span> <span class="n">dummy</span>
-    <span class="n">my_str</span><span class="p">:</span> <span class="n">AllObject</span> <span class="n">One</span> <span class="n">String</span>
+  <span class="o">-</span> <span class="nb">type</span><span class="p">:</span> <span class="n">motorSim</span><span class="o">.</span><span class="n">simMotorController</span>
+    <span class="n">port</span><span class="p">:</span> <span class="n">controllerOnePort</span>
+    <span class="n">controllerName</span><span class="p">:</span> <span class="n">controllerOne</span>
+    <span class="n">numAxes</span><span class="p">:</span> <span class="mi">4</span>
+    <span class="n">P</span><span class="p">:</span> <span class="s2">&quot;IBEK-MO-TST-01:&quot;</span>
 
-  <span class="o">-</span> <span class="nb">type</span><span class="p">:</span> <span class="n">module</span><span class="o">.</span><span class="n">AllObject</span>
-    <span class="n">name</span><span class="p">:</span> <span class="n">AllObject</span> <span class="n">Two</span>
-    <span class="n">my_object</span><span class="p">:</span> <span class="n">Ref1</span>
-    <span class="n">my_int_enum</span><span class="p">:</span> <span class="n">all_ahead</span>
-    <span class="n">my_inferred_enum</span><span class="p">:</span> <span class="n">first</span>
-    <span class="n">clock_rate</span><span class="p">:</span> <span class="mi">2</span><span class="n">Hz</span>
-    <span class="n">my_str</span><span class="p">:</span> <span class="n">AllObject</span> <span class="n">Two</span> <span class="n">String</span>
+  <span class="o">-</span> <span class="nb">type</span><span class="p">:</span> <span class="n">motorSim</span><span class="o">.</span><span class="n">simMotorAxis</span>
+    <span class="n">controller</span><span class="p">:</span> <span class="n">controllerOne</span>
+    <span class="c1"># Use ADDR in other fields to verify jinja templating between Args</span>
+    <span class="n">M</span><span class="p">:</span> <span class="n">M</span><span class="p">{{</span><span class="n">ADDR</span><span class="p">}}</span>
+    <span class="n">ADDR</span><span class="p">:</span> <span class="mi">0</span>
+    <span class="c1"># Also use ioc_name to verify jinja templating of ioc_name</span>
+    <span class="n">DESC</span><span class="p">:</span> <span class="s2">&quot;Motor {{ADDR}} for ioc {{ioc_name}}&quot;</span>
+    <span class="n">home</span><span class="p">:</span> <span class="mi">500</span>
 
-  <span class="o">-</span> <span class="nb">type</span><span class="p">:</span> <span class="n">object_module</span><span class="o">.</span><span class="n">ConsumerTwo</span>
-    <span class="n">name</span><span class="p">:</span> <span class="n">Consumer</span> <span class="n">Two</span> <span class="n">With</span> <span class="n">DB</span>
-    <span class="n">PORT</span><span class="p">:</span> <span class="n">Ref1</span>
+  <span class="o">-</span> <span class="nb">type</span><span class="p">:</span> <span class="n">motorSim</span><span class="o">.</span><span class="n">simMotorAxis</span>
+    <span class="n">controller</span><span class="p">:</span> <span class="n">controllerOne</span>
+    <span class="n">M</span><span class="p">:</span> <span class="n">M</span><span class="p">{{</span><span class="n">ADDR</span><span class="p">}}</span>
+    <span class="n">ADDR</span><span class="p">:</span> <span class="mi">1</span>
+    <span class="c1"># verify escaping for jinja templating</span>
+    <span class="n">DESC</span><span class="p">:</span> <span class="s2">&quot;Motor {{ADDR}} {</span><span class="si">% r</span><span class="s2">aw %} {{enclosed in escaped curly braces}} {</span><span class="si">% e</span><span class="s2">ndraw %}&quot;</span>
+    <span class="n">home</span><span class="p">:</span> <span class="mi">500</span>
 
-  <span class="o">-</span> <span class="nb">type</span><span class="p">:</span> <span class="n">object_module</span><span class="o">.</span><span class="n">ConsumerTwo</span>
-    <span class="n">name</span><span class="p">:</span> <span class="n">Disabled</span> <span class="n">Consumer</span>
-    <span class="n">PORT</span><span class="p">:</span> <span class="n">Ref1</span>
-    <span class="n">entity_enabled</span><span class="p">:</span> <span class="n">false</span>
+  <span class="o">-</span> <span class="nb">type</span><span class="p">:</span> <span class="n">motorSim</span><span class="o">.</span><span class="n">simMotorAxis</span>
+    <span class="n">controller</span><span class="p">:</span> <span class="n">controllerOne</span>
+    <span class="n">M</span><span class="p">:</span> <span class="n">M</span><span class="p">{{</span><span class="n">ADDR</span><span class="p">}}</span>
+    <span class="n">ADDR</span><span class="p">:</span> <span class="mi">2</span>
+    <span class="c1"># testing default DESC</span>
+    <span class="n">home</span><span class="p">:</span> <span class="mi">1500</span>
 
-  <span class="o">-</span> <span class="nb">type</span><span class="p">:</span> <span class="n">object_module</span><span class="o">.</span><span class="n">RefObject</span>
-    <span class="n">name</span><span class="p">:</span> <span class="n">Disabled</span> <span class="n">RefObject</span>
-    <span class="n">entity_enabled</span><span class="p">:</span> <span class="n">false</span>
+  <span class="o">-</span> <span class="nb">type</span><span class="p">:</span> <span class="n">motorSim</span><span class="o">.</span><span class="n">simMotorAxis</span>
+    <span class="n">controller</span><span class="p">:</span> <span class="n">controllerOne</span>
+    <span class="n">M</span><span class="p">:</span> <span class="n">M</span><span class="p">{{</span><span class="n">ADDR</span><span class="p">}}</span>
+    <span class="n">ADDR</span><span class="p">:</span> <span class="mi">3</span>
+    <span class="n">DESC</span><span class="p">:</span> <span class="s2">&quot;Motor {{ADDR}}&quot;</span>
+    <span class="n">home</span><span class="p">:</span> <span class="mi">2500</span>
+
+  <span class="o">-</span> <span class="nb">type</span><span class="p">:</span> <span class="n">motorSim</span><span class="o">.</span><span class="n">simMotorAxis</span>
+    <span class="n">controller</span><span class="p">:</span> <span class="n">controllerOne</span>
+    <span class="n">M</span><span class="p">:</span> <span class="n">CS_M</span><span class="p">{{</span><span class="n">ADDR</span><span class="p">}}</span>
+    <span class="n">ADDR</span><span class="p">:</span> <span class="mi">1</span>
+    <span class="n">DESC</span><span class="p">:</span> <span class="s2">&quot;CS Motor {{ADDR}}&quot;</span>
+    <span class="n">home</span><span class="p">:</span> <span class="mi">100</span>
+    <span class="n">CS_NUM</span><span class="p">:</span> <span class="mi">3</span>
+    <span class="n">is_cs</span><span class="p">:</span> <span class="n">true</span>
+
+  <span class="o">-</span> <span class="nb">type</span><span class="p">:</span> <span class="n">motorSim</span><span class="o">.</span><span class="n">simMotorAxis</span>
+    <span class="n">controller</span><span class="p">:</span> <span class="n">controllerOne</span>
+    <span class="n">M</span><span class="p">:</span> <span class="n">CS_M</span><span class="p">{{</span><span class="n">ADDR</span><span class="p">}}</span>
+    <span class="n">ADDR</span><span class="p">:</span> <span class="mi">2</span>
+    <span class="n">DESC</span><span class="p">:</span> <span class="s2">&quot;CS Motor {{ADDR}}&quot;</span>
+    <span class="n">home</span><span class="p">:</span> <span class="mi">100</span>
+    <span class="n">CS_NUM</span><span class="p">:</span> <span class="mi">3</span>
+    <span class="n">is_cs</span><span class="p">:</span> <span class="n">true</span>
 </pre></div>
 </div>
 </details>
@@ -749,45 +883,37 @@ file that ibek will generate from it.</p>
 
 cd &quot;/epics/ioc&quot;
 
-epicsEnvSet REF_OBJECT_NAME Ref1
+epicsEnvSet NAME_AS_ENV_VAR my name is controllerOnePort
 
 dbLoadDatabase dbd/ioc.dbd
 ioc_registerRecordDeviceDriver pdbbase
 
-# This line should appear once only in the pre_init section
-# TestValues testValue
-TestValues Ref1.127.0.0.1
-# this is a comment
-# that spans multiple lines
-# 
-testPreInit &quot;ioc_name={{ ioc_name }}&quot; &quot;&#39;AllObject One String&#39;&quot;
-my_str =                    AllObject One String
-my_inferred_enum =          third
-clock_rate =                dummy
-my_mixed_enum_no_default =  
-.
-# this is a comment
-# that spans multiple lines
-# 
-testPreInit &quot;AllObject Two&quot; &quot;&#39;AllObject Two String&#39;&quot;
-my_str =                    AllObject Two String
-my_inferred_enum =          hello
-clock_rate =                1
-my_mixed_enum_no_default =  
-.
-# ExampleTestFunction asynPortIP name port value
-ExampleTestFunction 127.0.0.1 Consumer Two With DB Ref1 Ref1.127.0.0.1
-# PORT defaults to the id of PORT, i.e. PORT.name
+# Setting up Asyn Port controllerOnePort on 192.168.0.55:2002:
+# AsynIPConfigure({{name}}, {{port}}, {{stop}}, {{parity}}, {{bits}}) 
+AsynIPConfigure(controllerOnePort, 192.168.0.55:2002, 1, none, 8)
+asynSetOption(9600, 0, N, Y)
+asynOctetSetInputEos(&quot;\n&quot;)
+asynOctetSetOutputEos(&quot;\n&quot;)
+# motorSimCreateController(controller_asyn_port_name, axis_count)
+# testing escaping:  {{enclosed in escaped curly braces}} 
+motorSimCreateController(controllerOne, 4)
 
 dbLoadRecords $(RUNTIME_DIR)/ioc.db
 iocInit
 
 
-testPostInit &quot;ioc_name={{ ioc_name }}&quot; test_value:
-this should appear once only in the post_init section
-# post init comment
-testPostInit &quot;AllObject Two&quot; test_value:
-# post init comment
+# motorSimCreateAxis(controller_asyn_port_name, axis, axis_description)
+motorSimConfigAxis(controllerOne, 0, 20000, -20000, 500, 500)
+# motorSimCreateAxis(controller_asyn_port_name, axis, axis_description)
+motorSimConfigAxis(controllerOne, 1, 20000, -20000, 500, 500)
+# motorSimCreateAxis(controller_asyn_port_name, axis, axis_description)
+motorSimConfigAxis(controllerOne, 2, 20000, -20000, 1500, 1500)
+# motorSimCreateAxis(controller_asyn_port_name, axis, axis_description)
+motorSimConfigAxis(controllerOne, 3, 20000, -20000, 2500, 2500)
+# motorSimCreateAxis(controller_asyn_port_name, axis, axis_description)
+motorSimConfigAxis(controllerOne, 1, 20000, -20000, 100, 100)
+# motorSimCreateAxis(controller_asyn_port_name, axis, axis_description)
+motorSimConfigAxis(controllerOne, 2, 20000, -20000, 100, 100)
 
 </pre></div>
 </div>
@@ -1458,23 +1584,20 @@ the container or during container development.</p>
 <details>
 <summary><a>multiple.ibek.ioc.schema.json</a></summary><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
   <span class="s2">&quot;$defs&quot;</span><span class="p">:</span> <span class="p">{</span>
-    <span class="s2">&quot;clock_rate&quot;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="s2">&quot;DIR&quot;</span><span class="p">:</span> <span class="p">{</span>
       <span class="s2">&quot;enum&quot;</span><span class="p">:</span> <span class="p">[</span>
-        <span class="s2">&quot;1Hz&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;2Hz&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;5Hz&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;10Hz&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;dummy&quot;</span>
+        <span class="s2">&quot;Pos&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;Neg&quot;</span>
       <span class="p">],</span>
-      <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;clock_rate&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;DIR&quot;</span><span class="p">,</span>
       <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
     <span class="p">},</span>
-    <span class="s2">&quot;module_AllObject&quot;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="s2">&quot;motorSim_simMotorAxis&quot;</span><span class="p">:</span> <span class="p">{</span>
       <span class="s2">&quot;additionalProperties&quot;</span><span class="p">:</span> <span class="n">false</span><span class="p">,</span>
       <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span>
         <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="p">{</span>
-          <span class="s2">&quot;const&quot;</span><span class="p">:</span> <span class="s2">&quot;module.AllObject&quot;</span><span class="p">,</span>
-          <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="s2">&quot;module.AllObject&quot;</span><span class="p">,</span>
+          <span class="s2">&quot;const&quot;</span><span class="p">:</span> <span class="s2">&quot;motorSim.simMotorAxis&quot;</span><span class="p">,</span>
+          <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="s2">&quot;motorSim.simMotorAxis&quot;</span><span class="p">,</span>
           <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;The type of this entity&quot;</span><span class="p">,</span>
           <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Type&quot;</span>
         <span class="p">},</span>
@@ -1484,111 +1607,98 @@ the container or during container development.</p>
           <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Entity Enabled&quot;</span><span class="p">,</span>
           <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;boolean&quot;</span>
         <span class="p">},</span>
-        <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="p">{</span>
-          <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;identifier&quot;</span><span class="p">,</span>
-          <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Name&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;controller&quot;</span><span class="p">:</span> <span class="p">{</span>
+          <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;a reference to the motion controller&quot;</span><span class="p">,</span>
+          <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Controller&quot;</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;M&quot;</span><span class="p">:</span> <span class="p">{</span>
+          <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;PV suffix for the motor record&quot;</span><span class="p">,</span>
+          <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;M&quot;</span><span class="p">,</span>
           <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
         <span class="p">},</span>
-        <span class="s2">&quot;do_database&quot;</span><span class="p">:</span> <span class="p">{</span>
-          <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="n">true</span><span class="p">,</span>
-          <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;don&#39;t render DB if this is false&quot;</span><span class="p">,</span>
-          <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Do Database&quot;</span><span class="p">,</span>
-          <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;boolean&quot;</span>
-        <span class="p">},</span>
-        <span class="s2">&quot;my_int_enum&quot;</span><span class="p">:</span> <span class="p">{</span>
-          <span class="s2">&quot;allOf&quot;</span><span class="p">:</span> <span class="p">[</span>
-            <span class="p">{</span>
-              <span class="s2">&quot;$ref&quot;</span><span class="p">:</span> <span class="s2">&quot;#/$defs/my_int_enum&quot;</span>
-            <span class="p">}</span>
-          <span class="p">],</span>
-          <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
-          <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;integer enumerated type&quot;</span>
-        <span class="p">},</span>
-        <span class="s2">&quot;my_inferred_enum&quot;</span><span class="p">:</span> <span class="p">{</span>
-          <span class="s2">&quot;allOf&quot;</span><span class="p">:</span> <span class="p">[</span>
-            <span class="p">{</span>
-              <span class="s2">&quot;$ref&quot;</span><span class="p">:</span> <span class="s2">&quot;#/$defs/my_inferred_enum&quot;</span>
-            <span class="p">}</span>
-          <span class="p">],</span>
-          <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;integer enumerated type with inferred value&quot;</span>
-        <span class="p">},</span>
-        <span class="s2">&quot;clock_rate&quot;</span><span class="p">:</span> <span class="p">{</span>
-          <span class="s2">&quot;allOf&quot;</span><span class="p">:</span> <span class="p">[</span>
-            <span class="p">{</span>
-              <span class="s2">&quot;$ref&quot;</span><span class="p">:</span> <span class="s2">&quot;#/$defs/clock_rate&quot;</span>
-            <span class="p">}</span>
-          <span class="p">],</span>
-          <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;demonstrates use of VME clock rates as an enum</span><span class="se">\n</span><span class="s2">this is an example of an &#39;illegal&#39; python enum</span><span class="se">\n</span><span class="s2">&quot;</span>
-        <span class="p">},</span>
-        <span class="s2">&quot;my_str&quot;</span><span class="p">:</span> <span class="p">{</span>
-          <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;string arg&quot;</span><span class="p">,</span>
-          <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;My Str&quot;</span><span class="p">,</span>
-          <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
-        <span class="p">},</span>
-        <span class="s2">&quot;my_int&quot;</span><span class="p">:</span> <span class="p">{</span>
-          <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
-          <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;integer arg&quot;</span><span class="p">,</span>
-          <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;My Int&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;ADDR&quot;</span><span class="p">:</span> <span class="p">{</span>
+          <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;The axis number (allowed to be from 0 to controller.numAxes-1)&quot;</span><span class="p">,</span>
+          <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Addr&quot;</span><span class="p">,</span>
           <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;integer&quot;</span>
         <span class="p">},</span>
-        <span class="s2">&quot;my_object&quot;</span><span class="p">:</span> <span class="p">{</span>
-          <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;object arg&quot;</span><span class="p">,</span>
-          <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;My Object&quot;</span>
+        <span class="s2">&quot;DESC&quot;</span><span class="p">:</span> <span class="p">{</span>
+          <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="s2">&quot;Motor {{ADDR}}&quot;</span><span class="p">,</span>
+          <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;The description of the axis&quot;</span><span class="p">,</span>
+          <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Desc&quot;</span><span class="p">,</span>
+          <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
         <span class="p">},</span>
-        <span class="s2">&quot;my_float&quot;</span><span class="p">:</span> <span class="p">{</span>
-          <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">,</span>
-          <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;float arg&quot;</span><span class="p">,</span>
-          <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;My Float&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;DLLM&quot;</span><span class="p">:</span> <span class="p">{</span>
+          <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="o">-</span><span class="mi">20000</span><span class="p">,</span>
+          <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;The low limit of the axis (in counts)&quot;</span><span class="p">,</span>
+          <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Dllm&quot;</span><span class="p">,</span>
+          <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;integer&quot;</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;DHLM&quot;</span><span class="p">:</span> <span class="p">{</span>
+          <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="mi">20000</span><span class="p">,</span>
+          <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;The high limit of the axis (in counts)&quot;</span><span class="p">,</span>
+          <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Dhlm&quot;</span><span class="p">,</span>
+          <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;integer&quot;</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;home&quot;</span><span class="p">:</span> <span class="p">{</span>
+          <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+          <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;The home position of the axis (in counts)&quot;</span><span class="p">,</span>
+          <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Home&quot;</span><span class="p">,</span>
+          <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;integer&quot;</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;start&quot;</span><span class="p">:</span> <span class="p">{</span>
+          <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="s2">&quot;{{home}}&quot;</span><span class="p">,</span>
+          <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;The starting position of the axis (in counts)&quot;</span><span class="p">,</span>
+          <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Start&quot;</span><span class="p">,</span>
+          <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;DIR&quot;</span><span class="p">:</span> <span class="p">{</span>
+          <span class="s2">&quot;allOf&quot;</span><span class="p">:</span> <span class="p">[</span>
+            <span class="p">{</span>
+              <span class="s2">&quot;$ref&quot;</span><span class="p">:</span> <span class="s2">&quot;#/$defs/DIR&quot;</span>
+            <span class="p">}</span>
+          <span class="p">],</span>
+          <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+          <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;The direction of the axis&quot;</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;VELO&quot;</span><span class="p">:</span> <span class="p">{</span>
+          <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="mf">10.0</span><span class="p">,</span>
+          <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;The velocity of the axis (in counts/sec)&quot;</span><span class="p">,</span>
+          <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Velo&quot;</span><span class="p">,</span>
           <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;number&quot;</span>
         <span class="p">},</span>
-        <span class="s2">&quot;my_bool&quot;</span><span class="p">:</span> <span class="p">{</span>
-          <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="n">true</span><span class="p">,</span>
-          <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;bool arg&quot;</span><span class="p">,</span>
-          <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;My Bool&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;VMAX&quot;</span><span class="p">:</span> <span class="p">{</span>
+          <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="s2">&quot;{{VELO}}&quot;</span><span class="p">,</span>
+          <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;The maximum velocity of the axis (in counts/sec)&quot;</span><span class="p">,</span>
+          <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Vmax&quot;</span><span class="p">,</span>
+          <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;is_cs&quot;</span><span class="p">:</span> <span class="p">{</span>
+          <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="n">false</span><span class="p">,</span>
+          <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Set to True if this axis a coordinate system axis&quot;</span><span class="p">,</span>
+          <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Is Cs&quot;</span><span class="p">,</span>
           <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;boolean&quot;</span>
         <span class="p">},</span>
-        <span class="s2">&quot;calculated_one&quot;</span><span class="p">:</span> <span class="p">{</span>
-          <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="s2">&quot;{{ name }}.{{ my_str }}.{{ my_int }}.{{ my_float }}.{{ my_bool }}&quot;</span><span class="p">,</span>
-          <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;test jinja render of arg values&quot;</span><span class="p">,</span>
-          <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Calculated One&quot;</span><span class="p">,</span>
-          <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
+        <span class="s2">&quot;CS_NUM&quot;</span><span class="p">:</span> <span class="p">{</span>
+          <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+          <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;The coordinate system number for this axis&quot;</span><span class="p">,</span>
+          <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Cs Num&quot;</span><span class="p">,</span>
+          <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;integer&quot;</span>
         <span class="p">}</span>
       <span class="p">},</span>
       <span class="s2">&quot;required&quot;</span><span class="p">:</span> <span class="p">[</span>
-        <span class="s2">&quot;name&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;my_inferred_enum&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;clock_rate&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;my_str&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;my_object&quot;</span>
+        <span class="s2">&quot;controller&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;M&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;ADDR&quot;</span>
       <span class="p">],</span>
-      <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;module_AllObject&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;motorSim_simMotorAxis&quot;</span><span class="p">,</span>
       <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span>
     <span class="p">},</span>
-    <span class="s2">&quot;my_inferred_enum&quot;</span><span class="p">:</span> <span class="p">{</span>
-      <span class="s2">&quot;enum&quot;</span><span class="p">:</span> <span class="p">[</span>
-        <span class="s2">&quot;first&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;second&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;third&quot;</span>
-      <span class="p">],</span>
-      <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;my_inferred_enum&quot;</span><span class="p">,</span>
-      <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
-    <span class="p">},</span>
-    <span class="s2">&quot;my_int_enum&quot;</span><span class="p">:</span> <span class="p">{</span>
-      <span class="s2">&quot;enum&quot;</span><span class="p">:</span> <span class="p">[</span>
-        <span class="s2">&quot;all_ahead&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;full_speed&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;ramming_speed&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;stop&quot;</span>
-      <span class="p">],</span>
-      <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;my_int_enum&quot;</span><span class="p">,</span>
-      <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
-    <span class="p">},</span>
-    <span class="s2">&quot;object_module_Consumer&quot;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="s2">&quot;motorSim_simMotorController&quot;</span><span class="p">:</span> <span class="p">{</span>
       <span class="s2">&quot;additionalProperties&quot;</span><span class="p">:</span> <span class="n">false</span><span class="p">,</span>
       <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span>
         <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="p">{</span>
-          <span class="s2">&quot;const&quot;</span><span class="p">:</span> <span class="s2">&quot;object_module.Consumer&quot;</span><span class="p">,</span>
-          <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="s2">&quot;object_module.Consumer&quot;</span><span class="p">,</span>
+          <span class="s2">&quot;const&quot;</span><span class="p">:</span> <span class="s2">&quot;motorSim.simMotorController&quot;</span><span class="p">,</span>
+          <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="s2">&quot;motorSim.simMotorController&quot;</span><span class="p">,</span>
           <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;The type of this entity&quot;</span><span class="p">,</span>
           <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Type&quot;</span>
         <span class="p">},</span>
@@ -1598,92 +1708,39 @@ the container or during container development.</p>
           <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Entity Enabled&quot;</span><span class="p">,</span>
           <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;boolean&quot;</span>
         <span class="p">},</span>
-        <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="p">{</span>
-          <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Consumer name&quot;</span><span class="p">,</span>
-          <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Name&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;controllerName&quot;</span><span class="p">:</span> <span class="p">{</span>
+          <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;The name of the controller and its Asyn Port Name&quot;</span><span class="p">,</span>
+          <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Controllername&quot;</span><span class="p">,</span>
           <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
         <span class="p">},</span>
-        <span class="s2">&quot;PORT&quot;</span><span class="p">:</span> <span class="p">{</span>
-          <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;a reference to an RefObject&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;P&quot;</span><span class="p">:</span> <span class="p">{</span>
+          <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Device PV Prefix&quot;</span><span class="p">,</span>
+          <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;P&quot;</span><span class="p">,</span>
+          <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;numAxes&quot;</span><span class="p">:</span> <span class="p">{</span>
+          <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;The number of axes to create&quot;</span><span class="p">,</span>
+          <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Numaxes&quot;</span><span class="p">,</span>
+          <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;integer&quot;</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;port&quot;</span><span class="p">:</span> <span class="p">{</span>
+          <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;a reference to the asyn port for communication with the controller&quot;</span><span class="p">,</span>
           <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Port&quot;</span>
-        <span class="p">}</span>
-      <span class="p">},</span>
-      <span class="s2">&quot;required&quot;</span><span class="p">:</span> <span class="p">[</span>
-        <span class="s2">&quot;name&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;PORT&quot;</span>
-      <span class="p">],</span>
-      <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;object_module_Consumer&quot;</span><span class="p">,</span>
-      <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span>
-    <span class="p">},</span>
-    <span class="s2">&quot;object_module_ConsumerTwo&quot;</span><span class="p">:</span> <span class="p">{</span>
-      <span class="s2">&quot;additionalProperties&quot;</span><span class="p">:</span> <span class="n">false</span><span class="p">,</span>
-      <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span>
-        <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="p">{</span>
-          <span class="s2">&quot;const&quot;</span><span class="p">:</span> <span class="s2">&quot;object_module.ConsumerTwo&quot;</span><span class="p">,</span>
-          <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="s2">&quot;object_module.ConsumerTwo&quot;</span><span class="p">,</span>
-          <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;The type of this entity&quot;</span><span class="p">,</span>
-          <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Type&quot;</span>
         <span class="p">},</span>
-        <span class="s2">&quot;entity_enabled&quot;</span><span class="p">:</span> <span class="p">{</span>
-          <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="n">true</span><span class="p">,</span>
-          <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;enable or disable this entity instance&quot;</span><span class="p">,</span>
-          <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Entity Enabled&quot;</span><span class="p">,</span>
-          <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;boolean&quot;</span>
-        <span class="p">},</span>
-        <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="p">{</span>
-          <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Consumer name&quot;</span><span class="p">,</span>
-          <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Name&quot;</span><span class="p">,</span>
-          <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
-        <span class="p">},</span>
-        <span class="s2">&quot;PORT&quot;</span><span class="p">:</span> <span class="p">{</span>
-          <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;a reference to an RefObject&quot;</span><span class="p">,</span>
-          <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Port&quot;</span>
-        <span class="p">}</span>
-      <span class="p">},</span>
-      <span class="s2">&quot;required&quot;</span><span class="p">:</span> <span class="p">[</span>
-        <span class="s2">&quot;name&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;PORT&quot;</span>
-      <span class="p">],</span>
-      <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;object_module_ConsumerTwo&quot;</span><span class="p">,</span>
-      <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span>
-    <span class="p">},</span>
-    <span class="s2">&quot;object_module_RefObject&quot;</span><span class="p">:</span> <span class="p">{</span>
-      <span class="s2">&quot;additionalProperties&quot;</span><span class="p">:</span> <span class="n">false</span><span class="p">,</span>
-      <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span>
-        <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="p">{</span>
-          <span class="s2">&quot;const&quot;</span><span class="p">:</span> <span class="s2">&quot;object_module.RefObject&quot;</span><span class="p">,</span>
-          <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="s2">&quot;object_module.RefObject&quot;</span><span class="p">,</span>
-          <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;The type of this entity&quot;</span><span class="p">,</span>
-          <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Type&quot;</span>
-        <span class="p">},</span>
-        <span class="s2">&quot;entity_enabled&quot;</span><span class="p">:</span> <span class="p">{</span>
-          <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="n">true</span><span class="p">,</span>
-          <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;enable or disable this entity instance&quot;</span><span class="p">,</span>
-          <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Entity Enabled&quot;</span><span class="p">,</span>
-          <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;boolean&quot;</span>
-        <span class="p">},</span>
-        <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="p">{</span>
-          <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Port name&quot;</span><span class="p">,</span>
-          <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Name&quot;</span><span class="p">,</span>
-          <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
-        <span class="p">},</span>
-        <span class="s2">&quot;IP&quot;</span><span class="p">:</span> <span class="p">{</span>
-          <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="s2">&quot;127.0.0.1&quot;</span><span class="p">,</span>
-          <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;IP address of port&quot;</span><span class="p">,</span>
-          <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Ip&quot;</span><span class="p">,</span>
-          <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
-        <span class="p">},</span>
-        <span class="s2">&quot;test_value&quot;</span><span class="p">:</span> <span class="p">{</span>
-          <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="s2">&quot;{{ name }}.{{ IP }}&quot;</span><span class="p">,</span>
-          <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;test jinja render of arg values&quot;</span><span class="p">,</span>
-          <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Test Value&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;DESC&quot;</span><span class="p">:</span> <span class="p">{</span>
+          <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="s2">&quot;Simulated Motion Controller testing escaping: {</span><span class="si">% r</span><span class="s2">aw %} {{enclosed in escaped curly braces}} {</span><span class="si">% e</span><span class="s2">ndraw %}&quot;</span><span class="p">,</span>
+          <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;The description of the controller&quot;</span><span class="p">,</span>
+          <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Desc&quot;</span><span class="p">,</span>
           <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
         <span class="p">}</span>
       <span class="p">},</span>
       <span class="s2">&quot;required&quot;</span><span class="p">:</span> <span class="p">[</span>
-        <span class="s2">&quot;name&quot;</span>
+        <span class="s2">&quot;controllerName&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;P&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;numAxes&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;port&quot;</span>
       <span class="p">],</span>
-      <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;object_module_RefObject&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;motorSim_simMotorController&quot;</span><span class="p">,</span>
       <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span>
     <span class="p">}</span>
   <span class="p">},</span>
@@ -1704,25 +1761,17 @@ the container or during container development.</p>
       <span class="s2">&quot;items&quot;</span><span class="p">:</span> <span class="p">{</span>
         <span class="s2">&quot;discriminator&quot;</span><span class="p">:</span> <span class="p">{</span>
           <span class="s2">&quot;mapping&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s2">&quot;module.AllObject&quot;</span><span class="p">:</span> <span class="s2">&quot;#/$defs/module_AllObject&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;object_module.Consumer&quot;</span><span class="p">:</span> <span class="s2">&quot;#/$defs/object_module_Consumer&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;object_module.ConsumerTwo&quot;</span><span class="p">:</span> <span class="s2">&quot;#/$defs/object_module_ConsumerTwo&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;object_module.RefObject&quot;</span><span class="p">:</span> <span class="s2">&quot;#/$defs/object_module_RefObject&quot;</span>
+            <span class="s2">&quot;motorSim.simMotorAxis&quot;</span><span class="p">:</span> <span class="s2">&quot;#/$defs/motorSim_simMotorAxis&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;motorSim.simMotorController&quot;</span><span class="p">:</span> <span class="s2">&quot;#/$defs/motorSim_simMotorController&quot;</span>
           <span class="p">},</span>
           <span class="s2">&quot;propertyName&quot;</span><span class="p">:</span> <span class="s2">&quot;type&quot;</span>
         <span class="p">},</span>
         <span class="s2">&quot;oneOf&quot;</span><span class="p">:</span> <span class="p">[</span>
           <span class="p">{</span>
-            <span class="s2">&quot;$ref&quot;</span><span class="p">:</span> <span class="s2">&quot;#/$defs/object_module_RefObject&quot;</span>
+            <span class="s2">&quot;$ref&quot;</span><span class="p">:</span> <span class="s2">&quot;#/$defs/motorSim_simMotorController&quot;</span>
           <span class="p">},</span>
           <span class="p">{</span>
-            <span class="s2">&quot;$ref&quot;</span><span class="p">:</span> <span class="s2">&quot;#/$defs/object_module_Consumer&quot;</span>
-          <span class="p">},</span>
-          <span class="p">{</span>
-            <span class="s2">&quot;$ref&quot;</span><span class="p">:</span> <span class="s2">&quot;#/$defs/object_module_ConsumerTwo&quot;</span>
-          <span class="p">},</span>
-          <span class="p">{</span>
-            <span class="s2">&quot;$ref&quot;</span><span class="p">:</span> <span class="s2">&quot;#/$defs/module_AllObject&quot;</span>
+            <span class="s2">&quot;$ref&quot;</span><span class="p">:</span> <span class="s2">&quot;#/$defs/motorSim_simMotorAxis&quot;</span>
           <span class="p">}</span>
         <span class="p">]</span>
       <span class="p">},</span>
