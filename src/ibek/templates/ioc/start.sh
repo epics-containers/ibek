@@ -1,6 +1,6 @@
 #!/bin/bash
 
-description = '
+description='
 
  The epics-containers IOC Startup Script
  =======================================
@@ -25,7 +25,7 @@ description = '
 
     The presence of this file overrides all other options.
 
-    WAARNING: config maps are restricted to 1MB total.
+    WARNING: config maps are restricted to 1MB total.
 
  2. ioc.yaml *************************************************************
     If the config folder contains a yaml file we invoke the ibek tool to
