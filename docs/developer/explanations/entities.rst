@@ -78,7 +78,7 @@ Expand below for the example **support module definition file**:
         <details>
         <summary><a>objects.ibek.support.yaml</a></summary>
 
-    .. include:: ../../../tests/samples/yaml/objects.ibek.support.yaml
+    .. include:: ../../../tests/samples/support/motorSim.ibek.support.yaml
         :literal:
 
     .. raw:: html
@@ -149,7 +149,7 @@ Click the arrows to reveal the files.
         <details>
         <summary><a>all.ibek.ioc.yaml</a></summary>
 
-    .. include:: ../../../tests/samples/yaml/all.ibek.ioc.yaml
+    .. include:: ../../../tests/samples/iocs/ibek-mo-ioc-01.yaml
         :literal:
 
     .. raw:: html
@@ -158,7 +158,7 @@ Click the arrows to reveal the files.
         <details>
         <summary><a>st.cmd</a></summary>
 
-    .. include:: ../../../tests/samples/outputs/all.st.cmd
+    .. include:: ../../../tests/samples/outputs/motorSim.st.cmd
         :literal:
 
     .. raw:: html
@@ -220,7 +220,7 @@ The Global Schema and example IOC instance schema are below:
         <details>
         <summary><a>multiple.ibek.ioc.schema.json</a></summary>
 
-    .. include:: ../../../tests/samples/schemas/multiple.ibek.ioc.schema.json
+    .. include:: ../../../tests/samples/schemas/single.ibek.ioc.schema.json
         :literal:
 
     .. raw:: html

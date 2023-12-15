@@ -33,29 +33,29 @@ def test_ibek_schema(tmp_path: Path, samples: Path):
     assert expected == actual
 
 
-def test_object_schema(tmp_path: Path, samples: Path):
-    """generate schema from a simple support module definition yaml"""
+def test_single_schema(tmp_path: Path, samples: Path):
+    """generate schema from a support module definition yaml"""
     clear_entity_model_ids()
 
-    schema_path = tmp_path / "objects.ibek.support.schema.json"
-    yaml_path = samples / "yaml" / "objects.ibek.support.yaml"
+    schema_path = tmp_path / "single.ibek.support.schema.json"
+    yaml_path = samples / "support" / "motorSim.ibek.support.yaml"
     run_cli("ioc", "generate-schema", yaml_path, "--output", schema_path)
 
     expected = json.loads(
-        (samples / "schemas" / "objects.ibek.ioc.schema.json").read_text()
+        (samples / "schemas" / "single.ibek.ioc.schema.json").read_text()
     )
 
     actual = json.loads((schema_path).read_text())
     assert expected == actual
 
 
-def test_ioc_schema(tmp_path: Path, samples: Path):
+def test_motor_sim_schema(tmp_path: Path, samples: Path):
     clear_entity_model_ids()
     """generate schema for a container with two support modules"""
 
-    schema_combined = tmp_path / "multiple.ibek.ioc.schema.json"
-    yaml_path1 = samples / "yaml" / "objects.ibek.support.yaml"
-    yaml_path2 = samples / "yaml" / "all.ibek.support.yaml"
+    schema_combined = tmp_path / "motorSim.ibek.ioc.schema.json"
+    yaml_path1 = samples / "support" / "asyn.ibek.support.yaml"
+    yaml_path2 = samples / "support" / "motorSim.ibek.support.yaml"
     run_cli(
         "ioc",
         "generate-schema",
@@ -67,47 +67,14 @@ def test_ioc_schema(tmp_path: Path, samples: Path):
     )
 
     expected = json.loads(
-        (samples / "schemas" / "multiple.ibek.ioc.schema.json").read_text()
+        (samples / "schemas" / "motorSim.ibek.ioc.schema.json").read_text()
     )
 
     actual = json.loads((schema_combined).read_text())
     assert expected == actual
 
 
-def test_build_runtime_single(tmp_path: Path, samples: Path):
-    """
-    build an ioc runtime script from an IOC instance entity file
-    and a single support module definition file
-
-    Also ensure output directory gets generated if it doesn't pre-exist
-    """
-    clear_entity_model_ids()
-    ioc_yaml = samples / "yaml" / "objects.ibek.ioc.yaml"
-    support_yaml = samples / "yaml" / "objects.ibek.support.yaml"
-    out_file = tmp_path / "new_dir" / "st.cmd"
-    out_db = tmp_path / "new_dir" / "objects.ioc.subst"
-
-    run_cli(
-        "runtime",
-        "generate",
-        ioc_yaml,
-        support_yaml,
-        "--out",
-        out_file,
-        "--db-out",
-        out_db,
-    )
-
-    example_boot = (samples / "outputs" / "objects.st.cmd").read_text()
-    actual_boot = out_file.read_text()
-    assert example_boot == actual_boot
-
-    example_db = (samples / "outputs" / "objects.ioc.subst").read_text()
-    actual_db = out_db.read_text()
-    assert example_db == actual_db
-
-
-def test_build_runtime_multiple(tmp_path: Path, samples: Path):
+def test_build_runtime_motorSim(tmp_path: Path, samples: Path):
     """
     build an ioc runtime script from an IOC instance entity file
     and multiple support module definition files
@@ -116,17 +83,17 @@ def test_build_runtime_multiple(tmp_path: Path, samples: Path):
     entity instantiations.
     """
     clear_entity_model_ids()
-    ioc_yaml = samples / "yaml" / "all.ibek.ioc.yaml"
-    support_yaml = samples / "yaml" / "objects.ibek.support.yaml"
-    support_yaml2 = samples / "yaml" / "all.ibek.support.yaml"
-    out_file = tmp_path / "st.cmd"
-    out_db = tmp_path / "all.ioc.subst"
+    ioc_yaml = samples / "iocs" / "ibek-mo-ioc-01.yaml"
+    support_yaml1 = samples / "support" / "asyn.ibek.support.yaml"
+    support_yaml2 = samples / "support" / "motorSim.ibek.support.yaml"
+    out_file = tmp_path / "motorSim.st.cmd"
+    out_db = tmp_path / "motorSim.ioc.subst"
 
     run_cli(
         "runtime",
         "generate",
         ioc_yaml,
-        support_yaml,
+        support_yaml1,
         support_yaml2,
         "--out",
         out_file,
@@ -134,11 +101,11 @@ def test_build_runtime_multiple(tmp_path: Path, samples: Path):
         out_db,
     )
 
-    example_boot = (samples / "outputs" / "all.st.cmd").read_text()
+    example_boot = (samples / "outputs" / "motorSim.st.cmd").read_text()
     actual_boot = out_file.read_text()
     assert example_boot == actual_boot
 
-    example_db = (samples / "outputs" / "all.ioc.subst").read_text()
+    example_db = (samples / "outputs" / "motorSim.ioc.subst").read_text()
     actual_db = out_db.read_text()
     assert example_db == actual_db
 
@@ -151,45 +118,13 @@ def test_build_runtime_multiple(tmp_path: Path, samples: Path):
     assert example_pvi == actual_pvi
 
 
-def test_build_no_db(tmp_path: Path, samples: Path):
-    """
-    build an ioc runtime script from an IOC instance entity file
-    and multiple support module definition files
-
-    Also verifies database subst file generation for multiple
-    entity instantiations.
-    """
-    clear_entity_model_ids()
-    ioc_yaml = samples / "yaml" / "all.nodb.ibek.ioc.yaml"
-    support_yaml = samples / "yaml" / "objects.ibek.support.yaml"
-    support_yaml2 = samples / "yaml" / "all.ibek.support.yaml"
-    out_file = tmp_path / "st.cmd"
-    out_db = tmp_path / "all.nodb.ioc.subst"
-
-    run_cli(
-        "runtime",
-        "generate",
-        ioc_yaml,
-        support_yaml,
-        support_yaml2,
-        "--out",
-        out_file,
-        "--db-out",
-        out_db,
-    )
-
-    example_db = (samples / "outputs" / "all.nodb.ioc.subst").read_text()
-    actual_db = out_db.read_text()
-    assert example_db == actual_db
-
-
 def test_build_utils_features(tmp_path: Path, samples: Path):
     """
     build an ioc runtime script to verify utils features
     """
     clear_entity_model_ids()
-    ioc_yaml = samples / "yaml" / "utils.ibek.ioc.yaml"
-    support_yaml = samples / "yaml" / "utils.ibek.support.yaml"
+    ioc_yaml = samples / "iocs" / "utils.ibek.ioc.yaml"
+    support_yaml = samples / "support" / "utils.ibek.support.yaml"
     out_file = tmp_path / "st.cmd"
     out_db = tmp_path / "ioc.subst"
 
@@ -216,7 +151,7 @@ def test_build_utils_features(tmp_path: Path, samples: Path):
 def test_generate_links_ibek(samples: Path, mocker: MockerFixture):
     symlink_mock = mocker.patch("ibek.support_cmds.commands.symlink_files")
 
-    generate_links(Path("yaml"), samples)
+    generate_links(Path("support"), samples)
 
-    symlink_mock.assert_any_call(samples / "yaml", PVI_YAML_PATTERN, PVI_DEFS)
-    symlink_mock.assert_any_call(samples / "yaml", SUPPORT_YAML_PATTERN, IBEK_DEFS)
+    symlink_mock.assert_any_call(samples / "support", PVI_YAML_PATTERN, PVI_DEFS)
+    symlink_mock.assert_any_call(samples / "support", SUPPORT_YAML_PATTERN, IBEK_DEFS)

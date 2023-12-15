@@ -1,0 +1,9 @@
+# yaml-language-server: $schema=../schemas/motorSim.ibek.ioc.schema.json
+
+ioc_name: test-bad-defaults-ioc
+description: an example for testing missing non-default values
+
+entities:
+  # deliberately do not specify port to test failure case
+  - type: asyn.AsynIP
+    name: controllerOnePort

@@ -1,0 +1,64 @@
+# yaml-language-server: $schema=../schemas/motorSim.ibek.ioc.schema.json
+
+ioc_name: "{{ ioc_yaml_file_name }}"
+description: Example simulated motion IOC for Testing ibek
+
+entities:
+  - type: asyn.AsynIP
+    name: controllerOnePort
+    port: 192.168.0.55:2002
+
+  - type: motorSim.simMotorController
+    port: controllerOnePort
+    controllerName: controllerOne
+    numAxes: 4
+    P: "IBEK-MO-TST-01:"
+
+  - type: motorSim.simMotorAxis
+    controller: controllerOne
+    # Use ADDR in other fields to verify jinja templating between Args
+    M: M{{ADDR}}
+    ADDR: 0
+    # Also use ioc_name to verify jinja templating of ioc_name
+    DESC: "Motor {{ADDR}} for ioc {{ioc_name}}"
+    home: 500
+
+  - type: motorSim.simMotorAxis
+    controller: controllerOne
+    M: M{{ADDR}}
+    ADDR: 1
+    # verify escaping for jinja templating
+    DESC: "Motor {{ADDR}} {% raw %} {{enclosed in escaped curly braces}} {% endraw %}"
+    home: 500
+
+  - type: motorSim.simMotorAxis
+    controller: controllerOne
+    M: M{{ADDR}}
+    ADDR: 2
+    # testing default DESC
+    home: 1500
+
+  - type: motorSim.simMotorAxis
+    controller: controllerOne
+    M: M{{ADDR}}
+    ADDR: 3
+    DESC: "Motor {{ADDR}}"
+    home: 2500
+
+  - type: motorSim.simMotorAxis
+    controller: controllerOne
+    M: CS_M{{ADDR}}
+    ADDR: 1
+    DESC: "CS Motor {{ADDR}}"
+    home: 100
+    CS_NUM: 3
+    is_cs: true
+
+  - type: motorSim.simMotorAxis
+    controller: controllerOne
+    M: CS_M{{ADDR}}
+    ADDR: 2
+    DESC: "CS Motor {{ADDR}}"
+    home: 100
+    CS_NUM: 3
+    is_cs: true

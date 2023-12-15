@@ -3,13 +3,13 @@
   <x>0</x>
   <y>0</y>
   <width>273</width>
-  <height>130</height>
+  <height>55</height>
   <grid_step_x>4</grid_step_x>
   <grid_step_y>4</grid_step_y>
   <widget type="label" version="2.0.0">
     <name>Title</name>
     <class>TITLE</class>
-    <text>all.ibek.ioc - Index</text>
+    <text>ibek-mo-ioc-01 - Index</text>
     <x use_class="true">0</x>
     <y use_class="true">0</y>
     <width>273</width>
@@ -41,94 +41,13 @@
         <target>tab</target>
         <description>Open Display</description>
         <macros>
-          <prefix>Ref1</prefix>
+          <prefix>IBEK-MO-TST-01::</prefix>
         </macros>
       </action>
     </actions>
     <text>imple</text>
     <x>143</x>
     <y>30</y>
-    <width>125</width>
-    <height>20</height>
-    <tooltip>$(actions)</tooltip>
-  </widget>
-  <widget type="label" version="2.0.0">
-    <name>Label</name>
-    <text>imple</text>
-    <x>23</x>
-    <y>55</y>
-    <width>115</width>
-    <height>20</height>
-  </widget>
-  <widget type="action_button" version="3.0.0">
-    <name>OpenDisplay</name>
-    <actions>
-      <action type="open_display">
-        <file>simple.pvi.bob</file>
-        <target>tab</target>
-        <description>Open Display</description>
-        <macros>
-          <prefix>ioc_name={{ ioc_name }}</prefix>
-        </macros>
-      </action>
-    </actions>
-    <text>imple</text>
-    <x>143</x>
-    <y>55</y>
-    <width>125</width>
-    <height>20</height>
-    <tooltip>$(actions)</tooltip>
-  </widget>
-  <widget type="label" version="2.0.0">
-    <name>Label</name>
-    <text>imple</text>
-    <x>23</x>
-    <y>80</y>
-    <width>115</width>
-    <height>20</height>
-  </widget>
-  <widget type="action_button" version="3.0.0">
-    <name>OpenDisplay</name>
-    <actions>
-      <action type="open_display">
-        <file>simple.pvi.bob</file>
-        <target>tab</target>
-        <description>Open Display</description>
-        <macros>
-          <prefix>AllObject Two</prefix>
-        </macros>
-      </action>
-    </actions>
-    <text>imple</text>
-    <x>143</x>
-    <y>80</y>
-    <width>125</width>
-    <height>20</height>
-    <tooltip>$(actions)</tooltip>
-  </widget>
-  <widget type="label" version="2.0.0">
-    <name>Label</name>
-    <text>imple</text>
-    <x>23</x>
-    <y>105</y>
-    <width>115</width>
-    <height>20</height>
-  </widget>
-  <widget type="action_button" version="3.0.0">
-    <name>OpenDisplay</name>
-    <actions>
-      <action type="open_display">
-        <file>simple.pvi.bob</file>
-        <target>tab</target>
-        <description>Open Display</description>
-        <macros>
-          <prefix>AllObject Two</prefix>
-        </macros>
-      </action>
-    </actions>
-    <text>imple</text>
-    <x>143</x>
-    <y>105</y>
     <width>125</width>
     <height>20</height>
     <tooltip>$(actions)</tooltip>
