@@ -115,8 +115,12 @@ jobs:
     needs: [lint, dist, test]
     if: ${{ github.event_name == 'push' && github.ref_type == 'tag' }}
     runs-on: ubuntu-latest
-    env:
-      HAS_PYPI_TOKEN: ${{ secrets.PYPI_TOKEN != '' }}
+    permissions:
+      # this permission is mandatory for trusted publishing To PyPI
+      id-token: write
+      contents: write
+    # Specify the GitHub Environment to publish to
+    environment: release
 
     steps:
       - name: Checkout
@@ -146,7 +150,4 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Publish to PyPI
-        if: ${{ env.HAS_PYPI_TOKEN }}
         uses: pypa/gh-action-pypi-publish@release/v1
-        with:
-          password: ${{ secrets.PYPI_TOKEN }}
