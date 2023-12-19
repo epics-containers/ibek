@@ -1,0 +1,56 @@
+# API
+
+This is the internal API reference for ibek
+
+% automodule ibek
+
+## `ibek`
+
+```{eval-rst}
+.. data:: ibek.__version__
+    :type: str
+
+    Version number as calculated by https://github.com/pypa/setuptools_scm
+```
+
+### `ibek.globals`
+
+```{eval-rst}
+.. automodule:: ibek.globals
+    :members:
+```
+
+### `ibek.support`
+
+```{eval-rst}
+.. automodule:: ibek.support
+    :members:
+```
+
+### `ibek.ioc`
+
+```{eval-rst}
+.. automodule:: ibek.ioc
+    :members:
+
+```
+
+### `ibek.render`
+
+```{eval-rst}
+.. automodule:: ibek.render
+    :members:
+```
+
+### `ibek.utils`
+
+```{eval-rst}
+.. automodule:: ibek.utils
+    :members:
+```
+
+```{eval-rst}
+.. class:: apischema.types.UndefinedType
+
+    A sentinel value that allows detection that a value has not been passed at init
+```
