@@ -10,9 +10,9 @@
     "editor.formatOnSave": true,
     "[python]": {
         "editor.codeActionsOnSave": {
-            "source.fixAll.ruff": false,
-            "source.organizeImports.ruff": true,
-            "source.black": true,
+            "source.fixAll.ruff": "never",
+            "source.organizeImports.ruff": "explicit",
+            "source.black": "explicit"
         }
     },
     "workbench.colorCustomizations": {
