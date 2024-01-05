@@ -1,3 +1,4 @@
+import os
 import re
 import subprocess
 from enum import Enum
@@ -87,9 +88,10 @@ def apt_install(
             subprocess.call(["wget", pkg, "-O", str(pkg_file)])
             debs[i] = str(pkg_file)
 
+    sudo = "sudo" if os.geteuid() != 0 else ""
     command = (
-        "apt-get update && apt-get upgrade -y && "
-        "apt-get install -y --no-install-recommends "
+        f"{sudo} apt-get update && {sudo} apt-get upgrade -y && "
+        f"{sudo} apt-get install -y --no-install-recommends "
         + " ".join(debs)
         + " ".join(ctx.args)
     )
