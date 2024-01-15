@@ -33,7 +33,7 @@ def instance(
 
     # validate the instance folder has a config folder
     ioc_folder = IOC_FOLDER
-    config_folder = IOC_FOLDER / CONFIG_DIR_NAME
+    config_folder = ioc_folder / CONFIG_DIR_NAME
     instance_config = instance / CONFIG_DIR_NAME
 
     # verify that the expected folder exists

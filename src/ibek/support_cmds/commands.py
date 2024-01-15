@@ -242,6 +242,12 @@ def generate_links(
             help="ibek-support(-xxx) folder to generate links for",
         ),
     ],
+    ibek_support: Annotated[
+        Optional[Path],
+        typer.Option(
+            help="Filepath to ibek-support root" "defaults to /epics/ibek-support"
+        ),
+    ] = None,
 ):
     """Generate symlinks to the ibek and pvi YAML files for a compiled IOC.
 
@@ -251,8 +257,8 @@ def generate_links(
                 module of the ioc-xxx Generic IOC project and may be the
                 public ibek-support repo or a private ibek-support-xxx repo.
     """
-    support_defs = folder
-    support_globals = folder / ".." / IBEK_GLOBALS
+    support_defs = (ibek_support or IBEK_SUPPORT) / support_module
+    support_globals = (ibek_support or IBEK_SUPPORT) / IBEK_GLOBALS
 
     symlink_files(support_defs, SUPPORT_YAML_PATTERN, IBEK_DEFS)
     symlink_files(support_globals, SUPPORT_YAML_PATTERN, IBEK_DEFS)
