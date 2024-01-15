@@ -4,8 +4,7 @@ from pathlib import Path
 
 import typer
 
-from ibek.globals import CONFIG_DIR_NAME, IOC_DIR_NAME, IOC_FOLDER, NaturalOrderGroup
-from ibek.ioc_cmds.assets import get_ioc_source
+from ibek.globals import CONFIG_DIR_NAME, IOC_FOLDER, NaturalOrderGroup
 
 log = logging.getLogger(__name__)
 dev_cli = typer.Typer(cls=NaturalOrderGroup)
@@ -28,10 +27,9 @@ def instance(
     - /epics/ioc -> /epics/ioc-pandablocks/ioc
     - /epics/ioc/config -> /repos/bl38p/iocs/bl38p-mo-panda-01/config
     """
-    # validate the instance folder has a config folder
 
-    generic_root = get_ioc_source()
-    ioc_folder = generic_root / IOC_DIR_NAME
+    # validate the instance folder has a config folder
+    ioc_folder = IOC_FOLDER
     config_folder = ioc_folder / CONFIG_DIR_NAME
     instance_config = instance / CONFIG_DIR_NAME
 

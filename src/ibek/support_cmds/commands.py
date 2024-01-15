@@ -7,8 +7,6 @@ from typing import List, Optional
 
 import typer
 
-from ibek.ioc_cmds.assets import get_ioc_source
-
 try:
     from git import Repo
 except ImportError:
@@ -246,8 +244,7 @@ def generate_links(
     ibek_support: Annotated[
         Optional[Path],
         typer.Option(
-            help="Filepath to ibek-support root"
-            "defaults to <generic IOC source folder>/ibek-support"
+            help="Filepath to ibek-support root" "defaults to /epics/ibek-support"
         ),
     ] = None,
 ):
@@ -258,8 +255,8 @@ def generate_links(
         ibek_support: Root of ibek support to find support module directory in
 
     """
-    support_defs = (ibek_support or get_ioc_source() / IBEK_SUPPORT) / support_module
-    support_globals = (ibek_support or get_ioc_source() / IBEK_SUPPORT) / IBEK_GLOBALS
+    support_defs = (ibek_support or IBEK_SUPPORT) / support_module
+    support_globals = (ibek_support or IBEK_SUPPORT) / IBEK_GLOBALS
 
     symlink_files(support_defs, SUPPORT_YAML_PATTERN, IBEK_DEFS)
     symlink_files(support_globals, SUPPORT_YAML_PATTERN, IBEK_DEFS)

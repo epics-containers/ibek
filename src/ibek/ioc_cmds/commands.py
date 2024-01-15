@@ -1,26 +1,19 @@
 import json
 import logging
-import shutil
-import subprocess
 from pathlib import Path
 from typing import Annotated, List, Optional
 
 import typer
-from jinja2 import Template
 
 from ibek.gen_scripts import ioc_create_model
 from ibek.globals import (
     IBEK_DEFS,
-    IOC_DBDS,
-    IOC_FOLDER,
-    IOC_LIBS,
     SUPPORT_YAML_PATTERN,
-    TEMPLATES,
     NaturalOrderGroup,
 )
 from ibek.ioc_cmds.docker import build_dockerfile
 
-from .assets import extract_assets, get_ioc_source
+from .assets import extract_assets
 
 log = logging.getLogger(__name__)
 ioc_cli = typer.Typer(cls=NaturalOrderGroup)
@@ -105,102 +98,3 @@ def extract_runtime_assets(
     as it is destructive of the source folder, because it uses move for speed.
     """
     extract_assets(destination, source, extras, defaults)
-
-
-@ioc_cli.command()
-def make_source_template(
-    destination: Annotated[
-        Optional[Path],
-        typer.Option(
-            help="Where to make the ioc folder. Defaults to under the "
-            "generic IOC source folder",
-        ),
-    ] = None,
-):
-    """
-    Create a new IOC boilerplate source tree in the given folder.
-    Default is ioc source repo / ioc .
-    """
-    if destination is None:
-        destination = get_ioc_source() / "ioc"
-
-    # use a known file to check if the destination is already an IOC
-    # because an empty folder can be created by 'ibek dev instance'
-    dest_release = destination / "configure" / "RELEASE"
-
-    if not dest_release.exists():
-        if destination.is_symlink():
-            destination.unlink()
-        shutil.copytree(TEMPLATES / "ioc", destination, dirs_exist_ok=True)
-
-    # make a symlink to the ioc folder in the root of the epics folder
-    # this becomes the standard place for code to look for the IOC
-    try:
-        IOC_FOLDER.unlink(missing_ok=True)
-    except IsADirectoryError:
-        shutil.rmtree(IOC_FOLDER)
-    IOC_FOLDER.symlink_to(destination)
-
-
-@ioc_cli.command()
-def generate_makefile(
-    folder_override: Annotated[
-        Optional[Path],
-        typer.Option(
-            help="Where to find the Makefile.jinja template.",
-        ),
-    ] = None,
-):
-    """
-    get the dbd and lib files from all support modules and generate
-    iocApp/src/Makefile from iocApp/src/Makefile.jinja
-    """
-    # Folder containing Makefile.jinja
-    make_folder = folder_override or get_ioc_source() / "ioc" / "iocApp" / "src"
-
-    # get all the dbd and lib files gathered from each support module
-    dbds: List[str] = []
-    libs: List[str] = []
-    if IOC_DBDS.exists():
-        dbds = [dbd.strip() for dbd in IOC_DBDS.read_text().split()]
-    if IOC_LIBS.exists():
-        libs = [lib.strip() for lib in IOC_LIBS.read_text().split()]
-
-    # generate the Makefile from the template
-    template = Template((make_folder / "Makefile.jinja").read_text())
-    # libraries are listed in reverse order of dependency
-    libs.reverse()
-    text = template.render(dbds=dbds, libs=libs)
-
-    with (make_folder / "Makefile").open("w") as stream:
-        stream.write(text)
-
-
-@ioc_cli.command(
-    context_settings={"allow_extra_args": True, "ignore_unknown_options": True}
-)
-def compile(
-    ctx: typer.Context,
-):
-    """
-    Compile a generic IOC after support modules are registered and compiled
-    """
-    path = IOC_FOLDER
-
-    command = f"make -C {path} -j $(nproc) " + " ".join(ctx.args)
-    exit(subprocess.call(["bash", "-c", command]))
-
-
-@ioc_cli.command(
-    context_settings={"allow_extra_args": True, "ignore_unknown_options": True}
-)
-def build(
-    ctx: typer.Context,
-):
-    """
-    A convenience function that calls make-source-template, generate-makefile,
-    compile
-    """
-    make_source_template()
-    generate_makefile()
-    compile(ctx)
