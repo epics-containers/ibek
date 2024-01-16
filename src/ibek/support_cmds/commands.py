@@ -17,7 +17,6 @@ from typing_extensions import Annotated
 from ibek.globals import (
     IBEK_DEFS,
     IBEK_GLOBALS,
-    IBEK_SUPPORT,
     IOC_DBDS,
     IOC_LIBS,
     PVI_DEFS,
@@ -235,28 +234,23 @@ def compile(
 
 @support_cli.command()
 def generate_links(
-    support_module: Annotated[
+    folder: Annotated[
         Path,
         typer.Argument(
-            help="Support module to generate links for (directory in ibek-support)"
+            help="ibek-support(-xxx) folder to generate links for",
         ),
     ],
-    ibek_support: Annotated[
-        Optional[Path],
-        typer.Option(
-            help="Filepath to ibek-support root" "defaults to /epics/ibek-support"
-        ),
-    ] = None,
 ):
     """Generate symlinks to the ibek and pvi YAML files for a compiled IOC.
 
     Args:
-        support_module: Support module to generate links for
-        ibek_support: Root of ibek support to find support module directory in
-
+        folder: path to an ibek-support folder containing the YAML files
+                for the support module to link to. This should be a sub
+                module of the ioc-xxx Generic IOC project and may be the
+                public ibek-support repo or a private ibek-support-xxx repo.
     """
-    support_defs = (ibek_support or IBEK_SUPPORT) / support_module
-    support_globals = (ibek_support or IBEK_SUPPORT) / IBEK_GLOBALS
+    support_defs = folder
+    support_globals = folder / ".." / IBEK_GLOBALS
 
     symlink_files(support_defs, SUPPORT_YAML_PATTERN, IBEK_DEFS)
     symlink_files(support_globals, SUPPORT_YAML_PATTERN, IBEK_DEFS)
