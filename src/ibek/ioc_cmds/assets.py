@@ -45,14 +45,16 @@ def extract_assets(destination: Path, source: Path, extras: List[Path], defaults
     os.chdir(source)
 
     # a default set of assets that all IOCs will need at runtime
+    # NOTE: IOC_FOLDER must be moved first as it is a symlink
+    # into WORKSPACES, and the move of WORKSPACES would break the symlink
     if defaults:
         default_assets = [
-            WORKSPACES,
             source / "support" / "configure",
             PVI_DEFS,
             IBEK_DEFS,
             IOC_FOLDER,
             Path("/venv"),
+            WORKSPACES,
         ]
     else:
         default_assets = []
