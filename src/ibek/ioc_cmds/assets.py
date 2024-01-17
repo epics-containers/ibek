@@ -7,7 +7,7 @@ from typing import List
 
 import typer
 
-from ibek.globals import IBEK_DEFS, IOC_FOLDER, PVI_DEFS, WORKSPACES
+from ibek.globals import IBEK_DEFS, IOC_FOLDER, PVI_DEFS
 
 log = logging.getLogger(__name__)
 
@@ -45,8 +45,6 @@ def extract_assets(destination: Path, source: Path, extras: List[Path], defaults
     os.chdir(source)
 
     # a default set of assets that all IOCs will need at runtime
-    # NOTE: IOC_FOLDER must be moved first as it is a symlink
-    # into WORKSPACES, and the move of WORKSPACES would break the symlink
     if defaults:
         default_assets = [
             source / "support" / "configure",
@@ -54,7 +52,6 @@ def extract_assets(destination: Path, source: Path, extras: List[Path], defaults
             IBEK_DEFS,
             IOC_FOLDER,
             Path("/venv"),
-            WORKSPACES,
         ]
     else:
         default_assets = []
