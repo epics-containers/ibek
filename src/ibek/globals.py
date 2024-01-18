@@ -31,7 +31,6 @@ IBEK_DEFS = EPICS_ROOT / "ibek-defs"
 PVI_DEFS = EPICS_ROOT / "pvi-defs"
 
 # Paths for ibek-support
-IBEK_SUPPORT = Path("ibek-support")
 IBEK_GLOBALS = Path("_global")
 SUPPORT_YAML_PATTERN = "*ibek.support.yaml"
 PVI_YAML_PATTERN = "*pvi.device.yaml"
