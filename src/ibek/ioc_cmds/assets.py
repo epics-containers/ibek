@@ -7,37 +7,9 @@ from typing import List
 
 import typer
 
-from ibek.globals import EPICS_ROOT, IBEK_DEFS, IOC_FOLDER, PVI_DEFS
+from ibek.globals import IBEK_DEFS, IOC_FOLDER, PVI_DEFS
 
 log = logging.getLogger(__name__)
-
-
-def get_ioc_source() -> Path:
-    """
-    The generic ioc source folder is mounted into the container at
-    /epics/ioc-XXXXX and should always contain the ibek-support
-    submodule. Therefore we can find the ibek-support folder by looking
-    for the ibek-support folder.
-
-    Functions that use this should provide an override variable that allows
-    the ibek caller to specify the location.
-    """
-    ibek_supports = list(EPICS_ROOT.glob("*/ibek-support"))
-
-    if len(ibek_supports) > 1:
-        log.error(
-            "Found more than one ibek-support folder. "
-            "ibek must be run in a container a single generic IOC source folder"
-        )
-        raise typer.Exit(1)
-    elif len(ibek_supports) == 0:
-        log.error(
-            "Could NOT find a generic IOC source folder containing ibek-support. "
-            "ibek must be run in a container with the generic IOC source folder"
-        )
-        raise typer.Exit(1)
-
-    return (ibek_supports[0] / "..").resolve()
 
 
 def move_file(src: Path, dest: Path, binary: List[str]):
@@ -75,7 +47,6 @@ def extract_assets(destination: Path, source: Path, extras: List[Path], defaults
     # a default set of assets that all IOCs will need at runtime
     if defaults:
         default_assets = [
-            get_ioc_source() / "ibek-support",
             source / "support" / "configure",
             PVI_DEFS,
             IBEK_DEFS,

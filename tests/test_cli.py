@@ -151,7 +151,7 @@ def test_build_utils_features(tmp_path: Path, samples: Path):
 def test_generate_links_ibek(samples: Path, mocker: MockerFixture):
     symlink_mock = mocker.patch("ibek.support_cmds.commands.symlink_files")
 
-    generate_links(Path("support"), samples)
+    generate_links(samples / "support")
 
     symlink_mock.assert_any_call(samples / "support", PVI_YAML_PATTERN, PVI_DEFS)
     symlink_mock.assert_any_call(samples / "support", SUPPORT_YAML_PATTERN, IBEK_DEFS)
