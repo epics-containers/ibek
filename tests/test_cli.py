@@ -113,8 +113,8 @@ def test_build_runtime_motorSim(tmp_path: Path, samples: Path):
     actual_index = (samples / "epics" / "opi" / "index.bob").read_text()
     assert example_index == actual_index
 
-    example_pvi = (samples / "outputs" / "Simple.pvi.bob").read_text()
-    actual_pvi = (samples / "epics" / "opi" / "Simple.pvi.bob").read_text()
+    example_pvi = (samples / "outputs" / "simple.pvi.bob").read_text()
+    actual_pvi = (samples / "epics" / "opi" / "simple.pvi.bob").read_text()
     assert example_pvi == actual_pvi
 
 

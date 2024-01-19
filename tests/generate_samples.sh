@@ -19,7 +19,7 @@ mkdir -p outputs
 set -ex
 
 mkdir -p epics/pvi-defs
-cp support/simple.pvi.device.yaml  epics/pvi-defs/Simple.pvi.device.yaml
+cp support/simple.pvi.device.yaml  epics/pvi-defs/simple.pvi.device.yaml
 
 echo making the support yaml schema
 ibek support generate-schema --output schemas/ibek.support.schema.json
