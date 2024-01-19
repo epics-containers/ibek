@@ -122,7 +122,9 @@ def generate_pvi(ioc: IOC) -> Tuple[List[IndexEntry], List[Tuple[Database, Entit
                 formatted_pvi_devices.append(device_name)
 
         if entity_pvi.index:
-            index_entries.append(IndexEntry(device_name, device_bob.name, macros))
+            index_entries.append(
+                IndexEntry(label=device_name, ui=device_bob.name, macros=macros)
+            )
 
     return index_entries, databases
 
