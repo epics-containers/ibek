@@ -35,7 +35,13 @@ def move_file(src: Path, dest: Path, binary: List[str]):
         subprocess.call(["bash", "-c", cmd])
 
 
-def extract_assets(destination: Path, source: Path, extras: List[Path], defaults: bool):
+def extract_assets(
+    destination: Path,
+    source: Path,
+    extras: List[Path],
+    defaults: bool,
+    dry_run: bool = False,
+):
     """
     extract and copy runtime assets from a completed developer stage container
     """
@@ -82,13 +88,19 @@ def extract_assets(destination: Path, source: Path, extras: List[Path], defaults
             src = module / asset
             if src.exists():
                 dest_file = destination_module / asset.relative_to(module)
-                move_file(src, dest_file, binary)
+                if dry_run:
+                    typer.echo(f"Would move {src} to {dest_file} with {binary}")
+                else:
+                    move_file(src, dest_file, binary)
 
     extra_files = default_assets + extras
     for asset in extra_files:
         src = source / asset
         if src.exists():
             dest_file = destination / asset.relative_to("/")
-            move_file(src, dest_file, binary)
+            if dry_run:
+                typer.echo(f"Would move extra asset {src} to {dest_file} with {binary}")
+            else:
+                move_file(src, dest_file, binary)
         else:
             raise RuntimeError(f"extra runtime asset {src} missing")

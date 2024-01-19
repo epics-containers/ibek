@@ -254,7 +254,8 @@ def generate_links(
     support_globals = folder / ".." / IBEK_GLOBALS
 
     symlink_files(folder, SUPPORT_YAML_PATTERN, IBEK_DEFS)
-    symlink_files(support_globals, SUPPORT_YAML_PATTERN, IBEK_DEFS)
+    if support_globals.exists():
+        symlink_files(support_globals, SUPPORT_YAML_PATTERN, IBEK_DEFS)
     symlink_files(folder, PVI_YAML_PATTERN, PVI_DEFS)
 
 

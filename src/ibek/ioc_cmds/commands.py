@@ -83,12 +83,13 @@ def extract_runtime_assets(
         ...,
         help="The root folder to extract assets into",
     ),
+    extras: List[Path] = typer.Argument(None, help="list of files to also extract"),
     source: Path = typer.Option(
         Path("/epics"),
         help="The root folder to extract assets from",
     ),
-    extras: List[Path] = typer.Option(None, help="list of files to also extract"),
     defaults: bool = typer.Option(True, help="copy the default assets"),
+    dry_run: bool = typer.Option(False, help="show what would happen"),
 ):
     """
     Find all the runtime assets in an EPICS installation and copy them to a
@@ -97,4 +98,4 @@ def extract_runtime_assets(
     This should be performed in a throw away container stage (runtime_prep)
     as it is destructive of the source folder, because it uses move for speed.
     """
-    extract_assets(destination, source, extras, defaults)
+    extract_assets(destination, source, extras, defaults, dry_run)
