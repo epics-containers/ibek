@@ -27,18 +27,24 @@ PVI_PV_PREFIX = "${prefix}"
 @runtime_cli.command()
 def generate(
     instance: Path = typer.Argument(
-        ..., help="The filepath to the ioc instance entity file"
+        ...,
+        help="The filepath to the ioc instance entity file",
+        autocompletion=lambda: [],  # Forces path autocompletion
     ),
     definitions: List[Path] = typer.Argument(
-        ..., help="The filepath to a support module definition file"
+        ...,
+        help="The filepath to a support module definition file",
+        autocompletion=lambda: [],  # Forces path autocompletion
     ),
     out: Path = typer.Option(
         default=RUNTIME_OUTPUT_PATH / "st.cmd",
         help="Path to output startup script",
+        autocompletion=lambda: [],  # Forces path autocompletion
     ),
     db_out: Path = typer.Option(
         default=RUNTIME_OUTPUT_PATH / "ioc.subst",
         help="Path to output database expansion shell script",
+        autocompletion=lambda: [],  # Forces path autocompletion
     ),
 ):
     """

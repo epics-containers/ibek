@@ -18,6 +18,7 @@ def instance(
         dir_okay=True,
         file_okay=False,
         exists=True,
+        autocompletion=lambda: [],  # Forces path autocompletion
     ),
 ):
     """
@@ -55,7 +56,9 @@ def instance(
 @dev_cli.command()
 def support(
     module: Path = typer.Argument(
-        ..., help="The filepath to the support module to work on"
+        ...,
+        help="The filepath to the support module to work on",
+        autocompletion=lambda: [],  # Forces path autocompletion
     ),
 ):
     """
