@@ -24,7 +24,11 @@ def build_docker(
     start: int = typer.Option(1, help="The step to start at in the Dockerfile"),
     stop: int = typer.Option(999, help="The step to stop at in the Dockerfile"),
     dockerfile: Annotated[
-        Path, typer.Option(help="The filepath to the Dockerfile to build")
+        Path,
+        typer.Option(
+            help="The filepath to the Dockerfile to build",
+            autocompletion=lambda: [],  # Forces path autocompletion
+        ),
     ] = Path.cwd()
     / "Dockerfile",
 ):
@@ -43,10 +47,14 @@ def generate_schema(
     definitions: List[Path] = typer.Argument(
         None,  # Note: typer converts None to an empty list because the type is List
         help="File paths to one or more support module YAML files",
+        autocompletion=lambda: [],  # Forces path autocompletion
     ),
     output: Annotated[
         Optional[Path],
-        typer.Option(help="The file path to the schema file to be written"),
+        typer.Option(
+            help="The file path to the schema file to be written",
+            autocompletion=lambda: [],  # Forces path autocompletion
+        ),
     ] = None,
     ibek_defs: bool = typer.Option(
         True, help=f"Include definitions in {IBEK_DEFS} in generated schema"
@@ -82,11 +90,13 @@ def extract_runtime_assets(
     destination: Path = typer.Argument(
         ...,
         help="The root folder to extract assets into",
+        autocompletion=lambda: [],  # Forces path autocompletion
     ),
     extras: List[Path] = typer.Argument(None, help="list of files to also extract"),
     source: Path = typer.Option(
         Path("/epics"),
         help="The root folder to extract assets from",
+        autocompletion=lambda: [],  # Forces path autocompletion
     ),
     defaults: bool = typer.Option(True, help="copy the default assets"),
     dry_run: bool = typer.Option(False, help="show what would happen"),
