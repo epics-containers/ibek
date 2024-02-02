@@ -2,6 +2,7 @@
 Functions for generating an IocInstance derived class from a
 support module definition YAML file
 """
+
 from __future__ import annotations
 
 import builtins

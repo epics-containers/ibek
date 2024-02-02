@@ -1,6 +1,7 @@
 """
 Tests to verify that the error handling works as expected.
 """
+
 from pathlib import Path
 
 import pytest

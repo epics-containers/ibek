@@ -2,7 +2,7 @@
   <name>Display</name>
   <x>0</x>
   <y>0</y>
-  <width>273</width>
+  <width>388</width>
   <height>55</height>
   <grid_step_x>4</grid_step_x>
   <grid_step_y>4</grid_step_y>
@@ -12,7 +12,7 @@
     <text>Simple Device - ${prefix}</text>
     <x use_class="true">0</x>
     <y use_class="true">0</y>
-    <width>273</width>
+    <width>388</width>
     <height>25</height>
     <font use_class="true">
       <font name="Header 1" family="Liberation Sans" style="BOLD" size="22.0">
@@ -30,15 +30,15 @@
     <text>Simple PV</text>
     <x>23</x>
     <y>30</y>
-    <width>115</width>
+    <width>150</width>
     <height>20</height>
   </widget>
   <widget type="textupdate" version="2.0.0">
     <name>TextUpdate</name>
     <pv_name>${prefix}Simple</pv_name>
-    <x>143</x>
+    <x>178</x>
     <y>30</y>
-    <width>125</width>
+    <width>205</width>
     <height>20</height>
     <font>
       <font name="Default Bold" family="Liberation Sans" style="BOLD" size="14.0">

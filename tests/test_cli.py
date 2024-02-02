@@ -2,6 +2,7 @@
 System tests that run the CLI commands and compare the output to expected
 results.
 """
+
 import json
 import subprocess
 import sys
