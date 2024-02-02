@@ -19,6 +19,7 @@ def instance(
         file_okay=False,
         exists=True,
         autocompletion=lambda: [],  # Forces path autocompletion
+        resolve_path=True,
     ),
 ):
     """
