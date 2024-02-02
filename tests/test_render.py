@@ -2,6 +2,7 @@
 Unit tests for the rendering of scripts and database entries from generated
 Entity classes
 """
+
 from typing import Literal
 
 from ibek.ioc import IOC, clear_entity_model_ids

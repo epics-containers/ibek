@@ -6,7 +6,6 @@
     ],
     "python.testing.unittestEnabled": false,
     "python.testing.pytestEnabled": true,
-    "python.languageServer": "Pylance",
     "editor.formatOnSave": true,
     "[python]": {
         "editor.codeActionsOnSave": {
@@ -14,10 +13,5 @@
             "source.organizeImports.ruff": "explicit",
             "source.black": "explicit"
         }
-    },
-    "workbench.colorCustomizations": {
-        "activityBar.background": "#01333D",
-        "titleBar.activeBackground": "#014756",
-        "titleBar.activeForeground": "#F1FDFF"
     }
 }

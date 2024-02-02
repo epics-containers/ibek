@@ -1,6 +1,7 @@
 """
 The Support Class represents a deserialized <MODULE_NAME>.ibek.support.yaml file.
 """
+
 from __future__ import annotations
 
 import json

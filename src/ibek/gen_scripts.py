@@ -1,6 +1,7 @@
 """
 Functions for building the db and boot scripts
 """
+
 import logging
 import re
 from pathlib import Path

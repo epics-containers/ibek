@@ -7,6 +7,7 @@ us to maintain state between calls to the Jinja templates because
 we pass a single instance of this class into all Jinja contexts.
 """
 
+import os
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Dict
@@ -61,6 +62,12 @@ class Utils:
         Set the ioc name based on the file name of the instance definition
         """
         self.ioc_name = name
+
+    def get_env(self, key: str) -> str:
+        """
+        Get an environment variable
+        """
+        return os.environ.get(key, "")
 
     def set_var(self, key: str, value: Any):
         """create a global variable for our jinja context"""
