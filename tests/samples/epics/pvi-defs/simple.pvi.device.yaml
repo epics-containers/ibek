@@ -3,6 +3,6 @@ label: Simple Device
 children:
   - type: SignalR
     name: SimplePV
-    pv: Simple
-    widget:
+    read_pv: Simple
+    read_widget:
       type: TextRead

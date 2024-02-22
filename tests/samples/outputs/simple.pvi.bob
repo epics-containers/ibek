@@ -1,7 +1,7 @@
 <display version="2.0.0">
   <name>Display</name>
   <x>0</x>
-  <y>0</y>
+  <y use_class="true">0</y>
   <width>388</width>
   <height>55</height>
   <grid_step_x>4</grid_step_x>
@@ -9,7 +9,7 @@
   <widget type="label" version="2.0.0">
     <name>Title</name>
     <class>TITLE</class>
-    <text>Simple Device - ${prefix}</text>
+    <text>Simple Device</text>
     <x use_class="true">0</x>
     <y use_class="true">0</y>
     <width>388</width>
@@ -35,7 +35,7 @@
   </widget>
   <widget type="textupdate" version="2.0.0">
     <name>TextUpdate</name>
-    <pv_name>${prefix}Simple</pv_name>
+    <pv_name>Simple</pv_name>
     <x>178</x>
     <y>30</y>
     <width>205</width>

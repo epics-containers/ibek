@@ -21,8 +21,6 @@ from ibek.utils import UTILS
 
 runtime_cli = typer.Typer(cls=NaturalOrderGroup)
 
-PVI_PV_PREFIX = "${prefix}"
-
 
 @runtime_cli.command()
 def generate(
@@ -104,30 +102,35 @@ def generate_pvi(ioc: IOC) -> Tuple[List[IndexEntry], List[Tuple[Database, Entit
         device_bob = OPI_OUTPUT_PATH / f"{device_name}.pvi.bob"
 
         # Skip deserializing yaml if not needed
-        if entity_pvi.pva_template or device_name not in formatted_pvi_devices:
+        if entity_pvi.pv or device_name not in formatted_pvi_devices:
             device = Device.deserialize(pvi_yaml)
             device.deserialize_parents([PVI_DEFS])
 
-            # Render the prefix value for the device from the instance parameters
-            macros = {"prefix": UTILS.render(entity.model_dump(), entity_pvi.prefix)}
-
-            if entity_pvi.pva_template:
+            if entity_pvi.pv:
                 # Create a template with the V4 structure defining a PVI interface
                 output_template = RUNTIME_OUTPUT_PATH / f"{device_name}.pvi.template"
-                format_template(device, PVI_PV_PREFIX, output_template)
+                format_template(device, entity_pvi.pv_prefix, output_template)
 
                 # Add to extra databases to be added into substitution file
                 databases.append(
-                    (Database(file=output_template.name, args=macros), entity)
+                    (
+                        Database(file=output_template.name, args=entity_pvi.ui_macros),
+                        entity,
+                    )
                 )
 
             if device_name not in formatted_pvi_devices:
-                formatter.format(device, PVI_PV_PREFIX, device_bob)
+                formatter.format(device, device_bob)
 
                 # Don't format further instance of this device
                 formatted_pvi_devices.append(device_name)
 
-        if entity_pvi.index:
+        if entity_pvi.ui_index:
+            try:
+                macros = {k: entity.__dict__[k] for k in entity_pvi.ui_macros}
+            except KeyError as e:
+                raise AttributeError(f"Macro {e} not found in args of {entity.type}")
+
             index_entries.append(
                 IndexEntry(label=device_name, ui=device_bob.name, macros=macros)
             )

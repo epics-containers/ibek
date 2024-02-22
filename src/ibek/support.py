@@ -167,17 +167,24 @@ class EntityPVI(BaseSettings):
     yaml_path: str = Field(
         description="Path to .pvi.device.yaml - absolute or relative to PVI_DEFS"
     )
-    index: bool = Field(
-        description="Whether to add generated UI to index for Entity", default=True
+    ui_index: bool = Field(
+        description="Whether to add the UI to the IOC index.",
+        default=True,
     )
-    prefix: str = Field(description="PV prefix to pass as $(prefix) on index button")
-    pva_template: bool = Field(
+    ui_macros: dict[str, None] = Field(
         description=(
-            "Whether to generate a database template with info tags that create a "
-            "PVAccess structure defining the PV interface (PVI) for this entity"
+            "Macros to launch the UI on the IOC index. "
+            "These must be args of the Entity this is attached to."
+        )
+    )
+    pv: bool = Field(
+        description=(
+            "Whether to generate a PVI PV. This adds a database template with info "
+            "tags that create a PVAccess PV representing the device structure."
         ),
         default=False,
     )
+    pv_prefix: str = Field(description='PV prefix for PVI PV - e.g. "$(P)"')
 
 
 class Definition(BaseSettings):
