@@ -13,6 +13,7 @@ from pytest_mock import MockerFixture
 from ibek import __version__
 from ibek.globals import IBEK_DEFS, PVI_DEFS, PVI_YAML_PATTERN, SUPPORT_YAML_PATTERN
 from ibek.ioc import clear_entity_model_ids
+from ibek.runtime_cmds.commands import generate
 from ibek.support_cmds.commands import generate_links
 from tests.conftest import run_cli
 
@@ -90,15 +91,10 @@ def test_build_runtime_motorSim(tmp_path: Path, samples: Path):
     out_file = tmp_path / "motorSim.st.cmd"
     out_db = tmp_path / "motorSim.ioc.subst"
 
-    run_cli(
-        "runtime",
-        "generate",
+    generate(
         ioc_yaml,
-        support_yaml1,
-        support_yaml2,
-        "--out",
+        [support_yaml1, support_yaml2],
         out_file,
-        "--db-out",
         out_db,
     )
 
