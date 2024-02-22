@@ -34,9 +34,9 @@ echo making an ioc schema using utils support yaml
 ibek ioc generate-schema --no-ibek-defs support/utils.ibek.support.yaml --output schemas/utils.ibek.ioc.schema.json
 
 echo making ioc based on ibek-mo-ioc-01.yaml
-ibek runtime generate iocs/ibek-mo-ioc-01.yaml support/asyn.ibek.support.yaml support/motorSim.ibek.support.yaml --out outputs/motorSim.st.cmd --db-out outputs/motorSim.ioc.subst
-cp ${EPICS_ROOT}/opi/* outputs/
+EPICS_ROOT=`pwd`/epics ibek runtime generate iocs/ibek-mo-ioc-01.yaml support/asyn.ibek.support.yaml support/motorSim.ibek.support.yaml
+mv `pwd`/epics/{runtime,opi}/* `pwd`/outputs/motorSim
 
 echo making ioc based on utils support yaml
-ibek runtime generate iocs/utils.ibek.ioc.yaml support/utils.ibek.support.yaml --out outputs/utils.st.cmd --db-out outputs/utils.ioc.subst
-
+EPICS_ROOT=`pwd`/epics ibek runtime generate iocs/utils.ibek.ioc.yaml support/utils.ibek.support.yaml
+mv `pwd`/epics/{runtime,opi}/* `pwd`/outputs/utils

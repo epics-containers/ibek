@@ -93,7 +93,7 @@
               }
             ]
           },
-          "description": "Dictionary of args and values to pass through to database. A value of None is equivalent to ARG: '{{ ARG }}'",
+          "description": "Dictionary of args and values to pass through to database. A value of None is equivalent to ARG: '{{ ARG }}'. See `UTILS.render_map` for more details.",
           "title": "Args",
           "type": "object"
         }
@@ -235,27 +235,43 @@
           "title": "Yaml Path",
           "type": "string"
         },
-        "index": {
+        "ui_index": {
           "default": true,
-          "description": "Whether to add generated UI to index for Entity",
-          "title": "Index",
+          "description": "Whether to add the UI to the IOC index.",
+          "title": "Ui Index",
           "type": "boolean"
         },
-        "prefix": {
-          "description": "PV prefix to pass as $(prefix) on index button",
-          "title": "Prefix",
-          "type": "string"
+        "ui_macros": {
+          "additionalProperties": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "default": null,
+          "description": "Macros to launch the UI on the IOC index. These must be args of the Entity this is attached to.",
+          "title": "Ui Macros",
+          "type": "object"
         },
-        "pva_template": {
+        "pv": {
           "default": false,
-          "description": "Whether to generate a database template with info tags that create a PVAccess structure defining the PV interface (PVI) for this entity",
-          "title": "Pva Template",
+          "description": "Whether to generate a PVI PV. This adds a database template with info tags that create a PVAccess PV representing the device structure.",
+          "title": "Pv",
           "type": "boolean"
+        },
+        "pv_prefix": {
+          "default": "",
+          "description": "PV prefix for PVI PV - e.g. \"$(P)\"",
+          "title": "Pv Prefix",
+          "type": "string"
         }
       },
       "required": [
-        "yaml_path",
-        "prefix"
+        "yaml_path"
       ],
       "title": "EntityPVI",
       "type": "object"

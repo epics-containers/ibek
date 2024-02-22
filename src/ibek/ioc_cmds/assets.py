@@ -7,7 +7,7 @@ from typing import List
 
 import typer
 
-from ibek.globals import IBEK_DEFS, IOC_FOLDER, PVI_DEFS
+from ibek.globals import GLOBALS, IOC_FOLDER
 
 log = logging.getLogger(__name__)
 
@@ -54,8 +54,8 @@ def extract_assets(
     if defaults:
         default_assets = [
             source / "support" / "configure",
-            PVI_DEFS,
-            IBEK_DEFS,
+            GLOBALS.PVI_DEFS,
+            GLOBALS.IBEK_DEFS,
             IOC_FOLDER,
             Path("/venv"),
         ]

@@ -16,11 +16,10 @@ except ImportError:
 from typing_extensions import Annotated
 
 from ibek.globals import (
-    IBEK_DEFS,
+    GLOBALS,
     IBEK_GLOBALS,
     IOC_DBDS,
     IOC_LIBS,
-    PVI_DEFS,
     PVI_YAML_PATTERN,
     RELEASE,
     RUNTIME_DEBS,
@@ -260,10 +259,10 @@ def generate_links(
     """
     support_globals = folder / ".." / IBEK_GLOBALS
 
-    symlink_files(folder, SUPPORT_YAML_PATTERN, IBEK_DEFS)
+    symlink_files(folder, SUPPORT_YAML_PATTERN, GLOBALS.IBEK_DEFS)
     if support_globals.exists():
-        symlink_files(support_globals, SUPPORT_YAML_PATTERN, IBEK_DEFS)
-    symlink_files(folder, PVI_YAML_PATTERN, PVI_DEFS)
+        symlink_files(support_globals, SUPPORT_YAML_PATTERN, GLOBALS.IBEK_DEFS)
+    symlink_files(folder, PVI_YAML_PATTERN, GLOBALS.PVI_DEFS)
 
 
 @support_cli.command()

@@ -52,9 +52,10 @@ defs:
 
     pvi:
       yaml_path: simple.pvi.device.yaml
-      prefix: "{{P}}:"
-      pva_template: true
-      index: true
+      ui_macros:
+        P:
+      pv: true
+      pv_prefix: $(P)
 
   - name: simMotorAxis
     description: |-

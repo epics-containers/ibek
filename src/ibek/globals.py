@@ -8,9 +8,36 @@ from pathlib import Path
 from pydantic import BaseModel, ConfigDict
 from typer.core import TyperGroup
 
+
+class _Globals:
+    """Helper class for accessing global constants."""
+
+    def __init__(self) -> None:
+        self.EPICS_ROOT = Path(os.getenv("EPICS_ROOT", "/epics/"))
+        """Root of epics directory tree.
+
+        This can be overriden by defining an environment variable "EPICS_ROOT".
+        """
+
+        self.IBEK_DEFS = self.EPICS_ROOT / "ibek-defs"
+        """Directory containing ibek support yaml definitions."""
+
+        self.PVI_DEFS = self.EPICS_ROOT / "pvi-defs"
+        """Directory containing pvi device yaml definitions."""
+
+        self.RUNTIME_OUTPUT = self.EPICS_ROOT / "runtime"
+        """Directory containing runtime generated assets for IOC boot."""
+
+        self.OPI_OUTPUT = self.EPICS_ROOT / "opi"
+        """Directory containing runtime generated opis to serve over http."""
+
+
+GLOBALS = _Globals()
+
+# TODO: Include all constants in _Globals
+
 # get the container paths from environment variables
 EPICS_BASE = Path(os.getenv("EPICS_BASE", "/epics/epics-base"))
-EPICS_ROOT = Path(os.getenv("EPICS_ROOT", "/epics/"))
 IOC_FOLDER = Path(os.getenv("IOC", "/epics/ioc"))
 SUPPORT = Path(os.getenv("SUPPORT", "/epics/support"))
 CONFIG_DIR_NAME = "config"
@@ -26,18 +53,10 @@ MODULES = SUPPORT / "configure/MODULES"
 # Folder containing templates for IOC src etc.
 TEMPLATES = Path(__file__).parent / "templates"
 
-# Definitions populated at container build time
-IBEK_DEFS = EPICS_ROOT / "ibek-defs"
-PVI_DEFS = EPICS_ROOT / "pvi-defs"
-
 # Paths for ibek-support
 IBEK_GLOBALS = Path("_global")
 SUPPORT_YAML_PATTERN = "*ibek.support.yaml"
 PVI_YAML_PATTERN = "*pvi.device.yaml"
-
-# Assets generated at runtime
-RUNTIME_OUTPUT_PATH = EPICS_ROOT / "runtime"
-OPI_OUTPUT_PATH = EPICS_ROOT / "opi"
 
 IOC_DBDS = SUPPORT / "configure/dbd_list"
 IOC_LIBS = SUPPORT / "configure/lib_list"
