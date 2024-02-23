@@ -9,7 +9,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
-    <title>Modules, Definitions and Entities &#8212; ibek 1.6.4.dev2+gb761fe6f documentation</title>
+    <title>Modules, Definitions and Entities &#8212; ibek 1.7.0b2.dev1+gcfc7dcd5 documentation</title>
   
   
   
@@ -605,7 +605,7 @@ defs:
     pvi:
       yaml_path: simple.pvi.device.yaml
       ui_macros:
-        P:
+        P: &quot;{{ P }}&quot;
       pv: true
       pv_prefix: $(P)
 
@@ -1205,7 +1205,14 @@ the container or during container development.</p>
         <span class="p">},</span>
         <span class="s2">&quot;ui_macros&quot;</span><span class="p">:</span> <span class="p">{</span>
           <span class="s2">&quot;additionalProperties&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;null&quot;</span>
+            <span class="s2">&quot;anyOf&quot;</span><span class="p">:</span> <span class="p">[</span>
+              <span class="p">{</span>
+                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
+              <span class="p">},</span>
+              <span class="p">{</span>
+                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;null&quot;</span>
+              <span class="p">}</span>
+            <span class="p">]</span>
           <span class="p">},</span>
           <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Macros to launch the UI on the IOC index. These must be args of the Entity this is attached to.&quot;</span><span class="p">,</span>
           <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Ui Macros&quot;</span><span class="p">,</span>
