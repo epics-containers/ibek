@@ -44,14 +44,8 @@ class RenderDb:
                 columns=[0] * len(args),
             )
 
-        # Add a new row of argument values.
-        # Note the case where no value was specified for the argument
-        # meaning that the name is to be rendered in Jinja
-        row = ["{{ %s }}" % k if v is None else v for k, v in args.items()]
-
-        # render any Jinja fields in the arguments
-        for i, line in enumerate(row):
-            row[i] = UTILS.render(dict(entity), row[i])
+        # add a new row of argument values, rendering any Jinja template fields
+        row = list(UTILS.render_map(dict(entity), args).values())
 
         # save the new row
         self.render_templates[filename].rows.append(row)
