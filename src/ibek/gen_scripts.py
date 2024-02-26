@@ -58,6 +58,10 @@ def ioc_deserialize(ioc_instance_yaml: Path, definition_yaml: List[Path]) -> IOC
 
     # extract the ioc instance yaml into a dict
     ioc_instance_dict = YAML(typ="safe").load(ioc_instance_yaml)
+    if ioc_instance_dict is None or "ioc_name" not in ioc_instance_dict:
+        raise RuntimeError(
+            f"Failed to load a valid ioc config from {ioc_instance_yaml}"
+        )
 
     # extract the ioc name into UTILS for use in jinja renders
     name = UTILS.render({}, ioc_instance_dict["ioc_name"])
