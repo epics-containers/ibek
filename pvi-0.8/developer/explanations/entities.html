@@ -9,7 +9,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
-    <title>Modules, Definitions and Entities &#8212; ibek 1.6.4.dev5+ga3f7680f documentation</title>
+    <title>Modules, Definitions and Entities &#8212; ibek 1.6.4.dev4+gc31d5a88 documentation</title>
   
   
   
@@ -605,7 +605,7 @@ defs:
     pvi:
       yaml_path: simple.pvi.device.yaml
       ui_macros:
-        P: &quot;{{ P }}&quot;
+        P:
       pv: true
       pv_prefix: $(P)
 
@@ -1214,6 +1214,7 @@ the container or during container development.</p>
               <span class="p">}</span>
             <span class="p">]</span>
           <span class="p">},</span>
+          <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="n">null</span><span class="p">,</span>
           <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Macros to launch the UI on the IOC index. These must be args of the Entity this is attached to.&quot;</span><span class="p">,</span>
           <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Ui Macros&quot;</span><span class="p">,</span>
           <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span>
@@ -1225,15 +1226,14 @@ the container or during container development.</p>
           <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;boolean&quot;</span>
         <span class="p">},</span>
         <span class="s2">&quot;pv_prefix&quot;</span><span class="p">:</span> <span class="p">{</span>
+          <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
           <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;PV prefix for PVI PV - e.g. </span><span class="se">\&quot;</span><span class="s2">$(P)</span><span class="se">\&quot;</span><span class="s2">&quot;</span><span class="p">,</span>
           <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Pv Prefix&quot;</span><span class="p">,</span>
           <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
         <span class="p">}</span>
       <span class="p">},</span>
       <span class="s2">&quot;required&quot;</span><span class="p">:</span> <span class="p">[</span>
-        <span class="s2">&quot;yaml_path&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;ui_macros&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;pv_prefix&quot;</span>
+        <span class="s2">&quot;yaml_path&quot;</span>
       <span class="p">],</span>
       <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;EntityPVI&quot;</span><span class="p">,</span>
       <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span>
