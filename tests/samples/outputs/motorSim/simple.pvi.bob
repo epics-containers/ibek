@@ -1,7 +1,7 @@
 <display version="2.0.0">
   <name>Display</name>
   <x>0</x>
-  <y>0</y>
+  <y use_class="true">0</y>
   <width>388</width>
   <height>55</height>
   <grid_step_x>4</grid_step_x>
@@ -9,7 +9,7 @@
   <widget type="label" version="2.0.0">
     <name>Title</name>
     <class>TITLE</class>
-    <text>ibek-mo-ioc-01 - Index</text>
+    <text>Simple Device</text>
     <x use_class="true">0</x>
     <y use_class="true">0</y>
     <width>388</width>
@@ -27,29 +27,23 @@
   </widget>
   <widget type="label" version="2.0.0">
     <name>Label</name>
-    <text>Simple</text>
+    <text>Simple PV</text>
     <x>23</x>
     <y>30</y>
     <width>150</width>
     <height>20</height>
   </widget>
-  <widget type="action_button" version="3.0.0">
-    <name>OpenDisplay</name>
-    <actions>
-      <action type="open_display">
-        <file>simple.pvi.bob</file>
-        <target>tab</target>
-        <description>Open Display</description>
-        <macros>
-          <prefix>IBEK-MO-TST-01::</prefix>
-        </macros>
-      </action>
-    </actions>
-    <text>Simple</text>
+  <widget type="textupdate" version="2.0.0">
+    <name>TextUpdate</name>
+    <pv_name>$(P)Simple</pv_name>
     <x>178</x>
     <y>30</y>
     <width>205</width>
     <height>20</height>
-    <tooltip>$(actions)</tooltip>
+    <font>
+      <font name="Default Bold" family="Liberation Sans" style="BOLD" size="14.0">
+      </font>
+    </font>
+    <horizontal_alignment>1</horizontal_alignment>
   </widget>
 </display>

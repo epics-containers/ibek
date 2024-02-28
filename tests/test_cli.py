@@ -11,8 +11,13 @@ from pathlib import Path
 from pytest_mock import MockerFixture
 
 from ibek import __version__
-from ibek.globals import IBEK_DEFS, PVI_DEFS, PVI_YAML_PATTERN, SUPPORT_YAML_PATTERN
+from ibek.globals import (
+    GLOBALS,
+    PVI_YAML_PATTERN,
+    SUPPORT_YAML_PATTERN,
+)
 from ibek.ioc import clear_entity_model_ids
+from ibek.runtime_cmds.commands import generate
 from ibek.support_cmds.commands import generate_links
 from tests.conftest import run_cli
 
@@ -75,7 +80,7 @@ def test_motor_sim_schema(tmp_path: Path, samples: Path):
     assert expected == actual
 
 
-def test_build_runtime_motorSim(tmp_path: Path, samples: Path):
+def test_build_runtime_motorSim(mocker: MockerFixture, tmp_path: Path, samples: Path):
     """
     build an ioc runtime script from an IOC instance entity file
     and multiple support module definition files
@@ -87,65 +92,52 @@ def test_build_runtime_motorSim(tmp_path: Path, samples: Path):
     ioc_yaml = samples / "iocs" / "ibek-mo-ioc-01.yaml"
     support_yaml1 = samples / "support" / "asyn.ibek.support.yaml"
     support_yaml2 = samples / "support" / "motorSim.ibek.support.yaml"
-    out_file = tmp_path / "motorSim.st.cmd"
-    out_db = tmp_path / "motorSim.ioc.subst"
+    expected_outputs = samples / "outputs" / "motorSim"
 
-    run_cli(
-        "runtime",
-        "generate",
-        ioc_yaml,
-        support_yaml1,
-        support_yaml2,
-        "--out",
-        out_file,
-        "--db-out",
-        out_db,
-    )
+    mocker.patch.object(GLOBALS, "RUNTIME_OUTPUT", tmp_path)
+    mocker.patch.object(GLOBALS, "OPI_OUTPUT", tmp_path)
 
-    example_boot = (samples / "outputs" / "motorSim.st.cmd").read_text()
-    actual_boot = out_file.read_text()
+    generate(ioc_yaml, [support_yaml1, support_yaml2])
+
+    example_boot = (expected_outputs / "st.cmd").read_text()
+    actual_boot = (tmp_path / "st.cmd").read_text()
     assert example_boot == actual_boot
 
-    example_db = (samples / "outputs" / "motorSim.ioc.subst").read_text()
-    actual_db = out_db.read_text()
+    example_db = (expected_outputs / "ioc.subst").read_text()
+    actual_db = (tmp_path / "ioc.subst").read_text()
     assert example_db == actual_db
 
-    example_index = (samples / "outputs" / "index.bob").read_text()
-    actual_index = (samples / "epics" / "opi" / "index.bob").read_text()
+    example_index = (expected_outputs / "index.bob").read_text()
+    actual_index = (tmp_path / "index.bob").read_text()
     assert example_index == actual_index
 
-    example_pvi = (samples / "outputs" / "simple.pvi.bob").read_text()
-    actual_pvi = (samples / "epics" / "opi" / "simple.pvi.bob").read_text()
-    assert example_pvi == actual_pvi
+    example_bob = (expected_outputs / "simple.pvi.bob").read_text()
+    actual_bob = (tmp_path / "simple.pvi.bob").read_text()
+    assert example_bob == actual_bob
+
+    example_template = (expected_outputs / "simple.pvi.template").read_text()
+    actual_template = (tmp_path / "simple.pvi.template").read_text()
+    assert example_template == actual_template
 
 
-def test_build_utils_features(tmp_path: Path, samples: Path):
+def test_build_utils_features(mocker: MockerFixture, tmp_path: Path, samples: Path):
     """
     build an ioc runtime script to verify utils features
     """
     clear_entity_model_ids()
     ioc_yaml = samples / "iocs" / "utils.ibek.ioc.yaml"
     support_yaml = samples / "support" / "utils.ibek.support.yaml"
-    out_file = tmp_path / "st.cmd"
-    out_db = tmp_path / "ioc.subst"
 
-    run_cli(
-        "runtime",
-        "generate",
-        ioc_yaml,
-        support_yaml,
-        "--out",
-        out_file,
-        "--db-out",
-        out_db,
-    )
+    mocker.patch.object(GLOBALS, "RUNTIME_OUTPUT", tmp_path)
 
-    example_boot = (samples / "outputs" / "utils.st.cmd").read_text()
-    actual_boot = out_file.read_text()
+    run_cli("runtime", "generate", ioc_yaml, support_yaml)
+
+    example_boot = (samples / "outputs" / "utils" / "st.cmd").read_text()
+    actual_boot = (tmp_path / "st.cmd").read_text()
     assert example_boot == actual_boot
 
-    example_db = (samples / "outputs" / "utils.ioc.subst").read_text()
-    actual_db = out_db.read_text()
+    example_db = (samples / "outputs" / "utils" / "ioc.subst").read_text()
+    actual_db = (tmp_path / "ioc.subst").read_text()
     assert example_db == actual_db
 
 
@@ -154,5 +146,9 @@ def test_generate_links_ibek(samples: Path, mocker: MockerFixture):
 
     generate_links(samples / "support")
 
-    symlink_mock.assert_any_call(samples / "support", PVI_YAML_PATTERN, PVI_DEFS)
-    symlink_mock.assert_any_call(samples / "support", SUPPORT_YAML_PATTERN, IBEK_DEFS)
+    symlink_mock.assert_any_call(
+        samples / "support", PVI_YAML_PATTERN, GLOBALS.PVI_DEFS
+    )
+    symlink_mock.assert_any_call(
+        samples / "support", SUPPORT_YAML_PATTERN, GLOBALS.IBEK_DEFS
+    )

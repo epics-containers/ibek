@@ -7,7 +7,7 @@ import typer
 
 from ibek.gen_scripts import ioc_create_model
 from ibek.globals import (
-    IBEK_DEFS,
+    GLOBALS,
     SUPPORT_YAML_PATTERN,
     NaturalOrderGroup,
 )
@@ -57,7 +57,7 @@ def generate_schema(
         ),
     ] = None,
     ibek_defs: bool = typer.Option(
-        True, help=f"Include definitions in {IBEK_DEFS} in generated schema"
+        True, help=f"Include definitions in {GLOBALS.IBEK_DEFS} in generated schema"
     ),
 ):
     """
@@ -71,10 +71,10 @@ def generate_schema(
     if ibek_defs:
         # this allows us to use the definitions inside the container
         # which are in a known location after the container is built
-        definitions += IBEK_DEFS.glob(SUPPORT_YAML_PATTERN)
+        definitions += GLOBALS.IBEK_DEFS.glob(SUPPORT_YAML_PATTERN)
 
     if not definitions:
-        log.error(f"No `definitions` given and none found in {IBEK_DEFS}")
+        log.error(f"No `definitions` given and none found in {GLOBALS.IBEK_DEFS}")
         raise typer.Exit(1)
 
     ioc_model = ioc_create_model(definitions)

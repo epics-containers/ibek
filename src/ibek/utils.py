@@ -10,7 +10,7 @@ we pass a single instance of this class into all Jinja contexts.
 import os
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Any, Dict
+from typing import Any, Dict, Mapping
 
 from jinja2 import Template
 
@@ -112,6 +112,25 @@ class Utils:
             ioc_yaml_file_name=self.file_name,
             ioc_name=self.ioc_name,
         )
+
+    def render_map(self, context: Any, map: Mapping[str, str | None]) -> dict[str, str]:
+        """
+        Render a map of jinja templates with values from the given context.
+
+        If given a key with a value of `None`, the key itself will be used as a template
+        value, so ``{"P": None}`` is equivalent to ``{"P": "{{ P }}"}``.
+
+        Args:
+            context: Context to extract template variables from
+            map: Map of macro to jinja template to render
+
+        """
+        return {
+            key: self.render(
+                context, template if template is not None else "{{ %s }}" % key
+            )
+            for key, template in map.items()
+        }
 
 
 # a singleton Utility object for sharing state across all Entity renders

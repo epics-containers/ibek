@@ -111,7 +111,8 @@ class Database(BaseSettings):
     args: Mapping[str, Optional[str]] = Field(
         description=(
             "Dictionary of args and values to pass through to database. "
-            "A value of None is equivalent to ARG: '{{ ARG }}'"
+            "A value of None is equivalent to ARG: '{{ ARG }}'. "
+            "See `UTILS.render_map` for more details."
         )
     )
 
@@ -167,17 +168,25 @@ class EntityPVI(BaseSettings):
     yaml_path: str = Field(
         description="Path to .pvi.device.yaml - absolute or relative to PVI_DEFS"
     )
-    index: bool = Field(
-        description="Whether to add generated UI to index for Entity", default=True
+    ui_index: bool = Field(
+        True,
+        description="Whether to add the UI to the IOC index.",
     )
-    prefix: str = Field(description="PV prefix to pass as $(prefix) on index button")
-    pva_template: bool = Field(
+    ui_macros: dict[str, str | None] = Field(
+        None,
         description=(
-            "Whether to generate a database template with info tags that create a "
-            "PVAccess structure defining the PV interface (PVI) for this entity"
+            "Macros to launch the UI on the IOC index. "
+            "These must be args of the Entity this is attached to."
         ),
-        default=False,
     )
+    pv: bool = Field(
+        False,
+        description=(
+            "Whether to generate a PVI PV. This adds a database template with info "
+            "tags that create a PVAccess PV representing the device structure."
+        ),
+    )
+    pv_prefix: str = Field("", description='PV prefix for PVI PV - e.g. "$(P)"')
 
 
 class Definition(BaseSettings):

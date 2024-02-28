@@ -87,18 +87,23 @@ def add_text_once(file: Path, text: str):
 
 
 def symlink_files(source_directory: Path, file_pattern: str, target_directory: Path):
-    """Symlink files patching the given pattern in source directory to target directory.
+    """
+    Symlink files matching the given pattern in source directory to target directory.
 
     Args:
         source_directory: Directory containing source files
-        file_patterm: Pattern of files in source directory to be symlinked
+        file_pattern: Pattern of files in source directory to be symlinked
         target_directory: Directory to create symlinks in
 
     """
+    source_files = list(source_directory.glob(file_pattern))
+    if not source_files:
+        return
+
     typer.echo(f"Symlinking {file_pattern} files:")
     target_directory.mkdir(parents=True, exist_ok=True)
-    for yaml in source_directory.glob(file_pattern):
-        typer.echo(f" {target_directory / yaml.name} -> {yaml}")
-        target = target_directory / yaml.name
+    for source_file in source_files:
+        typer.echo(f" {target_directory / source_file.name} -> {source_file}")
+        target = target_directory / source_file.name
         target.unlink(missing_ok=True)
-        target.symlink_to(yaml)
+        target.symlink_to(source_file)
