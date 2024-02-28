@@ -8,7 +8,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>ibek.support &#8212; ibek 1.6.3.dev6+g5a66d6c0 documentation</title>
+    <title>ibek.support &#8212; ibek 1.6.4.dev5+g5ddc2562 documentation</title>
   
   
   
@@ -563,7 +563,8 @@ document.write(`
     <span class="n">args</span><span class="p">:</span> <span class="n">Mapping</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
         <span class="n">description</span><span class="o">=</span><span class="p">(</span>
             <span class="s2">&quot;Dictionary of args and values to pass through to database. &quot;</span>
-            <span class="s2">&quot;A value of None is equivalent to ARG: &#39;{{ ARG }}&#39;&quot;</span>
+            <span class="s2">&quot;A value of None is equivalent to ARG: &#39;{{ ARG }}&#39;. &quot;</span>
+            <span class="s2">&quot;See `UTILS.render_map` for more details.&quot;</span>
         <span class="p">)</span>
     <span class="p">)</span></div>
 
@@ -619,17 +620,25 @@ document.write(`
     <span class="n">yaml_path</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
         <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Path to .pvi.device.yaml - absolute or relative to PVI_DEFS&quot;</span>
     <span class="p">)</span>
-    <span class="n">index</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
-        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Whether to add generated UI to index for Entity&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">True</span>
+    <span class="n">ui_index</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
+        <span class="kc">True</span><span class="p">,</span>
+        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Whether to add the UI to the IOC index.&quot;</span><span class="p">,</span>
     <span class="p">)</span>
-    <span class="n">prefix</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s2">&quot;PV prefix to pass as $(prefix) on index button&quot;</span><span class="p">)</span>
-    <span class="n">pva_template</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
+    <span class="n">ui_macros</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
+        <span class="kc">None</span><span class="p">,</span>
         <span class="n">description</span><span class="o">=</span><span class="p">(</span>
-            <span class="s2">&quot;Whether to generate a database template with info tags that create a &quot;</span>
-            <span class="s2">&quot;PVAccess structure defining the PV interface (PVI) for this entity&quot;</span>
+            <span class="s2">&quot;Macros to launch the UI on the IOC index. &quot;</span>
+            <span class="s2">&quot;These must be args of the Entity this is attached to.&quot;</span>
         <span class="p">),</span>
-        <span class="n">default</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-    <span class="p">)</span></div>
+    <span class="p">)</span>
+    <span class="n">pv</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
+        <span class="kc">False</span><span class="p">,</span>
+        <span class="n">description</span><span class="o">=</span><span class="p">(</span>
+            <span class="s2">&quot;Whether to generate a PVI PV. This adds a database template with info &quot;</span>
+            <span class="s2">&quot;tags that create a PVAccess PV representing the device structure.&quot;</span>
+        <span class="p">),</span>
+    <span class="p">)</span>
+    <span class="n">pv_prefix</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s1">&#39;PV prefix for PVI PV - e.g. &quot;$(P)&quot;&#39;</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="Definition"><a class="viewcode-back" href="../../user/reference/api.html#ibek.support.Definition">[docs]</a><span class="k">class</span> <span class="nc">Definition</span><span class="p">(</span><span class="n">BaseSettings</span><span class="p">):</span>

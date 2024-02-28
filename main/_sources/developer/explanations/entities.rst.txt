@@ -158,7 +158,7 @@ Click the arrows to reveal the files.
         <details>
         <summary><a>st.cmd</a></summary>
 
-    .. include:: ../../../tests/samples/outputs/motorSim.st.cmd
+    .. include:: ../../../tests/samples/outputs/motorSim/st.cmd
         :literal:
 
     .. raw:: html
