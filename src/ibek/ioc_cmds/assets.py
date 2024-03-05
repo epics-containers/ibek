@@ -103,4 +103,4 @@ def extract_assets(
             else:
                 move_file(src, dest_file, binary)
         else:
-            raise RuntimeError(f"extra runtime asset {src} missing")
+            typer.echo(f"WARNING: runtime asset {src} missing")
