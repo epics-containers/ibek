@@ -8,7 +8,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>ibek.globals &#8212; ibek 1.7.2b5.dev1+g7fe0f4a2 documentation</title>
+    <title>ibek.globals &#8212; ibek 1.7.2b6.dev1+g1cdd9441 documentation</title>
   
   
   
@@ -493,6 +493,9 @@ document.write(`
 
         <span class="bp">self</span><span class="o">.</span><span class="n">NATIVE</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">TARGET_ARCHITECTURE</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">EPICS_HOST_ARCH</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;True if the target architecture is the same as the host architecture.&quot;&quot;&quot;</span>
+
+        <span class="n">default_static</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">TARGET_ARCHITECTURE</span> <span class="o">!=</span> <span class="n">DEFAULT_ARCH</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">STATIC</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;STATIC&quot;</span><span class="p">,</span> <span class="n">default_static</span><span class="p">)</span>
 
 
 <span class="n">GLOBALS</span> <span class="o">=</span> <span class="n">_Globals</span><span class="p">()</span>
