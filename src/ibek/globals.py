@@ -42,6 +42,9 @@ class _Globals:
         self.NATIVE = self.TARGET_ARCHITECTURE == self.EPICS_HOST_ARCH
         """True if the target architecture is the same as the host architecture."""
 
+        default_static: bool = self.TARGET_ARCHITECTURE != DEFAULT_ARCH
+        self.STATIC = os.getenv("STATIC", default_static)
+
 
 GLOBALS = _Globals()
 
