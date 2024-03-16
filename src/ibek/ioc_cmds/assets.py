@@ -62,14 +62,15 @@ def extract_assets(
     else:
         default_assets = []
 
+    # folder names with binary files in them
+    binary = ["bin", "lib"]
+
     # non-native cross compilers built statically need only copy 'defaults'
     if GLOBALS.NATIVE:
         # for native builds we find and copy all the output folders from
         # the EPICS base and support modules
 
         # identify EPICS modules as folders with binary output folders
-        binary = ["bin", "lib"]
-
         binaries: List[Path] = []
         for find in binary:
             # only look two levels deep
