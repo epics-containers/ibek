@@ -57,10 +57,14 @@ def extract_assets(
             GLOBALS.PVI_DEFS,
             GLOBALS.IBEK_DEFS,
             IOC_FOLDER,
-            Path("/venv"),
         ]
     else:
         default_assets = []
+
+    if GLOBALS.NATIVE:
+        default_assets.append(Path("/venv"))
+    else:
+        default_assets.append(Path.readlink(IOC_FOLDER))
 
     # folder names with binary files in them
     binary = ["bin", "lib"]
