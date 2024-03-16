@@ -100,6 +100,7 @@ def create_boot_script(ioc_instance: IOC) -> str:
     renderer = Render()
 
     return template.render(
+        __utils__=UTILS,
         env_var_elements=renderer.render_environment_variable_elements(ioc_instance),
         script_elements=renderer.render_pre_ioc_init_elements(ioc_instance),
         post_ioc_init_elements=renderer.render_post_ioc_init_elements(ioc_instance),

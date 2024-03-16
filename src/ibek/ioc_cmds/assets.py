@@ -64,7 +64,11 @@ def extract_assets(
     if GLOBALS.NATIVE:
         default_assets.append(Path("/venv"))
     else:
-        default_assets.append(Path.readlink(IOC_FOLDER))
+        # gather the few files required for a static build
+        ioc_folder = Path.readlink(IOC_FOLDER)
+        bin = ioc_folder / "bin" / GLOBALS.TARGET_ARCHITECTURE
+        dbd = ioc_folder / "dbd"
+        default_assets += [bin, dbd]
 
     # folder names with binary files in them
     binary = ["bin", "lib"]
