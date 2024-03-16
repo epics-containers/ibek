@@ -62,36 +62,41 @@ def extract_assets(
     else:
         default_assets = []
 
-    # identify EPICS modules as folders with binary output folders
-    binary = ["bin", "lib"]
+    # non-native cross compilers built statically need only copy 'defaults'
+    if GLOBALS.NATIVE:
+        # for native builds we find and copy all the output folders from
+        # the EPICS base and support modules
 
-    binaries: List[Path] = []
-    for find in binary:
-        # only look two levels deep
-        binaries.extend(source.glob(f"*/*/{find}"))
-        binaries.extend(source.glob(f"*/{find}"))
+        # identify EPICS modules as folders with binary output folders
+        binary = ["bin", "lib"]
 
-    modules = [binary.parent for binary in binaries]
+        binaries: List[Path] = []
+        for find in binary:
+            # only look two levels deep
+            binaries.extend(source.glob(f"*/*/{find}"))
+            binaries.extend(source.glob(f"*/{find}"))
 
-    destination.mkdir(exist_ok=True, parents=True)
-    for module in modules:
-        # make sure dest folder exists
-        destination_module = destination / module.relative_to("/")
+        modules = [binary.parent for binary in binaries]
 
-        # use globs to make a list of the things we want to copy
-        asset_globs = [module.glob(match) for match in asset_matches.split("|")]
-        assets: List[Path] = [
-            asset for asset_glob in asset_globs for asset in asset_glob
-        ]
+        destination.mkdir(exist_ok=True, parents=True)
+        for module in modules:
+            # make sure dest folder exists
+            destination_module = destination / module.relative_to("/")
 
-        for asset in assets:
-            src = module / asset
-            if src.exists():
-                dest_file = destination_module / asset.relative_to(module)
-                if dry_run:
-                    typer.echo(f"Would move {src} to {dest_file} with {binary}")
-                else:
-                    move_file(src, dest_file, binary)
+            # use globs to make a list of the things we want to copy
+            asset_globs = [module.glob(match) for match in asset_matches.split("|")]
+            assets: List[Path] = [
+                asset for asset_glob in asset_globs for asset in asset_glob
+            ]
+
+            for asset in assets:
+                src = module / asset
+                if src.exists():
+                    dest_file = destination_module / asset.relative_to(module)
+                    if dry_run:
+                        typer.echo(f"Would move {src} to {dest_file} with {binary}")
+                    else:
+                        move_file(src, dest_file, binary)
 
     extra_files = default_assets + extras
     for asset in extra_files:

@@ -8,6 +8,8 @@ from pathlib import Path
 from pydantic import BaseModel, ConfigDict
 from typer.core import TyperGroup
 
+DEFAULT_ARCH = "linux-x86_64"
+
 
 class _Globals:
     """Helper class for accessing global constants."""
@@ -30,6 +32,15 @@ class _Globals:
 
         self.OPI_OUTPUT = self.EPICS_ROOT / "opi"
         """Directory containing runtime generated opis to serve over http."""
+
+        self.TARGET_ARCHITECTURE = os.getenv("TARGET_ARCHITECTURE", DEFAULT_ARCH)
+        """The target architecture for the current container."""
+
+        self.EPICS_HOST_ARCH = os.getenv("EPICS_HOST_ARCH", DEFAULT_ARCH)
+        """The host architecture for the current container."""
+
+        self.NATIVE = self.TARGET_ARCHITECTURE == self.EPICS_HOST_ARCH
+        """True if the target architecture is the same as the host architecture."""
 
 
 GLOBALS = _Globals()
