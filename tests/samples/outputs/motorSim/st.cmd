@@ -17,7 +17,7 @@ asynOctetSetOutputEos("\n")
 # testing escaping:  {{enclosed in escaped curly braces}} 
 motorSimCreateController(controllerOne, 4)
 
-dbLoadRecords $(RUNTIME_DIR)/ioc.db
+dbLoadRecords /epics/runtime/ioc.db
 iocInit
 
 

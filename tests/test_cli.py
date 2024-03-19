@@ -4,6 +4,7 @@ results.
 """
 
 import json
+import os
 import subprocess
 import sys
 from pathlib import Path
@@ -97,6 +98,8 @@ def test_build_runtime_motorSim(mocker: MockerFixture, tmp_path: Path, samples: 
     mocker.patch.object(GLOBALS, "RUNTIME_OUTPUT", tmp_path)
     mocker.patch.object(GLOBALS, "OPI_OUTPUT", tmp_path)
 
+    os.environ["IOC"] = "/epics/ioc"
+    os.environ["RUNTIME_DIR"] = "/epics/runtime"
     generate(ioc_yaml, [support_yaml1, support_yaml2])
 
     example_boot = (expected_outputs / "st.cmd").read_text()
@@ -130,6 +133,8 @@ def test_build_utils_features(mocker: MockerFixture, tmp_path: Path, samples: Pa
 
     mocker.patch.object(GLOBALS, "RUNTIME_OUTPUT", tmp_path)
 
+    os.environ["IOC"] = "/epics/ioc"
+    os.environ["RUNTIME_DIR"] = "/epics/runtime"
     run_cli("runtime", "generate", ioc_yaml, support_yaml)
 
     example_boot = (samples / "outputs" / "utils" / "st.cmd").read_text()

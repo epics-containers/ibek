@@ -11,6 +11,6 @@ ioc_registerRecordDeviceDriver pdbbase
 # counter "InterruptVector" is now 193
 # counter "InterruptVector" is now 194
 
-dbLoadRecords $(RUNTIME_DIR)/ioc.db
+dbLoadRecords /epics/runtime/ioc.db
 iocInit
 

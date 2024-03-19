@@ -45,7 +45,13 @@ def extract_assets(
     """
     extract and copy runtime assets from a completed developer stage container
     """
-    asset_matches = "bin|configure|db|dbd|include|lib|template|config|*.sh"
+
+    if GLOBALS.STATIC_BUILD:
+        # static builds only need database files from support modules
+        asset_matches = "db"
+    else:
+        # dynamically linked builds need binaries
+        asset_matches = "bin|db|lib"
 
     # chdir out of the folders we will move
     os.chdir(source)
@@ -56,15 +62,16 @@ def extract_assets(
             source / "support" / "configure",
             GLOBALS.PVI_DEFS,
             GLOBALS.IBEK_DEFS,
-            IOC_FOLDER,
-            Path("/venv"),
+            IOC_FOLDER,  # get the IOC folder symlink
+            Path.readlink(IOC_FOLDER),  # get contents of IOC folder
         ]
     else:
         default_assets = []
 
-    # identify EPICS modules as folders with binary output folders
+    # folder names with binary files in them
     binary = ["bin", "lib"]
 
+    # identify EPICS modules as folders with binary output folders
     binaries: List[Path] = []
     for find in binary:
         # only look two levels deep

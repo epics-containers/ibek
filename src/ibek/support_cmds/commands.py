@@ -71,6 +71,10 @@ def apt_install(
     Install debian packages into the container. If they have an http:// or https://
     prefix then they will be downloaded and installed from file.
     """
+    if runtime and not GLOBALS.NATIVE:
+        print("skipping runtime install in cross-compile environment")
+        return
+
     temp = Path("/tmp")
 
     if (only is AptWhen.run) or (only is AptWhen.both):
