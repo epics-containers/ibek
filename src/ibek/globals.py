@@ -33,17 +33,17 @@ class _Globals:
         self.OPI_OUTPUT = self.EPICS_ROOT / "opi"
         """Directory containing runtime generated opis to serve over http."""
 
-        self.TARGET_ARCHITECTURE = os.getenv("TARGET_ARCHITECTURE", DEFAULT_ARCH)
+        self.EPICS_TARGET_ARCH = os.getenv("EPICS_TARGET_ARCH", DEFAULT_ARCH)
         """The target architecture for the current container."""
 
         self.EPICS_HOST_ARCH = os.getenv("EPICS_HOST_ARCH", DEFAULT_ARCH)
         """The host architecture for the current container."""
 
-        self.NATIVE = self.TARGET_ARCHITECTURE == self.EPICS_HOST_ARCH
+        self.NATIVE = self.EPICS_TARGET_ARCH == self.EPICS_HOST_ARCH
         """True if the target architecture is the same as the host architecture."""
 
-        default_static: bool = self.TARGET_ARCHITECTURE != DEFAULT_ARCH
-        self.STATIC = os.getenv("STATIC", default_static)
+        default_static: bool = self.EPICS_TARGET_ARCH != DEFAULT_ARCH
+        self.STATIC_BUILD = os.getenv("STATIC_BUILD", default_static)
 
 
 GLOBALS = _Globals()

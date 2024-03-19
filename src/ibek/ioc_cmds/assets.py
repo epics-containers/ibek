@@ -46,12 +46,12 @@ def extract_assets(
     extract and copy runtime assets from a completed developer stage container
     """
 
-    if GLOBALS.STATIC:
+    if GLOBALS.STATIC_BUILD:
         # static builds only need database files from support modules
-        asset_matches = "db|template|*.sh"
+        asset_matches = "db"
     else:
         # dynamically linked builds need binaries
-        asset_matches = "bin|configure|db|dbd|include|lib|template|config|*.sh"
+        asset_matches = "bin|db|lib"
 
     # chdir out of the folders we will move
     os.chdir(source)
@@ -62,20 +62,11 @@ def extract_assets(
             source / "support" / "configure",
             GLOBALS.PVI_DEFS,
             GLOBALS.IBEK_DEFS,
-            IOC_FOLDER,
+            IOC_FOLDER,  # get the IOC folder symlink
+            Path.readlink(IOC_FOLDER),  # get contents of IOC folder
         ]
     else:
         default_assets = []
-
-    if GLOBALS.NATIVE:
-        # native builds can reuse the venv from the developer stage
-        default_assets.append(Path("/venv"))
-    else:
-        # gather the few files from ioc folder required for a static build
-        ioc_folder = Path.readlink(IOC_FOLDER)
-        bin = ioc_folder / "bin" / GLOBALS.TARGET_ARCHITECTURE
-        dbd = ioc_folder / "dbd"
-        default_assets += [bin, dbd]
 
     # folder names with binary files in them
     binary = ["bin", "lib"]
