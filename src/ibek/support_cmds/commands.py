@@ -56,49 +56,71 @@ PARSE_MACROS = re.compile(r"^([A-Z_a-z0-9]*)\s*=\s*(.*/.*)$", flags=re.M)
 support_cli = typer.Typer(cls=NaturalOrderGroup)
 
 
-@support_cli.command(
-    context_settings={"allow_extra_args": True, "ignore_unknown_options": True}
-)
-def apt_install(
-    ctx: typer.Context,
-    debs: List[str] = typer.Argument(None, help="list of debian packages to install"),
-    only: AptWhen = typer.Option(
-        AptWhen.both, help="which container build stage to install in"
-    ),
-    runtime: bool = typer.Option(False, help="install list of runtime packages"),
-):
+def _install_debs(debs: List[str]) -> None:
     """
-    Install debian packages into the container. If they have an http:// or https://
+    Install a list of debian packages.
+
+    If they have an http:// or https://
     prefix then they will be downloaded and installed from file.
     """
-    if runtime and not GLOBALS.NATIVE:
-        print("skipping runtime install in cross-compile environment")
-        return
-
     temp = Path("/tmp")
-
-    if (only is AptWhen.run) or (only is AptWhen.both):
-        add_list_to_file(RUNTIME_DEBS, debs)
-    if only is AptWhen.run:
-        return
-
-    if runtime and RUNTIME_DEBS.exists():
-        debs += RUNTIME_DEBS.read_text().split()
-
     for i, pkg in enumerate(debs):
         if pkg.startswith("http://") or pkg.startswith("https://"):
             pkg_file = temp / pkg.split("/")[-1]
             subprocess.call(["wget", pkg, "-O", str(pkg_file)])
             debs[i] = str(pkg_file)
 
+    if len(debs) == 0:
+        print("no packages to install")
+        return
+
+    print("installing packages: ", debs)
+
     sudo = "sudo" if os.geteuid() != 0 else ""
     command = (
         f"{sudo} apt-get update && {sudo} apt-get upgrade -y && "
-        f"{sudo} apt-get install -y --no-install-recommends "
-        + " ".join(debs)
-        + " ".join(ctx.args)
+        f"{sudo} apt-get install -y --no-install-recommends " + " ".join(debs)
     )
     exit(subprocess.call(["bash", "-c", command]))
+
+
+@support_cli.command()
+def apt_install(
+    debs: List[str] = typer.Argument(None, help="list of debian packages to install"),
+):
+    """
+    Install packages
+    """
+    _install_debs(debs)
+
+
+@support_cli.command()
+def add_runtime_packages(
+    debs: List[str] = typer.Argument(None, help="list of debian packages to install"),
+):
+    """
+    Add packages to RUNTIME_DEBS for later install with apt_install_runtime_packages
+    """
+    add_list_to_file(RUNTIME_DEBS, debs)
+
+
+@support_cli.command()
+def apt_install_runtime_packages(
+    skip_non_native: bool = typer.Option(
+        False, help="skip installation in cross-compile environment"
+    ),
+):
+    """
+    Install packages from the list collected by calls to add_runtime_packages
+    """
+    if not GLOBALS.NATIVE and skip_non_native:
+        print("skipping runtime install in cross-compile environment")
+        return
+
+    if RUNTIME_DEBS.exists():
+        debs = RUNTIME_DEBS.read_text().split()
+
+    _install_debs(debs)
 
 
 @support_cli.command(
