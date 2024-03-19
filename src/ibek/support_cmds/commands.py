@@ -56,7 +56,7 @@ PARSE_MACROS = re.compile(r"^([A-Z_a-z0-9]*)\s*=\s*(.*/.*)$", flags=re.M)
 support_cli = typer.Typer(cls=NaturalOrderGroup)
 
 
-def _install_debs(debs: List[str], args) -> None:
+def _install_debs(debs: List[str]) -> None:
     """
     Install a list of debian packages.
 
@@ -79,55 +79,48 @@ def _install_debs(debs: List[str], args) -> None:
     sudo = "sudo" if os.geteuid() != 0 else ""
     command = (
         f"{sudo} apt-get update && {sudo} apt-get upgrade -y && "
-        f"{sudo} apt-get install -y --no-install-recommends "
-        + " ".join(debs)
-        + " ".join(args)
+        f"{sudo} apt-get install -y --no-install-recommends " + " ".join(debs)
     )
     exit(subprocess.call(["bash", "-c", command]))
 
 
-@support_cli.command(
-    context_settings={"allow_extra_args": True, "ignore_unknown_options": True}
-)
-def runtime_apt_install(
-    ctx: typer.Context,
+@support_cli.command()
+def apt_install(
     debs: List[str] = typer.Argument(None, help="list of debian packages to install"),
 ):
     """
-    Install debian packages into the runtime container. Use the list of
-    packages in the RUNTIME_DEBS_debs file and also accept additional packages
-    as arguments.
+    Install packages
     """
-    if not GLOBALS.NATIVE:
+    _install_debs(debs)
+
+
+@support_cli.command()
+def add_runtime_packages(
+    debs: List[str] = typer.Argument(None, help="list of debian packages to install"),
+):
+    """
+    Add packages to RUNTIME_DEBS for later install with apt_install_runtime_packages
+    """
+    add_list_to_file(RUNTIME_DEBS, debs)
+
+
+@support_cli.command()
+def apt_install_runtime_packages(
+    skip_non_native: bool = typer.Option(
+        False, help="skip installation in cross-compile environment"
+    ),
+):
+    """
+    Install packages from the list collected by calls to add_runtime_packages
+    """
+    if not GLOBALS.NATIVE and skip_non_native:
         print("skipping runtime install in cross-compile environment")
         return
 
     if RUNTIME_DEBS.exists():
-        debs += RUNTIME_DEBS.read_text().split()
+        debs = RUNTIME_DEBS.read_text().split()
 
-    _install_debs(debs, ctx.args)
-
-
-@support_cli.command(
-    context_settings={"allow_extra_args": True, "ignore_unknown_options": True}
-)
-def apt_install(
-    ctx: typer.Context,
-    debs: List[str] = typer.Argument(None, help="list of debian packages to install"),
-    only: AptWhen = typer.Option(
-        AptWhen.both, help="which container build stage to install in"
-    ),
-):
-    """
-    Install debian packages into the developer container.
-    Also add to the list of packages to install in the runtime container.
-    """
-    if (only is AptWhen.run) or (only is AptWhen.both):
-        add_list_to_file(RUNTIME_DEBS, debs)
-    if only is AptWhen.run:
-        return
-
-    _install_debs(debs, ctx.args)
+    _install_debs(debs)
 
 
 @support_cli.command(
