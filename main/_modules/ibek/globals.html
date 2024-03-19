@@ -8,7 +8,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>ibek.globals &#8212; ibek 1.7.2.dev8+g682ce111 documentation</title>
+    <title>ibek.globals &#8212; ibek 1.7.2b7.dev12+g5ff96cfa documentation</title>
   
   
   
@@ -460,6 +460,8 @@ document.write(`
 <span class="kn">from</span> <span class="nn">pydantic</span> <span class="kn">import</span> <span class="n">BaseModel</span><span class="p">,</span> <span class="n">ConfigDict</span>
 <span class="kn">from</span> <span class="nn">typer.core</span> <span class="kn">import</span> <span class="n">TyperGroup</span>
 
+<span class="n">DEFAULT_ARCH</span> <span class="o">=</span> <span class="s2">&quot;linux-x86_64&quot;</span>
+
 
 <span class="k">class</span> <span class="nc">_Globals</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Helper class for accessing global constants.&quot;&quot;&quot;</span>
@@ -482,6 +484,18 @@ document.write(`
 
         <span class="bp">self</span><span class="o">.</span><span class="n">OPI_OUTPUT</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">EPICS_ROOT</span> <span class="o">/</span> <span class="s2">&quot;opi&quot;</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Directory containing runtime generated opis to serve over http.&quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">EPICS_TARGET_ARCH</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;EPICS_TARGET_ARCH&quot;</span><span class="p">,</span> <span class="n">DEFAULT_ARCH</span><span class="p">)</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;The target architecture for the current container.&quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">EPICS_HOST_ARCH</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;EPICS_HOST_ARCH&quot;</span><span class="p">,</span> <span class="n">DEFAULT_ARCH</span><span class="p">)</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;The host architecture for the current container.&quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">NATIVE</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">EPICS_TARGET_ARCH</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">EPICS_HOST_ARCH</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;True if the target architecture is the same as the host architecture.&quot;&quot;&quot;</span>
+
+        <span class="n">default_static</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">EPICS_TARGET_ARCH</span> <span class="o">!=</span> <span class="n">DEFAULT_ARCH</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">STATIC_BUILD</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;STATIC_BUILD&quot;</span><span class="p">,</span> <span class="n">default_static</span><span class="p">)</span>
 
 
 <span class="n">GLOBALS</span> <span class="o">=</span> <span class="n">_Globals</span><span class="p">()</span>
