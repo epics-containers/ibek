@@ -70,6 +70,12 @@ def _install_debs(debs: List[str], args) -> None:
             subprocess.call(["wget", pkg, "-O", str(pkg_file)])
             debs[i] = str(pkg_file)
 
+    if len(debs) == 0:
+        print("no packages to install")
+        return
+
+    print("installing packages: ", debs)
+
     sudo = "sudo" if os.geteuid() != 0 else ""
     command = (
         f"{sudo} apt-get update && {sudo} apt-get upgrade -y && "
