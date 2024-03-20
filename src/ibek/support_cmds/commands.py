@@ -265,6 +265,7 @@ def compile(
     result = subprocess.call(["bash", "-c", command])
     # save size of developer container with make clean
     command = f"make -C {path} -j $(nproc) clean"
+    subprocess.call(["bash", "-c", command])
     exit(result)
 
 
