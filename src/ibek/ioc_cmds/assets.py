@@ -64,14 +64,31 @@ def extract_assets(
             GLOBALS.IBEK_DEFS,
             IOC_FOLDER,  # get the IOC folder symlink
             Path.readlink(IOC_FOLDER),  # get contents of IOC folder
-        ]
+            Path("/venv"),  # get the virtualenv
+        ] + list(
+            source.glob("ibek*")
+        )  # get ibek-support and related folders
     else:
         default_assets = []
 
     # folder names with binary files in them
     binary = ["bin", "lib"]
 
+    # move the default assets and extras in their entirety
+    extra_files = default_assets + extras
+    for asset in extra_files:
+        src = source / asset
+        if src.exists():
+            dest_file = destination / asset.relative_to("/")
+            if dry_run:
+                typer.echo(f"Would move extra asset {src} to {dest_file} with {binary}")
+            else:
+                move_file(src, dest_file, binary)
+        else:
+            typer.echo(f"WARNING: runtime asset {src} missing")
+
     # identify EPICS modules as folders with binary output folders
+    # and move only their output folders as specified by asset_matches
     binaries: List[Path] = []
     for find in binary:
         # only look two levels deep
@@ -99,15 +116,3 @@ def extract_assets(
                     typer.echo(f"Would move {src} to {dest_file} with {binary}")
                 else:
                     move_file(src, dest_file, binary)
-
-    extra_files = default_assets + extras
-    for asset in extra_files:
-        src = source / asset
-        if src.exists():
-            dest_file = destination / asset.relative_to("/")
-            if dry_run:
-                typer.echo(f"Would move extra asset {src} to {dest_file} with {binary}")
-            else:
-                move_file(src, dest_file, binary)
-        else:
-            typer.echo(f"WARNING: runtime asset {src} missing")

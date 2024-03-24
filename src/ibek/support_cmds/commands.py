@@ -262,7 +262,11 @@ def compile(
     path = SUPPORT / module
 
     command = f"make -C {path} -j $(nproc) " + " ".join(ctx.args)
-    exit(subprocess.call(["bash", "-c", command]))
+    result = subprocess.call(["bash", "-c", command])
+    # save size of developer container with make clean
+    command = f"make -C {path} -j $(nproc) clean"
+    subprocess.call(["bash", "-c", command])
+    exit(result)
 
 
 @support_cli.command()
