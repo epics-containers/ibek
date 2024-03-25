@@ -29,8 +29,7 @@ def build_docker(
             help="The filepath to the Dockerfile to build",
             autocompletion=lambda: [],  # Forces path autocompletion
         ),
-    ] = Path.cwd()
-    / "Dockerfile",
+    ] = Path.cwd() / "Dockerfile",
 ):
     """
     EXPERIMENTAL: Attempt to interpret the Dockerfile and run it's commands
@@ -67,6 +66,8 @@ def generate_schema(
     if not (definitions or ibek_defs):
         log.error("One or more `definitions` required with `--no-ibek-defs`")
         raise typer.Exit(1)
+
+    definitions = definitions or []
 
     if ibek_defs:
         # this allows us to use the definitions inside the container
