@@ -67,7 +67,7 @@ def _install_debs(debs: List[str]) -> None:
     for i, pkg in enumerate(debs):
         if pkg.startswith("http://") or pkg.startswith("https://"):
             pkg_file = temp / pkg.split("/")[-1]
-            subprocess.call(["wget", pkg, "-O", str(pkg_file)])
+            subprocess.call(["busybox", "wget", pkg, "-O", str(pkg_file)])
             debs[i] = str(pkg_file)
 
     if len(debs) == 0:
