@@ -68,6 +68,8 @@ def generate_schema(
         log.error("One or more `definitions` required with `--no-ibek-defs`")
         raise typer.Exit(1)
 
+    definitions = definitions or []
+
     if ibek_defs:
         # this allows us to use the definitions inside the container
         # which are in a known location after the container is built
@@ -108,4 +110,5 @@ def extract_runtime_assets(
     This should be performed in a throw away container stage (runtime_prep)
     as it is destructive of the source folder, because it uses move for speed.
     """
+    extras = extras or []
     extract_assets(destination, source, extras, defaults, dry_run)

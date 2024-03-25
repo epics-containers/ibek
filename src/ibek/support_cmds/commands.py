@@ -62,12 +62,15 @@ def _install_debs(debs: List[str]) -> None:
 
     If they have an http:// or https://
     prefix then they will be downloaded and installed from file.
+
+    args: debs: List[str] - list of debian packages to install - can also include
+                            any additional 'apt-get install' options required
     """
     temp = Path("/tmp")
     for i, pkg in enumerate(debs):
         if pkg.startswith("http://") or pkg.startswith("https://"):
             pkg_file = temp / pkg.split("/")[-1]
-            subprocess.call(["wget", pkg, "-O", str(pkg_file)])
+            subprocess.call(["busybox", "wget", pkg, "-O", str(pkg_file)])
             debs[i] = str(pkg_file)
 
     if len(debs) == 0:
@@ -86,11 +89,18 @@ def _install_debs(debs: List[str]) -> None:
 
 @support_cli.command()
 def apt_install(
-    debs: List[str] = typer.Argument(None, help="list of debian packages to install"),
+    debs: List[str] = typer.Argument(
+        None,
+        help=(
+            "list of debian packages to install. Also may include any "
+            "additional 'apt-get install' options required"
+        ),
+    ),
 ):
     """
     Install packages
     """
+    debs = debs or []
     _install_debs(debs)
 
 
@@ -100,7 +110,10 @@ def add_runtime_packages(
 ):
     """
     Add packages to RUNTIME_DEBS for later install with apt_install_runtime_packages
+
+    The list may include any additional 'apt-get install' options required.
     """
+    debs = debs or []
     add_list_to_file(RUNTIME_DEBS, debs)
 
 
@@ -137,6 +150,9 @@ def git_clone(
 ):
     """
     clone a support module from a remote repository
+
+    Add any additional arguments to the git clone command at the end of the
+    argument list.
     """
     url = org + repo_name
     location = SUPPORT / repo_name
@@ -191,6 +207,7 @@ def add_libs(
     """
     declare the libraries for this support module for inclusion in IOC Makefile
     """
+    libs = libs or []
     add_list_to_file(IOC_LIBS, libs)
 
 
@@ -201,6 +218,7 @@ def add_dbds(
     """
     declare the dbd files for this support module for inclusion in IOC Makefile
     """
+    dbds = dbds or []
     add_list_to_file(IOC_DBDS, dbds)
 
 
@@ -258,6 +276,8 @@ def compile(
 ):
     """
     compile a support module after preparation with `ibek support register` etc.
+
+    Add any extra compiler options to the end of the argument list
     """
     path = SUPPORT / module
 
