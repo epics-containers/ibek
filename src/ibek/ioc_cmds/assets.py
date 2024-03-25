@@ -63,7 +63,9 @@ def extract_assets(
             GLOBALS.PVI_DEFS,
             GLOBALS.IBEK_DEFS,
             IOC_FOLDER,  # get the IOC folder symlink
-            Path.readlink(IOC_FOLDER),  # get contents of IOC folder
+            Path.readlink(
+                IOC_FOLDER
+            ).parent,  # get contents of IOC folder and its source (parent)
             Path("/venv"),  # get the virtualenv
         ] + list(
             source.glob("ibek*")
