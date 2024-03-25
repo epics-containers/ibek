@@ -62,6 +62,9 @@ def _install_debs(debs: List[str]) -> None:
 
     If they have an http:// or https://
     prefix then they will be downloaded and installed from file.
+
+    args: debs: List[str] - list of debian packages to install - can also include
+                            any additional 'apt-get install' options required
     """
     temp = Path("/tmp")
     for i, pkg in enumerate(debs):
@@ -86,7 +89,13 @@ def _install_debs(debs: List[str]) -> None:
 
 @support_cli.command()
 def apt_install(
-    debs: List[str] = typer.Argument(None, help="list of debian packages to install"),
+    debs: List[str] = typer.Argument(
+        None,
+        help=(
+            "list of debian packages to install. Also may include any "
+            "additional 'apt-get install' options required"
+        ),
+    ),
 ):
     """
     Install packages
@@ -101,6 +110,8 @@ def add_runtime_packages(
 ):
     """
     Add packages to RUNTIME_DEBS for later install with apt_install_runtime_packages
+
+    The list may include any additional 'apt-get install' options required.
     """
     debs = debs or []
     add_list_to_file(RUNTIME_DEBS, debs)
@@ -139,6 +150,9 @@ def git_clone(
 ):
     """
     clone a support module from a remote repository
+
+    Add any additional arguments to the git clone command at the end of the
+    argument list.
     """
     url = org + repo_name
     location = SUPPORT / repo_name
@@ -262,6 +276,8 @@ def compile(
 ):
     """
     compile a support module after preparation with `ibek support register` etc.
+
+    Add any extra compiler options to the end of the argument list
     """
     path = SUPPORT / module
 
