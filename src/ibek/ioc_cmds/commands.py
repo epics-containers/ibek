@@ -29,7 +29,8 @@ def build_docker(
             help="The filepath to the Dockerfile to build",
             autocompletion=lambda: [],  # Forces path autocompletion
         ),
-    ] = Path.cwd() / "Dockerfile",
+    ] = Path.cwd()
+    / "Dockerfile",
 ):
     """
     EXPERIMENTAL: Attempt to interpret the Dockerfile and run it's commands
@@ -109,4 +110,5 @@ def extract_runtime_assets(
     This should be performed in a throw away container stage (runtime_prep)
     as it is destructive of the source folder, because it uses move for speed.
     """
+    extras = extras or []
     extract_assets(destination, source, extras, defaults, dry_run)

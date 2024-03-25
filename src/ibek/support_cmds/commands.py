@@ -91,6 +91,7 @@ def apt_install(
     """
     Install packages
     """
+    debs = debs or []
     _install_debs(debs)
 
 
@@ -101,6 +102,7 @@ def add_runtime_packages(
     """
     Add packages to RUNTIME_DEBS for later install with apt_install_runtime_packages
     """
+    debs = debs or []
     add_list_to_file(RUNTIME_DEBS, debs)
 
 
@@ -191,6 +193,7 @@ def add_libs(
     """
     declare the libraries for this support module for inclusion in IOC Makefile
     """
+    libs = libs or []
     add_list_to_file(IOC_LIBS, libs)
 
 
@@ -201,6 +204,7 @@ def add_dbds(
     """
     declare the dbd files for this support module for inclusion in IOC Makefile
     """
+    dbds = dbds or []
     add_list_to_file(IOC_DBDS, dbds)
 
 
