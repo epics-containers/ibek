@@ -17,6 +17,20 @@ creates can execute in any container runtime, such as docker or podman.
   Releases       https://github.com/epics-containers/ibek/releases
   ============== ==============================================================
 
+UPDATE: Version 2.0.0
+=====================
+
+There have been a number of breaking changes since version 1.8.0. These are
+primarily to support RTEMS cross compiled IOCs. But we have also taken the
+opportunity to clarify the CLI.
+
+All changes are compatible with 2.0.0 of ibek-support and 3.4.0 of all other
+epics-containers repos. When using ioc-template 3.4.0 to update your generic
+IOCs, make sure you also update the ibek-support submodule to 2.0.0 or newer,
+then you should have all compatible versions.
+
+--------------------------------------------------------------------------------
+
 
 The documentation is still under construction. For the moment the best
 pages to read are the following:
