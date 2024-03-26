@@ -132,8 +132,7 @@ def apt_install_runtime_packages(
 
     if RUNTIME_DEBS.exists():
         debs = RUNTIME_DEBS.read_text().split()
-
-    _install_debs(debs)
+        _install_debs(debs)
 
 
 @support_cli.command(
