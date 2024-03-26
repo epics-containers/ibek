@@ -9,7 +9,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
-    <title>ibek: IOC Builder for EPICS and Kubernetes &#8212; ibek 1.8.2b5.dev2+g4ed56e17 documentation</title>
+    <title>ibek: IOC Builder for EPICS and Kubernetes &#8212; ibek 1.8.3.dev2+g0f005e09 documentation</title>
   
   
   
@@ -447,6 +447,17 @@ creates can execute in any container runtime, such as docker or podman.</p>
 </tbody>
 </table>
 </div></blockquote>
+</section>
+<section id="update-version-2-0-0">
+<h1>UPDATE: Version 2.0.0<a class="headerlink" href="#update-version-2-0-0" title="Permalink to this heading">#</a></h1>
+<p>There have been a number of breaking changes since version 1.8.0. These are
+primarily to support RTEMS cross compiled IOCs. But we have also taken the
+opportunity to clarify the CLI.</p>
+<p>All changes are compatible with 2.0.0 of ibek-support and 3.4.0 of all other
+epics-containers repos. When using ioc-template 3.4.0 to update your generic
+IOCs, make sure you also update the ibek-support submodule to 2.0.0 or newer,
+then you should have all compatible versions.</p>
+<hr class="docutils" />
 <p>The documentation is still under construction. For the moment the best
 pages to read are the following:</p>
 <ul class="simple">
