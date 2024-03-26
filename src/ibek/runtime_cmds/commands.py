@@ -87,8 +87,12 @@ def generate_pvi(ioc: IOC) -> Tuple[List[IndexEntry], List[Tuple[Database, Entit
 
         # Skip deserializing yaml if not needed
         if entity_pvi.pv or device_name not in formatted_pvi_devices:
-            device = Device.deserialize(pvi_yaml)
-            device.deserialize_parents([GLOBALS.PVI_DEFS])
+            try:
+                device = Device.deserialize(pvi_yaml)
+                device.deserialize_parents([GLOBALS.PVI_DEFS])
+            except Exception:
+                typer.echo(f"ERROR: Failed to deserialize {pvi_yaml}")
+                raise
 
             if entity_pvi.pv:
                 # Create a template with the V4 structure defining a PVI interface
