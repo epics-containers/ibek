@@ -17,7 +17,8 @@ dependencies = [
     "ruamel.yaml",
     "jinja2",
     "GitPython",
-    "pvi~=0.8",  # pvi currently tracks breaking changes with minor version
+    "semantic-version",
+    "pvi~=0.8",         # pvi currently tracks breaking changes with minor version
 ] # Add project dependencies here, e.g. ["click", "numpy"]
 dynamic = ["version"]
 license.file = "LICENSE"
