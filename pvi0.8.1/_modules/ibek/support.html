@@ -1,0 +1,751 @@
+
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ibek.support &#8212; ibek 2.0.2.dev1+g9e7d1bfb documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+<link href="../../_static/styles/bootstrap.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+
+  
+  <link href="../../_static/vendor/fontawesome/6.5.1/css/all.min.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.1/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.1/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.1/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=8d27b9dea8ad943066ae" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae" />
+  <script src="../../_static/vendor/fontawesome/6.5.1/js/all.min.js?digest=8d27b9dea8ad943066ae"></script>
+
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/sphinx_highlight.js"></script>
+    <script src="../../_static/clipboard.min.js"></script>
+    <script src="../../_static/copybutton.js"></script>
+    <script src="../../_static/design-tabs.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '_modules/ibek/support';</script>
+    <script>
+        DOCUMENTATION_OPTIONS.theme_version = '0.15.2';
+        DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://epics-containers.github.io/ibek/switcher.json';
+        DOCUMENTATION_OPTIONS.theme_switcher_version_match = 'pvi0.8.1';
+        DOCUMENTATION_OPTIONS.show_version_warning_banner = false;
+        </script>
+    <link rel="icon" href="../../_static/ibek-favicon.ico"/>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a id="pst-skip-link" class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>
+    Back to top
+  </button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar">
+<div class="bd-header__inner bd-page-width">
+  <label class="sidebar-toggle primary-toggle" for="__primary">
+    <span class="fa-solid fa-bars"></span>
+  </label>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+
+<a class="navbar-brand logo" href="../../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../../_static/ibek-logo.svg" class="logo__image only-light" alt=""/>
+    <script>document.write(`<img src="../../_static/ibek-logo.svg" class="logo__image only-dark" alt=""/>`);</script>
+  
+  
+    <p class="title logo__title">ibek</p>
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav class="navbar-nav">
+  <ul class="bd-navbar-elements navbar-nav">
+    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../user/index.html">
+                        User Guide
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../developer/index.html">
+                        Developer Guide
+                      </a>
+                    </li>
+                
+
+                <li class="nav-item">
+                  <a class="nav-link nav-external" href="https://github.com/epics-containers/ibek/releases">
+                    Release Notes
+                  </a>
+                </li>
+                
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+ <script>
+ document.write(`
+   <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
+  </button>
+`);
+</script></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links navbar-nav"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/epics-containers/ibek" title="GitHub" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i></span>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://pypi.org/project/ibek" title="PyPI" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fas fa-cube fa-lg" aria-hidden="true"></i></span>
+            <span class="sr-only">PyPI</span></a>
+        </li>
+</ul></div>
+      
+        <div class="navbar-item">
+<script>
+document.write(`
+  <div class="version-switcher__container dropdown">
+    <button id="pst-version-switcher-button-2"
+      type="button"
+      class="version-switcher__button btn btn-sm navbar-btn dropdown-toggle"
+      data-bs-toggle="dropdown"
+      aria-haspopup="listbox"
+      aria-controls="pst-version-switcher-list-2"
+      aria-label="Version switcher list"
+    >
+      Choose version  <!-- this text may get changed later by javascript -->
+      <span class="caret"></span>
+    </button>
+    <div id="pst-version-switcher-list-2"
+      class="version-switcher__menu dropdown-menu list-group-flush py-0"
+      role="listbox" aria-labelledby="pst-version-switcher-button-2">
+      <!-- dropdown will be populated by javascript on page load -->
+    </div>
+  </div>
+`);
+</script></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+ <script>
+ document.write(`
+   <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script>
+    </div>
+  
+
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <div class="bd-sidebar-primary bd-sidebar hide-on-wide">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          <div class="navbar-item">
+<nav class="navbar-nav">
+  <ul class="bd-navbar-elements navbar-nav">
+    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../user/index.html">
+                        User Guide
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../developer/index.html">
+                        Developer Guide
+                      </a>
+                    </li>
+                
+
+                <li class="nav-item">
+                  <a class="nav-link nav-external" href="https://github.com/epics-containers/ibek/releases">
+                    Release Notes
+                  </a>
+                </li>
+                
+  </ul>
+</nav></div>
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
+  </button>
+`);
+</script></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links navbar-nav"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/epics-containers/ibek" title="GitHub" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i></span>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://pypi.org/project/ibek" title="PyPI" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fas fa-cube fa-lg" aria-hidden="true"></i></span>
+            <span class="sr-only">PyPI</span></a>
+        </li>
+</ul></div>
+        
+          <div class="navbar-item">
+<script>
+document.write(`
+  <div class="version-switcher__container dropdown">
+    <button id="pst-version-switcher-button-3"
+      type="button"
+      class="version-switcher__button btn btn-sm navbar-btn dropdown-toggle"
+      data-bs-toggle="dropdown"
+      aria-haspopup="listbox"
+      aria-controls="pst-version-switcher-list-3"
+      aria-label="Version switcher list"
+    >
+      Choose version  <!-- this text may get changed later by javascript -->
+      <span class="caret"></span>
+    </button>
+    <div id="pst-version-switcher-list-3"
+      class="version-switcher__menu dropdown-menu list-group-flush py-0"
+      role="listbox" aria-labelledby="pst-version-switcher-button-3">
+      <!-- dropdown will be populated by javascript on page load -->
+    </div>
+  </div>
+`);
+</script></div>
+        
+      </div>
+    
+  </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+
+
+<nav aria-label="Breadcrumb">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../index.html" class="nav-link">Module code</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page">ibek.support</li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <h1>Source code for ibek.support</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">The Support Class represents a deserialized &lt;MODULE_NAME&gt;.ibek.support.yaml file.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
+
+<span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">from</span> <span class="nn">enum</span> <span class="kn">import</span> <span class="n">Enum</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Mapping</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">,</span> <span class="n">Union</span>
+
+<span class="kn">from</span> <span class="nn">pydantic</span> <span class="kn">import</span> <span class="n">Field</span><span class="p">,</span> <span class="n">PydanticUndefinedAnnotation</span>
+<span class="kn">from</span> <span class="nn">typing_extensions</span> <span class="kn">import</span> <span class="n">Literal</span>
+
+<span class="kn">from</span> <span class="nn">.globals</span> <span class="kn">import</span> <span class="n">BaseSettings</span>
+
+
+<div class="viewcode-block" id="default"><a class="viewcode-back" href="../../user/reference/api.html#ibek.support.default">[docs]</a><span class="k">def</span> <span class="nf">default</span><span class="p">(</span><span class="n">T</span><span class="p">:</span> <span class="nb">type</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    defines a default type which may be</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">Field</span><span class="p">(</span>
+        <span class="n">Union</span><span class="p">[</span><span class="n">Optional</span><span class="p">[</span><span class="n">T</span><span class="p">],</span> <span class="n">PydanticUndefinedAnnotation</span><span class="p">],</span>
+        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;If given, instance doesn&#39;t supply argument, what value should be used&quot;</span><span class="p">,</span>
+    <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="When"><a class="viewcode-back" href="../../user/reference/api.html#ibek.support.When">[docs]</a><span class="k">class</span> <span class="nc">When</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+    <span class="n">first</span> <span class="o">=</span> <span class="s2">&quot;first&quot;</span>
+    <span class="n">every</span> <span class="o">=</span> <span class="s2">&quot;every&quot;</span>
+    <span class="n">last</span> <span class="o">=</span> <span class="s2">&quot;last&quot;</span></div>
+
+
+<div class="viewcode-block" id="Arg"><a class="viewcode-back" href="../../user/reference/api.html#ibek.support.Arg">[docs]</a><span class="k">class</span> <span class="nc">Arg</span><span class="p">(</span><span class="n">BaseSettings</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Base class for all Argument Types&quot;&quot;&quot;</span>
+
+    <span class="nb">type</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
+        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Name of the argument that the IOC instance should pass&quot;</span>
+    <span class="p">)</span>
+    <span class="n">description</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
+        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Description of what the argument will be used for&quot;</span>
+    <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="FloatArg"><a class="viewcode-back" href="../../user/reference/api.html#ibek.support.FloatArg">[docs]</a><span class="k">class</span> <span class="nc">FloatArg</span><span class="p">(</span><span class="n">Arg</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;An argument with a float value&quot;&quot;&quot;</span>
+
+    <span class="nb">type</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;float&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;float&quot;</span>
+    <span class="n">default</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span></div>
+
+
+<div class="viewcode-block" id="StrArg"><a class="viewcode-back" href="../../user/reference/api.html#ibek.support.StrArg">[docs]</a><span class="k">class</span> <span class="nc">StrArg</span><span class="p">(</span><span class="n">Arg</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;An argument with a str value&quot;&quot;&quot;</span>
+
+    <span class="nb">type</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;str&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;str&quot;</span>
+    <span class="n">default</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span></div>
+
+
+<div class="viewcode-block" id="IntArg"><a class="viewcode-back" href="../../user/reference/api.html#ibek.support.IntArg">[docs]</a><span class="k">class</span> <span class="nc">IntArg</span><span class="p">(</span><span class="n">Arg</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;An argument with an int value&quot;&quot;&quot;</span>
+
+    <span class="nb">type</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;int&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;int&quot;</span>
+    <span class="n">default</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span></div>
+
+
+<div class="viewcode-block" id="BoolArg"><a class="viewcode-back" href="../../user/reference/api.html#ibek.support.BoolArg">[docs]</a><span class="k">class</span> <span class="nc">BoolArg</span><span class="p">(</span><span class="n">Arg</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;An argument with an bool value&quot;&quot;&quot;</span>
+
+    <span class="nb">type</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;bool&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;bool&quot;</span>
+    <span class="n">default</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span></div>
+
+
+<div class="viewcode-block" id="ObjectArg"><a class="viewcode-back" href="../../user/reference/api.html#ibek.support.ObjectArg">[docs]</a><span class="k">class</span> <span class="nc">ObjectArg</span><span class="p">(</span><span class="n">Arg</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A reference to another entity defined in this IOC&quot;&quot;&quot;</span>
+
+    <span class="nb">type</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;object&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;object&quot;</span>
+    <span class="n">default</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span></div>
+
+
+<div class="viewcode-block" id="IdArg"><a class="viewcode-back" href="../../user/reference/api.html#ibek.support.IdArg">[docs]</a><span class="k">class</span> <span class="nc">IdArg</span><span class="p">(</span><span class="n">Arg</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Explicit ID argument that an object can refer to&quot;&quot;&quot;</span>
+
+    <span class="nb">type</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;id&quot;</span>
+    <span class="n">default</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span></div>
+
+
+<div class="viewcode-block" id="EnumArg"><a class="viewcode-back" href="../../user/reference/api.html#ibek.support.EnumArg">[docs]</a><span class="k">class</span> <span class="nc">EnumArg</span><span class="p">(</span><span class="n">Arg</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;An argument with an enum value&quot;&quot;&quot;</span>
+
+    <span class="nb">type</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;enum&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;enum&quot;</span>
+    <span class="n">default</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="n">values</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
+        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;provides a list of values to make this argument an Enum&quot;</span><span class="p">,</span>
+    <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Database"><a class="viewcode-back" href="../../user/reference/api.html#ibek.support.Database">[docs]</a><span class="k">class</span> <span class="nc">Database</span><span class="p">(</span><span class="n">BaseSettings</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A database file that should be loaded by the startup script and its args</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">file</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
+        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Filename of the database template in &lt;module_root&gt;/db&quot;</span>
+    <span class="p">)</span>
+
+    <span class="n">enabled</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
+        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Set to False to disable loading this database&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="s2">&quot;True&quot;</span>
+    <span class="p">)</span>
+
+    <span class="n">args</span><span class="p">:</span> <span class="n">Mapping</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
+        <span class="n">description</span><span class="o">=</span><span class="p">(</span>
+            <span class="s2">&quot;Dictionary of args and values to pass through to database. &quot;</span>
+            <span class="s2">&quot;A value of None is equivalent to ARG: &#39;{{ ARG }}&#39;. &quot;</span>
+            <span class="s2">&quot;See `UTILS.render_map` for more details.&quot;</span>
+        <span class="p">)</span>
+    <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="EnvironmentVariable"><a class="viewcode-back" href="../../user/reference/api.html#ibek.support.EnvironmentVariable">[docs]</a><span class="k">class</span> <span class="nc">EnvironmentVariable</span><span class="p">(</span><span class="n">BaseSettings</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    An environment variable that should be set in the startup script</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s2">&quot;Name of environment variable&quot;</span><span class="p">)</span>
+    <span class="n">value</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s2">&quot;Value to set&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Comment"><a class="viewcode-back" href="../../user/reference/api.html#ibek.support.Comment">[docs]</a><span class="k">class</span> <span class="nc">Comment</span><span class="p">(</span><span class="n">BaseSettings</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A script snippet that will have &#39;# &#39; prepended to every line</span>
+<span class="sd">    for insertion into the startup script</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="nb">type</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;comment&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;comment&quot;</span>
+    <span class="n">when</span><span class="p">:</span> <span class="n">When</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s2">&quot;One of first / every / last&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="s2">&quot;every&quot;</span><span class="p">)</span>
+    <span class="n">value</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
+        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;A comment to add into the startup script&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="s2">&quot;&quot;</span>
+    <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Text"><a class="viewcode-back" href="../../user/reference/api.html#ibek.support.Text">[docs]</a><span class="k">class</span> <span class="nc">Text</span><span class="p">(</span><span class="n">BaseSettings</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A script snippet to insert into the startup script</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="nb">type</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;text&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;text&quot;</span>
+    <span class="n">when</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s2">&quot;One of first / every / last&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="s2">&quot;every&quot;</span><span class="p">)</span>
+    <span class="n">value</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s2">&quot;raw text to add to the startup script&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Value"><a class="viewcode-back" href="../../user/reference/api.html#ibek.support.Value">[docs]</a><span class="k">class</span> <span class="nc">Value</span><span class="p">(</span><span class="n">BaseSettings</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A calculated string value for a definition&quot;&quot;&quot;</span>
+
+    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s2">&quot;Name of the value that the IOC instance will expose&quot;</span><span class="p">)</span>
+    <span class="n">description</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
+        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Description of what the value will be used for&quot;</span>
+    <span class="p">)</span>
+    <span class="n">value</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s2">&quot;The contents of the value&quot;</span><span class="p">)</span></div>
+
+
+<span class="n">Script</span> <span class="o">=</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">Text</span><span class="p">,</span> <span class="n">Comment</span><span class="p">]]</span>
+
+
+<div class="viewcode-block" id="EntityPVI"><a class="viewcode-back" href="../../user/reference/api.html#ibek.support.EntityPVI">[docs]</a><span class="k">class</span> <span class="nc">EntityPVI</span><span class="p">(</span><span class="n">BaseSettings</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Entity PVI definition&quot;&quot;&quot;</span>
+
+    <span class="n">yaml_path</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
+        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Path to .pvi.device.yaml - absolute or relative to PVI_DEFS&quot;</span>
+    <span class="p">)</span>
+    <span class="n">ui_index</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
+        <span class="kc">True</span><span class="p">,</span>
+        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Whether to add the UI to the IOC index.&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">ui_macros</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
+        <span class="kc">None</span><span class="p">,</span>
+        <span class="n">description</span><span class="o">=</span><span class="p">(</span>
+            <span class="s2">&quot;Macros to launch the UI on the IOC index. &quot;</span>
+            <span class="s2">&quot;These must be args of the Entity this is attached to.&quot;</span>
+        <span class="p">),</span>
+    <span class="p">)</span>
+    <span class="n">pv</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
+        <span class="kc">False</span><span class="p">,</span>
+        <span class="n">description</span><span class="o">=</span><span class="p">(</span>
+            <span class="s2">&quot;Whether to generate a PVI PV. This adds a database template with info &quot;</span>
+            <span class="s2">&quot;tags that create a PVAccess PV representing the device structure.&quot;</span>
+        <span class="p">),</span>
+    <span class="p">)</span>
+    <span class="n">pv_prefix</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s1">&#39;PV prefix for PVI PV - e.g. &quot;$(P)&quot;&#39;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Definition"><a class="viewcode-back" href="../../user/reference/api.html#ibek.support.Definition">[docs]</a><span class="k">class</span> <span class="nc">Definition</span><span class="p">(</span><span class="n">BaseSettings</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A single definition of a class of Entity that an IOC instance may instantiate</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
+        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Publish Definition as type &lt;module&gt;.&lt;name&gt; for IOC instances&quot;</span>
+    <span class="p">)</span>
+    <span class="n">description</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
+        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;A description of the Support module defined here&quot;</span>
+    <span class="p">)</span>
+    <span class="c1"># declare Arg as Union of its subclasses for Pydantic to be able to deserialize</span>
+    <span class="n">args</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">tuple</span><span class="p">(</span><span class="n">Arg</span><span class="o">.</span><span class="n">__subclasses__</span><span class="p">())]]</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>  <span class="c1"># type: ignore</span>
+        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;The arguments IOC instance should supply&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="p">()</span>
+    <span class="p">)</span>
+    <span class="n">values</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Value</span><span class="p">]</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
+        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;The values IOC instance should supply&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="p">()</span>
+    <span class="p">)</span>
+    <span class="n">databases</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Database</span><span class="p">]</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
+        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Databases to instantiate&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="p">[]</span>
+    <span class="p">)</span>
+    <span class="n">pre_init</span><span class="p">:</span> <span class="n">Script</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
+        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Startup script snippets to add before iocInit()&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="p">()</span>
+    <span class="p">)</span>
+    <span class="n">post_init</span><span class="p">:</span> <span class="n">Script</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
+        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Startup script snippets to add post iocInit(), such as dbpf&quot;</span><span class="p">,</span>
+        <span class="n">default</span><span class="o">=</span><span class="p">(),</span>
+    <span class="p">)</span>
+    <span class="n">env_vars</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">EnvironmentVariable</span><span class="p">]</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
+        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Environment variables to set in the boot script&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="p">()</span>
+    <span class="p">)</span>
+    <span class="n">pvi</span><span class="p">:</span> <span class="n">EntityPVI</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s2">&quot;PVI definition for Entity&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_get_id_arg</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns the name of the ID argument for this definition, if it exists&quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">arg</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">args</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">arg</span><span class="p">,</span> <span class="n">IdArg</span><span class="p">):</span>
+                <span class="k">return</span> <span class="n">arg</span><span class="o">.</span><span class="n">name</span></div>
+
+
+<div class="viewcode-block" id="Support"><a class="viewcode-back" href="../../user/reference/api.html#ibek.support.Support">[docs]</a><span class="k">class</span> <span class="nc">Support</span><span class="p">(</span><span class="n">BaseSettings</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Lists the definitions for a support module, this defines what Entities it supports</span>
+
+<span class="sd">    Provides the deserialize entry point.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">module</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s2">&quot;Support module name, normally the repo name&quot;</span><span class="p">)</span>
+    <span class="n">defs</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Definition</span><span class="p">]</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
+        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;The definitions an IOC can create using this module&quot;</span>
+    <span class="p">)</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">get_schema</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="bp">cls</span><span class="o">.</span><span class="n">model_json_schema</span><span class="p">(),</span> <span class="n">indent</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span></div>
+</pre></div>
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer">
+                  
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../_static/scripts/bootstrap.js?digest=8d27b9dea8ad943066ae"></script>
+<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.15.2.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>
