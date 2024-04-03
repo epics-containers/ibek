@@ -8,7 +8,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>ibek.ioc &#8212; ibek 2.0.2.dev1+ge615565b documentation</title>
+    <title>ibek.ioc &#8212; ibek 2.0.2.dev3+gd3ac14b3 documentation</title>
   
   
   
@@ -585,7 +585,7 @@ document.write(`
 
     <span class="c1"># add the type literal which discriminates between the different Entity classes</span>
     <span class="n">typ</span> <span class="o">=</span> <span class="n">Literal</span><span class="p">[</span><span class="n">full_name</span><span class="p">]</span>  <span class="c1"># type: ignore</span>
-    <span class="n">add_arg</span><span class="p">(</span><span class="s2">&quot;type&quot;</span><span class="p">,</span> <span class="n">typ</span><span class="p">,</span> <span class="s2">&quot;The type of this entity&quot;</span><span class="p">,</span> <span class="n">full_name</span><span class="p">)</span>
+    <span class="n">add_arg</span><span class="p">(</span><span class="s2">&quot;type&quot;</span><span class="p">,</span> <span class="n">typ</span><span class="p">,</span> <span class="n">definition</span><span class="o">.</span><span class="n">description</span><span class="p">,</span> <span class="n">full_name</span><span class="p">)</span>
 
     <span class="n">entity_cls</span> <span class="o">=</span> <span class="n">create_model</span><span class="p">(</span>
         <span class="n">full_name</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">,</span> <span class="s2">&quot;_&quot;</span><span class="p">),</span>
