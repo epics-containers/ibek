@@ -2,6 +2,7 @@
 Some unit tests for ibek.
 """
 
+from ibek.commands import semver_compare
 from ibek.ioc import (
     clear_entity_model_ids,
     id_to_entity,
@@ -53,3 +54,12 @@ def test_object_references():
     assert device.type == "mymodule.device"
     assert device.port is port
     assert id_to_entity == {"PORT": port}
+
+
+def test_compare():
+    """
+    Verify the SemVer comparrisons work
+    """
+    assert semver_compare("1.1.1", "==1.1.1")
+    assert semver_compare("1.1.1", ">=1.1.0")
+    assert not semver_compare("1.1.1", ">=1.1.2")

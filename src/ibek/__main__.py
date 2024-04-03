@@ -4,6 +4,7 @@ import typer
 from ruamel.yaml import YAML
 
 from ibek._version import __version__
+from ibek.commands import semver_compare
 from ibek.dev_cmds.commands import dev_cli
 from ibek.globals import NaturalOrderGroup
 from ibek.ioc_cmds.commands import ioc_cli
@@ -57,6 +58,24 @@ def main(
     Provides support for building generic EPICS IOC container images and for
     running IOC instances in a Kubernetes cluster.
     """
+
+
+@cli.command()
+def compare(
+    base: str = typer.Argument(
+        help='SemVer string e.g. "1.2.0"',
+    ),
+    target: str = typer.Argument(
+        help='An operator (<=,>=,==,<,>) followed by a SemVer string e.g.">=1.2.0"',
+    ),
+):
+    """
+    Compare two SemVer strings similarly to pip's requirements specifier syntax
+    """
+    if semver_compare(base, target):
+        raise typer.Exit(code=0)
+    else:
+        raise typer.Exit(code=1)
 
 
 # test with:
