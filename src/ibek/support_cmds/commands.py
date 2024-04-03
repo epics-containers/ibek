@@ -30,6 +30,7 @@ from ibek.globals import (
 from ibek.support import Support
 from ibek.support_cmds.checks import (
     add_macro,
+    check_deps,
     do_dependencies,
     verify_release_includes_local,
 )
@@ -264,6 +265,16 @@ def add_to_config_site(
     if text != "":
         config_site = get_config_site_file(module, host, target)
         add_text_once(config_site, text)
+
+
+@support_cli.command()
+def check_dependencies(
+    deps: List[str] = typer.Argument(help="list of dependencies to check"),
+):
+    """
+    Check if specified dependencies have been supplied
+    """
+    check_deps(deps)
 
 
 @support_cli.command(

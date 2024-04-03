@@ -8,6 +8,7 @@ from typer.testing import CliRunner
 # This must be above the following imports so that it takes effect before
 # `globals.EPICS_ROOT` is imported (or anything built on top of it)
 os.environ["EPICS_ROOT"] = str(Path(__file__).parent / "samples" / "epics")
+os.environ["SUPPORT"] = str(Path(__file__).parent / "samples" / "epics" / "support")
 
 # The `noqa`s on these imports are necessary because of the above
 from ibek.__main__ import cli  # noqa: E402
