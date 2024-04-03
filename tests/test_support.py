@@ -2,6 +2,8 @@
 
 from pathlib import Path
 
+import pytest
+
 from ibek.support_cmds.checks import check_deps
 from ibek.support_cmds.files import symlink_files
 
@@ -24,4 +26,10 @@ def test_symlink_pvi(tmp_path: Path, samples: Path):
 
 
 def test_check_dependancies():
+
+    # Check Passes vs test data
     check_deps(["ADSimDetector"])
+
+    # Check fails
+    with pytest.raises(Exception):
+        check_deps(["FakeDetector"])
