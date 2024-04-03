@@ -133,7 +133,7 @@ def make_entity_model(definition: Definition, support: Support) -> Type[Entity]:
 
     # add the type literal which discriminates between the different Entity classes
     typ = Literal[full_name]  # type: ignore
-    add_arg("type", typ, "The type of this entity", full_name)
+    add_arg("type", typ, definition.description, full_name)
 
     entity_cls = create_model(
         full_name.replace(".", "_"),

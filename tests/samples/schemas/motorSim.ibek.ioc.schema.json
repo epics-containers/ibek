@@ -14,7 +14,7 @@
         "type": {
           "const": "asyn.AsynIP",
           "default": "asyn.AsynIP",
-          "description": "The type of this entity",
+          "description": "Asyn IP Port",
           "title": "Type"
         },
         "entity_enabled": {
@@ -154,7 +154,7 @@
         "type": {
           "const": "motorSim.simMotorAxis",
           "default": "motorSim.simMotorAxis",
-          "description": "The type of this entity",
+          "description": "Creates a simulation motor axis",
           "title": "Type"
         },
         "entity_enabled": {
@@ -255,7 +255,7 @@
         "type": {
           "const": "motorSim.simMotorController",
           "default": "motorSim.simMotorController",
-          "description": "The type of this entity",
+          "description": "Creates a simulation motion controller",
           "title": "Type"
         },
         "entity_enabled": {

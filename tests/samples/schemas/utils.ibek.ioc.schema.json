@@ -6,7 +6,7 @@
         "type": {
           "const": "epics.InterruptVectorVME",
           "default": "epics.InterruptVectorVME",
-          "description": "The type of this entity",
+          "description": "Reserve an interrupt vector for use with VME hardware.\n",
           "title": "Type"
         },
         "entity_enabled": {
@@ -45,7 +45,7 @@
         "type": {
           "const": "epics.InterruptVectorVME2",
           "default": "epics.InterruptVectorVME2",
-          "description": "The type of this entity",
+          "description": "naughty second use of same counter",
           "title": "Type"
         },
         "entity_enabled": {
