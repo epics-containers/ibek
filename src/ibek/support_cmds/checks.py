@@ -2,7 +2,6 @@
 Helper functions for the ibek support commands.
 """
 
-import os
 import re
 import shutil
 from pathlib import Path
@@ -87,31 +86,31 @@ def check_deps(deps: list[str]) -> None:
     """
     Check if specified dependencies have been supplied
     """
-    for dependancy in deps:
+    for dependency in deps:
 
         # Check if UCASE module name exist in RELEASE
         with open(RELEASE) as file:
             release_file = file.read()
-            if dependancy.upper() in release_file:
+            if dependency.upper() in release_file:
                 pass
             else:
-                raise Exception(f"{dependancy.upper()} not in {RELEASE}")
+                raise Exception(f"{dependency.upper()} not in {RELEASE}")
 
         # Check if folder with the module name exist in /epics/support
-        support_dir = SUPPORT / dependancy
-        if os.path.exists(support_dir):
+        support_dir = SUPPORT / dependency
+        if Path.exists(support_dir):
 
             # Check if contains at least one of db, dbd or lib
-            res = [os.path.exists(support_dir / _dir) for _dir in ["db", "dbd", "lib"]]
+            res = [Path.exists(support_dir / _dir) for _dir in ["db", "dbd", "lib"]]
             if any(res):
                 pass
             else:
                 raise Exception(f"db, dbd or lib directory not found in {support_dir}")
 
         else:
-            raise Exception(f"{dependancy} directory not in {SUPPORT}")
+            raise Exception(f"{dependency} directory not in {SUPPORT}")
 
-        print(f"SUCCESS: {dependancy} checked")
+        print(f"SUCCESS: {dependency} checked")
 
 
 def add_macro(macro: str, value: str, file: Path, replace: bool = True):
