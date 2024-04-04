@@ -154,6 +154,7 @@ def git_clone(
     Add any additional arguments to the git clone command at the end of the
     argument list.
     """
+    org = org if org.endswith("/") else org + "/"
     url = org + repo_name
     location = SUPPORT / repo_name
     if location.exists() and not force:
