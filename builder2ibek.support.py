@@ -291,7 +291,7 @@ class Builder2Support:
         # Classes with a leading underscore are assumed to be private / abstract
         # builder never exposes them to xeb so we don't want them in the YAML
         if builder_class.__name__.split(".")[-1].startswith("_"):
-            print "SKIPPING private class %s" % builder_class.__name__
+            print("SKIPPING private class %s" % builder_class.__name__)
             return None, None
 
         arg_info = ArgInfo(
@@ -360,8 +360,8 @@ class Builder2Support:
                 # are brought in by instantiating their parent so do not need to
                 # appear in the support yaml
                 print(
-                    "TODO:- No substitutions for %s " % template +
-                    "- this should be included by the above template"
+                    "TODO:- No substitutions for %s " % template
+                    + "- this should be included by the above template"
                 )
 
         if len(databases) > 0:
