@@ -288,6 +288,12 @@ class Builder2Support:
         """
         print("\nObject %s :" % builder_class.__name__)
 
+        # Classes with a leading underscore are assumed to be private / abstract
+        # builder never exposes them to xeb so we don't want them in the YAML
+        if builder_class.__name__.split(".")[-1].startswith("_"):
+            print "SKIPPING private class %s" % builder_class.__name__
+            return None, None
+
         arg_info = ArgInfo(
             name,
             getattr(builder_class, "UniqueName", "name"),
@@ -331,22 +337,32 @@ class Builder2Support:
             databases.append(database)
 
             template, substitutions = all_substitutions.popitem()
-            first_substitution = substitutions[1][0]
+            if len(substitutions[1]) > 0:
+                first_substitution = substitutions[1][0]
 
-            database["file"] = template
+                database["file"] = template
 
-            print("\nDB Template %s :" % template)
+                print("\nDB Template %s :" % template)
 
-            if hasattr(first_substitution, "ArgInfo"):
-                arginfo.add_arg_info(first_substitution.ArgInfo)
-                # the DB Arg entries in the YAML are Dictionary entries with no value
-                no_values = {k: None for k in arginfo.builder_args}
-            elif hasattr(first_substitution, "Arguments"):
-                no_values = {k: None for k in first_substitution.Arguments}
+                if hasattr(first_substitution, "ArgInfo"):
+                    arginfo.add_arg_info(first_substitution.ArgInfo)
+                    # the DB Arg entries in the YAML are Dictionary entries with no value
+                    no_values = {k: None for k in arginfo.builder_args}
+                elif hasattr(first_substitution, "Arguments"):
+                    no_values = {k: None for k in first_substitution.Arguments}
+                else:
+                    no_values = {"TODO": "No args for this template"}
+
+                database.insert(3, "args", no_values)
             else:
-                no_values = {"TODO": "No args for this template"}
-
-            database.insert(3, "args", no_values)
+                # this implies this is an included template - at least that is how
+                # it appears with the Tetramm support module. Included templates
+                # are brought in by instantiating their parent so do not need to
+                # appear in the support yaml
+                print(
+                    "TODO:- No substitutions for %s " % template +
+                    "- this should be included by the above template"
+                )
 
         if len(databases) > 0:
             arginfo.yaml_defs["databases"] = databases
@@ -421,6 +437,8 @@ class Builder2Support:
             # make an instance of the builder class and an ArgInfo that
             # describes all its arguments
             arginfo, builder_object = self._make_builder_object(name, builder_class)
+            if builder_object is None:
+                continue
 
             # Go and find all the arguments for all the database templates
             # and insert them plus DB file names into the YAML
