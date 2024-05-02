@@ -14,6 +14,8 @@ def test_symlink_ibek(tmp_path: Path, samples: Path):
     assert sorted([f.name for f in tmp_path.iterdir()]) == [
         "asyn.ibek.support.yaml",
         "bad_db.ibek.support.yaml",
+        "epics.ibek.support.yaml",
+        "ipac.ibek.support.yaml",
         "motorSim.ibek.support.yaml",
         "utils.ibek.support.yaml",
     ]
@@ -26,7 +28,6 @@ def test_symlink_pvi(tmp_path: Path, samples: Path):
 
 
 def test_check_dependancies():
-
     # Check Passes vs test data
     check_deps(["ADSimDetector"])
 

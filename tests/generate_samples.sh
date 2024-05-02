@@ -42,3 +42,7 @@ mv `pwd`/epics/{runtime,opi}/* `pwd`/outputs/motorSim
 echo making ioc based on utils support yaml
 EPICS_ROOT=`pwd`/epics ibek runtime generate iocs/utils.ibek.ioc.yaml support/utils.ibek.support.yaml
 mv `pwd`/epics/{runtime,opi}/* `pwd`/outputs/utils
+
+echo making ioc based on ipac support yaml
+EPICS_ROOT=`pwd`/epics ibek runtime generate iocs/ipac-test.yaml support/ipac.ibek.support.yaml support/epics.ibek.support.yaml
+mv `pwd`/epics/{runtime,opi}/* `pwd`/outputs/ipac
