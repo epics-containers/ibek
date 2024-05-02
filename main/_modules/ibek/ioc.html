@@ -8,7 +8,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>ibek.ioc &#8212; ibek 2.0.2b2.dev3+gb6c1248b documentation</title>
+    <title>ibek.ioc &#8212; ibek 2.0.2b2.dev5+g2ebec7ed documentation</title>
   
   
   
@@ -508,14 +508,16 @@ document.write(`
 
         <span class="n">entity_dict</span> <span class="o">=</span> <span class="n">entity</span><span class="o">.</span><span class="n">model_dump</span><span class="p">()</span>
         <span class="k">for</span> <span class="n">arg</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">entity_dict</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+                <span class="c1"># Jinja expansion of any of the Entity&#39;s string args/values</span>
+                <span class="n">value</span> <span class="o">=</span> <span class="n">UTILS</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="n">entity_dict</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+                <span class="nb">setattr</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">arg</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+
             <span class="k">if</span> <span class="n">arg</span> <span class="ow">in</span> <span class="n">ids</span><span class="p">:</span>
                 <span class="c1"># add this entity to the global id index</span>
                 <span class="k">if</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">id_to_entity</span><span class="p">:</span>
                     <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Duplicate id </span><span class="si">{</span><span class="n">value</span><span class="si">}</span><span class="s2"> in </span><span class="si">{</span><span class="nb">list</span><span class="p">(</span><span class="n">id_to_entity</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
                 <span class="n">id_to_entity</span><span class="p">[</span><span class="n">value</span><span class="p">]</span> <span class="o">=</span> <span class="n">entity</span>
-            <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
-                <span class="c1"># Jinja expansion of any of the Entity&#39;s string args/values</span>
-                <span class="nb">setattr</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">arg</span><span class="p">,</span> <span class="n">UTILS</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="n">entity_dict</span><span class="p">,</span> <span class="n">value</span><span class="p">))</span>
         <span class="k">return</span> <span class="n">entity</span></div>
 
     <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
