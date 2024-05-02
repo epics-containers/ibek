@@ -11,6 +11,7 @@ from pathlib import Path
 
 from pytest_mock import MockerFixture
 
+import ibek.utils as utils
 from ibek import __version__
 from ibek.globals import (
     GLOBALS,
@@ -157,3 +158,30 @@ def test_generate_links_ibek(samples: Path, mocker: MockerFixture):
     symlink_mock.assert_any_call(
         samples / "support", SUPPORT_YAML_PATTERN, GLOBALS.IBEK_DEFS
     )
+
+
+def test_ipac(mocker: MockerFixture, tmp_path: Path, samples: Path):
+    """
+    Tests that an id argument can include another argument in its default value
+    """
+
+    clear_entity_model_ids()
+    ioc_yaml = samples / "iocs" / "ipac-test.yaml"
+    support_yaml1 = samples / "support" / "ipac.ibek.support.yaml"
+    support_yaml2 = samples / "support" / "epics.ibek.support.yaml"
+    expected_outputs = samples / "outputs" / "ipac"
+
+    mocker.patch.object(GLOBALS, "RUNTIME_OUTPUT", tmp_path)
+    mocker.patch.object(GLOBALS, "OPI_OUTPUT", tmp_path)
+
+    # reset the InterruptVector counter to its initial state (if already used)
+    if "InterruptVector" in utils.UTILS.counters:
+        utils.UTILS.counters["InterruptVector"].current = 192
+
+    os.environ["IOC"] = "/epics/ioc"
+    os.environ["RUNTIME_DIR"] = "/epics/runtime"
+    generate(ioc_yaml, [support_yaml1, support_yaml2])
+
+    example_boot = (expected_outputs / "st.cmd").read_text()
+    actual_boot = (tmp_path / "st.cmd").read_text()
+    assert example_boot == actual_boot

@@ -1,0 +1,19 @@
+# yaml-language-server: $schema=file:///tmp/schema.json
+
+ioc_name: ipac-test
+
+description: example IOC with IPAC modules
+
+entities:
+  - type: epics.InterruptVectorVME
+    name: Vec1
+  - type: epics.InterruptVectorVME
+    name: Vec2
+
+  - type: ipac.Hy8002
+    slot: 4
+    interrupt_vector: Vec1
+
+  - type: ipac.Hy8002
+    slot: 5
+    interrupt_vector: Vec2

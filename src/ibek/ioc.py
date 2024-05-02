@@ -56,14 +56,16 @@ class Entity(BaseSettings):
 
         entity_dict = entity.model_dump()
         for arg, value in entity_dict.items():
+            if isinstance(value, str):
+                # Jinja expansion of any of the Entity's string args/values
+                value = UTILS.render(entity_dict, value)
+                setattr(entity, arg, value)
+
             if arg in ids:
                 # add this entity to the global id index
                 if value in id_to_entity:
                     raise ValueError(f"Duplicate id {value} in {list(id_to_entity)}")
                 id_to_entity[value] = entity
-            elif isinstance(value, str):
-                # Jinja expansion of any of the Entity's string args/values
-                setattr(entity, arg, UTILS.render(entity_dict, value))
         return entity
 
     def __str__(self):

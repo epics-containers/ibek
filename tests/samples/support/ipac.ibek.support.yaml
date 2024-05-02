@@ -1,0 +1,241 @@
+# yaml-language-server: $schema=https://github.com/epics-containers/ibek/releases/download/1.2.0/ibek.support.schema.json
+
+module: ipac
+
+defs:
+  - name: Hy8002
+    description: |-
+      Configure a Hytec 8002 Carrier card
+    args:
+      - type: int
+        name: slot
+        description: |-
+          VME Slot number
+
+      - type: id
+        name: IPACid
+        description: |-
+          Identifier for this device
+        default: IPAC{{ slot }}
+
+      - type: int
+        name: intLevel
+        description: |-
+          VME Interrupt Level
+        default: 2
+
+      - name: test
+        type: str
+        description: test
+        default: |
+          {{ slot }}
+
+      - name: interrupt_vector
+        type: object
+        description: Interrupt Vector reserved with epics.InterruptVectorVME, count=1
+
+    values:
+      - name: card_id
+        value: '{{ __utils__.counter("Carriers", start=0) }}'
+        description: Carrier Card Identifier
+
+    pre_init:
+      - value: |
+          # Hy8002 carrier card: slot: {{ slot }}, intLevel: {{ intLevel }}, interrupt: {{ interrupt_vector.name }} ({{ interrupt_vector.number }})
+          ipacAddHy8002("{{ slot }}, {{ intLevel}}, $({{interrupt_vector.name}})")
+          epicsEnvSet {{ IPACid }} = {{ card_id }}
+
+  - name: Hy8001
+    description: |-
+      TODO:ADD DESCRIPTION
+    args:
+      - type: int
+        name: slot
+        description: |-
+          VME Slot number
+
+      - type: enum
+        name: direction
+        description: |-
+          Direction of digital IO
+        values:
+          Mixed:
+          Input:
+          Output:
+
+      - type: int
+        name: cardid
+        description: |-
+          cardid?
+
+      - type: int
+        name: intLevel
+        description: |-
+          intLevel?
+        default: 0
+
+      - type: int
+        name: clock
+        description: |-
+          clock?
+        default: 0
+
+      - type: int
+        name: scan
+        description: |-
+          scan?
+        default: 0
+
+      - type: bool
+        name: invertin
+        description: |-
+          invertin?
+        default: false
+
+      - type: bool
+        name: invertout
+        description: |-
+          invertout?
+        default: false
+
+      - type: bool
+        name: ip_support
+        description: |-
+          ip_support?
+        default: false
+
+    pre_init:
+      - value: |
+          Hy8001Configure({{cardid}}, {{slot}}, {{vector}}, {{intLevel}}, 0, 0, {{clock}}, {{scan}}, {{direction}}, {{invertin}}, {{invertout}})
+  # TODO - MISSING ARGS: vector
+  # WARNING - non print commands in Initialise not parsed
+
+  - name: Hy8005
+    description: |-
+      TODO:ADD DESCRIPTION
+    args:
+      - type: int
+        name: slot
+        description: |-
+          VME Slot number
+
+      - type: int
+        name: cardnum
+        description: |-
+          Card number
+
+      - type: int
+        name: int_level
+        description: |-
+          VME Interrupt Level
+        default: 1
+
+      - type: int
+        name: hs_int
+        description: |-
+          Dunno actually
+        default: 0
+
+    pre_init:
+      - value: |
+          Hy8005Configure({{cardnum}}, {{slot}}, {{int_vec}}, {{int_level}}, {{hs_int}})
+  # TODO - MISSING ARGS: int_vec
+  - name: Hy8005_Channel
+    description: |-
+      TODO:ADD DESCRIPTION
+    args:
+      - type: object
+        name: parent
+        description: |-
+          Hy8005 card
+
+      - type: enum
+        name: ipslot
+        description: |-
+          IP slot
+        values:
+          A:
+          C:
+          B:
+          D:
+
+      - type: int
+        name: cardnum
+        description: |-
+          EPICS card identification
+
+      - type: enum
+        name: debrate
+        description: |-
+          debrate
+        values:
+          No_Debounce:
+          1KHz:
+          200Hz:
+          100Hz:
+          500Hz:
+
+      - type: enum
+        name: pwidth
+        description: |-
+          pwidth
+        default: 0
+        values:
+          100sec:
+          5sec:
+          10sec:
+          1sec:
+          10msec:
+          20sec:
+          100msec:
+          2sec:
+          50sec:
+          1msec:
+
+      - type: enum
+        name: scanrate
+        description: |-
+          scanrate
+        default: 0
+        values:
+          1MHz:
+          100KHz:
+          10KHz:
+          1KHz:
+
+      - type: enum
+        name: direction
+        description: |-
+          direction
+        default: 0
+        values:
+          inputs:
+          low in/high out:
+          outputs:
+          low out/high in:
+
+      - type: enum
+        name: clock
+        description: |-
+          clock
+        default: 0
+        values:
+          internal:
+          external:
+
+      - type: bool
+        name: invertInputs
+        description: |-
+          invert inputs
+        default: false
+
+      - type: bool
+        name: invertOutputs
+        description: |-
+          invert outputs
+        default: false
+
+    pre_init:
+      - value: |
+          Hy8005IOConfigure({{cardnum}}, {{carrier}}, {{ipslot}}, {{debrate}}, {{pwidth}}, {{scanrate}}, {{direction}}, {{intr}}, {{clock}})
+  # TODO - MISSING ARGS: carrier, intr

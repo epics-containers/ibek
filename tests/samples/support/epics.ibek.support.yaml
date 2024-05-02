@@ -1,0 +1,93 @@
+# yaml-language-server: $schema=https://github.com/epics-containers/ibek/releases/download/1.5.0/ibek.support.schema.json
+
+module: epics
+defs:
+  - name: EpicsCaMaxArrayBytes
+    description: Set the maximum size in bytes for sending arrays over channel access
+    args:
+      - type: int
+        name: max_bytes
+        description: Max size in bytes for sending arrays over channel access
+        default: 6000000
+    env_vars:
+      - name: EPICS_CA_MAX_ARRAY_BYTES
+        value: "{{ max_bytes }}"
+
+  - name: EpicsTsMinWest
+    description: Set the relative time zone minutes West relative to GMT (+/-720)
+    args:
+      - type: int
+        name: minutes_west
+        description: relative time zone minutes
+        default: 0
+    env_vars:
+      - name: EPICS_TS_MIN_WEST
+        value: "{{ minutes_west }}"
+
+  - name: dbpf
+    description: Set a PV value after iocInit
+    args:
+      - type: str
+        name: pv
+        description: Name of PV
+      - type: str
+        name: value
+        description: Value to set
+    post_init:
+      - value: dbpf "{{ pv }}" "{{ value }}"
+
+  - name: EpicsEnvSet
+    description: Set an environment variable in the ioc Shell
+    args:
+      - type: str
+        name: name
+        description: Name of environment variable
+      - type: str
+        name: value
+        description: Value of environment variable
+    env_vars:
+      - name: "{{ name }}"
+        value: "{{ value }}"
+
+  - name: StartupCommand
+    description: Adds an arbitrary command in the startup script before iocInit
+    args:
+      - type: str
+        name: command
+        description: command string
+        default: ""
+    pre_init:
+      - type: text
+        value: "{{ command }}"
+
+  - name: PostStartupCommand
+    description: Adds an arbitrary command in the startup script after iocInit
+    args:
+      - type: str
+        name: command
+        description: command string
+        default: ""
+    post_init:
+      - type: text
+        value: "{{ command }}"
+
+  - name: InterruptVectorVME
+    description: Reserve a VME interrupt vector
+    args:
+      - type: id
+        name: name
+        description: A name for an interrupt vector variable
+
+      - type: int
+        name: count
+        description: The number of interrupt vectors to reserve
+        default: 1
+
+    values:
+      - name: number
+        value: '{{  __utils__.counter("InterruptVector", start=192, stop=255, inc=count) }}'
+        description: Interrupt Vector number
+
+    env_vars:
+      - name: "{{ name }}"
+        value: "{{ number }}"
