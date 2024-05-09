@@ -152,7 +152,7 @@
         },
         "values": {
           "default": [],
-          "description": "The values IOC instance should supply",
+          "description": "Calculated values to use as additional arguments",
           "items": {
             "$ref": "#/$defs/Value"
           },

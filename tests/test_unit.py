@@ -2,6 +2,7 @@
 Some unit tests for ibek.
 """
 
+from ibek.args import IdArg, ObjectArg
 from ibek.commands import semver_compare
 from ibek.ioc import (
     clear_entity_model_ids,
@@ -9,7 +10,7 @@ from ibek.ioc import (
     make_entity_models,
     make_ioc_model,
 )
-from ibek.support import Definition, IdArg, ObjectArg, Support
+from ibek.support import Definition, Support
 
 
 def test_object_references():

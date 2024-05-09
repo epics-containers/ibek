@@ -18,8 +18,9 @@ from pydantic import (
 from pydantic.fields import FieldInfo
 from pydantic_core import PydanticUndefined
 
+from .args import EnumArg, IdArg, ObjectArg
 from .globals import BaseSettings
-from .support import Definition, EnumArg, IdArg, ObjectArg, Support
+from .support import Definition, Support
 from .utils import UTILS
 
 id_to_entity: Dict[str, Entity] = {}
