@@ -4,12 +4,8 @@ Some unit tests for ibek.
 
 from ibek.args import IdArg, ObjectArg
 from ibek.commands import semver_compare
-from ibek.ioc import (
-    clear_entity_model_ids,
-    id_to_entity,
-    make_entity_models,
-    make_ioc_model,
-)
+from ibek.entity_model import make_entity_models, make_ioc_model
+from ibek.ioc import clear_entity_model_ids, id_to_entity
 from ibek.support import Definition, Support
 
 

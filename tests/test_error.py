@@ -7,7 +7,8 @@ from pathlib import Path
 import pytest
 from ruamel.yaml import YAML
 
-from ibek.ioc import clear_entity_model_ids, make_entity_models, make_ioc_model
+from ibek.entity_model import make_entity_models, make_ioc_model
+from ibek.ioc import clear_entity_model_ids
 from ibek.support import Support
 from ibek.utils import UTILS
 from tests.conftest import run_cli

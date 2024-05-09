@@ -12,8 +12,9 @@ from ruamel.yaml.main import YAML
 
 from ibek.utils import UTILS
 
+from .entity_model import make_entity_models, make_ioc_model
 from .globals import TEMPLATES
-from .ioc import IOC, Entity, clear_entity_model_ids, make_entity_models, make_ioc_model
+from .ioc import IOC, Entity, clear_entity_model_ids
 from .render import Render
 from .render_db import RenderDb
 from .support import Database, Support

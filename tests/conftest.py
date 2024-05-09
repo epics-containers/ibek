@@ -12,7 +12,8 @@ os.environ["SUPPORT"] = str(Path(__file__).parent / "samples" / "epics" / "suppo
 
 # The `noqa`s on these imports are necessary because of the above
 from ibek.__main__ import cli  # noqa: E402
-from ibek.ioc import clear_entity_model_ids, make_entity_models  # noqa: E402
+from ibek.entity_model import make_entity_models  # noqa: E402
+from ibek.ioc import clear_entity_model_ids  # noqa: E402
 from ibek.support import Support  # noqa: E402
 
 runner = CliRunner()
