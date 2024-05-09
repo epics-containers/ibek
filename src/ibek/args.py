@@ -1,5 +1,5 @@
 """
-Define classes to specify arguments to Definitions
+Classes to specify arguments to Definitions
 """
 
 from __future__ import annotations

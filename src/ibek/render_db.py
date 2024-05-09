@@ -6,8 +6,8 @@ support module definitions
 from dataclasses import dataclass
 from typing import Any, Dict, List, Mapping, Optional, Tuple
 
+from ibek.definition import Database
 from ibek.ioc import IOC, Entity
-from ibek.support import Database
 from ibek.utils import UTILS
 
 

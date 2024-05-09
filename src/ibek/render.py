@@ -4,8 +4,8 @@ Functions for rendering lines in the boot script using Jinja2
 
 from typing import Callable, List, Optional, Union
 
+from .definition import Comment, Script, Text, When
 from .ioc import IOC, Entity
-from .support import Comment, Script, Text, When
 from .utils import UTILS
 
 

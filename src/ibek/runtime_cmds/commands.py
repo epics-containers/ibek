@@ -8,10 +8,10 @@ from pvi._format.dls import DLSFormatter
 from pvi._format.template import format_template
 from pvi.device import Device
 
+from ibek.definition import Database
 from ibek.gen_scripts import create_boot_script, create_db_script, ioc_deserialize
 from ibek.globals import GLOBALS, NaturalOrderGroup
 from ibek.ioc import IOC, Entity
-from ibek.support import Database
 from ibek.utils import UTILS
 
 runtime_cli = typer.Typer(cls=NaturalOrderGroup)

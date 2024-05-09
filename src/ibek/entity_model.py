@@ -1,3 +1,7 @@
+"""
+functions for making Entity models
+"""
+
 from __future__ import annotations
 
 import builtins

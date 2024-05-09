@@ -12,12 +12,13 @@ from ruamel.yaml.main import YAML
 
 from ibek.utils import UTILS
 
+from .definition import Database
 from .entity_model import make_entity_models, make_ioc_model
 from .globals import TEMPLATES
 from .ioc import IOC, Entity, clear_entity_model_ids
 from .render import Render
 from .render_db import RenderDb
-from .support import Database, Support
+from .support import Support
 
 log = logging.getLogger(__name__)
 

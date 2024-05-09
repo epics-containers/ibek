@@ -1,5 +1,5 @@
 """
-Functions for generating an IocInstance derived class from a
+Classes for generating an IocInstance derived class from a
 support module definition YAML file
 """
 

@@ -1,5 +1,5 @@
 """
-The Support Class represents a deserialized <MODULE_NAME>.ibek.support.yaml file.
+Define a collection of entities with arguments for instantiating them
 """
 
 from __future__ import annotations
