@@ -9,10 +9,11 @@ from typing import Sequence, Union
 from pydantic import Field
 
 from .args import Arg, Value
+from .globals import BaseSettings
 from .ioc import Entity
 
 
-class CollectionDefinition:
+class CollectionDefinition(BaseSettings):
     name: str = Field(
         description="Publish Definition as type <module>.<name> for IOC instances"
     )

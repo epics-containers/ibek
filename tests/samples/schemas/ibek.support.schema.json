@@ -39,6 +39,76 @@
       "title": "BoolArg",
       "type": "object"
     },
+    "CollectionDefinition": {
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "description": "Publish Definition as type <module>.<name> for IOC instances",
+          "title": "Name",
+          "type": "string"
+        },
+        "description": {
+          "description": "A description of the Support module defined here",
+          "title": "Description",
+          "type": "string"
+        },
+        "args": {
+          "default": [],
+          "description": "The arguments IOC instance should supply",
+          "items": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/FloatArg"
+              },
+              {
+                "$ref": "#/$defs/StrArg"
+              },
+              {
+                "$ref": "#/$defs/IntArg"
+              },
+              {
+                "$ref": "#/$defs/BoolArg"
+              },
+              {
+                "$ref": "#/$defs/ObjectArg"
+              },
+              {
+                "$ref": "#/$defs/IdArg"
+              },
+              {
+                "$ref": "#/$defs/EnumArg"
+              }
+            ]
+          },
+          "title": "Args",
+          "type": "array"
+        },
+        "values": {
+          "default": [],
+          "description": "Calculated values to use as additional arguments",
+          "items": {
+            "$ref": "#/$defs/Value"
+          },
+          "title": "Values",
+          "type": "array"
+        },
+        "entities": {
+          "default": [],
+          "description": "The entities that this collection is to instantiate",
+          "items": {
+            "$ref": "#/$defs/Entity"
+          },
+          "title": "Entities",
+          "type": "array"
+        }
+      },
+      "required": [
+        "name",
+        "description"
+      ],
+      "title": "CollectionDefinition",
+      "type": "object"
+    },
     "Comment": {
       "additionalProperties": false,
       "description": "A script snippet that will have '# ' prepended to every line\nfor insertion into the startup script",
@@ -224,6 +294,28 @@
         "description"
       ],
       "title": "Definition",
+      "type": "object"
+    },
+    "Entity": {
+      "additionalProperties": false,
+      "description": "A baseclass for all generated Entity classes.",
+      "properties": {
+        "type": {
+          "description": "The type of this entity",
+          "title": "Type",
+          "type": "string"
+        },
+        "entity_enabled": {
+          "default": true,
+          "description": "enable or disable this entity instance",
+          "title": "Entity Enabled",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "type"
+      ],
+      "title": "Entity",
       "type": "object"
     },
     "EntityPVI": {
@@ -610,7 +702,14 @@
     "defs": {
       "description": "The definitions an IOC can create using this module",
       "items": {
-        "$ref": "#/$defs/Definition"
+        "anyOf": [
+          {
+            "$ref": "#/$defs/Definition"
+          },
+          {
+            "$ref": "#/$defs/CollectionDefinition"
+          }
+        ]
       },
       "title": "Defs",
       "type": "array"

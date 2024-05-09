@@ -11,6 +11,8 @@ from pydantic import Field, create_model, field_validator
 from pydantic.fields import FieldInfo
 from pydantic_core import PydanticUndefined
 
+from ibek.collection import CollectionDefinition
+
 from .args import EnumArg, IdArg, ObjectArg
 from .ioc import IOC, Entity, EnumVal, id_to_entity
 from .support import Definition, Support
@@ -102,7 +104,11 @@ def make_entity_models(support: Support):
     entity_names = []
 
     for definition in support.defs:
-        entity_models.append(make_entity_model(definition, support))
+        if isinstance(definition, Definition):
+            entity_models.append(make_entity_model(definition, support))
+        elif isinstance(definition, CollectionDefinition):
+            """TODO: do we need to do anything here?"""
+
         if definition.name in entity_names:
             # not tested because schema validation will always catch this first
             raise ValueError(f"Duplicate entity name {definition.name}")

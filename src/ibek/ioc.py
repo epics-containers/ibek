@@ -14,8 +14,8 @@ from pydantic import (
 )
 
 from .args import IdArg
+from .definition import Definition
 from .globals import BaseSettings
-from .support import Definition
 from .utils import UTILS
 
 id_to_entity: Dict[str, Entity] = {}
