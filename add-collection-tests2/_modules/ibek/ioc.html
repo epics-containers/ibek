@@ -8,7 +8,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>ibek.ioc &#8212; ibek 2.0.3.dev7+g7674437a documentation</title>
+    <title>ibek.ioc &#8212; ibek 2.0.3.dev8+g5f4f435a documentation</title>
   
   
   
@@ -470,6 +470,7 @@ document.write(`
 <span class="kn">from</span> <span class="nn">.globals</span> <span class="kn">import</span> <span class="n">BaseSettings</span>
 <span class="kn">from</span> <span class="nn">.utils</span> <span class="kn">import</span> <span class="n">UTILS</span>
 
+<span class="c1"># a global dict of all entity instances indexed by their ID</span>
 <span class="n">id_to_entity</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Entity</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
 
 
@@ -527,20 +528,9 @@ document.write(`
                 <span class="k">if</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">id_to_entity</span><span class="p">:</span>
                     <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Duplicate id </span><span class="si">{</span><span class="n">value</span><span class="si">}</span><span class="s2"> in </span><span class="si">{</span><span class="nb">list</span><span class="p">(</span><span class="n">id_to_entity</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
                 <span class="n">id_to_entity</span><span class="p">[</span><span class="n">value</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span>
-        <span class="k">return</span> <span class="bp">self</span></div>
 
-    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="c1"># if this entity has an id then its string representation is the value of id</span>
-        <span class="n">id_name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__definition__</span><span class="o">.</span><span class="n">_get_id_arg</span><span class="p">()</span>
-        <span class="k">return</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">id_name</span><span class="p">)</span> <span class="k">if</span> <span class="n">id_name</span> <span class="k">else</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__str__</span><span class="p">()</span>
-
-<div class="viewcode-block" id="Entity.check_objects"><a class="viewcode-back" href="../../user/reference/api.html#ibek.ioc.Entity.check_objects">[docs]</a>    <span class="nd">@model_validator</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="s2">&quot;after&quot;</span><span class="p">)</span>
-    <span class="k">def</span> <span class="nf">check_objects</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Entity</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        If an object field was populated by a default value it will currently</span>
-<span class="sd">        just be a string representation of the object. This function will convert</span>
-<span class="sd">        that string into the actual object.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># If an object field was populated by a default value it will currently</span>
+        <span class="c1"># just be the object id. Now convert id into the actual object.</span>
         <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">model_fields_set</span><span class="p">:</span>
             <span class="n">prop</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">field</span><span class="p">)</span>
             <span class="n">model_field</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model_fields</span><span class="p">[</span><span class="n">field</span><span class="p">]</span>
@@ -548,7 +538,13 @@ document.write(`
             <span class="k">if</span> <span class="n">model_field</span><span class="o">.</span><span class="n">annotation</span> <span class="o">==</span> <span class="nb">object</span><span class="p">:</span>
                 <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">prop</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
                     <span class="nb">setattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">get_entity_by_id</span><span class="p">(</span><span class="n">prop</span><span class="p">))</span>
-        <span class="k">return</span> <span class="bp">self</span></div></div>
+
+        <span class="k">return</span> <span class="bp">self</span></div>
+
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># if this entity has an id then its string representation is the value of id</span>
+        <span class="n">id_name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__definition__</span><span class="o">.</span><span class="n">_get_id_arg</span><span class="p">()</span>
+        <span class="k">return</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">id_name</span><span class="p">)</span> <span class="k">if</span> <span class="n">id_name</span> <span class="k">else</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__str__</span><span class="p">()</span></div>
 
 
 <div class="viewcode-block" id="IOC"><a class="viewcode-back" href="../../user/reference/api.html#ibek.ioc.IOC">[docs]</a><span class="k">class</span> <span class="nc">IOC</span><span class="p">(</span><span class="n">BaseSettings</span><span class="p">):</span>
