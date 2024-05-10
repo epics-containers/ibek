@@ -1,0 +1,34 @@
+# yaml-language-server: $schema=../schemas/gauges.ibek.ioc.schema.json
+
+ioc_name: "{{ ioc_yaml_file_name }}"
+description: Example of initialising a gauge group with defaults to gauge1
+
+entities:
+  - type: asyn.AsynIP
+    name: controllerOnePort
+    port: 192.168.0.55:2002
+
+  - type: asyn.AsynIP
+    name: controllerTwoPort
+    port: 192.168.0.55:2002
+
+  - type: gauges.Mks937bGauge
+    port: controllerOnePort
+    name: MyGauge1
+    P: "IBEK-VA-GAUGE-01:"
+
+  - type: gauges.Mks937bGauge
+    port: controllerTwoPort
+    name: MyGauge2
+    P: "IBEK-VA-GAUGE-02:"
+
+  # an un-referenced Gauge
+  - type: gauges.Mks937bGauge
+    port: controllerTwoPort
+    name: MyGauge3
+    P: "IBEK-VA-GAUGE-03:"
+
+  - type: gauges.GaugeGroup
+    name: MyGaugeGroup
+    gauge1: MyGauge1
+    gauge2: MyGauge2

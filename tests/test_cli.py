@@ -185,3 +185,30 @@ def test_ipac(mocker: MockerFixture, tmp_path: Path, samples: Path):
     example_boot = (expected_outputs / "st.cmd").read_text()
     actual_boot = (tmp_path / "st.cmd").read_text()
     assert example_boot == actual_boot
+
+
+def test_gauges(mocker: MockerFixture, tmp_path: Path, samples: Path):
+    """
+    Tests that an id argument can include another argument in its default value
+    """
+
+    clear_entity_model_ids()
+    ioc_yaml = samples / "iocs" / "gauges.ibek.ioc.yaml"
+    support_yaml1 = samples / "support" / "asyn.ibek.support.yaml"
+    support_yaml2 = samples / "support" / "gauges.ibek.support.yaml"
+    expected_outputs = samples / "outputs" / "gauges"
+
+    mocker.patch.object(GLOBALS, "RUNTIME_OUTPUT", tmp_path)
+    mocker.patch.object(GLOBALS, "OPI_OUTPUT", tmp_path)
+
+    # reset the InterruptVector counter to its initial state (if already used)
+    if "InterruptVector" in utils.UTILS.counters:
+        utils.UTILS.counters["InterruptVector"].current = 192
+
+    os.environ["IOC"] = "/epics/ioc"
+    os.environ["RUNTIME_DIR"] = "/epics/runtime"
+    generate(ioc_yaml, [support_yaml1, support_yaml2])
+
+    example_boot = (expected_outputs / "st.cmd").read_text()
+    actual_boot = (tmp_path / "st.cmd").read_text()
+    assert example_boot == actual_boot

@@ -14,7 +14,7 @@ from pydantic_core import PydanticUndefined
 from ibek.collection import CollectionDefinition
 
 from .args import EnumArg, IdArg, ObjectArg
-from .ioc import IOC, Entity, EnumVal, id_to_entity
+from .ioc import IOC, Entity, EnumVal, get_entity_by_id
 from .support import Definition, Support
 
 
@@ -46,10 +46,7 @@ def make_entity_model(definition: Definition, support: Support) -> Type[Entity]:
 
             @field_validator(arg.name, mode="after")
             def lookup_instance(cls, id):
-                try:
-                    return id_to_entity[id]
-                except KeyError:
-                    raise ValueError(f"object {id} not found in {list(id_to_entity)}")
+                return get_entity_by_id(id)
 
             validators[full_arg_name] = lookup_instance
             arg_type = object

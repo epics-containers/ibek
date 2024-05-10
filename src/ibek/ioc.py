@@ -21,6 +21,13 @@ from .utils import UTILS
 id_to_entity: Dict[str, Entity] = {}
 
 
+def get_entity_by_id(id: str) -> Entity:
+    try:
+        return id_to_entity[id]
+    except KeyError:
+        raise ValueError(f"object {id} not found in {list(id_to_entity)}")
+
+
 def clear_entity_model_ids():
     """Resets the global id_to_entity dict. Used for testing."""
 
@@ -47,33 +54,49 @@ class Entity(BaseSettings):
     )
     __definition__: Definition
 
-    @model_validator(mode="after")  # type: ignore
-    def add_ibek_attributes(cls, entity: Entity):
+    @model_validator(mode="after")
+    def add_ibek_attributes(self):
         """
         Whole Entity model validation
         """
 
         # find the id field in this Entity if it has one
-        ids = {a.name for a in entity.__definition__.args if isinstance(a, IdArg)}
+        ids = {a.name for a in self.__definition__.args if isinstance(a, IdArg)}
 
-        entity_dict = entity.model_dump()
+        entity_dict = self.model_dump()
         for arg, value in entity_dict.items():
             if isinstance(value, str):
                 # Jinja expansion of any of the Entity's string args/values
                 value = UTILS.render(entity_dict, value)
-                setattr(entity, arg, value)
+                setattr(self, arg, value)
 
             if arg in ids:
                 # add this entity to the global id index
                 if value in id_to_entity:
                     raise ValueError(f"Duplicate id {value} in {list(id_to_entity)}")
-                id_to_entity[value] = entity
-        return entity
+                id_to_entity[value] = self
+        return self
 
     def __str__(self):
         # if this entity has an id then its string representation is the value of id
         id_name = self.__definition__._get_id_arg()
         return getattr(self, id_name) if id_name else super().__str__()
+
+    @model_validator(mode="after")
+    def check_objects(self) -> Entity:
+        """
+        If an object field was populated by a default value it will currently
+        just be a string representation of the object. This function will convert
+        that string into the actual object.
+        """
+        for field in self.model_fields_set:
+            prop = getattr(self, field)
+            model_field = self.model_fields[field]
+
+            if model_field.annotation == object:
+                if isinstance(prop, str):
+                    setattr(self, field, get_entity_by_id(prop))
+        return self
 
 
 class IOC(BaseSettings):

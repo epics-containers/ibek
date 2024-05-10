@@ -145,7 +145,9 @@ class Definition(BaseSettings):
     env_vars: Sequence[EnvironmentVariable] = Field(
         description="Environment variables to set in the boot script", default=()
     )
-    pvi: EntityPVI = Field(description="PVI definition for Entity", default=None)
+    pvi: Optional[EntityPVI] = Field(
+        description="PVI definition for Entity", default=None
+    )
 
     def _get_id_arg(self):
         """Returns the name of the ID argument for this definition, if it exists"""

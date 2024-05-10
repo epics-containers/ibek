@@ -280,9 +280,12 @@
           "type": "array"
         },
         "pvi": {
-          "allOf": [
+          "anyOf": [
             {
               "$ref": "#/$defs/EntityPVI"
+            },
+            {
+              "type": "null"
             }
           ],
           "default": null,
