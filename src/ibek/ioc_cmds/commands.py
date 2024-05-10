@@ -29,8 +29,7 @@ def build_docker(
             help="The filepath to the Dockerfile to build",
             autocompletion=lambda: [],  # Forces path autocompletion
         ),
-    ] = Path.cwd()
-    / "Dockerfile",
+    ] = Path.cwd() / "Dockerfile",
 ):
     """
     EXPERIMENTAL: Attempt to interpret the Dockerfile and run it's commands
@@ -79,7 +78,7 @@ def generate_schema(
         log.error(f"No `definitions` given and none found in {GLOBALS.IBEK_DEFS}")
         raise typer.Exit(1)
 
-    ioc_model = ioc_create_model(definitions)
+    ioc_model, _ = ioc_create_model(definitions)
     schema = json.dumps(ioc_model.model_json_schema(), indent=2)
     if output is None:
         typer.echo(schema)

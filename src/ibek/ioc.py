@@ -18,6 +18,7 @@ from .definition import Definition
 from .globals import BaseSettings
 from .utils import UTILS
 
+# a global dict of all entity instances indexed by their ID
 id_to_entity: Dict[str, Entity] = {}
 
 
@@ -75,20 +76,9 @@ class Entity(BaseSettings):
                 if value in id_to_entity:
                     raise ValueError(f"Duplicate id {value} in {list(id_to_entity)}")
                 id_to_entity[value] = self
-        return self
 
-    def __str__(self):
-        # if this entity has an id then its string representation is the value of id
-        id_name = self.__definition__._get_id_arg()
-        return getattr(self, id_name) if id_name else super().__str__()
-
-    @model_validator(mode="after")
-    def check_objects(self) -> Entity:
-        """
-        If an object field was populated by a default value it will currently
-        just be a string representation of the object. This function will convert
-        that string into the actual object.
-        """
+        # If an object field was populated by a default value it will currently
+        # just be the object id. Now convert id into the actual object.
         for field in self.model_fields_set:
             prop = getattr(self, field)
             model_field = self.model_fields[field]
@@ -96,7 +86,13 @@ class Entity(BaseSettings):
             if model_field.annotation == object:
                 if isinstance(prop, str):
                     setattr(self, field, get_entity_by_id(prop))
+
         return self
+
+    def __str__(self):
+        # if this entity has an id then its string representation is the value of id
+        id_name = self.__definition__._get_id_arg()
+        return getattr(self, id_name) if id_name else super().__str__()
 
 
 class IOC(BaseSettings):

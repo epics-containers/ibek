@@ -104,7 +104,7 @@ def make_entity_models(support: Support):
         if isinstance(definition, Definition):
             entity_models.append(make_entity_model(definition, support))
         elif isinstance(definition, CollectionDefinition):
-            """TODO: do we need to do anything here?"""
+            pass
 
         if definition.name in entity_names:
             # not tested because schema validation will always catch this first

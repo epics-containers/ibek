@@ -12,12 +12,14 @@ from ruamel.yaml.main import YAML
 
 from ibek.utils import UTILS
 
+from .collection import CollectionDefinition
 from .definition import Database
 from .entity_model import make_entity_models, make_ioc_model
 from .globals import TEMPLATES
 from .ioc import IOC, Entity, clear_entity_model_ids
 from .render import Render
 from .render_db import RenderDb
+from .sub_entity import SubEntity
 from .support import Support
 
 log = logging.getLogger(__name__)
@@ -27,11 +29,14 @@ schema_modeline = re.compile(r"# *yaml-language-server *: *\$schema=([^ ]*)")
 url_f = r"file://"
 
 
-def ioc_create_model(definitions: List[Path]) -> Type[IOC]:
+def ioc_create_model(
+    definitions: List[Path],
+) -> Tuple[Type[IOC], List[CollectionDefinition]]:
     """
     Take a list of definitions YAML and create an IOC model from it
     """
     entity_models = []
+    entity_collections = []
 
     clear_entity_model_ids()
     for definition in definitions:
@@ -44,10 +49,28 @@ def ioc_create_model(definitions: List[Path]) -> Type[IOC]:
         # make Entity classes described in the support module definition file
         entity_models += make_entity_models(support)
 
+        # collect up the IOCs CollectionDefinitions
+        for definition in support.defs:
+            if isinstance(definition, CollectionDefinition):
+                entity_collections.append(definition)
+
     # Save the schema for IOC
     model = make_ioc_model(entity_models)
 
-    return model
+    return model, entity_collections
+
+
+def process_sub_entities(collections: List[CollectionDefinition]):
+    """
+    Render all the SubEntities in this IOC
+    """
+
+    for collection in collections:
+        for entity in collection.entities:
+            if isinstance(entity, SubEntity):
+                entity_cls = name_to_entity_cls[entity.type]
+                entity = entity_cls(**entity.model_dump())
+                entity.__is_sub_entity__ = True
 
 
 def ioc_deserialize(ioc_instance_yaml: Path, definition_yaml: List[Path]) -> IOC:
@@ -56,10 +79,11 @@ def ioc_deserialize(ioc_instance_yaml: Path, definition_yaml: List[Path]) -> IOC
 
     Returns a model of the resulting ioc instance
     """
-    ioc_model = ioc_create_model(definition_yaml)
+    ioc_model, entity_collections = ioc_create_model(definition_yaml)
 
     # extract the ioc instance yaml into a dict
     ioc_instance_dict = YAML(typ="safe").load(ioc_instance_yaml)
+
     if ioc_instance_dict is None or "ioc_name" not in ioc_instance_dict:
         raise RuntimeError(
             f"Failed to load a valid ioc config from {ioc_instance_yaml}"
@@ -72,6 +96,9 @@ def ioc_deserialize(ioc_instance_yaml: Path, definition_yaml: List[Path]) -> IOC
 
     # Create an IOC instance from the instance dict and the model
     ioc_instance = ioc_model(**ioc_instance_dict)
+
+    # now that entity instance are created, we can process the SubEntities
+    process_sub_entities(entity_collections)
 
     return ioc_instance
 

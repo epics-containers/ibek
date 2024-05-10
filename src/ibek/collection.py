@@ -6,14 +6,13 @@ from __future__ import annotations
 
 from typing import Sequence, Union
 
-from pydantic import Field
+from pydantic import BaseModel, Field
 
 from .args import Arg, Value
-from .globals import BaseSettings
-from .ioc import Entity
+from .sub_entity import SubEntity
 
 
-class CollectionDefinition(BaseSettings):
+class CollectionDefinition(BaseModel):
     name: str = Field(
         description="Publish Definition as type <module>.<name> for IOC instances"
     )
@@ -28,6 +27,7 @@ class CollectionDefinition(BaseSettings):
         description="Calculated values to use as additional arguments", default=()
     )
 
-    entities: Sequence[Entity] = Field(
-        description="The entities that this collection is to instantiate", default=()
+    entities: Sequence[SubEntity] = Field(
+        description="The sub-entity instances that this collection is to instantiate",
+        default=(),
     )
