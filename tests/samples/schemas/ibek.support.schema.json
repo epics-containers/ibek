@@ -40,7 +40,6 @@
       "type": "object"
     },
     "CollectionDefinition": {
-      "additionalProperties": false,
       "properties": {
         "name": {
           "description": "Publish Definition as type <module>.<name> for IOC instances",
@@ -94,9 +93,9 @@
         },
         "entities": {
           "default": [],
-          "description": "The entities that this collection is to instantiate",
+          "description": "The sub-entity instances that this collection is to instantiate",
           "items": {
-            "$ref": "#/$defs/Entity"
+            "$ref": "#/$defs/SubEntity"
           },
           "title": "Entities",
           "type": "array"
@@ -297,28 +296,6 @@
         "description"
       ],
       "title": "Definition",
-      "type": "object"
-    },
-    "Entity": {
-      "additionalProperties": false,
-      "description": "A baseclass for all generated Entity classes.",
-      "properties": {
-        "type": {
-          "description": "The type of this entity",
-          "title": "Type",
-          "type": "string"
-        },
-        "entity_enabled": {
-          "default": true,
-          "description": "enable or disable this entity instance",
-          "title": "Entity Enabled",
-          "type": "boolean"
-        }
-      },
-      "required": [
-        "type"
-      ],
-      "title": "Entity",
       "type": "object"
     },
     "EntityPVI": {
@@ -629,6 +606,28 @@
         "description"
       ],
       "title": "StrArg",
+      "type": "object"
+    },
+    "SubEntity": {
+      "additionalProperties": true,
+      "description": "A loosely defined class to declare the Entities\nin an ibek.support.yaml file in the CollectionDefinition section",
+      "properties": {
+        "type": {
+          "description": "The type of this entity",
+          "title": "Type",
+          "type": "string"
+        },
+        "entity_enabled": {
+          "default": true,
+          "description": "enable or disable this entity instance",
+          "title": "Entity Enabled",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "type"
+      ],
+      "title": "SubEntity",
       "type": "object"
     },
     "Text": {

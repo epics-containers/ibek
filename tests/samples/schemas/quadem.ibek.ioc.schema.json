@@ -2910,6 +2910,62 @@
       "title": "dbrtype",
       "type": "string"
     },
+    "quadEM_Plugins": {
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "const": "quadEM.Plugins",
+          "default": "quadEM.Plugins",
+          "description": "Instantiates\n  12 NDStats plugins for Current, Sum, Diff and Pos Channels\n  12 NDTimeSeries plugins\n  12 NDArray plugins",
+          "title": "Type"
+        },
+        "entity_enabled": {
+          "default": true,
+          "description": "enable or disable this entity instance",
+          "title": "Entity Enabled",
+          "type": "boolean"
+        },
+        "DEVICE": {
+          "description": "Reference to the parent quadEM device",
+          "title": "Device"
+        },
+        "PORTPREFIX": {
+          "description": "The prefix for plugin asyn port names",
+          "title": "Portprefix",
+          "type": "string"
+        },
+        "STAT_NCHAN": {
+          "description": "Template argument",
+          "title": "Stat Nchan",
+          "type": "integer"
+        },
+        "STAT_XSIZE": {
+          "description": "Template argument",
+          "title": "Stat Xsize",
+          "type": "integer"
+        },
+        "HIST_SIZE": {
+          "default": 256,
+          "description": "Template argument",
+          "title": "Hist Size",
+          "type": "integer"
+        },
+        "QUEUE": {
+          "default": 16,
+          "description": "length of NDArray queue",
+          "title": "Queue",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "DEVICE",
+        "PORTPREFIX",
+        "STAT_NCHAN",
+        "STAT_XSIZE"
+      ],
+      "title": "quadEM_Plugins",
+      "type": "object"
+    },
     "quadEM_TetrAMM": {
       "additionalProperties": false,
       "properties": {
@@ -3013,6 +3069,7 @@
             "ADCore.NDTimeSeries": "#/$defs/ADCore_NDTimeSeries",
             "ADCore.NDTransform": "#/$defs/ADCore_NDTransform",
             "ADCore._NDCircularBuff": "#/$defs/ADCore__NDCircularBuff",
+            "quadEM.Plugins": "#/$defs/quadEM_Plugins",
             "quadEM.TetrAMM": "#/$defs/quadEM_TetrAMM"
           },
           "propertyName": "type"
@@ -3104,6 +3161,9 @@
           },
           {
             "$ref": "#/$defs/quadEM_TetrAMM"
+          },
+          {
+            "$ref": "#/$defs/quadEM_Plugins"
           }
         ]
       },
