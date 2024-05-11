@@ -26,7 +26,7 @@ class IocFactory:
     A Class for creating Generic IOC classes and instances
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         self._entity_classes: Dict[str, Type[Entity]] = {}
 
     def ioc_deserialize(
@@ -54,7 +54,7 @@ class IocFactory:
 
         # Create an IOC instance from the instance dict and the model
         ioc_instance = ioc_model(**ioc_instance_dict)
-        # post processing to insert SubEntities
+        # post processing to insert SubEntity instances
         self._process_collections(ioc_instance)
 
         return ioc_instance
@@ -85,7 +85,7 @@ class IocFactory:
         """
         Process all the collections in the IOC instance
         """
-        all_entities: Sequence[Entity] = []
+        all_entities: List[Entity] = []
 
         for entity in ioc_instance.entities:
             definition = entity.__definition__
@@ -93,11 +93,17 @@ class IocFactory:
                 # this is a collection - process all the sub-entities and throw
                 # away the root entity
                 for sub_entity in definition.entities:
-                    # cast the SubEntity to its concrete Entity subclass
+                    # find the Entity Class that the SubEntity represents
                     entity_cls = self._entity_classes[sub_entity.type]
-                    entity = entity_cls(**sub_entity.model_dump())
+                    # get the SubEntity arguments
+                    sub_args_dict = sub_entity.model_dump()
+                    # jinja render any references to parent Args in the SubEntity Args
+                    for key, arg in sub_args_dict.items():
+                        sub_args_dict[key] = UTILS.render(entity, arg)
+                    # cast the SubEntity to its concrete Entity subclass
+                    cast_entity = entity_cls(**sub_args_dict)
                     # add it to the IOCs entity list
-                    all_entities.append(entity)
+                    all_entities.append(cast_entity)
             else:
                 # a standard entity - just add it to the list
                 all_entities.append(entity)
@@ -105,8 +111,8 @@ class IocFactory:
         ioc_instance.entities = all_entities
 
     def _make_entity_model(
-        self, definition: Definition, support: Support
-    ) -> Type[Entity]:
+        self, definition: Definition | CollectionDefinition, support: Support
+    ) -> Type[Entity | CollectionDefinition]:
         """
         Create an Entity Model from a Definition instance and a Support instance.
         """

@@ -16,5 +16,3 @@ entities:
     PORTPREFIX: XBPM1
     STAT_NCHAN: 1000
     STAT_XSIZE: 10000
-
-  # - { type: ADCore.NDStats, PORT: "{{PORTPREFIX}}.STATS.I1", R: Cur1 }

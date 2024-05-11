@@ -3,14 +3,12 @@ Functions for building the db and boot scripts
 """
 
 import logging
-import re
-from typing import List, Tuple
+from typing import List, Sequence, Tuple
 
 from jinja2 import Template
 
 from ibek.utils import UTILS
 
-from .collection import CollectionDefinition
 from .definition import Database
 from .globals import TEMPLATES
 from .ioc import Entity
@@ -21,7 +19,7 @@ log = logging.getLogger(__name__)
 
 
 def create_db_script(
-    entities: List[Entity], extra_databases: List[Tuple[Database, Entity]]
+    entities: Sequence[Entity], extra_databases: List[Tuple[Database, Entity]]
 ) -> str:
     """
     Create make_db.sh script for expanding the database templates
@@ -36,7 +34,7 @@ def create_db_script(
         return Template(jinja_txt).render(templates=templates)
 
 
-def create_boot_script(entities: List[Entity]) -> str:
+def create_boot_script(entities: Sequence[Entity]) -> str:
     """
     Create the boot script for an IOC
     """

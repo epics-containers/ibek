@@ -1,4 +1,4 @@
-# yaml-language-server: $schema=/tmp/ibek.schema.json
+# yaml-language-server: $schema=../schemas/ibek.support.schema.json
 
 module: quadEM
 
@@ -100,7 +100,30 @@ defs:
         default: 16
 
     entities:
-      - { type: ADCore.NDStats, PORT: "{{PORTPREFIX}}.STATS.I1", R: Cur1, P: PP, NCHANS: 2, XSIZE: 100, YSIZE: 100, HIST_SIZE: 10, NDARRAY_PORT: XBPM1.DRV }
+      - { type: ADCore.NDStats, PORT: "{{PORTPREFIX}}.STATS.I1", R: Cur1, P: "{{DEVICE.P}}", NCHANS: "{{STAT_NCHAN}}", XSIZE: "{{STAT_XSIZE}}", YSIZE: 0, HIST_SIZE: "{{HIST_SIZE}}", NDARRAY_PORT: "{{DEVICE}}", ENABLED: 1 }
+      - { type: ADCore.NDStats, PORT: "{{PORTPREFIX}}.STATS.I2", R: Cur2, P: "{{DEVICE.P}}", NCHANS: "{{STAT_NCHAN}}", XSIZE: "{{STAT_XSIZE}}", YSIZE: 0, HIST_SIZE: "{{HIST_SIZE}}", NDARRAY_PORT: "{{DEVICE}}", ENABLED: 1 }
+      - { type: ADCore.NDStats, PORT: "{{PORTPREFIX}}.STATS.I3", R: Cur3, P: "{{DEVICE.P}}", NCHANS: "{{STAT_NCHAN}}", XSIZE: "{{STAT_XSIZE}}", YSIZE: 0, HIST_SIZE: "{{HIST_SIZE}}", NDARRAY_PORT: "{{DEVICE}}", ENABLED: 1 }
+      - { type: ADCore.NDStats, PORT: "{{PORTPREFIX}}.STATS.I4", R: Cur4, P: "{{DEVICE.P}}", NCHANS: "{{STAT_NCHAN}}", XSIZE: "{{STAT_XSIZE}}", YSIZE: 0, HIST_SIZE: "{{HIST_SIZE}}", NDARRAY_PORT: "{{DEVICE}}", ENABLED: 1 }
+      - { type: ADCore.NDStats, PORT: "{{PORTPREFIX}}.STATS.SumX", R: SumX, P: "{{DEVICE.P}}", NCHANS: "{{STAT_NCHAN}}", XSIZE: "{{STAT_XSIZE}}", YSIZE: 0, HIST_SIZE: "{{HIST_SIZE}}", NDARRAY_PORT: "{{DEVICE}}", ENABLED: 1 }
+      - { type: ADCore.NDStats, PORT: "{{PORTPREFIX}}.STATS.SumY", R: SumY, P: "{{DEVICE.P}}", NCHANS: "{{STAT_NCHAN}}", XSIZE: "{{STAT_XSIZE}}", YSIZE: 0, HIST_SIZE: "{{HIST_SIZE}}", NDARRAY_PORT: "{{DEVICE}}", ENABLED: 1 }
+      - { type: ADCore.NDStats, PORT: "{{PORTPREFIX}}.STATS.SumAll", R: SumAll, P: "{{DEVICE.P}}", NCHANS: "{{STAT_NCHAN}}", XSIZE: "{{STAT_XSIZE}}", YSIZE: 0, HIST_SIZE: "{{HIST_SIZE}}", NDARRAY_PORT: "{{DEVICE}}", ENABLED: 1 }
+      - { type: ADCore.NDStats, PORT: "{{PORTPREFIX}}.STATS.DiffX", R: DiffX, P: "{{DEVICE.P}}", NCHANS: "{{STAT_NCHAN}}", XSIZE: "{{STAT_XSIZE}}", YSIZE: 0, HIST_SIZE: "{{HIST_SIZE}}", NDARRAY_PORT: "{{DEVICE}}", ENABLED: 1 }
+      - { type: ADCore.NDStats, PORT: "{{PORTPREFIX}}.STATS.DiffY", R: DiffY, P: "{{DEVICE.P}}", NCHANS: "{{STAT_NCHAN}}", XSIZE: "{{STAT_XSIZE}}", YSIZE: 0, HIST_SIZE: "{{HIST_SIZE}}", NDARRAY_PORT: "{{DEVICE}}", ENABLED: 1 }
+      - { type: ADCore.NDStats, PORT: "{{PORTPREFIX}}.STATS.PosX", R: PosX, P: "{{DEVICE.P}}", NCHANS: "{{STAT_NCHAN}}", XSIZE: "{{STAT_XSIZE}}", YSIZE: 0, HIST_SIZE: "{{HIST_SIZE}}", NDARRAY_PORT: "{{DEVICE}}", ENABLED: 1 }
+      - { type: ADCore.NDStats, PORT: "{{PORTPREFIX}}.STATS.PosY", R: PosY, P: "{{DEVICE.P}}", NCHANS: "{{STAT_NCHAN}}", XSIZE: "{{STAT_XSIZE}}", YSIZE: 0, HIST_SIZE: "{{HIST_SIZE}}", NDARRAY_PORT: "{{DEVICE}}", ENABLED: 1 }
+
+      - { type: ADCore.NDStdArrays, PORT: "{{PORTPREFIX}}.ARRAYS.Arr1", R: Arr1, P: "{{DEVICE.P}}", NDARRAY_PORT: "{{DEVICE}}", ENABLED: 1, TYPE: "Float64", FTVL: "DOUBLE", NELEMENTS: "{{STAT_XSIZE}}" }
+      - { type: ADCore.NDStdArrays, PORT: "{{PORTPREFIX}}.ARRAYS.Arr2", R: Arr2, P: "{{DEVICE.P}}", NDARRAY_PORT: "{{DEVICE}}", ENABLED: 1, TYPE: "Float64", FTVL: "DOUBLE", NELEMENTS: "{{STAT_XSIZE}}" }
+      - { type: ADCore.NDStdArrays, PORT: "{{PORTPREFIX}}.ARRAYS.Arr3", R: Arr3, P: "{{DEVICE.P}}", NDARRAY_PORT: "{{DEVICE}}", ENABLED: 1, TYPE: "Float64", FTVL: "DOUBLE", NELEMENTS: "{{STAT_XSIZE}}" }
+      - { type: ADCore.NDStdArrays, PORT: "{{PORTPREFIX}}.ARRAYS.Arr4", R: Arr4, P: "{{DEVICE.P}}", NDARRAY_PORT: "{{DEVICE}}", ENABLED: 1, TYPE: "Float64", FTVL: "DOUBLE", NELEMENTS: "{{STAT_XSIZE}}" }
+      - { type: ADCore.NDStdArrays, PORT: "{{PORTPREFIX}}.ARRAYS.SumX", R: SumX, P: "{{DEVICE.P}}", NDARRAY_PORT: "{{DEVICE}}", ENABLED: 1, TYPE: "Float64", FTVL: "DOUBLE", NELEMENTS: "{{STAT_XSIZE}}" }
+      - { type: ADCore.NDStdArrays, PORT: "{{PORTPREFIX}}.ARRAYS.SumY", R: SumY, P: "{{DEVICE.P}}", NDARRAY_PORT: "{{DEVICE}}", ENABLED: 1, TYPE: "Float64", FTVL: "DOUBLE", NELEMENTS: "{{STAT_XSIZE}}" }
+      - { type: ADCore.NDStdArrays, PORT: "{{PORTPREFIX}}.ARRAYS.SumAll", R: SumAll, P: "{{DEVICE.P}}", NDARRAY_PORT: "{{DEVICE}}", ENABLED: 1, TYPE: "Float64", FTVL: "DOUBLE", NELEMENTS: "{{STAT_XSIZE}}" }
+      - { type: ADCore.NDStdArrays, PORT: "{{PORTPREFIX}}.ARRAYS.DiffX", R: DiffX, P: "{{DEVICE.P}}", NDARRAY_PORT: "{{DEVICE}}", ENABLED: 1, TYPE: "Float64", FTVL: "DOUBLE", NELEMENTS: "{{STAT_XSIZE}}" }
+      - { type: ADCore.NDStdArrays, PORT: "{{PORTPREFIX}}.ARRAYS.DiffY", R: DiffY, P: "{{DEVICE.P}}", NDARRAY_PORT: "{{DEVICE}}", ENABLED: 1, TYPE: "Float64", FTVL: "DOUBLE", NELEMENTS: "{{STAT_XSIZE}}" }
+      - { type: ADCore.NDStdArrays, PORT: "{{PORTPREFIX}}.ARRAYS.PosX", R: PosX, P: "{{DEVICE.P}}", NDARRAY_PORT: "{{DEVICE}}", ENABLED: 1, TYPE: "Float64", FTVL: "DOUBLE", NELEMENTS: "{{STAT_XSIZE}}" }
+      - { type: ADCore.NDStdArrays, PORT: "{{PORTPREFIX}}.ARRAYS.PosY", R: PosY, P: "{{DEVICE.P}}", NDARRAY_PORT: "{{DEVICE}}", ENABLED: 1, TYPE: "Float64", FTVL: "DOUBLE", NELEMENTS: "{{STAT_XSIZE}}" }
+
   # - { type: ADCore.NDStats, PORT: "{{PORTPREFIX}}.STATS.I1", R: Cur1 }
   # - { type: ADCore.NDStats, PORT: "{{PORTPREFIX}}.STATS.I1", R: Cur1 }
   # - { type: ADCore.NDStats, PORT: "{{PORTPREFIX}}.STATS.I2", R: Cur2 }

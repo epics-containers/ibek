@@ -22,14 +22,11 @@ from .utils import UTILS
 id_to_entity: Dict[str, Entity] = {}
 
 
-def get_entity_by_id(id: str, no_error=False) -> Entity:
+def get_entity_by_id(id: str) -> Entity:
     try:
         return id_to_entity[id]
     except KeyError:
-        if no_error:
-            return id
-        else:
-            raise ValueError(f"object {id} not found in {list(id_to_entity)}")
+        raise ValueError(f"object {id} not found in {list(id_to_entity)}")
 
 
 def clear_entity_model_ids():

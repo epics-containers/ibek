@@ -101,10 +101,15 @@ class Utils:
 
         return result
 
-    def render(self, context: Any, template_text: str) -> str:
+    def render(self, context: Any, template_text: Any) -> str:
         """
         Render a Jinja template with the global __utils__ object in the context
         """
+        if not isinstance(template_text, str):
+            # because this function is used to template arguments, it may
+            # be passed a non string which will always render to itself
+            return template_text
+
         jinja_template = Template(template_text)
         return jinja_template.render(
             context,

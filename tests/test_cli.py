@@ -232,3 +232,7 @@ def test_quadem(mocker: MockerFixture, tmp_path: Path, samples: Path):
     example_boot = (expected_outputs / "st.cmd").read_text()
     actual_boot = (tmp_path / "st.cmd").read_text()
     assert example_boot == actual_boot
+
+    example_db = (samples / "outputs" / "quadem" / "ioc.subst").read_text()
+    actual_db = (tmp_path / "ioc.subst").read_text()
+    assert example_db == actual_db

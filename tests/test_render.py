@@ -5,7 +5,7 @@ Entity classes
 
 from typing import Literal
 
-from ibek.ioc import IOC, clear_entity_model_ids
+from ibek.ioc import clear_entity_model_ids
 from ibek.render import Render
 from ibek.render_db import RenderDb
 

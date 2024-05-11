@@ -29,7 +29,8 @@ def build_docker(
             help="The filepath to the Dockerfile to build",
             autocompletion=lambda: [],  # Forces path autocompletion
         ),
-    ] = Path.cwd() / "Dockerfile",
+    ] = Path.cwd()
+    / "Dockerfile",
 ):
     """
     EXPERIMENTAL: Attempt to interpret the Dockerfile and run it's commands

@@ -1,4 +1,4 @@
-# yaml-language-server: $schema=https://github.com/epics-containers/ibek/releases/download/2.0.2/ibek.support.schema.json
+# yaml-language-server: $schema=../schemas/ibek.support.schema.json
 
 module: ADCore
 
@@ -946,8 +946,11 @@ defs:
           PORT:
 
     pre_init:
-      - value: |
+      - when: first
+        value: |
           # NDStdArraysConfigure(portName, queueSize, blockingCallbacks, NDArrayPort, NDArrayAddr, maxBuffers, maxMemory, priority, stackSize, maxThreads)
+
+      - value: |
           NDStdArraysConfigure("{{PORT}}", {{QUEUE}}, {{BLOCK}}, "{{NDARRAY_PORT}}", {{NDARRAY_ADDR}}, 0, 0, 0, 0, {{MAX_THREADS}})
 
   - name: _NDCircularBuff
@@ -1968,12 +1971,12 @@ defs:
           # ADCore path for manual NDTimeSeries.template to find base plugin template
           epicsEnvSet "EPICS_DB_INCLUDE_PATH", "$(ADCORE)/db"
 
-      - value: |
           # NDStatsConfigure(portName, queueSize, blockingCallbacks, NDArrayPort, NDArrayAddr, maxBuffers, maxMemory, priority, stackSize, maxThreads)
-          NDStatsConfigure("{{PORT}}", {{QUEUE}}, {{BLOCK}}, "{{NDARRAY_PORT}}", {{NDARRAY_ADDR}}, 0, 0, 0, 0, {{MAX_THREADS}})
           # NDTimeSeriesConfigure(portName, queueSize, blockingCallbacks, NDArrayPort, NDArrayAddr, maxSignals)
+
+      - value: |
+          NDStatsConfigure("{{PORT}}", {{QUEUE}}, {{BLOCK}}, "{{NDARRAY_PORT}}", {{NDARRAY_ADDR}}, 0, 0, 0, 0, {{MAX_THREADS}})
           NDTimeSeriesConfigure("{{PORT}}_TS", {{QUEUE}}, {{BLOCK}}, "{{PORT}}", 1, 23)
-          # Load time series records
           dbLoadRecords("$(ADCORE)/db/NDTimeSeries.template",  "P={{P}},R={{R}}, PORT={{PORT}} ,ADDR={{ADDR}},TIMEOUT={{TIMEOUT}},NDARRAY_PORT={{NDARRAY_PORT}},NDARRAY_ADDR={{NDARRAY_ADDR}},NCHANS={{NCHANS}},ENABLED={{ENABLED}}")
 
     pvi:

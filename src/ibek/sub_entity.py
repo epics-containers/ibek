@@ -1,6 +1,4 @@
-from typing import Sequence
-
-from pydantic import BaseModel, Field, model_validator
+from pydantic import BaseModel, Field
 
 
 class SubEntity(BaseModel, extra="allow"):
@@ -14,18 +12,3 @@ class SubEntity(BaseModel, extra="allow"):
     entity_enabled: bool = Field(
         description="enable or disable this entity instance", default=True
     )
-
-    @model_validator(mode="after")
-    def store(self):
-        """
-        Store the SubEntity instance in the global list of SubEntities
-        """
-
-        # empty extra implies this is the  base class being validated
-        if self.model_extra is not None:
-            sub_entities.append(self)
-            print(f"sub-entity {self.type}")
-        return self
-
-
-sub_entities: Sequence[SubEntity] = []

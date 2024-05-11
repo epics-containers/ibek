@@ -4,10 +4,10 @@ support module definitions
 """
 
 from dataclasses import dataclass
-from typing import Any, Dict, List, Mapping, Optional, Tuple
+from typing import Any, Dict, List, Mapping, Optional, Sequence, Tuple
 
 from ibek.definition import Database
-from ibek.ioc import IOC, Entity
+from ibek.ioc import Entity
 from ibek.utils import UTILS
 
 
@@ -22,7 +22,7 @@ class RenderDb:
         rows: List[List[str]]
         columns: List[int]
 
-    def __init__(self, entities: List[Entity]) -> None:
+    def __init__(self, entities: Sequence[Entity]) -> None:
         self.entities = entities
         # a mapping from template file name to details of instances of that template
         self.render_templates: Dict[str, RenderDb.RenderDbTemplate] = {}
