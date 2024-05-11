@@ -82,13 +82,9 @@ def test_database_render(motor_classes):
     # a whole IOC rather than a single entity at a time.
     clear_entity_model_ids()
 
-    ioc = IOC(
-        ioc_name="test_ioc",
-        description="for testing",
-        entities=[asyn1, sim_motor, motor1, motor2],
-    )
+    entities = [asyn1, sim_motor, motor1, motor2]
 
-    render_db = RenderDb(ioc)
+    render_db = RenderDb(entities)
     templates = render_db.render_database()
 
     assert templates == {

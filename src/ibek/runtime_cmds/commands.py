@@ -9,7 +9,8 @@ from pvi._format.template import format_template
 from pvi.device import Device
 
 from ibek.definition import Database
-from ibek.gen_scripts import create_boot_script, create_db_script, ioc_deserialize
+from ibek.entity_model import ioc_deserialize
+from ibek.gen_scripts import create_boot_script, create_db_script
 from ibek.globals import GLOBALS, NaturalOrderGroup
 from ibek.ioc import IOC, Entity
 from ibek.utils import UTILS
@@ -38,22 +39,32 @@ def generate(
 
     ioc_instance = ioc_deserialize(instance, definitions)
 
+    # extract the entities from the deserialized IOC, these are root level
+    # entities and SubEntities inside CollectionDefinitions
+    entities: List[Entity] = []
+    for entity in ioc_instance.entities:
+        if hasattr(entity.__definition__, "entities"):
+            entities += entity.__definition__.entities
+        else:
+            entities.append(entity)
+
     # Clear out generated files so developers know if something stops being generated
     shutil.rmtree(GLOBALS.RUNTIME_OUTPUT, ignore_errors=True)
     GLOBALS.RUNTIME_OUTPUT.mkdir(exist_ok=True)
     shutil.rmtree(GLOBALS.OPI_OUTPUT, ignore_errors=True)
     GLOBALS.OPI_OUTPUT.mkdir(exist_ok=True)
 
+    # TODO TODO make this take list of entities too
     pvi_index_entries, pvi_databases = generate_pvi(ioc_instance)
     generate_index(ioc_instance.ioc_name, pvi_index_entries)
 
-    script_txt = create_boot_script(ioc_instance)
+    script_txt = create_boot_script(entities)
     script_output = GLOBALS.RUNTIME_OUTPUT / "st.cmd"
     script_output.parent.mkdir(parents=True, exist_ok=True)
     with script_output.open("w") as stream:
         stream.write(script_txt)
 
-    db_txt = create_db_script(ioc_instance, pvi_databases)
+    db_txt = create_db_script(entities, pvi_databases)
     db_output = GLOBALS.RUNTIME_OUTPUT / "ioc.subst"
     with db_output.open("w") as stream:
         stream.write(db_txt)
@@ -77,9 +88,10 @@ def generate_pvi(ioc: IOC) -> Tuple[List[IndexEntry], List[Tuple[Database, Entit
 
     formatted_pvi_devices: List[str] = []
     for entity in ioc.entities:
-        entity_pvi = entity.__definition__.pvi
-        if entity_pvi is None:
+        definition = entity.__definition__
+        if not hasattr(definition, "pvi") or definition.pvi is None:
             continue
+        entity_pvi = definition.pvi
 
         pvi_yaml = GLOBALS.PVI_DEFS / entity_pvi.yaml_path
         device_name = pvi_yaml.name.split(".")[0]

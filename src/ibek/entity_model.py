@@ -5,17 +5,78 @@ functions for making Entity models
 from __future__ import annotations
 
 import builtins
-from typing import Annotated, Any, Dict, Literal, Sequence, Tuple, Type, Union
+from pathlib import Path
+from typing import Annotated, Any, Dict, List, Literal, Sequence, Tuple, Type, Union
 
 from pydantic import Field, create_model, field_validator
 from pydantic.fields import FieldInfo
 from pydantic_core import PydanticUndefined
+from ruamel.yaml.main import YAML
 
-from ibek.collection import CollectionDefinition
+from ibek.utils import UTILS
 
 from .args import EnumArg, IdArg, ObjectArg
-from .ioc import IOC, Entity, EnumVal, get_entity_by_id
+from .collection import CollectionDefinition
+from .ioc import IOC, Entity, EnumVal, clear_entity_model_ids, get_entity_by_id
 from .support import Definition, Support
+
+
+def ioc_deserialize(ioc_instance_yaml: Path, definition_yaml: List[Path]) -> IOC:
+    """
+    Takes an ioc instance entities file, list of generic ioc definitions files.
+
+    Returns a model of the resulting ioc instance
+    """
+    ioc_model, entity_collections = ioc_create_model(definition_yaml)
+
+    # extract the ioc instance yaml into a dict
+    ioc_instance_dict = YAML(typ="safe").load(ioc_instance_yaml)
+
+    if ioc_instance_dict is None or "ioc_name" not in ioc_instance_dict:
+        raise RuntimeError(
+            f"Failed to load a valid ioc config from {ioc_instance_yaml}"
+        )
+
+    # extract the ioc name into UTILS for use in jinja renders
+    name = UTILS.render({}, ioc_instance_dict["ioc_name"])
+    UTILS.set_ioc_name(name)
+    ioc_instance_dict["ioc_name"] = name
+
+    # Create an IOC instance from the instance dict and the model
+    ioc_instance = ioc_model(**ioc_instance_dict)
+
+    return ioc_instance
+
+
+def ioc_create_model(
+    definitions: List[Path],
+) -> Tuple[Type[IOC], List[CollectionDefinition]]:
+    """
+    Take a list of definitions YAML and create an IOC model from it
+    """
+    entity_models = []
+    entity_collections = []
+
+    clear_entity_model_ids()
+    for definition in definitions:
+        support_dict = YAML(typ="safe").load(definition)
+
+        Support.model_validate(support_dict)
+
+        # deserialize the support module definition file
+        support = Support(**support_dict)
+        # make Entity classes described in the support module definition file
+        entity_models += make_entity_models(support)
+
+        # collect up the IOCs CollectionDefinitions
+        for definition in support.defs:
+            if isinstance(definition, CollectionDefinition):
+                entity_collections.append(definition)
+
+    # Save the schema for IOC
+    model = make_ioc_model(entity_models)
+
+    return model, entity_collections
 
 
 def make_entity_model(definition: Definition, support: Support) -> Type[Entity]:
@@ -87,6 +148,10 @@ def make_entity_model(definition: Definition, support: Support) -> Type[Entity]:
 
     # add a link back to the Definition Instance that generated this Entity Class
     entity_cls.__definition__ = definition
+    # for CollectionDefinitions - all the SubEntities want a link back too
+    if hasattr(definition, "entities"):
+        for entity in definition.entities:
+            entity.__definition__ = definition
 
     return entity_cls
 
@@ -101,10 +166,7 @@ def make_entity_models(support: Support):
     entity_names = []
 
     for definition in support.defs:
-        if isinstance(definition, Definition):
-            entity_models.append(make_entity_model(definition, support))
-        elif isinstance(definition, CollectionDefinition):
-            pass
+        entity_models.append(make_entity_model(definition, support))
 
         if definition.name in entity_names:
             # not tested because schema validation will always catch this first

@@ -22,8 +22,8 @@ class RenderDb:
         rows: List[List[str]]
         columns: List[int]
 
-    def __init__(self, ioc_instance: IOC) -> None:
-        self.ioc_instance = ioc_instance
+    def __init__(self, entities: List[Entity]) -> None:
+        self.entities = entities
         # a mapping from template file name to details of instances of that template
         self.render_templates: Dict[str, RenderDb.RenderDbTemplate] = {}
 
@@ -55,7 +55,7 @@ class RenderDb:
         Gather the database template instantiations from all entities
         while validating the arguments
         """
-        for entity in self.ioc_instance.entities:
+        for entity in self.entities:
             databases = entity.__definition__.databases
 
             # Not all entities instantiate database templates

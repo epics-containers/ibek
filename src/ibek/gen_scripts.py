@@ -4,23 +4,18 @@ Functions for building the db and boot scripts
 
 import logging
 import re
-from pathlib import Path
-from typing import List, Tuple, Type
+from typing import List, Tuple
 
 from jinja2 import Template
-from ruamel.yaml.main import YAML
 
 from ibek.utils import UTILS
 
 from .collection import CollectionDefinition
 from .definition import Database
-from .entity_model import make_entity_models, make_ioc_model
 from .globals import TEMPLATES
-from .ioc import IOC, Entity, clear_entity_model_ids
+from .ioc import Entity
 from .render import Render
 from .render_db import RenderDb
-from .sub_entity import SubEntity
-from .support import Support
 
 log = logging.getLogger(__name__)
 
@@ -29,82 +24,21 @@ schema_modeline = re.compile(r"# *yaml-language-server *: *\$schema=([^ ]*)")
 url_f = r"file://"
 
 
-def ioc_create_model(
-    definitions: List[Path],
-) -> Tuple[Type[IOC], List[CollectionDefinition]]:
-    """
-    Take a list of definitions YAML and create an IOC model from it
-    """
-    entity_models = []
-    entity_collections = []
-
-    clear_entity_model_ids()
-    for definition in definitions:
-        support_dict = YAML(typ="safe").load(definition)
-
-        Support.model_validate(support_dict)
-
-        # deserialize the support module definition file
-        support = Support(**support_dict)
-        # make Entity classes described in the support module definition file
-        entity_models += make_entity_models(support)
-
-        # collect up the IOCs CollectionDefinitions
-        for definition in support.defs:
-            if isinstance(definition, CollectionDefinition):
-                entity_collections.append(definition)
-
-    # Save the schema for IOC
-    model = make_ioc_model(entity_models)
-
-    return model, entity_collections
-
-
 def process_sub_entities(collections: List[CollectionDefinition]):
     """
-    Render all the SubEntities in this IOC
+    Convert SubEntity instances in this IOC to their Entity instances
     """
 
-    for collection in collections:
-        for entity in collection.entities:
-            if isinstance(entity, SubEntity):
-                entity_cls = name_to_entity_cls[entity.type]
-                entity = entity_cls(**entity.model_dump())
-                entity.__is_sub_entity__ = True
-
-
-def ioc_deserialize(ioc_instance_yaml: Path, definition_yaml: List[Path]) -> IOC:
-    """
-    Takes an ioc instance entities file, list of generic ioc definitions files.
-
-    Returns a model of the resulting ioc instance
-    """
-    ioc_model, entity_collections = ioc_create_model(definition_yaml)
-
-    # extract the ioc instance yaml into a dict
-    ioc_instance_dict = YAML(typ="safe").load(ioc_instance_yaml)
-
-    if ioc_instance_dict is None or "ioc_name" not in ioc_instance_dict:
-        raise RuntimeError(
-            f"Failed to load a valid ioc config from {ioc_instance_yaml}"
-        )
-
-    # extract the ioc name into UTILS for use in jinja renders
-    name = UTILS.render({}, ioc_instance_dict["ioc_name"])
-    UTILS.set_ioc_name(name)
-    ioc_instance_dict["ioc_name"] = name
-
-    # Create an IOC instance from the instance dict and the model
-    ioc_instance = ioc_model(**ioc_instance_dict)
-
-    # now that entity instance are created, we can process the SubEntities
-    process_sub_entities(entity_collections)
-
-    return ioc_instance
+    # for collection in collections:
+    #     for entity in collection.entities:
+    #         if isinstance(entity, SubEntity):
+    #             entity_cls = name_to_entity_cls[entity.type]
+    #             entity = entity_cls(**entity.model_dump())
+    #             entity.__is_sub_entity__ = True
 
 
 def create_db_script(
-    ioc_instance: IOC, extra_databases: List[Tuple[Database, Entity]]
+    entities: List[Entity], extra_databases: List[Tuple[Database, Entity]]
 ) -> str:
     """
     Create make_db.sh script for expanding the database templates
@@ -112,14 +46,14 @@ def create_db_script(
     with open(TEMPLATES / "ioc.subst.jinja", "r") as f:
         jinja_txt = f.read()
 
-        renderer = RenderDb(ioc_instance)
+        renderer = RenderDb(entities)
 
         templates = renderer.render_database(extra_databases)
 
         return Template(jinja_txt).render(templates=templates)
 
 
-def create_boot_script(ioc_instance: IOC) -> str:
+def create_boot_script(entities: List[Entity]) -> str:
     """
     Create the boot script for an IOC
     """
@@ -130,7 +64,7 @@ def create_boot_script(ioc_instance: IOC) -> str:
 
     return template.render(
         __utils__=UTILS,
-        env_var_elements=renderer.render_environment_variable_elements(ioc_instance),
-        script_elements=renderer.render_pre_ioc_init_elements(ioc_instance),
-        post_ioc_init_elements=renderer.render_post_ioc_init_elements(ioc_instance),
+        env_var_elements=renderer.render_environment_variable_elements(entities),
+        script_elements=renderer.render_pre_ioc_init_elements(entities),
+        post_ioc_init_elements=renderer.render_post_ioc_init_elements(entities),
     )

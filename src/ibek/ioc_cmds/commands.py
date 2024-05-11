@@ -5,7 +5,7 @@ from typing import Annotated, List, Optional
 
 import typer
 
-from ibek.gen_scripts import ioc_create_model
+from ibek.entity_model import ioc_create_model
 from ibek.globals import (
     GLOBALS,
     SUPPORT_YAML_PATTERN,

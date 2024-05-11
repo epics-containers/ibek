@@ -11,6 +11,10 @@ class SubEntity(BaseModel, extra="allow"):
 
     type: str = Field(description="The type of this entity")
 
+    entity_enabled: bool = Field(
+        description="enable or disable this entity instance", default=True
+    )
+
     @model_validator(mode="after")
     def store(self):
         """
