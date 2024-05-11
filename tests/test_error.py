@@ -7,7 +7,6 @@ from pathlib import Path
 import pytest
 from ruamel.yaml import YAML
 
-from ibek.entity_model import make_entity_models, make_ioc_model
 from ibek.ioc import clear_entity_model_ids
 from ibek.support import Support
 from ibek.utils import UTILS
@@ -74,7 +73,7 @@ def test_bad_db(tmp_path: Path, samples: Path):
     assert "'non-existant' in database template 'test.db' not found" in str(ctx.value)
 
 
-def test_loading_module_twice(tmp_path: Path, samples: Path):
+def test_loading_module_twice(factory, tmp_path: Path, samples: Path):
     """
     Verify we get a sensible error if we try to load a module twice
     without clearing the entity model ids
@@ -86,11 +85,11 @@ def test_loading_module_twice(tmp_path: Path, samples: Path):
     instance_file = samples / "iocs" / "utils.ibek.ioc.yaml"
 
     support = Support(**YAML(typ="safe").load(definition_file))
-    entities1 = make_entity_models(support)
-    entities2 = make_entity_models(support)
+    entities1 = factory._make_entity_models(support)
+    entities2 = factory._make_entity_models(support)
 
-    generic_ioc1 = make_ioc_model(entities1)
-    generic_ioc2 = make_ioc_model(entities2)
+    generic_ioc1 = factory._make_ioc_model(entities1)
+    generic_ioc2 = factory._make_ioc_model(entities2)
 
     instance = YAML(typ="safe").load(instance_file)
     generic_ioc1(**instance)

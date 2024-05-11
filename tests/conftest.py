@@ -12,8 +12,8 @@ os.environ["SUPPORT"] = str(Path(__file__).parent / "samples" / "epics" / "suppo
 
 # The `noqa`s on these imports are necessary because of the above
 from ibek.__main__ import cli  # noqa: E402
-from ibek.entity_model import make_entity_models  # noqa: E402
 from ibek.ioc import clear_entity_model_ids  # noqa: E402
+from ibek.ioc_factory import IocFactory  # noqa: E402
 from ibek.support import Support  # noqa: E402
 
 runner = CliRunner()
@@ -57,15 +57,21 @@ def ioc_defs(samples):
     return samples / "iocs"
 
 
+# only one IocFactory instance for each test
+@fixture(scope="function")
+def factory():
+    return IocFactory()
+
+
 @fixture
-def asyn_classes(support_defs):
+def asyn_classes(support_defs, factory):
     # clear the entity classes to make sure there's nothing left
     clear_entity_model_ids()
 
     asyn_support = get_support(support_defs / "asyn.ibek.support.yaml")
 
     # make entity subclasses for everything defined in it
-    namespace = make_entity_models(asyn_support)
+    namespace = factory._make_entity_models(asyn_support)
 
     # return the namespace so that callers have access to all of the
     # generated dataclasses
@@ -73,7 +79,7 @@ def asyn_classes(support_defs):
 
 
 @fixture
-def motor_classes(support_defs):
+def motor_classes(support_defs, factory):
     # clear the entity classes to make sure there's nothing left
     clear_entity_model_ids()
 
@@ -81,8 +87,8 @@ def motor_classes(support_defs):
     motor_support = get_support(support_defs / "motorSim.ibek.support.yaml")
 
     # make entity subclasses for everything defined in it
-    namespace = make_entity_models(asyn_support)
-    namespace.extend(make_entity_models(motor_support))
+    namespace = factory._make_entity_models(asyn_support)
+    namespace.extend(factory._make_entity_models(motor_support))
 
     # return the namespace so that callers have access to all of the
     # generated dataclasses

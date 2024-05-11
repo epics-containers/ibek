@@ -9,10 +9,10 @@ from pvi._format.template import format_template
 from pvi.device import Device
 
 from ibek.definition import Database
-from ibek.entity_model import ioc_deserialize
 from ibek.gen_scripts import create_boot_script, create_db_script
 from ibek.globals import GLOBALS, NaturalOrderGroup
 from ibek.ioc import IOC, Entity
+from ibek.ioc_factory import IocFactory
 from ibek.utils import UTILS
 
 runtime_cli = typer.Typer(cls=NaturalOrderGroup)
@@ -37,7 +37,8 @@ def generate(
     # the file name under of the instance definition provides the IOC name
     UTILS.set_file_name(instance)
 
-    ioc_instance = ioc_deserialize(instance, definitions)
+    ioc_factory = IocFactory()
+    ioc_instance = ioc_factory.ioc_deserialize(instance, definitions)
 
     # extract the entities from the deserialized IOC, these are root level
     # entities and SubEntities inside CollectionDefinitions

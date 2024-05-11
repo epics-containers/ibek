@@ -20,23 +20,6 @@ from .render_db import RenderDb
 log = logging.getLogger(__name__)
 
 
-schema_modeline = re.compile(r"# *yaml-language-server *: *\$schema=([^ ]*)")
-url_f = r"file://"
-
-
-def process_sub_entities(collections: List[CollectionDefinition]):
-    """
-    Convert SubEntity instances in this IOC to their Entity instances
-    """
-
-    # for collection in collections:
-    #     for entity in collection.entities:
-    #         if isinstance(entity, SubEntity):
-    #             entity_cls = name_to_entity_cls[entity.type]
-    #             entity = entity_cls(**entity.model_dump())
-    #             entity.__is_sub_entity__ = True
-
-
 def create_db_script(
     entities: List[Entity], extra_databases: List[Tuple[Database, Entity]]
 ) -> str:
