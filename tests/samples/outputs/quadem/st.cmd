@@ -4,7 +4,25 @@ cd "/epics/ioc"
 dbLoadDatabase dbd/ioc.dbd
 ioc_registerRecordDeviceDriver pdbbase
 
+drvAsynIPPortConfigure(XBPM1.DRVip, 172.23.103.85:10001, 100, 0, 0)
+asynOctetSetInputEos(XBPM1.DRVip, 0, "\r\n")
+asynOctetSetOutputEos(XBPM1.DRVip, 0, "\r")
 
-dbLoadRecords /epics/runtime/ioc.db
+# drvTetrAMMConfigure(portName, IPportName, RingSize)
+drvTetrAMMConfigure("XBPM1.DRV", "XBPM1.DRVip", 10000)
+# ADCore path for manual NDTimeSeries.template to find base plugin template
+epicsEnvSet "EPICS_DB_INCLUDE_PATH", "$(ADCORE)/db"
+# NDStatsConfigure(portName, queueSize, blockingCallbacks, NDArrayPort, NDArrayAddr, maxBuffers, maxMemory, priority, stackSize, maxThreads)
+NDStatsConfigure(".STATS.I1", 2, 0, "XBPM1.DRV", 0, 0, 0, 0, 0, 1)
+# NDTimeSeriesConfigure(portName, queueSize, blockingCallbacks, NDArrayPort, NDArrayAddr, maxSignals)
+NDTimeSeriesConfigure(".STATS.I1_TS", 2, 0, ".STATS.I1", 1, 23)
+# Load time series records
+dbLoadRecords("$(ADCORE)/db/NDTimeSeries.template",  "P=PP,R=Cur1, PORT=.STATS.I1 ,ADDR=0,TIMEOUT=1,NDARRAY_PORT=XBPM1.DRV,NDARRAY_ADDR=0,NCHANS=2,ENABLED=0")
+
+dbLoadRecords /ioc.db
 iocInit
+
+
+# Increase precision of sample time for TetrAMM
+dbpf("BL03I-EA-XBPM-01:DRV:SampleTime_RBV.PREC", "5")
 

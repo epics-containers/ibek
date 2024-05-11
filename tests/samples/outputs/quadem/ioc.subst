@@ -7,3 +7,15 @@ pattern
 	{ "P",                "R",     "PORT"      }
 	{ "BL03I-EA-XBPM-01", ":DRV:", "XBPM1.DRV" }
 }
+
+file "$(ADCORE)/db/NDStats.template" {
+pattern 
+	{ "NDARRAY_PORT", "XSIZE", "NCHANS", "NDARRAY_ADDR", "YSIZE", "ENABLED", "HIST_SIZE", "PORT",      "P",  "R",    "TIMEOUT", "TS_PORT",    "SCANRATE", "ADDR" }
+	{ "XBPM1.DRV",    "100",   "2",      "0",            "100",   "0",       "10",        ".STATS.I1", "PP", "Cur1", "1",       "$(PORT)_TS", "I/O Intr", "0"    }
+}
+
+file "NDPluginStats.pvi.template" {
+pattern 
+	{ "P",  "R"    }
+	{ "PP", "Cur1" }
+}

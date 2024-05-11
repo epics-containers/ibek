@@ -23,7 +23,7 @@ from .support import Definition, Support
 
 class IocFactory:
     """
-    Factory class for creating Generic IOC classes and instances
+    A Class for creating Generic IOC classes and instances
     """
 
     def __init__(self):
@@ -54,6 +54,8 @@ class IocFactory:
 
         # Create an IOC instance from the instance dict and the model
         ioc_instance = ioc_model(**ioc_instance_dict)
+        # post processing to insert SubEntities
+        self._process_collections(ioc_instance)
 
         return ioc_instance
 
@@ -78,6 +80,29 @@ class IocFactory:
         model = self._make_ioc_model(entity_models)
 
         return model
+
+    def _process_collections(self, ioc_instance: IOC):
+        """
+        Process all the collections in the IOC instance
+        """
+        all_entities: Sequence[Entity] = []
+
+        for entity in ioc_instance.entities:
+            definition = entity.__definition__
+            if isinstance(definition, CollectionDefinition):
+                # this is a collection - process all the sub-entities and throw
+                # away the root entity
+                for sub_entity in definition.entities:
+                    # cast the SubEntity to its concrete Entity subclass
+                    entity_cls = self._entity_classes[sub_entity.type]
+                    entity = entity_cls(**sub_entity.model_dump())
+                    # add it to the IOCs entity list
+                    all_entities.append(entity)
+            else:
+                # a standard entity - just add it to the list
+                all_entities.append(entity)
+
+        ioc_instance.entities = all_entities
 
     def _make_entity_model(
         self, definition: Definition, support: Support
@@ -150,24 +175,11 @@ class IocFactory:
 
         # add a link back to the Definition Instance that generated this Entity Class
         entity_cls.__definition__ = definition
-        # for CollectionDefinitions - all the SubEntities want a link back too
-        if hasattr(definition, "entities"):
-            for entity in definition.entities:
-                entity.__definition__ = definition
+
+        # store this Entity class in the factory
+        self._entity_classes[full_name] = entity_cls
 
         return entity_cls
-
-    def process_sub_entities(self, collections: List[CollectionDefinition]):
-        """
-        Convert SubEntity instances in this IOC to their Entity instances
-        """
-
-        # for collection in collections:
-        #     for entity in collection.entities:
-        #         if isinstance(entity, SubEntity):
-        #             entity_cls = name_to_entity_cls[entity.type]
-        #             entity = entity_cls(**entity.model_dump())
-        #             entity.__is_sub_entity__ = True
 
     def _make_entity_models(self, support: Support):
         """
@@ -179,9 +191,7 @@ class IocFactory:
         entity_names = []
 
         for definition in support.defs:
-            new_entity = self._make_entity_model(definition, support)
-            self._entity_classes[new_entity.__name__] = new_entity
-            entity_models.append(new_entity)
+            entity_models.append(self._make_entity_model(definition, support))
 
             if definition.name in entity_names:
                 # not tested because schema validation will always catch this first
