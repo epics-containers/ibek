@@ -9,7 +9,6 @@ from typing import Sequence
 
 from pydantic import Field
 
-from .collection import CollectionDefinition
 from .definition import Definition
 from .globals import BaseSettings
 
@@ -22,7 +21,7 @@ class Support(BaseSettings):
     """
 
     module: str = Field(description="Support module name, normally the repo name")
-    defs: Sequence[Definition | CollectionDefinition] = Field(
+    defs: Sequence[Definition] = Field(
         description="The definitions an IOC can create using this module"
     )
 

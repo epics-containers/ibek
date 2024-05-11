@@ -39,75 +39,6 @@
       "title": "BoolArg",
       "type": "object"
     },
-    "CollectionDefinition": {
-      "properties": {
-        "name": {
-          "description": "Publish Definition as type <module>.<name> for IOC instances",
-          "title": "Name",
-          "type": "string"
-        },
-        "description": {
-          "description": "A description of the Support module defined here",
-          "title": "Description",
-          "type": "string"
-        },
-        "args": {
-          "default": [],
-          "description": "The arguments IOC instance should supply",
-          "items": {
-            "anyOf": [
-              {
-                "$ref": "#/$defs/FloatArg"
-              },
-              {
-                "$ref": "#/$defs/StrArg"
-              },
-              {
-                "$ref": "#/$defs/IntArg"
-              },
-              {
-                "$ref": "#/$defs/BoolArg"
-              },
-              {
-                "$ref": "#/$defs/ObjectArg"
-              },
-              {
-                "$ref": "#/$defs/IdArg"
-              },
-              {
-                "$ref": "#/$defs/EnumArg"
-              }
-            ]
-          },
-          "title": "Args",
-          "type": "array"
-        },
-        "values": {
-          "default": [],
-          "description": "Calculated values to use as additional arguments",
-          "items": {
-            "$ref": "#/$defs/Value"
-          },
-          "title": "Values",
-          "type": "array"
-        },
-        "entities": {
-          "default": [],
-          "description": "The sub-entity instances that this collection is to instantiate",
-          "items": {
-            "$ref": "#/$defs/SubEntity"
-          },
-          "title": "Entities",
-          "type": "array"
-        }
-      },
-      "required": [
-        "name",
-        "description"
-      ],
-      "title": "CollectionDefinition",
-      "type": "object"
-    },
     "Comment": {
       "additionalProperties": false,
       "description": "A script snippet that will have '# ' prepended to every line\nfor insertion into the startup script",
@@ -289,6 +220,15 @@
           ],
           "default": null,
           "description": "PVI definition for Entity"
+        },
+        "sub_entities": {
+          "default": [],
+          "description": "The sub-entity instances that this collection is to instantiate",
+          "items": {
+            "$ref": "#/$defs/SubEntity"
+          },
+          "title": "Sub Entities",
+          "type": "array"
         }
       },
       "required": [
@@ -610,7 +550,7 @@
     },
     "SubEntity": {
       "additionalProperties": true,
-      "description": "A loosely defined class to declare the Entities\nin an ibek.support.yaml file in the CollectionDefinition section",
+      "description": "A loosely defined class to declare the Entities\nin an ibek.support.yaml file in the 'sub_entities' property of an Entity\nsection",
       "properties": {
         "type": {
           "description": "The type of this entity",
@@ -704,14 +644,7 @@
     "defs": {
       "description": "The definitions an IOC can create using this module",
       "items": {
-        "anyOf": [
-          {
-            "$ref": "#/$defs/Definition"
-          },
-          {
-            "$ref": "#/$defs/CollectionDefinition"
-          }
-        ]
+        "$ref": "#/$defs/Definition"
       },
       "title": "Defs",
       "type": "array"

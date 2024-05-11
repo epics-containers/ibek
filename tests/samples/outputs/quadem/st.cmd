@@ -10,6 +10,13 @@ asynOctetSetOutputEos(XBPM1.DRVip, 0, "\r")
 
 # drvTetrAMMConfigure(portName, IPportName, RingSize)
 drvTetrAMMConfigure("XBPM1.DRV", "XBPM1.DRVip", 10000)
+
+################################################################################
+# Just demonstrating that Entities can have their own pre_init: AND sub_entities
+# This is the pre_init for quadem.Plugins device with id XBPM1
+################################################################################
+
+#
 # ADCore path for manual NDTimeSeries.template to find base plugin template
 epicsEnvSet "EPICS_DB_INCLUDE_PATH", "$(ADCORE)/db"
 

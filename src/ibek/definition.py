@@ -12,6 +12,7 @@ from typing_extensions import Literal
 
 from .args import Arg, IdArg, Value
 from .globals import BaseSettings
+from .sub_entity import SubEntity
 
 
 def default(T: type):
@@ -147,6 +148,12 @@ class Definition(BaseSettings):
     )
     pvi: Optional[EntityPVI] = Field(
         description="PVI definition for Entity", default=None
+    )
+
+    # list of additional entities to instantiate for each instance of this definition
+    sub_entities: Sequence[SubEntity] = Field(
+        description="The sub-entity instances that this collection is to instantiate",
+        default=(),
     )
 
     def _get_id_arg(self):

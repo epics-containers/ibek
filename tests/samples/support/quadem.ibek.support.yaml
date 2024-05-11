@@ -99,7 +99,17 @@ defs:
           length of NDArray queue
         default: 16
 
-    entities:
+    pre_init:
+      - value: |
+
+          ################################################################################
+          # Just demonstrating that Entities can have their own pre_init: AND sub_entities
+          # This is the pre_init for quadem.Plugins device with id {{PORTPREFIX}}
+          ################################################################################
+
+          #
+
+    sub_entities:
       - { type: ADCore.NDStats, PORT: "{{PORTPREFIX}}.STATS.I1", R: Cur1, P: "{{DEVICE.P}}", NCHANS: "{{STAT_NCHAN}}", XSIZE: "{{STAT_XSIZE}}", YSIZE: 0, HIST_SIZE: "{{HIST_SIZE}}", NDARRAY_PORT: "{{DEVICE}}", ENABLED: 1 }
       - { type: ADCore.NDStats, PORT: "{{PORTPREFIX}}.STATS.I2", R: Cur2, P: "{{DEVICE.P}}", NCHANS: "{{STAT_NCHAN}}", XSIZE: "{{STAT_XSIZE}}", YSIZE: 0, HIST_SIZE: "{{HIST_SIZE}}", NDARRAY_PORT: "{{DEVICE}}", ENABLED: 1 }
       - { type: ADCore.NDStats, PORT: "{{PORTPREFIX}}.STATS.I3", R: Cur3, P: "{{DEVICE.P}}", NCHANS: "{{STAT_NCHAN}}", XSIZE: "{{STAT_XSIZE}}", YSIZE: 0, HIST_SIZE: "{{HIST_SIZE}}", NDARRAY_PORT: "{{DEVICE}}", ENABLED: 1 }
@@ -123,38 +133,3 @@ defs:
       - { type: ADCore.NDStdArrays, PORT: "{{PORTPREFIX}}.ARRAYS.DiffY", R: DiffY, P: "{{DEVICE.P}}", NDARRAY_PORT: "{{DEVICE}}", ENABLED: 1, TYPE: "Float64", FTVL: "DOUBLE", NELEMENTS: "{{STAT_XSIZE}}" }
       - { type: ADCore.NDStdArrays, PORT: "{{PORTPREFIX}}.ARRAYS.PosX", R: PosX, P: "{{DEVICE.P}}", NDARRAY_PORT: "{{DEVICE}}", ENABLED: 1, TYPE: "Float64", FTVL: "DOUBLE", NELEMENTS: "{{STAT_XSIZE}}" }
       - { type: ADCore.NDStdArrays, PORT: "{{PORTPREFIX}}.ARRAYS.PosY", R: PosY, P: "{{DEVICE.P}}", NDARRAY_PORT: "{{DEVICE}}", ENABLED: 1, TYPE: "Float64", FTVL: "DOUBLE", NELEMENTS: "{{STAT_XSIZE}}" }
-
-  # - { type: ADCore.NDStats, PORT: "{{PORTPREFIX}}.STATS.I1", R: Cur1 }
-  # - { type: ADCore.NDStats, PORT: "{{PORTPREFIX}}.STATS.I1", R: Cur1 }
-  # - { type: ADCore.NDStats, PORT: "{{PORTPREFIX}}.STATS.I2", R: Cur2 }
-  # - { type: ADCore.NDStats, PORT: "{{PORTPREFIX}}.STATS.I3", R: Cur3 }
-  # - { type: ADCore.NDStats, PORT: "{{PORTPREFIX}}.STATS.I4", R: Cur4 }
-  # - { type: ADCore.NDStats, PORT: "{{PORTPREFIX}}.STATS.SumX", R: SumX }
-  # - { type: ADCore.NDStats, PORT: "{{PORTPREFIX}}.STATS.SumY", R: SumY }
-  # - { type: ADCore.NDStats, PORT: "{{PORTPREFIX}}.STATS.SumAll", R: SumAll }
-  # - { type: ADCore.NDStats, PORT: "{{PORTPREFIX}}.STATS.DiffX", R: DiffX }
-  # - { type: ADCore.NDStats, PORT: "{{PORTPREFIX}}.STATS.DiffY", R: DiffY }
-  # - { type: ADCore.NDStats, PORT: "{{PORTPREFIX}}.STATS.PosX", R: PosX }
-  # - { type: ADCore.NDStats, PORT: "{{PORTPREFIX}}.STATS.PosY", R: PosY }
-
-  # pre_init:
-  #   - when: first
-  #   - value: |
-  #       # NDStatsConfigure(portName, queueSize, blockingCallbacks, NDArrayPort, NDArrayAddr, maxBuffers, maxMemory, priority, stackSize, maxThreads)
-  #       # NDTimeSeriesConfigure(portName, queueSize, blockingCallbacks, NDArrayPort, NDArrayAddr, maxSignals)
-
-  #   - value: |
-  #       {% for tab in ["I1", "I2", "I3", "I4" , "SumX", "SumY", "SumAll", "DiffX", "DiffY", "PosX", "PosY"] -%}
-  #       {# support the historical, inconsistent naming of PVs and asyn ports #}
-  #       {%- set r_val_stats = "Cur%d" % loop.index if tab.startswith("I") else tab -%}
-  #       {%- set r_val_array = "ARR%d" % loop.index if tab.startswith("I") else "ARR%s" % tab -%}
-
-  #       NDStatsConfigure({{PORTPREFIX}}.STATS.{{tab}}, {{QUEUE}}, 0, {{DEVICE.PORT}}, {{loop.index0}}, 0, 0, 0, 0, 1)
-  #       dbLoadRecords("$(ADCORE)/db/NDStats.template", "P={{DEVICE.P}},R=:{{r_val_stats}}:, PORT={{PORTPREFIX}}.STATS.{{tab}}, ADDR=0, NDARRAY_PORT={{DEVICE.PORT}}, NDARRAY_ADDR={{loop.index0}}, NCHANS={{STAT_NCHAN}}, ENABLED=1, XSIZE={{STAT_XSIZE}}, YSIZE=0, HIST_SIZE={{HIST_SIZE}}")
-
-  #       NDTimeSeriesConfigure({{PORTPREFIX}}.STATS.{{tab}}_TS, {{QUEUE}}, 0, {{PORTPREFIX}}.STATS.{{tab}}, 1, 23)
-  #       dbLoadRecords("$(ADCORE)/db/NDTimeSeries.template",  "P={{DEVICE.P}}, R=:{{r_val_stats}}:TS:, PORT={{PORTPREFIX}}.STATS.{{tab}}_TS,ADDR=1, NDARRAY_PORT={{PORTPREFIX}}.{{tab}}, NDARRAY_ADDR=0, NCHANS={{STAT_NCHAN}}, ENABLED=1")
-
-  #       NDStdArraysConfigure({{PORTPREFIX}}.ARRAYS.{{tab}}, {{QUEUE}}, 0, {{DEVICE.PORT}}, {{loop.index0}}, 0, 0, 0, 0, 1)
-  #       dbLoadRecords("$(ADCORE)/db/NDStdArrays.template", "P={{DEVICE.P}},R=:{{r_val_array}}:, PORT={{PORTPREFIX}}.ARRAYS.{{tab}},ADDR=0, NDARRAY_PORT={{DEVICE.PORT}}, NDARRAY_ADDR={{loop.index0}}, ENABLED=1, FTVL=DOUBLE, TYPE=Float64, NCHANS={{STAT_NCHAN}}, XSIZE={{STAT_XSIZE}}, YSIZE=0, HIST_SIZE={{HIST_SIZE}}, NELEMENTS={{STAT_XSIZE}}")
-  #       {% endfor %}
