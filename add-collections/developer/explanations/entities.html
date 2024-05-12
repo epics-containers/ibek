@@ -9,7 +9,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
-    <title>Modules, Definitions and Entities &#8212; ibek 2.0.3.dev6+ga6e9848f documentation</title>
+    <title>Modules, Definitions and Entities &#8212; ibek 2.0.3.dev7+g7674437a documentation</title>
   
   
   
@@ -1242,9 +1242,12 @@ the container or during container development.</p>
           <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;array&quot;</span>
         <span class="p">},</span>
         <span class="s2">&quot;pvi&quot;</span><span class="p">:</span> <span class="p">{</span>
-          <span class="s2">&quot;allOf&quot;</span><span class="p">:</span> <span class="p">[</span>
+          <span class="s2">&quot;anyOf&quot;</span><span class="p">:</span> <span class="p">[</span>
             <span class="p">{</span>
               <span class="s2">&quot;$ref&quot;</span><span class="p">:</span> <span class="s2">&quot;#/$defs/EntityPVI&quot;</span>
+            <span class="p">},</span>
+            <span class="p">{</span>
+              <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;null&quot;</span>
             <span class="p">}</span>
           <span class="p">],</span>
           <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="n">null</span><span class="p">,</span>
