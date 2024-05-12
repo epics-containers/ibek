@@ -66,10 +66,18 @@ class Entity(BaseSettings):
 
         entity_dict = self.model_dump()
         for arg, value in entity_dict.items():
+            model_field = self.model_fields[arg]
+
             if isinstance(value, str):
                 # Jinja expansion of any of the Entity's string args/values
                 value = UTILS.render(entity_dict, value)
-                setattr(self, arg, value)
+                setattr(self, arg, str(value))
+
+            if model_field.annotation == object:
+                # if the field is an object but the type is str then look up
+                # the actual object (this covers default values with obj ref)
+                if isinstance(value, str):
+                    setattr(self, arg, get_entity_by_id(value))
 
             if arg in ids:
                 # add this entity to the global id index
@@ -77,22 +85,15 @@ class Entity(BaseSettings):
                     raise ValueError(f"Duplicate id {value} in {list(id_to_entity)}")
                 id_to_entity[value] = self
 
-        # If an object field was populated by a default value it will currently
-        # just be the object id. Now convert id into the actual object.
-        for field in self.model_fields_set:
-            prop = getattr(self, field)
-            model_field = self.model_fields[field]
-
-            if model_field.annotation == object:
-                if isinstance(prop, str):
-                    setattr(self, field, get_entity_by_id(prop))
-
         return self
 
     def __str__(self):
         # if this entity has an id then its string representation is the value of id
         id_name = self.__definition__._get_id_arg()
         return getattr(self, id_name) if id_name else super().__str__()
+
+    def __repr__(self):
+        return str(self)
 
 
 class IOC(BaseSettings):
