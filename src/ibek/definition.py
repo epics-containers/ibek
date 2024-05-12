@@ -5,7 +5,7 @@ The Definition class describes what a given support module can instantiate.
 from __future__ import annotations
 
 from enum import Enum
-from typing import Mapping, Optional, Sequence, Union
+from typing import Any, Mapping, Optional, Sequence, Union
 
 from pydantic import Field, PydanticUndefinedAnnotation
 from typing_extensions import Literal
@@ -153,6 +153,11 @@ class Definition(BaseSettings):
     # list of additional entities to instantiate for each instance of this definition
     sub_entities: Sequence[SubEntity] = Field(
         description="The sub-entity instances that this collection is to instantiate",
+        default=(),
+    )
+
+    shared: Sequence[Any] = Field(
+        description="A place to create any anchors required for repeating YAML",
         default=(),
     )
 

@@ -103,33 +103,37 @@ defs:
       - value: |
 
           ################################################################################
-          # Just demonstrating that Entities can have their own pre_init: AND sub_entities
+          # Just demonstrating that Entities can have their own pre_init AND SubEntities.
           # This is the pre_init for quadem.Plugins device with id {{PORTPREFIX}}
           ################################################################################
 
           #
 
-    sub_entities:
-      - { type: ADCore.NDStats, PORT: "{{PORTPREFIX}}.STATS.I1", R: Cur1, P: "{{DEVICE.P}}", NCHANS: "{{STAT_NCHAN}}", XSIZE: "{{STAT_XSIZE}}", YSIZE: 0, HIST_SIZE: "{{HIST_SIZE}}", NDARRAY_PORT: "{{DEVICE}}", ENABLED: 1 }
-      - { type: ADCore.NDStats, PORT: "{{PORTPREFIX}}.STATS.I2", R: Cur2, P: "{{DEVICE.P}}", NCHANS: "{{STAT_NCHAN}}", XSIZE: "{{STAT_XSIZE}}", YSIZE: 0, HIST_SIZE: "{{HIST_SIZE}}", NDARRAY_PORT: "{{DEVICE}}", ENABLED: 1 }
-      - { type: ADCore.NDStats, PORT: "{{PORTPREFIX}}.STATS.I3", R: Cur3, P: "{{DEVICE.P}}", NCHANS: "{{STAT_NCHAN}}", XSIZE: "{{STAT_XSIZE}}", YSIZE: 0, HIST_SIZE: "{{HIST_SIZE}}", NDARRAY_PORT: "{{DEVICE}}", ENABLED: 1 }
-      - { type: ADCore.NDStats, PORT: "{{PORTPREFIX}}.STATS.I4", R: Cur4, P: "{{DEVICE.P}}", NCHANS: "{{STAT_NCHAN}}", XSIZE: "{{STAT_XSIZE}}", YSIZE: 0, HIST_SIZE: "{{HIST_SIZE}}", NDARRAY_PORT: "{{DEVICE}}", ENABLED: 1 }
-      - { type: ADCore.NDStats, PORT: "{{PORTPREFIX}}.STATS.SumX", R: SumX, P: "{{DEVICE.P}}", NCHANS: "{{STAT_NCHAN}}", XSIZE: "{{STAT_XSIZE}}", YSIZE: 0, HIST_SIZE: "{{HIST_SIZE}}", NDARRAY_PORT: "{{DEVICE}}", ENABLED: 1 }
-      - { type: ADCore.NDStats, PORT: "{{PORTPREFIX}}.STATS.SumY", R: SumY, P: "{{DEVICE.P}}", NCHANS: "{{STAT_NCHAN}}", XSIZE: "{{STAT_XSIZE}}", YSIZE: 0, HIST_SIZE: "{{HIST_SIZE}}", NDARRAY_PORT: "{{DEVICE}}", ENABLED: 1 }
-      - { type: ADCore.NDStats, PORT: "{{PORTPREFIX}}.STATS.SumAll", R: SumAll, P: "{{DEVICE.P}}", NCHANS: "{{STAT_NCHAN}}", XSIZE: "{{STAT_XSIZE}}", YSIZE: 0, HIST_SIZE: "{{HIST_SIZE}}", NDARRAY_PORT: "{{DEVICE}}", ENABLED: 1 }
-      - { type: ADCore.NDStats, PORT: "{{PORTPREFIX}}.STATS.DiffX", R: DiffX, P: "{{DEVICE.P}}", NCHANS: "{{STAT_NCHAN}}", XSIZE: "{{STAT_XSIZE}}", YSIZE: 0, HIST_SIZE: "{{HIST_SIZE}}", NDARRAY_PORT: "{{DEVICE}}", ENABLED: 1 }
-      - { type: ADCore.NDStats, PORT: "{{PORTPREFIX}}.STATS.DiffY", R: DiffY, P: "{{DEVICE.P}}", NCHANS: "{{STAT_NCHAN}}", XSIZE: "{{STAT_XSIZE}}", YSIZE: 0, HIST_SIZE: "{{HIST_SIZE}}", NDARRAY_PORT: "{{DEVICE}}", ENABLED: 1 }
-      - { type: ADCore.NDStats, PORT: "{{PORTPREFIX}}.STATS.PosX", R: PosX, P: "{{DEVICE.P}}", NCHANS: "{{STAT_NCHAN}}", XSIZE: "{{STAT_XSIZE}}", YSIZE: 0, HIST_SIZE: "{{HIST_SIZE}}", NDARRAY_PORT: "{{DEVICE}}", ENABLED: 1 }
-      - { type: ADCore.NDStats, PORT: "{{PORTPREFIX}}.STATS.PosY", R: PosY, P: "{{DEVICE.P}}", NCHANS: "{{STAT_NCHAN}}", XSIZE: "{{STAT_XSIZE}}", YSIZE: 0, HIST_SIZE: "{{HIST_SIZE}}", NDARRAY_PORT: "{{DEVICE}}", ENABLED: 1 }
+    shared:
+      - &stats { type: ADCore.NDStats, P: "{{DEVICE.P}}", NCHANS: "{{STAT_NCHAN}}", XSIZE: "{{STAT_XSIZE}}", YSIZE: 0, HIST_SIZE: "{{HIST_SIZE}}", NDARRAY_PORT: "{{DEVICE}}", ENABLED: 1 }
+      - &arrays { type: ADCore.NDStdArrays, P: "{{DEVICE.P}}", NDARRAY_PORT: "{{DEVICE}}", ENABLED: 1, TYPE: "Float64", FTVL: "DOUBLE", NELEMENTS: "{{STAT_XSIZE}}" }
 
-      - { type: ADCore.NDStdArrays, PORT: "{{PORTPREFIX}}.ARRAYS.Arr1", R: Arr1, P: "{{DEVICE.P}}", NDARRAY_PORT: "{{DEVICE}}", ENABLED: 1, TYPE: "Float64", FTVL: "DOUBLE", NELEMENTS: "{{STAT_XSIZE}}" }
-      - { type: ADCore.NDStdArrays, PORT: "{{PORTPREFIX}}.ARRAYS.Arr2", R: Arr2, P: "{{DEVICE.P}}", NDARRAY_PORT: "{{DEVICE}}", ENABLED: 1, TYPE: "Float64", FTVL: "DOUBLE", NELEMENTS: "{{STAT_XSIZE}}" }
-      - { type: ADCore.NDStdArrays, PORT: "{{PORTPREFIX}}.ARRAYS.Arr3", R: Arr3, P: "{{DEVICE.P}}", NDARRAY_PORT: "{{DEVICE}}", ENABLED: 1, TYPE: "Float64", FTVL: "DOUBLE", NELEMENTS: "{{STAT_XSIZE}}" }
-      - { type: ADCore.NDStdArrays, PORT: "{{PORTPREFIX}}.ARRAYS.Arr4", R: Arr4, P: "{{DEVICE.P}}", NDARRAY_PORT: "{{DEVICE}}", ENABLED: 1, TYPE: "Float64", FTVL: "DOUBLE", NELEMENTS: "{{STAT_XSIZE}}" }
-      - { type: ADCore.NDStdArrays, PORT: "{{PORTPREFIX}}.ARRAYS.SumX", R: SumX, P: "{{DEVICE.P}}", NDARRAY_PORT: "{{DEVICE}}", ENABLED: 1, TYPE: "Float64", FTVL: "DOUBLE", NELEMENTS: "{{STAT_XSIZE}}" }
-      - { type: ADCore.NDStdArrays, PORT: "{{PORTPREFIX}}.ARRAYS.SumY", R: SumY, P: "{{DEVICE.P}}", NDARRAY_PORT: "{{DEVICE}}", ENABLED: 1, TYPE: "Float64", FTVL: "DOUBLE", NELEMENTS: "{{STAT_XSIZE}}" }
-      - { type: ADCore.NDStdArrays, PORT: "{{PORTPREFIX}}.ARRAYS.SumAll", R: SumAll, P: "{{DEVICE.P}}", NDARRAY_PORT: "{{DEVICE}}", ENABLED: 1, TYPE: "Float64", FTVL: "DOUBLE", NELEMENTS: "{{STAT_XSIZE}}" }
-      - { type: ADCore.NDStdArrays, PORT: "{{PORTPREFIX}}.ARRAYS.DiffX", R: DiffX, P: "{{DEVICE.P}}", NDARRAY_PORT: "{{DEVICE}}", ENABLED: 1, TYPE: "Float64", FTVL: "DOUBLE", NELEMENTS: "{{STAT_XSIZE}}" }
-      - { type: ADCore.NDStdArrays, PORT: "{{PORTPREFIX}}.ARRAYS.DiffY", R: DiffY, P: "{{DEVICE.P}}", NDARRAY_PORT: "{{DEVICE}}", ENABLED: 1, TYPE: "Float64", FTVL: "DOUBLE", NELEMENTS: "{{STAT_XSIZE}}" }
-      - { type: ADCore.NDStdArrays, PORT: "{{PORTPREFIX}}.ARRAYS.PosX", R: PosX, P: "{{DEVICE.P}}", NDARRAY_PORT: "{{DEVICE}}", ENABLED: 1, TYPE: "Float64", FTVL: "DOUBLE", NELEMENTS: "{{STAT_XSIZE}}" }
-      - { type: ADCore.NDStdArrays, PORT: "{{PORTPREFIX}}.ARRAYS.PosY", R: PosY, P: "{{DEVICE.P}}", NDARRAY_PORT: "{{DEVICE}}", ENABLED: 1, TYPE: "Float64", FTVL: "DOUBLE", NELEMENTS: "{{STAT_XSIZE}}" }
+    sub_entities:
+      - { <<: *stats, PORT: "{{PORTPREFIX}}.STATS.I1", R: Cur1 }
+      - { <<: *stats, PORT: "{{PORTPREFIX}}.STATS.I2", R: Cur2 }
+      - { <<: *stats, PORT: "{{PORTPREFIX}}.STATS.I3", R: Cur3 }
+      - { <<: *stats, PORT: "{{PORTPREFIX}}.STATS.I4", R: Cur4 }
+      - { <<: *stats, PORT: "{{PORTPREFIX}}.STATS.SumX", R: SumX }
+      - { <<: *stats, PORT: "{{PORTPREFIX}}.STATS.SumY", R: SumY }
+      - { <<: *stats, PORT: "{{PORTPREFIX}}.STATS.SumAll", R: SumAll }
+      - { <<: *stats, PORT: "{{PORTPREFIX}}.STATS.DiffX", R: DiffX }
+      - { <<: *stats, PORT: "{{PORTPREFIX}}.STATS.DiffY", R: DiffY }
+      - { <<: *stats, PORT: "{{PORTPREFIX}}.STATS.PosX", R: PosX }
+      - { <<: *stats, PORT: "{{PORTPREFIX}}.STATS.PosY", R: PosY }
+
+      - { <<: *arrays, PORT: "{{PORTPREFIX}}.ARRAYS.Arr1", R: Arr1 }
+      - { <<: *arrays, PORT: "{{PORTPREFIX}}.ARRAYS.Arr2", R: Arr2 }
+      - { <<: *arrays, PORT: "{{PORTPREFIX}}.ARRAYS.Arr3", R: Arr3 }
+      - { <<: *arrays, PORT: "{{PORTPREFIX}}.ARRAYS.Arr4", R: Arr4 }
+      - { <<: *arrays, PORT: "{{PORTPREFIX}}.ARRAYS.SumX", R: SumX }
+      - { <<: *arrays, PORT: "{{PORTPREFIX}}.ARRAYS.SumY", R: SumY }
+      - { <<: *arrays, PORT: "{{PORTPREFIX}}.ARRAYS.SumAll", R: SumAll }
+      - { <<: *arrays, PORT: "{{PORTPREFIX}}.ARRAYS.DiffX", R: DiffX }
+      - { <<: *arrays, PORT: "{{PORTPREFIX}}.ARRAYS.DiffY", R: DiffY }
+      - { <<: *arrays, PORT: "{{PORTPREFIX}}.ARRAYS.PosX", R: PosX }
+      - { <<: *arrays, PORT: "{{PORTPREFIX}}.ARRAYS.PosY", R: PosY }

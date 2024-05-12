@@ -12,7 +12,7 @@ asynOctetSetOutputEos(XBPM1.DRVip, 0, "\r")
 drvTetrAMMConfigure("XBPM1.DRV", "XBPM1.DRVip", 10000)
 
 ################################################################################
-# Just demonstrating that Entities can have their own pre_init: AND sub_entities
+# Just demonstrating that Entities can have their own pre_init AND SubEntities.
 # This is the pre_init for quadem.Plugins device with id XBPM1
 ################################################################################
 
