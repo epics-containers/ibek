@@ -82,14 +82,15 @@ class IocFactory:
 
     def _process_collections(self, ioc_instance: IOC):
         """
-        Process all the collections in the IOC instance
+        Process all the sub entity collections in the IOC instance
         """
         all_entities: List[Entity] = []
 
-        for entity in ioc_instance.entities:
+        def scan_sub_entities(entity: Entity):
+            # recursive function to scan for SubEntities in an entity
             definition = entity.__definition__
 
-            # add the parent standard entity - just add it to the list
+            # add the parent standard entity
             all_entities.append(entity)
 
             # add in SubEntities if any
@@ -103,8 +104,11 @@ class IocFactory:
                     sub_args_dict[key] = UTILS.render(entity, arg)
                 # cast the SubEntity to its concrete Entity subclass
                 cast_entity = entity_cls(**sub_args_dict)
-                # add it to the IOCs entity list
-                all_entities.append(cast_entity)
+                # recursively scan the SubEntity for more SubEntities
+                scan_sub_entities(cast_entity)
+
+        for entity in ioc_instance.entities:
+            scan_sub_entities(entity)
 
         ioc_instance.entities = all_entities
 

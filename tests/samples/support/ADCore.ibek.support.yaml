@@ -1972,12 +1972,12 @@ defs:
           epicsEnvSet "EPICS_DB_INCLUDE_PATH", "$(ADCORE)/db"
 
           # NDStatsConfigure(portName, queueSize, blockingCallbacks, NDArrayPort, NDArrayAddr, maxBuffers, maxMemory, priority, stackSize, maxThreads)
-          # NDTimeSeriesConfigure(portName, queueSize, blockingCallbacks, NDArrayPort, NDArrayAddr, maxSignals)
 
       - value: |
           NDStatsConfigure("{{PORT}}", {{QUEUE}}, {{BLOCK}}, "{{NDARRAY_PORT}}", {{NDARRAY_ADDR}}, 0, 0, 0, 0, {{MAX_THREADS}})
-          NDTimeSeriesConfigure("{{PORT}}_TS", {{QUEUE}}, {{BLOCK}}, "{{PORT}}", 1, 23)
-          dbLoadRecords("$(ADCORE)/db/NDTimeSeries.template",  "P={{P}},R={{R}}, PORT={{PORT}} ,ADDR={{ADDR}},TIMEOUT={{TIMEOUT}},NDARRAY_PORT={{NDARRAY_PORT}},NDARRAY_ADDR={{NDARRAY_ADDR}},NCHANS={{NCHANS}},ENABLED={{ENABLED}}")
+
+    sub_entities:
+      - { type: ADCore.NDTimeSeries, P: "{{P}}", R: "{{R}}TS:", PORT: "{{PORT}}_TS", NDARRAY_PORT: "{{PORT}}", NAME: "{{PORT}}_TS", NCHANS: "{{NCHANS}}", TIMEOUT: "{{TIMEOUT}}", ADDR: 0, NDARRAY_ADDR: 1, ENABLED: "{{ENABLED}}", QUEUE: "{{QUEUE}}", BLOCK: "{{BLOCK}}", NSIGNALS: 23 }
 
     pvi:
       yaml_path: NDPluginStats.pvi.device.yaml
@@ -2124,8 +2124,10 @@ defs:
           NAME:
 
     pre_init:
-      - value: |
+      - when: first
+        value: |
           # NDTimeSeriesConfigure(portName, queueSize, blockingCallbacks, NDArrayPort, NDArrayAddr, maxSignals, maxBuffers, maxMemory, priority, stackSize)
+      - value: |
           NDTimeSeriesConfigure("{{PORT}}", {{QUEUE}}, {{BLOCK}}, "{{NDARRAY_PORT}}", {{NDARRAY_ADDR}}, {{NSIGNALS}}, 0, 0, {{PRIORITY}}, {{STACKSIZE}})
 
   - name: NDAttributes
