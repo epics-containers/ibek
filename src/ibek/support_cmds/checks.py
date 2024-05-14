@@ -96,7 +96,7 @@ def check_deps(deps: list[str]) -> None:
                 raise Exception(f"{dependency.upper()} not in {RELEASE}")
 
         # Check if folder with the module name exist in /epics/support
-        support_dir = SUPPORT / dependency
+        support_dir = GLOBALS.SUPPORT / dependency
         if Path.exists(support_dir):
             # Check if contains at least one of db, dbd or lib
             res = [Path.exists(support_dir / _dir) for _dir in ["db", "dbd", "lib"]]
@@ -106,7 +106,7 @@ def check_deps(deps: list[str]) -> None:
                 raise Exception(f"db, dbd or lib directory not found in {support_dir}")
 
         else:
-            raise Exception(f"{dependency} directory not in {SUPPORT}")
+            raise Exception(f"{dependency} directory not in {GLOBALS.SUPPORT}")
 
         print(f"SUCCESS: {dependency} checked")
 

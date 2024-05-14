@@ -30,12 +30,11 @@ class EntityFactory:
         # EntityFactories
         clear_entity_model_ids()
 
-    def make_entity_models(self, definition_yaml: List[Path]) -> List[Entity]:
+    def make_entity_models(self, definition_yaml: List[Path]) -> List[Type[Entity]]:
         """
         Read a set of *.ibek.support.yaml files and generate Entity classes
         from their Definition entries
         """
-        entity_models = []
 
         for definition in definition_yaml:
             support_dict = YAML(typ="safe").load(definition)
@@ -45,9 +44,9 @@ class EntityFactory:
             # deserialize the support module definition file
             support = Support(**support_dict)
             # make Entity classes described in the support module definition file
-            entity_models += self._make_entity_models(support)
+            self._make_entity_models(support)
 
-        return self._entity_models.values()
+        return list(self._entity_models.values())
 
     def _make_entity_model(
         self, definition: EntityDefinition, support: Support
@@ -94,7 +93,8 @@ class EntityFactory:
                 enum_swapped = {}
                 for k, v in arg.values.items():
                     enum_swapped[str(v) if v else str(k)] = k
-                val_enum = EnumVal(arg.name, enum_swapped)
+                # TODO review enums especially with respect to Pydantic 2.7.1
+                val_enum = EnumVal(arg.name, enum_swapped)  # type: ignore
                 arg_type = val_enum
 
             else:
@@ -126,23 +126,22 @@ class EntityFactory:
 
         return entity_cls
 
-    def _make_entity_models(self, support: Support):
+    def _make_entity_models(self, support: Support) -> List[Type[Entity]]:
         """
         Create Entity subclasses for all Definition instances in the given
         Support instance. Returns a list of the Entity subclasses Models.
         """
-
-        entity_models = []
         entity_names = []
+        entity_models = []
 
         for definition in support.defs:
-            entity_models.append(self._make_entity_model(definition, support))
-
             if definition.name in entity_names:
                 # not tested because schema validation will always catch this first
                 raise ValueError(f"Duplicate entity name {definition.name}")
-            entity_names.append(definition.name)
 
+            entity_models.append(self._make_entity_model(definition, support))
+
+            entity_names.append(definition.name)
         return entity_models
 
     def process_collections(self, entities: List[Entity]):
