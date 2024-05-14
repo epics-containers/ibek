@@ -23,7 +23,6 @@ from ibek.globals import (
     PVI_YAML_PATTERN,
     RELEASE,
     RUNTIME_DEBS,
-    SUPPORT,
     SUPPORT_YAML_PATTERN,
     NaturalOrderGroup,
 )
@@ -156,7 +155,7 @@ def git_clone(
     """
     org = org if org.endswith("/") else org + "/"
     url = org + repo_name
-    location = SUPPORT / repo_name
+    location = GLOBALS.SUPPORT / repo_name
     if location.exists() and not force:
         print(f"skipping {location}, already cloned")
         return
@@ -164,7 +163,11 @@ def git_clone(
         rmtree(location, ignore_errors=True)
 
     Repo.clone_from(
-        url, SUPPORT / repo_name, branch=version, depth=1, multi_options=ctx.args
+        url,
+        GLOBALS.SUPPORT / repo_name,
+        branch=version,
+        depth=1,
+        multi_options=ctx.args,
     )
 
 
@@ -185,7 +188,7 @@ def register(
     inside an epics-containers build
     """
     macro = name.upper() if macro is None else macro
-    path = SUPPORT / name if (path is None) else path
+    path = GLOBALS.SUPPORT / name if (path is None) else path
 
     # add or replace the macro for this module in the global RELEASE file
     add_macro(macro, str(path), RELEASE)
@@ -290,7 +293,7 @@ def compile(
 
     Add any extra compiler options to the end of the argument list
     """
-    path = SUPPORT / module
+    path = GLOBALS.SUPPORT / module
 
     command = f"make -C {path} -j $(nproc) " + " ".join(ctx.args)
     result = subprocess.call(["bash", "-c", command])

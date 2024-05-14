@@ -16,9 +16,17 @@ class _Globals:
 
     def __init__(self) -> None:
         self.EPICS_ROOT = Path(os.getenv("EPICS_ROOT", "/epics/"))
-        """Root of epics directory tree.
+        """
+        Root of epics directory tree.
 
-        This can be overriden by defining an environment variable "EPICS_ROOT".
+        Can be overridden by defining an environment variable "EPICS_ROOT".
+        """
+
+        self.SUPPORT = Path(os.getenv("SUPPORT", self.EPICS_ROOT / "support"))
+        """
+        Directory containing support module clones
+
+        Can be overridden by defining an environment variable "SUPPORT"."
         """
 
         self.IBEK_DEFS = self.EPICS_ROOT / "ibek-defs"
@@ -53,16 +61,15 @@ GLOBALS = _Globals()
 # get the container paths from environment variables
 EPICS_BASE = Path(os.getenv("EPICS_BASE", "/epics/epics-base"))
 IOC_FOLDER = Path(os.getenv("IOC", "/epics/ioc"))
-SUPPORT = Path(os.getenv("SUPPORT", "/epics/support"))
 CONFIG_DIR_NAME = "config"
 IOC_DIR_NAME = "ioc"
 
 # the global RELEASE file which lists all support modules
-RELEASE = SUPPORT / "configure/RELEASE"
+RELEASE = GLOBALS.SUPPORT / "configure/RELEASE"
 # a bash script to export the macros defined in RELEASE as environment vars
-RELEASE_SH = SUPPORT / "configure/RELEASE.shell"
+RELEASE_SH = GLOBALS.SUPPORT / "configure/RELEASE.shell"
 # global MODULES file used to determine order of build
-MODULES = SUPPORT / "configure/MODULES"
+MODULES = GLOBALS.SUPPORT / "configure/MODULES"
 
 # Folder containing templates for IOC src etc.
 TEMPLATES = Path(__file__).parent / "templates"
@@ -72,9 +79,9 @@ IBEK_GLOBALS = Path("_global")
 SUPPORT_YAML_PATTERN = "*ibek.support.yaml"
 PVI_YAML_PATTERN = "*pvi.device.yaml"
 
-IOC_DBDS = SUPPORT / "configure/dbd_list"
-IOC_LIBS = SUPPORT / "configure/lib_list"
-RUNTIME_DEBS = SUPPORT / "configure/runtime_debs"
+IOC_DBDS = GLOBALS.SUPPORT / "configure/dbd_list"
+IOC_LIBS = GLOBALS.SUPPORT / "configure/lib_list"
+RUNTIME_DEBS = GLOBALS.SUPPORT / "configure/runtime_debs"
 
 
 class BaseSettings(BaseModel):

@@ -14,7 +14,7 @@ from pydantic_core import PydanticUndefined
 from ruamel.yaml.main import YAML
 
 from .args import EnumArg, IdArg, ObjectArg
-from .ioc import Entity, EnumVal, get_entity_by_id
+from .ioc import Entity, EnumVal, clear_entity_model_ids, get_entity_by_id
 from .support import Definition, Support
 from .utils import UTILS
 
@@ -22,18 +22,21 @@ from .utils import UTILS
 class EntityFactory:
     def __init__(self) -> None:
         """
-        EntityFactory tracks all the Entity Classes created in self._entity_classes
+        EntityFactory tracks all the Entity Models created in self._entity_classes
         """
-        self._entity_classes: Dict[str, Type[Entity]] = {}
+        self._entity_models: Dict[str, Type[Entity]] = {}
+        # starting a new EntityFactory implies we should throw away any existing
+        # Entity instances - this is required for tests which create multiple
+        # EntityFactories
+        clear_entity_model_ids()
 
-    def make_entity_classes(self, definition_yaml: List[Path]) -> List[Entity]:
+    def make_entity_models(self, definition_yaml: List[Path]) -> List[Entity]:
         """
         Read a set of *.ibek.support.yaml files and generate Entity classes
         from their Definition entries
         """
         entity_models = []
 
-        # TODO  clear_entity_model_ids()
         for definition in definition_yaml:
             support_dict = YAML(typ="safe").load(definition)
 
@@ -44,7 +47,7 @@ class EntityFactory:
             # make Entity classes described in the support module definition file
             entity_models += self._make_entity_models(support)
 
-        return self._entity_classes.values()
+        return self._entity_models.values()
 
     def _make_entity_model(
         self, definition: Definition, support: Support
@@ -121,7 +124,7 @@ class EntityFactory:
         entity_cls.__definition__ = definition
 
         # store this Entity class in the factory
-        self._entity_classes[full_name] = entity_cls
+        self._entity_models[full_name] = entity_cls
 
         return entity_cls
 
@@ -160,7 +163,7 @@ class EntityFactory:
             # add in SubEntities if any
             for sub_entity in definition.sub_entities:
                 # find the Entity Class that the SubEntity represents
-                entity_cls = self._entity_classes[sub_entity.type]
+                entity_cls = self._entity_models[sub_entity.type]
                 # get the SubEntity arguments
                 sub_args_dict = sub_entity.model_dump()
                 # jinja render any references to parent Args in the SubEntity Args

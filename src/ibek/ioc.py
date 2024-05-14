@@ -30,7 +30,7 @@ def get_entity_by_id(id: str) -> Entity:
 
 
 def clear_entity_model_ids():
-    """Resets the global id_to_entity dict. Used for testing."""
+    """Resets the global id_to_entity dict"""
 
     id_to_entity.clear()
 

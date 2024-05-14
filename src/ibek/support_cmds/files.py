@@ -8,7 +8,7 @@ from typing import List
 
 import typer
 
-from ibek.globals import SUPPORT
+from ibek.globals import GLOBALS
 
 
 class Local(str, Enum):
@@ -35,7 +35,7 @@ def get_config_site_file(
     Default is /epics/module/configure/CONFIG_SITE.local.linux-x86_64.Common
     """
     name = f"CONFIG_SITE{host.value}{target.value}"
-    filepath = SUPPORT / module / "configure" / name
+    filepath = GLOBALS.SUPPORT / module / "configure" / name
 
     return filepath
 
@@ -51,7 +51,7 @@ def get_release_file(
     default is /epics/module/configure/RELEASE.local
     """
     name = f"RELEASE{host.value}{target.value}{local.value}"
-    filepath = SUPPORT / module / "configure" / name
+    filepath = GLOBALS.SUPPORT / module / "configure" / name
 
     return filepath
 

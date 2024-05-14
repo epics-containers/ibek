@@ -8,7 +8,7 @@ from pathlib import Path
 
 import typer
 
-from ibek.globals import MODULES, RELEASE, RELEASE_SH, SUPPORT, TEMPLATES
+from ibek.globals import GLOBALS, MODULES, RELEASE, RELEASE_SH, TEMPLATES
 
 # turn RELEASE macros into bash macros
 SHELL_FIND = re.compile(r"\$\(([^\)]*)\)")
@@ -53,7 +53,7 @@ def do_dependencies():
     # generate the MODULES file for inclusion into the root Makefile
     # it simply defines a variable to hold each of the support module
     # directories in the order they are presented in RELEASE, except that
-    s = str(SUPPORT)
+    s = str(GLOBALS.SUPPORT)
     paths = [
         path[len(s) + 1 :]
         for path in global_release_paths.values()
@@ -87,7 +87,6 @@ def check_deps(deps: list[str]) -> None:
     Check if specified dependencies have been supplied
     """
     for dependency in deps:
-
         # Check if UCASE module name exist in RELEASE
         with open(RELEASE) as file:
             release_file = file.read()
@@ -99,7 +98,6 @@ def check_deps(deps: list[str]) -> None:
         # Check if folder with the module name exist in /epics/support
         support_dir = SUPPORT / dependency
         if Path.exists(support_dir):
-
             # Check if contains at least one of db, dbd or lib
             res = [Path.exists(support_dir / _dir) for _dir in ["db", "dbd", "lib"]]
             if any(res):
@@ -142,13 +140,13 @@ def validate_support():
     """
     template_support = TEMPLATES / "support"
     release = Path("configure") / "RELEASE"
-    global_release = SUPPORT / release
+    global_release = GLOBALS.SUPPORT / release
 
-    if not SUPPORT.exists():
-        typer.echo(f"INITIALIZING {SUPPORT} folder with template")
-        shutil.copytree(template_support, SUPPORT)
+    if not GLOBALS.SUPPORT.exists():
+        typer.echo(f"INITIALIZING {GLOBALS.SUPPORT} folder with template")
+        shutil.copytree(template_support, GLOBALS.SUPPORT)
     else:
         if not global_release.exists():
             global_release.parent.mkdir(parents=True, exist_ok=True)
-            typer.echo(f"INITIALIZING {SUPPORT / release} folder with template")
+            typer.echo(f"INITIALIZING {GLOBALS.SUPPORT / release} folder with template")
             shutil.copy2(template_support / release, global_release)

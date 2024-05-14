@@ -5,6 +5,8 @@ from pytest import fixture
 from ruamel.yaml import YAML
 from typer.testing import CliRunner
 
+from ibek.entity_factory import EntityFactory
+
 # This must be above the following imports so that it takes effect before
 # `globals.EPICS_ROOT` is imported (or anything built on top of it)
 os.environ["EPICS_ROOT"] = str(Path(__file__).parent / "samples" / "epics")
@@ -12,8 +14,6 @@ os.environ["SUPPORT"] = str(Path(__file__).parent / "samples" / "epics" / "suppo
 
 # The `noqa`s on these imports are necessary because of the above
 from ibek.__main__ import cli  # noqa: E402
-from ibek.ioc import clear_entity_model_ids  # noqa: E402
-from ibek.ioc_factory import IocFactory  # noqa: E402
 from ibek.support import Support  # noqa: E402
 
 runner = CliRunner()
@@ -59,19 +59,16 @@ def ioc_defs(samples):
 
 # only one IocFactory instance for each test
 @fixture(scope="function")
-def factory():
-    return IocFactory()
+def entity_factory():
+    return EntityFactory()
 
 
 @fixture
-def asyn_classes(support_defs, factory):
-    # clear the entity classes to make sure there's nothing left
-    clear_entity_model_ids()
-
+def asyn_classes(support_defs, entity_factory):
     asyn_support = get_support(support_defs / "asyn.ibek.support.yaml")
 
     # make entity subclasses for everything defined in it
-    namespace = factory._make_entity_models(asyn_support)
+    namespace = entity_factory._make_entity_models(asyn_support)
 
     # return the namespace so that callers have access to all of the
     # generated dataclasses
@@ -79,16 +76,13 @@ def asyn_classes(support_defs, factory):
 
 
 @fixture
-def motor_classes(support_defs, factory):
-    # clear the entity classes to make sure there's nothing left
-    clear_entity_model_ids()
-
+def motor_classes(support_defs, entity_factory):
     asyn_support = get_support(support_defs / "asyn.ibek.support.yaml")
     motor_support = get_support(support_defs / "motorSim.ibek.support.yaml")
 
     # make entity subclasses for everything defined in it
-    namespace = factory._make_entity_models(asyn_support)
-    namespace.extend(factory._make_entity_models(motor_support))
+    namespace = entity_factory._make_entity_models(asyn_support)
+    namespace.extend(entity_factory._make_entity_models(motor_support))
 
     # return the namespace so that callers have access to all of the
     # generated dataclasses

@@ -7,13 +7,13 @@ from pathlib import Path
 import pytest
 from ruamel.yaml import YAML
 
-from ibek.ioc import clear_entity_model_ids
+from ibek.ioc_factory import IocFactory
 from ibek.support import Support
 from ibek.utils import UTILS
 from tests.conftest import run_cli
 
 
-def test_counter_reuse(tmp_path: Path, samples: Path):
+def test_counter_reuse(samples: Path):
     """
     Check you cannot redefine a counter with the same name and different params
     """
@@ -30,7 +30,7 @@ def test_counter_reuse(tmp_path: Path, samples: Path):
     )
 
 
-def test_counter_overuse(tmp_path: Path, samples: Path):
+def test_counter_overuse(samples: Path):
     """
     Check that counter limits are enforced
     """
@@ -41,7 +41,8 @@ def test_counter_overuse(tmp_path: Path, samples: Path):
 
     with pytest.raises(ValueError) as ctx:
         run_cli("runtime", "generate", entity_file, definition_file1)
-    assert str(ctx.value) == "Counter 195 exceeded stop value of 194"
+
+    assert "Counter 195 exceeded stop value of 194" in str(ctx.value)
 
 
 def test_bad_ref(tmp_path: Path, samples: Path):
@@ -73,23 +74,21 @@ def test_bad_db(tmp_path: Path, samples: Path):
     assert "'non-existant' in database template 'test.db' not found" in str(ctx.value)
 
 
-def test_loading_module_twice(factory, tmp_path: Path, samples: Path):
+def test_loading_module_twice(entity_factory, tmp_path: Path, samples: Path):
     """
     Verify we get a sensible error if we try to load a module twice
     without clearing the entity model ids
     """
-
-    clear_entity_model_ids()
-
     definition_file = samples / "support" / "utils.ibek.support.yaml"
     instance_file = samples / "iocs" / "utils.ibek.ioc.yaml"
 
     support = Support(**YAML(typ="safe").load(definition_file))
-    entities1 = factory._make_entity_models(support)
-    entities2 = factory._make_entity_models(support)
+    entities1 = entity_factory._make_entity_models(support)
+    entities2 = entity_factory._make_entity_models(support)
 
-    generic_ioc1 = factory._make_ioc_model(entities1)
-    generic_ioc2 = factory._make_ioc_model(entities2)
+    ioc_factory = IocFactory()
+    generic_ioc1 = ioc_factory.make_ioc_model(entities1)
+    generic_ioc2 = ioc_factory.make_ioc_model(entities2)
 
     instance = YAML(typ="safe").load(instance_file)
     generic_ioc1(**instance)
@@ -103,8 +102,6 @@ def test_defaults(tmp_path: Path, samples: Path):
     """
     Check you cannot redefine a counter with the same name and different params
     """
-
-    clear_entity_model_ids()
     entity_file = samples / "iocs" / "bad_default.ibek.ioc.yaml"
     definition_file1 = samples / "support" / "asyn.ibek.support.yaml"
 

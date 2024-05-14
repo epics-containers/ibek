@@ -18,7 +18,6 @@ from ibek.globals import (
     PVI_YAML_PATTERN,
     SUPPORT_YAML_PATTERN,
 )
-from ibek.ioc import clear_entity_model_ids
 from ibek.runtime_cmds.commands import generate
 from ibek.support_cmds.commands import generate_links
 from tests.conftest import run_cli
@@ -43,11 +42,12 @@ def test_ibek_schema(tmp_path: Path, samples: Path):
 
 def test_single_schema(tmp_path: Path, samples: Path):
     """generate schema from a support module definition yaml"""
-    clear_entity_model_ids()
 
     schema_path = tmp_path / "single.ibek.support.schema.json"
     yaml_path = samples / "support" / "motorSim.ibek.support.yaml"
-    run_cli("ioc", "generate-schema", yaml_path, "--output", schema_path)
+    run_cli(
+        "ioc", "generate-schema", "--no-ibek-defs", yaml_path, "--output", schema_path
+    )
 
     expected = json.loads(
         (samples / "schemas" / "single.ibek.ioc.schema.json").read_text()
@@ -58,7 +58,6 @@ def test_single_schema(tmp_path: Path, samples: Path):
 
 
 def test_motor_sim_schema(tmp_path: Path, samples: Path):
-    clear_entity_model_ids()
     """generate schema for a container with two support modules"""
 
     schema_combined = tmp_path / "motorSim.ibek.ioc.schema.json"
@@ -90,7 +89,6 @@ def test_build_runtime_motorSim(mocker: MockerFixture, tmp_path: Path, samples: 
     Also verifies database subst file generation for multiple
     entity instantiations.
     """
-    clear_entity_model_ids()
     ioc_yaml = samples / "iocs" / "ibek-mo-ioc-01.yaml"
     support_yaml1 = samples / "support" / "asyn.ibek.support.yaml"
     support_yaml2 = samples / "support" / "motorSim.ibek.support.yaml"
@@ -98,7 +96,7 @@ def test_build_runtime_motorSim(mocker: MockerFixture, tmp_path: Path, samples: 
 
     mocker.patch.object(GLOBALS, "RUNTIME_OUTPUT", tmp_path)
     mocker.patch.object(GLOBALS, "OPI_OUTPUT", tmp_path)
-
+    mocker.patch.object(GLOBALS, "PVI_DEFS", samples / "epics" / "pvi-defs")
     os.environ["IOC"] = "/epics/ioc"
     os.environ["RUNTIME_DIR"] = "/epics/runtime"
     generate(ioc_yaml, [support_yaml1, support_yaml2])
@@ -128,7 +126,6 @@ def test_build_utils_features(mocker: MockerFixture, tmp_path: Path, samples: Pa
     """
     build an ioc runtime script to verify utils features
     """
-    clear_entity_model_ids()
     ioc_yaml = samples / "iocs" / "utils.ibek.ioc.yaml"
     support_yaml = samples / "support" / "utils.ibek.support.yaml"
 
@@ -165,7 +162,6 @@ def test_ipac(mocker: MockerFixture, tmp_path: Path, samples: Path):
     Tests that an id argument can include another argument in its default value
     """
 
-    clear_entity_model_ids()
     ioc_yaml = samples / "iocs" / "ipac-test.yaml"
     support_yaml1 = samples / "support" / "ipac.ibek.support.yaml"
     support_yaml2 = samples / "support" / "epics.ibek.support.yaml"
@@ -191,8 +187,6 @@ def test_gauges(mocker: MockerFixture, tmp_path: Path, samples: Path):
     """
     Tests that an id argument can include another argument in its default value
     """
-
-    clear_entity_model_ids()
     ioc_yaml = samples / "iocs" / "gauges.ibek.ioc.yaml"
     support_yaml1 = samples / "support" / "asyn.ibek.support.yaml"
     support_yaml2 = samples / "support" / "gauges.ibek.support.yaml"
@@ -215,8 +209,6 @@ def test_quadem(mocker: MockerFixture, tmp_path: Path, samples: Path):
     Tests the use of CollectionDefinitions in an IOC instance
     this example uses the tetramm beam position monitor module
     """
-
-    clear_entity_model_ids()
     ioc_yaml = samples / "iocs" / "quadem.ibek.ioc.yaml"
     support_yaml1 = samples / "support" / "ADCore.ibek.support.yaml"
     support_yaml2 = samples / "support" / "quadem.ibek.support.yaml"
@@ -224,9 +216,10 @@ def test_quadem(mocker: MockerFixture, tmp_path: Path, samples: Path):
 
     mocker.patch.object(GLOBALS, "RUNTIME_OUTPUT", tmp_path)
     mocker.patch.object(GLOBALS, "OPI_OUTPUT", tmp_path)
-
+    mocker.patch.object(GLOBALS, "PVI_DEFS", samples / "epics" / "pvi-defs")
     os.environ["IOC"] = "/epics/ioc"
     os.environ["RUNTIME_DIR"] = "/epics/runtime"
+
     generate(ioc_yaml, [support_yaml1, support_yaml2])
 
     example_boot = (expected_outputs / "st.cmd").read_text()
