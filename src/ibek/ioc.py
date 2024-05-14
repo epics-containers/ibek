@@ -14,7 +14,7 @@ from pydantic import (
 )
 
 from .args import IdArg
-from .definition import Definition
+from .definition import EntityDefinition
 from .globals import BaseSettings
 from .utils import UTILS
 
@@ -53,7 +53,7 @@ class Entity(BaseSettings):
     entity_enabled: bool = Field(
         description="enable or disable this entity instance", default=True
     )
-    __definition__: Definition
+    __definition__: EntityDefinition
 
     @model_validator(mode="after")
     def add_ibek_attributes(self):

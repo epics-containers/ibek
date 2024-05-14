@@ -115,7 +115,7 @@ class EntityPVI(BaseSettings):
     pv_prefix: str = Field("", description='PV prefix for PVI PV - e.g. "$(P)"')
 
 
-class Definition(BaseSettings):
+class EntityDefinition(BaseSettings):
     """
     A single definition of a class of Entity that an IOC instance may instantiate
     """

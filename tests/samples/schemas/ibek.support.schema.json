@@ -105,7 +105,7 @@
       "title": "Database",
       "type": "object"
     },
-    "Definition": {
+    "EntityDefinition": {
       "additionalProperties": false,
       "description": "A single definition of a class of Entity that an IOC instance may instantiate",
       "properties": {
@@ -242,7 +242,7 @@
         "name",
         "description"
       ],
-      "title": "Definition",
+      "title": "EntityDefinition",
       "type": "object"
     },
     "EntityPVI": {
@@ -651,7 +651,7 @@
     "defs": {
       "description": "The definitions an IOC can create using this module",
       "items": {
-        "$ref": "#/$defs/Definition"
+        "$ref": "#/$defs/EntityDefinition"
       },
       "title": "Defs",
       "type": "array"

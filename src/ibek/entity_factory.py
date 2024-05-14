@@ -15,7 +15,7 @@ from ruamel.yaml.main import YAML
 
 from .args import EnumArg, IdArg, ObjectArg
 from .ioc import Entity, EnumVal, clear_entity_model_ids, get_entity_by_id
-from .support import Definition, Support
+from .support import EntityDefinition, Support
 from .utils import UTILS
 
 
@@ -50,7 +50,7 @@ class EntityFactory:
         return self._entity_models.values()
 
     def _make_entity_model(
-        self, definition: Definition, support: Support
+        self, definition: EntityDefinition, support: Support
     ) -> Type[Entity]:
         """
         Create an Entity Model from a Definition instance and a Support instance.
@@ -100,8 +100,7 @@ class EntityFactory:
             else:
                 # arg.type is str, int, float, etc.
                 arg_type = getattr(builtins, arg.type)
-            default = getattr(arg, "default", None)
-            add_arg(arg.name, arg_type, arg.description, default)
+            add_arg(arg.name, arg_type, arg.description, getattr(arg, "default"))
 
         # add in the calculated values Jinja Templates as Fields in the Entity
         for value in definition.values:
@@ -118,7 +117,6 @@ class EntityFactory:
             __validators__=validators,
             __base__=Entity,
         )  # type: ignore
-        entity_cls.model_rebuild()
 
         # add a link back to the Definition Instance that generated this Entity Class
         entity_cls.__definition__ = definition

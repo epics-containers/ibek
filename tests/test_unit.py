@@ -6,7 +6,7 @@ from ibek.args import IdArg, ObjectArg
 from ibek.commands import semver_compare
 from ibek.ioc import id_to_entity
 from ibek.ioc_factory import IocFactory
-from ibek.support import Definition, Support
+from ibek.support import EntityDefinition, Support
 
 
 def test_object_references(entity_factory):
@@ -16,12 +16,12 @@ def test_object_references(entity_factory):
     support = Support(
         module="mymodule",
         defs=[
-            Definition(
+            EntityDefinition(
                 name="port",
                 description="a port",
                 args=[IdArg(name="name", description="an id")],
             ),
-            Definition(
+            EntityDefinition(
                 name="device",
                 description="a device",
                 args=[ObjectArg(name="port", description="the port")],

@@ -66,6 +66,4 @@ class IocFactory:
                 description="List of entities this IOC instantiates"
             )
 
-        NewIOC.model_rebuild()
-
         return NewIOC
