@@ -6,7 +6,7 @@ support module definition YAML file
 from __future__ import annotations
 
 from enum import Enum
-from typing import Dict, Sequence
+from typing import Dict, List, Sequence
 
 from pydantic import (
     Field,

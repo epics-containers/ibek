@@ -9,6 +9,7 @@ from pvi._format.template import format_template
 from pvi.device import Device
 
 from ibek.definition import Database
+from ibek.entity_factory import EntityFactory
 from ibek.gen_scripts import create_boot_script, create_db_script
 from ibek.globals import GLOBALS, NaturalOrderGroup
 from ibek.ioc import IOC, Entity
@@ -37,8 +38,13 @@ def generate(
     # the file name under of the instance definition provides the IOC name
     UTILS.set_file_name(instance)
 
-    ioc_factory = IocFactory()
-    ioc_instance = ioc_factory.ioc_deserialize(instance, definitions)
+    entity_factory = EntityFactory()
+    entity_models = entity_factory.make_entity_classes(definitions)
+    ioc_instance = IocFactory().deserialize_ioc(instance, entity_models)
+
+    # post processing to insert SubEntity instances
+    all_entities = entity_factory.process_collections(ioc_instance.entities)
+    ioc_instance.entities = all_entities
 
     # Clear out generated files so developers know if something stops being generated
     shutil.rmtree(GLOBALS.RUNTIME_OUTPUT, ignore_errors=True)

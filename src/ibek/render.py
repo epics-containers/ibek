@@ -104,7 +104,9 @@ class Render:
         return env_var_txt + "\n"
 
     def render_elements(
-        self, entities: Sequence[Entity], method: Callable[[Entity], Union[str, None]]
+        self,
+        entities: Sequence[Entity],
+        render_element: Callable[[Entity], Union[str, None]],
     ) -> str:
         """
         Render elements of a given IOC instance based on calling the correct method
@@ -112,7 +114,7 @@ class Render:
         elements = ""
         for entity in entities:
             if entity.entity_enabled:
-                element = method(entity)
+                element = render_element(entity)
                 if element:
                     elements += element
         return elements

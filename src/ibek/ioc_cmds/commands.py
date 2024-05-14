@@ -5,6 +5,7 @@ from typing import Annotated, List, Optional
 
 import typer
 
+from ibek.entity_factory import EntityFactory
 from ibek.globals import (
     GLOBALS,
     SUPPORT_YAML_PATTERN,
@@ -29,8 +30,7 @@ def build_docker(
             help="The filepath to the Dockerfile to build",
             autocompletion=lambda: [],  # Forces path autocompletion
         ),
-    ] = Path.cwd()
-    / "Dockerfile",
+    ] = Path.cwd() / "Dockerfile",
 ):
     """
     EXPERIMENTAL: Attempt to interpret the Dockerfile and run it's commands
@@ -79,8 +79,10 @@ def generate_schema(
         log.error(f"No `definitions` given and none found in {GLOBALS.IBEK_DEFS}")
         raise typer.Exit(1)
 
+    entity_factory = EntityFactory()
+    entity_models = entity_factory.make_entity_classes(definitions)
     ioc_factory = IocFactory()
-    ioc_model = ioc_factory.ioc_create_model(definitions)
+    ioc_model = ioc_factory.make_ioc_model(entity_models)
 
     schema = json.dumps(ioc_model.model_json_schema(), indent=2)
     if output is None:
