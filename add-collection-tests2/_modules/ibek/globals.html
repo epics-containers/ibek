@@ -8,7 +8,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>ibek.globals &#8212; ibek 2.0.3.dev21+gd13a1719 documentation</title>
+    <title>ibek.globals &#8212; ibek 2.0.3.dev22+g10ba7a65 documentation</title>
   
   
   
@@ -474,12 +474,15 @@ document.write(`
 <span class="sd">        Can be overridden by defining an environment variable &quot;EPICS_ROOT&quot;.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">SUPPORT</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;SUPPORT&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">EPICS_ROOT</span> <span class="o">/</span> <span class="s2">&quot;support&quot;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">SUPPORT</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">EPICS_ROOT</span> <span class="o">/</span> <span class="s2">&quot;support&quot;</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Directory containing support module clones</span>
 
 <span class="sd">        Can be overridden by defining an environment variable &quot;SUPPORT&quot;.&quot;</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">RELEASE</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">EPICS_ROOT</span> <span class="o">/</span> <span class="s2">&quot;support&quot;</span> <span class="o">/</span> <span class="s2">&quot;configure&quot;</span> <span class="o">/</span> <span class="s2">&quot;RELEASE&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;The global RELEASE file which lists all support modules&quot;&quot;&quot;</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">IBEK_DEFS</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">EPICS_ROOT</span> <span class="o">/</span> <span class="s2">&quot;ibek-defs&quot;</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Directory containing ibek support yaml definitions.&quot;&quot;&quot;</span>
@@ -516,8 +519,6 @@ document.write(`
 <span class="n">CONFIG_DIR_NAME</span> <span class="o">=</span> <span class="s2">&quot;config&quot;</span>
 <span class="n">IOC_DIR_NAME</span> <span class="o">=</span> <span class="s2">&quot;ioc&quot;</span>
 
-<span class="c1"># the global RELEASE file which lists all support modules</span>
-<span class="n">RELEASE</span> <span class="o">=</span> <span class="n">GLOBALS</span><span class="o">.</span><span class="n">SUPPORT</span> <span class="o">/</span> <span class="s2">&quot;configure/RELEASE&quot;</span>
 <span class="c1"># a bash script to export the macros defined in RELEASE as environment vars</span>
 <span class="n">RELEASE_SH</span> <span class="o">=</span> <span class="n">GLOBALS</span><span class="o">.</span><span class="n">SUPPORT</span> <span class="o">/</span> <span class="s2">&quot;configure/RELEASE.shell&quot;</span>
 <span class="c1"># global MODULES file used to determine order of build</span>
