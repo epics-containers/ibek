@@ -22,12 +22,15 @@ class _Globals:
         Can be overridden by defining an environment variable "EPICS_ROOT".
         """
 
-        self.SUPPORT = Path(os.getenv("SUPPORT", self.EPICS_ROOT / "support"))
+        self.SUPPORT = self.EPICS_ROOT / "support"
         """
         Directory containing support module clones
 
         Can be overridden by defining an environment variable "SUPPORT"."
         """
+
+        self.RELEASE = self.EPICS_ROOT / "support" / "configure" / "RELEASE"
+        """The global RELEASE file which lists all support modules"""
 
         self.IBEK_DEFS = self.EPICS_ROOT / "ibek-defs"
         """Directory containing ibek support yaml definitions."""
@@ -64,8 +67,6 @@ IOC_FOLDER = Path(os.getenv("IOC", "/epics/ioc"))
 CONFIG_DIR_NAME = "config"
 IOC_DIR_NAME = "ioc"
 
-# the global RELEASE file which lists all support modules
-RELEASE = GLOBALS.SUPPORT / "configure/RELEASE"
 # a bash script to export the macros defined in RELEASE as environment vars
 RELEASE_SH = GLOBALS.SUPPORT / "configure/RELEASE.shell"
 # global MODULES file used to determine order of build

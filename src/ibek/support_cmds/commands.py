@@ -21,7 +21,6 @@ from ibek.globals import (
     IOC_DBDS,
     IOC_LIBS,
     PVI_YAML_PATTERN,
-    RELEASE,
     RUNTIME_DEBS,
     SUPPORT_YAML_PATTERN,
     NaturalOrderGroup,
@@ -191,12 +190,12 @@ def register(
     path = GLOBALS.SUPPORT / name if (path is None) else path
 
     # add or replace the macro for this module in the global RELEASE file
-    add_macro(macro, str(path), RELEASE)
+    add_macro(macro, str(path), GLOBALS.RELEASE)
 
     # bring the global release file into this module with a symlink
     local = path / "configure" / "RELEASE.local"
     local.unlink(missing_ok=True)
-    local.symlink_to(RELEASE)
+    local.symlink_to(GLOBALS.RELEASE)
 
     # make sure this module uses RELEASE.local
     verify_release_includes_local(path / "configure")
@@ -235,7 +234,7 @@ def add_release_macro(
     """
     add or replace a macro the global RELEASE file
     """
-    add_macro(macro, value, RELEASE, replace)
+    add_macro(macro, value, GLOBALS.RELEASE, replace)
 
 
 @support_cli.command()

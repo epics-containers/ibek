@@ -32,9 +32,9 @@ def test_symlink_pvi(tmp_path: Path, samples: Path):
     assert [f.name for f in tmp_path.iterdir()] == ["simple.pvi.device.yaml"]
 
 
-@pytest.mark.skip("awaiting fix to the GLOBALS and mock patching issue")
 def test_check_dependencies(mocker: MockerFixture, samples: Path):
-    mocker.patch.object(GLOBALS, "SUPPORT", samples / "epics", "support")
+    mocker.patch.object(GLOBALS, "RELEASE", samples / "epics/support/configure/RELEASE")
+    mocker.patch.object(GLOBALS, "SUPPORT", samples / "epics/support/")
     # Check Passes vs test data
     check_deps(["ADSimDetector"])
 

@@ -8,7 +8,7 @@ from pathlib import Path
 
 import typer
 
-from ibek.globals import GLOBALS, MODULES, RELEASE, RELEASE_SH, TEMPLATES
+from ibek.globals import GLOBALS, MODULES, RELEASE_SH, TEMPLATES
 
 # turn RELEASE macros into bash macros
 SHELL_FIND = re.compile(r"\$\(([^\)]*)\)")
@@ -46,7 +46,7 @@ def do_dependencies():
 
     # parse the global release file
     global_release_paths = {}
-    text = RELEASE.read_text()
+    text = GLOBALS.RELEASE.read_text()
     for match in PARSE_MACROS_NULL.findall(text):
         global_release_paths[match[0]] = match[1]
 
@@ -88,12 +88,12 @@ def check_deps(deps: list[str]) -> None:
     """
     for dependency in deps:
         # Check if UCASE module name exist in RELEASE
-        with open(RELEASE) as file:
+        with open(GLOBALS.RELEASE) as file:
             release_file = file.read()
             if dependency.upper() in release_file:
                 pass
             else:
-                raise Exception(f"{dependency.upper()} not in {RELEASE}")
+                raise Exception(f"{dependency.upper()} not in {GLOBALS.RELEASE}")
 
         # Check if folder with the module name exist in /epics/support
         support_dir = GLOBALS.SUPPORT / dependency
