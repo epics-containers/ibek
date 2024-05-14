@@ -18,10 +18,7 @@ from typing_extensions import Annotated
 from ibek.globals import (
     GLOBALS,
     IBEK_GLOBALS,
-    IOC_DBDS,
-    IOC_LIBS,
     PVI_YAML_PATTERN,
-    RUNTIME_DEBS,
     SUPPORT_YAML_PATTERN,
     NaturalOrderGroup,
 )
@@ -113,7 +110,7 @@ def add_runtime_packages(
     The list may include any additional 'apt-get install' options required.
     """
     debs = debs or []
-    add_list_to_file(RUNTIME_DEBS, debs)
+    add_list_to_file(GLOBALS.RUNTIME_DEBS, debs)
 
 
 @support_cli.command()
@@ -129,8 +126,8 @@ def apt_install_runtime_packages(
         print("skipping runtime install in cross-compile environment")
         return
 
-    if RUNTIME_DEBS.exists():
-        debs = RUNTIME_DEBS.read_text().split()
+    if GLOBALS.RUNTIME_DEBS.exists():
+        debs = GLOBALS.RUNTIME_DEBS.read_text().split()
         _install_debs(debs)
 
 
@@ -211,7 +208,7 @@ def add_libs(
     declare the libraries for this support module for inclusion in IOC Makefile
     """
     libs = libs or []
-    add_list_to_file(IOC_LIBS, libs)
+    add_list_to_file(GLOBALS.IOC_LIBS, libs)
 
 
 @support_cli.command()
@@ -222,7 +219,6 @@ def add_dbds(
     declare the dbd files for this support module for inclusion in IOC Makefile
     """
     dbds = dbds or []
-    add_list_to_file(IOC_DBDS, dbds)
 
 
 @support_cli.command()

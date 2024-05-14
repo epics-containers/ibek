@@ -1,20 +1,16 @@
 import os
+import shutil
 from pathlib import Path
 
 from pytest import fixture
+from pytest_mock import MockerFixture
 from ruamel.yaml import YAML
 from typer.testing import CliRunner
 
+from ibek.__main__ import cli
 from ibek.entity_factory import EntityFactory
-
-# This must be above the following imports so that it takes effect before
-# `globals.EPICS_ROOT` is imported (or anything built on top of it)
-os.environ["EPICS_ROOT"] = str(Path(__file__).parent / "samples" / "epics")
-os.environ["SUPPORT"] = str(Path(__file__).parent / "samples" / "epics" / "support")
-
-# The `noqa`s on these imports are necessary because of the above
-from ibek.__main__ import cli  # noqa: E402
-from ibek.support import Support  # noqa: E402
+from ibek.globals import GLOBALS
+from ibek.support import Support
 
 runner = CliRunner()
 
@@ -61,6 +57,26 @@ def ioc_defs(samples):
 @fixture(scope="function")
 def entity_factory():
     return EntityFactory()
+
+
+@fixture
+def epics_root(samples: Path, tmp_path: Path, mocker: MockerFixture):
+    # create an partially populated epics_root structure in a temporary folder
+    epics = tmp_path / "epics"
+    shutil.copytree(samples / "epics", epics)
+    Path.mkdir(epics / "opi", exist_ok=True)
+    Path.mkdir(epics / "epics-base")
+    Path.mkdir(epics / "ioc/config", parents=True)
+    Path.mkdir(epics / "ibek-defs")
+    Path.mkdir(epics / "runtime")
+
+    mocker.patch.object(GLOBALS, "_EPICS_ROOT", epics)
+
+    # this should not be needed - what gives?
+    os.environ["IOC"] = "/epics/ioc"
+    os.environ["RUNTIME_DIR"] = "/epics/runtime"
+
+    return epics
 
 
 @fixture

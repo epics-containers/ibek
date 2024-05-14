@@ -3,9 +3,7 @@
 from pathlib import Path
 
 import pytest
-from pytest_mock import MockerFixture
 
-from ibek.globals import GLOBALS
 from ibek.support_cmds.checks import check_deps
 from ibek.support_cmds.files import symlink_files
 
@@ -32,9 +30,9 @@ def test_symlink_pvi(tmp_path: Path, samples: Path):
     assert [f.name for f in tmp_path.iterdir()] == ["simple.pvi.device.yaml"]
 
 
-def test_check_dependencies(mocker: MockerFixture, samples: Path):
-    mocker.patch.object(GLOBALS, "RELEASE", samples / "epics/support/configure/RELEASE")
-    mocker.patch.object(GLOBALS, "SUPPORT", samples / "epics/support/")
+# note this must refer to epics_root to patch where check_deps looks for
+# the support files
+def test_check_dependencies(epics_root: Path):
     # Check Passes vs test data
     check_deps(["ADSimDetector"])
 

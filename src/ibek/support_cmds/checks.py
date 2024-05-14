@@ -8,7 +8,7 @@ from pathlib import Path
 
 import typer
 
-from ibek.globals import GLOBALS, MODULES, RELEASE_SH, TEMPLATES
+from ibek.globals import GLOBALS, TEMPLATES
 
 # turn RELEASE macros into bash macros
 SHELL_FIND = re.compile(r"\$\(([^\)]*)\)")
@@ -62,7 +62,7 @@ def do_dependencies():
     if "IOC" in global_release_paths:
         paths.append(global_release_paths["IOC"])
     mod_list = f'MODULES := {" ".join(paths)}\n'
-    MODULES.write_text(mod_list)
+    GLOBALS.MODULES.write_text(mod_list)
 
     # generate RELEASE.shell file for inclusion into the ioc launch shell script.
     # This adds all module paths to the environment and also adds their db
@@ -79,7 +79,7 @@ def do_dependencies():
 
     shell_text = "\n".join(release_sh) + "\n"
     shell_text = SHELL_FIND.sub(SHELL_REPLACE, shell_text)
-    RELEASE_SH.write_text(shell_text)
+    GLOBALS.RELEASE_SH.write_text(shell_text)
 
 
 def check_deps(deps: list[str]) -> None:
