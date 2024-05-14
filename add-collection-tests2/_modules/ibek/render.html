@@ -8,7 +8,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>ibek.render &#8212; ibek 2.0.3.dev17+ga1631b68 documentation</title>
+    <title>ibek.render &#8212; ibek 2.0.3.dev19+gd11b619d documentation</title>
   
   
   
@@ -556,7 +556,9 @@ document.write(`
         <span class="k">return</span> <span class="n">env_var_txt</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span></div>
 
 <div class="viewcode-block" id="Render.render_elements"><a class="viewcode-back" href="../../user/reference/api.html#ibek.render.Render.render_elements">[docs]</a>    <span class="k">def</span> <span class="nf">render_elements</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span> <span class="n">entities</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Entity</span><span class="p">],</span> <span class="n">method</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">Entity</span><span class="p">],</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="kc">None</span><span class="p">]]</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">entities</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Entity</span><span class="p">],</span>
+        <span class="n">render_element</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">Entity</span><span class="p">],</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="kc">None</span><span class="p">]],</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Render elements of a given IOC instance based on calling the correct method</span>
@@ -564,7 +566,7 @@ document.write(`
         <span class="n">elements</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
         <span class="k">for</span> <span class="n">entity</span> <span class="ow">in</span> <span class="n">entities</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">entity</span><span class="o">.</span><span class="n">entity_enabled</span><span class="p">:</span>
-                <span class="n">element</span> <span class="o">=</span> <span class="n">method</span><span class="p">(</span><span class="n">entity</span><span class="p">)</span>
+                <span class="n">element</span> <span class="o">=</span> <span class="n">render_element</span><span class="p">(</span><span class="n">entity</span><span class="p">)</span>
                 <span class="k">if</span> <span class="n">element</span><span class="p">:</span>
                     <span class="n">elements</span> <span class="o">+=</span> <span class="n">element</span>
         <span class="k">return</span> <span class="n">elements</span></div>

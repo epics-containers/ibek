@@ -8,7 +8,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>ibek.globals &#8212; ibek 2.0.3.dev17+ga1631b68 documentation</title>
+    <title>ibek.globals &#8212; ibek 2.0.3.dev19+gd11b619d documentation</title>
   
   
   
@@ -468,9 +468,17 @@ document.write(`
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">EPICS_ROOT</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;EPICS_ROOT&quot;</span><span class="p">,</span> <span class="s2">&quot;/epics/&quot;</span><span class="p">))</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Root of epics directory tree.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Root of epics directory tree.</span>
 
-<span class="sd">        This can be overriden by defining an environment variable &quot;EPICS_ROOT&quot;.</span>
+<span class="sd">        Can be overridden by defining an environment variable &quot;EPICS_ROOT&quot;.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">SUPPORT</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;SUPPORT&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">EPICS_ROOT</span> <span class="o">/</span> <span class="s2">&quot;support&quot;</span><span class="p">))</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Directory containing support module clones</span>
+
+<span class="sd">        Can be overridden by defining an environment variable &quot;SUPPORT&quot;.&quot;</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">IBEK_DEFS</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">EPICS_ROOT</span> <span class="o">/</span> <span class="s2">&quot;ibek-defs&quot;</span>
@@ -505,16 +513,15 @@ document.write(`
 <span class="c1"># get the container paths from environment variables</span>
 <span class="n">EPICS_BASE</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;EPICS_BASE&quot;</span><span class="p">,</span> <span class="s2">&quot;/epics/epics-base&quot;</span><span class="p">))</span>
 <span class="n">IOC_FOLDER</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;IOC&quot;</span><span class="p">,</span> <span class="s2">&quot;/epics/ioc&quot;</span><span class="p">))</span>
-<span class="n">SUPPORT</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;SUPPORT&quot;</span><span class="p">,</span> <span class="s2">&quot;/epics/support&quot;</span><span class="p">))</span>
 <span class="n">CONFIG_DIR_NAME</span> <span class="o">=</span> <span class="s2">&quot;config&quot;</span>
 <span class="n">IOC_DIR_NAME</span> <span class="o">=</span> <span class="s2">&quot;ioc&quot;</span>
 
 <span class="c1"># the global RELEASE file which lists all support modules</span>
-<span class="n">RELEASE</span> <span class="o">=</span> <span class="n">SUPPORT</span> <span class="o">/</span> <span class="s2">&quot;configure/RELEASE&quot;</span>
+<span class="n">RELEASE</span> <span class="o">=</span> <span class="n">GLOBALS</span><span class="o">.</span><span class="n">SUPPORT</span> <span class="o">/</span> <span class="s2">&quot;configure/RELEASE&quot;</span>
 <span class="c1"># a bash script to export the macros defined in RELEASE as environment vars</span>
-<span class="n">RELEASE_SH</span> <span class="o">=</span> <span class="n">SUPPORT</span> <span class="o">/</span> <span class="s2">&quot;configure/RELEASE.shell&quot;</span>
+<span class="n">RELEASE_SH</span> <span class="o">=</span> <span class="n">GLOBALS</span><span class="o">.</span><span class="n">SUPPORT</span> <span class="o">/</span> <span class="s2">&quot;configure/RELEASE.shell&quot;</span>
 <span class="c1"># global MODULES file used to determine order of build</span>
-<span class="n">MODULES</span> <span class="o">=</span> <span class="n">SUPPORT</span> <span class="o">/</span> <span class="s2">&quot;configure/MODULES&quot;</span>
+<span class="n">MODULES</span> <span class="o">=</span> <span class="n">GLOBALS</span><span class="o">.</span><span class="n">SUPPORT</span> <span class="o">/</span> <span class="s2">&quot;configure/MODULES&quot;</span>
 
 <span class="c1"># Folder containing templates for IOC src etc.</span>
 <span class="n">TEMPLATES</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span><span class="o">.</span><span class="n">parent</span> <span class="o">/</span> <span class="s2">&quot;templates&quot;</span>
@@ -524,9 +531,9 @@ document.write(`
 <span class="n">SUPPORT_YAML_PATTERN</span> <span class="o">=</span> <span class="s2">&quot;*ibek.support.yaml&quot;</span>
 <span class="n">PVI_YAML_PATTERN</span> <span class="o">=</span> <span class="s2">&quot;*pvi.device.yaml&quot;</span>
 
-<span class="n">IOC_DBDS</span> <span class="o">=</span> <span class="n">SUPPORT</span> <span class="o">/</span> <span class="s2">&quot;configure/dbd_list&quot;</span>
-<span class="n">IOC_LIBS</span> <span class="o">=</span> <span class="n">SUPPORT</span> <span class="o">/</span> <span class="s2">&quot;configure/lib_list&quot;</span>
-<span class="n">RUNTIME_DEBS</span> <span class="o">=</span> <span class="n">SUPPORT</span> <span class="o">/</span> <span class="s2">&quot;configure/runtime_debs&quot;</span>
+<span class="n">IOC_DBDS</span> <span class="o">=</span> <span class="n">GLOBALS</span><span class="o">.</span><span class="n">SUPPORT</span> <span class="o">/</span> <span class="s2">&quot;configure/dbd_list&quot;</span>
+<span class="n">IOC_LIBS</span> <span class="o">=</span> <span class="n">GLOBALS</span><span class="o">.</span><span class="n">SUPPORT</span> <span class="o">/</span> <span class="s2">&quot;configure/lib_list&quot;</span>
+<span class="n">RUNTIME_DEBS</span> <span class="o">=</span> <span class="n">GLOBALS</span><span class="o">.</span><span class="n">SUPPORT</span> <span class="o">/</span> <span class="s2">&quot;configure/runtime_debs&quot;</span>
 
 
 <div class="viewcode-block" id="BaseSettings"><a class="viewcode-back" href="../../user/reference/api.html#ibek.globals.BaseSettings">[docs]</a><span class="k">class</span> <span class="nc">BaseSettings</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
