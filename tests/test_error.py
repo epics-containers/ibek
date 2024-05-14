@@ -13,7 +13,7 @@ from ibek.utils import UTILS
 from tests.conftest import run_cli
 
 
-def test_counter_reuse(samples: Path):
+def test_counter_reuse(epics_root: Path, samples: Path):
     """
     Check you cannot redefine a counter with the same name and different params
     """
@@ -30,7 +30,7 @@ def test_counter_reuse(samples: Path):
     )
 
 
-def test_counter_overuse(samples: Path):
+def test_counter_overuse(epics_root: Path, samples: Path):
     """
     Check that counter limits are enforced
     """
@@ -45,7 +45,7 @@ def test_counter_overuse(samples: Path):
     assert "Counter 195 exceeded stop value of 194" in str(ctx.value)
 
 
-def test_bad_ref(tmp_path: Path, samples: Path):
+def test_bad_ref(samples: Path):
     """
     Check bad object references are caught
     """
@@ -60,7 +60,7 @@ def test_bad_ref(tmp_path: Path, samples: Path):
     assert "object controllerOnePort_BAD_REF not found" in str(ctx.value)
 
 
-def test_bad_db(tmp_path: Path, samples: Path):
+def test_bad_db(epics_root: Path, samples: Path):
     """
     Check bad database args are caught
     """
@@ -74,7 +74,7 @@ def test_bad_db(tmp_path: Path, samples: Path):
     assert "'non-existant' in database template 'test.db' not found" in str(ctx.value)
 
 
-def test_loading_module_twice(entity_factory, tmp_path: Path, samples: Path):
+def test_loading_module_twice(entity_factory, samples: Path):
     """
     Verify we get a sensible error if we try to load a module twice
     without clearing the entity model ids

@@ -67,7 +67,9 @@ def extract_assets(
                 GLOBALS.IOC_FOLDER
             ).parent,  # get contents of IOC folder and its source (parent)
             Path("/venv"),  # get the virtualenv
-        ] + list(source.glob("ibek*"))  # get ibek-support and related folders
+        ] + list(
+            source.glob("ibek*")
+        )  # get ibek-support and related folders
     else:
         default_assets = []
 
