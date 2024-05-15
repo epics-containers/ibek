@@ -1,14 +1,13 @@
 
-
 <!DOCTYPE html>
 
 
-<html lang="en" data-content_root="" >
+<html lang="en" data-content_root="../../" >
 
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>ibek.render &#8212; ibek 2.0.3.dev4+g452aa93e documentation</title>
+    <title>ibek.render &#8212; ibek 3.5.0b2.dev7+g5477c597 documentation</title>
   
   
   
@@ -28,22 +27,22 @@
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.1/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.1/webfonts/fa-regular-400.woff2" />
 
-    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=fd3f3429" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css?v=0a3b3ea7" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
   <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=8d27b9dea8ad943066ae" />
 <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae" />
   <script src="../../_static/vendor/fontawesome/6.5.1/js/all.min.js?digest=8d27b9dea8ad943066ae"></script>
 
-    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
-    <script src="../../_static/doctools.js"></script>
-    <script src="../../_static/sphinx_highlight.js"></script>
-    <script src="../../_static/clipboard.min.js"></script>
-    <script src="../../_static/copybutton.js"></script>
-    <script src="../../_static/design-tabs.js"></script>
+    <script src="../../_static/documentation_options.js?v=0e8a475f"></script>
+    <script src="../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../_static/copybutton.js?v=30646c52"></script>
+    <script src="../../_static/design-tabs.js?v=36754332"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = '_modules/ibek/render';</script>
     <script>
         DOCUMENTATION_OPTIONS.theme_version = '0.15.2';
@@ -454,14 +453,16 @@ document.write(`
 <span class="sd">Functions for rendering lines in the boot script using Jinja2</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Union</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">,</span> <span class="n">Union</span>
 
-<span class="kn">from</span> <span class="nn">.ioc</span> <span class="kn">import</span> <span class="n">IOC</span><span class="p">,</span> <span class="n">Entity</span>
-<span class="kn">from</span> <span class="nn">.support</span> <span class="kn">import</span> <span class="n">Comment</span><span class="p">,</span> <span class="n">Script</span><span class="p">,</span> <span class="n">Text</span><span class="p">,</span> <span class="n">When</span>
+<span class="kn">from</span> <span class="nn">.definition</span> <span class="kn">import</span> <span class="n">Comment</span><span class="p">,</span> <span class="n">Script</span><span class="p">,</span> <span class="n">Text</span><span class="p">,</span> <span class="n">When</span>
+<span class="kn">from</span> <span class="nn">.ioc</span> <span class="kn">import</span> <span class="n">Entity</span>
 <span class="kn">from</span> <span class="nn">.utils</span> <span class="kn">import</span> <span class="n">UTILS</span>
 
 
-<div class="viewcode-block" id="Render"><a class="viewcode-back" href="../../user/reference/api.html#ibek.render.Render">[docs]</a><span class="k">class</span> <span class="nc">Render</span><span class="p">:</span>
+<div class="viewcode-block" id="Render">
+<a class="viewcode-back" href="../../user/reference/api.html#ibek.render.Render">[docs]</a>
+<span class="k">class</span> <span class="nc">Render</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    A class for generating snippets of startup script / EPICS DB</span>
 <span class="sd">    by using Jinja to combine snippet templates from support module</span>
@@ -471,7 +472,9 @@ document.write(`
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">:</span> <span class="s2">&quot;Render&quot;</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">once_done</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
 
-<div class="viewcode-block" id="Render.render_text"><a class="viewcode-back" href="../../user/reference/api.html#ibek.render.Render.render_text">[docs]</a>    <span class="k">def</span> <span class="nf">render_text</span><span class="p">(</span>
+<div class="viewcode-block" id="Render.render_text">
+<a class="viewcode-back" href="../../user/reference/api.html#ibek.render.Render.render_text">[docs]</a>
+    <span class="k">def</span> <span class="nf">render_text</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">instance</span><span class="p">:</span> <span class="n">Entity</span><span class="p">,</span> <span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">when</span><span class="o">=</span><span class="n">When</span><span class="o">.</span><span class="n">every</span><span class="p">,</span> <span class="n">suffix</span><span class="o">=</span><span class="s2">&quot;&quot;</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
@@ -504,6 +507,7 @@ document.write(`
 
         <span class="k">return</span> <span class="n">result</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span></div>
 
+
     <span class="k">def</span> <span class="nf">render_script</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">instance</span><span class="p">:</span> <span class="n">Entity</span><span class="p">,</span> <span class="n">script_items</span><span class="p">:</span> <span class="n">Script</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
         <span class="n">script</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
 
@@ -520,7 +524,9 @@ document.write(`
 
         <span class="k">return</span> <span class="n">script</span>
 
-<div class="viewcode-block" id="Render.render_pre_ioc_init"><a class="viewcode-back" href="../../user/reference/api.html#ibek.render.Render.render_pre_ioc_init">[docs]</a>    <span class="k">def</span> <span class="nf">render_pre_ioc_init</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">instance</span><span class="p">:</span> <span class="n">Entity</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<div class="viewcode-block" id="Render.render_pre_ioc_init">
+<a class="viewcode-back" href="../../user/reference/api.html#ibek.render.Render.render_pre_ioc_init">[docs]</a>
+    <span class="k">def</span> <span class="nf">render_pre_ioc_init</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">instance</span><span class="p">:</span> <span class="n">Entity</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        render the startup script by combining the jinja template from</span>
 <span class="sd">        an entity with the arguments from an Entity</span>
@@ -528,7 +534,10 @@ document.write(`
         <span class="n">pre_init</span> <span class="o">=</span> <span class="n">instance</span><span class="o">.</span><span class="n">__definition__</span><span class="o">.</span><span class="n">pre_init</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">render_script</span><span class="p">(</span><span class="n">instance</span><span class="p">,</span> <span class="n">pre_init</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="Render.render_post_ioc_init"><a class="viewcode-back" href="../../user/reference/api.html#ibek.render.Render.render_post_ioc_init">[docs]</a>    <span class="k">def</span> <span class="nf">render_post_ioc_init</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">instance</span><span class="p">:</span> <span class="n">Entity</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+
+<div class="viewcode-block" id="Render.render_post_ioc_init">
+<a class="viewcode-back" href="../../user/reference/api.html#ibek.render.Render.render_post_ioc_init">[docs]</a>
+    <span class="k">def</span> <span class="nf">render_post_ioc_init</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">instance</span><span class="p">:</span> <span class="n">Entity</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        render the post-iocInit entries by combining the jinja template</span>
 <span class="sd">        from an entity with the arguments from an Entity</span>
@@ -536,7 +545,10 @@ document.write(`
         <span class="n">post_init</span> <span class="o">=</span> <span class="n">instance</span><span class="o">.</span><span class="n">__definition__</span><span class="o">.</span><span class="n">post_init</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">render_script</span><span class="p">(</span><span class="n">instance</span><span class="p">,</span> <span class="n">post_init</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="Render.render_environment_variables"><a class="viewcode-back" href="../../user/reference/api.html#ibek.render.Render.render_environment_variables">[docs]</a>    <span class="k">def</span> <span class="nf">render_environment_variables</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">instance</span><span class="p">:</span> <span class="n">Entity</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+
+<div class="viewcode-block" id="Render.render_environment_variables">
+<a class="viewcode-back" href="../../user/reference/api.html#ibek.render.Render.render_environment_variables">[docs]</a>
+    <span class="k">def</span> <span class="nf">render_environment_variables</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">instance</span><span class="p">:</span> <span class="n">Entity</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        render the environment variable elements by combining the jinja template</span>
 <span class="sd">        from an entity with the arguments from an Entity</span>
@@ -555,37 +567,53 @@ document.write(`
             <span class="p">)</span>  <span class="c1"># type: ignore</span>
         <span class="k">return</span> <span class="n">env_var_txt</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span></div>
 
-<div class="viewcode-block" id="Render.render_elements"><a class="viewcode-back" href="../../user/reference/api.html#ibek.render.Render.render_elements">[docs]</a>    <span class="k">def</span> <span class="nf">render_elements</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span> <span class="n">ioc</span><span class="p">:</span> <span class="n">IOC</span><span class="p">,</span> <span class="n">method</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">Entity</span><span class="p">],</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="kc">None</span><span class="p">]]</span>
+
+<div class="viewcode-block" id="Render.render_elements">
+<a class="viewcode-back" href="../../user/reference/api.html#ibek.render.Render.render_elements">[docs]</a>
+    <span class="k">def</span> <span class="nf">render_elements</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">entities</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Entity</span><span class="p">],</span>
+        <span class="n">render_element</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">Entity</span><span class="p">],</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="kc">None</span><span class="p">]],</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Render elements of a given IOC instance based on calling the correct method</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">elements</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
-        <span class="k">for</span> <span class="n">entity</span> <span class="ow">in</span> <span class="n">ioc</span><span class="o">.</span><span class="n">entities</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">entity</span> <span class="ow">in</span> <span class="n">entities</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">entity</span><span class="o">.</span><span class="n">entity_enabled</span><span class="p">:</span>
-                <span class="n">element</span> <span class="o">=</span> <span class="n">method</span><span class="p">(</span><span class="n">entity</span><span class="p">)</span>
+                <span class="n">element</span> <span class="o">=</span> <span class="n">render_element</span><span class="p">(</span><span class="n">entity</span><span class="p">)</span>
                 <span class="k">if</span> <span class="n">element</span><span class="p">:</span>
                     <span class="n">elements</span> <span class="o">+=</span> <span class="n">element</span>
         <span class="k">return</span> <span class="n">elements</span></div>
 
-<div class="viewcode-block" id="Render.render_pre_ioc_init_elements"><a class="viewcode-back" href="../../user/reference/api.html#ibek.render.Render.render_pre_ioc_init_elements">[docs]</a>    <span class="k">def</span> <span class="nf">render_pre_ioc_init_elements</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ioc</span><span class="p">:</span> <span class="n">IOC</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+
+<div class="viewcode-block" id="Render.render_pre_ioc_init_elements">
+<a class="viewcode-back" href="../../user/reference/api.html#ibek.render.Render.render_pre_ioc_init_elements">[docs]</a>
+    <span class="k">def</span> <span class="nf">render_pre_ioc_init_elements</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">entities</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Entity</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Render all of the startup script entries for a given IOC instance</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">render_elements</span><span class="p">(</span><span class="n">ioc</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">render_pre_ioc_init</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">render_elements</span><span class="p">(</span><span class="n">entities</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">render_pre_ioc_init</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="Render.render_post_ioc_init_elements"><a class="viewcode-back" href="../../user/reference/api.html#ibek.render.Render.render_post_ioc_init_elements">[docs]</a>    <span class="k">def</span> <span class="nf">render_post_ioc_init_elements</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ioc</span><span class="p">:</span> <span class="n">IOC</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+
+<div class="viewcode-block" id="Render.render_post_ioc_init_elements">
+<a class="viewcode-back" href="../../user/reference/api.html#ibek.render.Render.render_post_ioc_init_elements">[docs]</a>
+    <span class="k">def</span> <span class="nf">render_post_ioc_init_elements</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">entities</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Entity</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Render all of the post-iocInit elements for a given IOC instance</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">render_elements</span><span class="p">(</span><span class="n">ioc</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">render_post_ioc_init</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">render_elements</span><span class="p">(</span><span class="n">entities</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">render_post_ioc_init</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="Render.render_environment_variable_elements"><a class="viewcode-back" href="../../user/reference/api.html#ibek.render.Render.render_environment_variable_elements">[docs]</a>    <span class="k">def</span> <span class="nf">render_environment_variable_elements</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ioc</span><span class="p">:</span> <span class="n">IOC</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+
+<div class="viewcode-block" id="Render.render_environment_variable_elements">
+<a class="viewcode-back" href="../../user/reference/api.html#ibek.render.Render.render_environment_variable_elements">[docs]</a>
+    <span class="k">def</span> <span class="nf">render_environment_variable_elements</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">entities</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Entity</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Render all of the environment variable entries for a given IOC instance</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">render_elements</span><span class="p">(</span><span class="n">ioc</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">render_environment_variables</span><span class="p">)</span></div></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">render_elements</span><span class="p">(</span><span class="n">entities</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">render_environment_variables</span><span class="p">)</span></div>
+</div>
+
 </pre></div>
 
                 </article>
