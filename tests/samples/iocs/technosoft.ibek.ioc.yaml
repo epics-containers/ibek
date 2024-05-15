@@ -1,33 +1,54 @@
-# yaml-language-server: $schema=../schemas/technosoft.ibek.ioc.schema.json
-
-ioc_name: "{{ __utils__.get_env('IOC_NAME') }}"
-
-description: example technosoft controller with 4 axes
+ioc_name: yag
+description: YAG motors
 
 entities:
-  - type: motorTML.Controller
-    controllerName: C1
-    P: "CONTROLLER1:"
-    TTY: /dev/ttyS0
-    hostid: 1
-    homing: LSN
-    axes: 4
+  - type: motorTML.CreateController
+    controllerName: TML
+    P: "SPARC:TML"
+    TTY: /tmp # /var/tmp/ttyV0
+    numAxes: 1
+    hostid: 15
 
-  - type: motorTML.Axis
-    controller: C1
-    axisName: A1
+  - type: motorTML.motorAxis
+    controller: TML
+    axid: 15
 
-  - type: motorTML.Axis
-    controller: C1
-    axisName: A2
-    # potential example of overriding the CONFIG parameter if non standard configuration is needed
-    # CONFIG: |-
-    #   {{controller.hostid}}AXIS_SETUP_{{num}}=$(SUPPORT)/motorTechnosoft/tml_lib/config/config.txt,AXIS_ID_{{num}}={{num}},AXIS_HOMING_SW_{{num}}=LSN
+    NSTEPS: 200
+    NMICROSTEPS: 256
+    VELO: 20
+    VELO_MAX: 50
+    VELO_MIN: 0.1
+    ACCL: 0.5
+    ACCL_MAX: 1.5
+    ACCL_MIN: 0.01
+    HAR: 0.5
+    HVEL: 10
+    JAR: 1
+    JVEL: 5
+    EGU: "ustep"
+    SLSP: 0.8
+    ENABLED: 1
+    TIMEOUT: 0
 
-  - type: motorTML.Axis
-    controller: C1
-    axisName: A3
+  - type: motorTML.motorAxis
+    controller: TML
+    axid: 17
 
-  - type: motorTML.Axis
-    controller: C1
-    axisName: A4
+    NSTEPS: 200
+    NMICROSTEPS: 256
+    VELO: 20
+    VELO_MAX: 50
+    VELO_MIN: 0.1
+    ACCL: 0.5
+    ACCL_MAX: 1.5
+    ACCL_MIN: 0.01
+    HAR: 0.5
+    HVEL: 10
+    JAR: 1
+    JVEL: 5
+    EGU: "ustep"
+    SLSP: 0.8
+    ENABLED: 1
+    TIMEOUT: 0
+
+  - type: motorTML.close
