@@ -4,8 +4,9 @@ cd "/epics/ioc"
 dbLoadDatabase dbd/ioc.dbd
 ioc_registerRecordDeviceDriver pdbbase
 
-set axes = __utils__.counters["motorTML.axisCount"].current
-ndsCreateDevice "TechnosoftTML", "", "FILE=/tmp/,NAXIS=,DEV_PATH=/dev/ttyS0,HOST_ID=1,{{controller.hostid}}AXIS_SETUP_{{num}}=$(SUPPORT)/motorTechnosoft/tml_lib/config/config.txt,AXIS_ID_{{num}}={{num}},AXIS_HOMING_SW_{{num}}=LSN,{{controller.hostid}}AXIS_SETUP_{{num}}=$(SUPPORT)/motorTechnosoft/tml_lib/config/config.txt,AXIS_ID_{{num}}={{num}},AXIS_HOMING_SW_{{num}}=LSN,{{controller.hostid}}AXIS_SETUP_{{num}}=$(SUPPORT)/motorTechnosoft/tml_lib/config/config.txt,AXIS_ID_{{num}}={{num}},AXIS_HOMING_SW_{{num}}=LSN
+ndsCreateDevice "TechnosoftTML", "", "FILE=/tmp/,NAXIS=4,DEV_PATH=/dev/ttyS0,HOST_ID=1, AXIS_SETUP_0=$(SUPPORT)/motorTechnosoft/tml_lib/config/config.txt,AXIS_ID_0=1,AXIS_HOMING_SW_0=LSN,AXIS_SETUP_1=$(SUPPORT)/motorTechnosoft/tml_lib/config/config.txt,AXIS_ID_1=2,AXIS_HOMING_SW_1=LSN,AXIS_SETUP_2=$(SUPPORT)/motorTechnosoft/tml_lib/config/config.txt,AXIS_ID_2=3,AXIS_HOMING_SW_2=LSN,AXIS_SETUP_3=$(SUPPORT)/motorTechnosoft/tml_lib/config/config.txt,AXIS_ID_3=4,AXIS_HOMING_SW_3=LSN"
+# the next line is hard coded from Andrea's example for comparison
+ndsCreateDevice "TechnosoftTML", "", "FILE=/tmp/,NAXIS=4,DEV_PATH=/dev/ttyS0,HOST_ID=1, AXIS_SETUP_0=$(SUPPORT)/motorTechnosoft/tml_lib/config/config.txt,AXIS_ID_0=1,AXIS_HOMING_SW_0=LSN,AXIS_SETUP_1=$(SUPPORT)/motorTechnosoft/tml_lib/config/config.txt,AXIS_ID_1=2,AXIS_HOMING_SW_1=LSN,AXIS_SETUP_2=$(SUPPORT)/motorTechnosoft/tml_lib/config/config.txt,AXIS_ID_2=3,AXIS_HOMING_SW_2=LSN,AXIS_SETUP_3=$(SUPPORT)/motorTechnosoft/tml_lib/config/config.txt,AXIS_ID_3=4,AXIS_HOMING_SW_3=LSN"
 
 dbLoadRecords /epics/runtime/ioc.db
 iocInit

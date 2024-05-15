@@ -33,7 +33,7 @@
           "type": "string"
         },
         "CONFIG": {
-          "default": "{{controller.hostid}}AXIS_SETUP_{{num}}=$(SUPPORT)/motorTechnosoft/tml_lib/config/config.txt,AXIS_ID_{{num}}={{num}},AXIS_HOMING_SW_{{num}}=LSN",
+          "default": "{%- set num = __utils__.counter(\"motorTML.axisCount\", start=0) -%}\nAXIS_SETUP_{{num}}=$(SUPPORT)/motorTechnosoft/tml_lib/config/config.txt,AXIS_ID_{{num}}={{num+1}},AXIS_HOMING_SW_{{num}}=LSN",
           "description": "Axis configuration string to add to the controller configuration",
           "title": "Config",
           "type": "string"
@@ -42,12 +42,6 @@
           "default": "{{ __utils__.get_var('motorTML.axisConfiguration').append(CONFIG) }}",
           "description": "Adds an axis configuration entry to the controller's list",
           "title": "Axisconfiguration",
-          "type": "string"
-        },
-        "num": {
-          "default": "{{ __utils__.counter(\"motorTML.axisCount\", start=0) }}",
-          "description": "Counts the number of axes declared",
-          "title": "Num",
           "type": "string"
         }
       },
@@ -78,6 +72,11 @@
           "title": "Controllername",
           "type": "string"
         },
+        "axes": {
+          "description": "Number of axes",
+          "title": "Axes",
+          "type": "integer"
+        },
         "P": {
           "description": "Device PV Prefix",
           "title": "P",
@@ -103,7 +102,7 @@
           "description": "Homing direction"
         },
         "CONFIG": {
-          "default": "set axes = __utils__.counters[\"motorTML.axisCount\"].current\nndsCreateDevice \"TechnosoftTML\", \"\", \"FILE=/tmp/,NAXIS={{axes}},DEV_PATH=/dev/ttyS0,HOST_ID={{hostid}},",
+          "default": "ndsCreateDevice \"TechnosoftTML\", \"\", \"FILE=/tmp/,NAXIS={{axes}},DEV_PATH=/dev/ttyS0,HOST_ID={{hostid}},",
           "description": "TML Configuration",
           "title": "Config",
           "type": "string"
@@ -117,6 +116,7 @@
       },
       "required": [
         "controllerName",
+        "axes",
         "P",
         "TTY",
         "hostid"

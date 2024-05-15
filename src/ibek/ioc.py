@@ -72,6 +72,8 @@ class Entity(BaseSettings):
                 # Jinja expansion of any of the Entity's string args/values
                 value = UTILS.render(entity_dict, value)
                 setattr(self, arg, str(value))
+                # update the entity_dict with the rendered value
+                entity_dict[arg] = value
 
             if model_field.annotation == object:
                 # if the field is an object but the type is str then look up
