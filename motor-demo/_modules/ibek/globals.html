@@ -8,7 +8,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>ibek.globals &#8212; ibek 3.5.0b2.dev1+g794e4bfe documentation</title>
+    <title>ibek.globals &#8212; ibek 3.5.0b2.dev5+g4aaa2cf5 documentation</title>
   
   
   
@@ -528,7 +528,6 @@ document.write(`
     <span class="k">def</span> <span class="nf">PVI_DEFS</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Directory containing pvi device yaml definitions.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_EPICS_ROOT</span> <span class="o">/</span> <span class="s2">&quot;pvi-defs&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_EPICS_ROOT</span> <span class="o">/</span> <span class="s2">&quot;pvi-defs&quot;</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">OPI_OUTPUT</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -537,7 +536,7 @@ document.write(`
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">EPICS_BASE</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;xx&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;The folder containing the epics base source and binaries&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_EPICS_ROOT</span> <span class="o">/</span> <span class="s2">&quot;epics-base&quot;</span>
 
     <span class="nd">@property</span>
@@ -547,7 +546,7 @@ document.write(`
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">CONFIG_DIR_NAME</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;configuration directory name for the IOC&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Name of config directory within IOC directory&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="s2">&quot;config&quot;</span>
 
     <span class="nd">@property</span>
