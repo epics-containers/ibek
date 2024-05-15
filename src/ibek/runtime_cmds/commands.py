@@ -43,7 +43,7 @@ def generate(
     ioc_instance = IocFactory().deserialize_ioc(instance, entity_models)
 
     # post processing to insert SubEntity instances
-    all_entities = entity_factory.process_collections(ioc_instance.entities)
+    all_entities = entity_factory.resolve_sub_entities(ioc_instance.entities)
     ioc_instance.entities = all_entities
 
     # Clear out generated files so developers know if something stops being generated

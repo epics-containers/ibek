@@ -22,7 +22,9 @@ from .utils import UTILS
 class EntityFactory:
     def __init__(self) -> None:
         """
-        EntityFactory tracks all the Entity Models created in self._entity_classes
+        A class to create `Entity` models from `EntityDefinition`s.
+
+        Created models are stored in `self._entity_models` to lookup when resolving nested `SubEntity`s.
         """
         self._entity_models: Dict[str, Type[Entity]] = {}
         # starting a new EntityFactory implies we should throw away any existing
@@ -144,19 +146,15 @@ class EntityFactory:
             entity_names.append(definition.name)
         return entity_models
 
-    def process_collections(self, entities: List[Entity]):
+    def resolve_sub_entities(self, entities: List[Entity]) -> List[Entity]:
         """
-        Process all the SubEntity collections in a list of Entity instances
+        Recursively resolve SubEntity collections in a list of Entity instances
         """
-        all_entities: List[Entity] = []
-
-        def resolve_sub_entities(entity: Entity):
-            # recursive function to scan for SubEntities in an entity
-            definition = entity.__definition__
-
+        resolved_entities: List[Entity] = []
+        for parent_entity in entities:
+            definition = parent_entity.__definition__
             # add the parent standard entity
-            all_entities.append(entity)
-
+            resolved_entities.append(parent_entity)
             # add in SubEntities if any
             for sub_entity in definition.sub_entities:
                 # find the Entity Class that the SubEntity represents
@@ -165,13 +163,9 @@ class EntityFactory:
                 sub_args_dict = sub_entity.model_dump()
                 # jinja render any references to parent Args in the SubEntity Args
                 for key, arg in sub_args_dict.items():
-                    sub_args_dict[key] = UTILS.render(entity, arg)
+                    sub_args_dict[key] = UTILS.render(parent_entity, arg)
                 # cast the SubEntity to its concrete Entity subclass
-                cast_entity = entity_cls(**sub_args_dict)
+                entity = entity_cls(**sub_args_dict)
                 # recursively scan the SubEntity for more SubEntities
-                resolve_sub_entities(cast_entity)
-
-        for entity in entities:
-            resolve_sub_entities(entity)
-
-        return all_entities
+                resolved_entities.extend(self.resolve_sub_entities([entity]))
+        return resolved_entities

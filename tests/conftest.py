@@ -53,7 +53,7 @@ def ioc_defs(samples):
     return samples / "iocs"
 
 
-# only one IocFactory instance for each test
+# only one EntityFactory instance for each test
 @fixture(scope="function")
 def entity_factory():
     return EntityFactory()
