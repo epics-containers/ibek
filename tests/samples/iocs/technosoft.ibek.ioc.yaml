@@ -10,20 +10,19 @@ entities:
     P: "CONTROLLER1:"
     TTY: /dev/ttyS0
     hostid: 1
-    axid: 1
     homing: LSN
-    CONFIG: config.txt
 
-  # - type: motorTML.Axis
-  #   controller: C1
-  #   axisName: A1
+  - type: motorTML.Axis
+    controller: C1
+    axisName: A1
 
   - type: motorTML.Axis
     controller: C1
     axisName: A2
+    # example of overriding the CONFIG parameter if non standard configuration is needed
     CONFIG: |-
       {{controller.hostid}}AXIS_SETUP_{{num}}=$(SUPPORT)/motorTechnosoft/tml_lib/config/config.txt,AXIS_ID_{{num}}={{num}},AXIS_HOMING_SW_{{num}}=LSN
 
-  # - type: motorTML.Axis
-  #   controller: C1
-  #   axisName: A3
+  - type: motorTML.Axis
+    controller: C1
+    axisName: A3

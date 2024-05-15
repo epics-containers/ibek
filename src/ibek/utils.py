@@ -75,8 +75,7 @@ class Utils:
 
     def get_var(self, key: str) -> Any:
         """get the value a global variable for our jinja context"""
-        # Intentionally raises a KeyError if the key doesn't exist
-        return self.variables[key]
+        return self.variables.get(key, "")
 
     def counter(
         self, name: str, start: int = 0, stop: int = 65535, inc: int = 1

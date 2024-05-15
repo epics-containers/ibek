@@ -22,10 +22,6 @@ defs:
         name: hostid
         description: |-
           Host ID
-      - type: int
-        name: axid
-        description: |-
-          axis ID
       - type: enum
         name: homing
         description: |-
@@ -38,6 +34,11 @@ defs:
         name: CONFIG
         description: |-
           TML Configuration
+        # set axes should be in {%%} but I need to fix order of evaluation
+        default: |-
+          set axes = __utils__.counters["motorTML.axisCount"].current
+          ndsCreateDevice "TechnosoftTML", "", "FILE=/tmp/,NAXIS={{axes}},DEV_PATH=/dev/ttyS0,HOST_ID={{hostid}},
+
     values:
       - name: axisConfiguration
         description: collects the axis configuration from axis entities
@@ -46,8 +47,7 @@ defs:
 
     pre_init:
       - value: |
-          {{",".join(__utils__.get_var('motorTML.axisConfiguration')) }}
-          NAXIS={{ __utils__.counters["motorTML.axisCount"].current }}
+          {{CONFIG}}{{",".join(__utils__.get_var('motorTML.axisConfiguration')) }}
 
   - name: Axis
     description: |-
@@ -71,11 +71,9 @@ defs:
           Axis configuration string to add to the controller configuration
         default: |-
           {{controller.hostid}}AXIS_SETUP_{{num}}=$(SUPPORT)/motorTechnosoft/tml_lib/config/config.txt,AXIS_ID_{{num}}={{num}},AXIS_HOMING_SW_{{num}}=LSN
+
     values:
       - name: axisConfiguration
         description: Adds an axis configuration entry to the controller's list
         value: |-
           {{ __utils__.get_var('motorTML.axisConfiguration').append(CONFIG) }}
-    pre_init:
-      - value: |
-          axis {{ axisName }} {{controller}} {{ CONFIG }}

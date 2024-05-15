@@ -4,10 +4,9 @@ cd "/epics/ioc"
 dbLoadDatabase dbd/ioc.dbd
 ioc_registerRecordDeviceDriver pdbbase
 
-{{controller.hostid}}AXIS_SETUP_{{num}}=$(SUPPORT)/motorTechnosoft/tml_lib/config/config.txt,AXIS_ID_{{num}}={{num}},AXIS_HOMING_SW_{{num}}=LSN
-NAXIS=1
-axis A2 C1 1AXIS_SETUP_{{ __utils__.counter("motorTML.axisCount", start=0) }}=$(SUPPORT)/motorTechnosoft/tml_lib/config/config.txt,AXIS_ID_{{ __utils__.counter("motorTML.axisCount", start=0) }}={{ __utils__.counter("motorTML.axisCount", start=0) }},AXIS_HOMING_SW_{{ __utils__.counter("motorTML.axisCount", start=0) }}=LSN
+set axes = __utils__.counters["motorTML.axisCount"].current
+ndsCreateDevice "TechnosoftTML", "", "FILE=/tmp/,NAXIS=,DEV_PATH=/dev/ttyS0,HOST_ID=1,{{controller.hostid}}AXIS_SETUP_{{num}}=$(SUPPORT)/motorTechnosoft/tml_lib/config/config.txt,AXIS_ID_{{num}}={{num}},AXIS_HOMING_SW_{{num}}=LSN,{{controller.hostid}}AXIS_SETUP_{{num}}=$(SUPPORT)/motorTechnosoft/tml_lib/config/config.txt,AXIS_ID_{{num}}={{num}},AXIS_HOMING_SW_{{num}}=LSN,{{controller.hostid}}AXIS_SETUP_{{num}}=$(SUPPORT)/motorTechnosoft/tml_lib/config/config.txt,AXIS_ID_{{num}}={{num}},AXIS_HOMING_SW_{{num}}=LSN
 
-dbLoadRecords /ioc.db
+dbLoadRecords /epics/runtime/ioc.db
 iocInit
 

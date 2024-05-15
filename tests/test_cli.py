@@ -225,8 +225,13 @@ def generic_generate(
     assert example_db == actual_db
 
 
-def test_andreas_motors(epics_root: Path, samples: Path):
+def test_andreas_motors(tmp_epics_root: Path, samples: Path):
     """
     Motor and axis example
     """
-    generic_generate(epics_root, samples, "motors", ["asyn", "andreas_motors"])
+    generic_generate(
+        tmp_epics_root,
+        samples,
+        "technosoft",
+        ["asyn", "technosoft"],
+    )

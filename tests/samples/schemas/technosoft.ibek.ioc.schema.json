@@ -14,7 +14,7 @@
         "type": {
           "const": "motorTML.Axis",
           "default": "motorTML.Axis",
-          "description": "Creates a Technosoft motion axis",
+          "description": "Technosoft motion axis",
           "title": "Type"
         },
         "entity_enabled": {
@@ -25,23 +25,28 @@
         },
         "controller": {
           "description": "Reference to the controller",
-          "title": "Controller",
-          "type": "string"
+          "title": "Controller"
         },
         "axisName": {
           "description": "The axis number",
           "title": "Axisname",
           "type": "string"
         },
+        "num": {
+          "default": "{{ __utils__.counter(\"motorTML.axisCount\", start=0) }}",
+          "description": "Counts the number of axes declared",
+          "title": "Num",
+          "type": "string"
+        },
         "CONFIG": {
-          "default": "star_vat_phs.t.zip",
-          "description": "TML Configuration",
+          "default": "{{controller.hostid}}AXIS_SETUP_{{num}}=$(SUPPORT)/motorTechnosoft/tml_lib/config/config.txt,AXIS_ID_{{num}}={{num}},AXIS_HOMING_SW_{{num}}=LSN",
+          "description": "Axis configuration string to add to the controller configuration",
           "title": "Config",
           "type": "string"
         },
         "axisConfiguration": {
-          "default": "{{ __utils__.set_var('motorTML.axisConfiguration', \",axis\" ~ axisName ~ __utils__.get_var('motorTML.axisConfiguration') }}",
-          "description": "collects the axis configuration string from axis entties",
+          "default": "{{ __utils__.get_var('motorTML.axisConfiguration').append(CONFIG) }}",
+          "description": "Adds an axis configuration entry to the controller's list",
           "title": "Axisconfiguration",
           "type": "string"
         }
@@ -59,7 +64,7 @@
         "type": {
           "const": "motorTML.Controller",
           "default": "motorTML.Controller",
-          "description": "Creates a Technosoft motion controller connected to a serial line",
+          "description": "Technosoft motion controller connected to a serial line",
           "title": "Type"
         },
         "entity_enabled": {
@@ -83,20 +88,9 @@
           "title": "Tty",
           "type": "string"
         },
-        "numAxes": {
-          "default": 1,
-          "description": "The number of axes to create",
-          "title": "Numaxes",
-          "type": "integer"
-        },
         "hostid": {
           "description": "Host ID",
           "title": "Hostid",
-          "type": "integer"
-        },
-        "axid": {
-          "description": "axis ID",
-          "title": "Axid",
           "type": "integer"
         },
         "homing": {
@@ -109,13 +103,14 @@
           "description": "Homing direction"
         },
         "CONFIG": {
+          "default": "set axes = __utils__.counters[\"motorTML.axisCount\"].current\nndsCreateDevice \"TechnosoftTML\", \"\", \"FILE=/tmp/,NAXIS={{axes}},DEV_PATH=/dev/ttyS0,HOST_ID={{hostid}},",
           "description": "TML Configuration",
           "title": "Config",
           "type": "string"
         },
         "axisConfiguration": {
-          "default": "{{ __utils__.set_var('motorTML.axisConfiguration', \"\") }}",
-          "description": "collects the axis configuration string from axis entties",
+          "default": "{{ __utils__.set_var('motorTML.axisConfiguration',[]) }}",
+          "description": "collects the axis configuration from axis entities",
           "title": "Axisconfiguration",
           "type": "string"
         }
@@ -124,9 +119,7 @@
         "controllerName",
         "P",
         "TTY",
-        "hostid",
-        "axid",
-        "CONFIG"
+        "hostid"
       ],
       "title": "motorTML_Controller",
       "type": "object"
