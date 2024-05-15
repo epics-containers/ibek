@@ -1,0 +1,177 @@
+{
+  "$defs": {
+    "homing": {
+      "enum": [
+        "LSN",
+        "LSP"
+      ],
+      "title": "homing",
+      "type": "string"
+    },
+    "motorTML_Axis": {
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "const": "motorTML.Axis",
+          "default": "motorTML.Axis",
+          "description": "Creates a Technosoft motion axis",
+          "title": "Type"
+        },
+        "entity_enabled": {
+          "default": true,
+          "description": "enable or disable this entity instance",
+          "title": "Entity Enabled",
+          "type": "boolean"
+        },
+        "controller": {
+          "description": "Reference to the controller",
+          "title": "Controller",
+          "type": "string"
+        },
+        "axisName": {
+          "description": "The axis number",
+          "title": "Axisname",
+          "type": "string"
+        },
+        "CONFIG": {
+          "default": "star_vat_phs.t.zip",
+          "description": "TML Configuration",
+          "title": "Config",
+          "type": "string"
+        },
+        "axisConfiguration": {
+          "default": "{{ __utils__.set_var('motorTML.axisConfiguration', \",axis\" ~ axisName ~ __utils__.get_var('motorTML.axisConfiguration') }}",
+          "description": "collects the axis configuration string from axis entties",
+          "title": "Axisconfiguration",
+          "type": "string"
+        }
+      },
+      "required": [
+        "controller",
+        "axisName"
+      ],
+      "title": "motorTML_Axis",
+      "type": "object"
+    },
+    "motorTML_Controller": {
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "const": "motorTML.Controller",
+          "default": "motorTML.Controller",
+          "description": "Creates a Technosoft motion controller connected to a serial line",
+          "title": "Type"
+        },
+        "entity_enabled": {
+          "default": true,
+          "description": "enable or disable this entity instance",
+          "title": "Entity Enabled",
+          "type": "boolean"
+        },
+        "controllerName": {
+          "description": "The name of the controller",
+          "title": "Controllername",
+          "type": "string"
+        },
+        "P": {
+          "description": "Device PV Prefix",
+          "title": "P",
+          "type": "string"
+        },
+        "TTY": {
+          "description": "TTY",
+          "title": "Tty",
+          "type": "string"
+        },
+        "numAxes": {
+          "default": 1,
+          "description": "The number of axes to create",
+          "title": "Numaxes",
+          "type": "integer"
+        },
+        "hostid": {
+          "description": "Host ID",
+          "title": "Hostid",
+          "type": "integer"
+        },
+        "axid": {
+          "description": "axis ID",
+          "title": "Axid",
+          "type": "integer"
+        },
+        "homing": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/homing"
+            }
+          ],
+          "default": "LSN",
+          "description": "Homing direction"
+        },
+        "CONFIG": {
+          "description": "TML Configuration",
+          "title": "Config",
+          "type": "string"
+        },
+        "axisConfiguration": {
+          "default": "{{ __utils__.set_var('motorTML.axisConfiguration', \"\") }}",
+          "description": "collects the axis configuration string from axis entties",
+          "title": "Axisconfiguration",
+          "type": "string"
+        }
+      },
+      "required": [
+        "controllerName",
+        "P",
+        "TTY",
+        "hostid",
+        "axid",
+        "CONFIG"
+      ],
+      "title": "motorTML_Controller",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "ioc_name": {
+      "description": "Name of IOC instance",
+      "title": "Ioc Name",
+      "type": "string"
+    },
+    "description": {
+      "description": "Description of what the IOC does",
+      "title": "Description",
+      "type": "string"
+    },
+    "entities": {
+      "description": "List of entities this IOC instantiates",
+      "items": {
+        "discriminator": {
+          "mapping": {
+            "motorTML.Axis": "#/$defs/motorTML_Axis",
+            "motorTML.Controller": "#/$defs/motorTML_Controller"
+          },
+          "propertyName": "type"
+        },
+        "oneOf": [
+          {
+            "$ref": "#/$defs/motorTML_Controller"
+          },
+          {
+            "$ref": "#/$defs/motorTML_Axis"
+          }
+        ]
+      },
+      "title": "Entities",
+      "type": "array"
+    }
+  },
+  "required": [
+    "ioc_name",
+    "description",
+    "entities"
+  ],
+  "title": "NewIOC",
+  "type": "object"
+}

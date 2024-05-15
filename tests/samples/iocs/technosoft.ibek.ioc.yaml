@@ -1,0 +1,29 @@
+# yaml-language-server: $schema=../schemas/technosoft.ibek.ioc.schema.json
+
+ioc_name: "{{ __utils__.get_env('IOC_NAME') }}"
+
+description: example technosoft controller with 4 axes
+
+entities:
+  - type: motorTML.Controller
+    controllerName: C1
+    P: "CONTROLLER1:"
+    TTY: /dev/ttyS0
+    hostid: 1
+    axid: 1
+    homing: LSN
+    CONFIG: config.txt
+
+  # - type: motorTML.Axis
+  #   controller: C1
+  #   axisName: A1
+
+  - type: motorTML.Axis
+    controller: C1
+    axisName: A2
+    CONFIG: |-
+      {{controller.hostid}}AXIS_SETUP_{{num}}=$(SUPPORT)/motorTechnosoft/tml_lib/config/config.txt,AXIS_ID_{{num}}={{num}},AXIS_HOMING_SW_{{num}}=LSN
+
+  # - type: motorTML.Axis
+  #   controller: C1
+  #   axisName: A3
