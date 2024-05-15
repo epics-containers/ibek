@@ -5,7 +5,6 @@ Entity classes
 
 from typing import Literal
 
-from ibek.ioc import IOC, clear_entity_model_ids
 from ibek.render import Render
 from ibek.render_db import RenderDb
 
@@ -80,15 +79,9 @@ def test_database_render(motor_classes):
 
     # make a dummy IOC with two entities as database render works against
     # a whole IOC rather than a single entity at a time.
-    clear_entity_model_ids()
+    entities = [asyn1, sim_motor, motor1, motor2]
 
-    ioc = IOC(
-        ioc_name="test_ioc",
-        description="for testing",
-        entities=[asyn1, sim_motor, motor1, motor2],
-    )
-
-    render_db = RenderDb(ioc)
+    render_db = RenderDb(entities)
     templates = render_db.render_database()
 
     assert templates == {

@@ -18,12 +18,7 @@ from typing_extensions import Annotated
 from ibek.globals import (
     GLOBALS,
     IBEK_GLOBALS,
-    IOC_DBDS,
-    IOC_LIBS,
     PVI_YAML_PATTERN,
-    RELEASE,
-    RUNTIME_DEBS,
-    SUPPORT,
     SUPPORT_YAML_PATTERN,
     NaturalOrderGroup,
 )
@@ -115,7 +110,7 @@ def add_runtime_packages(
     The list may include any additional 'apt-get install' options required.
     """
     debs = debs or []
-    add_list_to_file(RUNTIME_DEBS, debs)
+    add_list_to_file(GLOBALS.RUNTIME_DEBS, debs)
 
 
 @support_cli.command()
@@ -131,8 +126,8 @@ def apt_install_runtime_packages(
         print("skipping runtime install in cross-compile environment")
         return
 
-    if RUNTIME_DEBS.exists():
-        debs = RUNTIME_DEBS.read_text().split()
+    if GLOBALS.RUNTIME_DEBS.exists():
+        debs = GLOBALS.RUNTIME_DEBS.read_text().split()
         _install_debs(debs)
 
 
@@ -156,7 +151,7 @@ def git_clone(
     """
     org = org if org.endswith("/") else org + "/"
     url = org + repo_name
-    location = SUPPORT / repo_name
+    location = GLOBALS.SUPPORT / repo_name
     if location.exists() and not force:
         print(f"skipping {location}, already cloned")
         return
@@ -164,7 +159,11 @@ def git_clone(
         rmtree(location, ignore_errors=True)
 
     Repo.clone_from(
-        url, SUPPORT / repo_name, branch=version, depth=1, multi_options=ctx.args
+        url,
+        GLOBALS.SUPPORT / repo_name,
+        branch=version,
+        depth=1,
+        multi_options=ctx.args,
     )
 
 
@@ -185,15 +184,15 @@ def register(
     inside an epics-containers build
     """
     macro = name.upper() if macro is None else macro
-    path = SUPPORT / name if (path is None) else path
+    path = GLOBALS.SUPPORT / name if (path is None) else path
 
     # add or replace the macro for this module in the global RELEASE file
-    add_macro(macro, str(path), RELEASE)
+    add_macro(macro, str(path), GLOBALS.RELEASE)
 
     # bring the global release file into this module with a symlink
     local = path / "configure" / "RELEASE.local"
     local.unlink(missing_ok=True)
-    local.symlink_to(RELEASE)
+    local.symlink_to(GLOBALS.RELEASE)
 
     # make sure this module uses RELEASE.local
     verify_release_includes_local(path / "configure")
@@ -209,7 +208,7 @@ def add_libs(
     declare the libraries for this support module for inclusion in IOC Makefile
     """
     libs = libs or []
-    add_list_to_file(IOC_LIBS, libs)
+    add_list_to_file(GLOBALS.IOC_LIBS, libs)
 
 
 @support_cli.command()
@@ -220,7 +219,6 @@ def add_dbds(
     declare the dbd files for this support module for inclusion in IOC Makefile
     """
     dbds = dbds or []
-    add_list_to_file(IOC_DBDS, dbds)
 
 
 @support_cli.command()
@@ -232,7 +230,7 @@ def add_release_macro(
     """
     add or replace a macro the global RELEASE file
     """
-    add_macro(macro, value, RELEASE, replace)
+    add_macro(macro, value, GLOBALS.RELEASE, replace)
 
 
 @support_cli.command()
@@ -290,7 +288,7 @@ def compile(
 
     Add any extra compiler options to the end of the argument list
     """
-    path = SUPPORT / module
+    path = GLOBALS.SUPPORT / module
 
     command = f"make -C {path} -j $(nproc) " + " ".join(ctx.args)
     result = subprocess.call(["bash", "-c", command])

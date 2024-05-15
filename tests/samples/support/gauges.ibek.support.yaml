@@ -1,0 +1,65 @@
+# yaml-language-server: $schema=https://github.com/epics-containers/ibek/releases/download/1.5.3/ibek.support.schema.json
+
+module: gauges
+
+# Pretend support for vacuum space to test initialisation of a gauge group
+
+defs:
+  - name: Mks937bGauge
+    description: |-
+      MKS 937b Gauge controller
+    args:
+      - type: object
+        name: port
+        description: |-
+          Asyn port that connects to the device
+      - type: id
+        name: name
+        description: |-
+          name for the Device
+      - type: str
+        name: P
+        description: |-
+          PV prefix
+
+  - name: GaugeGroup
+    description: |-
+      Group of gauges
+    args:
+      - type: id
+        name: name
+        description: |-
+          name for the
+      - type: object
+        name: gauge1
+        description: |-
+          First gauge
+      - type: object
+        name: gauge2
+        description: |-
+          Second gauge
+        # default to the id of the gauge object we want as default
+        default: |-
+          {{gauge1.name}}
+      - type: object
+        name: gauge3
+        description: |-
+          Third gauge
+        default: |
+          {{gauge1.name}}
+      - type: object
+        name: gauge4
+        description: |-
+          Fourth gauge
+        default: |
+          {{gauge1.name}}
+
+    pre_init:
+      - value: |
+
+          # GAUGE GROUP GAUGE DEFAULTS TEST
+          # gauge1 P is {{gauge1.P}}
+          # gauge2 P is {{gauge2.P}}
+          # gauge3 P is {{gauge3.P}}
+          # gauge4 P is {{gauge4.P}}
+          # gauge4 baud is {{gauge4.port.baud}}

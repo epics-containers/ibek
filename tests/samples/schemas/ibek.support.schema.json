@@ -105,7 +105,7 @@
       "title": "Database",
       "type": "object"
     },
-    "Definition": {
+    "EntityDefinition": {
       "additionalProperties": false,
       "description": "A single definition of a class of Entity that an IOC instance may instantiate",
       "properties": {
@@ -152,7 +152,7 @@
         },
         "values": {
           "default": [],
-          "description": "The values IOC instance should supply",
+          "description": "Calculated values to use as additional arguments",
           "items": {
             "$ref": "#/$defs/Value"
           },
@@ -210,20 +210,39 @@
           "type": "array"
         },
         "pvi": {
-          "allOf": [
+          "anyOf": [
             {
               "$ref": "#/$defs/EntityPVI"
+            },
+            {
+              "type": "null"
             }
           ],
           "default": null,
           "description": "PVI definition for Entity"
+        },
+        "sub_entities": {
+          "default": [],
+          "description": "The sub-entity instances that this collection is to instantiate",
+          "items": {
+            "$ref": "#/$defs/SubEntity"
+          },
+          "title": "Sub Entities",
+          "type": "array"
+        },
+        "shared": {
+          "default": [],
+          "description": "A place to create any anchors required for repeating YAML",
+          "items": {},
+          "title": "Shared",
+          "type": "array"
         }
       },
       "required": [
         "name",
         "description"
       ],
-      "title": "Definition",
+      "title": "EntityDefinition",
       "type": "object"
     },
     "EntityPVI": {
@@ -536,6 +555,28 @@
       "title": "StrArg",
       "type": "object"
     },
+    "SubEntity": {
+      "additionalProperties": true,
+      "description": "A loosely defined class to declare the Entities\nin an ibek.support.yaml file in the 'sub_entities' property of an Entity\nsection",
+      "properties": {
+        "type": {
+          "description": "The type of this entity",
+          "title": "Type",
+          "type": "string"
+        },
+        "entity_enabled": {
+          "default": true,
+          "description": "enable or disable this entity instance",
+          "title": "Entity Enabled",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "type"
+      ],
+      "title": "SubEntity",
+      "type": "object"
+    },
     "Text": {
       "additionalProperties": false,
       "description": "A script snippet to insert into the startup script",
@@ -610,7 +651,7 @@
     "defs": {
       "description": "The definitions an IOC can create using this module",
       "items": {
-        "$ref": "#/$defs/Definition"
+        "$ref": "#/$defs/EntityDefinition"
       },
       "title": "Defs",
       "type": "array"

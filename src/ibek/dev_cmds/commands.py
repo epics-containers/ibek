@@ -4,7 +4,7 @@ from pathlib import Path
 
 import typer
 
-from ibek.globals import CONFIG_DIR_NAME, IOC_FOLDER, NaturalOrderGroup
+from ibek.globals import GLOBALS, NaturalOrderGroup
 
 log = logging.getLogger(__name__)
 dev_cli = typer.Typer(cls=NaturalOrderGroup)
@@ -34,9 +34,9 @@ def instance(
     """
 
     # validate the instance folder has a config folder
-    ioc_folder = IOC_FOLDER
-    config_folder = ioc_folder / CONFIG_DIR_NAME
-    instance_config = instance / CONFIG_DIR_NAME
+    ioc_folder = GLOBALS.IOC_FOLDER
+    config_folder = ioc_folder / GLOBALS.CONFIG_DIR_NAME
+    instance_config = instance / GLOBALS.CONFIG_DIR_NAME
 
     # verify that the expected folder exists
     if not ioc_folder.exists():

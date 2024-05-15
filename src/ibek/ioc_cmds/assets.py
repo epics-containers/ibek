@@ -7,7 +7,7 @@ from typing import List
 
 import typer
 
-from ibek.globals import GLOBALS, IOC_FOLDER
+from ibek.globals import GLOBALS
 
 log = logging.getLogger(__name__)
 
@@ -62,9 +62,9 @@ def extract_assets(
             source / "support" / "configure",
             GLOBALS.PVI_DEFS,
             GLOBALS.IBEK_DEFS,
-            IOC_FOLDER,  # get the IOC folder symlink
+            GLOBALS.IOC_FOLDER,  # get the IOC folder symlink
             Path.readlink(
-                IOC_FOLDER
+                GLOBALS.IOC_FOLDER
             ).parent,  # get contents of IOC folder and its source (parent)
             Path("/venv"),  # get the virtualenv
         ] + list(

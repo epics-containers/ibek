@@ -1,0 +1,278 @@
+label: asynNDArrayDriver
+parent: asynPortDriver
+children:
+  - type: Group
+    name: ADSetup
+    layout:
+      type: Grid
+      labelled: true
+    children:
+      - type: SignalR
+        name: PortName
+        read_pv: $(P)$(R)PortName_RBV
+        read_widget:
+          type: TextRead
+
+      - type: SignalR
+        name: Manufacturer
+        read_pv: $(P)$(R)Manufacturer_RBV
+        read_widget:
+          type: TextRead
+
+      - type: SignalR
+        name: Model
+        read_pv: $(P)$(R)Model_RBV
+        read_widget:
+          type: TextRead
+
+      - type: SignalR
+        name: SerialNumber
+        read_pv: $(P)$(R)SerialNumber_RBV
+        read_widget:
+          type: TextRead
+
+      - type: SignalR
+        name: FirmwareVersion
+        read_pv: $(P)$(R)FirmwareVersion_RBV
+        read_widget:
+          type: TextRead
+
+      - type: SignalR
+        name: SDKVersion
+        read_pv: $(P)$(R)SDKVersion_RBV
+        read_widget:
+          type: TextRead
+
+      - type: SignalR
+        name: DriverVersion
+        read_pv: $(P)$(R)DriverVersion_RBV
+        read_widget:
+          type: TextRead
+
+      - type: SignalR
+        name: ADCoreVersion
+        read_pv: $(P)$(R)ADCoreVersion_RBV
+        read_widget:
+          type: TextRead
+
+  - type: Group
+    name: ADReadout
+    layout:
+      type: Grid
+      labelled: true
+    children:
+      - type: SignalR
+        name: ArraySizeX
+        read_pv: $(P)$(R)ArraySizeX_RBV
+        read_widget:
+          type: TextRead
+
+      - type: SignalR
+        name: ArraySizeY
+        read_pv: $(P)$(R)ArraySizeY_RBV
+        read_widget:
+          type: TextRead
+
+      - type: SignalR
+        name: ArraySize
+        read_pv: $(P)$(R)ArraySize_RBV
+        read_widget:
+          type: TextRead
+
+      - type: SignalRW
+        name: DataType
+        write_pv: $(P)$(R)DataType
+        write_widget:
+          type: ComboBox
+        read_pv: $(P)$(R)DataType_RBV
+        read_widget:
+          type: TextRead
+
+      - type: SignalRW
+        name: ColorMode
+        write_pv: $(P)$(R)ColorMode
+        write_widget:
+          type: ComboBox
+        read_pv: $(P)$(R)ColorMode_RBV
+        read_widget:
+          type: TextRead
+
+  - type: Group
+    name: ADCollect
+    layout:
+      type: Grid
+      labelled: true
+    children:
+      - type: SignalR
+        name: NumQueuedArrays
+        read_pv: $(P)$(R)NumQueuedArrays
+        read_widget:
+          type: TextRead
+
+      - type: SignalW
+        name: WaitForPlugins
+        write_pv: $(P)$(R)WaitForPlugins
+        write_widget:
+          type: ToggleButton
+
+      - type: SignalRW
+        name: Acquire
+        write_pv: $(P)$(R)Acquire
+        write_widget:
+          type: ToggleButton
+        read_pv: $(P)$(R)Acquire_RBV
+        read_widget:
+          type: LED
+
+      - type: SignalRW
+        name: ArrayCounter
+        write_pv: $(P)$(R)ArrayCounter
+        write_widget:
+          type: TextWrite
+        read_pv: $(P)$(R)ArrayCounter_RBV
+        read_widget:
+          type: TextRead
+
+      - type: SignalRW
+        name: ArrayCallbacks
+        write_pv: $(P)$(R)ArrayCallbacks
+        write_widget:
+          type: ToggleButton
+        read_pv: $(P)$(R)ArrayCallbacks_RBV
+        read_widget:
+          type: LED
+
+  - type: Group
+    name: ADAttrFile
+    layout:
+      type: Grid
+      labelled: true
+    children:
+      - type: SignalW
+        name: NDAttributesFile
+        write_pv: $(P)$(R)NDAttributesFile
+        write_widget:
+          type: TextWrite
+          format: 4
+
+      - type: SignalW
+        name: NDAttributesMacros
+        write_pv: $(P)$(R)NDAttributesMacros
+        write_widget:
+          type: TextWrite
+          format: 4
+
+      - type: SignalR
+        name: NDAttributesStatus
+        read_pv: $(P)$(R)NDAttributesStatus
+        read_widget:
+          type: TextRead
+
+  - type: Group
+    name: AsynNDArrayDriverMisc
+    label: asynNDArrayDriver Ungrouped
+    layout:
+      type: Grid
+      labelled: true
+    children:
+      - type: SignalW
+        name: EmptyFreeList
+        write_pv: $(P)$(R)EmptyFreeList
+        write_widget:
+          type: ToggleButton
+
+      - type: SignalR
+        name: AcquireBusyCB
+        read_pv: $(P)$(R)AcquireBusyCB
+        read_widget:
+          type: LED
+
+      - type: SignalR
+        name: BayerPattern
+        read_pv: $(P)$(R)BayerPattern_RBV
+        read_widget:
+          type: TextRead
+
+      - type: SignalR
+        name: ArraySizeZ
+        read_pv: $(P)$(R)ArraySizeZ_RBV
+        read_widget:
+          type: TextRead
+
+      - type: SignalR
+        name: Codec
+        read_pv: $(P)$(R)Codec_RBV
+        read_widget:
+          type: TextRead
+
+      - type: SignalR
+        name: CompressedSize
+        read_pv: $(P)$(R)CompressedSize_RBV
+        read_widget:
+          type: TextRead
+
+      - type: SignalR
+        name: UniqueId
+        read_pv: $(P)$(R)UniqueId_RBV
+        read_widget:
+          type: TextRead
+
+      - type: SignalR
+        name: TimeStamp
+        read_pv: $(P)$(R)TimeStamp_RBV
+        read_widget:
+          type: TextRead
+
+      - type: SignalR
+        name: EpicsTSSec
+        read_pv: $(P)$(R)EpicsTSSec_RBV
+        read_widget:
+          type: TextRead
+
+      - type: SignalR
+        name: EpicsTSNsec
+        read_pv: $(P)$(R)EpicsTSNsec_RBV
+        read_widget:
+          type: TextRead
+
+      - type: SignalR
+        name: PoolMaxMem
+        read_pv: $(P)$(R)PoolMaxMem
+        read_widget:
+          type: TextRead
+
+      - type: SignalR
+        name: PoolUsedMem
+        read_pv: $(P)$(R)PoolUsedMem
+        read_widget:
+          type: TextRead
+
+      - type: SignalR
+        name: PoolAllocBuffers
+        read_pv: $(P)$(R)PoolAllocBuffers
+        read_widget:
+          type: TextRead
+
+      - type: SignalR
+        name: PoolFreeBuffers
+        read_pv: $(P)$(R)PoolFreeBuffers
+        read_widget:
+          type: TextRead
+
+      - type: SignalRW
+        name: NDimensions
+        write_pv: $(P)$(R)NDimensions
+        write_widget:
+          type: TextWrite
+        read_pv: $(P)$(R)NDimensions_RBV
+        read_widget:
+          type: TextRead
+
+      - type: SignalRW
+        name: Dimensions
+        write_pv: $(P)$(R)Dimensions
+        write_widget:
+          type: TextWrite
+        read_pv: $(P)$(R)Dimensions_RBV
+        read_widget:
+          type: TextRead

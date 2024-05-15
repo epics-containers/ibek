@@ -1,0 +1,139 @@
+# yaml-language-server: $schema=../schemas/ibek.support.schema.json
+
+module: quadEM
+
+defs:
+  - name: TetrAMM
+    description: |-
+      TODO:ADD DESCRIPTION
+    args:
+      - type: id
+        name: PORT
+        description: |-
+          Template argument
+
+      - type: str
+        name: P
+        description: |-
+          Base name of PV.
+
+      - type: str
+        name: R
+        description: |-
+          Second macro for name of PV.
+
+      - type: int
+        name: QSIZE
+        description: |-
+          ..
+        default: 20
+
+      - type: int
+        name: RING_SIZE
+        description: |-
+          ..
+        default: 10000
+
+      - type: str
+        name: IP
+        description: |-
+          IP address of the TetrAMM device
+
+    databases:
+      - file: $(QUADEM)/db/TetrAMM.template
+        args:
+          P:
+          R:
+          PORT:
+
+    pre_init:
+      - value: |
+          drvAsynIPPortConfigure({{PORT}}ip, {{IP}}, 100, 0, 0)
+          asynOctetSetInputEos({{PORT}}ip, 0, "\r\n")
+          asynOctetSetOutputEos({{PORT}}ip, 0, "\r")
+
+          # drvTetrAMMConfigure(portName, IPportName, RingSize)
+          drvTetrAMMConfigure("{{PORT}}", "{{PORT}}ip", {{RING_SIZE}})
+
+    post_init:
+      - value: |
+          # Increase precision of sample time for TetrAMM
+          dbpf("{{P}}{{R}}SampleTime_RBV.PREC", "5")
+
+  - name: Plugins
+    description: |-
+      Instantiates
+        12 NDStats plugins for Current, Sum, Diff and Pos Channels
+        12 NDTimeSeries plugins
+        12 NDArray plugins
+    args:
+      - type: object
+        name: DEVICE
+        description: |-
+          Reference to the parent quadEM device
+
+      - type: id
+        name: PORTPREFIX
+        description: |-
+          The prefix for plugin asyn port names
+
+      - type: int
+        name: STAT_NCHAN
+        description: |-
+          Template argument
+
+      - type: int
+        name: STAT_XSIZE
+        description: |-
+          Template argument
+
+      - type: int
+        name: HIST_SIZE
+        description: |-
+          Template argument
+        default: 256
+
+      - type: int
+        name: QUEUE
+        description: |-
+          length of NDArray queue
+        default: 16
+
+    pre_init:
+      - value: |
+
+          ################################################################################
+          # Just demonstrating that Entities can have their own pre_init AND SubEntities.
+          # This is the pre_init for quadem.Plugins device with id {{PORTPREFIX}}
+          ################################################################################
+
+          #
+
+    shared:
+      - &stats { type: ADCore.NDStats, P: "{{DEVICE.P}}", NCHANS: "{{STAT_NCHAN}}", XSIZE: "{{STAT_XSIZE}}", YSIZE: 0, HIST_SIZE: "{{HIST_SIZE}}", NDARRAY_PORT: "{{DEVICE}}", ENABLED: 1 }
+      - &arrays { type: ADCore.NDStdArrays, P: "{{DEVICE.P}}", NDARRAY_PORT: "{{DEVICE}}", ENABLED: 1, TYPE: "Float64", FTVL: "DOUBLE", NELEMENTS: "{{STAT_XSIZE}}" }
+
+    sub_entities:
+      - { <<: *stats, PORT: "{{PORTPREFIX}}.STATS.I1", R: Cur1 }
+      - { <<: *stats, PORT: "{{PORTPREFIX}}.STATS.I2", R: Cur2 }
+      - { <<: *stats, PORT: "{{PORTPREFIX}}.STATS.I3", R: Cur3 }
+      - { <<: *stats, PORT: "{{PORTPREFIX}}.STATS.I4", R: Cur4 }
+      - { <<: *stats, PORT: "{{PORTPREFIX}}.STATS.SumX", R: SumX }
+      - { <<: *stats, PORT: "{{PORTPREFIX}}.STATS.SumY", R: SumY }
+      - { <<: *stats, PORT: "{{PORTPREFIX}}.STATS.SumAll", R: SumAll }
+      - { <<: *stats, PORT: "{{PORTPREFIX}}.STATS.DiffX", R: DiffX }
+      - { <<: *stats, PORT: "{{PORTPREFIX}}.STATS.DiffY", R: DiffY }
+      - { <<: *stats, PORT: "{{PORTPREFIX}}.STATS.PosX", R: PosX }
+      - { <<: *stats, PORT: "{{PORTPREFIX}}.STATS.PosY", R: PosY }
+
+      - { <<: *arrays, PORT: "{{PORTPREFIX}}.ARRAYS.Arr1", R: Arr1 }
+      - { <<: *arrays, PORT: "{{PORTPREFIX}}.ARRAYS.Arr2", R: Arr2 }
+      - { <<: *arrays, PORT: "{{PORTPREFIX}}.ARRAYS.Arr3", R: Arr3 }
+      - { <<: *arrays, PORT: "{{PORTPREFIX}}.ARRAYS.Arr4", R: Arr4 }
+      - { <<: *arrays, PORT: "{{PORTPREFIX}}.ARRAYS.SumX", R: SumX }
+      - { <<: *arrays, PORT: "{{PORTPREFIX}}.ARRAYS.SumY", R: SumY }
+      - { <<: *arrays, PORT: "{{PORTPREFIX}}.ARRAYS.SumAll", R: SumAll }
+      - { <<: *arrays, PORT: "{{PORTPREFIX}}.ARRAYS.DiffX", R: DiffX }
+      - { <<: *arrays, PORT: "{{PORTPREFIX}}.ARRAYS.DiffY", R: DiffY }
+      - { <<: *arrays, PORT: "{{PORTPREFIX}}.ARRAYS.PosX", R: PosX }
+      - { <<: *arrays, PORT: "{{PORTPREFIX}}.ARRAYS.PosY", R: PosY }

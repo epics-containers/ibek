@@ -1,0 +1,3181 @@
+{
+  "$defs": {
+    "ADCore_NDAttrPlot": {
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "const": "ADCore.NDAttrPlot",
+          "default": "ADCore.NDAttrPlot",
+          "description": "TODO:ADD DESCRIPTION",
+          "title": "Type"
+        },
+        "entity_enabled": {
+          "default": true,
+          "description": "enable or disable this entity instance",
+          "title": "Entity Enabled",
+          "type": "boolean"
+        },
+        "P": {
+          "description": "Device prefix",
+          "title": "P",
+          "type": "string"
+        },
+        "R": {
+          "description": "Device suffix",
+          "title": "R",
+          "type": "string"
+        },
+        "PORT": {
+          "description": "Asyn port name",
+          "title": "Port",
+          "type": "string"
+        },
+        "NDARRAY_PORT": {
+          "description": "Asyn port of the callback source",
+          "title": "Ndarray Port"
+        },
+        "TIMEOUT": {
+          "default": 1,
+          "description": "Timeout",
+          "title": "Timeout",
+          "type": "integer"
+        },
+        "ADDR": {
+          "default": 0,
+          "description": "Asyn Port address",
+          "title": "Addr",
+          "type": "integer"
+        },
+        "NDARRAY_ADDR": {
+          "default": 0,
+          "description": "Asyn address of the callback source",
+          "title": "Ndarray Addr",
+          "type": "integer"
+        },
+        "ENABLED": {
+          "default": 0,
+          "description": "Plugin Enabled at startup?",
+          "title": "Enabled",
+          "type": "integer"
+        },
+        "SCANRATE": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/SCANRATE"
+            }
+          ],
+          "default": "I/O Intr",
+          "description": "Specified scan rate for cpu intensive PVs"
+        },
+        "QUEUE": {
+          "default": 10000,
+          "description": "Input array queue size",
+          "title": "Queue",
+          "type": "integer"
+        },
+        "N_CACHE": {
+          "default": 10000,
+          "description": "Number of NDArrays to store in cache",
+          "title": "N Cache",
+          "type": "integer"
+        },
+        "BLOCK": {
+          "default": 0,
+          "description": "Blocking callbacks?",
+          "title": "Block",
+          "type": "integer"
+        },
+        "ATTR_IND": {
+          "description": "Attribute index",
+          "title": "Attr Ind",
+          "type": "string"
+        },
+        "AXIS": {
+          "description": "Axis name",
+          "title": "Axis",
+          "type": "string"
+        },
+        "DATA_IND": {
+          "description": "Data index",
+          "title": "Data Ind",
+          "type": "string"
+        },
+        "DATA_ADDR": {
+          "description": "Asyn address for this data array",
+          "title": "Data Addr",
+          "type": "string"
+        }
+      },
+      "required": [
+        "P",
+        "R",
+        "PORT",
+        "NDARRAY_PORT",
+        "ATTR_IND",
+        "AXIS",
+        "DATA_IND",
+        "DATA_ADDR"
+      ],
+      "title": "ADCore_NDAttrPlot",
+      "type": "object"
+    },
+    "ADCore_NDAttribute": {
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "const": "ADCore.NDAttribute",
+          "default": "ADCore.NDAttribute",
+          "description": "This plugin displays NDArray attributes",
+          "title": "Type"
+        },
+        "entity_enabled": {
+          "default": true,
+          "description": "enable or disable this entity instance",
+          "title": "Entity Enabled",
+          "type": "boolean"
+        },
+        "P": {
+          "description": "Device Prefix",
+          "title": "P",
+          "type": "string"
+        },
+        "R": {
+          "description": "Device Suffix",
+          "title": "R",
+          "type": "string"
+        },
+        "PORT": {
+          "description": "Port name for the NDAttribute plugin",
+          "title": "Port",
+          "type": "string"
+        },
+        "NDARRAY_PORT": {
+          "description": "Input array port",
+          "title": "Ndarray Port"
+        },
+        "TIMEOUT": {
+          "default": 1,
+          "description": "Timeout",
+          "title": "Timeout",
+          "type": "integer"
+        },
+        "ADDR": {
+          "default": 0,
+          "description": "Asyn Port address",
+          "title": "Addr",
+          "type": "integer"
+        },
+        "NDARRAY_ADDR": {
+          "default": 0,
+          "description": "Input array port address",
+          "title": "Ndarray Addr",
+          "type": "integer"
+        },
+        "ENABLED": {
+          "default": 0,
+          "description": "Plugin Enabled at startup?",
+          "title": "Enabled",
+          "type": "integer"
+        },
+        "SCANRATE": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/SCANRATE"
+            }
+          ],
+          "default": "I/O Intr",
+          "description": "Specified scan rate for cpu intensive PVs"
+        },
+        "QUEUE": {
+          "default": 2,
+          "description": "Input array queue size",
+          "title": "Queue",
+          "type": "integer"
+        },
+        "BLOCK": {
+          "default": 0,
+          "description": "Blocking callbacks?",
+          "title": "Block",
+          "type": "integer"
+        },
+        "MAX_ATTRIBUTES": {
+          "default": 8,
+          "description": "Maximum number of attributes in this plugin",
+          "title": "Max Attributes",
+          "type": "integer"
+        },
+        "NCHANS": {
+          "default": 4096,
+          "description": "Number of points in the arrays",
+          "title": "Nchans",
+          "type": "integer"
+        },
+        "TS_PORT": {
+          "default": "$(PORT)_TS",
+          "description": "Asyn Port of Time Series plugin",
+          "title": "Ts Port",
+          "type": "string"
+        }
+      },
+      "required": [
+        "P",
+        "R",
+        "PORT",
+        "NDARRAY_PORT"
+      ],
+      "title": "ADCore_NDAttribute",
+      "type": "object"
+    },
+    "ADCore_NDAttributes": {
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "const": "ADCore.NDAttributes",
+          "default": "ADCore.NDAttributes",
+          "description": "Add an attribute to the NDAttributes file for a particular ADDriver or\n    NDPlugin, and associate it with the NDAttributes file",
+          "title": "Type"
+        },
+        "entity_enabled": {
+          "default": true,
+          "description": "enable or disable this entity instance",
+          "title": "Entity Enabled",
+          "type": "boolean"
+        },
+        "port": {
+          "description": "ADDriver or NDPlugin to attach xml file to",
+          "title": "Port"
+        },
+        "source": {
+          "description": "The EPICS PV (if type=EPICS_PV) or attribute name (if type=PARAM)",
+          "title": "Source",
+          "type": "string"
+        },
+        "name": {
+          "description": "Object name. You do not need to specify this",
+          "title": "Name",
+          "type": "string"
+        },
+        "attrname": {
+          "description": "Name of the attribute. If you leave this blank it defaults to <source>",
+          "title": "Attrname",
+          "type": "string"
+        },
+        "dbrtype": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/dbrtype"
+            }
+          ],
+          "default": "DBR_NATIVE",
+          "description": "DBR type (only used if type=EPICS_PV)"
+        },
+        "datatype": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/datatype"
+            }
+          ],
+          "default": "INT",
+          "description": "Data type (only used if type=PARAM)"
+        },
+        "description": {
+          "description": "Description of the attribute",
+          "title": "Description",
+          "type": "string"
+        },
+        "addr": {
+          "default": 0,
+          "description": "Asyn address of the parameter (only used if type=PARAM)",
+          "title": "Addr",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "port",
+        "source",
+        "name",
+        "attrname",
+        "description"
+      ],
+      "title": "ADCore_NDAttributes",
+      "type": "object"
+    },
+    "ADCore_NDCircularBuff": {
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "const": "ADCore.NDCircularBuff",
+          "default": "ADCore.NDCircularBuff",
+          "description": "This plugin provides a pre and post external trigger frame capture buffer",
+          "title": "Type"
+        },
+        "entity_enabled": {
+          "default": true,
+          "description": "enable or disable this entity instance",
+          "title": "Entity Enabled",
+          "type": "boolean"
+        },
+        "P": {
+          "description": "Device Prefix",
+          "title": "P",
+          "type": "string"
+        },
+        "R": {
+          "description": "Device Suffix",
+          "title": "R",
+          "type": "string"
+        },
+        "PORT": {
+          "description": "Port name for the FFT_calc plugin",
+          "title": "Port",
+          "type": "string"
+        },
+        "NDARRAY_PORT": {
+          "description": "Input array port",
+          "title": "Ndarray Port"
+        },
+        "TIMEOUT": {
+          "default": 1,
+          "description": "Timeout",
+          "title": "Timeout",
+          "type": "integer"
+        },
+        "ADDR": {
+          "default": 0,
+          "description": "Asyn Port address",
+          "title": "Addr",
+          "type": "integer"
+        },
+        "NDARRAY_ADDR": {
+          "default": 0,
+          "description": "Input array port address",
+          "title": "Ndarray Addr",
+          "type": "integer"
+        },
+        "ENABLED": {
+          "default": 1,
+          "description": "Plugin Enabled at startup?",
+          "title": "Enabled",
+          "type": "integer"
+        },
+        "SCANRATE": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/SCANRATE"
+            }
+          ],
+          "default": "I/O Intr",
+          "description": "Specified scan rate for cpu intensive PVs"
+        },
+        "PRECOUNT": {
+          "default": 100,
+          "description": "Pre-trigger frame count",
+          "title": "Precount",
+          "type": "integer"
+        },
+        "POSTCOUNT": {
+          "default": 100,
+          "description": "Post-trigger frame count",
+          "title": "Postcount",
+          "type": "integer"
+        },
+        "QUEUE": {
+          "default": 50,
+          "description": "Input array queue size",
+          "title": "Queue",
+          "type": "integer"
+        },
+        "BLOCK": {
+          "default": 0,
+          "description": "Blocking callbacks?",
+          "title": "Block",
+          "type": "integer"
+        },
+        "MAX_BUFFERS": {
+          "default": 128,
+          "description": "Max buffer size in number of frames",
+          "title": "Max Buffers",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "P",
+        "R",
+        "PORT",
+        "NDARRAY_PORT"
+      ],
+      "title": "ADCore_NDCircularBuff",
+      "type": "object"
+    },
+    "ADCore_NDCodec": {
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "const": "ADCore.NDCodec",
+          "default": "ADCore.NDCodec",
+          "description": "This plugin can compress or decompress NDArrays",
+          "title": "Type"
+        },
+        "entity_enabled": {
+          "default": true,
+          "description": "enable or disable this entity instance",
+          "title": "Entity Enabled",
+          "type": "boolean"
+        },
+        "P": {
+          "description": "Device Prefix",
+          "title": "P",
+          "type": "string"
+        },
+        "R": {
+          "description": "Device Suffix",
+          "title": "R",
+          "type": "string"
+        },
+        "PORT": {
+          "description": "Port name for the NDCodec plugin",
+          "title": "Port",
+          "type": "string"
+        },
+        "NDARRAY_PORT": {
+          "description": "Input array port",
+          "title": "Ndarray Port"
+        },
+        "TIMEOUT": {
+          "default": 1,
+          "description": "Asyn timeout",
+          "title": "Timeout",
+          "type": "integer"
+        },
+        "ADDR": {
+          "default": 0,
+          "description": "Asyn Port address",
+          "title": "Addr",
+          "type": "integer"
+        },
+        "NDARRAY_ADDR": {
+          "default": 0,
+          "description": "Input array port address",
+          "title": "Ndarray Addr",
+          "type": "integer"
+        },
+        "ENABLED": {
+          "default": 0,
+          "description": "Plugin Enabled at startup?",
+          "title": "Enabled",
+          "type": "integer"
+        },
+        "SCANRATE": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/SCANRATE"
+            }
+          ],
+          "default": "I/O Intr",
+          "description": "Specified scan rate for cpu intensive PVs"
+        },
+        "QUEUE": {
+          "default": 2,
+          "description": "Input array queue size",
+          "title": "Queue",
+          "type": "integer"
+        },
+        "BLOCK": {
+          "default": 0,
+          "description": "Blocking callbacks?",
+          "title": "Block",
+          "type": "integer"
+        },
+        "MAX_THREADS": {
+          "default": 1,
+          "description": "Maximum number threads",
+          "title": "Max Threads",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "P",
+        "R",
+        "PORT",
+        "NDARRAY_PORT"
+      ],
+      "title": "ADCore_NDCodec",
+      "type": "object"
+    },
+    "ADCore_NDColorConvert": {
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "const": "ADCore.NDColorConvert",
+          "default": "ADCore.NDColorConvert",
+          "description": "This plugin converts arrays from one colour type to another, e.g. Bayer -> RGB1",
+          "title": "Type"
+        },
+        "entity_enabled": {
+          "default": true,
+          "description": "enable or disable this entity instance",
+          "title": "Entity Enabled",
+          "type": "boolean"
+        },
+        "P": {
+          "description": "Device Prefix",
+          "title": "P",
+          "type": "string"
+        },
+        "R": {
+          "description": "Device Suffix",
+          "title": "R",
+          "type": "string"
+        },
+        "PORT": {
+          "description": "Port name for the NDColorConvert plugin",
+          "title": "Port",
+          "type": "string"
+        },
+        "NDARRAY_PORT": {
+          "description": "Input array port",
+          "title": "Ndarray Port"
+        },
+        "TIMEOUT": {
+          "default": 1,
+          "description": "Timeout",
+          "title": "Timeout",
+          "type": "integer"
+        },
+        "ADDR": {
+          "default": 0,
+          "description": "Asyn Port address",
+          "title": "Addr",
+          "type": "integer"
+        },
+        "NDARRAY_ADDR": {
+          "default": 0,
+          "description": "Input array port address",
+          "title": "Ndarray Addr",
+          "type": "integer"
+        },
+        "ENABLED": {
+          "default": 0,
+          "description": "Plugin Enabled at startup?",
+          "title": "Enabled",
+          "type": "integer"
+        },
+        "SCANRATE": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/SCANRATE"
+            }
+          ],
+          "default": "I/O Intr",
+          "description": "Specified scan rate for cpu intensive PVs"
+        },
+        "QUEUE": {
+          "default": 2,
+          "description": "Input array queue size",
+          "title": "Queue",
+          "type": "integer"
+        },
+        "BLOCK": {
+          "default": 0,
+          "description": "Blocking callbacks?",
+          "title": "Block",
+          "type": "integer"
+        },
+        "MAX_THREADS": {
+          "default": 1,
+          "description": "Maximum number threads",
+          "title": "Max Threads",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "P",
+        "R",
+        "PORT",
+        "NDARRAY_PORT"
+      ],
+      "title": "ADCore_NDColorConvert",
+      "type": "object"
+    },
+    "ADCore_NDFFT": {
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "const": "ADCore.NDFFT",
+          "default": "ADCore.NDFFT",
+          "description": "This plugin is used to calculate the FFT of a time series",
+          "title": "Type"
+        },
+        "entity_enabled": {
+          "default": true,
+          "description": "enable or disable this entity instance",
+          "title": "Entity Enabled",
+          "type": "boolean"
+        },
+        "P": {
+          "description": "Device prefix",
+          "title": "P",
+          "type": "string"
+        },
+        "R": {
+          "description": "Device suffix",
+          "title": "R",
+          "type": "string"
+        },
+        "PORT": {
+          "description": "Port name for the NDFFT plugin",
+          "title": "Port",
+          "type": "string"
+        },
+        "NDARRAY_PORT": {
+          "description": "Input array port",
+          "title": "Ndarray Port"
+        },
+        "NCHANS": {
+          "description": "Length of time series waveform",
+          "title": "Nchans",
+          "type": "string"
+        },
+        "TIMEOUT": {
+          "default": 1,
+          "description": "Asyn port timeout",
+          "title": "Timeout",
+          "type": "integer"
+        },
+        "ADDR": {
+          "default": 0,
+          "description": "Asyn port address",
+          "title": "Addr",
+          "type": "integer"
+        },
+        "NDARRAY_ADDR": {
+          "default": 0,
+          "description": "Input array port address",
+          "title": "Ndarray Addr",
+          "type": "integer"
+        },
+        "ENABLED": {
+          "default": 0,
+          "description": "Plugin Enabled at startup?",
+          "title": "Enabled",
+          "type": "integer"
+        },
+        "SCANRATE": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/SCANRATE"
+            }
+          ],
+          "default": "I/O Intr",
+          "description": "Specified scan rate for cpu intensive PVs"
+        },
+        "TIME_LINK": {
+          "default": 0.1,
+          "description": "Time in seconds between points (Can point to a record - use CP)",
+          "title": "Time Link",
+          "type": "number"
+        },
+        "NAME": {
+          "default": 0,
+          "description": "Label for signal",
+          "title": "Name",
+          "type": "integer"
+        },
+        "QUEUE": {
+          "default": 2,
+          "description": "Input array queue size",
+          "title": "Queue",
+          "type": "integer"
+        },
+        "BLOCK": {
+          "default": 0,
+          "description": "Blocking callbacks?",
+          "title": "Block",
+          "type": "integer"
+        },
+        "PRIORITY": {
+          "default": 0,
+          "description": "Thread priority if ASYN_CANBLOCK is set",
+          "title": "Priority",
+          "type": "integer"
+        },
+        "STACKSIZE": {
+          "default": 0,
+          "description": "Stack size if ASYN_CANBLOCK is set",
+          "title": "Stacksize",
+          "type": "integer"
+        },
+        "MAX_THREADS": {
+          "default": 1,
+          "description": "Maximum number threads",
+          "title": "Max Threads",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "P",
+        "R",
+        "PORT",
+        "NDARRAY_PORT",
+        "NCHANS"
+      ],
+      "title": "ADCore_NDFFT",
+      "type": "object"
+    },
+    "ADCore_NDFileHDF5": {
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "const": "ADCore.NDFileHDF5",
+          "default": "ADCore.NDFileHDF5",
+          "description": "This plugin can compress NDArrays to HDF5 and write them to file",
+          "title": "Type"
+        },
+        "entity_enabled": {
+          "default": true,
+          "description": "enable or disable this entity instance",
+          "title": "Entity Enabled",
+          "type": "boolean"
+        },
+        "P": {
+          "description": "Device Prefix",
+          "title": "P",
+          "type": "string"
+        },
+        "R": {
+          "description": "Device Suffix",
+          "title": "R",
+          "type": "string"
+        },
+        "PORT": {
+          "description": "Port name for the NDFileHDF5 plugin",
+          "title": "Port",
+          "type": "string"
+        },
+        "NDARRAY_PORT": {
+          "description": "Input array port",
+          "title": "Ndarray Port"
+        },
+        "TIMEOUT": {
+          "default": 1,
+          "description": "Asyn Port timeout",
+          "title": "Timeout",
+          "type": "integer"
+        },
+        "ADDR": {
+          "default": 0,
+          "description": "Asyn Port address",
+          "title": "Addr",
+          "type": "integer"
+        },
+        "NDARRAY_ADDR": {
+          "default": 0,
+          "description": "Input array port address",
+          "title": "Ndarray Addr",
+          "type": "integer"
+        },
+        "ENABLED": {
+          "default": 0,
+          "description": "Plugin Enabled at startup?",
+          "title": "Enabled",
+          "type": "integer"
+        },
+        "SCANRATE": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/SCANRATE"
+            }
+          ],
+          "default": "I/O Intr",
+          "description": "Specified scan rate for cpu intensive PVs"
+        },
+        "XMLSIZE": {
+          "default": 2048,
+          "description": "Number of elements of the XML layout waveform record",
+          "title": "Xmlsize",
+          "type": "integer"
+        },
+        "QUEUE": {
+          "default": 2,
+          "description": "Input array queue size",
+          "title": "Queue",
+          "type": "integer"
+        },
+        "BLOCK": {
+          "default": 0,
+          "description": "Blocking callbacks?",
+          "title": "Block",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "P",
+        "R",
+        "PORT",
+        "NDARRAY_PORT"
+      ],
+      "title": "ADCore_NDFileHDF5",
+      "type": "object"
+    },
+    "ADCore_NDFileJPEG": {
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "const": "ADCore.NDFileJPEG",
+          "default": "ADCore.NDFileJPEG",
+          "description": "This plugin can compress NDArrays to JPEG and write them to file",
+          "title": "Type"
+        },
+        "entity_enabled": {
+          "default": true,
+          "description": "enable or disable this entity instance",
+          "title": "Entity Enabled",
+          "type": "boolean"
+        },
+        "P": {
+          "description": "Device Prefix",
+          "title": "P",
+          "type": "string"
+        },
+        "R": {
+          "description": "Device Suffix",
+          "title": "R",
+          "type": "string"
+        },
+        "PORT": {
+          "description": "Port name for the NDFileJPEG plugin",
+          "title": "Port",
+          "type": "string"
+        },
+        "NDARRAY_PORT": {
+          "description": "Input array port",
+          "title": "Ndarray Port"
+        },
+        "TIMEOUT": {
+          "default": 1,
+          "description": "Timeout",
+          "title": "Timeout",
+          "type": "integer"
+        },
+        "ADDR": {
+          "default": 0,
+          "description": "Asyn Port address",
+          "title": "Addr",
+          "type": "integer"
+        },
+        "NDARRAY_ADDR": {
+          "default": 0,
+          "description": "Input array port address",
+          "title": "Ndarray Addr",
+          "type": "integer"
+        },
+        "ENABLED": {
+          "default": 0,
+          "description": "Plugin Enabled at startup?",
+          "title": "Enabled",
+          "type": "integer"
+        },
+        "SCANRATE": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/SCANRATE"
+            }
+          ],
+          "default": "I/O Intr",
+          "description": "Specified scan rate for cpu intensive PVs"
+        },
+        "QUEUE": {
+          "default": 2,
+          "description": "Input array queue size",
+          "title": "Queue",
+          "type": "integer"
+        },
+        "BLOCK": {
+          "default": 0,
+          "description": "Blocking callbacks?",
+          "title": "Block",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "P",
+        "R",
+        "PORT",
+        "NDARRAY_PORT"
+      ],
+      "title": "ADCore_NDFileJPEG",
+      "type": "object"
+    },
+    "ADCore_NDFileMagick": {
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "const": "ADCore.NDFileMagick",
+          "default": "ADCore.NDFileMagick",
+          "description": "This plugin can compress NDArrays to a range of formats supported by\n    graphics magick and write them to file",
+          "title": "Type"
+        },
+        "entity_enabled": {
+          "default": true,
+          "description": "enable or disable this entity instance",
+          "title": "Entity Enabled",
+          "type": "boolean"
+        },
+        "P": {
+          "description": "Device Prefix",
+          "title": "P",
+          "type": "string"
+        },
+        "R": {
+          "description": "Device Suffix",
+          "title": "R",
+          "type": "string"
+        },
+        "PORT": {
+          "description": "Port name for the NDFileMagick plugin",
+          "title": "Port",
+          "type": "string"
+        },
+        "NDARRAY_PORT": {
+          "description": "Input array port",
+          "title": "Ndarray Port"
+        },
+        "TIMEOUT": {
+          "default": 1,
+          "description": "Timeout",
+          "title": "Timeout",
+          "type": "integer"
+        },
+        "ADDR": {
+          "default": 0,
+          "description": "Asyn Port address",
+          "title": "Addr",
+          "type": "integer"
+        },
+        "NDARRAY_ADDR": {
+          "default": 0,
+          "description": "Input array port address",
+          "title": "Ndarray Addr",
+          "type": "integer"
+        },
+        "ENABLED": {
+          "default": 0,
+          "description": "Plugin Enabled at startup?",
+          "title": "Enabled",
+          "type": "integer"
+        },
+        "SCANRATE": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/SCANRATE"
+            }
+          ],
+          "default": "I/O Intr",
+          "description": "Specified scan rate for cpu intensive PVs"
+        },
+        "QUEUE": {
+          "default": 2,
+          "description": "Input array queue size",
+          "title": "Queue",
+          "type": "integer"
+        },
+        "BLOCK": {
+          "default": 0,
+          "description": "Blocking callbacks?",
+          "title": "Block",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "P",
+        "R",
+        "PORT",
+        "NDARRAY_PORT"
+      ],
+      "title": "ADCore_NDFileMagick",
+      "type": "object"
+    },
+    "ADCore_NDFileNetCDF": {
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "const": "ADCore.NDFileNetCDF",
+          "default": "ADCore.NDFileNetCDF",
+          "description": "This plugin can compress NDArrays to NetCDF and write them to file",
+          "title": "Type"
+        },
+        "entity_enabled": {
+          "default": true,
+          "description": "enable or disable this entity instance",
+          "title": "Entity Enabled",
+          "type": "boolean"
+        },
+        "P": {
+          "description": "Device Prefix",
+          "title": "P",
+          "type": "string"
+        },
+        "R": {
+          "description": "Device Suffix",
+          "title": "R",
+          "type": "string"
+        },
+        "NDARRAY_PORT": {
+          "description": "Input array port",
+          "title": "Ndarray Port"
+        },
+        "PORT": {
+          "description": "Port name for the NDFileNetCDF plugin",
+          "title": "Port",
+          "type": "string"
+        },
+        "TIMEOUT": {
+          "default": 1,
+          "description": "Timeout",
+          "title": "Timeout",
+          "type": "integer"
+        },
+        "ADDR": {
+          "default": 0,
+          "description": "Asyn Port address",
+          "title": "Addr",
+          "type": "integer"
+        },
+        "NDARRAY_ADDR": {
+          "default": 0,
+          "description": "Input array port address",
+          "title": "Ndarray Addr",
+          "type": "integer"
+        },
+        "ENABLED": {
+          "default": 0,
+          "description": "Plugin Enabled at startup?",
+          "title": "Enabled",
+          "type": "integer"
+        },
+        "SCANRATE": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/SCANRATE"
+            }
+          ],
+          "default": "I/O Intr",
+          "description": "Specified scan rate for cpu intensive PVs"
+        },
+        "QUEUE": {
+          "default": 2,
+          "description": "Input array queue size",
+          "title": "Queue",
+          "type": "integer"
+        },
+        "BLOCK": {
+          "default": 0,
+          "description": "Blocking callbacks?",
+          "title": "Block",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "P",
+        "R",
+        "NDARRAY_PORT",
+        "PORT"
+      ],
+      "title": "ADCore_NDFileNetCDF",
+      "type": "object"
+    },
+    "ADCore_NDFileNexus": {
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "const": "ADCore.NDFileNexus",
+          "default": "ADCore.NDFileNexus",
+          "description": "This plugin can compress NDArrays to Nexus and write them to file",
+          "title": "Type"
+        },
+        "entity_enabled": {
+          "default": true,
+          "description": "enable or disable this entity instance",
+          "title": "Entity Enabled",
+          "type": "boolean"
+        },
+        "P": {
+          "description": "Device Prefix",
+          "title": "P",
+          "type": "string"
+        },
+        "R": {
+          "description": "Device Suffix",
+          "title": "R",
+          "type": "string"
+        },
+        "PORT": {
+          "description": "Port name for the NDFileNexus plugin",
+          "title": "Port",
+          "type": "string"
+        },
+        "NDARRAY_PORT": {
+          "description": "Input array port",
+          "title": "Ndarray Port"
+        },
+        "TIMEOUT": {
+          "default": 1,
+          "description": "Timeout",
+          "title": "Timeout",
+          "type": "integer"
+        },
+        "ADDR": {
+          "default": 0,
+          "description": "Asyn Port address",
+          "title": "Addr",
+          "type": "integer"
+        },
+        "NDARRAY_ADDR": {
+          "default": 0,
+          "description": "Input array port address",
+          "title": "Ndarray Addr",
+          "type": "integer"
+        },
+        "ENABLED": {
+          "default": 0,
+          "description": "Plugin Enabled at startup?",
+          "title": "Enabled",
+          "type": "integer"
+        },
+        "SCANRATE": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/SCANRATE"
+            }
+          ],
+          "default": "I/O Intr",
+          "description": "Specified scan rate for cpu intensive PVs"
+        },
+        "QUEUE": {
+          "default": 2,
+          "description": "Input array queue size",
+          "title": "Queue",
+          "type": "integer"
+        },
+        "BLOCK": {
+          "default": 0,
+          "description": "Blocking callbacks?",
+          "title": "Block",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "P",
+        "R",
+        "PORT",
+        "NDARRAY_PORT"
+      ],
+      "title": "ADCore_NDFileNexus",
+      "type": "object"
+    },
+    "ADCore_NDFileNull": {
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "const": "ADCore.NDFileNull",
+          "default": "ADCore.NDFileNull",
+          "description": "Null file plugin for deleting driver files",
+          "title": "Type"
+        },
+        "entity_enabled": {
+          "default": true,
+          "description": "enable or disable this entity instance",
+          "title": "Entity Enabled",
+          "type": "boolean"
+        },
+        "P": {
+          "description": "Device Prefix",
+          "title": "P",
+          "type": "string"
+        },
+        "R": {
+          "description": "Device Suffix",
+          "title": "R",
+          "type": "string"
+        },
+        "PORT": {
+          "description": "Port name for the NDFileHDF5 plugin",
+          "title": "Port",
+          "type": "string"
+        },
+        "NDARRAY_PORT": {
+          "description": "Input array port",
+          "title": "Ndarray Port"
+        },
+        "TIMEOUT": {
+          "default": 1,
+          "description": "Timeout",
+          "title": "Timeout",
+          "type": "integer"
+        },
+        "ADDR": {
+          "default": 0,
+          "description": "Asyn Port address",
+          "title": "Addr",
+          "type": "integer"
+        },
+        "SCANRATE": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/SCANRATE"
+            }
+          ],
+          "default": "I/O Intr",
+          "description": "Specified scan rate for cpu intensive PVs"
+        },
+        "NDARRAY_ADDR": {
+          "default": 0,
+          "description": "Input array port address",
+          "title": "Ndarray Addr",
+          "type": "integer"
+        },
+        "ENABLED": {
+          "default": 0,
+          "description": "Plugin Enabled at startup?",
+          "title": "Enabled",
+          "type": "integer"
+        },
+        "QUEUE": {
+          "default": 2,
+          "description": "Input array queue size",
+          "title": "Queue",
+          "type": "integer"
+        },
+        "BLOCK": {
+          "default": 0,
+          "description": "Blocking callbacks?",
+          "title": "Block",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "P",
+        "R",
+        "PORT",
+        "NDARRAY_PORT"
+      ],
+      "title": "ADCore_NDFileNull",
+      "type": "object"
+    },
+    "ADCore_NDFileTIFF": {
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "const": "ADCore.NDFileTIFF",
+          "default": "ADCore.NDFileTIFF",
+          "description": "This plugin can compress NDArrays to TIFF and write them to file",
+          "title": "Type"
+        },
+        "entity_enabled": {
+          "default": true,
+          "description": "enable or disable this entity instance",
+          "title": "Entity Enabled",
+          "type": "boolean"
+        },
+        "P": {
+          "description": "Device Prefix",
+          "title": "P",
+          "type": "string"
+        },
+        "R": {
+          "description": "Device Suffix",
+          "title": "R",
+          "type": "string"
+        },
+        "NDARRAY_PORT": {
+          "description": "Input array port",
+          "title": "Ndarray Port"
+        },
+        "PORT": {
+          "description": "Port name for the NDFileTIFF plugin",
+          "title": "Port",
+          "type": "string"
+        },
+        "TIMEOUT": {
+          "default": 1,
+          "description": "Timeout",
+          "title": "Timeout",
+          "type": "integer"
+        },
+        "ADDR": {
+          "default": 0,
+          "description": "Asyn Port address",
+          "title": "Addr",
+          "type": "integer"
+        },
+        "NDARRAY_ADDR": {
+          "default": 0,
+          "description": "Input array port address",
+          "title": "Ndarray Addr",
+          "type": "integer"
+        },
+        "ENABLED": {
+          "default": 0,
+          "description": "Plugin Enabled at startup?",
+          "title": "Enabled",
+          "type": "integer"
+        },
+        "SCANRATE": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/SCANRATE"
+            }
+          ],
+          "default": "I/O Intr",
+          "description": "Specified scan rate for cpu intensive PVs"
+        },
+        "QUEUE": {
+          "default": 2,
+          "description": "Input array queue size",
+          "title": "Queue",
+          "type": "integer"
+        },
+        "BLOCK": {
+          "default": 0,
+          "description": "Blocking callbacks?",
+          "title": "Block",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "P",
+        "R",
+        "NDARRAY_PORT",
+        "PORT"
+      ],
+      "title": "ADCore_NDFileTIFF",
+      "type": "object"
+    },
+    "ADCore_NDGather": {
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "const": "ADCore.NDGather",
+          "default": "ADCore.NDGather",
+          "description": "This plugin is used to gather NDArrays from multiple upstream plugins and merge them into a single stream",
+          "title": "Type"
+        },
+        "entity_enabled": {
+          "default": true,
+          "description": "enable or disable this entity instance",
+          "title": "Entity Enabled",
+          "type": "boolean"
+        },
+        "NDARRAY_PORT": {
+          "description": "Input Array Port",
+          "title": "Ndarray Port",
+          "type": "string"
+        },
+        "PORT": {
+          "description": "Port name for the NDGather plugin",
+          "title": "Port",
+          "type": "string"
+        },
+        "TIMEOUT": {
+          "default": 1,
+          "description": "Timeout",
+          "title": "Timeout",
+          "type": "integer"
+        },
+        "ADDR": {
+          "default": 0,
+          "description": "Asyn Port address",
+          "title": "Addr",
+          "type": "integer"
+        },
+        "NDARRAY_ADDR": {
+          "default": 0,
+          "description": "Input Array Address",
+          "title": "Ndarray Addr",
+          "type": "integer"
+        },
+        "ENABLED": {
+          "default": 0,
+          "description": "Plugin Enabled at startup?",
+          "title": "Enabled",
+          "type": "integer"
+        },
+        "SCANRATE": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/SCANRATE"
+            }
+          ],
+          "default": "I/O Intr",
+          "description": "Specified scan rate for cpu intensive PVs"
+        },
+        "QUEUE": {
+          "default": 2,
+          "description": "Input array queue size",
+          "title": "Queue",
+          "type": "integer"
+        },
+        "BLOCK": {
+          "default": 0,
+          "description": "Blocking callbacks?",
+          "title": "Block",
+          "type": "integer"
+        },
+        "MAX_PORTS": {
+          "default": 5,
+          "description": "Maximum number of ports that this plugin can connect to for callbacks",
+          "title": "Max Ports",
+          "type": "integer"
+        },
+        "P": {
+          "description": "Device Prefix",
+          "title": "P",
+          "type": "string"
+        },
+        "R": {
+          "description": "Device Suffix",
+          "title": "R",
+          "type": "string"
+        }
+      },
+      "required": [
+        "NDARRAY_PORT",
+        "PORT",
+        "P",
+        "R"
+      ],
+      "title": "ADCore_NDGather",
+      "type": "object"
+    },
+    "ADCore_NDGather8": {
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "const": "ADCore.NDGather8",
+          "default": "ADCore.NDGather8",
+          "description": "This plugin is used to gather NDArrays from multiple upstream plugins and merge them into a single stream",
+          "title": "Type"
+        },
+        "entity_enabled": {
+          "default": true,
+          "description": "enable or disable this entity instance",
+          "title": "Entity Enabled",
+          "type": "boolean"
+        },
+        "NDARRAY_PORT": {
+          "description": "Input Array Port",
+          "title": "Ndarray Port",
+          "type": "string"
+        },
+        "PORT": {
+          "description": "Port name for the NDGather plugin",
+          "title": "Port",
+          "type": "string"
+        },
+        "TIMEOUT": {
+          "default": 1,
+          "description": "Timeout",
+          "title": "Timeout",
+          "type": "integer"
+        },
+        "ADDR": {
+          "default": 0,
+          "description": "Asyn Port address",
+          "title": "Addr",
+          "type": "integer"
+        },
+        "NDARRAY_ADDR": {
+          "default": 0,
+          "description": "Input Array Address",
+          "title": "Ndarray Addr",
+          "type": "integer"
+        },
+        "ENABLED": {
+          "default": 0,
+          "description": "Plugin Enabled at startup?",
+          "title": "Enabled",
+          "type": "integer"
+        },
+        "SCANRATE": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/SCANRATE"
+            }
+          ],
+          "default": "I/O Intr",
+          "description": "Specified scan rate for cpu intensive PVs"
+        },
+        "QUEUE": {
+          "default": 2,
+          "description": "Input array queue size",
+          "title": "Queue",
+          "type": "integer"
+        },
+        "BLOCK": {
+          "default": 0,
+          "description": "Blocking callbacks?",
+          "title": "Block",
+          "type": "integer"
+        },
+        "P": {
+          "description": "Device Prefix",
+          "title": "P",
+          "type": "string"
+        },
+        "R": {
+          "description": "Device Suffix",
+          "title": "R",
+          "type": "string"
+        },
+        "N": {
+          "description": "Port number (1 - maxPorts)",
+          "title": "N",
+          "type": "string"
+        },
+        "MAX_PORTS": {
+          "description": "Maximum number ports",
+          "title": "Max Ports",
+          "type": "string"
+        }
+      },
+      "required": [
+        "NDARRAY_PORT",
+        "PORT",
+        "P",
+        "R",
+        "N",
+        "MAX_PORTS"
+      ],
+      "title": "ADCore_NDGather8",
+      "type": "object"
+    },
+    "ADCore_NDOverlay": {
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "const": "ADCore.NDOverlay",
+          "default": "ADCore.NDOverlay",
+          "description": "This plugin writes overlays on the array, like cursors and boxes",
+          "title": "Type"
+        },
+        "entity_enabled": {
+          "default": true,
+          "description": "enable or disable this entity instance",
+          "title": "Entity Enabled",
+          "type": "boolean"
+        },
+        "P": {
+          "description": "Device Prefix",
+          "title": "P",
+          "type": "string"
+        },
+        "R": {
+          "description": "Device Suffix",
+          "title": "R",
+          "type": "string"
+        },
+        "PORT": {
+          "description": "Port name for the NDOverlay plugin",
+          "title": "Port",
+          "type": "string"
+        },
+        "NDARRAY_PORT": {
+          "description": "Input array port",
+          "title": "Ndarray Port"
+        },
+        "TIMEOUT": {
+          "default": 1,
+          "description": "Timeout",
+          "title": "Timeout",
+          "type": "integer"
+        },
+        "ADDR": {
+          "default": 0,
+          "description": "Asyn Port address",
+          "title": "Addr",
+          "type": "integer"
+        },
+        "NDARRAY_ADDR": {
+          "default": 0,
+          "description": "Input array port address",
+          "title": "Ndarray Addr",
+          "type": "integer"
+        },
+        "ENABLED": {
+          "default": 0,
+          "description": "Plugin Enabled at startup?",
+          "title": "Enabled",
+          "type": "integer"
+        },
+        "SCANRATE": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/SCANRATE"
+            }
+          ],
+          "default": "I/O Intr",
+          "description": "Specified scan rate for cpu intensive PVs"
+        },
+        "QUEUE": {
+          "default": 2,
+          "description": "Input array queue size",
+          "title": "Queue",
+          "type": "integer"
+        },
+        "BLOCK": {
+          "default": 0,
+          "description": "Blocking callbacks?",
+          "title": "Block",
+          "type": "integer"
+        },
+        "MAX_THREADS": {
+          "default": 1,
+          "description": "Maximum number threads",
+          "title": "Max Threads",
+          "type": "integer"
+        },
+        "O": {
+          "description": "NDOverlay Device Suffix",
+          "title": "O",
+          "type": "string"
+        },
+        "NAME": {
+          "description": "Name for the overlay",
+          "title": "Name",
+          "type": "string"
+        },
+        "SHAPE": {
+          "description": "Shape of the overlay",
+          "title": "Shape",
+          "type": "string"
+        },
+        "XPOS": {
+          "description": "Link for the XPos of the overlay",
+          "title": "Xpos",
+          "type": "string"
+        },
+        "YPOS": {
+          "description": "Link for the YPos of the overlay",
+          "title": "Ypos",
+          "type": "string"
+        },
+        "XCENT": {
+          "description": "Link for the XCent of the overlay",
+          "title": "Xcent",
+          "type": "string"
+        },
+        "YCENT": {
+          "description": "Link for the YCent of the overlay",
+          "title": "Ycent",
+          "type": "string"
+        },
+        "XSIZE": {
+          "description": "Link for the XSize of the overlay",
+          "title": "Xsize",
+          "type": "string"
+        },
+        "YSIZE": {
+          "description": "Link for the YSize of the overlay",
+          "title": "Ysize",
+          "type": "string"
+        },
+        "XWIDTH": {
+          "description": "Link for the XWidth of the overlay",
+          "title": "Xwidth",
+          "type": "string"
+        },
+        "YWIDTH": {
+          "description": "Link for the YWdith of the overlay",
+          "title": "Ywidth",
+          "type": "string"
+        }
+      },
+      "required": [
+        "P",
+        "R",
+        "PORT",
+        "NDARRAY_PORT",
+        "O",
+        "NAME",
+        "SHAPE",
+        "XPOS",
+        "YPOS",
+        "XCENT",
+        "YCENT",
+        "XSIZE",
+        "YSIZE",
+        "XWIDTH",
+        "YWIDTH"
+      ],
+      "title": "ADCore_NDOverlay",
+      "type": "object"
+    },
+    "ADCore_NDPosPlugin": {
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "const": "ADCore.NDPosPlugin",
+          "default": "ADCore.NDPosPlugin",
+          "description": "This plugin attaches position information to NDArrays",
+          "title": "Type"
+        },
+        "entity_enabled": {
+          "default": true,
+          "description": "enable or disable this entity instance",
+          "title": "Entity Enabled",
+          "type": "boolean"
+        },
+        "P": {
+          "description": "Device Prefix",
+          "title": "P",
+          "type": "string"
+        },
+        "R": {
+          "description": "Device Suffix",
+          "title": "R",
+          "type": "string"
+        },
+        "PORT": {
+          "description": "Port name for the NDPosPlugin plugin",
+          "title": "Port",
+          "type": "string"
+        },
+        "NDARRAY_PORT": {
+          "description": "Input array port",
+          "title": "Ndarray Port"
+        },
+        "TIMEOUT": {
+          "default": 1,
+          "description": "Asyn timeout",
+          "title": "Timeout",
+          "type": "integer"
+        },
+        "ADDR": {
+          "default": 0,
+          "description": "Asyn Port address",
+          "title": "Addr",
+          "type": "integer"
+        },
+        "NDARRAY_ADDR": {
+          "default": 0,
+          "description": "Input array port address",
+          "title": "Ndarray Addr",
+          "type": "integer"
+        },
+        "ENABLED": {
+          "default": 0,
+          "description": "Plugin Enabled at startup?",
+          "title": "Enabled",
+          "type": "integer"
+        },
+        "SCANRATE": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/SCANRATE"
+            }
+          ],
+          "default": "I/O Intr",
+          "description": "Specified scan rate for cpu intensive PVs"
+        },
+        "QUEUE": {
+          "default": 2,
+          "description": "Input array queue size",
+          "title": "Queue",
+          "type": "integer"
+        },
+        "BLOCK": {
+          "default": 0,
+          "description": "Blocking callbacks?",
+          "title": "Block",
+          "type": "integer"
+        },
+        "PRIORITY": {
+          "default": 0,
+          "description": "Max buffers to allocate",
+          "title": "Priority",
+          "type": "integer"
+        },
+        "STACKSIZE": {
+          "default": 0,
+          "description": "Max buffers to allocate",
+          "title": "Stacksize",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "P",
+        "R",
+        "PORT",
+        "NDARRAY_PORT"
+      ],
+      "title": "ADCore_NDPosPlugin",
+      "type": "object"
+    },
+    "ADCore_NDProcess": {
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "const": "ADCore.NDProcess",
+          "default": "ADCore.NDProcess",
+          "description": "This plugin does image processing like flat field correction, background\n    subtraction, and recursive filtering",
+          "title": "Type"
+        },
+        "entity_enabled": {
+          "default": true,
+          "description": "enable or disable this entity instance",
+          "title": "Entity Enabled",
+          "type": "boolean"
+        },
+        "P": {
+          "description": "Device Prefix",
+          "title": "P",
+          "type": "string"
+        },
+        "R": {
+          "description": "Device Suffix",
+          "title": "R",
+          "type": "string"
+        },
+        "PORT": {
+          "description": "Port name for the NDProcess plugin",
+          "title": "Port",
+          "type": "string"
+        },
+        "NDARRAY_PORT": {
+          "description": "Input array port",
+          "title": "Ndarray Port"
+        },
+        "TIMEOUT": {
+          "default": 1,
+          "description": "Timeout",
+          "title": "Timeout",
+          "type": "integer"
+        },
+        "ADDR": {
+          "default": 0,
+          "description": "Asyn Port address",
+          "title": "Addr",
+          "type": "integer"
+        },
+        "NDARRAY_ADDR": {
+          "default": 0,
+          "description": "Input array port address",
+          "title": "Ndarray Addr",
+          "type": "integer"
+        },
+        "ENABLED": {
+          "default": 0,
+          "description": "Plugin Enabled at startup?",
+          "title": "Enabled",
+          "type": "integer"
+        },
+        "SCANRATE": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/SCANRATE"
+            }
+          ],
+          "default": "I/O Intr",
+          "description": "Specified scan rate for cpu intensive PVs"
+        },
+        "QUEUE": {
+          "default": 2,
+          "description": "Input array queue size",
+          "title": "Queue",
+          "type": "integer"
+        },
+        "BLOCK": {
+          "default": 0,
+          "description": "Blocking callbacks?",
+          "title": "Block",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "P",
+        "R",
+        "PORT",
+        "NDARRAY_PORT"
+      ],
+      "title": "ADCore_NDProcess",
+      "type": "object"
+    },
+    "ADCore_NDPvaPlugin": {
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "const": "ADCore.NDPvaPlugin",
+          "default": "ADCore.NDPvaPlugin",
+          "description": "This plugin makes NDArrays available through PVAccess",
+          "title": "Type"
+        },
+        "entity_enabled": {
+          "default": true,
+          "description": "enable or disable this entity instance",
+          "title": "Entity Enabled",
+          "type": "boolean"
+        },
+        "P": {
+          "description": "Device Prefix",
+          "title": "P",
+          "type": "string"
+        },
+        "R": {
+          "description": "Device Suffix",
+          "title": "R",
+          "type": "string"
+        },
+        "PORT": {
+          "description": "Port name for the NDPosPlugin plugin",
+          "title": "Port",
+          "type": "string"
+        },
+        "NDARRAY_PORT": {
+          "description": "Input array port",
+          "title": "Ndarray Port"
+        },
+        "PVNAME": {
+          "description": "Name of the PV to post NDArray out on",
+          "title": "Pvname",
+          "type": "string"
+        },
+        "TIMEOUT": {
+          "default": 1,
+          "description": "Asyn timeout",
+          "title": "Timeout",
+          "type": "integer"
+        },
+        "ADDR": {
+          "default": 0,
+          "description": "Asyn Port address",
+          "title": "Addr",
+          "type": "integer"
+        },
+        "NDARRAY_ADDR": {
+          "default": 0,
+          "description": "Input array port address",
+          "title": "Ndarray Addr",
+          "type": "integer"
+        },
+        "ENABLED": {
+          "default": 0,
+          "description": "Plugin Enabled at startup?",
+          "title": "Enabled",
+          "type": "integer"
+        },
+        "SCANRATE": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/SCANRATE"
+            }
+          ],
+          "default": "I/O Intr",
+          "description": "Specified scan rate for cpu intensive PVs"
+        },
+        "QUEUE": {
+          "default": 2,
+          "description": "Input array queue size",
+          "title": "Queue",
+          "type": "integer"
+        },
+        "BLOCK": {
+          "default": 0,
+          "description": "Blocking callbacks?",
+          "title": "Block",
+          "type": "integer"
+        },
+        "PRIORITY": {
+          "default": 0,
+          "description": "Max buffers to allocate",
+          "title": "Priority",
+          "type": "integer"
+        },
+        "STACKSIZE": {
+          "default": 0,
+          "description": "Max buffers to allocate",
+          "title": "Stacksize",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "P",
+        "R",
+        "PORT",
+        "NDARRAY_PORT",
+        "PVNAME"
+      ],
+      "title": "ADCore_NDPvaPlugin",
+      "type": "object"
+    },
+    "ADCore_NDROI": {
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "const": "ADCore.NDROI",
+          "default": "ADCore.NDROI",
+          "description": "This plugin selects a region of interest and optionally scales it to\n    fit in a particular data type",
+          "title": "Type"
+        },
+        "entity_enabled": {
+          "default": true,
+          "description": "enable or disable this entity instance",
+          "title": "Entity Enabled",
+          "type": "boolean"
+        },
+        "P": {
+          "description": "Device Prefix",
+          "title": "P",
+          "type": "string"
+        },
+        "R": {
+          "description": "Device Suffix",
+          "title": "R",
+          "type": "string"
+        },
+        "PORT": {
+          "description": "Port name for the NDROI plugin",
+          "title": "Port",
+          "type": "string"
+        },
+        "NDARRAY_PORT": {
+          "description": "Input array port",
+          "title": "Ndarray Port"
+        },
+        "TIMEOUT": {
+          "default": 1,
+          "description": "Timeout",
+          "title": "Timeout",
+          "type": "integer"
+        },
+        "ADDR": {
+          "default": 0,
+          "description": "Asyn Port address",
+          "title": "Addr",
+          "type": "integer"
+        },
+        "NDARRAY_ADDR": {
+          "default": 0,
+          "description": "Input array port address",
+          "title": "Ndarray Addr",
+          "type": "integer"
+        },
+        "ENABLED": {
+          "default": 0,
+          "description": "Plugin Enabled at startup?",
+          "title": "Enabled",
+          "type": "integer"
+        },
+        "SCANRATE": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/SCANRATE"
+            }
+          ],
+          "default": "I/O Intr",
+          "description": "Specified scan rate for cpu intensive PVs"
+        },
+        "QUEUE": {
+          "default": 2,
+          "description": "Input array queue size",
+          "title": "Queue",
+          "type": "integer"
+        },
+        "BLOCK": {
+          "default": 0,
+          "description": "Blocking callbacks?",
+          "title": "Block",
+          "type": "integer"
+        },
+        "MAX_THREADS": {
+          "default": 1,
+          "description": "Maximum number threads",
+          "title": "Max Threads",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "P",
+        "R",
+        "PORT",
+        "NDARRAY_PORT"
+      ],
+      "title": "ADCore_NDROI",
+      "type": "object"
+    },
+    "ADCore_NDROIStat": {
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "const": "ADCore.NDROIStat",
+          "default": "ADCore.NDROIStat",
+          "description": "This plugin calculates statistics of ROIs",
+          "title": "Type"
+        },
+        "entity_enabled": {
+          "default": true,
+          "description": "enable or disable this entity instance",
+          "title": "Entity Enabled",
+          "type": "boolean"
+        },
+        "P": {
+          "description": "First part of base PV name",
+          "title": "P",
+          "type": "string"
+        },
+        "R": {
+          "description": "Second part of base PV name",
+          "title": "R",
+          "type": "string"
+        },
+        "PORT": {
+          "description": "Port name for the NDPluginROIStat plugin",
+          "title": "Port",
+          "type": "string"
+        },
+        "NDARRAY_PORT": {
+          "description": "Input array port",
+          "title": "Ndarray Port"
+        },
+        "TIMEOUT": {
+          "default": 1,
+          "description": "Timeout",
+          "title": "Timeout",
+          "type": "integer"
+        },
+        "ADDR": {
+          "default": 0,
+          "description": "asyn address on port",
+          "title": "Addr",
+          "type": "integer"
+        },
+        "NDARRAY_ADDR": {
+          "default": 0,
+          "description": "Input array port address",
+          "title": "Ndarray Addr",
+          "type": "integer"
+        },
+        "ENABLED": {
+          "default": 0,
+          "description": "Plugin Enabled at startup?",
+          "title": "Enabled",
+          "type": "integer"
+        },
+        "SCANRATE": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/SCANRATE"
+            }
+          ],
+          "default": "I/O Intr",
+          "description": "Specified scan rate for cpu intensive PVs"
+        },
+        "QUEUE": {
+          "default": 2,
+          "description": "Input array queue size",
+          "title": "Queue",
+          "type": "integer"
+        },
+        "BLOCK": {
+          "default": 0,
+          "description": "Blocking callbacks?",
+          "title": "Block",
+          "type": "integer"
+        },
+        "MAX_ROIS": {
+          "default": 8,
+          "description": "Maximum number of ROIs in this plugin",
+          "title": "Max Rois",
+          "type": "integer"
+        },
+        "NCHANS": {
+          "default": 4096,
+          "description": "Number of points in the arrays",
+          "title": "Nchans",
+          "type": "integer"
+        },
+        "MAX_THREADS": {
+          "default": 1,
+          "description": "Maximum number threads",
+          "title": "Max Threads",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "P",
+        "R",
+        "PORT",
+        "NDARRAY_PORT"
+      ],
+      "title": "ADCore_NDROIStat",
+      "type": "object"
+    },
+    "ADCore_NDScatter": {
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "const": "ADCore.NDScatter",
+          "default": "ADCore.NDScatter",
+          "description": "This plugin is used to distribute processing of NDArrays to multiple downstream plugins",
+          "title": "Type"
+        },
+        "entity_enabled": {
+          "default": true,
+          "description": "enable or disable this entity instance",
+          "title": "Entity Enabled",
+          "type": "boolean"
+        },
+        "P": {
+          "description": "Device Prefix",
+          "title": "P",
+          "type": "string"
+        },
+        "R": {
+          "description": "Device Suffix",
+          "title": "R",
+          "type": "string"
+        },
+        "PORT": {
+          "description": "Port name for the NDTimeSeries plugin",
+          "title": "Port",
+          "type": "string"
+        },
+        "NDARRAY_PORT": {
+          "description": "Input array port",
+          "title": "Ndarray Port"
+        },
+        "TIMEOUT": {
+          "default": 1,
+          "description": "Timeout",
+          "title": "Timeout",
+          "type": "integer"
+        },
+        "ADDR": {
+          "default": 0,
+          "description": "Asyn Port address",
+          "title": "Addr",
+          "type": "integer"
+        },
+        "NDARRAY_ADDR": {
+          "default": 0,
+          "description": "Input array port address",
+          "title": "Ndarray Addr",
+          "type": "integer"
+        },
+        "ENABLED": {
+          "default": 0,
+          "description": "Plugin Enabled at startup?",
+          "title": "Enabled",
+          "type": "integer"
+        },
+        "SCANRATE": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/SCANRATE"
+            }
+          ],
+          "default": "I/O Intr",
+          "description": "Specified scan rate for cpu intensive PVs"
+        },
+        "NAME": {
+          "default": 0,
+          "description": "Label for signal",
+          "title": "Name",
+          "type": "integer"
+        },
+        "QUEUE": {
+          "default": 2,
+          "description": "Input array queue size",
+          "title": "Queue",
+          "type": "integer"
+        },
+        "BLOCK": {
+          "default": 0,
+          "description": "Blocking callbacks?",
+          "title": "Block",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "P",
+        "R",
+        "PORT",
+        "NDARRAY_PORT"
+      ],
+      "title": "ADCore_NDScatter",
+      "type": "object"
+    },
+    "ADCore_NDStats": {
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "const": "ADCore.NDStats",
+          "default": "ADCore.NDStats",
+          "description": "This plugin calculates statistics like X and Y profile, centroid, and plots a histogram of binned pixels",
+          "title": "Type"
+        },
+        "entity_enabled": {
+          "default": true,
+          "description": "enable or disable this entity instance",
+          "title": "Entity Enabled",
+          "type": "boolean"
+        },
+        "PORT": {
+          "description": "Port name for the NDStats plugin",
+          "title": "Port",
+          "type": "string"
+        },
+        "NDARRAY_PORT": {
+          "description": "Input array port",
+          "title": "Ndarray Port"
+        },
+        "HIST_SIZE": {
+          "description": "Maximum size of Pixel binning histogram (e.g. 256 for Int8)",
+          "title": "Hist Size",
+          "type": "integer"
+        },
+        "P": {
+          "description": "Device Prefix",
+          "title": "P",
+          "type": "string"
+        },
+        "R": {
+          "description": "Device Suffix",
+          "title": "R",
+          "type": "string"
+        },
+        "XSIZE": {
+          "description": "XSIZE, Maximum size of X histograms (e.g. 1024)",
+          "title": "Xsize",
+          "type": "integer"
+        },
+        "YSIZE": {
+          "description": "Maximum size of Y histograms (e.g. 768)",
+          "title": "Ysize",
+          "type": "integer"
+        },
+        "ENABLED": {
+          "default": 0,
+          "description": "Plugin Enabled at startup?",
+          "title": "Enabled",
+          "type": "integer"
+        },
+        "NCHANS": {
+          "default": 2048,
+          "description": "Maximum length of time series (initialises waveform NELM, fixed on IOC boot)",
+          "title": "Nchans",
+          "type": "integer"
+        },
+        "QUEUE": {
+          "default": 2,
+          "description": "Input array queue size",
+          "title": "Queue",
+          "type": "integer"
+        },
+        "BLOCK": {
+          "default": 0,
+          "description": "Blocking callbacks?",
+          "title": "Block",
+          "type": "integer"
+        },
+        "NDARRAY_ADDR": {
+          "default": 0,
+          "description": "Input array port address",
+          "title": "Ndarray Addr",
+          "type": "integer"
+        },
+        "TIMEOUT": {
+          "default": 1,
+          "description": "Timeout",
+          "title": "Timeout",
+          "type": "integer"
+        },
+        "ADDR": {
+          "default": 0,
+          "description": "Asyn Port address",
+          "title": "Addr",
+          "type": "integer"
+        },
+        "MAX_THREADS": {
+          "default": 1,
+          "description": "Maximum number threads",
+          "title": "Max Threads",
+          "type": "integer"
+        },
+        "SCANRATE": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/SCANRATE"
+            }
+          ],
+          "default": "I/O Intr",
+          "description": "Specified scan rate for cpu intensive PVs"
+        },
+        "TS_PORT": {
+          "default": "$(PORT)_TS",
+          "description": "TS port",
+          "title": "Ts Port",
+          "type": "string"
+        }
+      },
+      "required": [
+        "PORT",
+        "NDARRAY_PORT",
+        "HIST_SIZE",
+        "P",
+        "R",
+        "XSIZE",
+        "YSIZE"
+      ],
+      "title": "ADCore_NDStats",
+      "type": "object"
+    },
+    "ADCore_NDStdArrays": {
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "const": "ADCore.NDStdArrays",
+          "default": "ADCore.NDStdArrays",
+          "description": "This plugin provides a waveform record that can display the NDArrays\n    produced by its NDARRAY_PORT",
+          "title": "Type"
+        },
+        "entity_enabled": {
+          "default": true,
+          "description": "enable or disable this entity instance",
+          "title": "Entity Enabled",
+          "type": "boolean"
+        },
+        "P": {
+          "description": "Device Prefix",
+          "title": "P",
+          "type": "string"
+        },
+        "R": {
+          "description": "Device Suffix",
+          "title": "R",
+          "type": "string"
+        },
+        "PORT": {
+          "description": "Port name for the NDStdArrays plugin",
+          "title": "Port",
+          "type": "string"
+        },
+        "NDARRAY_PORT": {
+          "description": "Input array port",
+          "title": "Ndarray Port"
+        },
+        "TYPE": {
+          "description": "Asyn Type e.g. Int32",
+          "title": "Type",
+          "type": "string"
+        },
+        "FTVL": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/FTVL"
+            }
+          ],
+          "description": "Field Type of Value"
+        },
+        "NELEMENTS": {
+          "description": "Number of elements",
+          "title": "Nelements",
+          "type": "integer"
+        },
+        "TIMEOUT": {
+          "default": 1,
+          "description": "Timeout",
+          "title": "Timeout",
+          "type": "integer"
+        },
+        "ADDR": {
+          "default": 0,
+          "description": "Asyn Port address",
+          "title": "Addr",
+          "type": "integer"
+        },
+        "NDARRAY_ADDR": {
+          "default": 0,
+          "description": "Input array port address",
+          "title": "Ndarray Addr",
+          "type": "integer"
+        },
+        "ENABLED": {
+          "default": 0,
+          "description": "Plugin Enabled at startup?",
+          "title": "Enabled",
+          "type": "integer"
+        },
+        "SCANRATE": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/SCANRATE"
+            }
+          ],
+          "default": "I/O Intr",
+          "description": "Specified scan rate for cpu intensive PVs"
+        },
+        "QUEUE": {
+          "default": 2,
+          "description": "Input array queue size",
+          "title": "Queue",
+          "type": "integer"
+        },
+        "BLOCK": {
+          "default": 0,
+          "description": "Blocking callbacks?",
+          "title": "Block",
+          "type": "integer"
+        },
+        "MAX_THREADS": {
+          "default": 1,
+          "description": "Maximum number threads",
+          "title": "Max Threads",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "P",
+        "R",
+        "PORT",
+        "NDARRAY_PORT",
+        "TYPE",
+        "FTVL",
+        "NELEMENTS"
+      ],
+      "title": "ADCore_NDStdArrays",
+      "type": "object"
+    },
+    "ADCore_NDTimeSeries": {
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "const": "ADCore.NDTimeSeries",
+          "default": "ADCore.NDTimeSeries",
+          "description": "This plugin creates time series arrays from callback data",
+          "title": "Type"
+        },
+        "entity_enabled": {
+          "default": true,
+          "description": "enable or disable this entity instance",
+          "title": "Entity Enabled",
+          "type": "boolean"
+        },
+        "P": {
+          "description": "Device prefix",
+          "title": "P",
+          "type": "string"
+        },
+        "R": {
+          "description": "Device suffix",
+          "title": "R",
+          "type": "string"
+        },
+        "PORT": {
+          "description": "Port name for the NDTimeSeries plugin",
+          "title": "Port",
+          "type": "string"
+        },
+        "NDARRAY_PORT": {
+          "description": "Input array port",
+          "title": "Ndarray Port"
+        },
+        "NCHANS": {
+          "description": "Length of time series waveform",
+          "title": "Nchans",
+          "type": "string"
+        },
+        "TIMEOUT": {
+          "default": 1,
+          "description": "Timeout",
+          "title": "Timeout",
+          "type": "integer"
+        },
+        "ADDR": {
+          "default": 0,
+          "description": "Asyn port address",
+          "title": "Addr",
+          "type": "integer"
+        },
+        "NDARRAY_ADDR": {
+          "default": 0,
+          "description": "Input array port address",
+          "title": "Ndarray Addr",
+          "type": "integer"
+        },
+        "ENABLED": {
+          "default": 0,
+          "description": "Plugin Enabled at startup?",
+          "title": "Enabled",
+          "type": "integer"
+        },
+        "SCANRATE": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/SCANRATE"
+            }
+          ],
+          "default": "I/O Intr",
+          "description": "Specified scan rate for cpu intensive PVs"
+        },
+        "TIME_LINK": {
+          "default": 0.1,
+          "description": "Time between points (Can point to a record - use CP)",
+          "title": "Time Link",
+          "type": "number"
+        },
+        "NSIGNALS": {
+          "default": 1,
+          "description": "Maximum number of time series signals",
+          "title": "Nsignals",
+          "type": "integer"
+        },
+        "QUEUE": {
+          "default": 2,
+          "description": "Input array queue size",
+          "title": "Queue",
+          "type": "integer"
+        },
+        "BLOCK": {
+          "default": 0,
+          "description": "Blocking callbacks?",
+          "title": "Block",
+          "type": "integer"
+        },
+        "PRIORITY": {
+          "default": 0,
+          "description": "Thread priority if ASYN_CANBLOCK is set",
+          "title": "Priority",
+          "type": "integer"
+        },
+        "STACKSIZE": {
+          "default": 0,
+          "description": "Stack size if ASYN_CANBLOCK is set",
+          "title": "Stacksize",
+          "type": "integer"
+        },
+        "NAME": {
+          "description": "Name of the signal",
+          "title": "Name",
+          "type": "string"
+        }
+      },
+      "required": [
+        "P",
+        "R",
+        "PORT",
+        "NDARRAY_PORT",
+        "NCHANS",
+        "NAME"
+      ],
+      "title": "ADCore_NDTimeSeries",
+      "type": "object"
+    },
+    "ADCore_NDTransform": {
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "const": "ADCore.NDTransform",
+          "default": "ADCore.NDTransform",
+          "description": "This plugin selects a region of interest and optionally scales it to fit in a particular data type",
+          "title": "Type"
+        },
+        "entity_enabled": {
+          "default": true,
+          "description": "enable or disable this entity instance",
+          "title": "Entity Enabled",
+          "type": "boolean"
+        },
+        "P": {
+          "description": "Device Prefix",
+          "title": "P",
+          "type": "string"
+        },
+        "R": {
+          "description": "Device Suffix",
+          "title": "R",
+          "type": "string"
+        },
+        "PORT": {
+          "description": "Port name for the NDTransform plugin",
+          "title": "Port",
+          "type": "string"
+        },
+        "NDARRAY_PORT": {
+          "description": "Input array port",
+          "title": "Ndarray Port"
+        },
+        "TIMEOUT": {
+          "default": 1,
+          "description": "Timeout",
+          "title": "Timeout",
+          "type": "integer"
+        },
+        "ADDR": {
+          "default": 0,
+          "description": "Asyn Port address",
+          "title": "Addr",
+          "type": "integer"
+        },
+        "NDARRAY_ADDR": {
+          "default": 0,
+          "description": "Input array port address",
+          "title": "Ndarray Addr",
+          "type": "integer"
+        },
+        "ENABLED": {
+          "default": 0,
+          "description": "Plugin Enabled at startup?",
+          "title": "Enabled",
+          "type": "integer"
+        },
+        "SCANRATE": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/SCANRATE"
+            }
+          ],
+          "default": "I/O Intr",
+          "description": "Specified scan rate for cpu intensive PVs"
+        },
+        "QUEUE": {
+          "default": 2,
+          "description": "Input array queue size",
+          "title": "Queue",
+          "type": "integer"
+        },
+        "BLOCK": {
+          "default": 0,
+          "description": "Blocking callbacks?",
+          "title": "Block",
+          "type": "integer"
+        },
+        "MAX_THREADS": {
+          "default": 1,
+          "description": "Maximum number threads",
+          "title": "Max Threads",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "P",
+        "R",
+        "PORT",
+        "NDARRAY_PORT"
+      ],
+      "title": "ADCore_NDTransform",
+      "type": "object"
+    },
+    "ADCore__NDCircularBuff": {
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "const": "ADCore._NDCircularBuff",
+          "default": "ADCore._NDCircularBuff",
+          "description": "TODO:ADD DESCRIPTION",
+          "title": "Type"
+        },
+        "entity_enabled": {
+          "default": true,
+          "description": "enable or disable this entity instance",
+          "title": "Entity Enabled",
+          "type": "boolean"
+        },
+        "P": {
+          "description": "Device Prefix",
+          "title": "P",
+          "type": "string"
+        },
+        "R": {
+          "description": "Device Suffix",
+          "title": "R",
+          "type": "string"
+        },
+        "PORT": {
+          "description": "Asyn Port name",
+          "title": "Port",
+          "type": "string"
+        },
+        "NDARRAY_PORT": {
+          "description": "Input Array Port",
+          "title": "Ndarray Port",
+          "type": "string"
+        },
+        "TIMEOUT": {
+          "default": 1,
+          "description": "Timeout",
+          "title": "Timeout",
+          "type": "integer"
+        },
+        "ADDR": {
+          "default": 0,
+          "description": "Asyn Port address",
+          "title": "Addr",
+          "type": "integer"
+        },
+        "NDARRAY_ADDR": {
+          "default": 0,
+          "description": "Input Array Address",
+          "title": "Ndarray Addr",
+          "type": "integer"
+        },
+        "ENABLED": {
+          "default": 0,
+          "description": "Plugin Enabled at startup?",
+          "title": "Enabled",
+          "type": "integer"
+        },
+        "SCANRATE": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/SCANRATE"
+            }
+          ],
+          "default": "I/O Intr",
+          "description": "Specified scan rate for cpu intensive PVs"
+        },
+        "PRECOUNT": {
+          "default": 100,
+          "description": "Pre-trigger frame count",
+          "title": "Precount",
+          "type": "integer"
+        },
+        "POSTCOUNT": {
+          "default": 100,
+          "description": "Post-trigger frame count",
+          "title": "Postcount",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "P",
+        "R",
+        "PORT",
+        "NDARRAY_PORT"
+      ],
+      "title": "ADCore__NDCircularBuff",
+      "type": "object"
+    },
+    "FTVL": {
+      "enum": [
+        "ENUM",
+        "SHORT",
+        "STRING",
+        "ULONG",
+        "UCHAR",
+        "DOUBLE",
+        "USHORT",
+        "LONG",
+        "FLOAT",
+        "CHAR"
+      ],
+      "title": "FTVL",
+      "type": "string"
+    },
+    "SCANRATE": {
+      "enum": [
+        ".1 second",
+        "1 second",
+        "10 second",
+        "5 second",
+        "Passive",
+        "2 second",
+        ".2 second",
+        ".5 second",
+        "Event",
+        "I/O Intr"
+      ],
+      "title": "SCANRATE",
+      "type": "string"
+    },
+    "datatype": {
+      "enum": [
+        "INT",
+        "DOUBLE",
+        "STRING"
+      ],
+      "title": "datatype",
+      "type": "string"
+    },
+    "dbrtype": {
+      "enum": [
+        "DBR_STRING",
+        "DBR_INT",
+        "DBR_NATIVE",
+        "DBR_SHORT",
+        "DBR_CHAR",
+        "DBR_ENUM",
+        "DBR_LONG",
+        "DBR_FLOAT"
+      ],
+      "title": "dbrtype",
+      "type": "string"
+    },
+    "quadEM_Plugins": {
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "const": "quadEM.Plugins",
+          "default": "quadEM.Plugins",
+          "description": "Instantiates\n  12 NDStats plugins for Current, Sum, Diff and Pos Channels\n  12 NDTimeSeries plugins\n  12 NDArray plugins",
+          "title": "Type"
+        },
+        "entity_enabled": {
+          "default": true,
+          "description": "enable or disable this entity instance",
+          "title": "Entity Enabled",
+          "type": "boolean"
+        },
+        "DEVICE": {
+          "description": "Reference to the parent quadEM device",
+          "title": "Device"
+        },
+        "PORTPREFIX": {
+          "description": "The prefix for plugin asyn port names",
+          "title": "Portprefix",
+          "type": "string"
+        },
+        "STAT_NCHAN": {
+          "description": "Template argument",
+          "title": "Stat Nchan",
+          "type": "integer"
+        },
+        "STAT_XSIZE": {
+          "description": "Template argument",
+          "title": "Stat Xsize",
+          "type": "integer"
+        },
+        "HIST_SIZE": {
+          "default": 256,
+          "description": "Template argument",
+          "title": "Hist Size",
+          "type": "integer"
+        },
+        "QUEUE": {
+          "default": 16,
+          "description": "length of NDArray queue",
+          "title": "Queue",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "DEVICE",
+        "PORTPREFIX",
+        "STAT_NCHAN",
+        "STAT_XSIZE"
+      ],
+      "title": "quadEM_Plugins",
+      "type": "object"
+    },
+    "quadEM_TetrAMM": {
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "const": "quadEM.TetrAMM",
+          "default": "quadEM.TetrAMM",
+          "description": "TODO:ADD DESCRIPTION",
+          "title": "Type"
+        },
+        "entity_enabled": {
+          "default": true,
+          "description": "enable or disable this entity instance",
+          "title": "Entity Enabled",
+          "type": "boolean"
+        },
+        "PORT": {
+          "description": "Template argument",
+          "title": "Port",
+          "type": "string"
+        },
+        "P": {
+          "description": "Base name of PV.",
+          "title": "P",
+          "type": "string"
+        },
+        "R": {
+          "description": "Second macro for name of PV.",
+          "title": "R",
+          "type": "string"
+        },
+        "QSIZE": {
+          "default": 20,
+          "description": "..",
+          "title": "Qsize",
+          "type": "integer"
+        },
+        "RING_SIZE": {
+          "default": 10000,
+          "description": "..",
+          "title": "Ring Size",
+          "type": "integer"
+        },
+        "IP": {
+          "description": "IP address of the TetrAMM device",
+          "title": "Ip",
+          "type": "string"
+        }
+      },
+      "required": [
+        "PORT",
+        "P",
+        "R",
+        "IP"
+      ],
+      "title": "quadEM_TetrAMM",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "ioc_name": {
+      "description": "Name of IOC instance",
+      "title": "Ioc Name",
+      "type": "string"
+    },
+    "description": {
+      "description": "Description of what the IOC does",
+      "title": "Description",
+      "type": "string"
+    },
+    "entities": {
+      "description": "List of entities this IOC instantiates",
+      "items": {
+        "discriminator": {
+          "mapping": {
+            "ADCore.NDAttrPlot": "#/$defs/ADCore_NDAttrPlot",
+            "ADCore.NDAttribute": "#/$defs/ADCore_NDAttribute",
+            "ADCore.NDAttributes": "#/$defs/ADCore_NDAttributes",
+            "ADCore.NDCircularBuff": "#/$defs/ADCore_NDCircularBuff",
+            "ADCore.NDCodec": "#/$defs/ADCore_NDCodec",
+            "ADCore.NDColorConvert": "#/$defs/ADCore_NDColorConvert",
+            "ADCore.NDFFT": "#/$defs/ADCore_NDFFT",
+            "ADCore.NDFileHDF5": "#/$defs/ADCore_NDFileHDF5",
+            "ADCore.NDFileJPEG": "#/$defs/ADCore_NDFileJPEG",
+            "ADCore.NDFileMagick": "#/$defs/ADCore_NDFileMagick",
+            "ADCore.NDFileNetCDF": "#/$defs/ADCore_NDFileNetCDF",
+            "ADCore.NDFileNexus": "#/$defs/ADCore_NDFileNexus",
+            "ADCore.NDFileNull": "#/$defs/ADCore_NDFileNull",
+            "ADCore.NDFileTIFF": "#/$defs/ADCore_NDFileTIFF",
+            "ADCore.NDGather": "#/$defs/ADCore_NDGather",
+            "ADCore.NDGather8": "#/$defs/ADCore_NDGather8",
+            "ADCore.NDOverlay": "#/$defs/ADCore_NDOverlay",
+            "ADCore.NDPosPlugin": "#/$defs/ADCore_NDPosPlugin",
+            "ADCore.NDProcess": "#/$defs/ADCore_NDProcess",
+            "ADCore.NDPvaPlugin": "#/$defs/ADCore_NDPvaPlugin",
+            "ADCore.NDROI": "#/$defs/ADCore_NDROI",
+            "ADCore.NDROIStat": "#/$defs/ADCore_NDROIStat",
+            "ADCore.NDScatter": "#/$defs/ADCore_NDScatter",
+            "ADCore.NDStats": "#/$defs/ADCore_NDStats",
+            "ADCore.NDStdArrays": "#/$defs/ADCore_NDStdArrays",
+            "ADCore.NDTimeSeries": "#/$defs/ADCore_NDTimeSeries",
+            "ADCore.NDTransform": "#/$defs/ADCore_NDTransform",
+            "ADCore._NDCircularBuff": "#/$defs/ADCore__NDCircularBuff",
+            "quadEM.Plugins": "#/$defs/quadEM_Plugins",
+            "quadEM.TetrAMM": "#/$defs/quadEM_TetrAMM"
+          },
+          "propertyName": "type"
+        },
+        "oneOf": [
+          {
+            "$ref": "#/$defs/ADCore_NDFileNexus"
+          },
+          {
+            "$ref": "#/$defs/ADCore_NDFFT"
+          },
+          {
+            "$ref": "#/$defs/ADCore_NDPosPlugin"
+          },
+          {
+            "$ref": "#/$defs/ADCore_NDOverlay"
+          },
+          {
+            "$ref": "#/$defs/ADCore_NDColorConvert"
+          },
+          {
+            "$ref": "#/$defs/ADCore_NDFileHDF5"
+          },
+          {
+            "$ref": "#/$defs/ADCore_NDFileNull"
+          },
+          {
+            "$ref": "#/$defs/ADCore_NDStdArrays"
+          },
+          {
+            "$ref": "#/$defs/ADCore__NDCircularBuff"
+          },
+          {
+            "$ref": "#/$defs/ADCore_NDFileMagick"
+          },
+          {
+            "$ref": "#/$defs/ADCore_NDCircularBuff"
+          },
+          {
+            "$ref": "#/$defs/ADCore_NDAttrPlot"
+          },
+          {
+            "$ref": "#/$defs/ADCore_NDCodec"
+          },
+          {
+            "$ref": "#/$defs/ADCore_NDGather"
+          },
+          {
+            "$ref": "#/$defs/ADCore_NDROI"
+          },
+          {
+            "$ref": "#/$defs/ADCore_NDAttribute"
+          },
+          {
+            "$ref": "#/$defs/ADCore_NDStats"
+          },
+          {
+            "$ref": "#/$defs/ADCore_NDTimeSeries"
+          },
+          {
+            "$ref": "#/$defs/ADCore_NDAttributes"
+          },
+          {
+            "$ref": "#/$defs/ADCore_NDProcess"
+          },
+          {
+            "$ref": "#/$defs/ADCore_NDFileTIFF"
+          },
+          {
+            "$ref": "#/$defs/ADCore_NDGather8"
+          },
+          {
+            "$ref": "#/$defs/ADCore_NDROIStat"
+          },
+          {
+            "$ref": "#/$defs/ADCore_NDFileNetCDF"
+          },
+          {
+            "$ref": "#/$defs/ADCore_NDPvaPlugin"
+          },
+          {
+            "$ref": "#/$defs/ADCore_NDTransform"
+          },
+          {
+            "$ref": "#/$defs/ADCore_NDFileJPEG"
+          },
+          {
+            "$ref": "#/$defs/ADCore_NDScatter"
+          },
+          {
+            "$ref": "#/$defs/quadEM_TetrAMM"
+          },
+          {
+            "$ref": "#/$defs/quadEM_Plugins"
+          }
+        ]
+      },
+      "title": "Entities",
+      "type": "array"
+    }
+  },
+  "required": [
+    "ioc_name",
+    "description",
+    "entities"
+  ],
+  "title": "NewIOC",
+  "type": "object"
+}

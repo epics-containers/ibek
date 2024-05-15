@@ -2,10 +2,10 @@
 Functions for rendering lines in the boot script using Jinja2
 """
 
-from typing import Callable, List, Optional, Union
+from typing import Callable, List, Optional, Sequence, Union
 
-from .ioc import IOC, Entity
-from .support import Comment, Script, Text, When
+from .definition import Comment, Script, Text, When
+from .ioc import Entity
 from .utils import UTILS
 
 
@@ -104,33 +104,35 @@ class Render:
         return env_var_txt + "\n"
 
     def render_elements(
-        self, ioc: IOC, method: Callable[[Entity], Union[str, None]]
+        self,
+        entities: Sequence[Entity],
+        render_element: Callable[[Entity], Union[str, None]],
     ) -> str:
         """
         Render elements of a given IOC instance based on calling the correct method
         """
         elements = ""
-        for entity in ioc.entities:
+        for entity in entities:
             if entity.entity_enabled:
-                element = method(entity)
+                element = render_element(entity)
                 if element:
                     elements += element
         return elements
 
-    def render_pre_ioc_init_elements(self, ioc: IOC) -> str:
+    def render_pre_ioc_init_elements(self, entities: Sequence[Entity]) -> str:
         """
         Render all of the startup script entries for a given IOC instance
         """
-        return self.render_elements(ioc, self.render_pre_ioc_init)
+        return self.render_elements(entities, self.render_pre_ioc_init)
 
-    def render_post_ioc_init_elements(self, ioc: IOC) -> str:
+    def render_post_ioc_init_elements(self, entities: Sequence[Entity]) -> str:
         """
         Render all of the post-iocInit elements for a given IOC instance
         """
-        return self.render_elements(ioc, self.render_post_ioc_init)
+        return self.render_elements(entities, self.render_post_ioc_init)
 
-    def render_environment_variable_elements(self, ioc: IOC) -> str:
+    def render_environment_variable_elements(self, entities: Sequence[Entity]) -> str:
         """
         Render all of the environment variable entries for a given IOC instance
         """
-        return self.render_elements(ioc, self.render_environment_variables)
+        return self.render_elements(entities, self.render_environment_variables)

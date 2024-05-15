@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=../schemas/quadem.ibek.ioc.schema.json
+
+ioc_name: "{{ __utils__.get_env('IOC_NAME') }}"
+description: Example TetrAMM for BL03I
+
+entities:
+  - type: quadEM.TetrAMM
+    PORT: XBPM1.DRV
+    P: BL03I-EA-XBPM-01
+    R: ":DRV:"
+    QSIZE: 20
+    IP: "172.23.103.85:10001"
+
+  - type: quadEM.Plugins
+    DEVICE: XBPM1.DRV
+    PORTPREFIX: XBPM1
+    STAT_NCHAN: 1000
+    STAT_XSIZE: 10000

@@ -2,31 +2,26 @@
 Some unit tests for ibek.
 """
 
+from ibek.args import IdArg, ObjectArg
 from ibek.commands import semver_compare
-from ibek.ioc import (
-    clear_entity_model_ids,
-    id_to_entity,
-    make_entity_models,
-    make_ioc_model,
-)
-from ibek.support import Definition, IdArg, ObjectArg, Support
+from ibek.ioc import id_to_entity
+from ibek.ioc_factory import IocFactory
+from ibek.support import EntityDefinition, Support
 
 
-def test_object_references():
+def test_object_references(entity_factory):
     """
     Verify the object references are correctly resolved
     """
-    clear_entity_model_ids()
-
     support = Support(
         module="mymodule",
         defs=[
-            Definition(
+            EntityDefinition(
                 name="port",
                 description="a port",
                 args=[IdArg(name="name", description="an id")],
             ),
-            Definition(
+            EntityDefinition(
                 name="device",
                 description="a device",
                 args=[ObjectArg(name="port", description="the port")],
@@ -34,8 +29,8 @@ def test_object_references():
         ],
     )
 
-    entities = make_entity_models(support)
-    ioc_model = make_ioc_model(entities)
+    entities = entity_factory._make_entity_models(support)
+    ioc_model = IocFactory().make_ioc_model(entities)
     assert entities[0].__definition__ == support.defs[0]
     assert entities[1].__definition__ == support.defs[1]
 

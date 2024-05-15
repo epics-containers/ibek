@@ -8,10 +8,12 @@ from pvi._format.dls import DLSFormatter
 from pvi._format.template import format_template
 from pvi.device import Device
 
-from ibek.gen_scripts import create_boot_script, create_db_script, ioc_deserialize
+from ibek.definition import Database
+from ibek.entity_factory import EntityFactory
+from ibek.gen_scripts import create_boot_script, create_db_script
 from ibek.globals import GLOBALS, NaturalOrderGroup
 from ibek.ioc import IOC, Entity
-from ibek.support import Database
+from ibek.ioc_factory import IocFactory
 from ibek.utils import UTILS
 
 runtime_cli = typer.Typer(cls=NaturalOrderGroup)
@@ -36,7 +38,13 @@ def generate(
     # the file name under of the instance definition provides the IOC name
     UTILS.set_file_name(instance)
 
-    ioc_instance = ioc_deserialize(instance, definitions)
+    entity_factory = EntityFactory()
+    entity_models = entity_factory.make_entity_models(definitions)
+    ioc_instance = IocFactory().deserialize_ioc(instance, entity_models)
+
+    # post processing to insert SubEntity instances
+    all_entities = entity_factory.resolve_sub_entities(ioc_instance.entities)
+    ioc_instance.entities = all_entities
 
     # Clear out generated files so developers know if something stops being generated
     shutil.rmtree(GLOBALS.RUNTIME_OUTPUT, ignore_errors=True)
@@ -47,13 +55,13 @@ def generate(
     pvi_index_entries, pvi_databases = generate_pvi(ioc_instance)
     generate_index(ioc_instance.ioc_name, pvi_index_entries)
 
-    script_txt = create_boot_script(ioc_instance)
+    script_txt = create_boot_script(ioc_instance.entities)
     script_output = GLOBALS.RUNTIME_OUTPUT / "st.cmd"
     script_output.parent.mkdir(parents=True, exist_ok=True)
     with script_output.open("w") as stream:
         stream.write(script_txt)
 
-    db_txt = create_db_script(ioc_instance, pvi_databases)
+    db_txt = create_db_script(ioc_instance.entities, pvi_databases)
     db_output = GLOBALS.RUNTIME_OUTPUT / "ioc.subst"
     with db_output.open("w") as stream:
         stream.write(db_txt)
@@ -77,9 +85,10 @@ def generate_pvi(ioc: IOC) -> Tuple[List[IndexEntry], List[Tuple[Database, Entit
 
     formatted_pvi_devices: List[str] = []
     for entity in ioc.entities:
-        entity_pvi = entity.__definition__.pvi
-        if entity_pvi is None:
+        definition = entity.__definition__
+        if not hasattr(definition, "pvi") or definition.pvi is None:
             continue
+        entity_pvi = definition.pvi
 
         pvi_yaml = GLOBALS.PVI_DEFS / entity_pvi.yaml_path
         device_name = pvi_yaml.name.split(".")[0]

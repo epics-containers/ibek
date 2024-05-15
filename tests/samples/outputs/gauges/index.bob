@@ -1,0 +1,28 @@
+<display version="2.0.0">
+  <name>gauges.ibek.ioc</name>
+  <x>0</x>
+  <y use_class="true">0</y>
+  <width>10</width>
+  <height>35</height>
+  <grid_step_x>4</grid_step_x>
+  <grid_step_y>4</grid_step_y>
+  <widget type="label" version="2.0.0">
+    <name>Title</name>
+    <class>TITLE</class>
+    <text>gauges.ibek.ioc</text>
+    <x use_class="true">0</x>
+    <y use_class="true">0</y>
+    <width>10</width>
+    <height>25</height>
+    <font use_class="true">
+      <font name="Header 1" family="Liberation Sans" style="BOLD" size="22.0">
+      </font>
+    </font>
+    <foreground_color use_class="true">
+      <color name="Text" red="0" green="0" blue="0">
+      </color>
+    </foreground_color>
+    <transparent use_class="true">true</transparent>
+    <horizontal_alignment>1</horizontal_alignment>
+  </widget>
+</display>

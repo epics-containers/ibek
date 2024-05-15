@@ -1,0 +1,292 @@
+{
+  "$defs": {
+    "asyn_AsynIP": {
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "const": "asyn.AsynIP",
+          "default": "asyn.AsynIP",
+          "description": "Asyn IP Port",
+          "title": "Type"
+        },
+        "entity_enabled": {
+          "default": true,
+          "description": "enable or disable this entity instance",
+          "title": "Entity Enabled",
+          "type": "boolean"
+        },
+        "port": {
+          "description": "Serial port tty name / IP address optionally followed by protocol",
+          "title": "Port",
+          "type": "string"
+        },
+        "name": {
+          "description": "Override name",
+          "title": "Name",
+          "type": "string"
+        },
+        "input_eos": {
+          "default": "\"\\n\"",
+          "description": "Input end of string (terminator)",
+          "title": "Input Eos",
+          "type": "string"
+        },
+        "output_eos": {
+          "default": "\"\\n\"",
+          "description": "Output end of string (terminator)",
+          "title": "Output Eos",
+          "type": "string"
+        },
+        "priority": {
+          "default": 100,
+          "description": "Priority",
+          "title": "Priority",
+          "type": "integer"
+        },
+        "noAuto_connect": {
+          "default": false,
+          "description": "Set to stop auto_connect",
+          "title": "Noauto Connect",
+          "type": "boolean"
+        },
+        "noProcessEos": {
+          "default": false,
+          "description": "Set to avoid processing end of string",
+          "title": "Noprocesseos",
+          "type": "boolean"
+        },
+        "baud": {
+          "default": 9600,
+          "description": "Baud Rate",
+          "title": "Baud",
+          "type": "integer"
+        },
+        "parity": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/parity"
+            }
+          ],
+          "default": "none",
+          "description": "Parity"
+        },
+        "crtscts": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/crtscts"
+            }
+          ],
+          "default": "N",
+          "description": "Set hardware flow control on"
+        },
+        "stop": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/stop"
+            }
+          ],
+          "default": "1",
+          "description": "Stop Bits"
+        },
+        "disconnectOnReadTimeout": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/disconnectOnReadTimeout"
+            }
+          ],
+          "default": "Y",
+          "description": "Disconnect when a read times out"
+        },
+        "bits": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/bits"
+            }
+          ],
+          "default": "8",
+          "description": "Bits"
+        }
+      },
+      "required": [
+        "port",
+        "name"
+      ],
+      "title": "asyn_AsynIP",
+      "type": "object"
+    },
+    "bits": {
+      "enum": [
+        "8",
+        "5",
+        "7",
+        "6"
+      ],
+      "title": "bits",
+      "type": "string"
+    },
+    "crtscts": {
+      "enum": [
+        "Y",
+        "N"
+      ],
+      "title": "crtscts",
+      "type": "string"
+    },
+    "disconnectOnReadTimeout": {
+      "enum": [
+        "Y",
+        "N"
+      ],
+      "title": "disconnectOnReadTimeout",
+      "type": "string"
+    },
+    "gauges_GaugeGroup": {
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "const": "gauges.GaugeGroup",
+          "default": "gauges.GaugeGroup",
+          "description": "Group of gauges",
+          "title": "Type"
+        },
+        "entity_enabled": {
+          "default": true,
+          "description": "enable or disable this entity instance",
+          "title": "Entity Enabled",
+          "type": "boolean"
+        },
+        "name": {
+          "description": "name for the",
+          "title": "Name",
+          "type": "string"
+        },
+        "gauge1": {
+          "description": "First gauge",
+          "title": "Gauge1"
+        },
+        "gauge2": {
+          "default": "{{gauge1.name}}",
+          "description": "Second gauge",
+          "title": "Gauge2"
+        },
+        "gauge3": {
+          "default": "{{gauge1.name}}\n",
+          "description": "Third gauge",
+          "title": "Gauge3"
+        },
+        "gauge4": {
+          "default": "{{gauge1.name}}\n",
+          "description": "Fourth gauge",
+          "title": "Gauge4"
+        }
+      },
+      "required": [
+        "name",
+        "gauge1"
+      ],
+      "title": "gauges_GaugeGroup",
+      "type": "object"
+    },
+    "gauges_Mks937bGauge": {
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "const": "gauges.Mks937bGauge",
+          "default": "gauges.Mks937bGauge",
+          "description": "MKS 937b Gauge controller",
+          "title": "Type"
+        },
+        "entity_enabled": {
+          "default": true,
+          "description": "enable or disable this entity instance",
+          "title": "Entity Enabled",
+          "type": "boolean"
+        },
+        "port": {
+          "description": "Asyn port that connects to the device",
+          "title": "Port"
+        },
+        "name": {
+          "description": "name for the Device",
+          "title": "Name",
+          "type": "string"
+        },
+        "P": {
+          "description": "PV prefix",
+          "title": "P",
+          "type": "string"
+        }
+      },
+      "required": [
+        "port",
+        "name",
+        "P"
+      ],
+      "title": "gauges_Mks937bGauge",
+      "type": "object"
+    },
+    "parity": {
+      "enum": [
+        "even",
+        "none",
+        "odd"
+      ],
+      "title": "parity",
+      "type": "string"
+    },
+    "stop": {
+      "enum": [
+        "1",
+        "2"
+      ],
+      "title": "stop",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "ioc_name": {
+      "description": "Name of IOC instance",
+      "title": "Ioc Name",
+      "type": "string"
+    },
+    "description": {
+      "description": "Description of what the IOC does",
+      "title": "Description",
+      "type": "string"
+    },
+    "entities": {
+      "description": "List of entities this IOC instantiates",
+      "items": {
+        "discriminator": {
+          "mapping": {
+            "asyn.AsynIP": "#/$defs/asyn_AsynIP",
+            "gauges.GaugeGroup": "#/$defs/gauges_GaugeGroup",
+            "gauges.Mks937bGauge": "#/$defs/gauges_Mks937bGauge"
+          },
+          "propertyName": "type"
+        },
+        "oneOf": [
+          {
+            "$ref": "#/$defs/asyn_AsynIP"
+          },
+          {
+            "$ref": "#/$defs/gauges_Mks937bGauge"
+          },
+          {
+            "$ref": "#/$defs/gauges_GaugeGroup"
+          }
+        ]
+      },
+      "title": "Entities",
+      "type": "array"
+    }
+  },
+  "required": [
+    "ioc_name",
+    "description",
+    "entities"
+  ],
+  "title": "NewIOC",
+  "type": "object"
+}

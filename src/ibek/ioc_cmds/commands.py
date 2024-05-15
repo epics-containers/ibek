@@ -5,13 +5,14 @@ from typing import Annotated, List, Optional
 
 import typer
 
-from ibek.gen_scripts import ioc_create_model
+from ibek.entity_factory import EntityFactory
 from ibek.globals import (
     GLOBALS,
     SUPPORT_YAML_PATTERN,
     NaturalOrderGroup,
 )
 from ibek.ioc_cmds.docker import build_dockerfile
+from ibek.ioc_factory import IocFactory
 
 from .assets import extract_assets
 
@@ -79,7 +80,11 @@ def generate_schema(
         log.error(f"No `definitions` given and none found in {GLOBALS.IBEK_DEFS}")
         raise typer.Exit(1)
 
-    ioc_model = ioc_create_model(definitions)
+    entity_factory = EntityFactory()
+    entity_models = entity_factory.make_entity_models(definitions)
+    ioc_factory = IocFactory()
+    ioc_model = ioc_factory.make_ioc_model(entity_models)
+
     schema = json.dumps(ioc_model.model_json_schema(), indent=2)
     if output is None:
         typer.echo(schema)
