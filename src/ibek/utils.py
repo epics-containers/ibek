@@ -110,13 +110,17 @@ class Utils:
             # be passed a non string which will always render to itself
             return template_text
 
-        jinja_template = Template(template_text)
-        return jinja_template.render(
-            context,
-            __utils__=self,
-            ioc_yaml_file_name=self.file_name,
-            ioc_name=self.ioc_name,
-        )
+        try:
+            jinja_template = Template(template_text)
+            return jinja_template.render(
+                context,
+                __utils__=self,
+                ioc_yaml_file_name=self.file_name,
+                ioc_name=self.ioc_name,
+            )
+        except Exception:
+            print(f"ERROR RENDERING TEMPLATE:\n{template_text}")
+            raise
 
     def render_map(self, context: Any, map: Mapping[str, str | None]) -> dict[str, str]:
         """
