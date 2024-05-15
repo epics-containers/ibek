@@ -28,14 +28,8 @@
           "title": "Controller"
         },
         "axisName": {
-          "description": "The axis number",
+          "description": "The axis name",
           "title": "Axisname",
-          "type": "string"
-        },
-        "num": {
-          "default": "{{ __utils__.counter(\"motorTML.axisCount\", start=0) }}",
-          "description": "Counts the number of axes declared",
-          "title": "Num",
           "type": "string"
         },
         "CONFIG": {
@@ -48,6 +42,12 @@
           "default": "{{ __utils__.get_var('motorTML.axisConfiguration').append(CONFIG) }}",
           "description": "Adds an axis configuration entry to the controller's list",
           "title": "Axisconfiguration",
+          "type": "string"
+        },
+        "num": {
+          "default": "{{ __utils__.counter(\"motorTML.axisCount\", start=0) }}",
+          "description": "Counts the number of axes declared",
+          "title": "Num",
           "type": "string"
         }
       },

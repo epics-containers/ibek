@@ -60,11 +60,7 @@ defs:
       - type: str
         name: axisName
         description: |-
-          The axis number
-      - name: num
-        description: Counts the number of axes declared
-        default: |-
-          {{ __utils__.counter("motorTML.axisCount", start=0) }}
+          The axis name
       - type: str
         name: CONFIG
         description: |-
@@ -77,3 +73,7 @@ defs:
         description: Adds an axis configuration entry to the controller's list
         value: |-
           {{ __utils__.get_var('motorTML.axisConfiguration').append(CONFIG) }}
+      - name: num
+        description: Counts the number of axes declared
+        value: |-
+          {{ __utils__.counter("motorTML.axisCount", start=0) }}
