@@ -80,7 +80,7 @@ def test_motor_sim_schema(tmp_path: Path, samples: Path):
     assert expected == actual
 
 
-def test_build_runtime_motorSim(epics_root: Path, samples: Path):
+def test_build_runtime_motorSim(tmp_epics_root: Path, samples: Path):
     """
     build an ioc runtime script from an IOC instance entity file
     and multiple support module definition files
@@ -96,27 +96,27 @@ def test_build_runtime_motorSim(epics_root: Path, samples: Path):
     generate(ioc_yaml, [support_yaml1, support_yaml2])
 
     example_boot = (expected_outputs / "st.cmd").read_text()
-    actual_boot = (epics_root / "runtime" / "st.cmd").read_text()
+    actual_boot = (tmp_epics_root / "runtime" / "st.cmd").read_text()
     assert example_boot == actual_boot
 
     example_db = (expected_outputs / "ioc.subst").read_text()
-    actual_db = (epics_root / "runtime" / "ioc.subst").read_text()
+    actual_db = (tmp_epics_root / "runtime" / "ioc.subst").read_text()
     assert example_db == actual_db
 
     example_index = (expected_outputs / "index.bob").read_text()
-    actual_index = (epics_root / "opi" / "index.bob").read_text()
+    actual_index = (tmp_epics_root / "opi" / "index.bob").read_text()
     assert example_index == actual_index
 
     example_bob = (expected_outputs / "simple.pvi.bob").read_text()
-    actual_bob = (epics_root / "opi" / "simple.pvi.bob").read_text()
+    actual_bob = (tmp_epics_root / "opi" / "simple.pvi.bob").read_text()
     assert example_bob == actual_bob
 
     example_template = (expected_outputs / "simple.pvi.template").read_text()
-    actual_template = (epics_root / "runtime" / "simple.pvi.template").read_text()
+    actual_template = (tmp_epics_root / "runtime" / "simple.pvi.template").read_text()
     assert example_template == actual_template
 
 
-def test_build_utils_features(epics_root: Path, samples: Path):
+def test_build_utils_features(tmp_epics_root: Path, samples: Path):
     """
     build an ioc runtime script to verify utils features
     """
@@ -126,11 +126,11 @@ def test_build_utils_features(epics_root: Path, samples: Path):
     run_cli("runtime", "generate", ioc_yaml, support_yaml)
 
     example_boot = (samples / "outputs" / "utils" / "st.cmd").read_text()
-    actual_boot = (epics_root / "runtime" / "st.cmd").read_text()
+    actual_boot = (tmp_epics_root / "runtime" / "st.cmd").read_text()
     assert example_boot == actual_boot
 
     example_db = (samples / "outputs" / "utils" / "ioc.subst").read_text()
-    actual_db = (epics_root / "runtime" / "ioc.subst").read_text()
+    actual_db = (tmp_epics_root / "runtime" / "ioc.subst").read_text()
     assert example_db == actual_db
 
 
@@ -147,7 +147,7 @@ def test_generate_links_ibek(samples: Path, mocker: MockerFixture):
     )
 
 
-def test_ipac(epics_root: Path, samples: Path):
+def test_ipac(tmp_epics_root: Path, samples: Path):
     """
     Tests that an id argument can include another argument in its default value
     """
@@ -164,11 +164,11 @@ def test_ipac(epics_root: Path, samples: Path):
     generate(ioc_yaml, [support_yaml1, support_yaml2])
 
     example_boot = (expected_outputs / "st.cmd").read_text()
-    actual_boot = (epics_root / "runtime" / "st.cmd").read_text()
+    actual_boot = (tmp_epics_root / "runtime" / "st.cmd").read_text()
     assert example_boot == actual_boot
 
 
-def test_gauges(epics_root: Path, samples: Path):
+def test_gauges(tmp_epics_root: Path, samples: Path):
     """
     Tests that an id argument can include another argument in its default value
     """
@@ -180,11 +180,11 @@ def test_gauges(epics_root: Path, samples: Path):
     generate(ioc_yaml, [support_yaml1, support_yaml2])
 
     example_boot = (expected_outputs / "st.cmd").read_text()
-    actual_boot = (epics_root / "runtime" / "st.cmd").read_text()
+    actual_boot = (tmp_epics_root / "runtime" / "st.cmd").read_text()
     assert example_boot == actual_boot
 
 
-def test_quadem(epics_root: Path, samples: Path):
+def test_quadem(tmp_epics_root: Path, samples: Path):
     """
     Tests the use of CollectionDefinitions in an IOC instance
     this example uses the tetramm beam position monitor module
@@ -197,9 +197,9 @@ def test_quadem(epics_root: Path, samples: Path):
     generate(ioc_yaml, [support_yaml1, support_yaml2])
 
     example_boot = (expected_outputs / "st.cmd").read_text()
-    actual_boot = (epics_root / "runtime" / "st.cmd").read_text()
+    actual_boot = (tmp_epics_root / "runtime" / "st.cmd").read_text()
     assert example_boot == actual_boot
 
     example_db = (samples / "outputs" / "quadem" / "ioc.subst").read_text()
-    actual_db = (epics_root / "runtime" / "ioc.subst").read_text()
+    actual_db = (tmp_epics_root / "runtime" / "ioc.subst").read_text()
     assert example_db == actual_db

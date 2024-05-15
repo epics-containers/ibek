@@ -32,7 +32,7 @@ def test_symlink_pvi(tmp_path: Path, samples: Path):
 
 # note this must refer to epics_root to patch where check_deps looks for
 # the support files
-def test_check_dependencies(epics_root: Path):
+def test_check_dependencies(tmp_epics_root: Path):
     # Check Passes vs test data
     check_deps(["ADSimDetector"])
 

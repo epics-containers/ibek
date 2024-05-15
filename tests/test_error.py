@@ -13,7 +13,7 @@ from ibek.utils import UTILS
 from tests.conftest import run_cli
 
 
-def test_counter_reuse(epics_root: Path, samples: Path):
+def test_counter_reuse(tmp_epics_root: Path, samples: Path):
     """
     Check you cannot redefine a counter with the same name and different params
     """
@@ -30,7 +30,7 @@ def test_counter_reuse(epics_root: Path, samples: Path):
     )
 
 
-def test_counter_overuse(epics_root: Path, samples: Path):
+def test_counter_overuse(tmp_epics_root: Path, samples: Path):
     """
     Check that counter limits are enforced
     """
@@ -60,7 +60,7 @@ def test_bad_ref(samples: Path):
     assert "object controllerOnePort_BAD_REF not found" in str(ctx.value)
 
 
-def test_bad_db(epics_root: Path, samples: Path):
+def test_bad_db(tmp_epics_root: Path, samples: Path):
     """
     Check bad database args are caught
     """

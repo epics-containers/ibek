@@ -60,11 +60,13 @@ def entity_factory():
 
 
 @fixture
-def epics_root(samples: Path, tmp_path: Path, mocker: MockerFixture):
+def tmp_epics_root(samples: Path, tmp_path: Path, mocker: MockerFixture):
     # create an partially populated epics_root structure in a temporary folder
     epics = tmp_path / "epics"
-    shutil.copytree(samples / "epics", epics)
-    Path.mkdir(epics / "opi", exist_ok=True)
+    epics.mkdir()
+    shutil.copytree(samples / "epics" / "pvi-defs", epics / "pvi-defs")
+    shutil.copytree(samples / "epics" / "support", epics / "support")
+    Path.mkdir(epics / "opi")
     Path.mkdir(epics / "epics-base")
     Path.mkdir(epics / "ioc/config", parents=True)
     Path.mkdir(epics / "ibek-defs")

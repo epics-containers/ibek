@@ -76,7 +76,6 @@ class _Globals:
     def PVI_DEFS(self):
         """Directory containing pvi device yaml definitions."""
         return self._EPICS_ROOT / "pvi-defs"
-        return self._EPICS_ROOT / "pvi-defs"
 
     @property
     def OPI_OUTPUT(self):
@@ -85,7 +84,7 @@ class _Globals:
 
     @property
     def EPICS_BASE(self):
-        """xx"""
+        """The folder containing the epics base source and binaries"""
         return self._EPICS_ROOT / "epics-base"
 
     @property
@@ -95,7 +94,7 @@ class _Globals:
 
     @property
     def CONFIG_DIR_NAME(self):
-        """configuration directory name for the IOC"""
+        """Name of config directory within IOC directory"""
         return "config"
 
     @property
