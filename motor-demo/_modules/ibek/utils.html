@@ -8,7 +8,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>ibek.utils &#8212; ibek 3.5.0b2.dev5+g4aaa2cf5 documentation</title>
+    <title>ibek.utils &#8212; ibek 3.5.0b2.dev5+g2fb8d91e documentation</title>
   
   
   
@@ -527,8 +527,7 @@ document.write(`
 
 <div class="viewcode-block" id="Utils.get_var"><a class="viewcode-back" href="../../user/reference/api.html#ibek.utils.Utils.get_var">[docs]</a>    <span class="k">def</span> <span class="nf">get_var</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;get the value a global variable for our jinja context&quot;&quot;&quot;</span>
-        <span class="c1"># Intentionally raises a KeyError if the key doesn&#39;t exist</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="n">key</span><span class="p">]</span></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">variables</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="Utils.counter"><a class="viewcode-back" href="../../user/reference/api.html#ibek.utils.Utils.counter">[docs]</a>    <span class="k">def</span> <span class="nf">counter</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">start</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">stop</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">65535</span><span class="p">,</span> <span class="n">inc</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span>
