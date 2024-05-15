@@ -28,11 +28,6 @@
           "title": "Controllername",
           "type": "string"
         },
-        "axes": {
-          "description": "Number of axes",
-          "title": "Axes",
-          "type": "integer"
-        },
         "P": {
           "description": "Device PV Prefix",
           "title": "P",
@@ -69,7 +64,6 @@
       },
       "required": [
         "controllerName",
-        "axes",
         "P",
         "TTY",
         "hostid"
@@ -256,7 +250,7 @@
           "type": "string"
         },
         "CONFIG": {
-          "default": ",AXIS_SETUP_{{num}}=$(SUPPORT)/motorTechnosoft/tml_lib/config/{{axconf}},AXIS_ID_{{num}}={{axid}},AXIS_HOMING_SW_{{num}}={{homing}}",
+          "default": "{%- set num = __utils__.counter(\"motorTML.axisCount\", start=0) -%}\n,AXIS_SETUP_{{num}}=$(SUPPORT)/motorTechnosoft/tml_lib/config/{{axconf}},AXIS_ID_{{num}}={{axid}},AXIS_HOMING_SW_{{num}}={{homing}}",
           "description": "Axis configuration string to add to the controller configuration",
           "title": "Config",
           "type": "string"
@@ -265,12 +259,6 @@
           "default": "{{ __utils__.get_var('motorTML.axisConfiguration').append(CONFIG) }}",
           "description": "Adds an axis configuration entry to the controller's list",
           "title": "Axisconfiguration",
-          "type": "string"
-        },
-        "num": {
-          "default": "{{ __utils__.counter(\"motorTML.axisCount\", start=0) }}",
-          "description": "Counts the number of axes declared",
-          "title": "Num",
           "type": "string"
         }
       },
