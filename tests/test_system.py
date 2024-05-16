@@ -3,6 +3,7 @@ some system tests
 """
 
 import os
+import re
 import shutil
 import subprocess
 from pathlib import Path
@@ -12,8 +13,10 @@ import pytest
 
 def run_command(command: str, error_OK=False, show=False):
     """
-    Run a command and return the output
+    Run a command and print the output to the console. Throw an exception on failure.
     """
+    print(f"Running: {command}")
+
     p_result = subprocess.run(command, capture_output=True, shell=True)
 
     output = p_result.stdout.decode()
@@ -24,6 +27,8 @@ def run_command(command: str, error_OK=False, show=False):
     if p_result.returncode != 0:
         msg = f"Command Failed: {command}\n\n{result}\n\n\n"
         raise RuntimeError(msg)
+
+    print(result)
 
 
 @pytest.mark.skipif(
@@ -44,14 +49,16 @@ def test_container_build_and_run(tmp_path: Path):
     shutil.copytree(ibek, tmp_path / ils / "ibek")
     docker = tmp_path / ils / "Dockerfile"
     text = docker.read_text()
-    text.replace(
-        "RUN pip install --upgrade -r requirements.txt",
-        "COPY ibek ibek\n pip install -e ./ibek",
-    )
+    this_ibek = "COPY ibek ibek\nRUN pip install ./ibek"
+    text = re.sub(r"RUN pip install.*\n", this_ibek, text)
+    docker.write_text(text)
+    print(text)
 
-    # build the container
+    # build the container with latest ibek and latest ibek-support
     os.chdir(ils)
+    run_command("git submodule update --init")
+    run_command("cd ibek-support && git checkout main")
     run_command("./build")
 
     # run the container test script
-    run_command("./run_tests.sh")
+    run_command("./tests/run-tests.sh")
