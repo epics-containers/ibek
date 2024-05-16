@@ -219,6 +219,7 @@ def add_dbds(
     declare the dbd files for this support module for inclusion in IOC Makefile
     """
     dbds = dbds or []
+    add_list_to_file(GLOBALS.IOC_DBDS, dbds)
 
 
 @support_cli.command()
