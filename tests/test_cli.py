@@ -203,3 +203,35 @@ def test_quadem(tmp_epics_root: Path, samples: Path):
     example_db = (samples / "outputs" / "quadem" / "ioc.subst").read_text()
     actual_db = (tmp_epics_root / "runtime" / "ioc.subst").read_text()
     assert example_db == actual_db
+
+
+def generic_generate(
+    epics_root: Path, samples: Path, ioc_name: str, support_names: list[str]
+):
+    ioc_yaml = samples / "iocs" / f"{ioc_name}.ibek.ioc.yaml"
+    support_yamls = [
+        samples / "support" / f"{name}.ibek.support.yaml" for name in support_names
+    ]
+    expected_outputs = samples / "outputs" / ioc_name
+
+    generate(ioc_yaml, support_yamls)
+
+    example_boot = (expected_outputs / "st.cmd").read_text()
+    actual_boot = (epics_root / "runtime" / "st.cmd").read_text()
+    assert example_boot == actual_boot
+
+    example_db = (expected_outputs / "ioc.subst").read_text()
+    actual_db = (epics_root / "runtime" / "ioc.subst").read_text()
+    assert example_db == actual_db
+
+
+def test_andreas_motors(tmp_epics_root: Path, samples: Path):
+    """
+    Motor and axis example
+    """
+    generic_generate(
+        tmp_epics_root,
+        samples,
+        "technosoft",
+        ["asyn", "technosoft"],
+    )

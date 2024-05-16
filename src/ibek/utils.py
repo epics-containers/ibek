@@ -75,8 +75,7 @@ class Utils:
 
     def get_var(self, key: str) -> Any:
         """get the value a global variable for our jinja context"""
-        # Intentionally raises a KeyError if the key doesn't exist
-        return self.variables[key]
+        return self.variables.get(key, "")
 
     def counter(
         self, name: str, start: int = 0, stop: int = 65535, inc: int = 1
@@ -110,13 +109,17 @@ class Utils:
             # be passed a non string which will always render to itself
             return template_text
 
-        jinja_template = Template(template_text)
-        return jinja_template.render(
-            context,
-            __utils__=self,
-            ioc_yaml_file_name=self.file_name,
-            ioc_name=self.ioc_name,
-        )
+        try:
+            jinja_template = Template(template_text)
+            return jinja_template.render(
+                context,
+                __utils__=self,
+                ioc_yaml_file_name=self.file_name,
+                ioc_name=self.ioc_name,
+            )
+        except Exception:
+            print(f"ERROR RENDERING TEMPLATE:\n{template_text}")
+            raise
 
     def render_map(self, context: Any, map: Mapping[str, str | None]) -> dict[str, str]:
         """

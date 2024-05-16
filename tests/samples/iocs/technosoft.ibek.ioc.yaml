@@ -1,0 +1,44 @@
+# yaml-language-server: $schema=../schemas/technosoft.ibek.ioc.schema.json
+
+ioc_name: yag
+description: YAG motors
+
+shared:
+  - &motor
+    type: motorTML.motorAxis
+    controller: TML
+    NSTEPS: 200
+    NMICROSTEPS: 256
+    VELO: 20
+    VELO_MAX: 50
+    VELO_MIN: 0.1
+    ACCL: 0.5
+    ACCL_MAX: 1.5
+    ACCL_MIN: 0.01
+    HAR: 0.5
+    HVEL: 10
+    JAR: 1
+    JVEL: 5
+    EGU: "ustep"
+    SLSP: 0.8
+    ENABLED: 1
+    TIMEOUT: 0
+
+entities:
+  - type: motorTML.CreateController
+    controllerName: TML
+    P: "SPARC:TML"
+    TTY: /tmp # /var/tmp/ttyV0
+    numAxes: 1
+    hostid: 15
+
+  - <<: *motor
+    axid: 15
+
+  - <<: *motor
+    axid: 17
+    # example of overriding a value from the shared dictionary merge
+    ACCL_MIN: 0.011
+    # (UNREALISTIC) example of using Jinja expression in an arg value
+    EGU: |-
+      {{controller.P}}

@@ -60,3 +60,15 @@ mv `pwd`/epics/{runtime,opi}/* `pwd`/outputs/gauges
 echo making ioc based on quadem support yaml
 EPICS_ROOT=`pwd`/epics ibek runtime generate iocs/quadem.ibek.ioc.yaml support/ADCore.ibek.support.yaml support/quadem.ibek.support.yaml
 mv `pwd`/epics/{runtime,opi}/* `pwd`/outputs/quadem
+
+
+############################################################################
+
+# technosoft motor example
+
+echo making an ioc schema using technosoft support yaml
+ibek ioc generate-schema --no-ibek-defs support/technosoft.ibek.support.yaml --output schemas/technosoft.ibek.ioc.schema.json
+
+echo making techosoft ioc
+EPICS_ROOT=`pwd`/epics ibek runtime generate iocs/technosoft.ibek.ioc.yaml support/technosoft.ibek.support.yaml
+mv `pwd`/epics/{runtime,opi}/* `pwd`/outputs/technosoft

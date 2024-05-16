@@ -280,6 +280,13 @@
       },
       "title": "Entities",
       "type": "array"
+    },
+    "shared": {
+      "default": [],
+      "description": "A place to create any anchors required for repeating YAML",
+      "items": {},
+      "title": "Shared",
+      "type": "array"
     }
   },
   "required": [

@@ -1,0 +1,297 @@
+{
+  "$defs": {
+    "homing": {
+      "enum": [
+        "LSN",
+        "LSP"
+      ],
+      "title": "homing",
+      "type": "string"
+    },
+    "motorTML_CreateController": {
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "const": "motorTML.CreateController",
+          "default": "motorTML.CreateController",
+          "description": "Creates a Technosoft motion controller connected to a serial line",
+          "title": "Type"
+        },
+        "entity_enabled": {
+          "default": true,
+          "description": "enable or disable this entity instance",
+          "title": "Entity Enabled",
+          "type": "boolean"
+        },
+        "controllerName": {
+          "description": "The name of the controller",
+          "title": "Controllername",
+          "type": "string"
+        },
+        "P": {
+          "description": "Device PV Prefix",
+          "title": "P",
+          "type": "string"
+        },
+        "TTY": {
+          "description": "TTY",
+          "title": "Tty",
+          "type": "string"
+        },
+        "numAxes": {
+          "default": 1,
+          "description": "The number of axes to create",
+          "title": "Numaxes",
+          "type": "integer"
+        },
+        "hostid": {
+          "description": "Host ID",
+          "title": "Hostid",
+          "type": "integer"
+        },
+        "CONFIG": {
+          "default": "FILE=/tmp/,NAXIS={{numAxes}},DEV_PATH={{TTY}},HOST_ID={{hostid}}",
+          "description": "TML Configuration",
+          "title": "Config",
+          "type": "string"
+        },
+        "axisConfiguration": {
+          "default": "{{ __utils__.set_var('motorTML.axisConfiguration',[]) }}",
+          "description": "collects the axis configuration from axis entities",
+          "title": "Axisconfiguration",
+          "type": "string"
+        }
+      },
+      "required": [
+        "controllerName",
+        "P",
+        "TTY",
+        "hostid"
+      ],
+      "title": "motorTML_CreateController",
+      "type": "object"
+    },
+    "motorTML_motorAxis": {
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "const": "motorTML.motorAxis",
+          "default": "motorTML.motorAxis",
+          "description": "Creates a motor axis",
+          "title": "Type"
+        },
+        "entity_enabled": {
+          "default": true,
+          "description": "enable or disable this entity instance",
+          "title": "Entity Enabled",
+          "type": "boolean"
+        },
+        "controller": {
+          "description": "a reference to the motion controller",
+          "title": "Controller"
+        },
+        "CHANNEL_PREFIX": {
+          "default": "ax0",
+          "description": "The axis prefix",
+          "title": "Channel Prefix",
+          "type": "string"
+        },
+        "CHANNEL_ID": {
+          "default": "MOT",
+          "description": "The axis ID",
+          "title": "Channel Id",
+          "type": "string"
+        },
+        "axid": {
+          "description": "The axis ID",
+          "title": "Axid",
+          "type": "integer"
+        },
+        "axconf": {
+          "default": "star_vat_phs.t.zip",
+          "description": "The axis configuration",
+          "title": "Axconf",
+          "type": "string"
+        },
+        "homing": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/homing"
+            }
+          ],
+          "default": "LSN",
+          "description": "Homing direction"
+        },
+        "NSTEPS": {
+          "default": 200,
+          "description": "Number of steps",
+          "title": "Nsteps",
+          "type": "integer"
+        },
+        "NMICROSTEPS": {
+          "default": 256,
+          "description": "Number of microsteps",
+          "title": "Nmicrosteps",
+          "type": "integer"
+        },
+        "VELO": {
+          "default": 20,
+          "description": "Velocity",
+          "title": "Velo",
+          "type": "integer"
+        },
+        "VELO_MIN": {
+          "default": 0.1,
+          "description": "Velocity min",
+          "title": "Velo Min",
+          "type": "number"
+        },
+        "VELO_MAX": {
+          "default": 50.0,
+          "description": "Velocity Max",
+          "title": "Velo Max",
+          "type": "number"
+        },
+        "ACCL": {
+          "default": 0.5,
+          "description": "Seconds to Velocity",
+          "title": "Accl",
+          "type": "number"
+        },
+        "ACCL_MIN": {
+          "default": 0.01,
+          "description": "Seconds to Velocity",
+          "title": "Accl Min",
+          "type": "number"
+        },
+        "ACCL_MAX": {
+          "default": 1.5,
+          "description": "Seconds to Velocity",
+          "title": "Accl Max",
+          "type": "number"
+        },
+        "HAR": {
+          "default": 0.5,
+          "description": "Homing acceleration",
+          "title": "Har",
+          "type": "number"
+        },
+        "HVEL": {
+          "default": 10.0,
+          "description": "Homing Velocity",
+          "title": "Hvel",
+          "type": "number"
+        },
+        "JAR": {
+          "default": 1,
+          "description": "JAR",
+          "title": "Jar",
+          "type": "integer"
+        },
+        "JVEL": {
+          "default": 5,
+          "description": "JVEL",
+          "title": "Jvel",
+          "type": "integer"
+        },
+        "EGU": {
+          "default": "ustep",
+          "description": "Engineering Units",
+          "title": "Egu",
+          "type": "string"
+        },
+        "SLSP": {
+          "default": 0.8,
+          "description": "Limit",
+          "title": "Slsp",
+          "type": "number"
+        },
+        "ENABLED": {
+          "default": 1,
+          "description": "Enabled",
+          "title": "Enabled",
+          "type": "integer"
+        },
+        "TIMEOUT": {
+          "default": 0,
+          "description": "Timeout",
+          "title": "Timeout",
+          "type": "integer"
+        },
+        "ASYN_ADDR": {
+          "default": "0",
+          "description": "Asyn Addr?",
+          "title": "Asyn Addr",
+          "type": "string"
+        },
+        "CONFIG": {
+          "default": "{%- set num = __utils__.counter(\"motorTML.axisCount\", start=0) -%}\n,AXIS_SETUP_{{num}}=$(SUPPORT)/motorTechnosoft/tml_lib/config/{{axconf}},AXIS_ID_{{num}}={{axid}},AXIS_HOMING_SW_{{num}}={{homing}}",
+          "description": "Axis configuration string to add to the controller configuration",
+          "title": "Config",
+          "type": "string"
+        },
+        "axisConfiguration": {
+          "default": "{{ __utils__.get_var('motorTML.axisConfiguration').append(CONFIG) }}",
+          "description": "Adds an axis configuration entry to the controller's list",
+          "title": "Axisconfiguration",
+          "type": "string"
+        }
+      },
+      "required": [
+        "controller",
+        "axid"
+      ],
+      "title": "motorTML_motorAxis",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "ioc_name": {
+      "description": "Name of IOC instance",
+      "title": "Ioc Name",
+      "type": "string"
+    },
+    "description": {
+      "description": "Description of what the IOC does",
+      "title": "Description",
+      "type": "string"
+    },
+    "entities": {
+      "description": "List of entities this IOC instantiates",
+      "items": {
+        "discriminator": {
+          "mapping": {
+            "motorTML.CreateController": "#/$defs/motorTML_CreateController",
+            "motorTML.motorAxis": "#/$defs/motorTML_motorAxis"
+          },
+          "propertyName": "type"
+        },
+        "oneOf": [
+          {
+            "$ref": "#/$defs/motorTML_CreateController"
+          },
+          {
+            "$ref": "#/$defs/motorTML_motorAxis"
+          }
+        ]
+      },
+      "title": "Entities",
+      "type": "array"
+    },
+    "shared": {
+      "default": [],
+      "description": "A place to create any anchors required for repeating YAML",
+      "items": {},
+      "title": "Shared",
+      "type": "array"
+    }
+  },
+  "required": [
+    "ioc_name",
+    "description",
+    "entities"
+  ],
+  "title": "NewIOC",
+  "type": "object"
+}

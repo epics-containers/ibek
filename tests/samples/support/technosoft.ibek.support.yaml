@@ -1,0 +1,247 @@
+# yaml-language-server: $schema=../schemas/ibek.support.schema.json
+
+module: motorTML
+
+defs:
+  - name: CreateController
+    description: |-
+      Creates a Technosoft motion controller connected to a serial line
+
+    args:
+      - type: id
+        name: controllerName
+        description: |-
+          The name of the controller
+      - type: str
+        name: P
+        description: |-
+          Device PV Prefix
+
+      - type: str
+        name: TTY
+        description: |-
+          TTY
+
+      - type: int
+        name: numAxes
+        description: |-
+          The number of axes to create
+        default: 1
+
+      - type: int
+        name: hostid
+        description: |-
+          Host ID
+
+      - type: str
+        name: CONFIG
+        description: |-
+          TML Configuration
+        default: |-
+          FILE=/tmp/,NAXIS={{numAxes}},DEV_PATH={{TTY}},HOST_ID={{hostid}}
+    values:
+      - name: axisConfiguration
+        description: collects the axis configuration from axis entities
+        value: |-
+          {{ __utils__.set_var('motorTML.axisConfiguration',[]) }}
+    pre_init:
+      - value: |
+          ndsCreateDevice "TechnosoftTML", "{{controllerName}}", "{{CONFIG}}{{"".join(__utils__.get_var('motorTML.axisConfiguration')) }}"
+
+  - name: motorAxis
+    description: |-
+      Creates a motor axis
+
+    args:
+      - type: object
+        name: controller
+        description: |-
+          a reference to the motion controller
+
+      - type: str
+        name: CHANNEL_PREFIX
+        description: |-
+          The axis prefix
+        default: ax0
+
+      - type: str
+        name: CHANNEL_ID
+        description: |-
+          The axis ID
+        default: MOT
+
+      - type: int
+        name: axid
+        description: |-
+          The axis ID
+
+      - type: str
+        name: axconf
+        description: |-
+          The axis configuration
+        default: star_vat_phs.t.zip
+
+      - type: enum
+        name: homing
+        description: |-
+          Homing direction
+        default: LSN
+        values:
+          LSN:
+          LSP:
+
+      - type: int
+        name: NSTEPS
+        description: |-
+          Number of steps
+        default: 200
+
+      - type: int
+        name: NMICROSTEPS
+        description: |-
+          Number of microsteps
+        default: 256
+
+      - type: int
+        name: VELO
+        description: |-
+          Velocity
+        default: 20
+
+      - type: float
+        name: VELO_MIN
+        description: |-
+          Velocity min
+        default: 0.1
+
+      - type: float
+        name: VELO_MAX
+        description: |-
+          Velocity Max
+        default: 50
+
+      - type: float
+        name: ACCL
+        description: |-
+          Seconds to Velocity
+        default: 0.5
+
+      - type: float
+        name: ACCL_MIN
+        description: |-
+          Seconds to Velocity
+        default: 0.01
+
+      - type: float
+        name: ACCL_MAX
+        description: |-
+          Seconds to Velocity
+        default: 1.5
+
+      - type: float
+        name: HAR
+        description: |-
+          Homing acceleration
+        default: 0.5
+
+      - type: float
+        name: HVEL
+        description: |-
+          Homing Velocity
+        default: 10
+
+      - type: int
+        name: JAR
+        description: |-
+          JAR
+        default: 1
+
+      - type: int
+        name: JVEL
+        description: |-
+          JVEL
+        default: 5
+
+      - type: str
+        name: EGU
+        description: |-
+          Engineering Units
+        default: "ustep"
+
+      - type: float
+        name: SLSP
+        description: |-
+          Limit
+        default: 0.8
+
+      - type: int
+        name: ENABLED
+        description: |-
+          Enabled
+        default: 1
+
+      - type: int
+        name: TIMEOUT
+        description: |-
+          Timeout
+        default: 0
+
+      - type: str
+        name: ASYN_ADDR
+        description: |-
+          Asyn Addr?
+        default: "0"
+
+      - type: str
+        name: CONFIG
+        description: |-
+          Axis configuration string to add to the controller configuration
+        default: |-
+          {%- set num = __utils__.counter("motorTML.axisCount", start=0) -%}
+          ,AXIS_SETUP_{{num}}=$(SUPPORT)/motorTechnosoft/tml_lib/config/{{axconf}},AXIS_ID_{{num}}={{axid}},AXIS_HOMING_SW_{{num}}={{homing}}
+    values:
+      - name: axisConfiguration
+        description: Adds an axis configuration entry to the controller's list
+        value: |-
+          {{ __utils__.get_var('motorTML.axisConfiguration').append(CONFIG) }}
+
+    pre_init:
+      - value: |
+          dbLoadRecords("$(SUPPORT)/motorTechnosoft/db/tmlAxis.template","PREFIX={{controller.P}}, CHANNEL_ID={{CHANNEL_ID}}, CHANNEL_PREFIX=ax{{num}}, ASYN_PORT={{controllerName}}, ASYN_ADDR={{ASYN_ADDR}}, NSTEPS={{NSTEPS}}, NMICROSTEPS={{NMICROSTEPS}}, VELO={{VELO}}, VELO_MIN={{VELO_MIN}}, VELO_MAX={{VELO_MAX}}, ACCL={{ACCL}}, ACCL_MIN={{ACCL_MIN}}, ACCL_MAX={{ACCL_MAX}}, HAR={{HAR}}, HVEL={{HVEL}}, JAR={{JAR}}, JVEL={{JVEL}}, ENABLED={{ENABLED}}, SLSP={{SLSP}}, EGU={{EGU}}, TIMEOUT={{TIMEOUT}}")
+
+    # databases:
+    #   # TODO as this is a simulation I have hard coded some of the DB fields,
+    #   # but these could easily be made into arguments above
+    #   #
+    #   # Note: supplying no value means that the argument of the same name is used
+    #   # (the most common case - if you contrive to make args and db fields the same.
+    #   # Which is  good idea for ease of transition from traditional IOCs)
+
+    #   - file: tmlAxis.template
+    #     args:
+    #       PREFIX: "{{controller.P}}"
+    #       ASYN_PORT: "{{controller.controllerName}}"
+    #       CHANNEL_ID:
+    #       CHANNEL_PREFIX:
+    #       ASYN_ADDR:
+    #       NSTEPS:
+    #       NMICROSTEPS:
+    #       VELO:
+    #       VELO_MIN:
+    #       VELO_MAX:
+    #       ACCL:
+    #       ACCL_MIN:
+    #       ACCL_MAX:
+    #       HAR:
+    #       HVEL:
+    #       JAR:
+    #       JVEL:
+    #       ENABLED:
+    #       SLSP:
+    #       EGU:
+    #       TIMEOUT:
+    post_init:
+      - value: |
+
+          dbpf("{{controller.P}}:{{CHANNEL_ID}}:MSGRS","START")
+          dbl
