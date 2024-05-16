@@ -6,7 +6,7 @@ support module definition YAML file
 from __future__ import annotations
 
 from enum import Enum
-from typing import Dict, List
+from typing import Any, Dict, List, Sequence
 
 from pydantic import (
     Field,
@@ -106,3 +106,7 @@ class IOC(BaseSettings):
     ioc_name: str = Field(description="Name of IOC instance")
     description: str = Field(description="Description of what the IOC does")
     entities: List[Entity]
+    shared: Sequence[Any] = Field(
+        description="A place to create any anchors required for repeating YAML",
+        default=(),
+    )

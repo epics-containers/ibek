@@ -50,7 +50,7 @@
           "type": "integer"
         },
         "CONFIG": {
-          "default": "ndsCreateDevice \"TechnosoftTML\", \"{{controllerName}}\", \"FILE=/tmp/,NAXIS={{numAxes}},DEV_PATH={{TTY}},HOST_ID={{hostid}}",
+          "default": "FILE=/tmp/,NAXIS={{numAxes}},DEV_PATH={{TTY}},HOST_ID={{hostid}}",
           "description": "TML Configuration",
           "title": "Config",
           "type": "string"
@@ -69,31 +69,6 @@
         "hostid"
       ],
       "title": "motorTML_CreateController",
-      "type": "object"
-    },
-    "motorTML_close": {
-      "additionalProperties": false,
-      "properties": {
-        "type": {
-          "const": "motorTML.close",
-          "default": "motorTML.close",
-          "description": "Close",
-          "title": "Type"
-        },
-        "entity_enabled": {
-          "default": true,
-          "description": "enable or disable this entity instance",
-          "title": "Entity Enabled",
-          "type": "boolean"
-        },
-        "axisConfiguration": {
-          "default": "{{ __utils__.get_var('motorTML.axisConfiguration').append(\"\\\"\") }}",
-          "description": "Close quote",
-          "title": "Axisconfiguration",
-          "type": "string"
-        }
-      },
-      "title": "motorTML_close",
       "type": "object"
     },
     "motorTML_motorAxis": {
@@ -288,7 +263,6 @@
         "discriminator": {
           "mapping": {
             "motorTML.CreateController": "#/$defs/motorTML_CreateController",
-            "motorTML.close": "#/$defs/motorTML_close",
             "motorTML.motorAxis": "#/$defs/motorTML_motorAxis"
           },
           "propertyName": "type"
@@ -299,13 +273,17 @@
           },
           {
             "$ref": "#/$defs/motorTML_motorAxis"
-          },
-          {
-            "$ref": "#/$defs/motorTML_close"
           }
         ]
       },
       "title": "Entities",
+      "type": "array"
+    },
+    "shared": {
+      "default": [],
+      "description": "A place to create any anchors required for repeating YAML",
+      "items": {},
+      "title": "Shared",
       "type": "array"
     }
   },

@@ -1,3 +1,5 @@
+# yaml-language-server: $schema=../schemas/ibek.support.schema.json
+
 module: motorTML
 
 defs:
@@ -35,9 +37,8 @@ defs:
         name: CONFIG
         description: |-
           TML Configuration
-        # set axes should be in {%%} but I need to fix order of evaluation
         default: |-
-          ndsCreateDevice "TechnosoftTML", "{{controllerName}}", "FILE=/tmp/,NAXIS={{numAxes}},DEV_PATH={{TTY}},HOST_ID={{hostid}}
+          FILE=/tmp/,NAXIS={{numAxes}},DEV_PATH={{TTY}},HOST_ID={{hostid}}
     values:
       - name: axisConfiguration
         description: collects the axis configuration from axis entities
@@ -45,7 +46,7 @@ defs:
           {{ __utils__.set_var('motorTML.axisConfiguration',[]) }}
     pre_init:
       - value: |
-          {{CONFIG}}{{"".join(__utils__.get_var('motorTML.axisConfiguration')) }}
+          ndsCreateDevice "TechnosoftTML", "{{controllerName}}", "{{CONFIG}}{{"".join(__utils__.get_var('motorTML.axisConfiguration')) }}"
 
   - name: motorAxis
     description: |-
@@ -244,12 +245,3 @@ defs:
 
           dbpf("{{controller.P}}:{{CHANNEL_ID}}:MSGRS","START")
           dbl
-
-  - name: close
-    description: |-
-      Close
-    values:
-      - name: axisConfiguration
-        description: Close quote
-        value: |-
-          {{ __utils__.get_var('motorTML.axisConfiguration').append("\"") }}
