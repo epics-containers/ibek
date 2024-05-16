@@ -65,7 +65,7 @@ class _Globals:
     @property
     def STATIC_BUILD(self):
         """True if the target architecture is not the default architecture."""
-        return os.getenv("STATIC_BUILD", self._EPICS_TARGET_ARCH != self._DEFAULT_ARCH)
+        return os.getenv("STATIC_BUILD", self.EPICS_TARGET_ARCH != self._DEFAULT_ARCH)
 
     @property
     def IBEK_DEFS(self):
