@@ -197,8 +197,14 @@ defs:
         description: |-
           Axis configuration string to add to the controller configuration
         default: |-
-          {%- set num = __utils__.counter("motorTML.axisCount", start=0) -%}
           ,AXIS_SETUP_{{num}}=$(SUPPORT)/motorTechnosoft/tml_lib/config/{{axconf}},AXIS_ID_{{num}}={{axid}},AXIS_HOMING_SW_{{num}}={{homing}}
+
+    pre_values:
+      - name: num
+        description: The auto incrementing axis number
+        value: |-
+          {{ __utils__.counter("motorTML.axisCount", start=0) }}
+
     values:
       - name: axisConfiguration
         description: Adds an axis configuration entry to the controller's list
@@ -207,7 +213,7 @@ defs:
 
     pre_init:
       - value: |
-          dbLoadRecords("$(SUPPORT)/motorTechnosoft/db/tmlAxis.template","PREFIX={{controller.P}}, CHANNEL_ID={{CHANNEL_ID}}, CHANNEL_PREFIX=ax{{num}}, ASYN_PORT={{controllerName}}, ASYN_ADDR={{ASYN_ADDR}}, NSTEPS={{NSTEPS}}, NMICROSTEPS={{NMICROSTEPS}}, VELO={{VELO}}, VELO_MIN={{VELO_MIN}}, VELO_MAX={{VELO_MAX}}, ACCL={{ACCL}}, ACCL_MIN={{ACCL_MIN}}, ACCL_MAX={{ACCL_MAX}}, HAR={{HAR}}, HVEL={{HVEL}}, JAR={{JAR}}, JVEL={{JVEL}}, ENABLED={{ENABLED}}, SLSP={{SLSP}}, EGU={{EGU}}, TIMEOUT={{TIMEOUT}}")
+          dbLoadRecords("$(SUPPORT)/motorTechnosoft/db/tmlAxis.template","PREFIX={{controller.P}}, CHANNEL_ID={{CHANNEL_ID}}, CHANNEL_PREFIX=ax{{num}}, ASYN_PORT={{controller.controllerName}}, ASYN_ADDR={{ASYN_ADDR}}, NSTEPS={{NSTEPS}}, NMICROSTEPS={{NMICROSTEPS}}, VELO={{VELO}}, VELO_MIN={{VELO_MIN}}, VELO_MAX={{VELO_MAX}}, ACCL={{ACCL}}, ACCL_MIN={{ACCL_MIN}}, ACCL_MAX={{ACCL_MAX}}, HAR={{HAR}}, HVEL={{HVEL}}, JAR={{JAR}}, JVEL={{JVEL}}, ENABLED={{ENABLED}}, SLSP={{SLSP}}, EGU={{EGU}}, TIMEOUT={{TIMEOUT}}")
 
     # databases:
     #   # TODO as this is a simulation I have hard coded some of the DB fields,

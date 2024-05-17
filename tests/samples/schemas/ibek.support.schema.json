@@ -152,11 +152,20 @@
         },
         "values": {
           "default": [],
-          "description": "Calculated values to use as additional arguments",
+          "description": "Calculated values to use as additional arguments With Jinja evaluation after all Args",
           "items": {
             "$ref": "#/$defs/Value"
           },
           "title": "Values",
+          "type": "array"
+        },
+        "pre_values": {
+          "default": [],
+          "description": "Calculated values to use as additional arguments With Jinja evaluation before all Args",
+          "items": {
+            "$ref": "#/$defs/Value"
+          },
+          "title": "Pre Values",
           "type": "array"
         },
         "databases": {

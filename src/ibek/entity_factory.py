@@ -71,6 +71,12 @@ class EntityFactory:
         # fully qualified name of the Entity class including support module
         full_name = f"{support.module}.{definition.name}"
 
+        # add in the calculated values Jinja Templates as Fields in the Entity
+        # these are the pre_values that should be Jinja rendered before any
+        # Args (or post values)
+        for value in definition.pre_values:
+            add_arg(value.name, str, value.description, value.value)
+
         # add in each of the arguments as a Field in the Entity
         for arg in definition.args:
             full_arg_name = f"{full_name}.{arg.name}"
