@@ -1,15 +1,14 @@
 
-
 <!DOCTYPE html>
 
 
-<html lang="en" data-content_root="" >
+<html lang="en" data-content_root="../../" >
 
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Pinning Requirements &#8212; ibek 3.0.0b2.dev3+geb5284f7 documentation</title>
+    <title>Pinning Requirements &#8212; ibek 3.0.0b3 documentation</title>
   
   
   
@@ -29,27 +28,27 @@
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.1/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.1/webfonts/fa-regular-400.woff2" />
 
-    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=fd3f3429" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css?v=0a3b3ea7" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
   <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=8d27b9dea8ad943066ae" />
 <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae" />
   <script src="../../_static/vendor/fontawesome/6.5.1/js/all.min.js?digest=8d27b9dea8ad943066ae"></script>
 
-    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
-    <script src="../../_static/doctools.js"></script>
-    <script src="../../_static/sphinx_highlight.js"></script>
-    <script src="../../_static/clipboard.min.js"></script>
-    <script src="../../_static/copybutton.js"></script>
-    <script src="../../_static/design-tabs.js"></script>
+    <script src="../../_static/documentation_options.js?v=1a5c5acd"></script>
+    <script src="../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../_static/copybutton.js?v=30646c52"></script>
+    <script src="../../_static/design-tabs.js?v=36754332"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'developer/how-to/pin-requirements';</script>
     <script>
         DOCUMENTATION_OPTIONS.theme_version = '0.15.2';
         DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://epics-containers.github.io/ibek/switcher.json';
-        DOCUMENTATION_OPTIONS.theme_switcher_version_match = 'motor-demo2';
+        DOCUMENTATION_OPTIONS.theme_switcher_version_match = '3.0.0b3';
         DOCUMENTATION_OPTIONS.show_version_warning_banner = false;
         </script>
     <link rel="icon" href="../../_static/ibek-favicon.ico"/>
@@ -493,9 +492,9 @@ document.write(`
                 <article class="bd-article">
                   
   <section id="pinning-requirements">
-<h1>Pinning Requirements<a class="headerlink" href="#pinning-requirements" title="Permalink to this heading">#</a></h1>
+<h1>Pinning Requirements<a class="headerlink" href="#pinning-requirements" title="Link to this heading">#</a></h1>
 <section id="introduction">
-<h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this heading">#</a></h2>
+<h2>Introduction<a class="headerlink" href="#introduction" title="Link to this heading">#</a></h2>
 <p>By design this project only defines dependencies in one place, i.e. in
 the <code class="docutils literal notranslate"><span class="pre">requires</span></code> table in <code class="docutils literal notranslate"><span class="pre">pyproject.toml</span></code>.</p>
 <p>In the <code class="docutils literal notranslate"><span class="pre">requires</span></code> table it is possible to pin versions of some dependencies
@@ -513,7 +512,7 @@ the same version as a previous successful release. This is a quick fix that
 should guarantee a successful CI build.</p>
 </section>
 <section id="finding-the-lock-files">
-<h2>Finding the lock files<a class="headerlink" href="#finding-the-lock-files" title="Permalink to this heading">#</a></h2>
+<h2>Finding the lock files<a class="headerlink" href="#finding-the-lock-files" title="Link to this heading">#</a></h2>
 <p>Every release of the project will have a set of requirements files published
 as release assets.</p>
 <p>For example take a look at the release page for python3-pip-skeleton-cli here:
@@ -530,7 +529,7 @@ be compatible with all the versions of Python in the test matrix.
 i.e. <code class="docutils literal notranslate"><span class="pre">requirements-test-ubuntu-latest-3.10.txt</span></code> in this example.</p>
 </section>
 <section id="applying-the-lock-file">
-<h2>Applying the lock file<a class="headerlink" href="#applying-the-lock-file" title="Permalink to this heading">#</a></h2>
+<h2>Applying the lock file<a class="headerlink" href="#applying-the-lock-file" title="Link to this heading">#</a></h2>
 <p>To apply a lockfile:</p>
 <ul class="simple">
 <li><p>copy the requirements file you have downloaded to the root of your
@@ -544,7 +543,7 @@ when installing each of the test environments. pip will then install exactly
 the same set of packages as the previous release.</p>
 </section>
 <section id="removing-dependency-locking-from-ci">
-<h2>Removing dependency locking from CI<a class="headerlink" href="#removing-dependency-locking-from-ci" title="Permalink to this heading">#</a></h2>
+<h2>Removing dependency locking from CI<a class="headerlink" href="#removing-dependency-locking-from-ci" title="Link to this heading">#</a></h2>
 <p>Once the reasons for locking the build have been resolved it is a good idea
 to go back to an unlocked build. This is because you get an early indication
 of any incoming problems.</p>
@@ -610,7 +609,7 @@ of the repo and push.</p>
 
   
   <div class="tocsection editthispage">
-    <a href="https://github.com/epics-containers/ibek/edit/motor-demo2/docs/developer/how-to/pin-requirements.rst">
+    <a href="https://github.com/epics-containers/ibek/edit/3.0.0b3/docs/developer/how-to/pin-requirements.rst">
       <i class="fa-solid fa-pencil"></i>
       
       

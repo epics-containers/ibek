@@ -1,14 +1,13 @@
 
-
 <!DOCTYPE html>
 
 
-<html lang="en" data-content_root="" >
+<html lang="en" data-content_root="../../" >
 
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>ibek.ioc &#8212; ibek 3.0.0b2.dev3+geb5284f7 documentation</title>
+    <title>ibek.ioc &#8212; ibek 3.0.0b3 documentation</title>
   
   
   
@@ -28,27 +27,27 @@
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.1/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.1/webfonts/fa-regular-400.woff2" />
 
-    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=fd3f3429" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css?v=0a3b3ea7" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
   <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=8d27b9dea8ad943066ae" />
 <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae" />
   <script src="../../_static/vendor/fontawesome/6.5.1/js/all.min.js?digest=8d27b9dea8ad943066ae"></script>
 
-    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
-    <script src="../../_static/doctools.js"></script>
-    <script src="../../_static/sphinx_highlight.js"></script>
-    <script src="../../_static/clipboard.min.js"></script>
-    <script src="../../_static/copybutton.js"></script>
-    <script src="../../_static/design-tabs.js"></script>
+    <script src="../../_static/documentation_options.js?v=1a5c5acd"></script>
+    <script src="../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../_static/copybutton.js?v=30646c52"></script>
+    <script src="../../_static/design-tabs.js?v=36754332"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = '_modules/ibek/ioc';</script>
     <script>
         DOCUMENTATION_OPTIONS.theme_version = '0.15.2';
         DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://epics-containers.github.io/ibek/switcher.json';
-        DOCUMENTATION_OPTIONS.theme_switcher_version_match = 'motor-demo2';
+        DOCUMENTATION_OPTIONS.theme_switcher_version_match = '3.0.0b3';
         DOCUMENTATION_OPTIONS.show_version_warning_banner = false;
         </script>
     <link rel="icon" href="../../_static/ibek-favicon.ico"/>
@@ -481,13 +480,18 @@ document.write(`
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;object </span><span class="si">{</span><span class="nb">id</span><span class="si">}</span><span class="s2"> not found in </span><span class="si">{</span><span class="nb">list</span><span class="p">(</span><span class="n">id_to_entity</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
 
-<div class="viewcode-block" id="clear_entity_model_ids"><a class="viewcode-back" href="../../user/reference/api.html#ibek.ioc.clear_entity_model_ids">[docs]</a><span class="k">def</span> <span class="nf">clear_entity_model_ids</span><span class="p">():</span>
+<div class="viewcode-block" id="clear_entity_model_ids">
+<a class="viewcode-back" href="../../user/reference/api.html#ibek.ioc.clear_entity_model_ids">[docs]</a>
+<span class="k">def</span> <span class="nf">clear_entity_model_ids</span><span class="p">():</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Resets the global id_to_entity dict&quot;&quot;&quot;</span>
 
     <span class="n">id_to_entity</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span></div>
 
 
-<div class="viewcode-block" id="EnumVal"><a class="viewcode-back" href="../../user/reference/api.html#ibek.ioc.EnumVal">[docs]</a><span class="k">class</span> <span class="nc">EnumVal</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+
+<div class="viewcode-block" id="EnumVal">
+<a class="viewcode-back" href="../../user/reference/api.html#ibek.ioc.EnumVal">[docs]</a>
+<span class="k">class</span> <span class="nc">EnumVal</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    An enum that is printed as its name only</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -496,7 +500,10 @@ document.write(`
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span></div>
 
 
-<div class="viewcode-block" id="Entity"><a class="viewcode-back" href="../../user/reference/api.html#ibek.ioc.Entity">[docs]</a><span class="k">class</span> <span class="nc">Entity</span><span class="p">(</span><span class="n">BaseSettings</span><span class="p">):</span>
+
+<div class="viewcode-block" id="Entity">
+<a class="viewcode-back" href="../../user/reference/api.html#ibek.ioc.Entity">[docs]</a>
+<span class="k">class</span> <span class="nc">Entity</span><span class="p">(</span><span class="n">BaseSettings</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    A baseclass for all generated Entity classes.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -507,7 +514,9 @@ document.write(`
     <span class="p">)</span>
     <span class="n">__definition__</span><span class="p">:</span> <span class="n">EntityDefinition</span>
 
-<div class="viewcode-block" id="Entity.add_ibek_attributes"><a class="viewcode-back" href="../../user/reference/api.html#ibek.ioc.Entity.add_ibek_attributes">[docs]</a>    <span class="nd">@model_validator</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="s2">&quot;after&quot;</span><span class="p">)</span>
+<div class="viewcode-block" id="Entity.add_ibek_attributes">
+<a class="viewcode-back" href="../../user/reference/api.html#ibek.ioc.Entity.add_ibek_attributes">[docs]</a>
+    <span class="nd">@model_validator</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="s2">&quot;after&quot;</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">add_ibek_attributes</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Whole Entity model validation</span>
@@ -541,6 +550,7 @@ document.write(`
 
         <span class="k">return</span> <span class="bp">self</span></div>
 
+
     <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="c1"># if this entity has an id then its string representation is the value of id</span>
         <span class="n">id_name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__definition__</span><span class="o">.</span><span class="n">_get_id_arg</span><span class="p">()</span>
@@ -550,7 +560,10 @@ document.write(`
         <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="IOC"><a class="viewcode-back" href="../../user/reference/api.html#ibek.ioc.IOC">[docs]</a><span class="k">class</span> <span class="nc">IOC</span><span class="p">(</span><span class="n">BaseSettings</span><span class="p">):</span>
+
+<div class="viewcode-block" id="IOC">
+<a class="viewcode-back" href="../../user/reference/api.html#ibek.ioc.IOC">[docs]</a>
+<span class="k">class</span> <span class="nc">IOC</span><span class="p">(</span><span class="n">BaseSettings</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Used to load an IOC instance entities yaml file into a Pydantic Model.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -562,6 +575,7 @@ document.write(`
         <span class="n">description</span><span class="o">=</span><span class="s2">&quot;A place to create any anchors required for repeating YAML&quot;</span><span class="p">,</span>
         <span class="n">default</span><span class="o">=</span><span class="p">(),</span>
     <span class="p">)</span></div>
+
 </pre></div>
 
                 </article>

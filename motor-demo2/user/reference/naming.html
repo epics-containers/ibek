@@ -1,15 +1,14 @@
 
-
 <!DOCTYPE html>
 
 
-<html lang="en" data-content_root="" >
+<html lang="en" data-content_root="../../" >
 
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Support YAML Conventions &#8212; ibek 3.0.0b2.dev3+geb5284f7 documentation</title>
+    <title>Support YAML Conventions &#8212; ibek 3.0.0b3 documentation</title>
   
   
   
@@ -29,27 +28,27 @@
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.1/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.1/webfonts/fa-regular-400.woff2" />
 
-    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=fd3f3429" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css?v=0a3b3ea7" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
   <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=8d27b9dea8ad943066ae" />
 <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae" />
   <script src="../../_static/vendor/fontawesome/6.5.1/js/all.min.js?digest=8d27b9dea8ad943066ae"></script>
 
-    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
-    <script src="../../_static/doctools.js"></script>
-    <script src="../../_static/sphinx_highlight.js"></script>
-    <script src="../../_static/clipboard.min.js"></script>
-    <script src="../../_static/copybutton.js"></script>
-    <script src="../../_static/design-tabs.js"></script>
+    <script src="../../_static/documentation_options.js?v=1a5c5acd"></script>
+    <script src="../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../_static/copybutton.js?v=30646c52"></script>
+    <script src="../../_static/design-tabs.js?v=36754332"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'user/reference/naming';</script>
     <script>
         DOCUMENTATION_OPTIONS.theme_version = '0.15.2';
         DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://epics-containers.github.io/ibek/switcher.json';
-        DOCUMENTATION_OPTIONS.theme_switcher_version_match = 'motor-demo2';
+        DOCUMENTATION_OPTIONS.theme_switcher_version_match = '3.0.0b3';
         DOCUMENTATION_OPTIONS.show_version_warning_banner = false;
         </script>
     <link rel="icon" href="../../_static/ibek-favicon.ico"/>
@@ -483,7 +482,7 @@ document.write(`
                 <article class="bd-article">
                   
   <section id="support-yaml-conventions">
-<h1>Support YAML Conventions<a class="headerlink" href="#support-yaml-conventions" title="Permalink to this heading">#</a></h1>
+<h1>Support YAML Conventions<a class="headerlink" href="#support-yaml-conventions" title="Link to this heading">#</a></h1>
 <p>TODO: Create a linter that checks for these conventions
 TODO: split out ibek-defs and ibek-defs-dls for internal support modules.</p>
 <p>IBEK Support YAML defines what Entities can be instantiated
@@ -491,7 +490,7 @@ by IOC instances.
 There will be one of these YAML files per support module.
 These files should adhere to the following naming conventions.</p>
 <section id="filename">
-<h2>Filename<a class="headerlink" href="#filename" title="Permalink to this heading">#</a></h2>
+<h2>Filename<a class="headerlink" href="#filename" title="Link to this heading">#</a></h2>
 <p>The filename is always <em>SupportModule</em>.ibek.support.yaml, where
 <em>SupportModule</em> is the name of the support module as named in its git
 repository.</p>
@@ -507,7 +506,7 @@ aravisGigE/aravisGigE.ibek.support.yaml
 </div>
 </section>
 <section id="module">
-<h2>Module<a class="headerlink" href="#module" title="Permalink to this heading">#</a></h2>
+<h2>Module<a class="headerlink" href="#module" title="Link to this heading">#</a></h2>
 <p>Every YAML file will start by declaring the module name using <code class="docutils literal notranslate"><span class="pre">module:</span></code>.
 This should typically
 be the same as the filename prefix. However if the filename prefix is not a
@@ -520,12 +519,12 @@ aravisGigE
 </div>
 </section>
 <section id="definitions">
-<h2>Definitions<a class="headerlink" href="#definitions" title="Permalink to this heading">#</a></h2>
+<h2>Definitions<a class="headerlink" href="#definitions" title="Link to this heading">#</a></h2>
 <p>All definitions have a <code class="docutils literal notranslate"><span class="pre">name:</span></code> field. This should be UpperCamelCase as it
 represents a class in Python.</p>
 </section>
 <section id="args">
-<h2>Args<a class="headerlink" href="#args" title="Permalink to this heading">#</a></h2>
+<h2>Args<a class="headerlink" href="#args" title="Link to this heading">#</a></h2>
 <p>Every Arg also has a name and these should be snake_case as they represent
 class properties in Python.</p>
 <p>HOWEVER: where these arguments refer to a database template macro, the original
@@ -538,7 +537,7 @@ historical support.</p>
 will use the historical adhoc naming conventions.</p>
 </section>
 <section id="functions">
-<h2>Functions<a class="headerlink" href="#functions" title="Permalink to this heading">#</a></h2>
+<h2>Functions<a class="headerlink" href="#functions" title="Link to this heading">#</a></h2>
 <p>Function Arguments should be in UpperCamelCase. Function names must be as
 per the function name you are calling in iocShell startup.</p>
 <p>e.g.</p>
@@ -615,7 +614,7 @@ per the function name you are calling in iocShell startup.</p>
 
   
   <div class="tocsection editthispage">
-    <a href="https://github.com/epics-containers/ibek/edit/motor-demo2/docs/user/reference/naming.rst">
+    <a href="https://github.com/epics-containers/ibek/edit/3.0.0b3/docs/user/reference/naming.rst">
       <i class="fa-solid fa-pencil"></i>
       
       
