@@ -12,7 +12,7 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Dict, Mapping
 
-from jinja2 import Template
+from jinja2 import StrictUndefined, Template
 
 
 @dataclass
@@ -110,7 +110,7 @@ class Utils:
             return template_text
 
         try:
-            jinja_template = Template(template_text)
+            jinja_template = Template(template_text, undefined=StrictUndefined)
             return jinja_template.render(
                 context,
                 __utils__=self,

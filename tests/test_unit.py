@@ -2,11 +2,17 @@
 Some unit tests for ibek.
 """
 
+import dataclasses
+
+import jinja2
+import pytest
+
 from ibek.args import IdArg, ObjectArg
 from ibek.commands import semver_compare
 from ibek.ioc import id_to_entity
 from ibek.ioc_factory import IocFactory
 from ibek.support import EntityDefinition, Support
+from ibek.utils import UTILS
 
 
 def test_object_references(entity_factory):
@@ -58,3 +64,28 @@ def test_compare():
     assert semver_compare("1.1.1", "==1.1.1")
     assert semver_compare("1.1.1", ">=1.1.0")
     assert not semver_compare("1.1.1", ">=1.1.2")
+
+
+@dataclasses.dataclass
+class Person:
+    name: str
+    age: int
+
+
+def test_strict():
+    """
+    validate that bad references in Jinja are caught
+    """
+    p = Person("giles", 59)
+
+    my_template = "{{ person.name ~ ' of age ' ~ person.age }}"
+    text = UTILS.render({"person": p}, my_template)
+    assert text == "giles of age 59"
+
+    my_template = "{{ person.name ~ ' of age ' ~ height }}"
+    with pytest.raises(jinja2.exceptions.UndefinedError):
+        text = UTILS.render({"person": p}, my_template)
+
+    my_template = "{{ person.name ~ ' of age ' ~ person.height }}"
+    with pytest.raises(jinja2.exceptions.UndefinedError):
+        text = UTILS.render({"person": p}, my_template)
