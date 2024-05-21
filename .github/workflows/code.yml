@@ -46,6 +46,7 @@ jobs:
       PY_IGNORE_IMPORTMISMATCH: "1"
       # enable QT tests with no X Display
       QT_QPA_PLATFORM: "offscreen"
+      IBEK_SYSTEM_TESTING: "true"
 
     steps:
       - name: Checkout
