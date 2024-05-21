@@ -32,6 +32,10 @@ def run_command(command: str, error_OK=False, show=False):
 
 
 @pytest.mark.skipif(
+    os.getenv("IBEK_SYSTEM_TESTING") != "true",
+    reason="export IBEK_SYSTEM_TESTING=true",
+)
+@pytest.mark.skipif(
     os.getenv("REMOTE_CONTAINERS") == "true", reason="only run outside devcontainers"
 )
 def test_container_build_and_run(tmp_path: Path):
