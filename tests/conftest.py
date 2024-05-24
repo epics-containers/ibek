@@ -105,3 +105,7 @@ def motor_classes(support_defs, entity_factory):
     # return the namespace so that callers have access to all of the
     # generated dataclasses
     return namespace
+
+@fixture
+def instance(samples: Path, mocker: MockerFixture):
+    mocker.patch.object(GLOBALS, "_EPICS_ROOT", samples / "instance")

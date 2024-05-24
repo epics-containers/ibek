@@ -1,0 +1,85 @@
+# yaml-language-server: $schema=file:///workspaces/pvi/schemas/pvi.device.schema.json
+label: pmacAxis
+parent: asynMotorAxis
+
+# These all need work and SHOULD NOT appear before asynMotorAxis groups
+
+# children:
+
+# - type: Group
+#   name: Basicasynmotor
+#   layout:
+#     type: Grid
+#     labelled: true
+#   children:
+
+#   - type: SignalW
+#     name: Direction
+#     write_pv: $(P)$(M):Direction
+#     write_widget:
+#       type: TextWrite
+
+#   - type: SignalW
+#     name: Offset
+#     write_pv: $(P)$(M):Offset
+#     write_widget:
+#       type: TextWrite
+
+#   - type: SignalW
+#     name: Resolution
+#     write_pv: $(P)$(M):Resolution
+#     write_widget:
+#       type: TextWrite
+
+# - type: Group
+#   name: Dlspmacasynmotor
+#   layout:
+#     type: Grid
+#     labelled: true
+#   children:
+
+#   - type: SignalW
+#     name: MRESSET
+#     write_pv: $(P)$(M):MRES_SET
+#     write_widget:
+#       type: TextWrite
+
+#   - type: SignalW
+#     name: OFFSET
+#     write_pv: $(P)$(M):OFF_SET
+#     write_widget:
+#       type: TextWrite
+
+# - type: Group
+#   name: Elosskillautohomerecords
+#   layout:
+#     type: Grid
+#     labelled: true
+#   children:
+
+#   - type: SignalW
+#     name: HOMINGSTATUS
+#     write_pv: $(P)$(M):HOMING_STATUS
+#     write_widget:
+#       type: TextWrite
+
+#   - type: SignalW
+#     name: KILL
+#     write_pv: $(P)$(M):KILL
+#     write_widget:
+#       type: TextWrite
+
+#   - type: SignalR
+#     name: HMPOS
+#     read_pv: $(P)$(M):HMPOS_RBV
+#     read_widget:
+#       type: TextRead
+
+#   - type: SignalRW
+#     name: SENDELOSSRC
+#     write_pv: $(P)$(M):SEND_ELOSSRC
+#     write_widget:
+#       type: TextWrite
+#     read_pv: $(P)$(M):ELOSS
+#     read_widget:
+#       type: TextRead

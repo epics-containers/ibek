@@ -3,10 +3,15 @@ Unit tests for the rendering of scripts and database entries from generated
 Entity classes
 """
 
+from pathlib import Path
 from typing import Literal
 
+from ibek.entity_factory import EntityFactory
+from ibek.gen_scripts import create_boot_script, create_db_script
+from ibek.ioc_factory import IocFactory
 from ibek.render import Render
 from ibek.render_db import RenderDb
+from ibek.runtime_cmds.commands import generate_index, generate_pvi
 
 
 def find_entity_class(entity_classes, entity_type):
@@ -109,3 +114,31 @@ def test_environment_variables(motor_classes):
     env_text = render.render_environment_variables(asyn_obj)
 
     assert env_text == "epicsEnvSet NAME_AS_ENV_VAR my name is asyn1\n"
+
+
+def test_runtime_generate(samples, instance):
+    """
+    Test startup script for an IOC instance
+    """
+    instance_dir = samples / "instance" / "ioc.yaml"
+    support_dir = [samples / "support" / "pmac.ibek.support.yaml"]
+    example_script = (samples / "instance" / "st.cmd").read_text()
+    example_db = (samples / "instance" / "ioc.subst").read_text()
+
+    entity_factory = EntityFactory()
+    entity_models = entity_factory.make_entity_models(support_dir)
+    ioc_instance = IocFactory().deserialize_ioc(instance_dir, entity_models)
+
+    all_entities = entity_factory.resolve_sub_entities(ioc_instance.entities)
+    ioc_instance.entities = all_entities
+
+    _, pvi_databases = generate_pvi(ioc_instance)
+
+    script_txt = create_boot_script(ioc_instance.entities)
+    db_txt = create_db_script(ioc_instance.entities, pvi_databases)
+
+    #(samples / "instance" / "st.cmd").write_text(script_txt)
+    #(samples / "instance" / "ioc.subst").write_text(db_txt)
+
+    assert example_script == script_txt
+    assert example_db == db_txt

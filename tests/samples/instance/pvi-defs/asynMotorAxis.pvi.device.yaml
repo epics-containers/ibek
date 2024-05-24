@@ -1,0 +1,342 @@
+# yaml-language-server: $schema=file:///workspaces/pvi/schemas/pvi.device.schema.json
+
+# a hand built PVI representation of the the motor record
+label: asynMotorAxis
+parent: asynPortDriver
+children:
+  - type: Group
+    name: Motor
+    layout:
+      type: Grid
+      labelled: true
+    children:
+      - type: SignalRW
+        name: Position
+        write_pv: $(P)$(M)
+        write_widget:
+          type: TextWrite
+        read_pv: $(P)$(M).RBV
+        read_widget:
+          type: TextRead
+
+      - type: SignalW
+        name: Stop
+        write_pv: $(P)$(M).STOP
+        write_widget:
+          type: ButtonPanel
+          actions:
+            Stop: "1"
+
+      - type: SignalW
+        name: TweakForward
+        write_pv: $(P)$(M).TWF
+        write_widget:
+          type: ButtonPanel
+          actions:
+            TweakForward: "1"
+
+      - type: SignalW
+        name: TweakStep
+        write_pv: $(P)$(M).TWV
+        write_widget:
+          type : TextWrite
+
+      - type: SignalW
+        name: TweakReverse
+        write_pv: $(P)$(M).TWR
+        write_widget:
+          type: ButtonPanel
+          actions:
+            TweakReverse: "1"
+
+
+  - type: Group
+    name: Status
+    layout:
+      type: Grid
+      labelled: true
+    children:
+      - type: SignalR
+        name: Ready
+        read_pv: $(P)$(M).DMOV
+        read_widget:
+          type: LED
+
+      - type: SignalR
+        name: Moving
+        read_pv: $(P)$(M).MOVN
+        read_widget:
+          type: LED
+
+      - type: SignalR
+        name: Forward
+        read_pv: $(P)$(M).TDIR
+        read_widget:
+          type: LED
+
+      - type: SignalR
+        name: Homed
+        read_pv: $(P)$(M).MSTA
+        read_widget:
+          type: LED
+
+      - type: SignalR
+        name: HighLimit
+        read_pv: $(P)$(M).HLS
+        read_widget:
+          type: LED
+
+      - type: SignalR
+        name: LowLimit
+        read_pv: $(P)$(M).LLS
+        read_widget:
+          type: LED
+
+      - type: SignalR
+        name: SoftLimit
+        read_pv: $(P)$(M).LVIO
+        read_widget:
+          type: LED
+
+      - type: SignalR
+        name: Missed
+        read_pv: $(P)$(M).MISS
+        read_widget:
+          type: LED
+
+  - type: Group
+    name: Homing
+    layout:
+      type: Grid
+      labelled: true
+    children:
+      - type: SignalW
+        name: HomeForward
+        write_pv: $(P)$(M).HOMF
+        write_widget:
+          type: ButtonPanel
+          actions:
+            HomeForward: "1"
+
+      - type: SignalW
+        name: HomeReverse
+        write_pv: $(P)$(M).HOMR
+        write_widget:
+          type: ButtonPanel
+          actions:
+            HomeReverse: "1"
+
+
+  - type: Group
+    name: Calibration
+    layout:
+      type: Grid
+      labelled: true
+
+    children:
+      - type: SignalW
+        name: Direction
+        write_pv: $(P)$(M).DIR
+        write_widget:
+          type: ComboBox
+      - type: SignalW
+        name: Offset
+        write_pv: $(P)$(M).OFF
+      - type: SignalW
+        name: FreezeOffset
+        write_pv: $(P)$(M).FOFF
+        write_widget:
+          type: ComboBox
+      - type: SignalW
+        name: SetOrUnset
+        write_pv: $(P)$(M).SET
+        write_widget:
+          type: ComboBox
+
+  - type: Group
+    name: StatusDetail
+    layout:
+      type: Grid
+      labelled: true
+
+    children:
+      - type: SignalR
+        name: Status
+        read_pv: $(P)$(M).MSTA
+        read_widget:
+          type: BitField
+          # NOT working yet - this is a placeholder for now
+          number_of_bits: 10
+          labels:
+            - Pos Dir
+            - Done
+            - High Limit
+            - Home Limit
+            - Unused
+            - Closed Loop
+            - Following Error
+            - At Home
+            - Encoder Present
+            - Problem
+            - Moving
+            - Gain Support
+            - Comms Error
+            - Low Limit
+            - Homed
+      - type: SignalR
+        name: DialReadBackValue
+        read_pv: $(P)$(M).DRBV
+        read_widget:
+          type: TextRead
+      - type: SignalW
+        name: ReadBackSettleTime
+        write_pv: $(P)$(M).DLY
+      - type: SignalR
+        name: DvalMinusDrbv
+        read_pv: $(P)$(M).DIFF
+        read_widget:
+          type: TextRead
+      - type: SignalR
+        name: RvalMinusRrbv
+        read_pv: $(P)$(M).RDIF
+        read_widget:
+          type: TextRead
+      - type: SignalR
+        name: RawMotorPosition
+        read_pv: $(P)$(M).RRBV
+        read_widget:
+          type: TextRead
+      - type: SignalR
+        name: RawEncoderPosition
+        read_pv: $(P)$(M).REP
+        read_widget:
+          type: TextRead
+      - type: SignalR
+        name: DirectionOfTravel
+        read_pv: $(P)$(M).TDIR
+        read_widget:
+          type: TextRead
+      - type: SignalR
+        name: FollowingError
+        read_pv: $(P)$(M):FERROR
+        read_widget:
+          type: TextRead
+      - type: SignalR
+        name: MaxFollowingError
+        read_pv: $(P)$(M):FERRORMAX
+        read_widget:
+          type: TextRead
+
+  - type: Group
+    name: Motion
+    layout:
+      type: Grid
+      labelled: true
+
+    children:
+      - type: SignalW
+        name: MaxVelocity
+        write_pv: $(P)$(M).VMAX
+      - type: SignalW
+        name: BaseVelocity
+        write_pv: $(P)$(M).VBAS
+      - type: SignalW
+        name: Velocity
+        write_pv: $(P)$(M).VELO
+      - type: SignalW
+        name: Acceleration
+        write_pv: $(P)$(M).ACCL
+      - type: SignalW
+        name: JogVelocity
+        write_pv: $(P)$(M).JVEL
+      - type: SignalW
+        name: JogAcceleration
+        write_pv: $(P)$(M).JAR
+      - type: SignalW
+        name: BacklashDistance
+        write_pv: $(P)$(M).BDST
+      - type: SignalW
+        name: BacklashVelocity
+        write_pv: $(P)$(M).BVEL
+      - type: SignalW
+        name: BacklashSecsToVel
+        write_pv: $(P)$(M).BACC
+      - type: SignalW
+        name: MoveFraction
+        write_pv: $(P)$(M).FRAC
+      - type: SignalW
+        name: ReryDeadband
+        write_pv: $(P)$(M).RDBD
+      - type: SignalW
+        name: RetryCount
+        write_pv: $(P)$(M).RTRY
+
+  - type: Group
+    name: Resolution
+    layout:
+      type: Grid
+      labelled: true
+
+    children:
+      - type: SignalW
+        name: MotorStepSize
+        write_pv: $(P)$(M).MRES
+      - type: SignalW
+        name: StepsPerRevolution
+        write_pv: $(P)$(M).SREV
+      - type: SignalW
+        name: EncoderStepSize
+        write_pv: $(P)$(M).ERES
+      - type: SignalW
+        name: ReadbackStepSize
+        write_pv: $(P)$(M).RRES
+      - type: SignalW
+        name: UseEncoderIfPresent
+        write_pv: $(P)$(M).UEIP
+        write_widget:
+          type: ComboBox
+
+  - type: Group
+    name: MotorLimits
+    layout:
+      type: Grid
+      labelled: true
+
+    children:
+      - type: SignalW
+        name: UserHighLimit
+        write_pv: $(P)$(M).HLM
+      - type: SignalW
+        name: UserLowLimit
+        write_pv: $(P)$(M).LLM
+      - type: SignalW
+        name: DialHighLimit
+        write_pv: $(P)$(M).DHLM
+      - type: SignalW
+        name: DialLowLimit
+        write_pv: $(P)$(M).DLLM
+      - type: SignalR
+        name: LimitViolation
+        read_pv: $(P)$(M).LVIO
+        read_widget:
+          type: LED
+      - type: SignalR
+        name: AtHighLimitSwitch
+        read_pv: $(P)$(M).HLS
+        read_widget:
+          type: LED
+      - type: SignalR
+        name: AtLowLimitSwitch
+        read_pv: $(P)$(M).LLS
+        read_widget:
+          type: LED
+      - type: SignalR
+        name: AtRawHighLimitSwitch
+        read_pv: $(P)$(M).RHLS
+        read_widget:
+          type: LED
+      - type: SignalR
+        name: AtRawLowLimitSwitch
+        read_pv: $(P)$(M).RLLS
+        read_widget:
+          type: LED
