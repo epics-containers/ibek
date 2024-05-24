@@ -10,7 +10,7 @@ from typing import Any, Dict, List, Literal, Tuple, Type
 
 from pydantic import create_model, field_validator
 from pydantic.fields import FieldInfo
-from pydantic_core import PydanticUndefined
+from pydantic_core import PydanticUndefined, ValidationError
 from ruamel.yaml.main import YAML
 
 from .args import EnumArg, IdArg, ObjectArg
@@ -41,12 +41,16 @@ class EntityFactory:
         for definition in definition_yaml:
             support_dict = YAML(typ="safe").load(definition)
 
-            Support.model_validate(support_dict)
+            try:
+                Support.model_validate(support_dict)
 
-            # deserialize the support module definition file
-            support = Support(**support_dict)
-            # make Entity classes described in the support module definition file
-            self._make_entity_models(support)
+                # deserialize the support module definition file
+                support = Support(**support_dict)
+                # make Entity classes described in the support module definition file
+                self._make_entity_models(support)
+            except ValidationError:
+                print(f"PYDANTIC VALIDATION ERROR IN {definition}")
+                raise
 
         return list(self._entity_models.values())
 
