@@ -6,6 +6,7 @@ import dataclasses
 
 import jinja2
 import pytest
+from ruamel.yaml.main import YAML
 
 from ibek.args import IdArg, ObjectArg
 from ibek.commands import semver_compare
@@ -89,3 +90,23 @@ def test_strict():
     my_template = "{{ person.name ~ ' of age ' ~ person.height }}"
     with pytest.raises(jinja2.exceptions.UndefinedError):
         text = UTILS.render({"person": p}, my_template)
+
+
+def test_dlsPLC(samples, tmp_path):
+    # This test verifies that the compression of the dls_plc support file using
+    # yaml anchors and aliases has resulted in the original yaml when fully expanded
+    name = "dlsPLC.ibek.support.yaml"
+    plc_support = samples / "support" / name
+    plc_support_expanded = tmp_path / name
+    plc_support_original = samples / "outputs" / name
+
+    support_dict = YAML(typ="safe").load(plc_support)
+    for definition in support_dict["defs"]:
+        if "shared" in definition:
+            del definition["shared"]
+    YAML().dump(support_dict, plc_support_expanded)
+
+    original_text = plc_support_original.read_text()
+    expanded_text = plc_support_expanded.read_text()
+
+    assert original_text == expanded_text
