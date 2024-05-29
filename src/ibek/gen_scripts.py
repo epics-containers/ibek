@@ -50,7 +50,12 @@ def create_boot_script(entities: Sequence[Entity]) -> str:
     renderer = Render()
 
     return template.render(
+        # old name for global context for backward compatibility
         __utils__=UTILS,
+        # new short name for global context
+        _ctx_=UTILS,
+        # put variables created with set/get directly in the context
+        **UTILS.variables,
         env_var_elements=renderer.render_environment_variable_elements(entities),
         script_elements=renderer.render_pre_ioc_init_elements(entities),
         post_ioc_init_elements=renderer.render_post_ioc_init_elements(entities),

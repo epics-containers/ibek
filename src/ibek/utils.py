@@ -32,6 +32,12 @@ class Counter:
                 f"Counter {self.current} exceeded stop value of {self.stop}"
             )
 
+    def __repr__(self) -> str:
+        return str(self.current)
+
+    def __str__(self) -> str:
+        return str(self.current)
+
 
 class Utils:
     """
@@ -42,6 +48,10 @@ class Utils:
         self.file_name: str = ""
         self.ioc_name: str = ""
         self.__reset__()
+
+        # old names for backward compatibility
+        self.set_var = self.set
+        self.get_var = self.get
 
     def __reset__(self: "Utils"):
         """
@@ -69,13 +79,15 @@ class Utils:
         """
         return os.environ.get(key, "")
 
-    def set_var(self, key: str, value: Any):
+    def set(self, key: str, value: Any) -> Any:
         """create a global variable for our jinja context"""
         self.variables[key] = value
+        return value
 
-    def get_var(self, key: str) -> Any:
+    def get(self, key: str, default="") -> Any:
         """get the value a global variable for our jinja context"""
-        return self.variables.get(key, "")
+        # default is used to set an initial value if the variable is not set
+        return self.variables.get(key, default)
 
     def counter(
         self, name: str, start: int = 0, stop: int = 65535, inc: int = 1
@@ -113,7 +125,12 @@ class Utils:
             jinja_template = Template(template_text, undefined=StrictUndefined)
             return jinja_template.render(
                 context,
+                # old name for global context for backward compatibility
                 __utils__=self,
+                # new short name for global context
+                _ctx_=self,
+                # put variables created with set/get directly in the context
+                **self.variables,
                 ioc_yaml_file_name=self.file_name,
                 ioc_name=self.ioc_name,
             )
