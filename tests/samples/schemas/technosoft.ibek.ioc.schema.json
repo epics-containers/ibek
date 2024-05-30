@@ -86,6 +86,12 @@
           "title": "Entity Enabled",
           "type": "boolean"
         },
+        "num": {
+          "default": "{{ __utils__.counter(\"motorTML.axisCount\", start=0) }}",
+          "description": "The auto incrementing axis number",
+          "title": "Num",
+          "type": "string"
+        },
         "controller": {
           "description": "a reference to the motion controller",
           "title": "Controller"
@@ -225,7 +231,7 @@
           "type": "string"
         },
         "CONFIG": {
-          "default": "{%- set num = __utils__.counter(\"motorTML.axisCount\", start=0) -%}\n,AXIS_SETUP_{{num}}=$(SUPPORT)/motorTechnosoft/tml_lib/config/{{axconf}},AXIS_ID_{{num}}={{axid}},AXIS_HOMING_SW_{{num}}={{homing}}",
+          "default": ",AXIS_SETUP_{{num}}=$(SUPPORT)/motorTechnosoft/tml_lib/config/{{axconf}},AXIS_ID_{{num}}={{axid}},AXIS_HOMING_SW_{{num}}={{homing}}",
           "description": "Axis configuration string to add to the controller configuration",
           "title": "Config",
           "type": "string"

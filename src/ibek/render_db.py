@@ -76,7 +76,7 @@ class RenderDb:
 
             for arg, value in database.args.items():
                 if value is None:
-                    if arg not in entity.__dict__:
+                    if arg not in entity.__dict__ and arg not in UTILS.variables:
                         raise ValueError(
                             f"database arg '{arg}' in database template "
                             f"'{database.file}' not found in context"

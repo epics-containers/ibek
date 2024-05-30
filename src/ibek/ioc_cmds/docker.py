@@ -1,5 +1,4 @@
 import os
-import shutil
 import subprocess
 from pathlib import Path
 from typing import List
@@ -35,16 +34,8 @@ def handle_command(context: Path, tokens: List[str], step, start):
         os.chdir(tokens[1])
     elif docker_action == "COPY":
         print("COPY", tokens)
-        src = context / (Path(tokens[1]))
-        dest = (Path.cwd() / Path(tokens[2])).absolute()
-        if src == dest:
-            print("SKIPPING copy of same path")
-        else:
-            print(f"copying {src} to {dest}")
-            if src.is_file():
-                shutil.copy(src, dest)
-            else:
-                shutil.copytree(src, dest, dirs_exist_ok=True)
+        # skipping because in devcontainer the project folder is already mounted
+        # where the destination copy is supposed to go inside the container
     elif docker_action == "FROM":
         if "runtime_prep" in tokens:
             print("\n== Aborting before destructive runtime prep stage. ==\n")

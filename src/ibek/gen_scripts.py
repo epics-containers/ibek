@@ -5,7 +5,7 @@ Functions for building the db and boot scripts
 import logging
 from typing import List, Sequence, Tuple
 
-from jinja2 import Template
+from jinja2 import StrictUndefined, Template
 
 from ibek.utils import UTILS
 
@@ -31,7 +31,13 @@ def create_db_script(
 
         templates = renderer.render_database(extra_databases)
 
-        return Template(jinja_txt).render(templates=templates)
+        try:
+            return Template(jinja_txt).render(
+                templates=templates, undefined=StrictUndefined
+            )
+        except Exception:
+            print(f"ERROR RENDERING DATABASE TEMPLATE:\n{templates}")
+            raise
 
 
 def create_boot_script(entities: Sequence[Entity]) -> str:
@@ -44,7 +50,12 @@ def create_boot_script(entities: Sequence[Entity]) -> str:
     renderer = Render()
 
     return template.render(
+        # old name for global context for backward compatibility
         __utils__=UTILS,
+        # new short name for global context
+        _ctx_=UTILS,
+        # put variables created with set/get directly in the context
+        **UTILS.variables,
         env_var_elements=renderer.render_environment_variable_elements(entities),
         script_elements=renderer.render_pre_ioc_init_elements(entities),
         post_ioc_init_elements=renderer.render_post_ioc_init_elements(entities),

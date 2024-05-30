@@ -42,16 +42,16 @@ def test_container_build_and_run(tmp_path: Path):
     """
     make sure that a container build works and that the container can run an IOC
     """
-    ils = "ioc-lakeshore340"
+    ioc = "ioc-template-example"
 
     # get the lakeshore generic container source
     os.chdir(tmp_path)
-    run_command(f"git clone https://github.com/epics-containers/{ils}")
+    run_command(f"git clone https://github.com/epics-containers/{ioc}")
 
     # patch the dockerfile to include this version of ibek
     ibek = Path(__file__).parent.parent
-    shutil.copytree(ibek, tmp_path / ils / "ibek")
-    docker = tmp_path / ils / "Dockerfile"
+    shutil.copytree(ibek, tmp_path / ioc / "ibek")
+    docker = tmp_path / ioc / "Dockerfile"
     text = docker.read_text()
     this_ibek = "COPY ibek ibek\nRUN pip install ./ibek"
     text = re.sub(r"RUN pip install.*\n", this_ibek, text)
@@ -59,7 +59,7 @@ def test_container_build_and_run(tmp_path: Path):
     print(text)
 
     # build the container with latest ibek and latest ibek-support
-    os.chdir(ils)
+    os.chdir(ioc)
     run_command("git submodule update --init")
     run_command("cd ibek-support && git checkout main")
     run_command("./build")
