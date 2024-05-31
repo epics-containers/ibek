@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Modules, Definitions and Entities &#8212; ibek 3.0.0b6.dev4+gb714d200 documentation</title>
+    <title>Modules, Definitions and Entities &#8212; ibek 3.0.0b6.dev5+g55683976 documentation</title>
   
   
   
@@ -38,7 +38,7 @@
 <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=3ee479438cf8b5e0d341" />
   <script src="../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=3ee479438cf8b5e0d341"></script>
 
-    <script src="../../_static/documentation_options.js?v=29048f0c"></script>
+    <script src="../../_static/documentation_options.js?v=304d509d"></script>
     <script src="../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -1091,6 +1091,9 @@ the container or during container development.</p>
           <span class="s2">&quot;items&quot;</span><span class="p">:</span> <span class="p">{</span>
             <span class="s2">&quot;anyOf&quot;</span><span class="p">:</span> <span class="p">[</span>
               <span class="p">{</span>
+                <span class="s2">&quot;$ref&quot;</span><span class="p">:</span> <span class="s2">&quot;#/$defs/ListArg&quot;</span>
+              <span class="p">},</span>
+              <span class="p">{</span>
                 <span class="s2">&quot;$ref&quot;</span><span class="p">:</span> <span class="s2">&quot;#/$defs/FloatArg&quot;</span>
               <span class="p">},</span>
               <span class="p">{</span>
@@ -1452,6 +1455,46 @@ the container or during container development.</p>
       <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;IntArg&quot;</span><span class="p">,</span>
       <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span>
     <span class="p">},</span>
+    <span class="s2">&quot;ListArg&quot;</span><span class="p">:</span> <span class="p">{</span>
+      <span class="s2">&quot;additionalProperties&quot;</span><span class="p">:</span> <span class="n">false</span><span class="p">,</span>
+      <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;An argument with a float value&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="p">{</span>
+          <span class="s2">&quot;const&quot;</span><span class="p">:</span> <span class="s2">&quot;list&quot;</span><span class="p">,</span>
+          <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="s2">&quot;list&quot;</span><span class="p">,</span>
+          <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Type&quot;</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="p">{</span>
+          <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Name of the argument that the IOC instance should pass&quot;</span><span class="p">,</span>
+          <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Name&quot;</span><span class="p">,</span>
+          <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="p">{</span>
+          <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Description of what the argument will be used for&quot;</span><span class="p">,</span>
+          <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Description&quot;</span><span class="p">,</span>
+          <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="p">{</span>
+          <span class="s2">&quot;anyOf&quot;</span><span class="p">:</span> <span class="p">[</span>
+            <span class="p">{</span>
+              <span class="s2">&quot;items&quot;</span><span class="p">:</span> <span class="p">{},</span>
+              <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;array&quot;</span>
+            <span class="p">},</span>
+            <span class="p">{</span>
+              <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;null&quot;</span>
+            <span class="p">}</span>
+          <span class="p">],</span>
+          <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="n">null</span><span class="p">,</span>
+          <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Default&quot;</span>
+        <span class="p">}</span>
+      <span class="p">},</span>
+      <span class="s2">&quot;required&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="s2">&quot;name&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;description&quot;</span>
+      <span class="p">],</span>
+      <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;ListArg&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span>
+    <span class="p">},</span>
     <span class="s2">&quot;ObjectArg&quot;</span><span class="p">:</span> <span class="p">{</span>
       <span class="s2">&quot;additionalProperties&quot;</span><span class="p">:</span> <span class="n">false</span><span class="p">,</span>
       <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;A reference to another entity defined in this IOC&quot;</span><span class="p">,</span>
@@ -1618,6 +1661,13 @@ the container or during container development.</p>
   <span class="s2">&quot;additionalProperties&quot;</span><span class="p">:</span> <span class="n">false</span><span class="p">,</span>
   <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Lists the definitions for a support module, this defines what Entities it supports</span><span class="se">\n\n</span><span class="s2">Provides the deserialize entry point.&quot;</span><span class="p">,</span>
   <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="s2">&quot;shared&quot;</span><span class="p">:</span> <span class="p">{</span>
+      <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="p">[],</span>
+      <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;A place to create any anchors required for repeating YAML&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;items&quot;</span><span class="p">:</span> <span class="p">{},</span>
+      <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Shared&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;array&quot;</span>
+    <span class="p">},</span>
     <span class="s2">&quot;module&quot;</span><span class="p">:</span> <span class="p">{</span>
       <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Support module name, normally the repo name&quot;</span><span class="p">,</span>
       <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Module&quot;</span><span class="p">,</span>
