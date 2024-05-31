@@ -149,7 +149,7 @@ Click the arrows to reveal the files.
         <details>
         <summary><a>all.ibek.ioc.yaml</a></summary>
 
-    .. include:: ../../../tests/samples/iocs/ibek-mo-ioc-01.yaml
+    .. include:: ../../../tests/samples/iocs/motorSim.ibek.ioc.yaml
         :literal:
 
     .. raw:: html
