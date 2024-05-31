@@ -34,6 +34,13 @@ class Arg(BaseSettings):
     )
 
 
+class ListArg(Arg):
+    """An argument with a float value"""
+
+    type: Literal["list"] = "list"
+    default: Optional[list] = None
+
+
 class FloatArg(Arg):
     """An argument with a float value"""
 

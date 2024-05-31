@@ -19,6 +19,7 @@ def test_symlink_ibek(tmp_path: Path, samples: Path):
         "epics.ibek.support.yaml",
         "gauges.ibek.support.yaml",
         "ipac.ibek.support.yaml",
+        "listarg.ibek.support.yaml",
         "motorSim.ibek.support.yaml",
         "quadem.ibek.support.yaml",
         "technosoft.ibek.support.yaml",
