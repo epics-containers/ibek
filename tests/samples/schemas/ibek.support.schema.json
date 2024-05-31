@@ -125,6 +125,9 @@
           "items": {
             "anyOf": [
               {
+                "$ref": "#/$defs/ListArg"
+              },
+              {
                 "$ref": "#/$defs/FloatArg"
               },
               {
@@ -486,6 +489,46 @@
       "title": "IntArg",
       "type": "object"
     },
+    "ListArg": {
+      "additionalProperties": false,
+      "description": "An argument with a float value",
+      "properties": {
+        "type": {
+          "const": "list",
+          "default": "list",
+          "title": "Type"
+        },
+        "name": {
+          "description": "Name of the argument that the IOC instance should pass",
+          "title": "Name",
+          "type": "string"
+        },
+        "description": {
+          "description": "Description of what the argument will be used for",
+          "title": "Description",
+          "type": "string"
+        },
+        "default": {
+          "anyOf": [
+            {
+              "items": {},
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Default"
+        }
+      },
+      "required": [
+        "name",
+        "description"
+      ],
+      "title": "ListArg",
+      "type": "object"
+    },
     "ObjectArg": {
       "additionalProperties": false,
       "description": "A reference to another entity defined in this IOC",
@@ -652,6 +695,13 @@
   "additionalProperties": false,
   "description": "Lists the definitions for a support module, this defines what Entities it supports\n\nProvides the deserialize entry point.",
   "properties": {
+    "shared": {
+      "default": [],
+      "description": "A place to create any anchors required for repeating YAML",
+      "items": {},
+      "title": "Shared",
+      "type": "array"
+    },
     "module": {
       "description": "Support module name, normally the repo name",
       "title": "Module",

@@ -72,3 +72,14 @@ ibek ioc generate-schema --no-ibek-defs support/technosoft.ibek.support.yaml --o
 echo making techosoft ioc
 EPICS_ROOT=`pwd`/epics ibek runtime generate iocs/technosoft.ibek.ioc.yaml support/technosoft.ibek.support.yaml
 mv `pwd`/epics/{runtime,opi}/* `pwd`/outputs/technosoft
+
+# list example
+
+echo making an ioc schema using listarg support yaml
+ibek ioc generate-schema --no-ibek-defs support/listarg.ibek.support.yaml --output schemas/listarg.ibek.schema.json
+
+echo making listarg ioc
+EPICS_ROOT=`pwd`/epics ibek runtime generate iocs/listarg.ibek.ioc.yaml support/listarg.ibek.support.yaml
+mv `pwd`/epics/{runtime,opi}/* `pwd`/outputs/listarg
+
+

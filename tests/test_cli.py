@@ -235,3 +235,15 @@ def test_andreas_motors(tmp_epics_root: Path, samples: Path):
         "technosoft",
         ["asyn", "technosoft"],
     )
+
+
+def test_list(tmp_epics_root: Path, samples: Path):
+    """
+    Motor and axis example
+    """
+    generic_generate(
+        tmp_epics_root,
+        samples,
+        "listarg",
+        ["listarg"],
+    )

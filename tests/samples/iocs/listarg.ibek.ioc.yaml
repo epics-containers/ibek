@@ -1,0 +1,7 @@
+# yaml-language-server: $schema=../schemas/listarg.ibek.schema.json
+ioc_name: counter
+description: an example motion ioc for ibek testing
+
+entities:
+  - type: listtest.lister
+    friends: ["Rimmer", "Holly", "Cat", "Kryten"]

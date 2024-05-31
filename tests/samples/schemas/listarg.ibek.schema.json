@@ -1,0 +1,83 @@
+{
+  "$defs": {
+    "listtest_lister": {
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "const": "listtest.lister",
+          "default": "listtest.lister",
+          "description": "The protagonist from Red Dwarf",
+          "title": "Type"
+        },
+        "entity_enabled": {
+          "default": true,
+          "description": "enable or disable this entity instance",
+          "title": "Entity Enabled",
+          "type": "boolean"
+        },
+        "quote": {
+          "default": "Smoke me a kipper, I'll be back for breakfast",
+          "description": "most hated quote",
+          "title": "Quote",
+          "type": "string"
+        },
+        "friends": {
+          "description": "List of friends",
+          "items": {},
+          "title": "Friends",
+          "type": "array"
+        }
+      },
+      "required": [
+        "friends"
+      ],
+      "title": "listtest_lister",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "ioc_name": {
+      "description": "Name of IOC instance",
+      "title": "Ioc Name",
+      "type": "string"
+    },
+    "description": {
+      "description": "Description of what the IOC does",
+      "title": "Description",
+      "type": "string"
+    },
+    "entities": {
+      "description": "List of entities this IOC instantiates",
+      "items": {
+        "discriminator": {
+          "mapping": {
+            "listtest.lister": "#/$defs/listtest_lister"
+          },
+          "propertyName": "type"
+        },
+        "oneOf": [
+          {
+            "$ref": "#/$defs/listtest_lister"
+          }
+        ]
+      },
+      "title": "Entities",
+      "type": "array"
+    },
+    "shared": {
+      "default": [],
+      "description": "A place to create any anchors required for repeating YAML",
+      "items": {},
+      "title": "Shared",
+      "type": "array"
+    }
+  },
+  "required": [
+    "ioc_name",
+    "description",
+    "entities"
+  ],
+  "title": "NewIOC",
+  "type": "object"
+}

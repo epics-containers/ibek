@@ -1,0 +1,28 @@
+# yaml-language-server: $schema=../schemas/ibek.support.schema.json
+module: listtest
+
+defs:
+  - name: lister
+    description: |-
+      The protagonist from Red Dwarf
+    args:
+      - type: str
+        name: quote
+        description: |-
+          most hated quote
+        default: |-
+          Smoke me a kipper, I'll be back for breakfast
+
+      - type: list
+        name: friends
+        description: |-
+          List of friends
+
+    pre_init:
+      - value: |
+          Lister does not like to hear "{{quote}}" has friends:
+          {% for friend in friends -%}
+          - {{friend}}
+          {% endfor -%}
+
+          First friend is {{friends[0]}}
