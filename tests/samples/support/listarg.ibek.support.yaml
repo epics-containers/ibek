@@ -6,14 +6,14 @@ defs:
     description: |-
       The protagonist from Red Dwarf
     args:
-      - type: str
+      - arg_type: str
         name: quote
         description: |-
           most hated quote
         default: |-
           Smoke me a kipper, I'll be back for breakfast
 
-      - type: list
+      - arg_type: list
         name: friends
         description: |-
           List of friends

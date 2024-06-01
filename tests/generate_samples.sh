@@ -18,7 +18,7 @@ cd $SAMPLES_DIR
 mkdir -p schemas
 mkdir -p outputs
 
-set -ex
+set -e
 
 mkdir -p epics/pvi-defs
 cp support/simple.pvi.device.yaml  epics/pvi-defs/simple.pvi.device.yaml

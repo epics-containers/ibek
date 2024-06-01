@@ -79,12 +79,14 @@ class EntityFactory:
 
         # add in each of the arguments as a Field in the Entity
         for arg in definition.args:
-            full_arg_name = f"{full_name}.{arg.name}"
+            # TODO - don't understand why I need type ignore here
+            # arg is 'discriminated' which is a Union of all the Arg subclasses
+            full_arg_name = f"{full_name}.{arg.name}"  # type: ignore
             arg_type: Any
 
             if isinstance(arg, ObjectArg):
-
-                @field_validator(arg.name, mode="after")
+                # TODO look into why arg.name requires type ignore
+                @field_validator(arg.name, mode="after")  # type: ignore
                 def lookup_instance(cls, id):
                     return get_entity_by_id(id)
 
@@ -106,9 +108,10 @@ class EntityFactory:
                 arg_type = val_enum
 
             else:
-                # arg.type is str, int, float, etc.
-                arg_type = getattr(builtins, arg.type)
-            add_arg(arg.name, arg_type, arg.description, getattr(arg, "default"))
+                # arg.arg_type is str, int, float, etc.
+                arg_type = getattr(builtins, arg.arg_type)
+            # TODO look into why arg.name requires type ignore
+            add_arg(arg.name, arg_type, arg.description, getattr(arg, "default"))  # type: ignore
 
         # add in the calculated values Jinja Templates as Fields in the Entity
         for value in definition.values:

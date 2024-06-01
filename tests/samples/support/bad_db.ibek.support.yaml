@@ -10,7 +10,7 @@ defs:
     description: |
       Example object with a database containing a non-existant arg
     args:
-      - type: id
+      - arg_type: id
         name: name
         description: Port name
 

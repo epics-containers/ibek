@@ -4,10 +4,10 @@
       "additionalProperties": false,
       "description": "An argument with an bool value",
       "properties": {
-        "type": {
+        "arg_type": {
           "const": "bool",
           "default": "bool",
-          "title": "Type"
+          "title": "Arg Type"
         },
         "name": {
           "description": "Name of the argument that the IOC instance should pass",
@@ -43,10 +43,10 @@
       "additionalProperties": false,
       "description": "A script snippet that will have '# ' prepended to every line\nfor insertion into the startup script",
       "properties": {
-        "type": {
+        "arg_type": {
           "const": "comment",
           "default": "comment",
-          "title": "Type"
+          "title": "Arg Type"
         },
         "when": {
           "allOf": [
@@ -123,7 +123,21 @@
           "default": [],
           "description": "The arguments IOC instance should supply",
           "items": {
-            "anyOf": [
+            "description": "union of arg types",
+            "discriminator": {
+              "mapping": {
+                "bool": "#/$defs/BoolArg",
+                "enum": "#/$defs/EnumArg",
+                "float": "#/$defs/FloatArg",
+                "id": "#/$defs/IdArg",
+                "int": "#/$defs/IntArg",
+                "list": "#/$defs/ListArg",
+                "object": "#/$defs/ObjectArg",
+                "str": "#/$defs/StrArg"
+              },
+              "propertyName": "arg_type"
+            },
+            "oneOf": [
               {
                 "$ref": "#/$defs/ListArg"
               },
@@ -311,10 +325,10 @@
       "additionalProperties": false,
       "description": "An argument with an enum value",
       "properties": {
-        "type": {
+        "arg_type": {
           "const": "enum",
           "default": "enum",
-          "title": "Type"
+          "title": "Arg Type"
         },
         "name": {
           "description": "Name of the argument that the IOC instance should pass",
@@ -376,10 +390,10 @@
       "additionalProperties": false,
       "description": "An argument with a float value",
       "properties": {
-        "type": {
+        "arg_type": {
           "const": "float",
           "default": "float",
-          "title": "Type"
+          "title": "Arg Type"
         },
         "name": {
           "description": "Name of the argument that the IOC instance should pass",
@@ -415,10 +429,10 @@
       "additionalProperties": false,
       "description": "Explicit ID argument that an object can refer to",
       "properties": {
-        "type": {
+        "arg_type": {
           "const": "id",
           "default": "id",
-          "title": "Type"
+          "title": "Arg Type"
         },
         "name": {
           "description": "Name of the argument that the IOC instance should pass",
@@ -454,10 +468,10 @@
       "additionalProperties": false,
       "description": "An argument with an int value",
       "properties": {
-        "type": {
+        "arg_type": {
           "const": "int",
           "default": "int",
-          "title": "Type"
+          "title": "Arg Type"
         },
         "name": {
           "description": "Name of the argument that the IOC instance should pass",
@@ -493,10 +507,10 @@
       "additionalProperties": false,
       "description": "An argument with a float value",
       "properties": {
-        "type": {
+        "arg_type": {
           "const": "list",
           "default": "list",
-          "title": "Type"
+          "title": "Arg Type"
         },
         "name": {
           "description": "Name of the argument that the IOC instance should pass",
@@ -533,10 +547,10 @@
       "additionalProperties": false,
       "description": "A reference to another entity defined in this IOC",
       "properties": {
-        "type": {
+        "arg_type": {
           "const": "object",
           "default": "object",
-          "title": "Type"
+          "title": "Arg Type"
         },
         "name": {
           "description": "Name of the argument that the IOC instance should pass",
@@ -572,10 +586,10 @@
       "additionalProperties": false,
       "description": "An argument with a str value",
       "properties": {
-        "type": {
+        "arg_type": {
           "const": "str",
           "default": "str",
-          "title": "Type"
+          "title": "Arg Type"
         },
         "name": {
           "description": "Name of the argument that the IOC instance should pass",
@@ -633,10 +647,10 @@
       "additionalProperties": false,
       "description": "A script snippet to insert into the startup script",
       "properties": {
-        "type": {
+        "arg_type": {
           "const": "text",
           "default": "text",
-          "title": "Type"
+          "title": "Arg Type"
         },
         "when": {
           "default": "every",

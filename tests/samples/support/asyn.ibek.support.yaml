@@ -7,54 +7,54 @@ defs:
     description: |-
       Asyn IP Port
     args:
-      - type: str
+      - arg_type: str
         name: port
         description: |-
           Serial port tty name / IP address optionally followed by protocol
 
-      - type: id
+      - arg_type: id
         name: name
         description: |-
           Override name
 
-      - type: str
+      - arg_type: str
         name: input_eos
         description: |-
           Input end of string (terminator)
         # test escaping of quotes
         default: '"\n"'
 
-      - type: str
+      - arg_type: str
         name: output_eos
         description: |-
           Output end of string (terminator)
         default: '"\n"'
 
-      - type: int
+      - arg_type: int
         name: priority
         description: |-
           Priority
         default: 100
 
-      - type: bool
+      - arg_type: bool
         name: noAuto_connect
         description: |-
           Set to stop auto_connect
         default: false
 
-      - type: bool
+      - arg_type: bool
         name: noProcessEos
         description: |-
           Set to avoid processing end of string
         default: false
 
-      - type: int
+      - arg_type: int
         name: baud
         description: |-
           Baud Rate
         default: 9600
 
-      - type: enum
+      - arg_type: enum
         name: parity
         description: |-
           Parity
@@ -64,7 +64,7 @@ defs:
           odd:
         default: none
 
-      - type: enum
+      - arg_type: enum
         name: crtscts
         description: |-
           Set hardware flow control on
@@ -73,7 +73,7 @@ defs:
           N:
         default: N
 
-      - type: enum
+      - arg_type: enum
         name: stop
         description: |-
           Stop Bits
@@ -82,7 +82,7 @@ defs:
           "2":
         default: "1"
 
-      - type: enum
+      - arg_type: enum
         name: disconnectOnReadTimeout
         description: |-
           Disconnect when a read times out
@@ -91,7 +91,7 @@ defs:
           N:
         default: Y
 
-      - type: enum
+      - arg_type: enum
         name: bits
         description: |-
           Bits

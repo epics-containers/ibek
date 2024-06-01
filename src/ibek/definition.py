@@ -5,7 +5,7 @@ The Definition class describes what a given support module can instantiate.
 from __future__ import annotations
 
 from enum import Enum
-from typing import Any, Mapping, Optional, Sequence, Union
+from typing import Annotated, Any, Mapping, Optional, Sequence, Union
 
 from pydantic import Field, PydanticUndefinedAnnotation
 from typing_extensions import Literal
@@ -68,7 +68,7 @@ class Comment(BaseSettings):
     for insertion into the startup script
     """
 
-    type: Literal["comment"] = "comment"
+    arg_type: Literal["comment"] = "comment"
     when: When = Field(description="One of first / every / last", default="every")
     value: str = Field(
         description="A comment to add into the startup script", default=""
@@ -80,7 +80,7 @@ class Text(BaseSettings):
     A script snippet to insert into the startup script
     """
 
-    type: Literal["text"] = "text"
+    arg_type: Literal["text"] = "text"
     when: str = Field(description="One of first / every / last", default="every")
     value: str = Field(description="raw text to add to the startup script", default="")
 
@@ -115,6 +115,12 @@ class EntityPVI(BaseSettings):
     pv_prefix: str = Field("", description='PV prefix for PVI PV - e.g. "$(P)"')
 
 
+discriminated = Annotated[  # type: ignore
+    Union[tuple(Arg.__subclasses__())],
+    Field(discriminator="arg_type", description="union of arg types"),
+]
+
+
 class EntityDefinition(BaseSettings):
     """
     A single definition of a class of Entity that an IOC instance may instantiate
@@ -127,8 +133,10 @@ class EntityDefinition(BaseSettings):
         description="A description of the Support module defined here"
     )
     # declare Arg as Union of its subclasses for Pydantic to be able to deserialize
-    args: Sequence[Union[tuple(Arg.__subclasses__())]] = Field(  # type: ignore
-        description="The arguments IOC instance should supply", default=()
+
+    args: Sequence[discriminated] = Field(  # type: ignore
+        description="The arguments IOC instance should supply",
+        default=(),
     )
     values: Sequence[Value] = Field(
         description="Calculated values to use as additional arguments "

@@ -7,51 +7,51 @@ defs:
     description: |-
       This plugin can compress NDArrays to Nexus and write them to file
     args:
-      - type: str
+      - arg_type: str
         name: P
         description: |-
           Device Prefix
 
-      - type: str
+      - arg_type: str
         name: R
         description: |-
           Device Suffix
 
-      - type: id
+      - arg_type: id
         name: PORT
         description: |-
           Port name for the NDFileNexus plugin
 
-      - type: object
+      - arg_type: object
         name: NDARRAY_PORT
         description: |-
           Input array port
 
-      - type: int
+      - arg_type: int
         name: TIMEOUT
         description: |-
           Timeout
         default: 1
 
-      - type: int
+      - arg_type: int
         name: ADDR
         description: |-
           Asyn Port address
         default: 0
 
-      - type: int
+      - arg_type: int
         name: NDARRAY_ADDR
         description: |-
           Input array port address
         default: 0
 
-      - type: int
+      - arg_type: int
         name: ENABLED
         description: |-
           Plugin Enabled at startup?
         default: 0
 
-      - type: enum
+      - arg_type: enum
         name: SCANRATE
         description: |-
           Specified scan rate for cpu intensive PVs
@@ -68,13 +68,13 @@ defs:
           Event:
           I/O Intr:
 
-      - type: int
+      - arg_type: int
         name: QUEUE
         description: |-
           Input array queue size
         default: 2
 
-      - type: int
+      - arg_type: int
         name: BLOCK
         description: |-
           Blocking callbacks?
@@ -102,56 +102,56 @@ defs:
     description: |-
       This plugin is used to calculate the FFT of a time series
     args:
-      - type: str
+      - arg_type: str
         name: P
         description: |-
           Device prefix
 
-      - type: str
+      - arg_type: str
         name: R
         description: |-
           Device suffix
 
-      - type: id
+      - arg_type: id
         name: PORT
         description: |-
           Port name for the NDFFT plugin
 
-      - type: object
+      - arg_type: object
         name: NDARRAY_PORT
         description: |-
           Input array port
 
-      - type: str
+      - arg_type: str
         name: NCHANS
         description: |-
           Length of time series waveform
 
-      - type: int
+      - arg_type: int
         name: TIMEOUT
         description: |-
           Asyn port timeout
         default: 1
 
-      - type: int
+      - arg_type: int
         name: ADDR
         description: |-
           Asyn port address
         default: 0
 
-      - type: int
+      - arg_type: int
         name: NDARRAY_ADDR
         description: |-
           Input array port address
         default: 0
 
-      - type: int
+      - arg_type: int
         name: ENABLED
         description: |-
           Plugin Enabled at startup?
         default: 0
 
-      - type: enum
+      - arg_type: enum
         name: SCANRATE
         description: |-
           Specified scan rate for cpu intensive PVs
@@ -168,43 +168,43 @@ defs:
           Event:
           I/O Intr:
 
-      - type: float
+      - arg_type: float
         name: TIME_LINK
         description: |-
           Time in seconds between points (Can point to a record - use CP)
         default: 0.1
 
-      - type: int
+      - arg_type: int
         name: NAME
         description: |-
           Label for signal
         default: 0
 
-      - type: int
+      - arg_type: int
         name: QUEUE
         description: |-
           Input array queue size
         default: 2
 
-      - type: int
+      - arg_type: int
         name: BLOCK
         description: |-
           Blocking callbacks?
         default: 0
 
-      - type: int
+      - arg_type: int
         name: PRIORITY
         description: |-
           Thread priority if ASYN_CANBLOCK is set
         default: 0
 
-      - type: int
+      - arg_type: int
         name: STACKSIZE
         description: |-
           Stack size if ASYN_CANBLOCK is set
         default: 0
 
-      - type: int
+      - arg_type: int
         name: MAX_THREADS
         description: |-
           Maximum number threads
@@ -235,51 +235,51 @@ defs:
     description: |-
       This plugin attaches position information to NDArrays
     args:
-      - type: str
+      - arg_type: str
         name: P
         description: |-
           Device Prefix
 
-      - type: str
+      - arg_type: str
         name: R
         description: |-
           Device Suffix
 
-      - type: id
+      - arg_type: id
         name: PORT
         description: |-
           Port name for the NDPosPlugin plugin
 
-      - type: object
+      - arg_type: object
         name: NDARRAY_PORT
         description: |-
           Input array port
 
-      - type: int
+      - arg_type: int
         name: TIMEOUT
         description: |-
           Asyn timeout
         default: 1
 
-      - type: int
+      - arg_type: int
         name: ADDR
         description: |-
           Asyn Port address
         default: 0
 
-      - type: int
+      - arg_type: int
         name: NDARRAY_ADDR
         description: |-
           Input array port address
         default: 0
 
-      - type: int
+      - arg_type: int
         name: ENABLED
         description: |-
           Plugin Enabled at startup?
         default: 0
 
-      - type: enum
+      - arg_type: enum
         name: SCANRATE
         description: |-
           Specified scan rate for cpu intensive PVs
@@ -296,25 +296,25 @@ defs:
           Event:
           I/O Intr:
 
-      - type: int
+      - arg_type: int
         name: QUEUE
         description: |-
           Input array queue size
         default: 2
 
-      - type: int
+      - arg_type: int
         name: BLOCK
         description: |-
           Blocking callbacks?
         default: 0
 
-      - type: int
+      - arg_type: int
         name: PRIORITY
         description: |-
           Max buffers to allocate
         default: 0
 
-      - type: int
+      - arg_type: int
         name: STACKSIZE
         description: |-
           Max buffers to allocate
@@ -342,51 +342,51 @@ defs:
     description: |-
       This plugin writes overlays on the array, like cursors and boxes
     args:
-      - type: str
+      - arg_type: str
         name: P
         description: |-
           Device Prefix
 
-      - type: str
+      - arg_type: str
         name: R
         description: |-
           Device Suffix
 
-      - type: id
+      - arg_type: id
         name: PORT
         description: |-
           Port name for the NDOverlay plugin
 
-      - type: object
+      - arg_type: object
         name: NDARRAY_PORT
         description: |-
           Input array port
 
-      - type: int
+      - arg_type: int
         name: TIMEOUT
         description: |-
           Timeout
         default: 1
 
-      - type: int
+      - arg_type: int
         name: ADDR
         description: |-
           Asyn Port address
         default: 0
 
-      - type: int
+      - arg_type: int
         name: NDARRAY_ADDR
         description: |-
           Input array port address
         default: 0
 
-      - type: int
+      - arg_type: int
         name: ENABLED
         description: |-
           Plugin Enabled at startup?
         default: 0
 
-      - type: enum
+      - arg_type: enum
         name: SCANRATE
         description: |-
           Specified scan rate for cpu intensive PVs
@@ -403,75 +403,75 @@ defs:
           Event:
           I/O Intr:
 
-      - type: int
+      - arg_type: int
         name: QUEUE
         description: |-
           Input array queue size
         default: 2
 
-      - type: int
+      - arg_type: int
         name: BLOCK
         description: |-
           Blocking callbacks?
         default: 0
 
-      - type: int
+      - arg_type: int
         name: MAX_THREADS
         description: |-
           Maximum number threads
         default: 1
 
-      - type: str
+      - arg_type: str
         name: O
         description: |-
           NDOverlay Device Suffix
 
-      - type: str
+      - arg_type: str
         name: NAME
         description: |-
           Name for the overlay
 
-      - type: str
+      - arg_type: str
         name: SHAPE
         description: |-
           Shape of the overlay
 
-      - type: str
+      - arg_type: str
         name: XPOS
         description: |-
           Link for the XPos of the overlay
 
-      - type: str
+      - arg_type: str
         name: YPOS
         description: |-
           Link for the YPos of the overlay
 
-      - type: str
+      - arg_type: str
         name: XCENT
         description: |-
           Link for the XCent of the overlay
 
-      - type: str
+      - arg_type: str
         name: YCENT
         description: |-
           Link for the YCent of the overlay
 
-      - type: str
+      - arg_type: str
         name: XSIZE
         description: |-
           Link for the XSize of the overlay
 
-      - type: str
+      - arg_type: str
         name: YSIZE
         description: |-
           Link for the YSize of the overlay
 
-      - type: str
+      - arg_type: str
         name: XWIDTH
         description: |-
           Link for the XWidth of the overlay
 
-      - type: str
+      - arg_type: str
         name: YWIDTH
         description: |-
           Link for the YWdith of the overlay
@@ -517,51 +517,51 @@ defs:
     description: |-
       This plugin converts arrays from one colour type to another, e.g. Bayer -> RGB1
     args:
-      - type: str
+      - arg_type: str
         name: P
         description: |-
           Device Prefix
 
-      - type: str
+      - arg_type: str
         name: R
         description: |-
           Device Suffix
 
-      - type: id
+      - arg_type: id
         name: PORT
         description: |-
           Port name for the NDColorConvert plugin
 
-      - type: object
+      - arg_type: object
         name: NDARRAY_PORT
         description: |-
           Input array port
 
-      - type: int
+      - arg_type: int
         name: TIMEOUT
         description: |-
           Timeout
         default: 1
 
-      - type: int
+      - arg_type: int
         name: ADDR
         description: |-
           Asyn Port address
         default: 0
 
-      - type: int
+      - arg_type: int
         name: NDARRAY_ADDR
         description: |-
           Input array port address
         default: 0
 
-      - type: int
+      - arg_type: int
         name: ENABLED
         description: |-
           Plugin Enabled at startup?
         default: 0
 
-      - type: enum
+      - arg_type: enum
         name: SCANRATE
         description: |-
           Specified scan rate for cpu intensive PVs
@@ -578,19 +578,19 @@ defs:
           Event:
           I/O Intr:
 
-      - type: int
+      - arg_type: int
         name: QUEUE
         description: |-
           Input array queue size
         default: 2
 
-      - type: int
+      - arg_type: int
         name: BLOCK
         description: |-
           Blocking callbacks?
         default: 0
 
-      - type: int
+      - arg_type: int
         name: MAX_THREADS
         description: |-
           Maximum number threads
@@ -618,51 +618,51 @@ defs:
     description: |-
       This plugin can compress NDArrays to HDF5 and write them to file
     args:
-      - type: str
+      - arg_type: str
         name: P
         description: |-
           Device Prefix
 
-      - type: str
+      - arg_type: str
         name: R
         description: |-
           Device Suffix
 
-      - type: id
+      - arg_type: id
         name: PORT
         description: |-
           Port name for the NDFileHDF5 plugin
 
-      - type: object
+      - arg_type: object
         name: NDARRAY_PORT
         description: |-
           Input array port
 
-      - type: int
+      - arg_type: int
         name: TIMEOUT
         description: |-
           Asyn Port timeout
         default: 1
 
-      - type: int
+      - arg_type: int
         name: ADDR
         description: |-
           Asyn Port address
         default: 0
 
-      - type: int
+      - arg_type: int
         name: NDARRAY_ADDR
         description: |-
           Input array port address
         default: 0
 
-      - type: int
+      - arg_type: int
         name: ENABLED
         description: |-
           Plugin Enabled at startup?
         default: 0
 
-      - type: enum
+      - arg_type: enum
         name: SCANRATE
         description: |-
           Specified scan rate for cpu intensive PVs
@@ -679,19 +679,19 @@ defs:
           Event:
           I/O Intr:
 
-      - type: int
+      - arg_type: int
         name: XMLSIZE
         description: |-
           Number of elements of the XML layout waveform record
         default: 2048
 
-      - type: int
+      - arg_type: int
         name: QUEUE
         description: |-
           Input array queue size
         default: 2
 
-      - type: int
+      - arg_type: int
         name: BLOCK
         description: |-
           Blocking callbacks?
@@ -728,39 +728,39 @@ defs:
     description: |-
       Null file plugin for deleting driver files
     args:
-      - type: str
+      - arg_type: str
         name: P
         description: |-
           Device Prefix
 
-      - type: str
+      - arg_type: str
         name: R
         description: |-
           Device Suffix
 
-      - type: id
+      - arg_type: id
         name: PORT
         description: |-
           Port name for the NDFileHDF5 plugin
 
-      - type: object
+      - arg_type: object
         name: NDARRAY_PORT
         description: |-
           Input array port
 
-      - type: int
+      - arg_type: int
         name: TIMEOUT
         description: |-
           Timeout
         default: 1
 
-      - type: int
+      - arg_type: int
         name: ADDR
         description: |-
           Asyn Port address
         default: 0
 
-      - type: enum
+      - arg_type: enum
         name: SCANRATE
         description: |-
           Specified scan rate for cpu intensive PVs
@@ -777,25 +777,25 @@ defs:
           Event:
           I/O Intr:
 
-      - type: int
+      - arg_type: int
         name: NDARRAY_ADDR
         description: |-
           Input array port address
         default: 0
 
-      - type: int
+      - arg_type: int
         name: ENABLED
         description: |-
           Plugin Enabled at startup?
         default: 0
 
-      - type: int
+      - arg_type: int
         name: QUEUE
         description: |-
           Input array queue size
         default: 2
 
-      - type: int
+      - arg_type: int
         name: BLOCK
         description: |-
           Blocking callbacks?
@@ -824,32 +824,32 @@ defs:
       This plugin provides a waveform record that can display the NDArrays
           produced by its NDARRAY_PORT
     args:
-      - type: str
+      - arg_type: str
         name: P
         description: |-
           Device Prefix
 
-      - type: str
+      - arg_type: str
         name: R
         description: |-
           Device Suffix
 
-      - type: id
+      - arg_type: id
         name: PORT
         description: |-
           Port name for the NDStdArrays plugin
 
-      - type: object
+      - arg_type: object
         name: NDARRAY_PORT
         description: |-
           Input array port
 
-      - type: str
+      - arg_type: str
         name: TYPE
         description: |-
           Asyn Type e.g. Int32
 
-      - type: enum
+      - arg_type: enum
         name: FTVL
         description: |-
           Field Type of Value
@@ -865,36 +865,36 @@ defs:
           FLOAT:
           CHAR:
 
-      - type: int
+      - arg_type: int
         name: NELEMENTS
         description: |-
           Number of elements
 
-      - type: int
+      - arg_type: int
         name: TIMEOUT
         description: |-
           Timeout
         default: 1
 
-      - type: int
+      - arg_type: int
         name: ADDR
         description: |-
           Asyn Port address
         default: 0
 
-      - type: int
+      - arg_type: int
         name: NDARRAY_ADDR
         description: |-
           Input array port address
         default: 0
 
-      - type: int
+      - arg_type: int
         name: ENABLED
         description: |-
           Plugin Enabled at startup?
         default: 0
 
-      - type: enum
+      - arg_type: enum
         name: SCANRATE
         description: |-
           Specified scan rate for cpu intensive PVs
@@ -911,19 +911,19 @@ defs:
           Event:
           I/O Intr:
 
-      - type: int
+      - arg_type: int
         name: QUEUE
         description: |-
           Input array queue size
         default: 2
 
-      - type: int
+      - arg_type: int
         name: BLOCK
         description: |-
           Blocking callbacks?
         default: 0
 
-      - type: int
+      - arg_type: int
         name: MAX_THREADS
         description: |-
           Maximum number threads
@@ -957,51 +957,51 @@ defs:
     description: |-
       TODO:ADD DESCRIPTION
     args:
-      - type: str
+      - arg_type: str
         name: P
         description: |-
           Device Prefix
 
-      - type: str
+      - arg_type: str
         name: R
         description: |-
           Device Suffix
 
-      - type: str
+      - arg_type: str
         name: PORT
         description: |-
           Asyn Port name
 
-      - type: str
+      - arg_type: str
         name: NDARRAY_PORT
         description: |-
           Input Array Port
 
-      - type: int
+      - arg_type: int
         name: TIMEOUT
         description: |-
           Timeout
         default: 1
 
-      - type: int
+      - arg_type: int
         name: ADDR
         description: |-
           Asyn Port address
         default: 0
 
-      - type: int
+      - arg_type: int
         name: NDARRAY_ADDR
         description: |-
           Input Array Address
         default: 0
 
-      - type: int
+      - arg_type: int
         name: ENABLED
         description: |-
           Plugin Enabled at startup?
         default: 0
 
-      - type: enum
+      - arg_type: enum
         name: SCANRATE
         description: |-
           Specified scan rate for cpu intensive PVs
@@ -1018,13 +1018,13 @@ defs:
           Event:
           I/O Intr:
 
-      - type: int
+      - arg_type: int
         name: PRECOUNT
         description: |-
           Pre-trigger frame count
         default: 100
 
-      - type: int
+      - arg_type: int
         name: POSTCOUNT
         description: |-
           Post-trigger frame count
@@ -1050,51 +1050,51 @@ defs:
       This plugin can compress NDArrays to a range of formats supported by
           graphics magick and write them to file
     args:
-      - type: str
+      - arg_type: str
         name: P
         description: |-
           Device Prefix
 
-      - type: str
+      - arg_type: str
         name: R
         description: |-
           Device Suffix
 
-      - type: id
+      - arg_type: id
         name: PORT
         description: |-
           Port name for the NDFileMagick plugin
 
-      - type: object
+      - arg_type: object
         name: NDARRAY_PORT
         description: |-
           Input array port
 
-      - type: int
+      - arg_type: int
         name: TIMEOUT
         description: |-
           Timeout
         default: 1
 
-      - type: int
+      - arg_type: int
         name: ADDR
         description: |-
           Asyn Port address
         default: 0
 
-      - type: int
+      - arg_type: int
         name: NDARRAY_ADDR
         description: |-
           Input array port address
         default: 0
 
-      - type: int
+      - arg_type: int
         name: ENABLED
         description: |-
           Plugin Enabled at startup?
         default: 0
 
-      - type: enum
+      - arg_type: enum
         name: SCANRATE
         description: |-
           Specified scan rate for cpu intensive PVs
@@ -1111,13 +1111,13 @@ defs:
           Event:
           I/O Intr:
 
-      - type: int
+      - arg_type: int
         name: QUEUE
         description: |-
           Input array queue size
         default: 2
 
-      - type: int
+      - arg_type: int
         name: BLOCK
         description: |-
           Blocking callbacks?
@@ -1145,51 +1145,51 @@ defs:
     description: |-
       This plugin provides a pre and post external trigger frame capture buffer
     args:
-      - type: str
+      - arg_type: str
         name: P
         description: |-
           Device Prefix
 
-      - type: str
+      - arg_type: str
         name: R
         description: |-
           Device Suffix
 
-      - type: id
+      - arg_type: id
         name: PORT
         description: |-
           Port name for the FFT_calc plugin
 
-      - type: object
+      - arg_type: object
         name: NDARRAY_PORT
         description: |-
           Input array port
 
-      - type: int
+      - arg_type: int
         name: TIMEOUT
         description: |-
           Timeout
         default: 1
 
-      - type: int
+      - arg_type: int
         name: ADDR
         description: |-
           Asyn Port address
         default: 0
 
-      - type: int
+      - arg_type: int
         name: NDARRAY_ADDR
         description: |-
           Input array port address
         default: 0
 
-      - type: int
+      - arg_type: int
         name: ENABLED
         description: |-
           Plugin Enabled at startup?
         default: 1
 
-      - type: enum
+      - arg_type: enum
         name: SCANRATE
         description: |-
           Specified scan rate for cpu intensive PVs
@@ -1206,31 +1206,31 @@ defs:
           Event:
           I/O Intr:
 
-      - type: int
+      - arg_type: int
         name: PRECOUNT
         description: |-
           Pre-trigger frame count
         default: 100
 
-      - type: int
+      - arg_type: int
         name: POSTCOUNT
         description: |-
           Post-trigger frame count
         default: 100
 
-      - type: int
+      - arg_type: int
         name: QUEUE
         description: |-
           Input array queue size
         default: 50
 
-      - type: int
+      - arg_type: int
         name: BLOCK
         description: |-
           Blocking callbacks?
         default: 0
 
-      - type: int
+      - arg_type: int
         name: MAX_BUFFERS
         description: |-
           Max buffer size in number of frames
@@ -1260,51 +1260,51 @@ defs:
     description: |-
       TODO:ADD DESCRIPTION
     args:
-      - type: str
+      - arg_type: str
         name: P
         description: |-
           Device prefix
 
-      - type: str
+      - arg_type: str
         name: R
         description: |-
           Device suffix
 
-      - type: id
+      - arg_type: id
         name: PORT
         description: |-
           Asyn port name
 
-      - type: object
+      - arg_type: object
         name: NDARRAY_PORT
         description: |-
           Asyn port of the callback source
 
-      - type: int
+      - arg_type: int
         name: TIMEOUT
         description: |-
           Timeout
         default: 1
 
-      - type: int
+      - arg_type: int
         name: ADDR
         description: |-
           Asyn Port address
         default: 0
 
-      - type: int
+      - arg_type: int
         name: NDARRAY_ADDR
         description: |-
           Asyn address of the callback source
         default: 0
 
-      - type: int
+      - arg_type: int
         name: ENABLED
         description: |-
           Plugin Enabled at startup?
         default: 0
 
-      - type: enum
+      - arg_type: enum
         name: SCANRATE
         description: |-
           Specified scan rate for cpu intensive PVs
@@ -1321,40 +1321,40 @@ defs:
           Event:
           I/O Intr:
 
-      - type: int
+      - arg_type: int
         name: QUEUE
         description: |-
           Input array queue size
         default: 10000
 
-      - type: int
+      - arg_type: int
         name: N_CACHE
         description: |-
           Number of NDArrays to store in cache
         default: 10000
 
-      - type: int
+      - arg_type: int
         name: BLOCK
         description: |-
           Blocking callbacks?
         default: 0
 
-      - type: str
+      - arg_type: str
         name: ATTR_IND
         description: |-
           Attribute index
 
-      - type: str
+      - arg_type: str
         name: AXIS
         description: |-
           Axis name
 
-      - type: str
+      - arg_type: str
         name: DATA_IND
         description: |-
           Data index
 
-      - type: str
+      - arg_type: str
         name: DATA_ADDR
         description: |-
           Asyn address for this data array
@@ -1397,51 +1397,51 @@ defs:
     description: |-
       This plugin can compress or decompress NDArrays
     args:
-      - type: str
+      - arg_type: str
         name: P
         description: |-
           Device Prefix
 
-      - type: str
+      - arg_type: str
         name: R
         description: |-
           Device Suffix
 
-      - type: id
+      - arg_type: id
         name: PORT
         description: |-
           Port name for the NDCodec plugin
 
-      - type: object
+      - arg_type: object
         name: NDARRAY_PORT
         description: |-
           Input array port
 
-      - type: int
+      - arg_type: int
         name: TIMEOUT
         description: |-
           Asyn timeout
         default: 1
 
-      - type: int
+      - arg_type: int
         name: ADDR
         description: |-
           Asyn Port address
         default: 0
 
-      - type: int
+      - arg_type: int
         name: NDARRAY_ADDR
         description: |-
           Input array port address
         default: 0
 
-      - type: int
+      - arg_type: int
         name: ENABLED
         description: |-
           Plugin Enabled at startup?
         default: 0
 
-      - type: enum
+      - arg_type: enum
         name: SCANRATE
         description: |-
           Specified scan rate for cpu intensive PVs
@@ -1458,19 +1458,19 @@ defs:
           Event:
           I/O Intr:
 
-      - type: int
+      - arg_type: int
         name: QUEUE
         description: |-
           Input array queue size
         default: 2
 
-      - type: int
+      - arg_type: int
         name: BLOCK
         description: |-
           Blocking callbacks?
         default: 0
 
-      - type: int
+      - arg_type: int
         name: MAX_THREADS
         description: |-
           Maximum number threads
@@ -1498,41 +1498,41 @@ defs:
     description: |-
       This plugin is used to gather NDArrays from multiple upstream plugins and merge them into a single stream
     args:
-      - type: str
+      - arg_type: str
         name: NDARRAY_PORT
         description: |-
           Input Array Port
 
-      - type: id
+      - arg_type: id
         name: PORT
         description: |-
           Port name for the NDGather plugin
 
-      - type: int
+      - arg_type: int
         name: TIMEOUT
         description: |-
           Timeout
         default: 1
 
-      - type: int
+      - arg_type: int
         name: ADDR
         description: |-
           Asyn Port address
         default: 0
 
-      - type: int
+      - arg_type: int
         name: NDARRAY_ADDR
         description: |-
           Input Array Address
         default: 0
 
-      - type: int
+      - arg_type: int
         name: ENABLED
         description: |-
           Plugin Enabled at startup?
         default: 0
 
-      - type: enum
+      - arg_type: enum
         name: SCANRATE
         description: |-
           Specified scan rate for cpu intensive PVs
@@ -1549,30 +1549,30 @@ defs:
           Event:
           I/O Intr:
 
-      - type: int
+      - arg_type: int
         name: QUEUE
         description: |-
           Input array queue size
         default: 2
 
-      - type: int
+      - arg_type: int
         name: BLOCK
         description: |-
           Blocking callbacks?
         default: 0
 
-      - type: int
+      - arg_type: int
         name: MAX_PORTS
         description: |-
           Maximum number of ports that this plugin can connect to for callbacks
         default: 5
 
-      - type: str
+      - arg_type: str
         name: P
         description: |-
           Device Prefix
 
-      - type: str
+      - arg_type: str
         name: R
         description: |-
           Device Suffix
@@ -1601,51 +1601,51 @@ defs:
       This plugin selects a region of interest and optionally scales it to
           fit in a particular data type
     args:
-      - type: str
+      - arg_type: str
         name: P
         description: |-
           Device Prefix
 
-      - type: str
+      - arg_type: str
         name: R
         description: |-
           Device Suffix
 
-      - type: id
+      - arg_type: id
         name: PORT
         description: |-
           Port name for the NDROI plugin
 
-      - type: object
+      - arg_type: object
         name: NDARRAY_PORT
         description: |-
           Input array port
 
-      - type: int
+      - arg_type: int
         name: TIMEOUT
         description: |-
           Timeout
         default: 1
 
-      - type: int
+      - arg_type: int
         name: ADDR
         description: |-
           Asyn Port address
         default: 0
 
-      - type: int
+      - arg_type: int
         name: NDARRAY_ADDR
         description: |-
           Input array port address
         default: 0
 
-      - type: int
+      - arg_type: int
         name: ENABLED
         description: |-
           Plugin Enabled at startup?
         default: 0
 
-      - type: enum
+      - arg_type: enum
         name: SCANRATE
         description: |-
           Specified scan rate for cpu intensive PVs
@@ -1662,19 +1662,19 @@ defs:
           Event:
           I/O Intr:
 
-      - type: int
+      - arg_type: int
         name: QUEUE
         description: |-
           Input array queue size
         default: 2
 
-      - type: int
+      - arg_type: int
         name: BLOCK
         description: |-
           Blocking callbacks?
         default: 0
 
-      - type: int
+      - arg_type: int
         name: MAX_THREADS
         description: |-
           Maximum number threads
@@ -1710,51 +1710,51 @@ defs:
     description: |-
       This plugin displays NDArray attributes
     args:
-      - type: str
+      - arg_type: str
         name: P
         description: |-
           Device Prefix
 
-      - type: str
+      - arg_type: str
         name: R
         description: |-
           Device Suffix
 
-      - type: id
+      - arg_type: id
         name: PORT
         description: |-
           Port name for the NDAttribute plugin
 
-      - type: object
+      - arg_type: object
         name: NDARRAY_PORT
         description: |-
           Input array port
 
-      - type: int
+      - arg_type: int
         name: TIMEOUT
         description: |-
           Timeout
         default: 1
 
-      - type: int
+      - arg_type: int
         name: ADDR
         description: |-
           Asyn Port address
         default: 0
 
-      - type: int
+      - arg_type: int
         name: NDARRAY_ADDR
         description: |-
           Input array port address
         default: 0
 
-      - type: int
+      - arg_type: int
         name: ENABLED
         description: |-
           Plugin Enabled at startup?
         default: 0
 
-      - type: enum
+      - arg_type: enum
         name: SCANRATE
         description: |-
           Specified scan rate for cpu intensive PVs
@@ -1771,31 +1771,31 @@ defs:
           Event:
           I/O Intr:
 
-      - type: int
+      - arg_type: int
         name: QUEUE
         description: |-
           Input array queue size
         default: 2
 
-      - type: int
+      - arg_type: int
         name: BLOCK
         description: |-
           Blocking callbacks?
         default: 0
 
-      - type: int
+      - arg_type: int
         name: MAX_ATTRIBUTES
         description: |-
           Maximum number of attributes in this plugin
         default: 8
 
-      - type: int
+      - arg_type: int
         name: NCHANS
         description: |-
           Number of points in the arrays
         default: 4096
 
-      - type: str
+      - arg_type: str
         name: TS_PORT
         description: |-
           Asyn Port of Time Series plugin
@@ -1841,90 +1841,90 @@ defs:
     description: |-
       This plugin calculates statistics like X and Y profile, centroid, and plots a histogram of binned pixels
     args:
-      - type: id
+      - arg_type: id
         name: PORT
         description: |-
           Port name for the NDStats plugin
 
-      - type: object
+      - arg_type: object
         name: NDARRAY_PORT
         description: |-
           Input array port
 
-      - type: int
+      - arg_type: int
         name: HIST_SIZE
         description: |-
           Maximum size of Pixel binning histogram (e.g. 256 for Int8)
 
-      - type: str
+      - arg_type: str
         name: P
         description: |-
           Device Prefix
 
-      - type: str
+      - arg_type: str
         name: R
         description: |-
           Device Suffix
 
-      - type: int
+      - arg_type: int
         name: XSIZE
         description: |-
           XSIZE, Maximum size of X histograms (e.g. 1024)
 
-      - type: int
+      - arg_type: int
         name: YSIZE
         description: |-
           Maximum size of Y histograms (e.g. 768)
 
-      - type: int
+      - arg_type: int
         name: ENABLED
         description: |-
           Plugin Enabled at startup?
         default: 0
 
-      - type: int
+      - arg_type: int
         name: NCHANS
         description: |-
           Maximum length of time series (initialises waveform NELM, fixed on IOC boot)
         default: 2048
 
-      - type: int
+      - arg_type: int
         name: QUEUE
         description: |-
           Input array queue size
         default: 2
 
-      - type: int
+      - arg_type: int
         name: BLOCK
         description: |-
           Blocking callbacks?
         default: 0
 
-      - type: int
+      - arg_type: int
         name: NDARRAY_ADDR
         description: |-
           Input array port address
         default: 0
 
-      - type: int
+      - arg_type: int
         name: TIMEOUT
         description: |-
           Timeout
         default: 1
 
-      - type: int
+      - arg_type: int
         name: ADDR
         description: |-
           Asyn Port address
         default: 0
 
-      - type: int
+      - arg_type: int
         name: MAX_THREADS
         description: |-
           Maximum number threads
         default: 1
 
-      - type: enum
+      - arg_type: enum
         name: SCANRATE
         description: |-
           Specified scan rate for cpu intensive PVs
@@ -1941,7 +1941,7 @@ defs:
           Event:
           I/O Intr:
 
-      - type: str
+      - arg_type: str
         name: TS_PORT
         description: |-
           TS port
@@ -1991,56 +1991,56 @@ defs:
     description: |-
       This plugin creates time series arrays from callback data
     args:
-      - type: str
+      - arg_type: str
         name: P
         description: |-
           Device prefix
 
-      - type: str
+      - arg_type: str
         name: R
         description: |-
           Device suffix
 
-      - type: id
+      - arg_type: id
         name: PORT
         description: |-
           Port name for the NDTimeSeries plugin
 
-      - type: object
+      - arg_type: object
         name: NDARRAY_PORT
         description: |-
           Input array port
 
-      - type: str
+      - arg_type: str
         name: NCHANS
         description: |-
           Length of time series waveform
 
-      - type: int
+      - arg_type: int
         name: TIMEOUT
         description: |-
           Timeout
         default: 1
 
-      - type: int
+      - arg_type: int
         name: ADDR
         description: |-
           Asyn port address
         default: 0
 
-      - type: int
+      - arg_type: int
         name: NDARRAY_ADDR
         description: |-
           Input array port address
         default: 0
 
-      - type: int
+      - arg_type: int
         name: ENABLED
         description: |-
           Plugin Enabled at startup?
         default: 0
 
-      - type: enum
+      - arg_type: enum
         name: SCANRATE
         description: |-
           Specified scan rate for cpu intensive PVs
@@ -2057,43 +2057,43 @@ defs:
           Event:
           I/O Intr:
 
-      - type: float
+      - arg_type: float
         name: TIME_LINK
         description: |-
           Time between points (Can point to a record - use CP)
         default: 0.1
 
-      - type: int
+      - arg_type: int
         name: NSIGNALS
         description: |-
           Maximum number of time series signals
         default: 1
 
-      - type: int
+      - arg_type: int
         name: QUEUE
         description: |-
           Input array queue size
         default: 2
 
-      - type: int
+      - arg_type: int
         name: BLOCK
         description: |-
           Blocking callbacks?
         default: 0
 
-      - type: int
+      - arg_type: int
         name: PRIORITY
         description: |-
           Thread priority if ASYN_CANBLOCK is set
         default: 0
 
-      - type: int
+      - arg_type: int
         name: STACKSIZE
         description: |-
           Stack size if ASYN_CANBLOCK is set
         default: 0
 
-      - type: str
+      - arg_type: str
         name: NAME
         description: |-
           Name of the signal
@@ -2135,27 +2135,27 @@ defs:
       Add an attribute to the NDAttributes file for a particular ADDriver or
           NDPlugin, and associate it with the NDAttributes file
     args:
-      - type: object
+      - arg_type: object
         name: port
         description: |-
           ADDriver or NDPlugin to attach xml file to
 
-      - type: str
+      - arg_type: str
         name: source
         description: |-
           The EPICS PV (if type=EPICS_PV) or attribute name (if type=PARAM)
 
-      - type: id
+      - arg_type: id
         name: name
         description: |-
           Object name. You do not need to specify this
 
-      - type: str
+      - arg_type: str
         name: attrname
         description: |-
           Name of the attribute. If you leave this blank it defaults to <source>
 
-      - type: enum
+      - arg_type: enum
         name: type
         description: |-
           Where the data should be picked up from
@@ -2164,7 +2164,7 @@ defs:
           EPICS_PV:
           PARAM:
 
-      - type: enum
+      - arg_type: enum
         name: dbrtype
         description: |-
           DBR type (only used if type=EPICS_PV)
@@ -2179,7 +2179,7 @@ defs:
           DBR_LONG:
           DBR_FLOAT:
 
-      - type: enum
+      - arg_type: enum
         name: datatype
         description: |-
           Data type (only used if type=PARAM)
@@ -2189,12 +2189,12 @@ defs:
           DOUBLE:
           STRING:
 
-      - type: str
+      - arg_type: str
         name: description
         description: |-
           Description of the attribute
 
-      - type: int
+      - arg_type: int
         name: addr
         description: |-
           Asyn address of the parameter (only used if type=PARAM)
@@ -2209,51 +2209,51 @@ defs:
       This plugin does image processing like flat field correction, background
           subtraction, and recursive filtering
     args:
-      - type: str
+      - arg_type: str
         name: P
         description: |-
           Device Prefix
 
-      - type: str
+      - arg_type: str
         name: R
         description: |-
           Device Suffix
 
-      - type: id
+      - arg_type: id
         name: PORT
         description: |-
           Port name for the NDProcess plugin
 
-      - type: object
+      - arg_type: object
         name: NDARRAY_PORT
         description: |-
           Input array port
 
-      - type: int
+      - arg_type: int
         name: TIMEOUT
         description: |-
           Timeout
         default: 1
 
-      - type: int
+      - arg_type: int
         name: ADDR
         description: |-
           Asyn Port address
         default: 0
 
-      - type: int
+      - arg_type: int
         name: NDARRAY_ADDR
         description: |-
           Input array port address
         default: 0
 
-      - type: int
+      - arg_type: int
         name: ENABLED
         description: |-
           Plugin Enabled at startup?
         default: 0
 
-      - type: enum
+      - arg_type: enum
         name: SCANRATE
         description: |-
           Specified scan rate for cpu intensive PVs
@@ -2270,13 +2270,13 @@ defs:
           Event:
           I/O Intr:
 
-      - type: int
+      - arg_type: int
         name: QUEUE
         description: |-
           Input array queue size
         default: 2
 
-      - type: int
+      - arg_type: int
         name: BLOCK
         description: |-
           Blocking callbacks?
@@ -2312,51 +2312,51 @@ defs:
     description: |-
       This plugin can compress NDArrays to TIFF and write them to file
     args:
-      - type: str
+      - arg_type: str
         name: P
         description: |-
           Device Prefix
 
-      - type: str
+      - arg_type: str
         name: R
         description: |-
           Device Suffix
 
-      - type: object
+      - arg_type: object
         name: NDARRAY_PORT
         description: |-
           Input array port
 
-      - type: id
+      - arg_type: id
         name: PORT
         description: |-
           Port name for the NDFileTIFF plugin
 
-      - type: int
+      - arg_type: int
         name: TIMEOUT
         description: |-
           Timeout
         default: 1
 
-      - type: int
+      - arg_type: int
         name: ADDR
         description: |-
           Asyn Port address
         default: 0
 
-      - type: int
+      - arg_type: int
         name: NDARRAY_ADDR
         description: |-
           Input array port address
         default: 0
 
-      - type: int
+      - arg_type: int
         name: ENABLED
         description: |-
           Plugin Enabled at startup?
         default: 0
 
-      - type: enum
+      - arg_type: enum
         name: SCANRATE
         description: |-
           Specified scan rate for cpu intensive PVs
@@ -2373,13 +2373,13 @@ defs:
           Event:
           I/O Intr:
 
-      - type: int
+      - arg_type: int
         name: QUEUE
         description: |-
           Input array queue size
         default: 2
 
-      - type: int
+      - arg_type: int
         name: BLOCK
         description: |-
           Blocking callbacks?
@@ -2407,41 +2407,41 @@ defs:
     description: |-
       This plugin is used to gather NDArrays from multiple upstream plugins and merge them into a single stream
     args:
-      - type: str
+      - arg_type: str
         name: NDARRAY_PORT
         description: |-
           Input Array Port
 
-      - type: id
+      - arg_type: id
         name: PORT
         description: |-
           Port name for the NDGather plugin
 
-      - type: int
+      - arg_type: int
         name: TIMEOUT
         description: |-
           Timeout
         default: 1
 
-      - type: int
+      - arg_type: int
         name: ADDR
         description: |-
           Asyn Port address
         default: 0
 
-      - type: int
+      - arg_type: int
         name: NDARRAY_ADDR
         description: |-
           Input Array Address
         default: 0
 
-      - type: int
+      - arg_type: int
         name: ENABLED
         description: |-
           Plugin Enabled at startup?
         default: 0
 
-      - type: enum
+      - arg_type: enum
         name: SCANRATE
         description: |-
           Specified scan rate for cpu intensive PVs
@@ -2458,34 +2458,34 @@ defs:
           Event:
           I/O Intr:
 
-      - type: int
+      - arg_type: int
         name: QUEUE
         description: |-
           Input array queue size
         default: 2
 
-      - type: int
+      - arg_type: int
         name: BLOCK
         description: |-
           Blocking callbacks?
         default: 0
 
-      - type: str
+      - arg_type: str
         name: P
         description: |-
           Device Prefix
 
-      - type: str
+      - arg_type: str
         name: R
         description: |-
           Device Suffix
 
-      - type: str
+      - arg_type: str
         name: N
         description: |-
           Port number (1 - maxPorts)
 
-      - type: str
+      - arg_type: str
         name: MAX_PORTS
         description: |-
           Maximum number ports
@@ -2519,51 +2519,51 @@ defs:
     description: |-
       This plugin calculates statistics of ROIs
     args:
-      - type: str
+      - arg_type: str
         name: P
         description: |-
           First part of base PV name
 
-      - type: str
+      - arg_type: str
         name: R
         description: |-
           Second part of base PV name
 
-      - type: id
+      - arg_type: id
         name: PORT
         description: |-
           Port name for the NDPluginROIStat plugin
 
-      - type: object
+      - arg_type: object
         name: NDARRAY_PORT
         description: |-
           Input array port
 
-      - type: int
+      - arg_type: int
         name: TIMEOUT
         description: |-
           Timeout
         default: 1
 
-      - type: int
+      - arg_type: int
         name: ADDR
         description: |-
           asyn address on port
         default: 0
 
-      - type: int
+      - arg_type: int
         name: NDARRAY_ADDR
         description: |-
           Input array port address
         default: 0
 
-      - type: int
+      - arg_type: int
         name: ENABLED
         description: |-
           Plugin Enabled at startup?
         default: 0
 
-      - type: enum
+      - arg_type: enum
         name: SCANRATE
         description: |-
           Specified scan rate for cpu intensive PVs
@@ -2580,31 +2580,31 @@ defs:
           Event:
           I/O Intr:
 
-      - type: int
+      - arg_type: int
         name: QUEUE
         description: |-
           Input array queue size
         default: 2
 
-      - type: int
+      - arg_type: int
         name: BLOCK
         description: |-
           Blocking callbacks?
         default: 0
 
-      - type: int
+      - arg_type: int
         name: MAX_ROIS
         description: |-
           Maximum number of ROIs in this plugin
         default: 8
 
-      - type: int
+      - arg_type: int
         name: NCHANS
         description: |-
           Number of points in the arrays
         default: 4096
 
-      - type: int
+      - arg_type: int
         name: MAX_THREADS
         description: |-
           Maximum number threads
@@ -2642,51 +2642,51 @@ defs:
     description: |-
       This plugin can compress NDArrays to NetCDF and write them to file
     args:
-      - type: str
+      - arg_type: str
         name: P
         description: |-
           Device Prefix
 
-      - type: str
+      - arg_type: str
         name: R
         description: |-
           Device Suffix
 
-      - type: object
+      - arg_type: object
         name: NDARRAY_PORT
         description: |-
           Input array port
 
-      - type: id
+      - arg_type: id
         name: PORT
         description: |-
           Port name for the NDFileNetCDF plugin
 
-      - type: int
+      - arg_type: int
         name: TIMEOUT
         description: |-
           Timeout
         default: 1
 
-      - type: int
+      - arg_type: int
         name: ADDR
         description: |-
           Asyn Port address
         default: 0
 
-      - type: int
+      - arg_type: int
         name: NDARRAY_ADDR
         description: |-
           Input array port address
         default: 0
 
-      - type: int
+      - arg_type: int
         name: ENABLED
         description: |-
           Plugin Enabled at startup?
         default: 0
 
-      - type: enum
+      - arg_type: enum
         name: SCANRATE
         description: |-
           Specified scan rate for cpu intensive PVs
@@ -2703,13 +2703,13 @@ defs:
           Event:
           I/O Intr:
 
-      - type: int
+      - arg_type: int
         name: QUEUE
         description: |-
           Input array queue size
         default: 2
 
-      - type: int
+      - arg_type: int
         name: BLOCK
         description: |-
           Blocking callbacks?
@@ -2737,56 +2737,56 @@ defs:
     description: |-
       This plugin makes NDArrays available through PVAccess
     args:
-      - type: str
+      - arg_type: str
         name: P
         description: |-
           Device Prefix
 
-      - type: str
+      - arg_type: str
         name: R
         description: |-
           Device Suffix
 
-      - type: id
+      - arg_type: id
         name: PORT
         description: |-
           Port name for the NDPosPlugin plugin
 
-      - type: object
+      - arg_type: object
         name: NDARRAY_PORT
         description: |-
           Input array port
 
-      - type: str
+      - arg_type: str
         name: PVNAME
         description: |-
           Name of the PV to post NDArray out on
 
-      - type: int
+      - arg_type: int
         name: TIMEOUT
         description: |-
           Asyn timeout
         default: 1
 
-      - type: int
+      - arg_type: int
         name: ADDR
         description: |-
           Asyn Port address
         default: 0
 
-      - type: int
+      - arg_type: int
         name: NDARRAY_ADDR
         description: |-
           Input array port address
         default: 0
 
-      - type: int
+      - arg_type: int
         name: ENABLED
         description: |-
           Plugin Enabled at startup?
         default: 0
 
-      - type: enum
+      - arg_type: enum
         name: SCANRATE
         description: |-
           Specified scan rate for cpu intensive PVs
@@ -2803,25 +2803,25 @@ defs:
           Event:
           I/O Intr:
 
-      - type: int
+      - arg_type: int
         name: QUEUE
         description: |-
           Input array queue size
         default: 2
 
-      - type: int
+      - arg_type: int
         name: BLOCK
         description: |-
           Blocking callbacks?
         default: 0
 
-      - type: int
+      - arg_type: int
         name: PRIORITY
         description: |-
           Max buffers to allocate
         default: 0
 
-      - type: int
+      - arg_type: int
         name: STACKSIZE
         description: |-
           Max buffers to allocate
@@ -2858,51 +2858,51 @@ defs:
     description: |-
       This plugin selects a region of interest and optionally scales it to fit in a particular data type
     args:
-      - type: str
+      - arg_type: str
         name: P
         description: |-
           Device Prefix
 
-      - type: str
+      - arg_type: str
         name: R
         description: |-
           Device Suffix
 
-      - type: id
+      - arg_type: id
         name: PORT
         description: |-
           Port name for the NDTransform plugin
 
-      - type: object
+      - arg_type: object
         name: NDARRAY_PORT
         description: |-
           Input array port
 
-      - type: int
+      - arg_type: int
         name: TIMEOUT
         description: |-
           Timeout
         default: 1
 
-      - type: int
+      - arg_type: int
         name: ADDR
         description: |-
           Asyn Port address
         default: 0
 
-      - type: int
+      - arg_type: int
         name: NDARRAY_ADDR
         description: |-
           Input array port address
         default: 0
 
-      - type: int
+      - arg_type: int
         name: ENABLED
         description: |-
           Plugin Enabled at startup?
         default: 0
 
-      - type: enum
+      - arg_type: enum
         name: SCANRATE
         description: |-
           Specified scan rate for cpu intensive PVs
@@ -2919,19 +2919,19 @@ defs:
           Event:
           I/O Intr:
 
-      - type: int
+      - arg_type: int
         name: QUEUE
         description: |-
           Input array queue size
         default: 2
 
-      - type: int
+      - arg_type: int
         name: BLOCK
         description: |-
           Blocking callbacks?
         default: 0
 
-      - type: int
+      - arg_type: int
         name: MAX_THREADS
         description: |-
           Maximum number threads
@@ -2959,51 +2959,51 @@ defs:
     description: |-
       This plugin can compress NDArrays to JPEG and write them to file
     args:
-      - type: str
+      - arg_type: str
         name: P
         description: |-
           Device Prefix
 
-      - type: str
+      - arg_type: str
         name: R
         description: |-
           Device Suffix
 
-      - type: id
+      - arg_type: id
         name: PORT
         description: |-
           Port name for the NDFileJPEG plugin
 
-      - type: object
+      - arg_type: object
         name: NDARRAY_PORT
         description: |-
           Input array port
 
-      - type: int
+      - arg_type: int
         name: TIMEOUT
         description: |-
           Timeout
         default: 1
 
-      - type: int
+      - arg_type: int
         name: ADDR
         description: |-
           Asyn Port address
         default: 0
 
-      - type: int
+      - arg_type: int
         name: NDARRAY_ADDR
         description: |-
           Input array port address
         default: 0
 
-      - type: int
+      - arg_type: int
         name: ENABLED
         description: |-
           Plugin Enabled at startup?
         default: 0
 
-      - type: enum
+      - arg_type: enum
         name: SCANRATE
         description: |-
           Specified scan rate for cpu intensive PVs
@@ -3020,13 +3020,13 @@ defs:
           Event:
           I/O Intr:
 
-      - type: int
+      - arg_type: int
         name: QUEUE
         description: |-
           Input array queue size
         default: 2
 
-      - type: int
+      - arg_type: int
         name: BLOCK
         description: |-
           Blocking callbacks?
@@ -3054,51 +3054,51 @@ defs:
     description: |-
       This plugin is used to distribute processing of NDArrays to multiple downstream plugins
     args:
-      - type: str
+      - arg_type: str
         name: P
         description: |-
           Device Prefix
 
-      - type: str
+      - arg_type: str
         name: R
         description: |-
           Device Suffix
 
-      - type: id
+      - arg_type: id
         name: PORT
         description: |-
           Port name for the NDTimeSeries plugin
 
-      - type: object
+      - arg_type: object
         name: NDARRAY_PORT
         description: |-
           Input array port
 
-      - type: int
+      - arg_type: int
         name: TIMEOUT
         description: |-
           Timeout
         default: 1
 
-      - type: int
+      - arg_type: int
         name: ADDR
         description: |-
           Asyn Port address
         default: 0
 
-      - type: int
+      - arg_type: int
         name: NDARRAY_ADDR
         description: |-
           Input array port address
         default: 0
 
-      - type: int
+      - arg_type: int
         name: ENABLED
         description: |-
           Plugin Enabled at startup?
         default: 0
 
-      - type: enum
+      - arg_type: enum
         name: SCANRATE
         description: |-
           Specified scan rate for cpu intensive PVs
@@ -3115,19 +3115,19 @@ defs:
           Event:
           I/O Intr:
 
-      - type: int
+      - arg_type: int
         name: NAME
         description: |-
           Label for signal
         default: 0
 
-      - type: int
+      - arg_type: int
         name: QUEUE
         description: |-
           Input array queue size
         default: 2
 
-      - type: int
+      - arg_type: int
         name: BLOCK
         description: |-
           Blocking callbacks?

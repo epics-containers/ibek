@@ -9,15 +9,15 @@ defs:
     description: |-
       MKS 937b Gauge controller
     args:
-      - type: object
+      - arg_type: object
         name: port
         description: |-
           Asyn port that connects to the device
-      - type: id
+      - arg_type: id
         name: name
         description: |-
           name for the Device
-      - type: str
+      - arg_type: str
         name: P
         description: |-
           PV prefix
@@ -26,28 +26,28 @@ defs:
     description: |-
       Group of gauges
     args:
-      - type: id
+      - arg_type: id
         name: name
         description: |-
           name for the
-      - type: object
+      - arg_type: object
         name: gauge1
         description: |-
           First gauge
-      - type: object
+      - arg_type: object
         name: gauge2
         description: |-
           Second gauge
         # default to the id of the gauge object we want as default
         default: |-
           {{gauge1.name}}
-      - type: object
+      - arg_type: object
         name: gauge3
         description: |-
           Third gauge
         default: |
           {{gauge1.name}}
-      - type: object
+      - arg_type: object
         name: gauge4
         description: |-
           Fourth gauge
