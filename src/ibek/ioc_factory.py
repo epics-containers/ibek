@@ -59,7 +59,7 @@ class IocFactory:
         """
 
         entity_union = Union[tuple(entity_models)]  # type: ignore
-        discriminated = Annotated[entity_union, Field(discriminator="entity_type")]  # type: ignore
+        discriminated = Annotated[entity_union, Field(discriminator="type")]  # type: ignore
 
         class NewIOC(IOC):
             entities: Sequence[discriminated] = Field(  # type: ignore

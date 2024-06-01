@@ -50,7 +50,7 @@ class Entity(BaseSettings):
     A baseclass for all generated Entity classes.
     """
 
-    entity_type: str = Field(description="The type of this entity")
+    type: str = Field(description="The type of this entity")
     entity_enabled: bool = Field(
         description="enable or disable this entity instance", default=True
     )

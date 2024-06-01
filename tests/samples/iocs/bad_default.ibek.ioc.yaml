@@ -5,5 +5,5 @@ description: an example for testing missing non-default values
 
 entities:
   # deliberately do not specify port to test failure case
-  - entity_type: asyn.AsynIP
+  - type: asyn.AsynIP
     name: controllerOnePort

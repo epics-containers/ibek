@@ -4,17 +4,17 @@ ioc_name: "{{ ioc_yaml_file_name }}"
 description: Example simulated motion IOC for Testing ibek
 
 entities:
-  - entity_type: asyn.AsynIP
+  - type: asyn.AsynIP
     name: controllerOnePort
     port: 192.168.0.55:2002
 
-  - entity_type: motorSim.simMotorController
+  - type: motorSim.simMotorController
     port: controllerOnePort
     controllerName: controllerOne
     numAxes: 4
     P: "IBEK-MO-TST-01:"
 
-  - entity_type: motorSim.simMotorAxis
+  - type: motorSim.simMotorAxis
     controller: controllerOne
     # Use ADDR in other fields to verify jinja templating between Args
     M: M{{ADDR}}
@@ -23,7 +23,7 @@ entities:
     DESC: "Motor {{ADDR}} for ioc {{ioc_name}}"
     home: 500
 
-  - entity_type: motorSim.simMotorAxis
+  - type: motorSim.simMotorAxis
     controller: controllerOne
     M: M{{ADDR}}
     ADDR: 1
@@ -31,21 +31,21 @@ entities:
     DESC: "Motor {{ADDR}} {% raw %} {{enclosed in escaped curly braces}} {% endraw %}"
     home: 500
 
-  - entity_type: motorSim.simMotorAxis
+  - type: motorSim.simMotorAxis
     controller: controllerOne
     M: M{{ADDR}}
     ADDR: 2
     # testing default DESC
     home: 1500
 
-  - entity_type: motorSim.simMotorAxis
+  - type: motorSim.simMotorAxis
     controller: controllerOne
     M: M{{ADDR}}
     ADDR: 3
     DESC: "Motor {{ADDR}}"
     home: 2500
 
-  - entity_type: motorSim.simMotorAxis
+  - type: motorSim.simMotorAxis
     controller: controllerOne
     M: CS_M{{ADDR}}
     ADDR: 1
@@ -54,7 +54,7 @@ entities:
     CS_NUM: 3
     is_cs: true
 
-  - entity_type: motorSim.simMotorAxis
+  - type: motorSim.simMotorAxis
     controller: controllerOne
     M: CS_M{{ADDR}}
     ADDR: 2

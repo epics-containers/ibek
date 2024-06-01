@@ -11,10 +11,10 @@
     "asyn_AsynIP": {
       "additionalProperties": false,
       "properties": {
-        "entity_type": {
+        "type": {
           "const": "asyn.AsynIP",
           "description": "Asyn IP Port",
-          "title": "Entity Type"
+          "title": "Type"
         },
         "entity_enabled": {
           "default": true,
@@ -155,7 +155,7 @@
         }
       },
       "required": [
-        "entity_type",
+        "type",
         "port",
         "name"
       ],
@@ -191,10 +191,10 @@
     "motorSim_simMotorAxis": {
       "additionalProperties": false,
       "properties": {
-        "entity_type": {
+        "type": {
           "const": "motorSim.simMotorAxis",
           "description": "Creates a simulation motor axis",
-          "title": "Entity Type"
+          "title": "Type"
         },
         "entity_enabled": {
           "default": true,
@@ -351,7 +351,7 @@
         }
       },
       "required": [
-        "entity_type",
+        "type",
         "controller",
         "M",
         "ADDR"
@@ -362,10 +362,10 @@
     "motorSim_simMotorController": {
       "additionalProperties": false,
       "properties": {
-        "entity_type": {
+        "type": {
           "const": "motorSim.simMotorController",
           "description": "Creates a simulation motion controller",
-          "title": "Entity Type"
+          "title": "Type"
         },
         "entity_enabled": {
           "default": true,
@@ -410,7 +410,7 @@
         }
       },
       "required": [
-        "entity_type",
+        "type",
         "controllerName",
         "P",
         "numAxes",
@@ -458,7 +458,7 @@
             "motorSim.simMotorAxis": "#/$defs/motorSim_simMotorAxis",
             "motorSim.simMotorController": "#/$defs/motorSim_simMotorController"
           },
-          "propertyName": "entity_type"
+          "propertyName": "type"
         },
         "oneOf": [
           {

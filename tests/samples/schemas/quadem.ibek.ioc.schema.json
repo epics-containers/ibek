@@ -3,10 +3,10 @@
     "ADCore_NDAttrPlot": {
       "additionalProperties": false,
       "properties": {
-        "entity_type": {
+        "type": {
           "const": "ADCore.NDAttrPlot",
           "description": "TODO:ADD DESCRIPTION",
-          "title": "Entity Type"
+          "title": "Type"
         },
         "entity_enabled": {
           "default": true,
@@ -176,7 +176,7 @@
         }
       },
       "required": [
-        "entity_type",
+        "type",
         "P",
         "R",
         "PORT",
@@ -192,10 +192,10 @@
     "ADCore_NDAttribute": {
       "additionalProperties": false,
       "properties": {
-        "entity_type": {
+        "type": {
           "const": "ADCore.NDAttribute",
           "description": "This plugin displays NDArray attributes",
-          "title": "Entity Type"
+          "title": "Type"
         },
         "entity_enabled": {
           "default": true,
@@ -367,7 +367,7 @@
         }
       },
       "required": [
-        "entity_type",
+        "type",
         "P",
         "R",
         "PORT",
@@ -379,10 +379,10 @@
     "ADCore_NDAttributes": {
       "additionalProperties": false,
       "properties": {
-        "entity_type": {
+        "type": {
           "const": "ADCore.NDAttributes",
           "description": "Add an attribute to the NDAttributes file for a particular ADDriver or\n    NDPlugin, and associate it with the NDAttributes file",
-          "title": "Entity Type"
+          "title": "Type"
         },
         "entity_enabled": {
           "default": true,
@@ -408,15 +408,6 @@
           "description": "Name of the attribute. If you leave this blank it defaults to <source>",
           "title": "Attrname",
           "type": "string"
-        },
-        "type": {
-          "allOf": [
-            {
-              "$ref": "#/$defs/type"
-            }
-          ],
-          "default": "EPICS_PV",
-          "description": "Where the data should be picked up from"
         },
         "dbrtype": {
           "allOf": [
@@ -459,7 +450,7 @@
         }
       },
       "required": [
-        "entity_type",
+        "type",
         "port",
         "source",
         "name",
@@ -472,10 +463,10 @@
     "ADCore_NDCircularBuff": {
       "additionalProperties": false,
       "properties": {
-        "entity_type": {
+        "type": {
           "const": "ADCore.NDCircularBuff",
           "description": "This plugin provides a pre and post external trigger frame capture buffer",
-          "title": "Entity Type"
+          "title": "Type"
         },
         "entity_enabled": {
           "default": true,
@@ -657,7 +648,7 @@
         }
       },
       "required": [
-        "entity_type",
+        "type",
         "P",
         "R",
         "PORT",
@@ -669,10 +660,10 @@
     "ADCore_NDCodec": {
       "additionalProperties": false,
       "properties": {
-        "entity_type": {
+        "type": {
           "const": "ADCore.NDCodec",
           "description": "This plugin can compress or decompress NDArrays",
-          "title": "Entity Type"
+          "title": "Type"
         },
         "entity_enabled": {
           "default": true,
@@ -822,7 +813,7 @@
         }
       },
       "required": [
-        "entity_type",
+        "type",
         "P",
         "R",
         "PORT",
@@ -834,10 +825,10 @@
     "ADCore_NDColorConvert": {
       "additionalProperties": false,
       "properties": {
-        "entity_type": {
+        "type": {
           "const": "ADCore.NDColorConvert",
           "description": "This plugin converts arrays from one colour type to another, e.g. Bayer -> RGB1",
-          "title": "Entity Type"
+          "title": "Type"
         },
         "entity_enabled": {
           "default": true,
@@ -987,7 +978,7 @@
         }
       },
       "required": [
-        "entity_type",
+        "type",
         "P",
         "R",
         "PORT",
@@ -999,10 +990,10 @@
     "ADCore_NDFFT": {
       "additionalProperties": false,
       "properties": {
-        "entity_type": {
+        "type": {
           "const": "ADCore.NDFFT",
           "description": "This plugin is used to calculate the FFT of a time series",
-          "title": "Entity Type"
+          "title": "Type"
         },
         "entity_enabled": {
           "default": true,
@@ -1221,7 +1212,7 @@
         }
       },
       "required": [
-        "entity_type",
+        "type",
         "P",
         "R",
         "PORT",
@@ -1234,10 +1225,10 @@
     "ADCore_NDFileHDF5": {
       "additionalProperties": false,
       "properties": {
-        "entity_type": {
+        "type": {
           "const": "ADCore.NDFileHDF5",
           "description": "This plugin can compress NDArrays to HDF5 and write them to file",
-          "title": "Entity Type"
+          "title": "Type"
         },
         "entity_enabled": {
           "default": true,
@@ -1387,7 +1378,7 @@
         }
       },
       "required": [
-        "entity_type",
+        "type",
         "P",
         "R",
         "PORT",
@@ -1399,10 +1390,10 @@
     "ADCore_NDFileJPEG": {
       "additionalProperties": false,
       "properties": {
-        "entity_type": {
+        "type": {
           "const": "ADCore.NDFileJPEG",
           "description": "This plugin can compress NDArrays to JPEG and write them to file",
-          "title": "Entity Type"
+          "title": "Type"
         },
         "entity_enabled": {
           "default": true,
@@ -1536,7 +1527,7 @@
         }
       },
       "required": [
-        "entity_type",
+        "type",
         "P",
         "R",
         "PORT",
@@ -1548,10 +1539,10 @@
     "ADCore_NDFileMagick": {
       "additionalProperties": false,
       "properties": {
-        "entity_type": {
+        "type": {
           "const": "ADCore.NDFileMagick",
           "description": "This plugin can compress NDArrays to a range of formats supported by\n    graphics magick and write them to file",
-          "title": "Entity Type"
+          "title": "Type"
         },
         "entity_enabled": {
           "default": true,
@@ -1685,7 +1676,7 @@
         }
       },
       "required": [
-        "entity_type",
+        "type",
         "P",
         "R",
         "PORT",
@@ -1697,10 +1688,10 @@
     "ADCore_NDFileNetCDF": {
       "additionalProperties": false,
       "properties": {
-        "entity_type": {
+        "type": {
           "const": "ADCore.NDFileNetCDF",
           "description": "This plugin can compress NDArrays to NetCDF and write them to file",
-          "title": "Entity Type"
+          "title": "Type"
         },
         "entity_enabled": {
           "default": true,
@@ -1834,7 +1825,7 @@
         }
       },
       "required": [
-        "entity_type",
+        "type",
         "P",
         "R",
         "NDARRAY_PORT",
@@ -1846,10 +1837,10 @@
     "ADCore_NDFileNexus": {
       "additionalProperties": false,
       "properties": {
-        "entity_type": {
+        "type": {
           "const": "ADCore.NDFileNexus",
           "description": "This plugin can compress NDArrays to Nexus and write them to file",
-          "title": "Entity Type"
+          "title": "Type"
         },
         "entity_enabled": {
           "default": true,
@@ -1983,7 +1974,7 @@
         }
       },
       "required": [
-        "entity_type",
+        "type",
         "P",
         "R",
         "PORT",
@@ -1995,10 +1986,10 @@
     "ADCore_NDFileNull": {
       "additionalProperties": false,
       "properties": {
-        "entity_type": {
+        "type": {
           "const": "ADCore.NDFileNull",
           "description": "Null file plugin for deleting driver files",
-          "title": "Entity Type"
+          "title": "Type"
         },
         "entity_enabled": {
           "default": true,
@@ -2132,7 +2123,7 @@
         }
       },
       "required": [
-        "entity_type",
+        "type",
         "P",
         "R",
         "PORT",
@@ -2144,10 +2135,10 @@
     "ADCore_NDFileTIFF": {
       "additionalProperties": false,
       "properties": {
-        "entity_type": {
+        "type": {
           "const": "ADCore.NDFileTIFF",
           "description": "This plugin can compress NDArrays to TIFF and write them to file",
-          "title": "Entity Type"
+          "title": "Type"
         },
         "entity_enabled": {
           "default": true,
@@ -2281,7 +2272,7 @@
         }
       },
       "required": [
-        "entity_type",
+        "type",
         "P",
         "R",
         "NDARRAY_PORT",
@@ -2293,10 +2284,10 @@
     "ADCore_NDGather": {
       "additionalProperties": false,
       "properties": {
-        "entity_type": {
+        "type": {
           "const": "ADCore.NDGather",
           "description": "This plugin is used to gather NDArrays from multiple upstream plugins and merge them into a single stream",
-          "title": "Entity Type"
+          "title": "Type"
         },
         "entity_enabled": {
           "default": true,
@@ -2447,7 +2438,7 @@
         }
       },
       "required": [
-        "entity_type",
+        "type",
         "NDARRAY_PORT",
         "PORT",
         "P",
@@ -2459,10 +2450,10 @@
     "ADCore_NDGather8": {
       "additionalProperties": false,
       "properties": {
-        "entity_type": {
+        "type": {
           "const": "ADCore.NDGather8",
           "description": "This plugin is used to gather NDArrays from multiple upstream plugins and merge them into a single stream",
-          "title": "Entity Type"
+          "title": "Type"
         },
         "entity_enabled": {
           "default": true,
@@ -2607,7 +2598,7 @@
         }
       },
       "required": [
-        "entity_type",
+        "type",
         "NDARRAY_PORT",
         "PORT",
         "P",
@@ -2621,10 +2612,10 @@
     "ADCore_NDOverlay": {
       "additionalProperties": false,
       "properties": {
-        "entity_type": {
+        "type": {
           "const": "ADCore.NDOverlay",
           "description": "This plugin writes overlays on the array, like cursors and boxes",
-          "title": "Entity Type"
+          "title": "Type"
         },
         "entity_enabled": {
           "default": true,
@@ -2829,7 +2820,7 @@
         }
       },
       "required": [
-        "entity_type",
+        "type",
         "P",
         "R",
         "PORT",
@@ -2852,10 +2843,10 @@
     "ADCore_NDPosPlugin": {
       "additionalProperties": false,
       "properties": {
-        "entity_type": {
+        "type": {
           "const": "ADCore.NDPosPlugin",
           "description": "This plugin attaches position information to NDArrays",
-          "title": "Entity Type"
+          "title": "Type"
         },
         "entity_enabled": {
           "default": true,
@@ -3021,7 +3012,7 @@
         }
       },
       "required": [
-        "entity_type",
+        "type",
         "P",
         "R",
         "PORT",
@@ -3033,10 +3024,10 @@
     "ADCore_NDProcess": {
       "additionalProperties": false,
       "properties": {
-        "entity_type": {
+        "type": {
           "const": "ADCore.NDProcess",
           "description": "This plugin does image processing like flat field correction, background\n    subtraction, and recursive filtering",
-          "title": "Entity Type"
+          "title": "Type"
         },
         "entity_enabled": {
           "default": true,
@@ -3170,7 +3161,7 @@
         }
       },
       "required": [
-        "entity_type",
+        "type",
         "P",
         "R",
         "PORT",
@@ -3182,10 +3173,10 @@
     "ADCore_NDPvaPlugin": {
       "additionalProperties": false,
       "properties": {
-        "entity_type": {
+        "type": {
           "const": "ADCore.NDPvaPlugin",
           "description": "This plugin makes NDArrays available through PVAccess",
-          "title": "Entity Type"
+          "title": "Type"
         },
         "entity_enabled": {
           "default": true,
@@ -3356,7 +3347,7 @@
         }
       },
       "required": [
-        "entity_type",
+        "type",
         "P",
         "R",
         "PORT",
@@ -3369,10 +3360,10 @@
     "ADCore_NDROI": {
       "additionalProperties": false,
       "properties": {
-        "entity_type": {
+        "type": {
           "const": "ADCore.NDROI",
           "description": "This plugin selects a region of interest and optionally scales it to\n    fit in a particular data type",
-          "title": "Entity Type"
+          "title": "Type"
         },
         "entity_enabled": {
           "default": true,
@@ -3522,7 +3513,7 @@
         }
       },
       "required": [
-        "entity_type",
+        "type",
         "P",
         "R",
         "PORT",
@@ -3534,10 +3525,10 @@
     "ADCore_NDROIStat": {
       "additionalProperties": false,
       "properties": {
-        "entity_type": {
+        "type": {
           "const": "ADCore.NDROIStat",
           "description": "This plugin calculates statistics of ROIs",
-          "title": "Entity Type"
+          "title": "Type"
         },
         "entity_enabled": {
           "default": true,
@@ -3719,7 +3710,7 @@
         }
       },
       "required": [
-        "entity_type",
+        "type",
         "P",
         "R",
         "PORT",
@@ -3731,10 +3722,10 @@
     "ADCore_NDScatter": {
       "additionalProperties": false,
       "properties": {
-        "entity_type": {
+        "type": {
           "const": "ADCore.NDScatter",
           "description": "This plugin is used to distribute processing of NDArrays to multiple downstream plugins",
-          "title": "Entity Type"
+          "title": "Type"
         },
         "entity_enabled": {
           "default": true,
@@ -3884,7 +3875,7 @@
         }
       },
       "required": [
-        "entity_type",
+        "type",
         "P",
         "R",
         "PORT",
@@ -3896,10 +3887,10 @@
     "ADCore_NDStats": {
       "additionalProperties": false,
       "properties": {
-        "entity_type": {
+        "type": {
           "const": "ADCore.NDStats",
           "description": "This plugin calculates statistics like X and Y profile, centroid, and plots a histogram of binned pixels",
-          "title": "Entity Type"
+          "title": "Type"
         },
         "entity_enabled": {
           "default": true,
@@ -4116,7 +4107,7 @@
         }
       },
       "required": [
-        "entity_type",
+        "type",
         "PORT",
         "NDARRAY_PORT",
         "HIST_SIZE",
@@ -4131,10 +4122,10 @@
     "ADCore_NDStdArrays": {
       "additionalProperties": false,
       "properties": {
-        "entity_type": {
+        "type": {
           "const": "ADCore.NDStdArrays",
           "description": "This plugin provides a waveform record that can display the NDArrays\n    produced by its NDARRAY_PORT",
-          "title": "Entity Type"
+          "title": "Type"
         },
         "entity_enabled": {
           "default": true,
@@ -4312,7 +4303,7 @@
         }
       },
       "required": [
-        "entity_type",
+        "type",
         "P",
         "R",
         "PORT",
@@ -4327,10 +4318,10 @@
     "ADCore_NDTimeSeries": {
       "additionalProperties": false,
       "properties": {
-        "entity_type": {
+        "type": {
           "const": "ADCore.NDTimeSeries",
           "description": "This plugin creates time series arrays from callback data",
-          "title": "Entity Type"
+          "title": "Type"
         },
         "entity_enabled": {
           "default": true,
@@ -4538,7 +4529,7 @@
         }
       },
       "required": [
-        "entity_type",
+        "type",
         "P",
         "R",
         "PORT",
@@ -4552,10 +4543,10 @@
     "ADCore_NDTransform": {
       "additionalProperties": false,
       "properties": {
-        "entity_type": {
+        "type": {
           "const": "ADCore.NDTransform",
           "description": "This plugin selects a region of interest and optionally scales it to fit in a particular data type",
-          "title": "Entity Type"
+          "title": "Type"
         },
         "entity_enabled": {
           "default": true,
@@ -4705,7 +4696,7 @@
         }
       },
       "required": [
-        "entity_type",
+        "type",
         "P",
         "R",
         "PORT",
@@ -4717,10 +4708,10 @@
     "ADCore__NDCircularBuff": {
       "additionalProperties": false,
       "properties": {
-        "entity_type": {
+        "type": {
           "const": "ADCore._NDCircularBuff",
           "description": "TODO:ADD DESCRIPTION",
-          "title": "Entity Type"
+          "title": "Type"
         },
         "entity_enabled": {
           "default": true,
@@ -4855,7 +4846,7 @@
         }
       },
       "required": [
-        "entity_type",
+        "type",
         "P",
         "R",
         "PORT",
@@ -4922,10 +4913,10 @@
     "quadEM_Plugins": {
       "additionalProperties": false,
       "properties": {
-        "entity_type": {
+        "type": {
           "const": "quadEM.Plugins",
           "description": "Instantiates\n  12 NDStats plugins for Current, Sum, Diff and Pos Channels\n  12 NDTimeSeries plugins\n  12 NDArray plugins",
-          "title": "Entity Type"
+          "title": "Type"
         },
         "entity_enabled": {
           "default": true,
@@ -5006,7 +4997,7 @@
         }
       },
       "required": [
-        "entity_type",
+        "type",
         "DEVICE",
         "PORTPREFIX",
         "STAT_NCHAN",
@@ -5018,10 +5009,10 @@
     "quadEM_TetrAMM": {
       "additionalProperties": false,
       "properties": {
-        "entity_type": {
+        "type": {
           "const": "quadEM.TetrAMM",
           "description": "TODO:ADD DESCRIPTION",
-          "title": "Entity Type"
+          "title": "Type"
         },
         "entity_enabled": {
           "default": true,
@@ -5083,7 +5074,7 @@
         }
       },
       "required": [
-        "entity_type",
+        "type",
         "PORT",
         "P",
         "R",
@@ -5091,14 +5082,6 @@
       ],
       "title": "quadEM_TetrAMM",
       "type": "object"
-    },
-    "type": {
-      "enum": [
-        "EPICS_PV",
-        "PARAM"
-      ],
-      "title": "type",
-      "type": "string"
     }
   },
   "additionalProperties": false,
@@ -5149,7 +5132,7 @@
             "quadEM.Plugins": "#/$defs/quadEM_Plugins",
             "quadEM.TetrAMM": "#/$defs/quadEM_TetrAMM"
           },
-          "propertyName": "entity_type"
+          "propertyName": "type"
         },
         "oneOf": [
           {

@@ -9,23 +9,23 @@ from ibek.render import Render
 from ibek.render_db import RenderDb
 
 
-def find_entity_class(entity_classes, entity_type):
+def find_entity_class(entity_classes, type):
     for entity_class in entity_classes:
-        literal = Literal[entity_type]  # type: ignore
-        if entity_class.model_fields["entity_type"].annotation == literal:
+        literal = Literal[type]  # type: ignore
+        if entity_class.model_fields["type"].annotation == literal:
             return entity_class
     else:
-        raise ValueError(f"{entity_type} not found in entity_classes")
+        raise ValueError(f"{type} not found in entity_classes")
 
 
 def test_pre_init_script(asyn_classes):
     definition = find_entity_class(asyn_classes, "asyn.AsynIP")
 
-    # NOTE: because we have switched from type to entity_type in the
+    # NOTE: because we have switched from type to type in the
     # we need to pass it to the constructor
     # Not ideal - but does not affect deserialization of these types
-    port1 = definition(name="asyn1", port="10.0.1.1", entity_type="asyn.AsynIP")
-    port2 = definition(name="asyn2", port="10.0.1.2", entity_type="asyn.AsynIP")
+    port1 = definition(name="asyn1", port="10.0.1.1", type="asyn.AsynIP")
+    port2 = definition(name="asyn2", port="10.0.1.2", type="asyn.AsynIP")
 
     render = Render()
     script_txt = render.render_script(port1, port1.__definition__.pre_init)
@@ -49,13 +49,13 @@ def test_obj_ref_script(motor_classes):
     asyn_def = find_entity_class(motor_classes, "asyn.AsynIP")
     motor_def = find_entity_class(motor_classes, "motorSim.simMotorController")
 
-    asyn_def(name="asyn1", port="10.0.1.1", entity_type="asyn.AsynIP")
+    asyn_def(name="asyn1", port="10.0.1.1", type="asyn.AsynIP")
     motor_obj = motor_def(
         port="asyn1",
         controllerName="ctrl1",
         P="IBEK-MO-01:",
         numAxes=4,
-        entity_type="motorSim.simMotorController",
+        type="motorSim.simMotorController",
     )
 
     render = Render()
@@ -73,7 +73,7 @@ def test_database_render(motor_classes):
     sim_def = find_entity_class(motor_classes, "motorSim.simMotorController")
     motor_def = find_entity_class(motor_classes, "motorSim.simMotorAxis")
 
-    asyn1 = asyn_def(name="asyn1", port="10.0.1.1", entity_type="asyn.AsynIP")
+    asyn1 = asyn_def(name="asyn1", port="10.0.1.1", type="asyn.AsynIP")
     # TODO removing DESC below causes a failure in jinja templating
     # The default DESC field contains jinja escaping and this fails for some
     # reason. But it works fine in the test test_build_runtime_motorSim which
@@ -84,17 +84,15 @@ def test_database_render(motor_classes):
         P="IBEK-MO-01:",
         numAxes=4,
         DESC="test",
-        entity_type="motorSim.simMotorController",
+        type="motorSim.simMotorController",
     )
-    motor1 = motor_def(
-        controller="ctrl1", M="M1", ADDR=1, entity_type="motorSim.simMotorAxis"
-    )
+    motor1 = motor_def(controller="ctrl1", M="M1", ADDR=1, type="motorSim.simMotorAxis")
     motor2 = motor_def(
         controller="ctrl1",
         M="M2",
         ADDR=2,
         is_cs=True,
-        entity_type="motorSim.simMotorAxis",
+        type="motorSim.simMotorAxis",
     )
 
     # make a dummy IOC with two entities as database render works against
@@ -123,7 +121,7 @@ def test_database_render(motor_classes):
 def test_environment_variables(motor_classes):
     asyn_def = find_entity_class(motor_classes, "asyn.AsynIP")
 
-    asyn_obj = asyn_def(name="asyn1", port="10.0.1.1", entity_type="asyn.AsynIP")
+    asyn_obj = asyn_def(name="asyn1", port="10.0.1.1", type="asyn.AsynIP")
 
     render = Render()
     env_text = render.render_environment_variables(asyn_obj)

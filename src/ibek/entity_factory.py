@@ -139,7 +139,7 @@ class EntityFactory:
 
         # add the type literal which discriminates between the different Entity classes
         typ = Literal[full_name]  # type: ignore
-        args["entity_type"] = (typ, Field(description=definition.description))
+        args["type"] = (typ, Field(description=definition.description))
 
         class_name = full_name.replace(".", "_")
         entity_cls = create_model(
@@ -187,7 +187,7 @@ class EntityFactory:
             # add in SubEntities if any
             for sub_entity in definition.sub_entities:
                 # find the Entity Class that the SubEntity represents
-                entity_cls = self._entity_models[sub_entity.entity_type]
+                entity_cls = self._entity_models[sub_entity.type]
                 # get the SubEntity arguments
                 sub_args_dict = sub_entity.model_dump()
                 # jinja render any references to parent Args in the SubEntity Args

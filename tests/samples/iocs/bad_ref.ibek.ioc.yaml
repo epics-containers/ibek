@@ -4,11 +4,11 @@ ioc_name: test-multiple-ioc
 description: demo bad object reference
 
 entities:
-  - entity_type: asyn.AsynIP
+  - type: asyn.AsynIP
     name: controllerOnePort
     port: 192.168.0.55:2002
 
-  - entity_type: motorSim.simMotorController
+  - type: motorSim.simMotorController
     port: controllerOnePort_BAD_REF
     controllerName: controllerOne
     numAxes: 4

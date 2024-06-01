@@ -110,8 +110,8 @@ defs:
           #
 
     shared:
-      - &stats { entity_type: ADCore.NDStats, P: "{{DEVICE.P}}", NCHANS: "{{STAT_NCHAN}}", XSIZE: "{{STAT_XSIZE}}", YSIZE: 0, HIST_SIZE: "{{HIST_SIZE}}", NDARRAY_PORT: "{{DEVICE}}", ENABLED: 1 }
-      - &arrays { entity_type: ADCore.NDStdArrays, P: "{{DEVICE.P}}", NDARRAY_PORT: "{{DEVICE}}", ENABLED: 1, TYPE: "Float64", FTVL: "DOUBLE", NELEMENTS: "{{STAT_XSIZE}}" }
+      - &stats { type: ADCore.NDStats, P: "{{DEVICE.P}}", NCHANS: "{{STAT_NCHAN}}", XSIZE: "{{STAT_XSIZE}}", YSIZE: 0, HIST_SIZE: "{{HIST_SIZE}}", NDARRAY_PORT: "{{DEVICE}}", ENABLED: 1 }
+      - &arrays { type: ADCore.NDStdArrays, P: "{{DEVICE.P}}", NDARRAY_PORT: "{{DEVICE}}", ENABLED: 1, TYPE: "Float64", FTVL: "DOUBLE", NELEMENTS: "{{STAT_XSIZE}}" }
 
     sub_entities:
       - { <<: *stats, PORT: "{{PORTPREFIX}}.STATS.I1", R: Cur1 }

@@ -22,10 +22,10 @@
     "epics_EpicsCaMaxArrayBytes": {
       "additionalProperties": false,
       "properties": {
-        "entity_type": {
+        "type": {
           "const": "epics.EpicsCaMaxArrayBytes",
           "description": "Set the maximum size in bytes for sending arrays over channel access",
-          "title": "Entity Type"
+          "title": "Type"
         },
         "entity_enabled": {
           "default": true,
@@ -51,7 +51,7 @@
         }
       },
       "required": [
-        "entity_type"
+        "type"
       ],
       "title": "epics_EpicsCaMaxArrayBytes",
       "type": "object"
@@ -59,10 +59,10 @@
     "epics_EpicsEnvSet": {
       "additionalProperties": false,
       "properties": {
-        "entity_type": {
+        "type": {
           "const": "epics.EpicsEnvSet",
           "description": "Set an environment variable in the ioc Shell",
-          "title": "Entity Type"
+          "title": "Type"
         },
         "entity_enabled": {
           "default": true,
@@ -82,7 +82,7 @@
         }
       },
       "required": [
-        "entity_type",
+        "type",
         "name",
         "value"
       ],
@@ -92,10 +92,10 @@
     "epics_EpicsTsMinWest": {
       "additionalProperties": false,
       "properties": {
-        "entity_type": {
+        "type": {
           "const": "epics.EpicsTsMinWest",
           "description": "Set the relative time zone minutes West relative to GMT (+/-720)",
-          "title": "Entity Type"
+          "title": "Type"
         },
         "entity_enabled": {
           "default": true,
@@ -121,7 +121,7 @@
         }
       },
       "required": [
-        "entity_type"
+        "type"
       ],
       "title": "epics_EpicsTsMinWest",
       "type": "object"
@@ -129,10 +129,10 @@
     "epics_InterruptVectorVME": {
       "additionalProperties": false,
       "properties": {
-        "entity_type": {
+        "type": {
           "const": "epics.InterruptVectorVME",
           "description": "Reserve a VME interrupt vector",
-          "title": "Entity Type"
+          "title": "Type"
         },
         "entity_enabled": {
           "default": true,
@@ -169,7 +169,7 @@
         }
       },
       "required": [
-        "entity_type",
+        "type",
         "name"
       ],
       "title": "epics_InterruptVectorVME",
@@ -178,10 +178,10 @@
     "epics_PostStartupCommand": {
       "additionalProperties": false,
       "properties": {
-        "entity_type": {
+        "type": {
           "const": "epics.PostStartupCommand",
           "description": "Adds an arbitrary command in the startup script after iocInit",
-          "title": "Entity Type"
+          "title": "Type"
         },
         "entity_enabled": {
           "default": true,
@@ -197,7 +197,7 @@
         }
       },
       "required": [
-        "entity_type"
+        "type"
       ],
       "title": "epics_PostStartupCommand",
       "type": "object"
@@ -205,10 +205,10 @@
     "epics_StartupCommand": {
       "additionalProperties": false,
       "properties": {
-        "entity_type": {
+        "type": {
           "const": "epics.StartupCommand",
           "description": "Adds an arbitrary command in the startup script before iocInit",
-          "title": "Entity Type"
+          "title": "Type"
         },
         "entity_enabled": {
           "default": true,
@@ -224,7 +224,7 @@
         }
       },
       "required": [
-        "entity_type"
+        "type"
       ],
       "title": "epics_StartupCommand",
       "type": "object"
@@ -232,10 +232,10 @@
     "epics_dbpf": {
       "additionalProperties": false,
       "properties": {
-        "entity_type": {
+        "type": {
           "const": "epics.dbpf",
           "description": "Set a PV value after iocInit",
-          "title": "Entity Type"
+          "title": "Type"
         },
         "entity_enabled": {
           "default": true,
@@ -255,7 +255,7 @@
         }
       },
       "required": [
-        "entity_type",
+        "type",
         "pv",
         "value"
       ],
@@ -284,10 +284,10 @@
     "ipac_Hy8001": {
       "additionalProperties": false,
       "properties": {
-        "entity_type": {
+        "type": {
           "const": "ipac.Hy8001",
           "description": "TODO:ADD DESCRIPTION",
-          "title": "Entity Type"
+          "title": "Type"
         },
         "entity_enabled": {
           "default": true,
@@ -431,7 +431,7 @@
         }
       },
       "required": [
-        "entity_type",
+        "type",
         "slot",
         "direction",
         "cardid"
@@ -442,10 +442,10 @@
     "ipac_Hy8002": {
       "additionalProperties": false,
       "properties": {
-        "entity_type": {
+        "type": {
           "const": "ipac.Hy8002",
           "description": "Configure a Hytec 8002 Carrier card",
-          "title": "Entity Type"
+          "title": "Type"
         },
         "entity_enabled": {
           "default": true,
@@ -508,7 +508,7 @@
         }
       },
       "required": [
-        "entity_type",
+        "type",
         "slot",
         "interrupt_vector"
       ],
@@ -518,10 +518,10 @@
     "ipac_Hy8005": {
       "additionalProperties": false,
       "properties": {
-        "entity_type": {
+        "type": {
           "const": "ipac.Hy8005",
           "description": "TODO:ADD DESCRIPTION",
-          "title": "Entity Type"
+          "title": "Type"
         },
         "entity_enabled": {
           "default": true,
@@ -593,7 +593,7 @@
         }
       },
       "required": [
-        "entity_type",
+        "type",
         "slot",
         "cardnum"
       ],
@@ -603,10 +603,10 @@
     "ipac_Hy8005_Channel": {
       "additionalProperties": false,
       "properties": {
-        "entity_type": {
+        "type": {
           "const": "ipac.Hy8005_Channel",
           "description": "TODO:ADD DESCRIPTION",
-          "title": "Entity Type"
+          "title": "Type"
         },
         "entity_enabled": {
           "default": true,
@@ -719,7 +719,7 @@
         }
       },
       "required": [
-        "entity_type",
+        "type",
         "parent",
         "ipslot",
         "cardnum",
@@ -794,7 +794,7 @@
             "ipac.Hy8005": "#/$defs/ipac_Hy8005",
             "ipac.Hy8005_Channel": "#/$defs/ipac_Hy8005_Channel"
           },
-          "propertyName": "entity_type"
+          "propertyName": "type"
         },
         "oneOf": [
           {

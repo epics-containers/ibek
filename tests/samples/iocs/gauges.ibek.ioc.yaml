@@ -4,31 +4,31 @@ ioc_name: "{{ ioc_yaml_file_name }}"
 description: Example of initialising a gauge group with defaults to gauge1
 
 entities:
-  - entity_type: asyn.AsynIP
+  - type: asyn.AsynIP
     name: controllerOnePort
     port: 192.168.0.55:2002
 
-  - entity_type: asyn.AsynIP
+  - type: asyn.AsynIP
     name: controllerTwoPort
     port: 192.168.0.55:2002
 
-  - entity_type: gauges.Mks937bGauge
+  - type: gauges.Mks937bGauge
     port: controllerOnePort
     name: MyGauge1
     P: "IBEK-VA-GAUGE-01:"
 
-  - entity_type: gauges.Mks937bGauge
+  - type: gauges.Mks937bGauge
     port: controllerTwoPort
     name: MyGauge2
     P: "IBEK-VA-GAUGE-02:"
 
   # an un-referenced Gauge
-  - entity_type: gauges.Mks937bGauge
+  - type: gauges.Mks937bGauge
     port: controllerTwoPort
     name: MyGauge3
     P: "IBEK-VA-GAUGE-03:"
 
-  - entity_type: gauges.GaugeGroup
+  - type: gauges.GaugeGroup
     name: MyGaugeGroup
     gauge1: MyGauge1
     gauge2: MyGauge2

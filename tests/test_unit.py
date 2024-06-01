@@ -45,15 +45,15 @@ def test_object_references(entity_factory):
         ioc_name="",
         description="",
         entities=[
-            dict(entity_type="mymodule.port", name="PORT"),
-            dict(entity_type="mymodule.device", port="PORT"),
+            dict(type="mymodule.port", name="PORT"),
+            dict(type="mymodule.device", port="PORT"),
         ],
     )
     ioc = ioc_model(**d)
     port, device = ioc.entities
     # TODO try to get rid of the need for ''
-    assert port.entity_type == "mymodule.port"
-    assert device.entity_type == "mymodule.device"
+    assert port.type == "mymodule.port"
+    assert device.type == "mymodule.device"
     assert device.port is port
     assert id_to_entity == {"PORT": port}
 
