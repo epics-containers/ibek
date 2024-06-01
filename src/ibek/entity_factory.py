@@ -9,7 +9,6 @@ from pathlib import Path
 from typing import Annotated, Any, Dict, List, Literal, Tuple, Type
 
 from pydantic import Field, create_model, field_validator
-from pydantic.fields import FieldInfo
 from pydantic_core import PydanticUndefined, ValidationError
 from ruamel.yaml.main import YAML
 
