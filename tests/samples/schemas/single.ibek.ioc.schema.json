@@ -11,11 +11,10 @@
     "motorSim_simMotorAxis": {
       "additionalProperties": false,
       "properties": {
-        "type": {
+        "entity_type": {
           "const": "motorSim.simMotorAxis",
-          "default": "motorSim.simMotorAxis",
           "description": "Creates a simulation motor axis",
-          "title": "Type"
+          "title": "Entity Type"
         },
         "entity_enabled": {
           "default": true,
@@ -102,6 +101,7 @@
         }
       },
       "required": [
+        "entity_type",
         "controller",
         "M",
         "ADDR"
@@ -112,11 +112,10 @@
     "motorSim_simMotorController": {
       "additionalProperties": false,
       "properties": {
-        "type": {
+        "entity_type": {
           "const": "motorSim.simMotorController",
-          "default": "motorSim.simMotorController",
           "description": "Creates a simulation motion controller",
-          "title": "Type"
+          "title": "Entity Type"
         },
         "entity_enabled": {
           "default": true,
@@ -151,6 +150,7 @@
         }
       },
       "required": [
+        "entity_type",
         "controllerName",
         "P",
         "numAxes",
@@ -180,7 +180,7 @@
             "motorSim.simMotorAxis": "#/$defs/motorSim_simMotorAxis",
             "motorSim.simMotorController": "#/$defs/motorSim_simMotorController"
           },
-          "propertyName": "type"
+          "propertyName": "entity_type"
         },
         "oneOf": [
           {

@@ -611,9 +611,9 @@
       "additionalProperties": true,
       "description": "A loosely defined class to declare the Entities\nin an ibek.support.yaml file in the 'sub_entities' property of an Entity\nsection",
       "properties": {
-        "type": {
+        "entity_type": {
           "description": "The type of this entity",
-          "title": "Type",
+          "title": "Entity Type",
           "type": "string"
         },
         "entity_enabled": {
@@ -624,7 +624,7 @@
         }
       },
       "required": [
-        "type"
+        "entity_type"
       ],
       "title": "SubEntity",
       "type": "object"

@@ -3,11 +3,10 @@
     "listtest_lister": {
       "additionalProperties": false,
       "properties": {
-        "type": {
+        "entity_type": {
           "const": "listtest.lister",
-          "default": "listtest.lister",
           "description": "The protagonist from Red Dwarf",
-          "title": "Type"
+          "title": "Entity Type"
         },
         "entity_enabled": {
           "default": true,
@@ -29,6 +28,7 @@
         }
       },
       "required": [
+        "entity_type",
         "friends"
       ],
       "title": "listtest_lister",
@@ -54,7 +54,7 @@
           "mapping": {
             "listtest.lister": "#/$defs/listtest_lister"
           },
-          "propertyName": "type"
+          "propertyName": "entity_type"
         },
         "oneOf": [
           {

@@ -3,5 +3,8 @@ ioc_name: counter
 description: an example motion ioc for ibek testing
 
 entities:
-  - type: listtest.lister
+  - entity_type: listtest.lister
     friends: ["Rimmer", "Holly", "Cat", "Kryten"]
+
+  # - entity_entity_type: listtest.lister
+  #   friends: '{{  ["Rimmer"] + ["tt"] | list }}'

@@ -8,7 +8,7 @@ class SubEntity(BaseModel, extra="allow"):
     section
     """
 
-    type: str = Field(description="The type of this entity")
+    entity_type: str = Field(description="The type of this entity")
 
     entity_enabled: bool = Field(
         description="enable or disable this entity instance", default=True

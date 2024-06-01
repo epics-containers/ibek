@@ -6,9 +6,9 @@ from __future__ import annotations
 
 import builtins
 from pathlib import Path
-from typing import Any, Dict, List, Literal, Tuple, Type
+from typing import Annotated, Any, Dict, List, Literal, Tuple, Type
 
-from pydantic import create_model, field_validator
+from pydantic import Field, create_model, field_validator
 from pydantic.fields import FieldInfo
 from pydantic_core import PydanticUndefined, ValidationError
 from ruamel.yaml.main import YAML
@@ -64,10 +64,7 @@ class EntityFactory:
         def add_arg(name, typ, description, default):
             if default is None:
                 default = PydanticUndefined
-            args[name] = (
-                typ,
-                FieldInfo(description=description, default=default),
-            )
+            args[name] = (Annotated[typ, Field(description=description)], default)
 
         args: Dict[str, Tuple[type, Any]] = {}
         validators: Dict[str, Any] = {}
@@ -120,7 +117,7 @@ class EntityFactory:
 
         # add the type literal which discriminates between the different Entity classes
         typ = Literal[full_name]  # type: ignore
-        add_arg("type", typ, definition.description, full_name)
+        args["entity_type"] = (typ, Field(description=definition.description))
 
         class_name = full_name.replace(".", "_")
         entity_cls = create_model(
@@ -168,7 +165,7 @@ class EntityFactory:
             # add in SubEntities if any
             for sub_entity in definition.sub_entities:
                 # find the Entity Class that the SubEntity represents
-                entity_cls = self._entity_models[sub_entity.type]
+                entity_cls = self._entity_models[sub_entity.entity_type]
                 # get the SubEntity arguments
                 sub_args_dict = sub_entity.model_dump()
                 # jinja render any references to parent Args in the SubEntity Args

@@ -1977,7 +1977,7 @@ defs:
           NDStatsConfigure("{{PORT}}", {{QUEUE}}, {{BLOCK}}, "{{NDARRAY_PORT}}", {{NDARRAY_ADDR}}, 0, 0, 0, 0, {{MAX_THREADS}})
 
     sub_entities:
-      - { type: ADCore.NDTimeSeries, P: "{{P}}", R: "{{R}}TS:", PORT: "{{PORT}}_TS", NDARRAY_PORT: "{{PORT}}", NAME: "{{PORT}}_TS", NCHANS: "{{NCHANS}}", TIMEOUT: "{{TIMEOUT}}", ADDR: 0, NDARRAY_ADDR: 1, ENABLED: "{{ENABLED}}", QUEUE: "{{QUEUE}}", BLOCK: "{{BLOCK}}", NSIGNALS: 23 }
+      - { entity_type: ADCore.NDTimeSeries, P: "{{P}}", R: "{{R}}TS:", PORT: "{{PORT}}_TS", NDARRAY_PORT: "{{PORT}}", NAME: "{{PORT}}_TS", NCHANS: "{{NCHANS}}", TIMEOUT: "{{TIMEOUT}}", ADDR: 0, NDARRAY_ADDR: 1, ENABLED: "{{ENABLED}}", QUEUE: "{{QUEUE}}", BLOCK: "{{BLOCK}}", NSIGNALS: 23 }
 
     pvi:
       yaml_path: NDPluginStats.pvi.device.yaml

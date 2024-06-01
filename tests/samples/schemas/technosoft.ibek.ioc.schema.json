@@ -11,11 +11,10 @@
     "motorTML_CreateController": {
       "additionalProperties": false,
       "properties": {
-        "type": {
+        "entity_type": {
           "const": "motorTML.CreateController",
-          "default": "motorTML.CreateController",
           "description": "Creates a Technosoft motion controller connected to a serial line",
-          "title": "Type"
+          "title": "Entity Type"
         },
         "entity_enabled": {
           "default": true,
@@ -63,6 +62,7 @@
         }
       },
       "required": [
+        "entity_type",
         "controllerName",
         "P",
         "TTY",
@@ -74,11 +74,10 @@
     "motorTML_motorAxis": {
       "additionalProperties": false,
       "properties": {
-        "type": {
+        "entity_type": {
           "const": "motorTML.motorAxis",
-          "default": "motorTML.motorAxis",
           "description": "Creates a motor axis",
-          "title": "Type"
+          "title": "Entity Type"
         },
         "entity_enabled": {
           "default": true,
@@ -244,6 +243,7 @@
         }
       },
       "required": [
+        "entity_type",
         "controller",
         "axid"
       ],
@@ -271,7 +271,7 @@
             "motorTML.CreateController": "#/$defs/motorTML_CreateController",
             "motorTML.motorAxis": "#/$defs/motorTML_motorAxis"
           },
-          "propertyName": "type"
+          "propertyName": "entity_type"
         },
         "oneOf": [
           {

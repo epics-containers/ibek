@@ -3,11 +3,10 @@
     "asyn_AsynIP": {
       "additionalProperties": false,
       "properties": {
-        "type": {
+        "entity_type": {
           "const": "asyn.AsynIP",
-          "default": "asyn.AsynIP",
           "description": "Asyn IP Port",
-          "title": "Type"
+          "title": "Entity Type"
         },
         "entity_enabled": {
           "default": true,
@@ -108,6 +107,7 @@
         }
       },
       "required": [
+        "entity_type",
         "port",
         "name"
       ],
@@ -143,11 +143,10 @@
     "gauges_GaugeGroup": {
       "additionalProperties": false,
       "properties": {
-        "type": {
+        "entity_type": {
           "const": "gauges.GaugeGroup",
-          "default": "gauges.GaugeGroup",
           "description": "Group of gauges",
-          "title": "Type"
+          "title": "Entity Type"
         },
         "entity_enabled": {
           "default": true,
@@ -181,6 +180,7 @@
         }
       },
       "required": [
+        "entity_type",
         "name",
         "gauge1"
       ],
@@ -190,11 +190,10 @@
     "gauges_Mks937bGauge": {
       "additionalProperties": false,
       "properties": {
-        "type": {
+        "entity_type": {
           "const": "gauges.Mks937bGauge",
-          "default": "gauges.Mks937bGauge",
           "description": "MKS 937b Gauge controller",
-          "title": "Type"
+          "title": "Entity Type"
         },
         "entity_enabled": {
           "default": true,
@@ -218,6 +217,7 @@
         }
       },
       "required": [
+        "entity_type",
         "port",
         "name",
         "P"
@@ -264,7 +264,7 @@
             "gauges.GaugeGroup": "#/$defs/gauges_GaugeGroup",
             "gauges.Mks937bGauge": "#/$defs/gauges_Mks937bGauge"
           },
-          "propertyName": "type"
+          "propertyName": "entity_type"
         },
         "oneOf": [
           {

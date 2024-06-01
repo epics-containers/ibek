@@ -3,5 +3,5 @@ ioc_name: counter
 description: an example motion ioc for ibek testing
 
 entities:
-  - type: epics.InterruptVectorVME
+  - entity_type: epics.InterruptVectorVME
     name: Vec0

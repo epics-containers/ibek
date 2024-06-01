@@ -2,5 +2,5 @@ ioc_name: test-bad-db-ioc
 description: demo bad database definition
 
 entities:
-  - type: object_module.RefObject
+  - entity_type: object_module.RefObject
     name: Ref1

@@ -3,11 +3,10 @@
     "epics_InterruptVectorVME": {
       "additionalProperties": false,
       "properties": {
-        "type": {
+        "entity_type": {
           "const": "epics.InterruptVectorVME",
-          "default": "epics.InterruptVectorVME",
           "description": "Reserve an interrupt vector for use with VME hardware.\n",
-          "title": "Type"
+          "title": "Entity Type"
         },
         "entity_enabled": {
           "default": true,
@@ -34,6 +33,7 @@
         }
       },
       "required": [
+        "entity_type",
         "name"
       ],
       "title": "epics_InterruptVectorVME",
@@ -42,11 +42,10 @@
     "epics_InterruptVectorVME2": {
       "additionalProperties": false,
       "properties": {
-        "type": {
+        "entity_type": {
           "const": "epics.InterruptVectorVME2",
-          "default": "epics.InterruptVectorVME2",
           "description": "naughty second use of same counter",
-          "title": "Type"
+          "title": "Entity Type"
         },
         "entity_enabled": {
           "default": true,
@@ -61,6 +60,7 @@
         }
       },
       "required": [
+        "entity_type",
         "name"
       ],
       "title": "epics_InterruptVectorVME2",
@@ -87,7 +87,7 @@
             "epics.InterruptVectorVME": "#/$defs/epics_InterruptVectorVME",
             "epics.InterruptVectorVME2": "#/$defs/epics_InterruptVectorVME2"
           },
-          "propertyName": "type"
+          "propertyName": "entity_type"
         },
         "oneOf": [
           {
