@@ -7,4 +7,5 @@ entities:
     friends: ["Rimmer", "Holly", "Cat", "Kryten"]
 
   - entity_type: listtest.lister
-    friends: '{{  ["Rimmer"] + ["tt"] | list }}'
+    friends: |-
+      {{  ["Rimmer"] + ["tt"] | list }}

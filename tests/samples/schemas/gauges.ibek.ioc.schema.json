@@ -101,104 +101,49 @@
           "title": "Baud"
         },
         "parity": {
-          "anyOf": [
+          "allOf": [
             {
-              "description": "jinja that renders to <enum 'parity'>",
-              "pattern": ".*\\{\\{.*\\}\\}.*",
-              "type": "string"
-            },
-            {
-              "allOf": [
-                {
-                  "$ref": "#/$defs/parity"
-                }
-              ],
-              "description": "Parity"
+              "$ref": "#/$defs/parity"
             }
           ],
           "default": "none",
-          "description": "union of <enum 'parity'> and jinja representation of {typ}",
-          "title": "Parity"
+          "description": "Parity"
         },
         "crtscts": {
-          "anyOf": [
+          "allOf": [
             {
-              "description": "jinja that renders to <enum 'crtscts'>",
-              "pattern": ".*\\{\\{.*\\}\\}.*",
-              "type": "string"
-            },
-            {
-              "allOf": [
-                {
-                  "$ref": "#/$defs/crtscts"
-                }
-              ],
-              "description": "Set hardware flow control on"
+              "$ref": "#/$defs/crtscts"
             }
           ],
           "default": "N",
-          "description": "union of <enum 'crtscts'> and jinja representation of {typ}",
-          "title": "Crtscts"
+          "description": "Set hardware flow control on"
         },
         "stop": {
-          "anyOf": [
+          "allOf": [
             {
-              "description": "jinja that renders to <enum 'stop'>",
-              "pattern": ".*\\{\\{.*\\}\\}.*",
-              "type": "string"
-            },
-            {
-              "allOf": [
-                {
-                  "$ref": "#/$defs/stop"
-                }
-              ],
-              "description": "Stop Bits"
+              "$ref": "#/$defs/stop"
             }
           ],
           "default": "1",
-          "description": "union of <enum 'stop'> and jinja representation of {typ}",
-          "title": "Stop"
+          "description": "Stop Bits"
         },
         "disconnectOnReadTimeout": {
-          "anyOf": [
+          "allOf": [
             {
-              "description": "jinja that renders to <enum 'disconnectOnReadTimeout'>",
-              "pattern": ".*\\{\\{.*\\}\\}.*",
-              "type": "string"
-            },
-            {
-              "allOf": [
-                {
-                  "$ref": "#/$defs/disconnectOnReadTimeout"
-                }
-              ],
-              "description": "Disconnect when a read times out"
+              "$ref": "#/$defs/disconnectOnReadTimeout"
             }
           ],
           "default": "Y",
-          "description": "union of <enum 'disconnectOnReadTimeout'> and jinja representation of {typ}",
-          "title": "Disconnectonreadtimeout"
+          "description": "Disconnect when a read times out"
         },
         "bits": {
-          "anyOf": [
+          "allOf": [
             {
-              "description": "jinja that renders to <enum 'bits'>",
-              "pattern": ".*\\{\\{.*\\}\\}.*",
-              "type": "string"
-            },
-            {
-              "allOf": [
-                {
-                  "$ref": "#/$defs/bits"
-                }
-              ],
-              "description": "Bits"
+              "$ref": "#/$defs/bits"
             }
           ],
           "default": "8",
-          "description": "union of <enum 'bits'> and jinja representation of {typ}",
-          "title": "Bits"
+          "description": "Bits"
         }
       },
       "required": [

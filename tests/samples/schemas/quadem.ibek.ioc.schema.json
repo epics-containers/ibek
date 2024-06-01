@@ -98,24 +98,13 @@
           "title": "Enabled"
         },
         "SCANRATE": {
-          "anyOf": [
+          "allOf": [
             {
-              "description": "jinja that renders to <enum 'SCANRATE'>",
-              "pattern": ".*\\{\\{.*\\}\\}.*",
-              "type": "string"
-            },
-            {
-              "allOf": [
-                {
-                  "$ref": "#/$defs/SCANRATE"
-                }
-              ],
-              "description": "Specified scan rate for cpu intensive PVs"
+              "$ref": "#/$defs/SCANRATE"
             }
           ],
           "default": "I/O Intr",
-          "description": "union of <enum 'SCANRATE'> and jinja representation of {typ}",
-          "title": "Scanrate"
+          "description": "Specified scan rate for cpu intensive PVs"
         },
         "QUEUE": {
           "anyOf": [
@@ -298,24 +287,13 @@
           "title": "Enabled"
         },
         "SCANRATE": {
-          "anyOf": [
+          "allOf": [
             {
-              "description": "jinja that renders to <enum 'SCANRATE'>",
-              "pattern": ".*\\{\\{.*\\}\\}.*",
-              "type": "string"
-            },
-            {
-              "allOf": [
-                {
-                  "$ref": "#/$defs/SCANRATE"
-                }
-              ],
-              "description": "Specified scan rate for cpu intensive PVs"
+              "$ref": "#/$defs/SCANRATE"
             }
           ],
           "default": "I/O Intr",
-          "description": "union of <enum 'SCANRATE'> and jinja representation of {typ}",
-          "title": "Scanrate"
+          "description": "Specified scan rate for cpu intensive PVs"
         },
         "QUEUE": {
           "anyOf": [
@@ -432,64 +410,31 @@
           "type": "string"
         },
         "type": {
-          "anyOf": [
+          "allOf": [
             {
-              "description": "jinja that renders to <enum 'type'>",
-              "pattern": ".*\\{\\{.*\\}\\}.*",
-              "type": "string"
-            },
-            {
-              "allOf": [
-                {
-                  "$ref": "#/$defs/type"
-                }
-              ],
-              "description": "Where the data should be picked up from"
+              "$ref": "#/$defs/type"
             }
           ],
           "default": "EPICS_PV",
-          "description": "union of <enum 'type'> and jinja representation of {typ}",
-          "title": "Type"
+          "description": "Where the data should be picked up from"
         },
         "dbrtype": {
-          "anyOf": [
+          "allOf": [
             {
-              "description": "jinja that renders to <enum 'dbrtype'>",
-              "pattern": ".*\\{\\{.*\\}\\}.*",
-              "type": "string"
-            },
-            {
-              "allOf": [
-                {
-                  "$ref": "#/$defs/dbrtype"
-                }
-              ],
-              "description": "DBR type (only used if type=EPICS_PV)"
+              "$ref": "#/$defs/dbrtype"
             }
           ],
           "default": "DBR_NATIVE",
-          "description": "union of <enum 'dbrtype'> and jinja representation of {typ}",
-          "title": "Dbrtype"
+          "description": "DBR type (only used if type=EPICS_PV)"
         },
         "datatype": {
-          "anyOf": [
+          "allOf": [
             {
-              "description": "jinja that renders to <enum 'datatype'>",
-              "pattern": ".*\\{\\{.*\\}\\}.*",
-              "type": "string"
-            },
-            {
-              "allOf": [
-                {
-                  "$ref": "#/$defs/datatype"
-                }
-              ],
-              "description": "Data type (only used if type=PARAM)"
+              "$ref": "#/$defs/datatype"
             }
           ],
           "default": "INT",
-          "description": "union of <enum 'datatype'> and jinja representation of {typ}",
-          "title": "Datatype"
+          "description": "Data type (only used if type=PARAM)"
         },
         "description": {
           "description": "Description of the attribute",
@@ -622,24 +567,13 @@
           "title": "Enabled"
         },
         "SCANRATE": {
-          "anyOf": [
+          "allOf": [
             {
-              "description": "jinja that renders to <enum 'SCANRATE'>",
-              "pattern": ".*\\{\\{.*\\}\\}.*",
-              "type": "string"
-            },
-            {
-              "allOf": [
-                {
-                  "$ref": "#/$defs/SCANRATE"
-                }
-              ],
-              "description": "Specified scan rate for cpu intensive PVs"
+              "$ref": "#/$defs/SCANRATE"
             }
           ],
           "default": "I/O Intr",
-          "description": "union of <enum 'SCANRATE'> and jinja representation of {typ}",
-          "title": "Scanrate"
+          "description": "Specified scan rate for cpu intensive PVs"
         },
         "PRECOUNT": {
           "anyOf": [
@@ -830,24 +764,13 @@
           "title": "Enabled"
         },
         "SCANRATE": {
-          "anyOf": [
+          "allOf": [
             {
-              "description": "jinja that renders to <enum 'SCANRATE'>",
-              "pattern": ".*\\{\\{.*\\}\\}.*",
-              "type": "string"
-            },
-            {
-              "allOf": [
-                {
-                  "$ref": "#/$defs/SCANRATE"
-                }
-              ],
-              "description": "Specified scan rate for cpu intensive PVs"
+              "$ref": "#/$defs/SCANRATE"
             }
           ],
           "default": "I/O Intr",
-          "description": "union of <enum 'SCANRATE'> and jinja representation of {typ}",
-          "title": "Scanrate"
+          "description": "Specified scan rate for cpu intensive PVs"
         },
         "QUEUE": {
           "anyOf": [
@@ -1006,24 +929,13 @@
           "title": "Enabled"
         },
         "SCANRATE": {
-          "anyOf": [
+          "allOf": [
             {
-              "description": "jinja that renders to <enum 'SCANRATE'>",
-              "pattern": ".*\\{\\{.*\\}\\}.*",
-              "type": "string"
-            },
-            {
-              "allOf": [
-                {
-                  "$ref": "#/$defs/SCANRATE"
-                }
-              ],
-              "description": "Specified scan rate for cpu intensive PVs"
+              "$ref": "#/$defs/SCANRATE"
             }
           ],
           "default": "I/O Intr",
-          "description": "union of <enum 'SCANRATE'> and jinja representation of {typ}",
-          "title": "Scanrate"
+          "description": "Specified scan rate for cpu intensive PVs"
         },
         "QUEUE": {
           "anyOf": [
@@ -1187,24 +1099,13 @@
           "title": "Enabled"
         },
         "SCANRATE": {
-          "anyOf": [
+          "allOf": [
             {
-              "description": "jinja that renders to <enum 'SCANRATE'>",
-              "pattern": ".*\\{\\{.*\\}\\}.*",
-              "type": "string"
-            },
-            {
-              "allOf": [
-                {
-                  "$ref": "#/$defs/SCANRATE"
-                }
-              ],
-              "description": "Specified scan rate for cpu intensive PVs"
+              "$ref": "#/$defs/SCANRATE"
             }
           ],
           "default": "I/O Intr",
-          "description": "union of <enum 'SCANRATE'> and jinja representation of {typ}",
-          "title": "Scanrate"
+          "description": "Specified scan rate for cpu intensive PVs"
         },
         "TIME_LINK": {
           "anyOf": [
@@ -1428,24 +1329,13 @@
           "title": "Enabled"
         },
         "SCANRATE": {
-          "anyOf": [
+          "allOf": [
             {
-              "description": "jinja that renders to <enum 'SCANRATE'>",
-              "pattern": ".*\\{\\{.*\\}\\}.*",
-              "type": "string"
-            },
-            {
-              "allOf": [
-                {
-                  "$ref": "#/$defs/SCANRATE"
-                }
-              ],
-              "description": "Specified scan rate for cpu intensive PVs"
+              "$ref": "#/$defs/SCANRATE"
             }
           ],
           "default": "I/O Intr",
-          "description": "union of <enum 'SCANRATE'> and jinja representation of {typ}",
-          "title": "Scanrate"
+          "description": "Specified scan rate for cpu intensive PVs"
         },
         "XMLSIZE": {
           "anyOf": [
@@ -1604,24 +1494,13 @@
           "title": "Enabled"
         },
         "SCANRATE": {
-          "anyOf": [
+          "allOf": [
             {
-              "description": "jinja that renders to <enum 'SCANRATE'>",
-              "pattern": ".*\\{\\{.*\\}\\}.*",
-              "type": "string"
-            },
-            {
-              "allOf": [
-                {
-                  "$ref": "#/$defs/SCANRATE"
-                }
-              ],
-              "description": "Specified scan rate for cpu intensive PVs"
+              "$ref": "#/$defs/SCANRATE"
             }
           ],
           "default": "I/O Intr",
-          "description": "union of <enum 'SCANRATE'> and jinja representation of {typ}",
-          "title": "Scanrate"
+          "description": "Specified scan rate for cpu intensive PVs"
         },
         "QUEUE": {
           "anyOf": [
@@ -1764,24 +1643,13 @@
           "title": "Enabled"
         },
         "SCANRATE": {
-          "anyOf": [
+          "allOf": [
             {
-              "description": "jinja that renders to <enum 'SCANRATE'>",
-              "pattern": ".*\\{\\{.*\\}\\}.*",
-              "type": "string"
-            },
-            {
-              "allOf": [
-                {
-                  "$ref": "#/$defs/SCANRATE"
-                }
-              ],
-              "description": "Specified scan rate for cpu intensive PVs"
+              "$ref": "#/$defs/SCANRATE"
             }
           ],
           "default": "I/O Intr",
-          "description": "union of <enum 'SCANRATE'> and jinja representation of {typ}",
-          "title": "Scanrate"
+          "description": "Specified scan rate for cpu intensive PVs"
         },
         "QUEUE": {
           "anyOf": [
@@ -1924,24 +1792,13 @@
           "title": "Enabled"
         },
         "SCANRATE": {
-          "anyOf": [
+          "allOf": [
             {
-              "description": "jinja that renders to <enum 'SCANRATE'>",
-              "pattern": ".*\\{\\{.*\\}\\}.*",
-              "type": "string"
-            },
-            {
-              "allOf": [
-                {
-                  "$ref": "#/$defs/SCANRATE"
-                }
-              ],
-              "description": "Specified scan rate for cpu intensive PVs"
+              "$ref": "#/$defs/SCANRATE"
             }
           ],
           "default": "I/O Intr",
-          "description": "union of <enum 'SCANRATE'> and jinja representation of {typ}",
-          "title": "Scanrate"
+          "description": "Specified scan rate for cpu intensive PVs"
         },
         "QUEUE": {
           "anyOf": [
@@ -2084,24 +1941,13 @@
           "title": "Enabled"
         },
         "SCANRATE": {
-          "anyOf": [
+          "allOf": [
             {
-              "description": "jinja that renders to <enum 'SCANRATE'>",
-              "pattern": ".*\\{\\{.*\\}\\}.*",
-              "type": "string"
-            },
-            {
-              "allOf": [
-                {
-                  "$ref": "#/$defs/SCANRATE"
-                }
-              ],
-              "description": "Specified scan rate for cpu intensive PVs"
+              "$ref": "#/$defs/SCANRATE"
             }
           ],
           "default": "I/O Intr",
-          "description": "union of <enum 'SCANRATE'> and jinja representation of {typ}",
-          "title": "Scanrate"
+          "description": "Specified scan rate for cpu intensive PVs"
         },
         "QUEUE": {
           "anyOf": [
@@ -2212,24 +2058,13 @@
           "title": "Addr"
         },
         "SCANRATE": {
-          "anyOf": [
+          "allOf": [
             {
-              "description": "jinja that renders to <enum 'SCANRATE'>",
-              "pattern": ".*\\{\\{.*\\}\\}.*",
-              "type": "string"
-            },
-            {
-              "allOf": [
-                {
-                  "$ref": "#/$defs/SCANRATE"
-                }
-              ],
-              "description": "Specified scan rate for cpu intensive PVs"
+              "$ref": "#/$defs/SCANRATE"
             }
           ],
           "default": "I/O Intr",
-          "description": "union of <enum 'SCANRATE'> and jinja representation of {typ}",
-          "title": "Scanrate"
+          "description": "Specified scan rate for cpu intensive PVs"
         },
         "NDARRAY_ADDR": {
           "anyOf": [
@@ -2404,24 +2239,13 @@
           "title": "Enabled"
         },
         "SCANRATE": {
-          "anyOf": [
+          "allOf": [
             {
-              "description": "jinja that renders to <enum 'SCANRATE'>",
-              "pattern": ".*\\{\\{.*\\}\\}.*",
-              "type": "string"
-            },
-            {
-              "allOf": [
-                {
-                  "$ref": "#/$defs/SCANRATE"
-                }
-              ],
-              "description": "Specified scan rate for cpu intensive PVs"
+              "$ref": "#/$defs/SCANRATE"
             }
           ],
           "default": "I/O Intr",
-          "description": "union of <enum 'SCANRATE'> and jinja representation of {typ}",
-          "title": "Scanrate"
+          "description": "Specified scan rate for cpu intensive PVs"
         },
         "QUEUE": {
           "anyOf": [
@@ -2555,24 +2379,13 @@
           "title": "Enabled"
         },
         "SCANRATE": {
-          "anyOf": [
+          "allOf": [
             {
-              "description": "jinja that renders to <enum 'SCANRATE'>",
-              "pattern": ".*\\{\\{.*\\}\\}.*",
-              "type": "string"
-            },
-            {
-              "allOf": [
-                {
-                  "$ref": "#/$defs/SCANRATE"
-                }
-              ],
-              "description": "Specified scan rate for cpu intensive PVs"
+              "$ref": "#/$defs/SCANRATE"
             }
           ],
           "default": "I/O Intr",
-          "description": "union of <enum 'SCANRATE'> and jinja representation of {typ}",
-          "title": "Scanrate"
+          "description": "Specified scan rate for cpu intensive PVs"
         },
         "QUEUE": {
           "anyOf": [
@@ -2732,24 +2545,13 @@
           "title": "Enabled"
         },
         "SCANRATE": {
-          "anyOf": [
+          "allOf": [
             {
-              "description": "jinja that renders to <enum 'SCANRATE'>",
-              "pattern": ".*\\{\\{.*\\}\\}.*",
-              "type": "string"
-            },
-            {
-              "allOf": [
-                {
-                  "$ref": "#/$defs/SCANRATE"
-                }
-              ],
-              "description": "Specified scan rate for cpu intensive PVs"
+              "$ref": "#/$defs/SCANRATE"
             }
           ],
           "default": "I/O Intr",
-          "description": "union of <enum 'SCANRATE'> and jinja representation of {typ}",
-          "title": "Scanrate"
+          "description": "Specified scan rate for cpu intensive PVs"
         },
         "QUEUE": {
           "anyOf": [
@@ -2914,24 +2716,13 @@
           "title": "Enabled"
         },
         "SCANRATE": {
-          "anyOf": [
+          "allOf": [
             {
-              "description": "jinja that renders to <enum 'SCANRATE'>",
-              "pattern": ".*\\{\\{.*\\}\\}.*",
-              "type": "string"
-            },
-            {
-              "allOf": [
-                {
-                  "$ref": "#/$defs/SCANRATE"
-                }
-              ],
-              "description": "Specified scan rate for cpu intensive PVs"
+              "$ref": "#/$defs/SCANRATE"
             }
           ],
           "default": "I/O Intr",
-          "description": "union of <enum 'SCANRATE'> and jinja representation of {typ}",
-          "title": "Scanrate"
+          "description": "Specified scan rate for cpu intensive PVs"
         },
         "QUEUE": {
           "anyOf": [
@@ -3156,24 +2947,13 @@
           "title": "Enabled"
         },
         "SCANRATE": {
-          "anyOf": [
+          "allOf": [
             {
-              "description": "jinja that renders to <enum 'SCANRATE'>",
-              "pattern": ".*\\{\\{.*\\}\\}.*",
-              "type": "string"
-            },
-            {
-              "allOf": [
-                {
-                  "$ref": "#/$defs/SCANRATE"
-                }
-              ],
-              "description": "Specified scan rate for cpu intensive PVs"
+              "$ref": "#/$defs/SCANRATE"
             }
           ],
           "default": "I/O Intr",
-          "description": "union of <enum 'SCANRATE'> and jinja representation of {typ}",
-          "title": "Scanrate"
+          "description": "Specified scan rate for cpu intensive PVs"
         },
         "QUEUE": {
           "anyOf": [
@@ -3348,24 +3128,13 @@
           "title": "Enabled"
         },
         "SCANRATE": {
-          "anyOf": [
+          "allOf": [
             {
-              "description": "jinja that renders to <enum 'SCANRATE'>",
-              "pattern": ".*\\{\\{.*\\}\\}.*",
-              "type": "string"
-            },
-            {
-              "allOf": [
-                {
-                  "$ref": "#/$defs/SCANRATE"
-                }
-              ],
-              "description": "Specified scan rate for cpu intensive PVs"
+              "$ref": "#/$defs/SCANRATE"
             }
           ],
           "default": "I/O Intr",
-          "description": "union of <enum 'SCANRATE'> and jinja representation of {typ}",
-          "title": "Scanrate"
+          "description": "Specified scan rate for cpu intensive PVs"
         },
         "QUEUE": {
           "anyOf": [
@@ -3513,24 +3282,13 @@
           "title": "Enabled"
         },
         "SCANRATE": {
-          "anyOf": [
+          "allOf": [
             {
-              "description": "jinja that renders to <enum 'SCANRATE'>",
-              "pattern": ".*\\{\\{.*\\}\\}.*",
-              "type": "string"
-            },
-            {
-              "allOf": [
-                {
-                  "$ref": "#/$defs/SCANRATE"
-                }
-              ],
-              "description": "Specified scan rate for cpu intensive PVs"
+              "$ref": "#/$defs/SCANRATE"
             }
           ],
           "default": "I/O Intr",
-          "description": "union of <enum 'SCANRATE'> and jinja representation of {typ}",
-          "title": "Scanrate"
+          "description": "Specified scan rate for cpu intensive PVs"
         },
         "QUEUE": {
           "anyOf": [
@@ -3706,24 +3464,13 @@
           "title": "Enabled"
         },
         "SCANRATE": {
-          "anyOf": [
+          "allOf": [
             {
-              "description": "jinja that renders to <enum 'SCANRATE'>",
-              "pattern": ".*\\{\\{.*\\}\\}.*",
-              "type": "string"
-            },
-            {
-              "allOf": [
-                {
-                  "$ref": "#/$defs/SCANRATE"
-                }
-              ],
-              "description": "Specified scan rate for cpu intensive PVs"
+              "$ref": "#/$defs/SCANRATE"
             }
           ],
           "default": "I/O Intr",
-          "description": "union of <enum 'SCANRATE'> and jinja representation of {typ}",
-          "title": "Scanrate"
+          "description": "Specified scan rate for cpu intensive PVs"
         },
         "QUEUE": {
           "anyOf": [
@@ -3882,24 +3629,13 @@
           "title": "Enabled"
         },
         "SCANRATE": {
-          "anyOf": [
+          "allOf": [
             {
-              "description": "jinja that renders to <enum 'SCANRATE'>",
-              "pattern": ".*\\{\\{.*\\}\\}.*",
-              "type": "string"
-            },
-            {
-              "allOf": [
-                {
-                  "$ref": "#/$defs/SCANRATE"
-                }
-              ],
-              "description": "Specified scan rate for cpu intensive PVs"
+              "$ref": "#/$defs/SCANRATE"
             }
           ],
           "default": "I/O Intr",
-          "description": "union of <enum 'SCANRATE'> and jinja representation of {typ}",
-          "title": "Scanrate"
+          "description": "Specified scan rate for cpu intensive PVs"
         },
         "QUEUE": {
           "anyOf": [
@@ -4090,24 +3826,13 @@
           "title": "Enabled"
         },
         "SCANRATE": {
-          "anyOf": [
+          "allOf": [
             {
-              "description": "jinja that renders to <enum 'SCANRATE'>",
-              "pattern": ".*\\{\\{.*\\}\\}.*",
-              "type": "string"
-            },
-            {
-              "allOf": [
-                {
-                  "$ref": "#/$defs/SCANRATE"
-                }
-              ],
-              "description": "Specified scan rate for cpu intensive PVs"
+              "$ref": "#/$defs/SCANRATE"
             }
           ],
           "default": "I/O Intr",
-          "description": "union of <enum 'SCANRATE'> and jinja representation of {typ}",
-          "title": "Scanrate"
+          "description": "Specified scan rate for cpu intensive PVs"
         },
         "NAME": {
           "anyOf": [
@@ -4375,24 +4100,13 @@
           "title": "Max Threads"
         },
         "SCANRATE": {
-          "anyOf": [
+          "allOf": [
             {
-              "description": "jinja that renders to <enum 'SCANRATE'>",
-              "pattern": ".*\\{\\{.*\\}\\}.*",
-              "type": "string"
-            },
-            {
-              "allOf": [
-                {
-                  "$ref": "#/$defs/SCANRATE"
-                }
-              ],
-              "description": "Specified scan rate for cpu intensive PVs"
+              "$ref": "#/$defs/SCANRATE"
             }
           ],
           "default": "I/O Intr",
-          "description": "union of <enum 'SCANRATE'> and jinja representation of {typ}",
-          "title": "Scanrate"
+          "description": "Specified scan rate for cpu intensive PVs"
         },
         "TS_PORT": {
           "default": "$(PORT)_TS",
@@ -4453,23 +4167,12 @@
           "type": "string"
         },
         "FTVL": {
-          "anyOf": [
+          "allOf": [
             {
-              "description": "jinja that renders to <enum 'FTVL'>",
-              "pattern": ".*\\{\\{.*\\}\\}.*",
-              "type": "string"
-            },
-            {
-              "allOf": [
-                {
-                  "$ref": "#/$defs/FTVL"
-                }
-              ],
-              "description": "Field Type of Value"
+              "$ref": "#/$defs/FTVL"
             }
           ],
-          "description": "union of <enum 'FTVL'> and jinja representation of {typ}",
-          "title": "Ftvl"
+          "description": "Field Type of Value"
         },
         "NELEMENTS": {
           "anyOf": [
@@ -4551,24 +4254,13 @@
           "title": "Enabled"
         },
         "SCANRATE": {
-          "anyOf": [
+          "allOf": [
             {
-              "description": "jinja that renders to <enum 'SCANRATE'>",
-              "pattern": ".*\\{\\{.*\\}\\}.*",
-              "type": "string"
-            },
-            {
-              "allOf": [
-                {
-                  "$ref": "#/$defs/SCANRATE"
-                }
-              ],
-              "description": "Specified scan rate for cpu intensive PVs"
+              "$ref": "#/$defs/SCANRATE"
             }
           ],
           "default": "I/O Intr",
-          "description": "union of <enum 'SCANRATE'> and jinja representation of {typ}",
-          "title": "Scanrate"
+          "description": "Specified scan rate for cpu intensive PVs"
         },
         "QUEUE": {
           "anyOf": [
@@ -4735,24 +4427,13 @@
           "title": "Enabled"
         },
         "SCANRATE": {
-          "anyOf": [
+          "allOf": [
             {
-              "description": "jinja that renders to <enum 'SCANRATE'>",
-              "pattern": ".*\\{\\{.*\\}\\}.*",
-              "type": "string"
-            },
-            {
-              "allOf": [
-                {
-                  "$ref": "#/$defs/SCANRATE"
-                }
-              ],
-              "description": "Specified scan rate for cpu intensive PVs"
+              "$ref": "#/$defs/SCANRATE"
             }
           ],
           "default": "I/O Intr",
-          "description": "union of <enum 'SCANRATE'> and jinja representation of {typ}",
-          "title": "Scanrate"
+          "description": "Specified scan rate for cpu intensive PVs"
         },
         "TIME_LINK": {
           "anyOf": [
@@ -4966,24 +4647,13 @@
           "title": "Enabled"
         },
         "SCANRATE": {
-          "anyOf": [
+          "allOf": [
             {
-              "description": "jinja that renders to <enum 'SCANRATE'>",
-              "pattern": ".*\\{\\{.*\\}\\}.*",
-              "type": "string"
-            },
-            {
-              "allOf": [
-                {
-                  "$ref": "#/$defs/SCANRATE"
-                }
-              ],
-              "description": "Specified scan rate for cpu intensive PVs"
+              "$ref": "#/$defs/SCANRATE"
             }
           ],
           "default": "I/O Intr",
-          "description": "union of <enum 'SCANRATE'> and jinja representation of {typ}",
-          "title": "Scanrate"
+          "description": "Specified scan rate for cpu intensive PVs"
         },
         "QUEUE": {
           "anyOf": [
@@ -5143,24 +4813,13 @@
           "title": "Enabled"
         },
         "SCANRATE": {
-          "anyOf": [
+          "allOf": [
             {
-              "description": "jinja that renders to <enum 'SCANRATE'>",
-              "pattern": ".*\\{\\{.*\\}\\}.*",
-              "type": "string"
-            },
-            {
-              "allOf": [
-                {
-                  "$ref": "#/$defs/SCANRATE"
-                }
-              ],
-              "description": "Specified scan rate for cpu intensive PVs"
+              "$ref": "#/$defs/SCANRATE"
             }
           ],
           "default": "I/O Intr",
-          "description": "union of <enum 'SCANRATE'> and jinja representation of {typ}",
-          "title": "Scanrate"
+          "description": "Specified scan rate for cpu intensive PVs"
         },
         "PRECOUNT": {
           "anyOf": [

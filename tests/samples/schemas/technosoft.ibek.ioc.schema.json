@@ -149,24 +149,13 @@
           "type": "string"
         },
         "homing": {
-          "anyOf": [
+          "allOf": [
             {
-              "description": "jinja that renders to <enum 'homing'>",
-              "pattern": ".*\\{\\{.*\\}\\}.*",
-              "type": "string"
-            },
-            {
-              "allOf": [
-                {
-                  "$ref": "#/$defs/homing"
-                }
-              ],
-              "description": "Homing direction"
+              "$ref": "#/$defs/homing"
             }
           ],
           "default": "LSN",
-          "description": "union of <enum 'homing'> and jinja representation of {typ}",
-          "title": "Homing"
+          "description": "Homing direction"
         },
         "NSTEPS": {
           "anyOf": [

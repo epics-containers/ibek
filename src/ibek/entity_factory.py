@@ -63,7 +63,8 @@ class EntityFactory:
         def add_arg(name, typ, description, default):
             if default is None:
                 default = PydanticUndefined
-            if typ in [str, object]:
+            # cheesy check for enum, can this be improved?
+            if typ in [str, object] or "enum" in str(typ):
                 args[name] = (Annotated[typ, Field(description=description)], default)
             else:
                 args[name] = (

@@ -107,24 +107,13 @@
           "type": "string"
         },
         "DIR": {
-          "anyOf": [
+          "allOf": [
             {
-              "description": "jinja that renders to <enum 'DIR'>",
-              "pattern": ".*\\{\\{.*\\}\\}.*",
-              "type": "string"
-            },
-            {
-              "allOf": [
-                {
-                  "$ref": "#/$defs/DIR"
-                }
-              ],
-              "description": "The direction of the axis"
+              "$ref": "#/$defs/DIR"
             }
           ],
           "default": 0,
-          "description": "union of <enum 'DIR'> and jinja representation of {typ}",
-          "title": "Dir"
+          "description": "The direction of the axis"
         },
         "VELO": {
           "anyOf": [
