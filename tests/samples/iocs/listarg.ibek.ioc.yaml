@@ -6,5 +6,5 @@ entities:
   - entity_type: listtest.lister
     friends: ["Rimmer", "Holly", "Cat", "Kryten"]
 
-  # - entity_entity_type: listtest.lister
-  #   friends: '{{  ["Rimmer"] + ["tt"] | list }}'
+  - entity_type: listtest.lister
+    friends: '{{  ["Rimmer"] + ["tt"] | list }}'

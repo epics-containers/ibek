@@ -63,7 +63,26 @@ class EntityFactory:
         def add_arg(name, typ, description, default):
             if default is None:
                 default = PydanticUndefined
-            args[name] = (Annotated[typ, Field(description=description)], default)
+            if typ in [str, object]:
+                args[name] = (Annotated[typ, Field(description=description)], default)
+            else:
+                args[name] = (
+                    Annotated[
+                        Annotated[
+                            str,
+                            Field(
+                                description=f"jinja that renders to {typ}",
+                                pattern=r".*\{\{.*\}\}.*",
+                            ),
+                        ]
+                        | Annotated[typ, Field(description=description)],
+                        Field(
+                            description=f"union of {typ} and jinja "
+                            "representation of {typ}"
+                        ),
+                    ],
+                    default,
+                )
 
         args: Dict[str, Tuple[type, Any]] = {}
         validators: Dict[str, Any] = {}

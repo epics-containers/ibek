@@ -10,6 +10,24 @@ Lister does not like to hear "Smoke me a kipper, I'll be back for breakfast" has
 - Cat
 - Kryten
 First friend is Rimmer
+Lister does not like to hear "Smoke me a kipper, I'll be back for breakfast" has friends:
+- [
+- '
+- R
+- i
+- m
+- m
+- e
+- r
+- '
+- ,
+-  
+- '
+- t
+- t
+- '
+- ]
+First friend is [
 
 dbLoadRecords /epics/runtime/ioc.db
 iocInit

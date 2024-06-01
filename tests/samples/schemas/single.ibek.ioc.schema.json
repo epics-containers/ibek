@@ -32,9 +32,19 @@
           "type": "string"
         },
         "ADDR": {
-          "description": "The axis number (allowed to be from 0 to controller.numAxes-1)",
-          "title": "Addr",
-          "type": "integer"
+          "anyOf": [
+            {
+              "description": "jinja that renders to <class 'int'>",
+              "pattern": ".*\\{\\{.*\\}\\}.*",
+              "type": "string"
+            },
+            {
+              "description": "The axis number (allowed to be from 0 to controller.numAxes-1)",
+              "type": "integer"
+            }
+          ],
+          "description": "union of <class 'int'> and jinja representation of {typ}",
+          "title": "Addr"
         },
         "DESC": {
           "default": "Motor {{ADDR}}",
@@ -43,22 +53,52 @@
           "type": "string"
         },
         "DLLM": {
+          "anyOf": [
+            {
+              "description": "jinja that renders to <class 'int'>",
+              "pattern": ".*\\{\\{.*\\}\\}.*",
+              "type": "string"
+            },
+            {
+              "description": "The low limit of the axis (in counts)",
+              "type": "integer"
+            }
+          ],
           "default": -20000,
-          "description": "The low limit of the axis (in counts)",
-          "title": "Dllm",
-          "type": "integer"
+          "description": "union of <class 'int'> and jinja representation of {typ}",
+          "title": "Dllm"
         },
         "DHLM": {
+          "anyOf": [
+            {
+              "description": "jinja that renders to <class 'int'>",
+              "pattern": ".*\\{\\{.*\\}\\}.*",
+              "type": "string"
+            },
+            {
+              "description": "The high limit of the axis (in counts)",
+              "type": "integer"
+            }
+          ],
           "default": 20000,
-          "description": "The high limit of the axis (in counts)",
-          "title": "Dhlm",
-          "type": "integer"
+          "description": "union of <class 'int'> and jinja representation of {typ}",
+          "title": "Dhlm"
         },
         "home": {
+          "anyOf": [
+            {
+              "description": "jinja that renders to <class 'int'>",
+              "pattern": ".*\\{\\{.*\\}\\}.*",
+              "type": "string"
+            },
+            {
+              "description": "The home position of the axis (in counts)",
+              "type": "integer"
+            }
+          ],
           "default": 0,
-          "description": "The home position of the axis (in counts)",
-          "title": "Home",
-          "type": "integer"
+          "description": "union of <class 'int'> and jinja representation of {typ}",
+          "title": "Home"
         },
         "start": {
           "default": "{{home}}",
@@ -67,19 +107,40 @@
           "type": "string"
         },
         "DIR": {
-          "allOf": [
+          "anyOf": [
             {
-              "$ref": "#/$defs/DIR"
+              "description": "jinja that renders to <enum 'DIR'>",
+              "pattern": ".*\\{\\{.*\\}\\}.*",
+              "type": "string"
+            },
+            {
+              "allOf": [
+                {
+                  "$ref": "#/$defs/DIR"
+                }
+              ],
+              "description": "The direction of the axis"
             }
           ],
           "default": 0,
-          "description": "The direction of the axis"
+          "description": "union of <enum 'DIR'> and jinja representation of {typ}",
+          "title": "Dir"
         },
         "VELO": {
+          "anyOf": [
+            {
+              "description": "jinja that renders to <class 'float'>",
+              "pattern": ".*\\{\\{.*\\}\\}.*",
+              "type": "string"
+            },
+            {
+              "description": "The velocity of the axis (in counts/sec)",
+              "type": "number"
+            }
+          ],
           "default": 10.0,
-          "description": "The velocity of the axis (in counts/sec)",
-          "title": "Velo",
-          "type": "number"
+          "description": "union of <class 'float'> and jinja representation of {typ}",
+          "title": "Velo"
         },
         "VMAX": {
           "default": "{{VELO}}",
@@ -88,16 +149,36 @@
           "type": "string"
         },
         "is_cs": {
+          "anyOf": [
+            {
+              "description": "jinja that renders to <class 'bool'>",
+              "pattern": ".*\\{\\{.*\\}\\}.*",
+              "type": "string"
+            },
+            {
+              "description": "Set to True if this axis a coordinate system axis",
+              "type": "boolean"
+            }
+          ],
           "default": false,
-          "description": "Set to True if this axis a coordinate system axis",
-          "title": "Is Cs",
-          "type": "boolean"
+          "description": "union of <class 'bool'> and jinja representation of {typ}",
+          "title": "Is Cs"
         },
         "CS_NUM": {
+          "anyOf": [
+            {
+              "description": "jinja that renders to <class 'int'>",
+              "pattern": ".*\\{\\{.*\\}\\}.*",
+              "type": "string"
+            },
+            {
+              "description": "The coordinate system number for this axis",
+              "type": "integer"
+            }
+          ],
           "default": 0,
-          "description": "The coordinate system number for this axis",
-          "title": "Cs Num",
-          "type": "integer"
+          "description": "union of <class 'int'> and jinja representation of {typ}",
+          "title": "Cs Num"
         }
       },
       "required": [
@@ -134,9 +215,19 @@
           "type": "string"
         },
         "numAxes": {
-          "description": "The number of axes to create",
-          "title": "Numaxes",
-          "type": "integer"
+          "anyOf": [
+            {
+              "description": "jinja that renders to <class 'int'>",
+              "pattern": ".*\\{\\{.*\\}\\}.*",
+              "type": "string"
+            },
+            {
+              "description": "The number of axes to create",
+              "type": "integer"
+            }
+          ],
+          "description": "union of <class 'int'> and jinja representation of {typ}",
+          "title": "Numaxes"
         },
         "port": {
           "description": "a reference to the asyn port for communication with the controller",

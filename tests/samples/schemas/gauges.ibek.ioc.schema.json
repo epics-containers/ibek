@@ -37,73 +37,168 @@
           "type": "string"
         },
         "priority": {
+          "anyOf": [
+            {
+              "description": "jinja that renders to <class 'int'>",
+              "pattern": ".*\\{\\{.*\\}\\}.*",
+              "type": "string"
+            },
+            {
+              "description": "Priority",
+              "type": "integer"
+            }
+          ],
           "default": 100,
-          "description": "Priority",
-          "title": "Priority",
-          "type": "integer"
+          "description": "union of <class 'int'> and jinja representation of {typ}",
+          "title": "Priority"
         },
         "noAuto_connect": {
+          "anyOf": [
+            {
+              "description": "jinja that renders to <class 'bool'>",
+              "pattern": ".*\\{\\{.*\\}\\}.*",
+              "type": "string"
+            },
+            {
+              "description": "Set to stop auto_connect",
+              "type": "boolean"
+            }
+          ],
           "default": false,
-          "description": "Set to stop auto_connect",
-          "title": "Noauto Connect",
-          "type": "boolean"
+          "description": "union of <class 'bool'> and jinja representation of {typ}",
+          "title": "Noauto Connect"
         },
         "noProcessEos": {
+          "anyOf": [
+            {
+              "description": "jinja that renders to <class 'bool'>",
+              "pattern": ".*\\{\\{.*\\}\\}.*",
+              "type": "string"
+            },
+            {
+              "description": "Set to avoid processing end of string",
+              "type": "boolean"
+            }
+          ],
           "default": false,
-          "description": "Set to avoid processing end of string",
-          "title": "Noprocesseos",
-          "type": "boolean"
+          "description": "union of <class 'bool'> and jinja representation of {typ}",
+          "title": "Noprocesseos"
         },
         "baud": {
+          "anyOf": [
+            {
+              "description": "jinja that renders to <class 'int'>",
+              "pattern": ".*\\{\\{.*\\}\\}.*",
+              "type": "string"
+            },
+            {
+              "description": "Baud Rate",
+              "type": "integer"
+            }
+          ],
           "default": 9600,
-          "description": "Baud Rate",
-          "title": "Baud",
-          "type": "integer"
+          "description": "union of <class 'int'> and jinja representation of {typ}",
+          "title": "Baud"
         },
         "parity": {
-          "allOf": [
+          "anyOf": [
             {
-              "$ref": "#/$defs/parity"
+              "description": "jinja that renders to <enum 'parity'>",
+              "pattern": ".*\\{\\{.*\\}\\}.*",
+              "type": "string"
+            },
+            {
+              "allOf": [
+                {
+                  "$ref": "#/$defs/parity"
+                }
+              ],
+              "description": "Parity"
             }
           ],
           "default": "none",
-          "description": "Parity"
+          "description": "union of <enum 'parity'> and jinja representation of {typ}",
+          "title": "Parity"
         },
         "crtscts": {
-          "allOf": [
+          "anyOf": [
             {
-              "$ref": "#/$defs/crtscts"
+              "description": "jinja that renders to <enum 'crtscts'>",
+              "pattern": ".*\\{\\{.*\\}\\}.*",
+              "type": "string"
+            },
+            {
+              "allOf": [
+                {
+                  "$ref": "#/$defs/crtscts"
+                }
+              ],
+              "description": "Set hardware flow control on"
             }
           ],
           "default": "N",
-          "description": "Set hardware flow control on"
+          "description": "union of <enum 'crtscts'> and jinja representation of {typ}",
+          "title": "Crtscts"
         },
         "stop": {
-          "allOf": [
+          "anyOf": [
             {
-              "$ref": "#/$defs/stop"
+              "description": "jinja that renders to <enum 'stop'>",
+              "pattern": ".*\\{\\{.*\\}\\}.*",
+              "type": "string"
+            },
+            {
+              "allOf": [
+                {
+                  "$ref": "#/$defs/stop"
+                }
+              ],
+              "description": "Stop Bits"
             }
           ],
           "default": "1",
-          "description": "Stop Bits"
+          "description": "union of <enum 'stop'> and jinja representation of {typ}",
+          "title": "Stop"
         },
         "disconnectOnReadTimeout": {
-          "allOf": [
+          "anyOf": [
             {
-              "$ref": "#/$defs/disconnectOnReadTimeout"
+              "description": "jinja that renders to <enum 'disconnectOnReadTimeout'>",
+              "pattern": ".*\\{\\{.*\\}\\}.*",
+              "type": "string"
+            },
+            {
+              "allOf": [
+                {
+                  "$ref": "#/$defs/disconnectOnReadTimeout"
+                }
+              ],
+              "description": "Disconnect when a read times out"
             }
           ],
           "default": "Y",
-          "description": "Disconnect when a read times out"
+          "description": "union of <enum 'disconnectOnReadTimeout'> and jinja representation of {typ}",
+          "title": "Disconnectonreadtimeout"
         },
         "bits": {
-          "allOf": [
+          "anyOf": [
             {
-              "$ref": "#/$defs/bits"
+              "description": "jinja that renders to <enum 'bits'>",
+              "pattern": ".*\\{\\{.*\\}\\}.*",
+              "type": "string"
+            },
+            {
+              "allOf": [
+                {
+                  "$ref": "#/$defs/bits"
+                }
+              ],
+              "description": "Bits"
             }
           ],
           "default": "8",
-          "description": "Bits"
+          "description": "union of <enum 'bits'> and jinja representation of {typ}",
+          "title": "Bits"
         }
       },
       "required": [

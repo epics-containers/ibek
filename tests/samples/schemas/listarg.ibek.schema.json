@@ -21,10 +21,20 @@
           "type": "string"
         },
         "friends": {
-          "description": "List of friends",
-          "items": {},
-          "title": "Friends",
-          "type": "array"
+          "anyOf": [
+            {
+              "description": "jinja that renders to <class 'list'>",
+              "pattern": ".*\\{\\{.*\\}\\}.*",
+              "type": "string"
+            },
+            {
+              "description": "List of friends",
+              "items": {},
+              "type": "array"
+            }
+          ],
+          "description": "union of <class 'list'> and jinja representation of {typ}",
+          "title": "Friends"
         }
       },
       "required": [
