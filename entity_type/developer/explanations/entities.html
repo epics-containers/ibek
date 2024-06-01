@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Modules, Definitions and Entities &#8212; ibek 3.0.0b6.dev10+gec460d89 documentation</title>
+    <title>Modules, Definitions and Entities &#8212; ibek 3.0.0b6.dev11+g93b5f597 documentation</title>
   
   
   
@@ -38,7 +38,7 @@
 <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=3ee479438cf8b5e0d341" />
   <script src="../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=3ee479438cf8b5e0d341"></script>
 
-    <script src="../../_static/documentation_options.js?v=c36be02e"></script>
+    <script src="../../_static/documentation_options.js?v=9ca86da9"></script>
     <script src="../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -1816,24 +1816,13 @@ the container or during container development.</p>
           <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
         <span class="p">},</span>
         <span class="s2">&quot;DIR&quot;</span><span class="p">:</span> <span class="p">{</span>
-          <span class="s2">&quot;anyOf&quot;</span><span class="p">:</span> <span class="p">[</span>
+          <span class="s2">&quot;allOf&quot;</span><span class="p">:</span> <span class="p">[</span>
             <span class="p">{</span>
-              <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;jinja that renders to &lt;enum &#39;DIR&#39;&gt;&quot;</span><span class="p">,</span>
-              <span class="s2">&quot;pattern&quot;</span><span class="p">:</span> <span class="s2">&quot;.*</span><span class="se">\\</span><span class="s2">{</span><span class="se">\\</span><span class="s2">{.*</span><span class="se">\\</span><span class="s2">}</span><span class="se">\\</span><span class="s2">}.*&quot;</span><span class="p">,</span>
-              <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
-            <span class="p">},</span>
-            <span class="p">{</span>
-              <span class="s2">&quot;allOf&quot;</span><span class="p">:</span> <span class="p">[</span>
-                <span class="p">{</span>
-                  <span class="s2">&quot;$ref&quot;</span><span class="p">:</span> <span class="s2">&quot;#/$defs/DIR&quot;</span>
-                <span class="p">}</span>
-              <span class="p">],</span>
-              <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;The direction of the axis&quot;</span>
+              <span class="s2">&quot;$ref&quot;</span><span class="p">:</span> <span class="s2">&quot;#/$defs/DIR&quot;</span>
             <span class="p">}</span>
           <span class="p">],</span>
           <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
-          <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;union of &lt;enum &#39;DIR&#39;&gt; and jinja representation of </span><span class="si">{typ}</span><span class="s2">&quot;</span><span class="p">,</span>
-          <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Dir&quot;</span>
+          <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;The direction of the axis&quot;</span>
         <span class="p">},</span>
         <span class="s2">&quot;VELO&quot;</span><span class="p">:</span> <span class="p">{</span>
           <span class="s2">&quot;anyOf&quot;</span><span class="p">:</span> <span class="p">[</span>

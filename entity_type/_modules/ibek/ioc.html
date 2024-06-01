@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>ibek.ioc &#8212; ibek 3.0.0b6.dev10+gec460d89 documentation</title>
+    <title>ibek.ioc &#8212; ibek 3.0.0b6.dev11+g93b5f597 documentation</title>
   
   
   
@@ -37,7 +37,7 @@
 <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=3ee479438cf8b5e0d341" />
   <script src="../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=3ee479438cf8b5e0d341"></script>
 
-    <script src="../../_static/documentation_options.js?v=c36be02e"></script>
+    <script src="../../_static/documentation_options.js?v=9ca86da9"></script>
     <script src="../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -460,6 +460,7 @@ document.write(`
 
 <span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
 
+<span class="kn">import</span> <span class="nn">json</span>
 <span class="kn">from</span> <span class="nn">enum</span> <span class="kn">import</span> <span class="n">Enum</span>
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Sequence</span>
 
@@ -536,7 +537,19 @@ document.write(`
             <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
                 <span class="c1"># Jinja expansion of any of the Entity&#39;s string args/values</span>
                 <span class="n">value</span> <span class="o">=</span> <span class="n">UTILS</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="n">entity_dict</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
-                <span class="nb">setattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">arg</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">value</span><span class="p">))</span>
+                <span class="c1"># this is a cheesy test - any better ideas please let me know</span>
+                <span class="k">if</span> <span class="s2">&quot;Union&quot;</span> <span class="ow">in</span> <span class="nb">str</span><span class="p">(</span><span class="n">model_field</span><span class="o">.</span><span class="n">annotation</span><span class="p">):</span>
+                    <span class="c1"># Args that were non strings and have been rendered by Jinja</span>
+                    <span class="c1"># must be coerced back into their original type</span>
+                    <span class="k">try</span><span class="p">:</span>
+                        <span class="c1"># shame I need the replace - why are jinja an json disagreeing?</span>
+                        <span class="n">value</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">value</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;&#39;&quot;</span><span class="p">,</span> <span class="s1">&#39;&quot;&#39;</span><span class="p">))</span>
+                    <span class="k">except</span><span class="p">:</span>
+                        <span class="nb">print</span><span class="p">(</span>
+                            <span class="sa">f</span><span class="s2">&quot;ERROR: fail to decode </span><span class="si">{</span><span class="n">value</span><span class="si">}</span><span class="s2"> as a </span><span class="si">{</span><span class="n">model_field</span><span class="o">.</span><span class="n">annotation</span><span class="si">}</span><span class="s2">&quot;</span>
+                        <span class="p">)</span>
+                        <span class="k">raise</span>
+                <span class="nb">setattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">arg</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
                 <span class="c1"># update the entity_dict with the rendered value</span>
                 <span class="n">entity_dict</span><span class="p">[</span><span class="n">arg</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
 
