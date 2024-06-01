@@ -1,0 +1,853 @@
+{
+  "$defs": {
+    "clock": {
+      "enum": [
+        "internal",
+        "external"
+      ],
+      "title": "clock",
+      "type": "string"
+    },
+    "debrate": {
+      "enum": [
+        "No_Debounce",
+        "1KHz",
+        "200Hz",
+        "100Hz",
+        "500Hz"
+      ],
+      "title": "debrate",
+      "type": "string"
+    },
+    "epics_EpicsCaMaxArrayBytes": {
+      "additionalProperties": false,
+      "properties": {
+        "entity_type": {
+          "const": "epics.EpicsCaMaxArrayBytes",
+          "description": "Set the maximum size in bytes for sending arrays over channel access",
+          "title": "Entity Type"
+        },
+        "entity_enabled": {
+          "default": true,
+          "description": "enable or disable this entity instance",
+          "title": "Entity Enabled",
+          "type": "boolean"
+        },
+        "max_bytes": {
+          "anyOf": [
+            {
+              "description": "jinja that renders to <class 'int'>",
+              "pattern": ".*\\{\\{.*\\}\\}.*",
+              "type": "string"
+            },
+            {
+              "description": "Max size in bytes for sending arrays over channel access",
+              "type": "integer"
+            }
+          ],
+          "default": 6000000,
+          "description": "union of <class 'int'> and jinja representation of {typ}",
+          "title": "Max Bytes"
+        }
+      },
+      "required": [
+        "entity_type"
+      ],
+      "title": "epics_EpicsCaMaxArrayBytes",
+      "type": "object"
+    },
+    "epics_EpicsEnvSet": {
+      "additionalProperties": false,
+      "properties": {
+        "entity_type": {
+          "const": "epics.EpicsEnvSet",
+          "description": "Set an environment variable in the ioc Shell",
+          "title": "Entity Type"
+        },
+        "entity_enabled": {
+          "default": true,
+          "description": "enable or disable this entity instance",
+          "title": "Entity Enabled",
+          "type": "boolean"
+        },
+        "name": {
+          "description": "Name of environment variable",
+          "title": "Name",
+          "type": "string"
+        },
+        "value": {
+          "description": "Value of environment variable",
+          "title": "Value",
+          "type": "string"
+        }
+      },
+      "required": [
+        "entity_type",
+        "name",
+        "value"
+      ],
+      "title": "epics_EpicsEnvSet",
+      "type": "object"
+    },
+    "epics_EpicsTsMinWest": {
+      "additionalProperties": false,
+      "properties": {
+        "entity_type": {
+          "const": "epics.EpicsTsMinWest",
+          "description": "Set the relative time zone minutes West relative to GMT (+/-720)",
+          "title": "Entity Type"
+        },
+        "entity_enabled": {
+          "default": true,
+          "description": "enable or disable this entity instance",
+          "title": "Entity Enabled",
+          "type": "boolean"
+        },
+        "minutes_west": {
+          "anyOf": [
+            {
+              "description": "jinja that renders to <class 'int'>",
+              "pattern": ".*\\{\\{.*\\}\\}.*",
+              "type": "string"
+            },
+            {
+              "description": "relative time zone minutes",
+              "type": "integer"
+            }
+          ],
+          "default": 0,
+          "description": "union of <class 'int'> and jinja representation of {typ}",
+          "title": "Minutes West"
+        }
+      },
+      "required": [
+        "entity_type"
+      ],
+      "title": "epics_EpicsTsMinWest",
+      "type": "object"
+    },
+    "epics_InterruptVectorVME": {
+      "additionalProperties": false,
+      "properties": {
+        "entity_type": {
+          "const": "epics.InterruptVectorVME",
+          "description": "Reserve a VME interrupt vector",
+          "title": "Entity Type"
+        },
+        "entity_enabled": {
+          "default": true,
+          "description": "enable or disable this entity instance",
+          "title": "Entity Enabled",
+          "type": "boolean"
+        },
+        "name": {
+          "description": "A name for an interrupt vector variable",
+          "title": "Name",
+          "type": "string"
+        },
+        "count": {
+          "anyOf": [
+            {
+              "description": "jinja that renders to <class 'int'>",
+              "pattern": ".*\\{\\{.*\\}\\}.*",
+              "type": "string"
+            },
+            {
+              "description": "The number of interrupt vectors to reserve",
+              "type": "integer"
+            }
+          ],
+          "default": 1,
+          "description": "union of <class 'int'> and jinja representation of {typ}",
+          "title": "Count"
+        },
+        "number": {
+          "default": "{{  __utils__.counter(\"InterruptVector\", start=192, stop=255, inc=count) }}",
+          "description": "Interrupt Vector number",
+          "title": "Number",
+          "type": "string"
+        }
+      },
+      "required": [
+        "entity_type",
+        "name"
+      ],
+      "title": "epics_InterruptVectorVME",
+      "type": "object"
+    },
+    "epics_PostStartupCommand": {
+      "additionalProperties": false,
+      "properties": {
+        "entity_type": {
+          "const": "epics.PostStartupCommand",
+          "description": "Adds an arbitrary command in the startup script after iocInit",
+          "title": "Entity Type"
+        },
+        "entity_enabled": {
+          "default": true,
+          "description": "enable or disable this entity instance",
+          "title": "Entity Enabled",
+          "type": "boolean"
+        },
+        "command": {
+          "default": "",
+          "description": "command string",
+          "title": "Command",
+          "type": "string"
+        }
+      },
+      "required": [
+        "entity_type"
+      ],
+      "title": "epics_PostStartupCommand",
+      "type": "object"
+    },
+    "epics_StartupCommand": {
+      "additionalProperties": false,
+      "properties": {
+        "entity_type": {
+          "const": "epics.StartupCommand",
+          "description": "Adds an arbitrary command in the startup script before iocInit",
+          "title": "Entity Type"
+        },
+        "entity_enabled": {
+          "default": true,
+          "description": "enable or disable this entity instance",
+          "title": "Entity Enabled",
+          "type": "boolean"
+        },
+        "command": {
+          "default": "",
+          "description": "command string",
+          "title": "Command",
+          "type": "string"
+        }
+      },
+      "required": [
+        "entity_type"
+      ],
+      "title": "epics_StartupCommand",
+      "type": "object"
+    },
+    "epics_dbpf": {
+      "additionalProperties": false,
+      "properties": {
+        "entity_type": {
+          "const": "epics.dbpf",
+          "description": "Set a PV value after iocInit",
+          "title": "Entity Type"
+        },
+        "entity_enabled": {
+          "default": true,
+          "description": "enable or disable this entity instance",
+          "title": "Entity Enabled",
+          "type": "boolean"
+        },
+        "pv": {
+          "description": "Name of PV",
+          "title": "Pv",
+          "type": "string"
+        },
+        "value": {
+          "description": "Value to set",
+          "title": "Value",
+          "type": "string"
+        }
+      },
+      "required": [
+        "entity_type",
+        "pv",
+        "value"
+      ],
+      "title": "epics_dbpf",
+      "type": "object"
+    },
+    "ibek__entity_factory__direction__1": {
+      "enum": [
+        "Mixed",
+        "Input",
+        "Output"
+      ],
+      "title": "direction",
+      "type": "string"
+    },
+    "ibek__entity_factory__direction__2": {
+      "enum": [
+        "inputs",
+        "low in/high out",
+        "outputs",
+        "low out/high in"
+      ],
+      "title": "direction",
+      "type": "string"
+    },
+    "ipac_Hy8001": {
+      "additionalProperties": false,
+      "properties": {
+        "entity_type": {
+          "const": "ipac.Hy8001",
+          "description": "TODO:ADD DESCRIPTION",
+          "title": "Entity Type"
+        },
+        "entity_enabled": {
+          "default": true,
+          "description": "enable or disable this entity instance",
+          "title": "Entity Enabled",
+          "type": "boolean"
+        },
+        "slot": {
+          "anyOf": [
+            {
+              "description": "jinja that renders to <class 'int'>",
+              "pattern": ".*\\{\\{.*\\}\\}.*",
+              "type": "string"
+            },
+            {
+              "description": "VME Slot number",
+              "type": "integer"
+            }
+          ],
+          "description": "union of <class 'int'> and jinja representation of {typ}",
+          "title": "Slot"
+        },
+        "direction": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/ibek__entity_factory__direction__1"
+            }
+          ],
+          "description": "Direction of digital IO"
+        },
+        "cardid": {
+          "anyOf": [
+            {
+              "description": "jinja that renders to <class 'int'>",
+              "pattern": ".*\\{\\{.*\\}\\}.*",
+              "type": "string"
+            },
+            {
+              "description": "cardid?",
+              "type": "integer"
+            }
+          ],
+          "description": "union of <class 'int'> and jinja representation of {typ}",
+          "title": "Cardid"
+        },
+        "intLevel": {
+          "anyOf": [
+            {
+              "description": "jinja that renders to <class 'int'>",
+              "pattern": ".*\\{\\{.*\\}\\}.*",
+              "type": "string"
+            },
+            {
+              "description": "intLevel?",
+              "type": "integer"
+            }
+          ],
+          "default": 0,
+          "description": "union of <class 'int'> and jinja representation of {typ}",
+          "title": "Intlevel"
+        },
+        "clock": {
+          "anyOf": [
+            {
+              "description": "jinja that renders to <class 'int'>",
+              "pattern": ".*\\{\\{.*\\}\\}.*",
+              "type": "string"
+            },
+            {
+              "description": "clock?",
+              "type": "integer"
+            }
+          ],
+          "default": 0,
+          "description": "union of <class 'int'> and jinja representation of {typ}",
+          "title": "Clock"
+        },
+        "scan": {
+          "anyOf": [
+            {
+              "description": "jinja that renders to <class 'int'>",
+              "pattern": ".*\\{\\{.*\\}\\}.*",
+              "type": "string"
+            },
+            {
+              "description": "scan?",
+              "type": "integer"
+            }
+          ],
+          "default": 0,
+          "description": "union of <class 'int'> and jinja representation of {typ}",
+          "title": "Scan"
+        },
+        "invertin": {
+          "anyOf": [
+            {
+              "description": "jinja that renders to <class 'bool'>",
+              "pattern": ".*\\{\\{.*\\}\\}.*",
+              "type": "string"
+            },
+            {
+              "description": "invertin?",
+              "type": "boolean"
+            }
+          ],
+          "default": false,
+          "description": "union of <class 'bool'> and jinja representation of {typ}",
+          "title": "Invertin"
+        },
+        "invertout": {
+          "anyOf": [
+            {
+              "description": "jinja that renders to <class 'bool'>",
+              "pattern": ".*\\{\\{.*\\}\\}.*",
+              "type": "string"
+            },
+            {
+              "description": "invertout?",
+              "type": "boolean"
+            }
+          ],
+          "default": false,
+          "description": "union of <class 'bool'> and jinja representation of {typ}",
+          "title": "Invertout"
+        },
+        "ip_support": {
+          "anyOf": [
+            {
+              "description": "jinja that renders to <class 'bool'>",
+              "pattern": ".*\\{\\{.*\\}\\}.*",
+              "type": "string"
+            },
+            {
+              "description": "ip_support?",
+              "type": "boolean"
+            }
+          ],
+          "default": false,
+          "description": "union of <class 'bool'> and jinja representation of {typ}",
+          "title": "Ip Support"
+        }
+      },
+      "required": [
+        "entity_type",
+        "slot",
+        "direction",
+        "cardid"
+      ],
+      "title": "ipac_Hy8001",
+      "type": "object"
+    },
+    "ipac_Hy8002": {
+      "additionalProperties": false,
+      "properties": {
+        "entity_type": {
+          "const": "ipac.Hy8002",
+          "description": "Configure a Hytec 8002 Carrier card",
+          "title": "Entity Type"
+        },
+        "entity_enabled": {
+          "default": true,
+          "description": "enable or disable this entity instance",
+          "title": "Entity Enabled",
+          "type": "boolean"
+        },
+        "slot": {
+          "anyOf": [
+            {
+              "description": "jinja that renders to <class 'int'>",
+              "pattern": ".*\\{\\{.*\\}\\}.*",
+              "type": "string"
+            },
+            {
+              "description": "VME Slot number",
+              "type": "integer"
+            }
+          ],
+          "description": "union of <class 'int'> and jinja representation of {typ}",
+          "title": "Slot"
+        },
+        "IPACid": {
+          "default": "IPAC{{ slot }}",
+          "description": "Identifier for this device",
+          "title": "Ipacid",
+          "type": "string"
+        },
+        "intLevel": {
+          "anyOf": [
+            {
+              "description": "jinja that renders to <class 'int'>",
+              "pattern": ".*\\{\\{.*\\}\\}.*",
+              "type": "string"
+            },
+            {
+              "description": "VME Interrupt Level",
+              "type": "integer"
+            }
+          ],
+          "default": 2,
+          "description": "union of <class 'int'> and jinja representation of {typ}",
+          "title": "Intlevel"
+        },
+        "test": {
+          "default": "{{ slot }}\n",
+          "description": "test",
+          "title": "Test",
+          "type": "string"
+        },
+        "interrupt_vector": {
+          "description": "Interrupt Vector reserved with epics.InterruptVectorVME, count=1",
+          "title": "Interrupt Vector"
+        },
+        "card_id": {
+          "default": "{{ __utils__.counter(\"Carriers\", start=0) }}",
+          "description": "Carrier Card Identifier",
+          "title": "Card Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "entity_type",
+        "slot",
+        "interrupt_vector"
+      ],
+      "title": "ipac_Hy8002",
+      "type": "object"
+    },
+    "ipac_Hy8005": {
+      "additionalProperties": false,
+      "properties": {
+        "entity_type": {
+          "const": "ipac.Hy8005",
+          "description": "TODO:ADD DESCRIPTION",
+          "title": "Entity Type"
+        },
+        "entity_enabled": {
+          "default": true,
+          "description": "enable or disable this entity instance",
+          "title": "Entity Enabled",
+          "type": "boolean"
+        },
+        "slot": {
+          "anyOf": [
+            {
+              "description": "jinja that renders to <class 'int'>",
+              "pattern": ".*\\{\\{.*\\}\\}.*",
+              "type": "string"
+            },
+            {
+              "description": "VME Slot number",
+              "type": "integer"
+            }
+          ],
+          "description": "union of <class 'int'> and jinja representation of {typ}",
+          "title": "Slot"
+        },
+        "cardnum": {
+          "anyOf": [
+            {
+              "description": "jinja that renders to <class 'int'>",
+              "pattern": ".*\\{\\{.*\\}\\}.*",
+              "type": "string"
+            },
+            {
+              "description": "Card number",
+              "type": "integer"
+            }
+          ],
+          "description": "union of <class 'int'> and jinja representation of {typ}",
+          "title": "Cardnum"
+        },
+        "int_level": {
+          "anyOf": [
+            {
+              "description": "jinja that renders to <class 'int'>",
+              "pattern": ".*\\{\\{.*\\}\\}.*",
+              "type": "string"
+            },
+            {
+              "description": "VME Interrupt Level",
+              "type": "integer"
+            }
+          ],
+          "default": 1,
+          "description": "union of <class 'int'> and jinja representation of {typ}",
+          "title": "Int Level"
+        },
+        "hs_int": {
+          "anyOf": [
+            {
+              "description": "jinja that renders to <class 'int'>",
+              "pattern": ".*\\{\\{.*\\}\\}.*",
+              "type": "string"
+            },
+            {
+              "description": "Dunno actually",
+              "type": "integer"
+            }
+          ],
+          "default": 0,
+          "description": "union of <class 'int'> and jinja representation of {typ}",
+          "title": "Hs Int"
+        }
+      },
+      "required": [
+        "entity_type",
+        "slot",
+        "cardnum"
+      ],
+      "title": "ipac_Hy8005",
+      "type": "object"
+    },
+    "ipac_Hy8005_Channel": {
+      "additionalProperties": false,
+      "properties": {
+        "entity_type": {
+          "const": "ipac.Hy8005_Channel",
+          "description": "TODO:ADD DESCRIPTION",
+          "title": "Entity Type"
+        },
+        "entity_enabled": {
+          "default": true,
+          "description": "enable or disable this entity instance",
+          "title": "Entity Enabled",
+          "type": "boolean"
+        },
+        "parent": {
+          "description": "Hy8005 card",
+          "title": "Parent"
+        },
+        "ipslot": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/ipslot"
+            }
+          ],
+          "description": "IP slot"
+        },
+        "cardnum": {
+          "anyOf": [
+            {
+              "description": "jinja that renders to <class 'int'>",
+              "pattern": ".*\\{\\{.*\\}\\}.*",
+              "type": "string"
+            },
+            {
+              "description": "EPICS card identification",
+              "type": "integer"
+            }
+          ],
+          "description": "union of <class 'int'> and jinja representation of {typ}",
+          "title": "Cardnum"
+        },
+        "debrate": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/debrate"
+            }
+          ],
+          "description": "debrate"
+        },
+        "pwidth": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/pwidth"
+            }
+          ],
+          "default": 0,
+          "description": "pwidth"
+        },
+        "scanrate": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/scanrate"
+            }
+          ],
+          "default": 0,
+          "description": "scanrate"
+        },
+        "direction": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/ibek__entity_factory__direction__2"
+            }
+          ],
+          "default": 0,
+          "description": "direction"
+        },
+        "clock": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/clock"
+            }
+          ],
+          "default": 0,
+          "description": "clock"
+        },
+        "invertInputs": {
+          "anyOf": [
+            {
+              "description": "jinja that renders to <class 'bool'>",
+              "pattern": ".*\\{\\{.*\\}\\}.*",
+              "type": "string"
+            },
+            {
+              "description": "invert inputs",
+              "type": "boolean"
+            }
+          ],
+          "default": false,
+          "description": "union of <class 'bool'> and jinja representation of {typ}",
+          "title": "Invertinputs"
+        },
+        "invertOutputs": {
+          "anyOf": [
+            {
+              "description": "jinja that renders to <class 'bool'>",
+              "pattern": ".*\\{\\{.*\\}\\}.*",
+              "type": "string"
+            },
+            {
+              "description": "invert outputs",
+              "type": "boolean"
+            }
+          ],
+          "default": false,
+          "description": "union of <class 'bool'> and jinja representation of {typ}",
+          "title": "Invertoutputs"
+        }
+      },
+      "required": [
+        "entity_type",
+        "parent",
+        "ipslot",
+        "cardnum",
+        "debrate"
+      ],
+      "title": "ipac_Hy8005_Channel",
+      "type": "object"
+    },
+    "ipslot": {
+      "enum": [
+        "A",
+        "C",
+        "B",
+        "D"
+      ],
+      "title": "ipslot",
+      "type": "string"
+    },
+    "pwidth": {
+      "enum": [
+        "100sec",
+        "5sec",
+        "10sec",
+        "1sec",
+        "10msec",
+        "20sec",
+        "100msec",
+        "2sec",
+        "50sec",
+        "1msec"
+      ],
+      "title": "pwidth",
+      "type": "string"
+    },
+    "scanrate": {
+      "enum": [
+        "1MHz",
+        "100KHz",
+        "10KHz",
+        "1KHz"
+      ],
+      "title": "scanrate",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "ioc_name": {
+      "description": "Name of IOC instance",
+      "title": "Ioc Name",
+      "type": "string"
+    },
+    "description": {
+      "description": "Description of what the IOC does",
+      "title": "Description",
+      "type": "string"
+    },
+    "entities": {
+      "description": "List of entities this IOC instantiates",
+      "items": {
+        "discriminator": {
+          "mapping": {
+            "epics.EpicsCaMaxArrayBytes": "#/$defs/epics_EpicsCaMaxArrayBytes",
+            "epics.EpicsEnvSet": "#/$defs/epics_EpicsEnvSet",
+            "epics.EpicsTsMinWest": "#/$defs/epics_EpicsTsMinWest",
+            "epics.InterruptVectorVME": "#/$defs/epics_InterruptVectorVME",
+            "epics.PostStartupCommand": "#/$defs/epics_PostStartupCommand",
+            "epics.StartupCommand": "#/$defs/epics_StartupCommand",
+            "epics.dbpf": "#/$defs/epics_dbpf",
+            "ipac.Hy8001": "#/$defs/ipac_Hy8001",
+            "ipac.Hy8002": "#/$defs/ipac_Hy8002",
+            "ipac.Hy8005": "#/$defs/ipac_Hy8005",
+            "ipac.Hy8005_Channel": "#/$defs/ipac_Hy8005_Channel"
+          },
+          "propertyName": "entity_type"
+        },
+        "oneOf": [
+          {
+            "$ref": "#/$defs/ipac_Hy8002"
+          },
+          {
+            "$ref": "#/$defs/ipac_Hy8001"
+          },
+          {
+            "$ref": "#/$defs/ipac_Hy8005"
+          },
+          {
+            "$ref": "#/$defs/ipac_Hy8005_Channel"
+          },
+          {
+            "$ref": "#/$defs/epics_EpicsCaMaxArrayBytes"
+          },
+          {
+            "$ref": "#/$defs/epics_EpicsTsMinWest"
+          },
+          {
+            "$ref": "#/$defs/epics_dbpf"
+          },
+          {
+            "$ref": "#/$defs/epics_EpicsEnvSet"
+          },
+          {
+            "$ref": "#/$defs/epics_StartupCommand"
+          },
+          {
+            "$ref": "#/$defs/epics_PostStartupCommand"
+          },
+          {
+            "$ref": "#/$defs/epics_InterruptVectorVME"
+          }
+        ]
+      },
+      "title": "Entities",
+      "type": "array"
+    },
+    "shared": {
+      "default": [],
+      "description": "A place to create any anchors required for repeating YAML",
+      "items": {},
+      "title": "Shared",
+      "type": "array"
+    }
+  },
+  "required": [
+    "ioc_name",
+    "description",
+    "entities"
+  ],
+  "title": "NewIOC",
+  "type": "object"
+}
