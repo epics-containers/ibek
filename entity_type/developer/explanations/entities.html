@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Modules, Definitions and Entities &#8212; ibek 3.0.0b6.dev8+gf4227138 documentation</title>
+    <title>Modules, Definitions and Entities &#8212; ibek 3.0.0b6.dev9+g384ca1fa documentation</title>
   
   
   
@@ -38,7 +38,7 @@
 <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=3ee479438cf8b5e0d341" />
   <script src="../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=3ee479438cf8b5e0d341"></script>
 
-    <script src="../../_static/documentation_options.js?v=45e1847e"></script>
+    <script src="../../_static/documentation_options.js?v=51e67449"></script>
     <script src="../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -566,27 +566,27 @@ defs:
       Creates a simulation motion controller
 
     args:
-      - type: id
+      - arg_type: id
         name: controllerName
         description: |-
           The name of the controller and its Asyn Port Name
 
-      - type: str
+      - arg_type: str
         name: P
         description: |-
           Device PV Prefix
 
-      - type: int
+      - arg_type: int
         name: numAxes
         description: |-
           The number of axes to create
 
-      - type: object
+      - arg_type: object
         name: port
         description: |-
           a reference to the asyn port for communication with the controller
 
-      - type: str
+      - arg_type: str
         name: DESC
         description: |-
           The description of the controller
@@ -617,52 +617,52 @@ defs:
       Creates a simulation motor axis
 
     args:
-      - type: object
+      - arg_type: object
         name: controller
         description: |-
           a reference to the motion controller
 
-      - type: str
+      - arg_type: str
         name: M
         description: |-
           PV suffix for the motor record
 
-      - type: int
+      - arg_type: int
         name: ADDR
         description: |-
           The axis number (allowed to be from 0 to controller.numAxes-1)
 
-      - type: str
+      - arg_type: str
         name: DESC
         description: |-
           The description of the axis
         default: &quot;Motor {{ADDR}}&quot;
 
-      - type: int
+      - arg_type: int
         name: DLLM
         description: |-
           The low limit of the axis (in counts)
         default: -20000
 
-      - type: int
+      - arg_type: int
         name: DHLM
         description: |-
           The high limit of the axis (in counts)
         default: 20000
 
-      - type: int
+      - arg_type: int
         name: home
         description: |-
           The home position of the axis (in counts)
         default: 0
 
-      - type: str # int or jinja string
+      - arg_type: str # int or jinja string
         name: start
         description: |-
           The starting position of the axis (in counts)
         default: &quot;{{home}}&quot;
 
-      - type: enum
+      - arg_type: enum
         name: DIR
         description: |-
           The direction of the axis
@@ -671,25 +671,25 @@ defs:
           Pos: 0
           Neg: 1
 
-      - type: float
+      - arg_type: float
         name: VELO
         description: |-
           The velocity of the axis (in counts/sec)
         default: 10.0
 
-      - type: str # float or jinja string
+      - arg_type: str # float or jinja string
         name: VMAX
         description: |-
           The maximum velocity of the axis (in counts/sec)
         default: &quot;{{VELO}}&quot;
 
-      - type: bool
+      - arg_type: bool
         name: is_cs
         description: |-
           Set to True if this axis a coordinate system axis
         default: false
 
-      - type: int
+      - arg_type: int
         name: CS_NUM
         description: |-
           The coordinate system number for this axis
@@ -970,10 +970,10 @@ the container or during container development.</p>
       <span class="s2">&quot;additionalProperties&quot;</span><span class="p">:</span> <span class="n">false</span><span class="p">,</span>
       <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;An argument with an bool value&quot;</span><span class="p">,</span>
       <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span>
-        <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;arg_type&quot;</span><span class="p">:</span> <span class="p">{</span>
           <span class="s2">&quot;const&quot;</span><span class="p">:</span> <span class="s2">&quot;bool&quot;</span><span class="p">,</span>
           <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="s2">&quot;bool&quot;</span><span class="p">,</span>
-          <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Type&quot;</span>
+          <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Arg Type&quot;</span>
         <span class="p">},</span>
         <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="p">{</span>
           <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Name of the argument that the IOC instance should pass&quot;</span><span class="p">,</span>
@@ -1009,10 +1009,10 @@ the container or during container development.</p>
       <span class="s2">&quot;additionalProperties&quot;</span><span class="p">:</span> <span class="n">false</span><span class="p">,</span>
       <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;A script snippet that will have &#39;# &#39; prepended to every line</span><span class="se">\n</span><span class="s2">for insertion into the startup script&quot;</span><span class="p">,</span>
       <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span>
-        <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;arg_type&quot;</span><span class="p">:</span> <span class="p">{</span>
           <span class="s2">&quot;const&quot;</span><span class="p">:</span> <span class="s2">&quot;comment&quot;</span><span class="p">,</span>
           <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="s2">&quot;comment&quot;</span><span class="p">,</span>
-          <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Type&quot;</span>
+          <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Arg Type&quot;</span>
         <span class="p">},</span>
         <span class="s2">&quot;when&quot;</span><span class="p">:</span> <span class="p">{</span>
           <span class="s2">&quot;allOf&quot;</span><span class="p">:</span> <span class="p">[</span>
@@ -1089,7 +1089,21 @@ the container or during container development.</p>
           <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="p">[],</span>
           <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;The arguments IOC instance should supply&quot;</span><span class="p">,</span>
           <span class="s2">&quot;items&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s2">&quot;anyOf&quot;</span><span class="p">:</span> <span class="p">[</span>
+            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;union of arg types&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;discriminator&quot;</span><span class="p">:</span> <span class="p">{</span>
+              <span class="s2">&quot;mapping&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;bool&quot;</span><span class="p">:</span> <span class="s2">&quot;#/$defs/BoolArg&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;enum&quot;</span><span class="p">:</span> <span class="s2">&quot;#/$defs/EnumArg&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;float&quot;</span><span class="p">:</span> <span class="s2">&quot;#/$defs/FloatArg&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="s2">&quot;#/$defs/IdArg&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;int&quot;</span><span class="p">:</span> <span class="s2">&quot;#/$defs/IntArg&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;list&quot;</span><span class="p">:</span> <span class="s2">&quot;#/$defs/ListArg&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;object&quot;</span><span class="p">:</span> <span class="s2">&quot;#/$defs/ObjectArg&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;str&quot;</span><span class="p">:</span> <span class="s2">&quot;#/$defs/StrArg&quot;</span>
+              <span class="p">},</span>
+              <span class="s2">&quot;propertyName&quot;</span><span class="p">:</span> <span class="s2">&quot;arg_type&quot;</span>
+            <span class="p">},</span>
+            <span class="s2">&quot;oneOf&quot;</span><span class="p">:</span> <span class="p">[</span>
               <span class="p">{</span>
                 <span class="s2">&quot;$ref&quot;</span><span class="p">:</span> <span class="s2">&quot;#/$defs/ListArg&quot;</span>
               <span class="p">},</span>
@@ -1277,10 +1291,10 @@ the container or during container development.</p>
       <span class="s2">&quot;additionalProperties&quot;</span><span class="p">:</span> <span class="n">false</span><span class="p">,</span>
       <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;An argument with an enum value&quot;</span><span class="p">,</span>
       <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span>
-        <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;arg_type&quot;</span><span class="p">:</span> <span class="p">{</span>
           <span class="s2">&quot;const&quot;</span><span class="p">:</span> <span class="s2">&quot;enum&quot;</span><span class="p">,</span>
           <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="s2">&quot;enum&quot;</span><span class="p">,</span>
-          <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Type&quot;</span>
+          <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Arg Type&quot;</span>
         <span class="p">},</span>
         <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="p">{</span>
           <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Name of the argument that the IOC instance should pass&quot;</span><span class="p">,</span>
@@ -1342,10 +1356,10 @@ the container or during container development.</p>
       <span class="s2">&quot;additionalProperties&quot;</span><span class="p">:</span> <span class="n">false</span><span class="p">,</span>
       <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;An argument with a float value&quot;</span><span class="p">,</span>
       <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span>
-        <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;arg_type&quot;</span><span class="p">:</span> <span class="p">{</span>
           <span class="s2">&quot;const&quot;</span><span class="p">:</span> <span class="s2">&quot;float&quot;</span><span class="p">,</span>
           <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="s2">&quot;float&quot;</span><span class="p">,</span>
-          <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Type&quot;</span>
+          <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Arg Type&quot;</span>
         <span class="p">},</span>
         <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="p">{</span>
           <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Name of the argument that the IOC instance should pass&quot;</span><span class="p">,</span>
@@ -1381,10 +1395,10 @@ the container or during container development.</p>
       <span class="s2">&quot;additionalProperties&quot;</span><span class="p">:</span> <span class="n">false</span><span class="p">,</span>
       <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Explicit ID argument that an object can refer to&quot;</span><span class="p">,</span>
       <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span>
-        <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;arg_type&quot;</span><span class="p">:</span> <span class="p">{</span>
           <span class="s2">&quot;const&quot;</span><span class="p">:</span> <span class="s2">&quot;id&quot;</span><span class="p">,</span>
           <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="s2">&quot;id&quot;</span><span class="p">,</span>
-          <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Type&quot;</span>
+          <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Arg Type&quot;</span>
         <span class="p">},</span>
         <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="p">{</span>
           <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Name of the argument that the IOC instance should pass&quot;</span><span class="p">,</span>
@@ -1420,10 +1434,10 @@ the container or during container development.</p>
       <span class="s2">&quot;additionalProperties&quot;</span><span class="p">:</span> <span class="n">false</span><span class="p">,</span>
       <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;An argument with an int value&quot;</span><span class="p">,</span>
       <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span>
-        <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;arg_type&quot;</span><span class="p">:</span> <span class="p">{</span>
           <span class="s2">&quot;const&quot;</span><span class="p">:</span> <span class="s2">&quot;int&quot;</span><span class="p">,</span>
           <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="s2">&quot;int&quot;</span><span class="p">,</span>
-          <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Type&quot;</span>
+          <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Arg Type&quot;</span>
         <span class="p">},</span>
         <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="p">{</span>
           <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Name of the argument that the IOC instance should pass&quot;</span><span class="p">,</span>
@@ -1459,10 +1473,10 @@ the container or during container development.</p>
       <span class="s2">&quot;additionalProperties&quot;</span><span class="p">:</span> <span class="n">false</span><span class="p">,</span>
       <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;An argument with a float value&quot;</span><span class="p">,</span>
       <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span>
-        <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;arg_type&quot;</span><span class="p">:</span> <span class="p">{</span>
           <span class="s2">&quot;const&quot;</span><span class="p">:</span> <span class="s2">&quot;list&quot;</span><span class="p">,</span>
           <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="s2">&quot;list&quot;</span><span class="p">,</span>
-          <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Type&quot;</span>
+          <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Arg Type&quot;</span>
         <span class="p">},</span>
         <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="p">{</span>
           <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Name of the argument that the IOC instance should pass&quot;</span><span class="p">,</span>
@@ -1499,10 +1513,10 @@ the container or during container development.</p>
       <span class="s2">&quot;additionalProperties&quot;</span><span class="p">:</span> <span class="n">false</span><span class="p">,</span>
       <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;A reference to another entity defined in this IOC&quot;</span><span class="p">,</span>
       <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span>
-        <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;arg_type&quot;</span><span class="p">:</span> <span class="p">{</span>
           <span class="s2">&quot;const&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span>
           <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span>
-          <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Type&quot;</span>
+          <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Arg Type&quot;</span>
         <span class="p">},</span>
         <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="p">{</span>
           <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Name of the argument that the IOC instance should pass&quot;</span><span class="p">,</span>
@@ -1538,10 +1552,10 @@ the container or during container development.</p>
       <span class="s2">&quot;additionalProperties&quot;</span><span class="p">:</span> <span class="n">false</span><span class="p">,</span>
       <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;An argument with a str value&quot;</span><span class="p">,</span>
       <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span>
-        <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;arg_type&quot;</span><span class="p">:</span> <span class="p">{</span>
           <span class="s2">&quot;const&quot;</span><span class="p">:</span> <span class="s2">&quot;str&quot;</span><span class="p">,</span>
           <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="s2">&quot;str&quot;</span><span class="p">,</span>
-          <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Type&quot;</span>
+          <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Arg Type&quot;</span>
         <span class="p">},</span>
         <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="p">{</span>
           <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Name of the argument that the IOC instance should pass&quot;</span><span class="p">,</span>
@@ -1599,10 +1613,10 @@ the container or during container development.</p>
       <span class="s2">&quot;additionalProperties&quot;</span><span class="p">:</span> <span class="n">false</span><span class="p">,</span>
       <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;A script snippet to insert into the startup script&quot;</span><span class="p">,</span>
       <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span>
-        <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;arg_type&quot;</span><span class="p">:</span> <span class="p">{</span>
           <span class="s2">&quot;const&quot;</span><span class="p">:</span> <span class="s2">&quot;text&quot;</span><span class="p">,</span>
           <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="s2">&quot;text&quot;</span><span class="p">,</span>
-          <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Type&quot;</span>
+          <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Arg Type&quot;</span>
         <span class="p">},</span>
         <span class="s2">&quot;when&quot;</span><span class="p">:</span> <span class="p">{</span>
           <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="s2">&quot;every&quot;</span><span class="p">,</span>
