@@ -12,7 +12,9 @@ Lister does not like to hear "Smoke me a kipper, I'll be back for breakfast" has
 First friend is Rimmer
 Lister does not like to hear "Smoke me a kipper, I'll be back for breakfast" has friends:
 - Rimmer
-- tt
+- Parallel Holly
+- Parallel Holly
+- Parallel Holly
 First friend is Rimmer
 
 dbLoadRecords /epics/runtime/ioc.db

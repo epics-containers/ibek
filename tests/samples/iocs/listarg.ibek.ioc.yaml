@@ -8,4 +8,4 @@ entities:
 
   - type: listtest.lister
     friends: |-
-      {{  ["Rimmer"] + ["tt"] | list }}
+      {{ ["Rimmer"] + ["Parallel Holly"] * 3  }}
