@@ -10,7 +10,7 @@ defs:
     description: |
       Reserve an interrupt vector for use with VME hardware.
     args:
-      - arg_type: id
+      - type: id
         name: name
         description: A name for an interrupt vector variable
 
@@ -27,17 +27,17 @@ defs:
         value: '{{  __utils__.counter("InterruptVector", start=192, stop=255) }}'
 
     pre_init:
-      - arg_type: comment
+      - type: comment
         value: global "magic" is {{ get_global }}
-      - arg_type: comment
+      - type: comment
         value: counter "InterruptVector" is now {{ __utils__.counter("InterruptVector", start=192, stop=255) }}
-      - arg_type: comment
+      - type: comment
         value: counter "InterruptVector" is now {{ __utils__.counter("InterruptVector", start=192, stop=255) }}
 
   - name: InterruptVectorVME2
     description: naughty second use of same counter
     args:
-      - arg_type: id
+      - type: id
         name: name
         description: A name for an interrupt vector variable
 

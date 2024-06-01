@@ -102,7 +102,7 @@ class EntityFactory:
             # TODO - don't understand why I need type ignore here
             # arg is 'discriminated' which is a Union of all the Arg subclasses
             full_arg_name = f"{full_name}.{arg.name}"  # type: ignore
-            arg_type: Any
+            type: Any
 
             if isinstance(arg, ObjectArg):
                 # TODO look into why arg.name requires type ignore
@@ -111,10 +111,10 @@ class EntityFactory:
                     return get_entity_by_id(id)
 
                 validators[full_arg_name] = lookup_instance
-                arg_type = object
+                type = object
 
             elif isinstance(arg, IdArg):
-                arg_type = str
+                type = str
 
             elif isinstance(arg, EnumArg):
                 # Pydantic uses the values of the Enum as the options in the schema.
@@ -125,13 +125,13 @@ class EntityFactory:
                     enum_swapped[str(v) if v else str(k)] = k
                 # TODO review enums especially with respect to Pydantic 2.7.1
                 val_enum = EnumVal(arg.name, enum_swapped)  # type: ignore
-                arg_type = val_enum
+                type = val_enum
 
             else:
-                # arg.arg_type is str, int, float, etc.
-                arg_type = getattr(builtins, arg.arg_type)
+                # arg.type is str, int, float, etc.
+                type = getattr(builtins, arg.type)
             # TODO look into why arg.name requires type ignore
-            add_arg(arg.name, arg_type, arg.description, getattr(arg, "default"))  # type: ignore
+            add_arg(arg.name, type, arg.description, getattr(arg, "default"))  # type: ignore
 
         # add in the calculated values Jinja Templates as Fields in the Entity
         for value in definition.values:

@@ -8,32 +8,32 @@ defs:
       Creates a Technosoft motion controller connected to a serial line
 
     args:
-      - arg_type: id
+      - type: id
         name: controllerName
         description: |-
           The name of the controller
-      - arg_type: str
+      - type: str
         name: P
         description: |-
           Device PV Prefix
 
-      - arg_type: str
+      - type: str
         name: TTY
         description: |-
           TTY
 
-      - arg_type: int
+      - type: int
         name: numAxes
         description: |-
           The number of axes to create
         default: 1
 
-      - arg_type: int
+      - type: int
         name: hostid
         description: |-
           Host ID
 
-      - arg_type: str
+      - type: str
         name: CONFIG
         description: |-
           TML Configuration
@@ -53,35 +53,35 @@ defs:
       Creates a motor axis
 
     args:
-      - arg_type: object
+      - type: object
         name: controller
         description: |-
           a reference to the motion controller
 
-      - arg_type: str
+      - type: str
         name: CHANNEL_PREFIX
         description: |-
           The axis prefix
         default: ax0
 
-      - arg_type: str
+      - type: str
         name: CHANNEL_ID
         description: |-
           The axis ID
         default: MOT
 
-      - arg_type: int
+      - type: int
         name: axid
         description: |-
           The axis ID
 
-      - arg_type: str
+      - type: str
         name: axconf
         description: |-
           The axis configuration
         default: star_vat_phs.t.zip
 
-      - arg_type: enum
+      - type: enum
         name: homing
         description: |-
           Homing direction
@@ -90,109 +90,109 @@ defs:
           LSN:
           LSP:
 
-      - arg_type: int
+      - type: int
         name: NSTEPS
         description: |-
           Number of steps
         default: 200
 
-      - arg_type: int
+      - type: int
         name: NMICROSTEPS
         description: |-
           Number of microsteps
         default: 256
 
-      - arg_type: int
+      - type: int
         name: VELO
         description: |-
           Velocity
         default: 20
 
-      - arg_type: float
+      - type: float
         name: VELO_MIN
         description: |-
           Velocity min
         default: 0.1
 
-      - arg_type: float
+      - type: float
         name: VELO_MAX
         description: |-
           Velocity Max
         default: 50
 
-      - arg_type: float
+      - type: float
         name: ACCL
         description: |-
           Seconds to Velocity
         default: 0.5
 
-      - arg_type: float
+      - type: float
         name: ACCL_MIN
         description: |-
           Seconds to Velocity
         default: 0.01
 
-      - arg_type: float
+      - type: float
         name: ACCL_MAX
         description: |-
           Seconds to Velocity
         default: 1.5
 
-      - arg_type: float
+      - type: float
         name: HAR
         description: |-
           Homing acceleration
         default: 0.5
 
-      - arg_type: float
+      - type: float
         name: HVEL
         description: |-
           Homing Velocity
         default: 10
 
-      - arg_type: int
+      - type: int
         name: JAR
         description: |-
           JAR
         default: 1
 
-      - arg_type: int
+      - type: int
         name: JVEL
         description: |-
           JVEL
         default: 5
 
-      - arg_type: str
+      - type: str
         name: EGU
         description: |-
           Engineering Units
         default: "ustep"
 
-      - arg_type: float
+      - type: float
         name: SLSP
         description: |-
           Limit
         default: 0.8
 
-      - arg_type: int
+      - type: int
         name: ENABLED
         description: |-
           Enabled
         default: 1
 
-      - arg_type: int
+      - type: int
         name: TIMEOUT
         description: |-
           Timeout
         default: 0
 
-      - arg_type: str
+      - type: str
         name: ASYN_ADDR
         description: |-
           Asyn Addr?
         default: "0"
 
-      - arg_type: str
+      - type: str
         name: CONFIG
         description: |-
           Axis configuration string to add to the controller configuration

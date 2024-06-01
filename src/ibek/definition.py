@@ -68,7 +68,7 @@ class Comment(BaseSettings):
     for insertion into the startup script
     """
 
-    arg_type: Literal["comment"] = "comment"
+    type: Literal["comment"] = "comment"
     when: When = Field(description="One of first / every / last", default="every")
     value: str = Field(
         description="A comment to add into the startup script", default=""
@@ -80,7 +80,7 @@ class Text(BaseSettings):
     A script snippet to insert into the startup script
     """
 
-    arg_type: Literal["text"] = "text"
+    type: Literal["text"] = "text"
     when: str = Field(description="One of first / every / last", default="every")
     value: str = Field(description="raw text to add to the startup script", default="")
 
@@ -117,7 +117,7 @@ class EntityPVI(BaseSettings):
 
 discriminated = Annotated[  # type: ignore
     Union[tuple(Arg.__subclasses__())],
-    Field(discriminator="arg_type", description="union of arg types"),
+    Field(discriminator="type", description="union of arg types"),
 ]
 
 

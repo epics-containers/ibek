@@ -5,7 +5,7 @@ defs:
   - name: EpicsCaMaxArrayBytes
     description: Set the maximum size in bytes for sending arrays over channel access
     args:
-      - arg_type: int
+      - type: int
         name: max_bytes
         description: Max size in bytes for sending arrays over channel access
         default: 6000000
@@ -16,7 +16,7 @@ defs:
   - name: EpicsTsMinWest
     description: Set the relative time zone minutes West relative to GMT (+/-720)
     args:
-      - arg_type: int
+      - type: int
         name: minutes_west
         description: relative time zone minutes
         default: 0
@@ -27,10 +27,10 @@ defs:
   - name: dbpf
     description: Set a PV value after iocInit
     args:
-      - arg_type: str
+      - type: str
         name: pv
         description: Name of PV
-      - arg_type: str
+      - type: str
         name: value
         description: Value to set
     post_init:
@@ -39,10 +39,10 @@ defs:
   - name: EpicsEnvSet
     description: Set an environment variable in the ioc Shell
     args:
-      - arg_type: str
+      - type: str
         name: name
         description: Name of environment variable
-      - arg_type: str
+      - type: str
         name: value
         description: Value of environment variable
     env_vars:
@@ -52,33 +52,33 @@ defs:
   - name: StartupCommand
     description: Adds an arbitrary command in the startup script before iocInit
     args:
-      - arg_type: str
+      - type: str
         name: command
         description: command string
         default: ""
     pre_init:
-      - arg_type: text
+      - type: text
         value: "{{ command }}"
 
   - name: PostStartupCommand
     description: Adds an arbitrary command in the startup script after iocInit
     args:
-      - arg_type: str
+      - type: str
         name: command
         description: command string
         default: ""
     post_init:
-      - arg_type: text
+      - type: text
         value: "{{ command }}"
 
   - name: InterruptVectorVME
     description: Reserve a VME interrupt vector
     args:
-      - arg_type: id
+      - type: id
         name: name
         description: A name for an interrupt vector variable
 
-      - arg_type: int
+      - type: int
         name: count
         description: The number of interrupt vectors to reserve
         default: 1

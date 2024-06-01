@@ -11,27 +11,27 @@ defs:
       Creates a simulation motion controller
 
     args:
-      - arg_type: id
+      - type: id
         name: controllerName
         description: |-
           The name of the controller and its Asyn Port Name
 
-      - arg_type: str
+      - type: str
         name: P
         description: |-
           Device PV Prefix
 
-      - arg_type: int
+      - type: int
         name: numAxes
         description: |-
           The number of axes to create
 
-      - arg_type: object
+      - type: object
         name: port
         description: |-
           a reference to the asyn port for communication with the controller
 
-      - arg_type: str
+      - type: str
         name: DESC
         description: |-
           The description of the controller
@@ -62,52 +62,52 @@ defs:
       Creates a simulation motor axis
 
     args:
-      - arg_type: object
+      - type: object
         name: controller
         description: |-
           a reference to the motion controller
 
-      - arg_type: str
+      - type: str
         name: M
         description: |-
           PV suffix for the motor record
 
-      - arg_type: int
+      - type: int
         name: ADDR
         description: |-
           The axis number (allowed to be from 0 to controller.numAxes-1)
 
-      - arg_type: str
+      - type: str
         name: DESC
         description: |-
           The description of the axis
         default: "Motor {{ADDR}}"
 
-      - arg_type: int
+      - type: int
         name: DLLM
         description: |-
           The low limit of the axis (in counts)
         default: -20000
 
-      - arg_type: int
+      - type: int
         name: DHLM
         description: |-
           The high limit of the axis (in counts)
         default: 20000
 
-      - arg_type: int
+      - type: int
         name: home
         description: |-
           The home position of the axis (in counts)
         default: 0
 
-      - arg_type: str # int or jinja string
+      - type: str # int or jinja string
         name: start
         description: |-
           The starting position of the axis (in counts)
         default: "{{home}}"
 
-      - arg_type: enum
+      - type: enum
         name: DIR
         description: |-
           The direction of the axis
@@ -116,25 +116,25 @@ defs:
           Pos: 0
           Neg: 1
 
-      - arg_type: float
+      - type: float
         name: VELO
         description: |-
           The velocity of the axis (in counts/sec)
         default: 10.0
 
-      - arg_type: str # float or jinja string
+      - type: str # float or jinja string
         name: VMAX
         description: |-
           The maximum velocity of the axis (in counts/sec)
         default: "{{VELO}}"
 
-      - arg_type: bool
+      - type: bool
         name: is_cs
         description: |-
           Set to True if this axis a coordinate system axis
         default: false
 
-      - arg_type: int
+      - type: int
         name: CS_NUM
         description: |-
           The coordinate system number for this axis

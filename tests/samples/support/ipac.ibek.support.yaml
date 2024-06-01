@@ -7,31 +7,31 @@ defs:
     description: |-
       Configure a Hytec 8002 Carrier card
     args:
-      - arg_type: int
+      - type: int
         name: slot
         description: |-
           VME Slot number
 
-      - arg_type: id
+      - type: id
         name: IPACid
         description: |-
           Identifier for this device
         default: IPAC{{ slot }}
 
-      - arg_type: int
+      - type: int
         name: intLevel
         description: |-
           VME Interrupt Level
         default: 2
 
       - name: test
-        arg_type: str
+        type: str
         description: test
         default: |
           {{ slot }}
 
       - name: interrupt_vector
-        arg_type: object
+        type: object
         description: Interrupt Vector reserved with epics.InterruptVectorVME, count=1
 
     values:
@@ -49,12 +49,12 @@ defs:
     description: |-
       TODO:ADD DESCRIPTION
     args:
-      - arg_type: int
+      - type: int
         name: slot
         description: |-
           VME Slot number
 
-      - arg_type: enum
+      - type: enum
         name: direction
         description: |-
           Direction of digital IO
@@ -63,42 +63,42 @@ defs:
           Input:
           Output:
 
-      - arg_type: int
+      - type: int
         name: cardid
         description: |-
           cardid?
 
-      - arg_type: int
+      - type: int
         name: intLevel
         description: |-
           intLevel?
         default: 0
 
-      - arg_type: int
+      - type: int
         name: clock
         description: |-
           clock?
         default: 0
 
-      - arg_type: int
+      - type: int
         name: scan
         description: |-
           scan?
         default: 0
 
-      - arg_type: bool
+      - type: bool
         name: invertin
         description: |-
           invertin?
         default: false
 
-      - arg_type: bool
+      - type: bool
         name: invertout
         description: |-
           invertout?
         default: false
 
-      - arg_type: bool
+      - type: bool
         name: ip_support
         description: |-
           ip_support?
@@ -114,23 +114,23 @@ defs:
     description: |-
       TODO:ADD DESCRIPTION
     args:
-      - arg_type: int
+      - type: int
         name: slot
         description: |-
           VME Slot number
 
-      - arg_type: int
+      - type: int
         name: cardnum
         description: |-
           Card number
 
-      - arg_type: int
+      - type: int
         name: int_level
         description: |-
           VME Interrupt Level
         default: 1
 
-      - arg_type: int
+      - type: int
         name: hs_int
         description: |-
           Dunno actually
@@ -144,12 +144,12 @@ defs:
     description: |-
       TODO:ADD DESCRIPTION
     args:
-      - arg_type: object
+      - type: object
         name: parent
         description: |-
           Hy8005 card
 
-      - arg_type: enum
+      - type: enum
         name: ipslot
         description: |-
           IP slot
@@ -159,12 +159,12 @@ defs:
           B:
           D:
 
-      - arg_type: int
+      - type: int
         name: cardnum
         description: |-
           EPICS card identification
 
-      - arg_type: enum
+      - type: enum
         name: debrate
         description: |-
           debrate
@@ -175,7 +175,7 @@ defs:
           100Hz:
           500Hz:
 
-      - arg_type: enum
+      - type: enum
         name: pwidth
         description: |-
           pwidth
@@ -192,7 +192,7 @@ defs:
           50sec:
           1msec:
 
-      - arg_type: enum
+      - type: enum
         name: scanrate
         description: |-
           scanrate
@@ -203,7 +203,7 @@ defs:
           10KHz:
           1KHz:
 
-      - arg_type: enum
+      - type: enum
         name: direction
         description: |-
           direction
@@ -214,7 +214,7 @@ defs:
           outputs:
           low out/high in:
 
-      - arg_type: enum
+      - type: enum
         name: clock
         description: |-
           clock
@@ -223,13 +223,13 @@ defs:
           internal:
           external:
 
-      - arg_type: bool
+      - type: bool
         name: invertInputs
         description: |-
           invert inputs
         default: false
 
-      - arg_type: bool
+      - type: bool
         name: invertOutputs
         description: |-
           invert outputs

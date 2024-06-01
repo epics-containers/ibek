@@ -7,34 +7,34 @@ defs:
     description: |-
       TODO:ADD DESCRIPTION
     args:
-      - arg_type: id
+      - type: id
         name: PORT
         description: |-
           Template argument
 
-      - arg_type: str
+      - type: str
         name: P
         description: |-
           Base name of PV.
 
-      - arg_type: str
+      - type: str
         name: R
         description: |-
           Second macro for name of PV.
 
-      - arg_type: int
+      - type: int
         name: QSIZE
         description: |-
           ..
         default: 20
 
-      - arg_type: int
+      - type: int
         name: RING_SIZE
         description: |-
           ..
         default: 10000
 
-      - arg_type: str
+      - type: str
         name: IP
         description: |-
           IP address of the TetrAMM device
@@ -67,33 +67,33 @@ defs:
         12 NDTimeSeries plugins
         12 NDArray plugins
     args:
-      - arg_type: object
+      - type: object
         name: DEVICE
         description: |-
           Reference to the parent quadEM device
 
-      - arg_type: id
+      - type: id
         name: PORTPREFIX
         description: |-
           The prefix for plugin asyn port names
 
-      - arg_type: int
+      - type: int
         name: STAT_NCHAN
         description: |-
           Template argument
 
-      - arg_type: int
+      - type: int
         name: STAT_XSIZE
         description: |-
           Template argument
 
-      - arg_type: int
+      - type: int
         name: HIST_SIZE
         description: |-
           Template argument
         default: 256
 
-      - arg_type: int
+      - type: int
         name: QUEUE
         description: |-
           length of NDArray queue
