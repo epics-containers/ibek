@@ -4,8 +4,10 @@ description: an example motion ioc for ibek testing
 
 entities:
   - type: listtest.lister
-    friends: ["Rimmer", "Holly", "Cat", "Kryten"]
+    # test an actual list of strings
+    friends: ["Psiren", "Vindaloovian", "Polymorph"]
 
   - type: listtest.lister
+    # test a jinja template that renders to a list
     friends: |-
-      {{ ["Rimmer"] + ["Parallel Holly"] * 3  }}
+      {{ (["Rimmer"] + ["Parallel Holly"]) * 2  }}

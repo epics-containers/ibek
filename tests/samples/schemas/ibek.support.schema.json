@@ -529,6 +529,11 @@
               "type": "array"
             },
             {
+              "description": "A Jinja2 template string",
+              "pattern": ".*\\{\\{.*\\}\\}.*",
+              "type": "string"
+            },
+            {
               "type": "null"
             }
           ],

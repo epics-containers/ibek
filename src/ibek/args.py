@@ -4,12 +4,33 @@ Classes to specify arguments to Definitions
 
 from __future__ import annotations
 
+from enum import Enum
 from typing import Any, Dict, Optional
 
 from pydantic import Field
-from typing_extensions import Literal
+from typing_extensions import Annotated, Literal
 
-from .globals import BaseSettings
+from .globals import JINJA, BaseSettings
+
+JinjaString = Annotated[
+    str, Field(description="A Jinja2 template string", pattern=JINJA)
+]
+
+
+class ValueTypes(Enum):
+    """The type of a value"""
+
+    string = "str"
+    float = "float"
+    int = "int"
+    bool = "bool"
+    list = "list"
+
+    def __str__(self):
+        return str(self.value)
+
+    def __repr__(self):
+        return str(self.value)
 
 
 class Value(BaseSettings):
@@ -20,6 +41,9 @@ class Value(BaseSettings):
         description="Description of what the value will be used for"
     )
     value: str = Field(description="The contents of the value")
+    type: ValueTypes = Field(
+        description="The type of the value", default=ValueTypes.string
+    )
 
 
 class Arg(BaseSettings):
@@ -38,7 +62,7 @@ class ListArg(Arg):
     """An argument with a float value"""
 
     type: Literal["list"] = "list"
-    default: Optional[list] = None
+    default: Optional[list | JinjaString] = None
 
 
 class FloatArg(Arg):

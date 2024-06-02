@@ -33,13 +33,30 @@
               "type": "array"
             }
           ],
+          "default": "{{ [\"Rimmer\"] + [ \"Cat\", \"Kryten\", \"Holly\"] }}",
           "description": "union of <class 'list'> and jinja representation of {typ}",
           "title": "Friends"
+        },
+        "time_vortex": {
+          "anyOf": [
+            {
+              "description": "jinja that renders to <class 'list'>",
+              "pattern": ".*\\{\\{.*\\}\\}.*",
+              "type": "string"
+            },
+            {
+              "description": "friends after the Time Hole episode",
+              "items": {},
+              "type": "array"
+            }
+          ],
+          "default": "{{ (friends * 3) | sort }}",
+          "description": "union of <class 'list'> and jinja representation of {typ}",
+          "title": "Time Vortex"
         }
       },
       "required": [
-        "type",
-        "friends"
+        "type"
       ],
       "title": "listtest_lister",
       "type": "object"

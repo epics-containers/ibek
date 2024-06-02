@@ -4,18 +4,23 @@ cd "/epics/ioc"
 dbLoadDatabase dbd/ioc.dbd
 ioc_registerRecordDeviceDriver pdbbase
 
-Lister does not like to hear "Smoke me a kipper, I'll be back for breakfast" has friends:
+Lister, who does not like to hear "Smoke me a kipper, I'll be back for breakfast" has friends:
+- Psiren
+- Vindaloovian
+- Polymorph
+
+First friend is Psiren
+Time vortex friends are ['Polymorph', 'Polymorph', 'Polymorph', 'Psiren', 'Psiren', 'Psiren', 'Vindaloovian', 'Vindaloovian', 'Vindaloovian']
+Fist time vortex friend is Polymorph
+Lister, who does not like to hear "Smoke me a kipper, I'll be back for breakfast" has friends:
 - Rimmer
-- Holly
-- Cat
-- Kryten
-First friend is Rimmer
-Lister does not like to hear "Smoke me a kipper, I'll be back for breakfast" has friends:
+- Parallel Holly
 - Rimmer
 - Parallel Holly
-- Parallel Holly
-- Parallel Holly
+
 First friend is Rimmer
+Time vortex friends are ['Parallel Holly', 'Parallel Holly', 'Parallel Holly', 'Parallel Holly', 'Parallel Holly', 'Parallel Holly', 'Rimmer', 'Rimmer', 'Rimmer', 'Rimmer', 'Rimmer', 'Rimmer']
+Fist time vortex friend is Parallel Holly
 
 dbLoadRecords /epics/runtime/ioc.db
 iocInit

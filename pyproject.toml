@@ -66,6 +66,7 @@ ignore_missing_imports = true # Ignore missing stubs in imported modules
 addopts = """
     --tb=native -vv --doctest-modules --doctest-glob="*.rst"
     --cov=ibek --cov-report term --cov-report xml:cov.xml
+    --ignore tests/samples
     """
 # https://iscinumpy.gitlab.io/post/bound-version-constraints/#watch-for-warnings
 filterwarnings = [

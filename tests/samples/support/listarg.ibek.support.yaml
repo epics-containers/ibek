@@ -17,12 +17,24 @@ defs:
         name: friends
         description: |-
           List of friends
+        default: '{{ ["Rimmer"] + [ "Cat", "Kryten", "Holly"] }}'
+
+    values:
+      - name: time_vortex
+        description: |-
+          friends after the Time Hole episode
+        type: list
+        value: |-
+          {{ (friends * 3) | sort }}
 
     pre_init:
       - value: |
-          Lister does not like to hear "{{quote}}" has friends:
-          {% for friend in friends -%}
+          Lister, who does not like to hear "{{quote}}" has friends:
+          {#- example Jinja loop which is discouraged, but demos we have a list -#}
+          {%- for friend in friends %}
           - {{friend}}
-          {% endfor -%}
+          {%- endfor%}
 
           First friend is {{friends[0]}}
+          Time vortex friends are {{time_vortex}}
+          Fist time vortex friend is {{time_vortex[0]}}
