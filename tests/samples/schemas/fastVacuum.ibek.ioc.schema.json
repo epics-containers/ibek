@@ -42,19 +42,29 @@
           "type": "boolean"
         },
         "gaugeNum": {
+          "anyOf": [
+            {
+              "description": "jinja that renders to <class 'int'>",
+              "pattern": ".*\\{\\{.*\\}\\}.*",
+              "type": "string"
+            },
+            {
+              "description": "auto gauge count",
+              "type": "integer"
+            }
+          ],
           "default": "{{ _ctx_.counter(\"fvGaugeNum\", start=1) }}",
-          "description": "auto gauge count",
-          "title": "Gaugenum",
-          "type": "string"
+          "description": "union of <class 'int'> and jinja representation of {typ}",
+          "title": "Gaugenum"
         },
         "fan": {
-          "default": "{{ \"%02d\" % (gaugeNum | int / 7 + 1) }}",
+          "default": "{{ \"%02d\" % (gaugeNum / 7 + 1) }}",
           "description": "fan number",
           "title": "Fan",
           "type": "string"
         },
         "mask": {
-          "default": "{{ _ctx_.set('fvMask', _ctx_.get('fvMask', 0) + 2**(gaugeNum | int)) }}",
+          "default": "{{ _ctx_.set('fvMask', _ctx_.get('fvMask', 0) + 2**gaugeNum) }}",
           "description": "mask for the channel",
           "title": "Mask",
           "type": "string"
@@ -107,7 +117,7 @@
           "title": "Timeout"
         },
         "lnk_no": {
-          "default": "{{ ((gaugeNum | int - 1) % 6) + 1 }}",
+          "default": "{{ ((gaugeNum - 1) % 6) + 1 }}",
           "description": "link number",
           "title": "Lnk No",
           "type": "string"
@@ -119,46 +129,37 @@
           "type": "string"
         },
         "addr_offset": {
-          "default": "{{ (gaugeNum | int - 1) * (master.combined_nelm | int) }}",
-          "description": "waveform address offset for the first waveform for this channel",
-          "title": "Addr Offset",
-          "type": "string"
+          "anyOf": [
+            {
+              "description": "jinja that renders to <class 'int'>",
+              "pattern": ".*\\{\\{.*\\}\\}.*",
+              "type": "string"
+            },
+            {
+              "description": "waveform address offset for the first waveform for this channel",
+              "type": "integer"
+            }
+          ],
+          "default": "{{ (gaugeNum - 1) * master.combined_nelm }}",
+          "description": "union of <class 'int'> and jinja representation of {typ}",
+          "title": "Addr Offset"
         },
-        "wave0_addr": {
-          "default": "{{ (addr_offset | int) + (master.waveform_nelm | int) * 0 }}",
-          "description": "waveform address",
-          "title": "Wave0 Addr",
-          "type": "string"
-        },
-        "wave1_addr": {
-          "default": "{{ (addr_offset | int) + (master.waveform_nelm | int) * 1 }}",
-          "description": "waveform address",
-          "title": "Wave1 Addr",
-          "type": "string"
-        },
-        "wave2_addr": {
-          "default": "{{ (addr_offset | int) + (master.waveform_nelm | int) * 2 }}",
-          "description": "waveform address",
-          "title": "Wave2 Addr",
-          "type": "string"
-        },
-        "wave3_addr": {
-          "default": "{{ (addr_offset | int) + (master.waveform_nelm | int) * 3 }}",
-          "description": "waveform address",
-          "title": "Wave3 Addr",
-          "type": "string"
-        },
-        "wave4_addr": {
-          "default": "{{ (addr_offset | int) + (master.waveform_nelm | int) * 4 }}",
-          "description": "waveform address",
-          "title": "Wave4 Addr",
-          "type": "string"
-        },
-        "wave5_addr": {
-          "default": "{{ (addr_offset | int) + (master.waveform_nelm | int) * 5 }}",
-          "description": "waveform address",
-          "title": "Wave5 Addr",
-          "type": "string"
+        "wave_addr": {
+          "anyOf": [
+            {
+              "description": "jinja that renders to <class 'list'>",
+              "pattern": ".*\\{\\{.*\\}\\}.*",
+              "type": "string"
+            },
+            {
+              "description": "waveform addresses",
+              "items": {},
+              "type": "array"
+            }
+          ],
+          "default": "{%- set addr = [] -%}\n{%- for i in range(6) -%}\n{%- set addr = addr.append(addr_offset + master.waveform_nelm * i) -%}\n{%- endfor -%}\n{{ addr }}",
+          "description": "union of <class 'list'> and jinja representation of {typ}",
+          "title": "Wave Addr"
         }
       },
       "required": [
@@ -211,16 +212,36 @@
           "type": "string"
         },
         "waveform_nelm": {
-          "default": "500",
-          "description": "waveform element count",
-          "title": "Waveform Nelm",
-          "type": "string"
+          "anyOf": [
+            {
+              "description": "jinja that renders to <class 'int'>",
+              "pattern": ".*\\{\\{.*\\}\\}.*",
+              "type": "string"
+            },
+            {
+              "description": "waveform element count",
+              "type": "integer"
+            }
+          ],
+          "default": 500,
+          "description": "union of <class 'int'> and jinja representation of {typ}",
+          "title": "Waveform Nelm"
         },
         "combined_nelm": {
-          "default": "{{ (6 * waveform_nelm|int) }}",
-          "description": "total waveform element count",
-          "title": "Combined Nelm",
-          "type": "string"
+          "anyOf": [
+            {
+              "description": "jinja that renders to <class 'int'>",
+              "pattern": ".*\\{\\{.*\\}\\}.*",
+              "type": "string"
+            },
+            {
+              "description": "total waveform element count",
+              "type": "integer"
+            }
+          ],
+          "default": "{{ 6 * waveform_nelm }}",
+          "description": "union of <class 'int'> and jinja representation of {typ}",
+          "title": "Combined Nelm"
         }
       },
       "required": [

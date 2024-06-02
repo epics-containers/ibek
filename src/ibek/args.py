@@ -40,7 +40,7 @@ class Value(BaseSettings):
     description: str = Field(
         description="Description of what the value will be used for"
     )
-    value: str = Field(description="The contents of the value")
+    value: Any = Field(description="The contents of the value")
     type: ValueTypes = Field(
         description="The type of the value", default=ValueTypes.string
     )

@@ -122,7 +122,7 @@ mv `pwd`/epics/{runtime,opi}/* `pwd`/outputs/listarg
 ############################################################################
 
 echo making an ioc schema using fastVacuum support yaml
-ibek ioc generate-schema --no-ibek-defs support/fastVacuum.ibek.support.yaml --output schemas/fastVacuum.ibek.schema.json
+ibek ioc generate-schema --no-ibek-defs support/fastVacuum.ibek.support.yaml --output schemas/fastVacuum.ibek.ioc.schema.json
 
 echo making fastVacuum ioc
 EPICS_ROOT=`pwd`/epics ibek runtime generate iocs/fastVacuum.ibek.ioc.yaml support/fastVacuum.ibek.support.yaml

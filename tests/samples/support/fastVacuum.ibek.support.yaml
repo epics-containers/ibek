@@ -47,12 +47,14 @@ defs:
 
       - description: waveform element count
         name: waveform_nelm
-        value: "500"
+        type: int
+        value: 500
 
       - description: total waveform element count
         name: combined_nelm
+        type: int
         value: |-
-          {{ (6 * waveform_nelm|int) }}
+          {{ 6 * waveform_nelm }}
 
     databases:
       - file: $(DLSPLC)/db/dlsPLC_fastVacuumMaster.template
@@ -111,24 +113,25 @@ defs:
     pre_values:
       - description: auto gauge count
         name: gaugeNum
+        type: int
         value: |-
           {{ _ctx_.counter("fvGaugeNum", start=1) }}
 
       - description: fan number
         name: fan
         value: |-
-          {{ "%02d" % (gaugeNum | int / 7 + 1) }}
+          {{ "%02d" % (gaugeNum / 7 + 1) }}
 
       - description: mask for the channel
         name: mask
         value: |-
-          {{ _ctx_.set('fvMask', _ctx_.get('fvMask', 0) + 2**(gaugeNum | int)) }}
+          {{ _ctx_.set('fvMask', _ctx_.get('fvMask', 0) + 2**gaugeNum) }}
 
     values:
       - description: link number
         name: lnk_no
         value: |-
-          {{ ((gaugeNum | int - 1) % 6) + 1 }}
+          {{ ((gaugeNum - 1) % 6) + 1 }}
 
       - description: Gauge PV
         name: gaugePV
@@ -137,38 +140,20 @@ defs:
 
       - description: waveform address offset for the first waveform for this channel
         name: addr_offset
+        type: int
         value: |-
-          {{ (gaugeNum | int - 1) * (master.combined_nelm | int) }}
+          {{ (gaugeNum - 1) * master.combined_nelm }}
 
-      - description: waveform address
-        name: wave0_addr
+      - description: waveform addresses
+        name: wave_addr
+        type: list
+        # this is still not pretty enough :-(
         value: |-
-          {{ (addr_offset | int) + (master.waveform_nelm | int) * 0 }}
-
-      - description: waveform address
-        name: wave1_addr
-        value: |-
-          {{ (addr_offset | int) + (master.waveform_nelm | int) * 1 }}
-
-      - description: waveform address
-        name: wave2_addr
-        value: |-
-          {{ (addr_offset | int) + (master.waveform_nelm | int) * 2 }}
-
-      - description: waveform address
-        name: wave3_addr
-        value: |-
-          {{ (addr_offset | int) + (master.waveform_nelm | int) * 3 }}
-
-      - description: waveform address
-        name: wave4_addr
-        value: |-
-          {{ (addr_offset | int) + (master.waveform_nelm | int) * 4 }}
-
-      - description: waveform address
-        name: wave5_addr
-        value: |-
-          {{ (addr_offset | int) + (master.waveform_nelm | int) * 5 }}
+          {%- set addr = [] -%}
+          {%- for i in range(6) -%}
+          {%- set addr = addr.append(addr_offset + master.waveform_nelm * i) -%}
+          {%- endfor -%}
+          {{ addr }}
 
     databases:
       - file: $(DLSPLC)/db/dlsPLC_fastVacuumLink.template
@@ -184,11 +169,11 @@ defs:
           id: "{{id}}"
           em:
           waveform_nelm: "{{master.waveform_nelm}}"
-          wave0_addr:
-          wave1_addr:
-          wave2_addr:
-          wave3_addr:
-          wave4_addr:
-          wave5_addr:
+          wave0_addr: "{{wave_addr[0]}}"
+          wave1_addr: "{{wave_addr[1]}}"
+          wave2_addr: "{{wave_addr[2]}}"
+          wave3_addr: "{{wave_addr[3]}}"
+          wave4_addr: "{{wave_addr[4]}}"
+          wave5_addr: "{{wave_addr[5]}}"
           combined_nelm: "{{master.combined_nelm}}"
           timeout:
