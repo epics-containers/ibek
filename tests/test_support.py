@@ -17,6 +17,7 @@ def test_symlink_ibek(tmp_path: Path, samples: Path):
         "bad_db.ibek.support.yaml",
         "dlsPLC.ibek.support.yaml",
         "epics.ibek.support.yaml",
+        "fastVacuum.ibek.support.yaml",
         "gauges.ibek.support.yaml",
         "ipac.ibek.support.yaml",
         "listarg.ibek.support.yaml",

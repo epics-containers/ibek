@@ -686,6 +686,15 @@
           "description": "The contents of the value",
           "title": "Value",
           "type": "string"
+        },
+        "type": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/ValueTypes"
+            }
+          ],
+          "default": "str",
+          "description": "The type of the value"
         }
       },
       "required": [
@@ -695,6 +704,18 @@
       ],
       "title": "Value",
       "type": "object"
+    },
+    "ValueTypes": {
+      "description": "The type of a value",
+      "enum": [
+        "str",
+        "float",
+        "int",
+        "bool",
+        "list"
+      ],
+      "title": "ValueTypes",
+      "type": "string"
     },
     "When": {
       "enum": [

@@ -116,3 +116,14 @@ EPICS_ROOT=`pwd`/epics ibek runtime generate iocs/listarg.ibek.ioc.yaml support/
 mv `pwd`/epics/{runtime,opi}/* `pwd`/outputs/listarg
 
 
+
+############################################################################
+# fast vacuum (dlsPLC) example
+############################################################################
+
+echo making an ioc schema using fastVacuum support yaml
+ibek ioc generate-schema --no-ibek-defs support/fastVacuum.ibek.support.yaml --output schemas/fastVacuum.ibek.schema.json
+
+echo making fastVacuum ioc
+EPICS_ROOT=`pwd`/epics ibek runtime generate iocs/fastVacuum.ibek.ioc.yaml support/fastVacuum.ibek.support.yaml
+mv `pwd`/epics/{runtime,opi}/* `pwd`/outputs/fastVacuum
