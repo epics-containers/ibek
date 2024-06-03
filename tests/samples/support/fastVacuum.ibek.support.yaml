@@ -147,7 +147,14 @@ defs:
       - description: waveform addresses
         name: wave_addr
         type: list
-        # this is still not pretty enough :-(
+        value: |-
+          {%- set addr_list = range(addr_offset,addr_offset + master.waveform_nelm * 6, master.waveform_nelm) -%}
+          {{ addr_list | list }}
+
+      - description: waveform addresses
+        name: wave_addr_alternative
+        type: list
+        # explicit loop is uglier but more versatile
         value: |-
           {%- set addr = [] -%}
           {%- for i in range(6) -%}
