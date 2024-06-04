@@ -7,7 +7,11 @@
           "const": "asyn.AsynIP",
           "default": "asyn.AsynIP",
           "description": "Asyn IP Port",
-          "title": "Type"
+          "enum": [
+            "asyn.AsynIP"
+          ],
+          "title": "Type",
+          "type": "string"
         },
         "entity_enabled": {
           "default": true,
@@ -147,7 +151,11 @@
           "const": "gauges.GaugeGroup",
           "default": "gauges.GaugeGroup",
           "description": "Group of gauges",
-          "title": "Type"
+          "enum": [
+            "gauges.GaugeGroup"
+          ],
+          "title": "Type",
+          "type": "string"
         },
         "entity_enabled": {
           "default": true,
@@ -194,7 +202,11 @@
           "const": "gauges.Mks937bGauge",
           "default": "gauges.Mks937bGauge",
           "description": "MKS 937b Gauge controller",
-          "title": "Type"
+          "enum": [
+            "gauges.Mks937bGauge"
+          ],
+          "title": "Type",
+          "type": "string"
         },
         "entity_enabled": {
           "default": true,

@@ -7,7 +7,11 @@
           "const": "ADCore.NDAttrPlot",
           "default": "ADCore.NDAttrPlot",
           "description": "TODO:ADD DESCRIPTION",
-          "title": "Type"
+          "enum": [
+            "ADCore.NDAttrPlot"
+          ],
+          "title": "Type",
+          "type": "string"
         },
         "entity_enabled": {
           "default": true,
@@ -126,7 +130,11 @@
           "const": "ADCore.NDAttribute",
           "default": "ADCore.NDAttribute",
           "description": "This plugin displays NDArray attributes",
-          "title": "Type"
+          "enum": [
+            "ADCore.NDAttribute"
+          ],
+          "title": "Type",
+          "type": "string"
         },
         "entity_enabled": {
           "default": true,
@@ -233,7 +241,11 @@
           "const": "ADCore.NDAttributes",
           "default": "ADCore.NDAttributes",
           "description": "Add an attribute to the NDAttributes file for a particular ADDriver or\n    NDPlugin, and associate it with the NDAttributes file",
-          "title": "Type"
+          "enum": [
+            "ADCore.NDAttributes"
+          ],
+          "title": "Type",
+          "type": "string"
         },
         "entity_enabled": {
           "default": true,
@@ -307,7 +319,11 @@
           "const": "ADCore.NDCircularBuff",
           "default": "ADCore.NDCircularBuff",
           "description": "This plugin provides a pre and post external trigger frame capture buffer",
-          "title": "Type"
+          "enum": [
+            "ADCore.NDCircularBuff"
+          ],
+          "title": "Type",
+          "type": "string"
         },
         "entity_enabled": {
           "default": true,
@@ -414,7 +430,11 @@
           "const": "ADCore.NDCodec",
           "default": "ADCore.NDCodec",
           "description": "This plugin can compress or decompress NDArrays",
-          "title": "Type"
+          "enum": [
+            "ADCore.NDCodec"
+          ],
+          "title": "Type",
+          "type": "string"
         },
         "entity_enabled": {
           "default": true,
@@ -509,7 +529,11 @@
           "const": "ADCore.NDColorConvert",
           "default": "ADCore.NDColorConvert",
           "description": "This plugin converts arrays from one colour type to another, e.g. Bayer -> RGB1",
-          "title": "Type"
+          "enum": [
+            "ADCore.NDColorConvert"
+          ],
+          "title": "Type",
+          "type": "string"
         },
         "entity_enabled": {
           "default": true,
@@ -604,7 +628,11 @@
           "const": "ADCore.NDFFT",
           "default": "ADCore.NDFFT",
           "description": "This plugin is used to calculate the FFT of a time series",
-          "title": "Type"
+          "enum": [
+            "ADCore.NDFFT"
+          ],
+          "title": "Type",
+          "type": "string"
         },
         "entity_enabled": {
           "default": true,
@@ -729,7 +757,11 @@
           "const": "ADCore.NDFileHDF5",
           "default": "ADCore.NDFileHDF5",
           "description": "This plugin can compress NDArrays to HDF5 and write them to file",
-          "title": "Type"
+          "enum": [
+            "ADCore.NDFileHDF5"
+          ],
+          "title": "Type",
+          "type": "string"
         },
         "entity_enabled": {
           "default": true,
@@ -824,7 +856,11 @@
           "const": "ADCore.NDFileJPEG",
           "default": "ADCore.NDFileJPEG",
           "description": "This plugin can compress NDArrays to JPEG and write them to file",
-          "title": "Type"
+          "enum": [
+            "ADCore.NDFileJPEG"
+          ],
+          "title": "Type",
+          "type": "string"
         },
         "entity_enabled": {
           "default": true,
@@ -913,7 +949,11 @@
           "const": "ADCore.NDFileMagick",
           "default": "ADCore.NDFileMagick",
           "description": "This plugin can compress NDArrays to a range of formats supported by\n    graphics magick and write them to file",
-          "title": "Type"
+          "enum": [
+            "ADCore.NDFileMagick"
+          ],
+          "title": "Type",
+          "type": "string"
         },
         "entity_enabled": {
           "default": true,
@@ -1002,7 +1042,11 @@
           "const": "ADCore.NDFileNetCDF",
           "default": "ADCore.NDFileNetCDF",
           "description": "This plugin can compress NDArrays to NetCDF and write them to file",
-          "title": "Type"
+          "enum": [
+            "ADCore.NDFileNetCDF"
+          ],
+          "title": "Type",
+          "type": "string"
         },
         "entity_enabled": {
           "default": true,
@@ -1091,7 +1135,11 @@
           "const": "ADCore.NDFileNexus",
           "default": "ADCore.NDFileNexus",
           "description": "This plugin can compress NDArrays to Nexus and write them to file",
-          "title": "Type"
+          "enum": [
+            "ADCore.NDFileNexus"
+          ],
+          "title": "Type",
+          "type": "string"
         },
         "entity_enabled": {
           "default": true,
@@ -1180,7 +1228,11 @@
           "const": "ADCore.NDFileNull",
           "default": "ADCore.NDFileNull",
           "description": "Null file plugin for deleting driver files",
-          "title": "Type"
+          "enum": [
+            "ADCore.NDFileNull"
+          ],
+          "title": "Type",
+          "type": "string"
         },
         "entity_enabled": {
           "default": true,
@@ -1269,7 +1321,11 @@
           "const": "ADCore.NDFileTIFF",
           "default": "ADCore.NDFileTIFF",
           "description": "This plugin can compress NDArrays to TIFF and write them to file",
-          "title": "Type"
+          "enum": [
+            "ADCore.NDFileTIFF"
+          ],
+          "title": "Type",
+          "type": "string"
         },
         "entity_enabled": {
           "default": true,
@@ -1358,7 +1414,11 @@
           "const": "ADCore.NDGather",
           "default": "ADCore.NDGather",
           "description": "This plugin is used to gather NDArrays from multiple upstream plugins and merge them into a single stream",
-          "title": "Type"
+          "enum": [
+            "ADCore.NDGather"
+          ],
+          "title": "Type",
+          "type": "string"
         },
         "entity_enabled": {
           "default": true,
@@ -1454,7 +1514,11 @@
           "const": "ADCore.NDGather8",
           "default": "ADCore.NDGather8",
           "description": "This plugin is used to gather NDArrays from multiple upstream plugins and merge them into a single stream",
-          "title": "Type"
+          "enum": [
+            "ADCore.NDGather8"
+          ],
+          "title": "Type",
+          "type": "string"
         },
         "entity_enabled": {
           "default": true,
@@ -1556,7 +1620,11 @@
           "const": "ADCore.NDOverlay",
           "default": "ADCore.NDOverlay",
           "description": "This plugin writes overlays on the array, like cursors and boxes",
-          "title": "Type"
+          "enum": [
+            "ADCore.NDOverlay"
+          ],
+          "title": "Type",
+          "type": "string"
         },
         "entity_enabled": {
           "default": true,
@@ -1717,7 +1785,11 @@
           "const": "ADCore.NDPosPlugin",
           "default": "ADCore.NDPosPlugin",
           "description": "This plugin attaches position information to NDArrays",
-          "title": "Type"
+          "enum": [
+            "ADCore.NDPosPlugin"
+          ],
+          "title": "Type",
+          "type": "string"
         },
         "entity_enabled": {
           "default": true,
@@ -1818,7 +1890,11 @@
           "const": "ADCore.NDProcess",
           "default": "ADCore.NDProcess",
           "description": "This plugin does image processing like flat field correction, background\n    subtraction, and recursive filtering",
-          "title": "Type"
+          "enum": [
+            "ADCore.NDProcess"
+          ],
+          "title": "Type",
+          "type": "string"
         },
         "entity_enabled": {
           "default": true,
@@ -1907,7 +1983,11 @@
           "const": "ADCore.NDPvaPlugin",
           "default": "ADCore.NDPvaPlugin",
           "description": "This plugin makes NDArrays available through PVAccess",
-          "title": "Type"
+          "enum": [
+            "ADCore.NDPvaPlugin"
+          ],
+          "title": "Type",
+          "type": "string"
         },
         "entity_enabled": {
           "default": true,
@@ -2014,7 +2094,11 @@
           "const": "ADCore.NDROI",
           "default": "ADCore.NDROI",
           "description": "This plugin selects a region of interest and optionally scales it to\n    fit in a particular data type",
-          "title": "Type"
+          "enum": [
+            "ADCore.NDROI"
+          ],
+          "title": "Type",
+          "type": "string"
         },
         "entity_enabled": {
           "default": true,
@@ -2109,7 +2193,11 @@
           "const": "ADCore.NDROIStat",
           "default": "ADCore.NDROIStat",
           "description": "This plugin calculates statistics of ROIs",
-          "title": "Type"
+          "enum": [
+            "ADCore.NDROIStat"
+          ],
+          "title": "Type",
+          "type": "string"
         },
         "entity_enabled": {
           "default": true,
@@ -2216,7 +2304,11 @@
           "const": "ADCore.NDScatter",
           "default": "ADCore.NDScatter",
           "description": "This plugin is used to distribute processing of NDArrays to multiple downstream plugins",
-          "title": "Type"
+          "enum": [
+            "ADCore.NDScatter"
+          ],
+          "title": "Type",
+          "type": "string"
         },
         "entity_enabled": {
           "default": true,
@@ -2311,7 +2403,11 @@
           "const": "ADCore.NDStats",
           "default": "ADCore.NDStats",
           "description": "This plugin calculates statistics like X and Y profile, centroid, and plots a histogram of binned pixels",
-          "title": "Type"
+          "enum": [
+            "ADCore.NDStats"
+          ],
+          "title": "Type",
+          "type": "string"
         },
         "entity_enabled": {
           "default": true,
@@ -2436,7 +2532,11 @@
           "const": "ADCore.NDStdArrays",
           "default": "ADCore.NDStdArrays",
           "description": "This plugin provides a waveform record that can display the NDArrays\n    produced by its NDARRAY_PORT",
-          "title": "Type"
+          "enum": [
+            "ADCore.NDStdArrays"
+          ],
+          "title": "Type",
+          "type": "string"
         },
         "entity_enabled": {
           "default": true,
@@ -2552,7 +2652,11 @@
           "const": "ADCore.NDTimeSeries",
           "default": "ADCore.NDTimeSeries",
           "description": "This plugin creates time series arrays from callback data",
-          "title": "Type"
+          "enum": [
+            "ADCore.NDTimeSeries"
+          ],
+          "title": "Type",
+          "type": "string"
         },
         "entity_enabled": {
           "default": true,
@@ -2677,7 +2781,11 @@
           "const": "ADCore.NDTransform",
           "default": "ADCore.NDTransform",
           "description": "This plugin selects a region of interest and optionally scales it to fit in a particular data type",
-          "title": "Type"
+          "enum": [
+            "ADCore.NDTransform"
+          ],
+          "title": "Type",
+          "type": "string"
         },
         "entity_enabled": {
           "default": true,
@@ -2772,7 +2880,11 @@
           "const": "ADCore._NDCircularBuff",
           "default": "ADCore._NDCircularBuff",
           "description": "TODO:ADD DESCRIPTION",
-          "title": "Type"
+          "enum": [
+            "ADCore._NDCircularBuff"
+          ],
+          "title": "Type",
+          "type": "string"
         },
         "entity_enabled": {
           "default": true,
@@ -2917,7 +3029,11 @@
           "const": "quadEM.Plugins",
           "default": "quadEM.Plugins",
           "description": "Instantiates\n  12 NDStats plugins for Current, Sum, Diff and Pos Channels\n  12 NDTimeSeries plugins\n  12 NDArray plugins",
-          "title": "Type"
+          "enum": [
+            "quadEM.Plugins"
+          ],
+          "title": "Type",
+          "type": "string"
         },
         "entity_enabled": {
           "default": true,
@@ -2973,7 +3089,11 @@
           "const": "quadEM.TetrAMM",
           "default": "quadEM.TetrAMM",
           "description": "TODO:ADD DESCRIPTION",
-          "title": "Type"
+          "enum": [
+            "quadEM.TetrAMM"
+          ],
+          "title": "Type",
+          "type": "string"
         },
         "entity_enabled": {
           "default": true,
