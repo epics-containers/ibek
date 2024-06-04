@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Modules, Definitions and Entities &#8212; ibek 3.0.0b6.dev3+g65210c60 documentation</title>
+    <title>Modules, Definitions and Entities &#8212; ibek 3.0.0b6.dev7+g7eb87f80 documentation</title>
   
   
   
@@ -38,7 +38,7 @@
 <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=3ee479438cf8b5e0d341" />
   <script src="../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=3ee479438cf8b5e0d341"></script>
 
-    <script src="../../_static/documentation_options.js?v=c60bad04"></script>
+    <script src="../../_static/documentation_options.js?v=5782ea69"></script>
     <script src="../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -973,7 +973,11 @@ the container or during container development.</p>
         <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="p">{</span>
           <span class="s2">&quot;const&quot;</span><span class="p">:</span> <span class="s2">&quot;bool&quot;</span><span class="p">,</span>
           <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="s2">&quot;bool&quot;</span><span class="p">,</span>
-          <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Type&quot;</span>
+          <span class="s2">&quot;enum&quot;</span><span class="p">:</span> <span class="p">[</span>
+            <span class="s2">&quot;bool&quot;</span>
+          <span class="p">],</span>
+          <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Type&quot;</span><span class="p">,</span>
+          <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
         <span class="p">},</span>
         <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="p">{</span>
           <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Name of the argument that the IOC instance should pass&quot;</span><span class="p">,</span>
@@ -1012,7 +1016,11 @@ the container or during container development.</p>
         <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="p">{</span>
           <span class="s2">&quot;const&quot;</span><span class="p">:</span> <span class="s2">&quot;comment&quot;</span><span class="p">,</span>
           <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="s2">&quot;comment&quot;</span><span class="p">,</span>
-          <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Type&quot;</span>
+          <span class="s2">&quot;enum&quot;</span><span class="p">:</span> <span class="p">[</span>
+            <span class="s2">&quot;comment&quot;</span>
+          <span class="p">],</span>
+          <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Type&quot;</span><span class="p">,</span>
+          <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
         <span class="p">},</span>
         <span class="s2">&quot;when&quot;</span><span class="p">:</span> <span class="p">{</span>
           <span class="s2">&quot;allOf&quot;</span><span class="p">:</span> <span class="p">[</span>
@@ -1277,7 +1285,11 @@ the container or during container development.</p>
         <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="p">{</span>
           <span class="s2">&quot;const&quot;</span><span class="p">:</span> <span class="s2">&quot;enum&quot;</span><span class="p">,</span>
           <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="s2">&quot;enum&quot;</span><span class="p">,</span>
-          <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Type&quot;</span>
+          <span class="s2">&quot;enum&quot;</span><span class="p">:</span> <span class="p">[</span>
+            <span class="s2">&quot;enum&quot;</span>
+          <span class="p">],</span>
+          <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Type&quot;</span><span class="p">,</span>
+          <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
         <span class="p">},</span>
         <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="p">{</span>
           <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Name of the argument that the IOC instance should pass&quot;</span><span class="p">,</span>
@@ -1342,7 +1354,11 @@ the container or during container development.</p>
         <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="p">{</span>
           <span class="s2">&quot;const&quot;</span><span class="p">:</span> <span class="s2">&quot;float&quot;</span><span class="p">,</span>
           <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="s2">&quot;float&quot;</span><span class="p">,</span>
-          <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Type&quot;</span>
+          <span class="s2">&quot;enum&quot;</span><span class="p">:</span> <span class="p">[</span>
+            <span class="s2">&quot;float&quot;</span>
+          <span class="p">],</span>
+          <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Type&quot;</span><span class="p">,</span>
+          <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
         <span class="p">},</span>
         <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="p">{</span>
           <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Name of the argument that the IOC instance should pass&quot;</span><span class="p">,</span>
@@ -1381,7 +1397,11 @@ the container or during container development.</p>
         <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="p">{</span>
           <span class="s2">&quot;const&quot;</span><span class="p">:</span> <span class="s2">&quot;id&quot;</span><span class="p">,</span>
           <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="s2">&quot;id&quot;</span><span class="p">,</span>
-          <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Type&quot;</span>
+          <span class="s2">&quot;enum&quot;</span><span class="p">:</span> <span class="p">[</span>
+            <span class="s2">&quot;id&quot;</span>
+          <span class="p">],</span>
+          <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Type&quot;</span><span class="p">,</span>
+          <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
         <span class="p">},</span>
         <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="p">{</span>
           <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Name of the argument that the IOC instance should pass&quot;</span><span class="p">,</span>
@@ -1420,7 +1440,11 @@ the container or during container development.</p>
         <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="p">{</span>
           <span class="s2">&quot;const&quot;</span><span class="p">:</span> <span class="s2">&quot;int&quot;</span><span class="p">,</span>
           <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="s2">&quot;int&quot;</span><span class="p">,</span>
-          <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Type&quot;</span>
+          <span class="s2">&quot;enum&quot;</span><span class="p">:</span> <span class="p">[</span>
+            <span class="s2">&quot;int&quot;</span>
+          <span class="p">],</span>
+          <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Type&quot;</span><span class="p">,</span>
+          <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
         <span class="p">},</span>
         <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="p">{</span>
           <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Name of the argument that the IOC instance should pass&quot;</span><span class="p">,</span>
@@ -1459,7 +1483,11 @@ the container or during container development.</p>
         <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="p">{</span>
           <span class="s2">&quot;const&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span>
           <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span>
-          <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Type&quot;</span>
+          <span class="s2">&quot;enum&quot;</span><span class="p">:</span> <span class="p">[</span>
+            <span class="s2">&quot;object&quot;</span>
+          <span class="p">],</span>
+          <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Type&quot;</span><span class="p">,</span>
+          <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
         <span class="p">},</span>
         <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="p">{</span>
           <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Name of the argument that the IOC instance should pass&quot;</span><span class="p">,</span>
@@ -1498,7 +1526,11 @@ the container or during container development.</p>
         <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="p">{</span>
           <span class="s2">&quot;const&quot;</span><span class="p">:</span> <span class="s2">&quot;str&quot;</span><span class="p">,</span>
           <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="s2">&quot;str&quot;</span><span class="p">,</span>
-          <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Type&quot;</span>
+          <span class="s2">&quot;enum&quot;</span><span class="p">:</span> <span class="p">[</span>
+            <span class="s2">&quot;str&quot;</span>
+          <span class="p">],</span>
+          <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Type&quot;</span><span class="p">,</span>
+          <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
         <span class="p">},</span>
         <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="p">{</span>
           <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Name of the argument that the IOC instance should pass&quot;</span><span class="p">,</span>
@@ -1559,7 +1591,11 @@ the container or during container development.</p>
         <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="p">{</span>
           <span class="s2">&quot;const&quot;</span><span class="p">:</span> <span class="s2">&quot;text&quot;</span><span class="p">,</span>
           <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="s2">&quot;text&quot;</span><span class="p">,</span>
-          <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Type&quot;</span>
+          <span class="s2">&quot;enum&quot;</span><span class="p">:</span> <span class="p">[</span>
+            <span class="s2">&quot;text&quot;</span>
+          <span class="p">],</span>
+          <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Type&quot;</span><span class="p">,</span>
+          <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
         <span class="p">},</span>
         <span class="s2">&quot;when&quot;</span><span class="p">:</span> <span class="p">{</span>
           <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="s2">&quot;every&quot;</span><span class="p">,</span>
@@ -1660,7 +1696,11 @@ the container or during container development.</p>
           <span class="s2">&quot;const&quot;</span><span class="p">:</span> <span class="s2">&quot;motorSim.simMotorAxis&quot;</span><span class="p">,</span>
           <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="s2">&quot;motorSim.simMotorAxis&quot;</span><span class="p">,</span>
           <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Creates a simulation motor axis&quot;</span><span class="p">,</span>
-          <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Type&quot;</span>
+          <span class="s2">&quot;enum&quot;</span><span class="p">:</span> <span class="p">[</span>
+            <span class="s2">&quot;motorSim.simMotorAxis&quot;</span>
+          <span class="p">],</span>
+          <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Type&quot;</span><span class="p">,</span>
+          <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
         <span class="p">},</span>
         <span class="s2">&quot;entity_enabled&quot;</span><span class="p">:</span> <span class="p">{</span>
           <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="n">true</span><span class="p">,</span>
@@ -1761,7 +1801,11 @@ the container or during container development.</p>
           <span class="s2">&quot;const&quot;</span><span class="p">:</span> <span class="s2">&quot;motorSim.simMotorController&quot;</span><span class="p">,</span>
           <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="s2">&quot;motorSim.simMotorController&quot;</span><span class="p">,</span>
           <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Creates a simulation motion controller&quot;</span><span class="p">,</span>
-          <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Type&quot;</span>
+          <span class="s2">&quot;enum&quot;</span><span class="p">:</span> <span class="p">[</span>
+            <span class="s2">&quot;motorSim.simMotorController&quot;</span>
+          <span class="p">],</span>
+          <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Type&quot;</span><span class="p">,</span>
+          <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
         <span class="p">},</span>
         <span class="s2">&quot;entity_enabled&quot;</span><span class="p">:</span> <span class="p">{</span>
           <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="n">true</span><span class="p">,</span>
