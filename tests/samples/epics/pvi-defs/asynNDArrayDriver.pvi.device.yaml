@@ -153,14 +153,14 @@ children:
         write_pv: $(P)$(R)NDAttributesFile
         write_widget:
           type: TextWrite
-          format: 4
+          format: string
 
       - type: SignalW
         name: NDAttributesMacros
         write_pv: $(P)$(R)NDAttributesMacros
         write_widget:
           type: TextWrite
-          format: 4
+          format: string
 
       - type: SignalR
         name: NDAttributesStatus
