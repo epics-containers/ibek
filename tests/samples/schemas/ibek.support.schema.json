@@ -7,7 +7,11 @@
         "type": {
           "const": "bool",
           "default": "bool",
-          "title": "Type"
+          "enum": [
+            "bool"
+          ],
+          "title": "Type",
+          "type": "string"
         },
         "name": {
           "description": "Name of the argument that the IOC instance should pass",
@@ -46,7 +50,11 @@
         "type": {
           "const": "comment",
           "default": "comment",
-          "title": "Type"
+          "enum": [
+            "comment"
+          ],
+          "title": "Type",
+          "type": "string"
         },
         "when": {
           "allOf": [
@@ -311,7 +319,11 @@
         "type": {
           "const": "enum",
           "default": "enum",
-          "title": "Type"
+          "enum": [
+            "enum"
+          ],
+          "title": "Type",
+          "type": "string"
         },
         "name": {
           "description": "Name of the argument that the IOC instance should pass",
@@ -376,7 +388,11 @@
         "type": {
           "const": "float",
           "default": "float",
-          "title": "Type"
+          "enum": [
+            "float"
+          ],
+          "title": "Type",
+          "type": "string"
         },
         "name": {
           "description": "Name of the argument that the IOC instance should pass",
@@ -415,7 +431,11 @@
         "type": {
           "const": "id",
           "default": "id",
-          "title": "Type"
+          "enum": [
+            "id"
+          ],
+          "title": "Type",
+          "type": "string"
         },
         "name": {
           "description": "Name of the argument that the IOC instance should pass",
@@ -454,7 +474,11 @@
         "type": {
           "const": "int",
           "default": "int",
-          "title": "Type"
+          "enum": [
+            "int"
+          ],
+          "title": "Type",
+          "type": "string"
         },
         "name": {
           "description": "Name of the argument that the IOC instance should pass",
@@ -493,7 +517,11 @@
         "type": {
           "const": "object",
           "default": "object",
-          "title": "Type"
+          "enum": [
+            "object"
+          ],
+          "title": "Type",
+          "type": "string"
         },
         "name": {
           "description": "Name of the argument that the IOC instance should pass",
@@ -532,7 +560,11 @@
         "type": {
           "const": "str",
           "default": "str",
-          "title": "Type"
+          "enum": [
+            "str"
+          ],
+          "title": "Type",
+          "type": "string"
         },
         "name": {
           "description": "Name of the argument that the IOC instance should pass",
@@ -593,7 +625,11 @@
         "type": {
           "const": "text",
           "default": "text",
-          "title": "Type"
+          "enum": [
+            "text"
+          ],
+          "title": "Type",
+          "type": "string"
         },
         "when": {
           "default": "every",
