@@ -62,7 +62,7 @@ class Utils:
         return self.variables.get(s_key, default)
 
     def incrementor(
-        self, name: str, start: int = 0, increment: int = 1, stop: int = 10000
+        self, name: str, start: int = 0, increment: int = 1, stop: int | None = None
     ) -> int:
         """
         get a named counter that increments by inc each time it is called
@@ -78,7 +78,7 @@ class Utils:
             if not isinstance(counter, int):
                 raise ValueError(f"Variable {index} is not an integer")
             self.variables[index] += increment
-            if self.variables[index] > stop:
+            if stop is not None and self.variables[index] > stop:
                 raise ValueError(f"Counter {index} exceeded maximum value of {stop}")
 
         return self.variables[index]

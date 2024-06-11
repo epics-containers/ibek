@@ -141,11 +141,8 @@ defs:
         value: |-
           {{ master.device }}:GAUGE:{{id}}_0
 
-      - description: waveform address offset for the first waveform for this channel
-        name: addr_offset
-        type: int
-        value: |-
-          {{ (gaugeNum - 1) * master.combined_nelm }}
+    shared:
+      - &wave_addr "{{ _global.incrementor('wave_addr_{}'.format(master), 0, master.waveform_nelm) }}"
 
     databases:
       - file: $(DLSPLC)/db/dlsPLC_fastVacuumLink.template
@@ -161,11 +158,11 @@ defs:
           id: "{{id}}"
           em:
           waveform_nelm: "{{master.waveform_nelm}}"
-          wave0_addr: "{{ addr_offset }}"
-          wave1_addr: "{{ addr_offset + master.waveform_nelm }}"
-          wave2_addr: "{{ addr_offset + master.waveform_nelm * 2 }}"
-          wave3_addr: "{{ addr_offset + master.waveform_nelm * 3 }}"
-          wave4_addr: "{{ addr_offset + master.waveform_nelm * 4 }}"
-          wave5_addr: "{{ addr_offset + master.waveform_nelm * 5 }}"
+          wave0_addr: *wave_addr
+          wave1_addr: *wave_addr
+          wave2_addr: *wave_addr
+          wave3_addr: *wave_addr
+          wave4_addr: *wave_addr
+          wave5_addr: *wave_addr
           combined_nelm: "{{master.combined_nelm}}"
           timeout:
