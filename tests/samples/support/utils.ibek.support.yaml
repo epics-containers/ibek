@@ -14,7 +14,7 @@ defs:
         name: name
         description: A name for an interrupt vector variable
 
-    values:
+    post_defines:
       - name: test_global_var
         description: test global variable setter
         value: '{{  _global.set_var("magic_global", 42) }}'

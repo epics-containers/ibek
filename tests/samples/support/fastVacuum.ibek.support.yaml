@@ -41,7 +41,7 @@ defs:
         description: |-
           Device prefix
 
-    values:
+    post_defines:
       - description: device name
         name: device
         value: |-
@@ -112,7 +112,7 @@ defs:
           asyn fins_port timeout
         default: 0
 
-    pre_values:
+    pre_defines:
       - description: auto gauge count
         name: gaugeNum
         type: int
@@ -129,7 +129,7 @@ defs:
         value: |-
           {{ _global.set('fvMask', _global.get('fvMask', 0) + 2**gaugeNum) }}
 
-    values:
+    post_defines:
       - description: link number
         name: lnk_no
         value: |-

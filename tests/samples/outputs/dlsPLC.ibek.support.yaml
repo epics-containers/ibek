@@ -2040,7 +2040,7 @@ defs:
   - type: str
     name: device
     description: Device prefix
-  values:
+  post_defines:
   - description: device name
     name: device
     value: :- {{dom}}-VA-FAST-01

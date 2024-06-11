@@ -176,22 +176,22 @@
           "title": "Args",
           "type": "array"
         },
-        "values": {
+        "post_defines": {
           "default": [],
           "description": "Calculated values to use as additional arguments With Jinja evaluation after all Args",
           "items": {
             "$ref": "#/$defs/Value"
           },
-          "title": "Values",
+          "title": "Post Defines",
           "type": "array"
         },
-        "pre_values": {
+        "pre_defines": {
           "default": [],
           "description": "Calculated values to use as additional arguments With Jinja evaluation before all Args",
           "items": {
             "$ref": "#/$defs/Value"
           },
-          "title": "Pre Values",
+          "title": "Pre Defines",
           "type": "array"
         },
         "databases": {

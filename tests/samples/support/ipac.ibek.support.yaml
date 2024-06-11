@@ -34,7 +34,7 @@ defs:
         type: object
         description: Interrupt Vector reserved with epics.InterruptVectorVME, count=1
 
-    values:
+    post_defines:
       - name: card_id
         value: '{{ _global.counter("Carriers", start=0) }}'
         description: Carrier Card Identifier

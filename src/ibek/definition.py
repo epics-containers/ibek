@@ -138,12 +138,12 @@ class EntityDefinition(BaseSettings):
         description="The arguments IOC instance should supply",
         default=(),
     )
-    values: Sequence[Value] = Field(
+    post_defines: Sequence[Value] = Field(
         description="Calculated values to use as additional arguments "
         "With Jinja evaluation after all Args",
         default=(),
     )
-    pre_values: Sequence[Value] = Field(
+    pre_defines: Sequence[Value] = Field(
         description="Calculated values to use as additional arguments "
         "With Jinja evaluation before all Args",
         default=(),

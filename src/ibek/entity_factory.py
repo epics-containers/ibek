@@ -102,7 +102,7 @@ class EntityFactory:
         # add in the calculated values Jinja Templates as Fields in the Entity
         # these are the pre_values that should be Jinja rendered before any
         # Args (or post values)
-        add_defines(definition.pre_values)
+        add_defines(definition.pre_defines)
 
         # add in each of the arguments as a Field in the Entity
         for arg in definition.args:
@@ -141,7 +141,7 @@ class EntityFactory:
             add_arg(arg.name, type, arg.description, getattr(arg, "default"))  # type: ignore
 
         # add in the calculated values Jinja Templates as Fields in the Entity
-        add_defines(definition.values)
+        add_defines(definition.post_defines)
 
         # add the type literal which discriminates between the different Entity classes
         typ = Literal[full_name]  # type: ignore

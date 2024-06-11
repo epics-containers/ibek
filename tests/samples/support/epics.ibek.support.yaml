@@ -83,7 +83,7 @@ defs:
         description: The number of interrupt vectors to reserve
         default: 1
 
-    values:
+    post_defines:
       - name: number
         value: '{{  _global.counter("InterruptVector", start=192, stop=255, inc=count) }}'
         description: Interrupt Vector number

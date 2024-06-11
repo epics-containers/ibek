@@ -39,7 +39,7 @@ defs:
           TML Configuration
         default: |-
           FILE=/tmp/,NAXIS={{numAxes}},DEV_PATH={{TTY}},HOST_ID={{hostid}}
-    values:
+    post_defines:
       - name: axisConfiguration
         description: collects the axis configuration from axis entities
         value: |-
@@ -199,13 +199,13 @@ defs:
         default: |-
           ,AXIS_SETUP_{{num}}=$(SUPPORT)/motorTechnosoft/tml_lib/config/{{axconf}},AXIS_ID_{{num}}={{axid}},AXIS_HOMING_SW_{{num}}={{homing}}
 
-    pre_values:
+    pre_defines:
       - name: num
         description: The auto incrementing axis number
         value: |-
           {{ _global.counter("motorTML.axisCount", start=0) }}
 
-    values:
+    post_defines:
       - name: axisConfiguration
         description: Adds an axis configuration entry to the controller's list
         value: |-

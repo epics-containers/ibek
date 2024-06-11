@@ -2613,7 +2613,7 @@ defs:
         description: |-
           Device prefix
 
-    values:
+    post_defines:
       - description: device name
         name: device
         value: :-

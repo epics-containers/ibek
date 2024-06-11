@@ -9,7 +9,7 @@ defs:
     description: |-
       The protagonist from Red Dwarf
 
-    pre_values:
+    pre_defines:
       - name: name
         description: |-
           name of the character
@@ -40,7 +40,7 @@ defs:
         default: |-
           {{ 29 + cryo_years }}
 
-    values:
+    post_defines:
       - name: cryo_years
         description: |-
           years in cryogenic sleep
