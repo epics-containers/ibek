@@ -1,4 +1,4 @@
-# yaml-language-server: $schema=https://github.com/epics-containers/ibek/releases/download/3.0.0b4/ibek.support.schema.json
+# yaml-language-server: $schema=../schemas/ibek.support.schema.json
 
 module: dlsPLC
 
@@ -2613,7 +2613,7 @@ defs:
         description: |-
           Device prefix
 
-    values:
+    post_defines:
       - description: device name
         name: device
         value: :-

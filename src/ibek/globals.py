@@ -138,6 +138,8 @@ PVI_YAML_PATTERN = "*pvi.device.yaml"
 
 GLOBALS = _Globals()
 
+JINJA = r".*\{\{.*\}\}.*"
+
 
 class BaseSettings(BaseModel):
     """A Base class for setting consistent Pydantic model configuration"""

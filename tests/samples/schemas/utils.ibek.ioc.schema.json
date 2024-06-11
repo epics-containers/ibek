@@ -5,7 +5,6 @@
       "properties": {
         "type": {
           "const": "epics.InterruptVectorVME",
-          "default": "epics.InterruptVectorVME",
           "description": "Reserve an interrupt vector for use with VME hardware.\n",
           "enum": [
             "epics.InterruptVectorVME"
@@ -25,19 +24,20 @@
           "type": "string"
         },
         "test_global_var": {
-          "default": "{{  __utils__.set_var(\"magic_global\", 42) }}",
+          "default": "{{  _global.set_var(\"magic_global\", 42) }}",
           "description": "test global variable setter",
           "title": "Test Global Var",
           "type": "string"
         },
         "get_global": {
-          "default": "{{  __utils__.get_var(\"magic_global\") }}",
+          "default": "{{  _global.get_var(\"magic_global\") }}",
           "description": "test global variable getter",
           "title": "Get Global",
           "type": "string"
         }
       },
       "required": [
+        "type",
         "name"
       ],
       "title": "epics_InterruptVectorVME",
@@ -48,7 +48,6 @@
       "properties": {
         "type": {
           "const": "epics.InterruptVectorVME2",
-          "default": "epics.InterruptVectorVME2",
           "description": "naughty second use of same counter",
           "enum": [
             "epics.InterruptVectorVME2"
@@ -69,6 +68,7 @@
         }
       },
       "required": [
+        "type",
         "name"
       ],
       "title": "epics_InterruptVectorVME2",

@@ -1,0 +1,82 @@
+# yaml-language-server: $schema=../schemas/ibek.support.schema.json
+
+# A support module yaml that tests lists in values and also tests
+# 'jinja str/type' capability in Arg default values
+module: listtest
+
+defs:
+  - name: lister
+    description: |-
+      The protagonist from Red Dwarf
+
+    pre_defines:
+      - name: name
+        description: |-
+          name of the character
+        value: |-
+          Dave Lister
+
+    args:
+      - type: str
+        name: quote
+        description: |-
+          most hated quote
+        default: |-
+          Smoke me a kipper, I'll be back for breakfast
+
+      - type: bool
+        name: is_human
+        description: |-
+          is the character human
+        # example bool using Jinja
+        default: |-
+          {{ name == 'Dave Lister' }}
+
+      - type: int
+        name: age
+        description: |-
+          Age of the character including cryogenic sleep
+        # example int using Jinja
+        default: |-
+          {{ 29 + cryo_years }}
+
+    post_defines:
+      - name: cryo_years
+        description: |-
+          years in cryogenic sleep
+        type: int
+        value: 3000000
+        # https://en.wikipedia.org/wiki/Dave_Lister#:~:text=As%20a%20result%2C%20Holly%20keeps,radiation%20levels%20return%20to%20normal.
+
+      # example type list value not using Jinja
+      - name: friends
+        description: |-
+          friends of Lister
+        type: list
+        value:
+          - Rimmer
+          - Cat
+          - Kryten
+          - Holly
+
+      # example type list value using Jinja
+      - name: time_vortex
+        description: |-
+          friends after the Time Hole episode
+        type: list
+        value: |-
+          {{ (friends * 3) | sort }}
+
+    pre_init:
+      - value: |
+
+
+          Lister, age {{age}}, who does not like to hear "{{quote}}" has friends:
+          {#- example Jinja loop which is discouraged, but demos we have a list -#}
+          {%- for friend in friends %}
+          o {{friend}}
+          {%- endfor%}
+
+          First friend is {{friends[0]}}
+          Time vortex friends are {{time_vortex}}
+          Fist time vortex friend is {{time_vortex[0]}}

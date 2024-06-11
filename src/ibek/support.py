@@ -5,7 +5,7 @@ Support Class to represent a deserialized <MODULE_NAME>.ibek.support.yaml file.
 from __future__ import annotations
 
 import json
-from typing import Sequence
+from typing import Any, Sequence
 
 from pydantic import Field
 
@@ -19,6 +19,11 @@ class Support(BaseSettings):
 
     Provides the deserialize entry point.
     """
+
+    shared: Sequence[Any] = Field(
+        description="A place to create any anchors required for repeating YAML",
+        default=(),
+    )
 
     module: str = Field(description="Support module name, normally the repo name")
     defs: Sequence[EntityDefinition] = Field(

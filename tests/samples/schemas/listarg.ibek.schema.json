@@ -1,0 +1,173 @@
+{
+  "$defs": {
+    "listtest_lister": {
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "const": "listtest.lister",
+          "description": "The protagonist from Red Dwarf",
+          "enum": [
+            "listtest.lister"
+          ],
+          "title": "Type",
+          "type": "string"
+        },
+        "entity_enabled": {
+          "default": true,
+          "description": "enable or disable this entity instance",
+          "title": "Entity Enabled",
+          "type": "boolean"
+        },
+        "name": {
+          "default": "Dave Lister",
+          "description": "name of the character",
+          "title": "Name",
+          "type": "string"
+        },
+        "quote": {
+          "default": "Smoke me a kipper, I'll be back for breakfast",
+          "description": "most hated quote",
+          "title": "Quote",
+          "type": "string"
+        },
+        "is_human": {
+          "anyOf": [
+            {
+              "description": "jinja that renders to <class 'bool'>",
+              "pattern": ".*\\{\\{.*\\}\\}.*",
+              "type": "string"
+            },
+            {
+              "description": "is the character human",
+              "type": "boolean"
+            }
+          ],
+          "default": "{{ name == 'Dave Lister' }}",
+          "description": "union of <class 'bool'> and jinja representation of {typ}",
+          "title": "Is Human"
+        },
+        "age": {
+          "anyOf": [
+            {
+              "description": "jinja that renders to <class 'int'>",
+              "pattern": ".*\\{\\{.*\\}\\}.*",
+              "type": "string"
+            },
+            {
+              "description": "Age of the character including cryogenic sleep",
+              "type": "integer"
+            }
+          ],
+          "default": "{{ 29 + cryo_years }}",
+          "description": "union of <class 'int'> and jinja representation of {typ}",
+          "title": "Age"
+        },
+        "cryo_years": {
+          "anyOf": [
+            {
+              "description": "jinja that renders to <class 'int'>",
+              "pattern": ".*\\{\\{.*\\}\\}.*",
+              "type": "string"
+            },
+            {
+              "description": "years in cryogenic sleep",
+              "type": "integer"
+            }
+          ],
+          "default": 3000000,
+          "description": "union of <class 'int'> and jinja representation of {typ}",
+          "title": "Cryo Years"
+        },
+        "friends": {
+          "anyOf": [
+            {
+              "description": "jinja that renders to <class 'list'>",
+              "pattern": ".*\\{\\{.*\\}\\}.*",
+              "type": "string"
+            },
+            {
+              "description": "friends of Lister",
+              "items": {},
+              "type": "array"
+            }
+          ],
+          "default": [
+            "Rimmer",
+            "Cat",
+            "Kryten",
+            "Holly"
+          ],
+          "description": "union of <class 'list'> and jinja representation of {typ}",
+          "title": "Friends"
+        },
+        "time_vortex": {
+          "anyOf": [
+            {
+              "description": "jinja that renders to <class 'list'>",
+              "pattern": ".*\\{\\{.*\\}\\}.*",
+              "type": "string"
+            },
+            {
+              "description": "friends after the Time Hole episode",
+              "items": {},
+              "type": "array"
+            }
+          ],
+          "default": "{{ (friends * 3) | sort }}",
+          "description": "union of <class 'list'> and jinja representation of {typ}",
+          "title": "Time Vortex"
+        }
+      },
+      "required": [
+        "type"
+      ],
+      "title": "listtest_lister",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "ioc_name": {
+      "description": "Name of IOC instance",
+      "title": "Ioc Name",
+      "type": "string"
+    },
+    "description": {
+      "description": "Description of what the IOC does",
+      "title": "Description",
+      "type": "string"
+    },
+    "entities": {
+      "description": "List of entities this IOC instantiates",
+      "items": {
+        "discriminator": {
+          "mapping": {
+            "listtest.lister": "#/$defs/listtest_lister"
+          },
+          "propertyName": "type"
+        },
+        "oneOf": [
+          {
+            "$ref": "#/$defs/listtest_lister"
+          }
+        ]
+      },
+      "title": "Entities",
+      "type": "array"
+    },
+    "shared": {
+      "default": [],
+      "description": "A place to create any anchors required for repeating YAML",
+      "items": {},
+      "title": "Shared",
+      "type": "array"
+    }
+  },
+  "required": [
+    "ioc_name",
+    "description",
+    "entities"
+  ],
+  "title": "NewIOC",
+  "type": "object"
+}

@@ -1,0 +1,331 @@
+{
+  "$defs": {
+    "dlsPLC_dummy": {
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "const": "dlsPLC.dummy",
+          "description": "dummy record",
+          "enum": [
+            "dlsPLC.dummy"
+          ],
+          "title": "Type",
+          "type": "string"
+        },
+        "entity_enabled": {
+          "default": true,
+          "description": "enable or disable this entity instance",
+          "title": "Entity Enabled",
+          "type": "boolean"
+        },
+        "device": {
+          "description": "name for dummy object",
+          "title": "Device",
+          "type": "string"
+        }
+      },
+      "required": [
+        "type",
+        "device"
+      ],
+      "title": "dlsPLC_dummy",
+      "type": "object"
+    },
+    "dlsPLC_fastVacuumChannel": {
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "const": "dlsPLC.fastVacuumChannel",
+          "description": "Adds a fast vacuum channel to the fast vacuum master",
+          "enum": [
+            "dlsPLC.fastVacuumChannel"
+          ],
+          "title": "Type",
+          "type": "string"
+        },
+        "entity_enabled": {
+          "default": true,
+          "description": "enable or disable this entity instance",
+          "title": "Entity Enabled",
+          "type": "boolean"
+        },
+        "name": {
+          "description": "Gui tag",
+          "title": "Name",
+          "type": "string"
+        },
+        "master": {
+          "description": "Master",
+          "title": "Master"
+        },
+        "img": {
+          "description": "Base IMG PV",
+          "title": "Img",
+          "type": "string"
+        },
+        "id": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/id"
+            }
+          ],
+          "description": "FV PLC gauge number"
+        },
+        "em": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/em"
+            }
+          ],
+          "default": 0,
+          "description": "EM block to use"
+        },
+        "timeout": {
+          "anyOf": [
+            {
+              "description": "jinja that renders to <class 'int'>",
+              "pattern": ".*\\{\\{.*\\}\\}.*",
+              "type": "string"
+            },
+            {
+              "description": "asyn fins_port timeout",
+              "type": "integer"
+            }
+          ],
+          "default": 0,
+          "description": "union of <class 'int'> and jinja representation of {typ}",
+          "title": "Timeout"
+        },
+        "gaugeNum": {
+          "anyOf": [
+            {
+              "description": "jinja that renders to <class 'int'>",
+              "pattern": ".*\\{\\{.*\\}\\}.*",
+              "type": "string"
+            },
+            {
+              "description": "auto gauge count",
+              "type": "integer"
+            }
+          ],
+          "default": "{{ _global.counter(\"fvGaugeNum\", start=1) }}",
+          "description": "union of <class 'int'> and jinja representation of {typ}",
+          "title": "Gaugenum"
+        },
+        "fan": {
+          "default": "{{ \"%02d\" % (gaugeNum / 7 + 1) }}",
+          "description": "fan number",
+          "title": "Fan",
+          "type": "string"
+        },
+        "mask": {
+          "default": "{{ _global.set('fvMask', _global.get('fvMask', 0) + 2**gaugeNum) }}",
+          "description": "mask for the channel",
+          "title": "Mask",
+          "type": "string"
+        },
+        "lnk_no": {
+          "default": "{{ ((gaugeNum - 1) % 6) + 1 }}",
+          "description": "link number",
+          "title": "Lnk No",
+          "type": "string"
+        },
+        "gaugePV": {
+          "default": "{{ master.device }}:GAUGE:{{id}}_0",
+          "description": "Gauge PV",
+          "title": "Gaugepv",
+          "type": "string"
+        },
+        "addr_offset": {
+          "anyOf": [
+            {
+              "description": "jinja that renders to <class 'int'>",
+              "pattern": ".*\\{\\{.*\\}\\}.*",
+              "type": "string"
+            },
+            {
+              "description": "waveform address offset for the first waveform for this channel",
+              "type": "integer"
+            }
+          ],
+          "default": "{{ (gaugeNum - 1) * master.combined_nelm }}",
+          "description": "union of <class 'int'> and jinja representation of {typ}",
+          "title": "Addr Offset"
+        }
+      },
+      "required": [
+        "type",
+        "name",
+        "master",
+        "img",
+        "id"
+      ],
+      "title": "dlsPLC_fastVacuumChannel",
+      "type": "object"
+    },
+    "dlsPLC_fastVacuumMaster": {
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "const": "dlsPLC.fastVacuumMaster",
+          "description": "master records for fast vacuum",
+          "enum": [
+            "dlsPLC.fastVacuumMaster"
+          ],
+          "title": "Type",
+          "type": "string"
+        },
+        "entity_enabled": {
+          "default": true,
+          "description": "enable or disable this entity instance",
+          "title": "Entity Enabled",
+          "type": "boolean"
+        },
+        "name": {
+          "description": "Gui tag",
+          "title": "Name",
+          "type": "string"
+        },
+        "dom": {
+          "description": "Domain, eg, FE06I",
+          "title": "Dom",
+          "type": "string"
+        },
+        "fins_port": {
+          "description": "FINS port",
+          "title": "Fins Port"
+        },
+        "eip_port": {
+          "description": "EtherIP port",
+          "title": "Eip Port",
+          "type": "string"
+        },
+        "device": {
+          "default": "{{dom}}-VA-FAST-01",
+          "description": "device name",
+          "title": "Device",
+          "type": "string"
+        },
+        "waveform_nelm": {
+          "anyOf": [
+            {
+              "description": "jinja that renders to <class 'int'>",
+              "pattern": ".*\\{\\{.*\\}\\}.*",
+              "type": "string"
+            },
+            {
+              "description": "waveform element count",
+              "type": "integer"
+            }
+          ],
+          "default": 500,
+          "description": "union of <class 'int'> and jinja representation of {typ}",
+          "title": "Waveform Nelm"
+        },
+        "combined_nelm": {
+          "anyOf": [
+            {
+              "description": "jinja that renders to <class 'int'>",
+              "pattern": ".*\\{\\{.*\\}\\}.*",
+              "type": "string"
+            },
+            {
+              "description": "total waveform element count",
+              "type": "integer"
+            }
+          ],
+          "default": "{{ 6 * waveform_nelm }}",
+          "description": "union of <class 'int'> and jinja representation of {typ}",
+          "title": "Combined Nelm"
+        }
+      },
+      "required": [
+        "type",
+        "name",
+        "dom",
+        "fins_port",
+        "eip_port"
+      ],
+      "title": "dlsPLC_fastVacuumMaster",
+      "type": "object"
+    },
+    "em": {
+      "enum": [
+        "0",
+        "1",
+        "2"
+      ],
+      "title": "em",
+      "type": "string"
+    },
+    "id": {
+      "enum": [
+        "01",
+        "02",
+        "03",
+        "04",
+        "05",
+        "06",
+        "07",
+        "08",
+        "09",
+        "10"
+      ],
+      "title": "id",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "ioc_name": {
+      "description": "Name of IOC instance",
+      "title": "Ioc Name",
+      "type": "string"
+    },
+    "description": {
+      "description": "Description of what the IOC does",
+      "title": "Description",
+      "type": "string"
+    },
+    "entities": {
+      "description": "List of entities this IOC instantiates",
+      "items": {
+        "discriminator": {
+          "mapping": {
+            "dlsPLC.dummy": "#/$defs/dlsPLC_dummy",
+            "dlsPLC.fastVacuumChannel": "#/$defs/dlsPLC_fastVacuumChannel",
+            "dlsPLC.fastVacuumMaster": "#/$defs/dlsPLC_fastVacuumMaster"
+          },
+          "propertyName": "type"
+        },
+        "oneOf": [
+          {
+            "$ref": "#/$defs/dlsPLC_dummy"
+          },
+          {
+            "$ref": "#/$defs/dlsPLC_fastVacuumMaster"
+          },
+          {
+            "$ref": "#/$defs/dlsPLC_fastVacuumChannel"
+          }
+        ]
+      },
+      "title": "Entities",
+      "type": "array"
+    },
+    "shared": {
+      "default": [],
+      "description": "A place to create any anchors required for repeating YAML",
+      "items": {},
+      "title": "Shared",
+      "type": "array"
+    }
+  },
+  "required": [
+    "ioc_name",
+    "description",
+    "entities"
+  ],
+  "title": "NewIOC",
+  "type": "object"
+}

@@ -1,0 +1,9 @@
+# yaml-language-server: $schema=../schemas/listarg.ibek.schema.json
+ioc_name: counter
+description: an example for list values testing
+
+entities:
+  - type: listtest.lister
+
+  - type: listtest.lister
+    age: 42

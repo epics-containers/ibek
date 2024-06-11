@@ -6,14 +6,15 @@ from __future__ import annotations
 
 import builtins
 from pathlib import Path
-from typing import Any, Dict, List, Literal, Tuple, Type
+from typing import Annotated, Any, Dict, List, Literal, Sequence, Tuple, Type
 
-from pydantic import create_model, field_validator
-from pydantic.fields import FieldInfo
+from pydantic import Field, create_model, field_validator
 from pydantic_core import PydanticUndefined, ValidationError
 from ruamel.yaml.main import YAML
 
-from .args import EnumArg, IdArg, ObjectArg
+from ibek.globals import JINJA
+
+from .args import EnumArg, IdArg, ObjectArg, Value
 from .ioc import Entity, EnumVal, clear_entity_model_ids, get_entity_by_id
 from .support import EntityDefinition, Support
 from .utils import UTILS
@@ -61,13 +62,36 @@ class EntityFactory:
         Create an Entity Model from a Definition instance and a Support instance.
         """
 
+        def add_defines(s: Sequence[Value]) -> None:
+            # add in the pre_defines or post_defines as Args in the Entity
+            for value in s:
+                typ = getattr(builtins, str(value.type))
+                add_arg(value.name, typ, value.description, value.value)
+
         def add_arg(name, typ, description, default):
             if default is None:
                 default = PydanticUndefined
-            args[name] = (
-                typ,
-                FieldInfo(description=description, default=default),
-            )
+            # cheesy check for enum, can this be improved?
+            if typ in [str, object] or "enum" in str(typ):
+                args[name] = (Annotated[typ, Field(description=description)], default)
+            else:
+                args[name] = (
+                    Annotated[
+                        Annotated[
+                            str,
+                            Field(
+                                description=f"jinja that renders to {typ}",
+                                pattern=JINJA,
+                            ),
+                        ]
+                        | Annotated[typ, Field(description=description)],
+                        Field(
+                            description=f"union of {typ} and jinja "
+                            "representation of {typ}"
+                        ),
+                    ],
+                    default,
+                )
 
         args: Dict[str, Tuple[type, Any]] = {}
         validators: Dict[str, Any] = {}
@@ -78,25 +102,26 @@ class EntityFactory:
         # add in the calculated values Jinja Templates as Fields in the Entity
         # these are the pre_values that should be Jinja rendered before any
         # Args (or post values)
-        for value in definition.pre_values:
-            add_arg(value.name, str, value.description, value.value)
+        add_defines(definition.pre_defines)
 
         # add in each of the arguments as a Field in the Entity
         for arg in definition.args:
-            full_arg_name = f"{full_name}.{arg.name}"
-            arg_type: Any
+            # TODO - don't understand why I need type ignore here
+            # arg is 'discriminated' which is a Union of all the Arg subclasses
+            full_arg_name = f"{full_name}.{arg.name}"  # type: ignore
+            type: Any
 
             if isinstance(arg, ObjectArg):
-
-                @field_validator(arg.name, mode="after")
+                # TODO look into why arg.name requires type ignore
+                @field_validator(arg.name, mode="after")  # type: ignore
                 def lookup_instance(cls, id):
                     return get_entity_by_id(id)
 
                 validators[full_arg_name] = lookup_instance
-                arg_type = object
+                type = object
 
             elif isinstance(arg, IdArg):
-                arg_type = str
+                type = str
 
             elif isinstance(arg, EnumArg):
                 # Pydantic uses the values of the Enum as the options in the schema.
@@ -107,20 +132,20 @@ class EntityFactory:
                     enum_swapped[str(v) if v else str(k)] = k
                 # TODO review enums especially with respect to Pydantic 2.7.1
                 val_enum = EnumVal(arg.name, enum_swapped)  # type: ignore
-                arg_type = val_enum
+                type = val_enum
 
             else:
                 # arg.type is str, int, float, etc.
-                arg_type = getattr(builtins, arg.type)
-            add_arg(arg.name, arg_type, arg.description, getattr(arg, "default"))
+                type = getattr(builtins, arg.type)
+            # TODO look into why arg.name requires type ignore
+            add_arg(arg.name, type, arg.description, getattr(arg, "default"))  # type: ignore
 
         # add in the calculated values Jinja Templates as Fields in the Entity
-        for value in definition.values:
-            add_arg(value.name, str, value.description, value.value)
+        add_defines(definition.post_defines)
 
         # add the type literal which discriminates between the different Entity classes
         typ = Literal[full_name]  # type: ignore
-        add_arg("type", typ, definition.description, full_name)
+        args["type"] = (typ, Field(description=definition.description))
 
         class_name = full_name.replace(".", "_")
         entity_cls = create_model(

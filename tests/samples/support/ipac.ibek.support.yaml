@@ -1,4 +1,4 @@
-# yaml-language-server: $schema=https://github.com/epics-containers/ibek/releases/download/1.2.0/ibek.support.schema.json
+# yaml-language-server: $schema=../schemas/ibek.support.schema.json
 
 module: ipac
 
@@ -34,9 +34,9 @@ defs:
         type: object
         description: Interrupt Vector reserved with epics.InterruptVectorVME, count=1
 
-    values:
+    post_defines:
       - name: card_id
-        value: '{{ __utils__.counter("Carriers", start=0) }}'
+        value: '{{ _global.counter("Carriers", start=0) }}'
         description: Carrier Card Identifier
 
     pre_init:

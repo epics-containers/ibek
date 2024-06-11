@@ -13,7 +13,6 @@
       "properties": {
         "type": {
           "const": "motorTML.CreateController",
-          "default": "motorTML.CreateController",
           "description": "Creates a Technosoft motion controller connected to a serial line",
           "enum": [
             "motorTML.CreateController"
@@ -43,15 +42,35 @@
           "type": "string"
         },
         "numAxes": {
+          "anyOf": [
+            {
+              "description": "jinja that renders to <class 'int'>",
+              "pattern": ".*\\{\\{.*\\}\\}.*",
+              "type": "string"
+            },
+            {
+              "description": "The number of axes to create",
+              "type": "integer"
+            }
+          ],
           "default": 1,
-          "description": "The number of axes to create",
-          "title": "Numaxes",
-          "type": "integer"
+          "description": "union of <class 'int'> and jinja representation of {typ}",
+          "title": "Numaxes"
         },
         "hostid": {
-          "description": "Host ID",
-          "title": "Hostid",
-          "type": "integer"
+          "anyOf": [
+            {
+              "description": "jinja that renders to <class 'int'>",
+              "pattern": ".*\\{\\{.*\\}\\}.*",
+              "type": "string"
+            },
+            {
+              "description": "Host ID",
+              "type": "integer"
+            }
+          ],
+          "description": "union of <class 'int'> and jinja representation of {typ}",
+          "title": "Hostid"
         },
         "CONFIG": {
           "default": "FILE=/tmp/,NAXIS={{numAxes}},DEV_PATH={{TTY}},HOST_ID={{hostid}}",
@@ -60,13 +79,14 @@
           "type": "string"
         },
         "axisConfiguration": {
-          "default": "{{ __utils__.set_var('motorTML.axisConfiguration',[]) }}",
+          "default": "{{ _global.set_var('motorTML.axisConfiguration',[]) }}",
           "description": "collects the axis configuration from axis entities",
           "title": "Axisconfiguration",
           "type": "string"
         }
       },
       "required": [
+        "type",
         "controllerName",
         "P",
         "TTY",
@@ -80,7 +100,6 @@
       "properties": {
         "type": {
           "const": "motorTML.motorAxis",
-          "default": "motorTML.motorAxis",
           "description": "Creates a motor axis",
           "enum": [
             "motorTML.motorAxis"
@@ -95,7 +114,7 @@
           "type": "boolean"
         },
         "num": {
-          "default": "{{ __utils__.counter(\"motorTML.axisCount\", start=0) }}",
+          "default": "{{ _global.counter(\"motorTML.axisCount\", start=0) }}",
           "description": "The auto incrementing axis number",
           "title": "Num",
           "type": "string"
@@ -117,9 +136,19 @@
           "type": "string"
         },
         "axid": {
-          "description": "The axis ID",
-          "title": "Axid",
-          "type": "integer"
+          "anyOf": [
+            {
+              "description": "jinja that renders to <class 'int'>",
+              "pattern": ".*\\{\\{.*\\}\\}.*",
+              "type": "string"
+            },
+            {
+              "description": "The axis ID",
+              "type": "integer"
+            }
+          ],
+          "description": "union of <class 'int'> and jinja representation of {typ}",
+          "title": "Axid"
         },
         "axconf": {
           "default": "star_vat_phs.t.zip",
@@ -137,76 +166,196 @@
           "description": "Homing direction"
         },
         "NSTEPS": {
+          "anyOf": [
+            {
+              "description": "jinja that renders to <class 'int'>",
+              "pattern": ".*\\{\\{.*\\}\\}.*",
+              "type": "string"
+            },
+            {
+              "description": "Number of steps",
+              "type": "integer"
+            }
+          ],
           "default": 200,
-          "description": "Number of steps",
-          "title": "Nsteps",
-          "type": "integer"
+          "description": "union of <class 'int'> and jinja representation of {typ}",
+          "title": "Nsteps"
         },
         "NMICROSTEPS": {
+          "anyOf": [
+            {
+              "description": "jinja that renders to <class 'int'>",
+              "pattern": ".*\\{\\{.*\\}\\}.*",
+              "type": "string"
+            },
+            {
+              "description": "Number of microsteps",
+              "type": "integer"
+            }
+          ],
           "default": 256,
-          "description": "Number of microsteps",
-          "title": "Nmicrosteps",
-          "type": "integer"
+          "description": "union of <class 'int'> and jinja representation of {typ}",
+          "title": "Nmicrosteps"
         },
         "VELO": {
+          "anyOf": [
+            {
+              "description": "jinja that renders to <class 'int'>",
+              "pattern": ".*\\{\\{.*\\}\\}.*",
+              "type": "string"
+            },
+            {
+              "description": "Velocity",
+              "type": "integer"
+            }
+          ],
           "default": 20,
-          "description": "Velocity",
-          "title": "Velo",
-          "type": "integer"
+          "description": "union of <class 'int'> and jinja representation of {typ}",
+          "title": "Velo"
         },
         "VELO_MIN": {
+          "anyOf": [
+            {
+              "description": "jinja that renders to <class 'float'>",
+              "pattern": ".*\\{\\{.*\\}\\}.*",
+              "type": "string"
+            },
+            {
+              "description": "Velocity min",
+              "type": "number"
+            }
+          ],
           "default": 0.1,
-          "description": "Velocity min",
-          "title": "Velo Min",
-          "type": "number"
+          "description": "union of <class 'float'> and jinja representation of {typ}",
+          "title": "Velo Min"
         },
         "VELO_MAX": {
+          "anyOf": [
+            {
+              "description": "jinja that renders to <class 'float'>",
+              "pattern": ".*\\{\\{.*\\}\\}.*",
+              "type": "string"
+            },
+            {
+              "description": "Velocity Max",
+              "type": "number"
+            }
+          ],
           "default": 50.0,
-          "description": "Velocity Max",
-          "title": "Velo Max",
-          "type": "number"
+          "description": "union of <class 'float'> and jinja representation of {typ}",
+          "title": "Velo Max"
         },
         "ACCL": {
+          "anyOf": [
+            {
+              "description": "jinja that renders to <class 'float'>",
+              "pattern": ".*\\{\\{.*\\}\\}.*",
+              "type": "string"
+            },
+            {
+              "description": "Seconds to Velocity",
+              "type": "number"
+            }
+          ],
           "default": 0.5,
-          "description": "Seconds to Velocity",
-          "title": "Accl",
-          "type": "number"
+          "description": "union of <class 'float'> and jinja representation of {typ}",
+          "title": "Accl"
         },
         "ACCL_MIN": {
+          "anyOf": [
+            {
+              "description": "jinja that renders to <class 'float'>",
+              "pattern": ".*\\{\\{.*\\}\\}.*",
+              "type": "string"
+            },
+            {
+              "description": "Seconds to Velocity",
+              "type": "number"
+            }
+          ],
           "default": 0.01,
-          "description": "Seconds to Velocity",
-          "title": "Accl Min",
-          "type": "number"
+          "description": "union of <class 'float'> and jinja representation of {typ}",
+          "title": "Accl Min"
         },
         "ACCL_MAX": {
+          "anyOf": [
+            {
+              "description": "jinja that renders to <class 'float'>",
+              "pattern": ".*\\{\\{.*\\}\\}.*",
+              "type": "string"
+            },
+            {
+              "description": "Seconds to Velocity",
+              "type": "number"
+            }
+          ],
           "default": 1.5,
-          "description": "Seconds to Velocity",
-          "title": "Accl Max",
-          "type": "number"
+          "description": "union of <class 'float'> and jinja representation of {typ}",
+          "title": "Accl Max"
         },
         "HAR": {
+          "anyOf": [
+            {
+              "description": "jinja that renders to <class 'float'>",
+              "pattern": ".*\\{\\{.*\\}\\}.*",
+              "type": "string"
+            },
+            {
+              "description": "Homing acceleration",
+              "type": "number"
+            }
+          ],
           "default": 0.5,
-          "description": "Homing acceleration",
-          "title": "Har",
-          "type": "number"
+          "description": "union of <class 'float'> and jinja representation of {typ}",
+          "title": "Har"
         },
         "HVEL": {
+          "anyOf": [
+            {
+              "description": "jinja that renders to <class 'float'>",
+              "pattern": ".*\\{\\{.*\\}\\}.*",
+              "type": "string"
+            },
+            {
+              "description": "Homing Velocity",
+              "type": "number"
+            }
+          ],
           "default": 10.0,
-          "description": "Homing Velocity",
-          "title": "Hvel",
-          "type": "number"
+          "description": "union of <class 'float'> and jinja representation of {typ}",
+          "title": "Hvel"
         },
         "JAR": {
+          "anyOf": [
+            {
+              "description": "jinja that renders to <class 'int'>",
+              "pattern": ".*\\{\\{.*\\}\\}.*",
+              "type": "string"
+            },
+            {
+              "description": "JAR",
+              "type": "integer"
+            }
+          ],
           "default": 1,
-          "description": "JAR",
-          "title": "Jar",
-          "type": "integer"
+          "description": "union of <class 'int'> and jinja representation of {typ}",
+          "title": "Jar"
         },
         "JVEL": {
+          "anyOf": [
+            {
+              "description": "jinja that renders to <class 'int'>",
+              "pattern": ".*\\{\\{.*\\}\\}.*",
+              "type": "string"
+            },
+            {
+              "description": "JVEL",
+              "type": "integer"
+            }
+          ],
           "default": 5,
-          "description": "JVEL",
-          "title": "Jvel",
-          "type": "integer"
+          "description": "union of <class 'int'> and jinja representation of {typ}",
+          "title": "Jvel"
         },
         "EGU": {
           "default": "ustep",
@@ -215,22 +364,52 @@
           "type": "string"
         },
         "SLSP": {
+          "anyOf": [
+            {
+              "description": "jinja that renders to <class 'float'>",
+              "pattern": ".*\\{\\{.*\\}\\}.*",
+              "type": "string"
+            },
+            {
+              "description": "Limit",
+              "type": "number"
+            }
+          ],
           "default": 0.8,
-          "description": "Limit",
-          "title": "Slsp",
-          "type": "number"
+          "description": "union of <class 'float'> and jinja representation of {typ}",
+          "title": "Slsp"
         },
         "ENABLED": {
+          "anyOf": [
+            {
+              "description": "jinja that renders to <class 'int'>",
+              "pattern": ".*\\{\\{.*\\}\\}.*",
+              "type": "string"
+            },
+            {
+              "description": "Enabled",
+              "type": "integer"
+            }
+          ],
           "default": 1,
-          "description": "Enabled",
-          "title": "Enabled",
-          "type": "integer"
+          "description": "union of <class 'int'> and jinja representation of {typ}",
+          "title": "Enabled"
         },
         "TIMEOUT": {
+          "anyOf": [
+            {
+              "description": "jinja that renders to <class 'int'>",
+              "pattern": ".*\\{\\{.*\\}\\}.*",
+              "type": "string"
+            },
+            {
+              "description": "Timeout",
+              "type": "integer"
+            }
+          ],
           "default": 0,
-          "description": "Timeout",
-          "title": "Timeout",
-          "type": "integer"
+          "description": "union of <class 'int'> and jinja representation of {typ}",
+          "title": "Timeout"
         },
         "ASYN_ADDR": {
           "default": "0",
@@ -245,13 +424,14 @@
           "type": "string"
         },
         "axisConfiguration": {
-          "default": "{{ __utils__.get_var('motorTML.axisConfiguration').append(CONFIG) }}",
+          "default": "{{ _global.get_var('motorTML.axisConfiguration').append(CONFIG) }}",
           "description": "Adds an axis configuration entry to the controller's list",
           "title": "Axisconfiguration",
           "type": "string"
         }
       },
       "required": [
+        "type",
         "controller",
         "axid"
       ],

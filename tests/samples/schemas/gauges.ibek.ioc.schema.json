@@ -5,7 +5,6 @@
       "properties": {
         "type": {
           "const": "asyn.AsynIP",
-          "default": "asyn.AsynIP",
           "description": "Asyn IP Port",
           "enum": [
             "asyn.AsynIP"
@@ -42,28 +41,68 @@
           "type": "string"
         },
         "priority": {
+          "anyOf": [
+            {
+              "description": "jinja that renders to <class 'int'>",
+              "pattern": ".*\\{\\{.*\\}\\}.*",
+              "type": "string"
+            },
+            {
+              "description": "Priority",
+              "type": "integer"
+            }
+          ],
           "default": 100,
-          "description": "Priority",
-          "title": "Priority",
-          "type": "integer"
+          "description": "union of <class 'int'> and jinja representation of {typ}",
+          "title": "Priority"
         },
         "noAuto_connect": {
+          "anyOf": [
+            {
+              "description": "jinja that renders to <class 'bool'>",
+              "pattern": ".*\\{\\{.*\\}\\}.*",
+              "type": "string"
+            },
+            {
+              "description": "Set to stop auto_connect",
+              "type": "boolean"
+            }
+          ],
           "default": false,
-          "description": "Set to stop auto_connect",
-          "title": "Noauto Connect",
-          "type": "boolean"
+          "description": "union of <class 'bool'> and jinja representation of {typ}",
+          "title": "Noauto Connect"
         },
         "noProcessEos": {
+          "anyOf": [
+            {
+              "description": "jinja that renders to <class 'bool'>",
+              "pattern": ".*\\{\\{.*\\}\\}.*",
+              "type": "string"
+            },
+            {
+              "description": "Set to avoid processing end of string",
+              "type": "boolean"
+            }
+          ],
           "default": false,
-          "description": "Set to avoid processing end of string",
-          "title": "Noprocesseos",
-          "type": "boolean"
+          "description": "union of <class 'bool'> and jinja representation of {typ}",
+          "title": "Noprocesseos"
         },
         "baud": {
+          "anyOf": [
+            {
+              "description": "jinja that renders to <class 'int'>",
+              "pattern": ".*\\{\\{.*\\}\\}.*",
+              "type": "string"
+            },
+            {
+              "description": "Baud Rate",
+              "type": "integer"
+            }
+          ],
           "default": 9600,
-          "description": "Baud Rate",
-          "title": "Baud",
-          "type": "integer"
+          "description": "union of <class 'int'> and jinja representation of {typ}",
+          "title": "Baud"
         },
         "parity": {
           "allOf": [
@@ -112,6 +151,7 @@
         }
       },
       "required": [
+        "type",
         "port",
         "name"
       ],
@@ -149,7 +189,6 @@
       "properties": {
         "type": {
           "const": "gauges.GaugeGroup",
-          "default": "gauges.GaugeGroup",
           "description": "Group of gauges",
           "enum": [
             "gauges.GaugeGroup"
@@ -189,6 +228,7 @@
         }
       },
       "required": [
+        "type",
         "name",
         "gauge1"
       ],
@@ -200,7 +240,6 @@
       "properties": {
         "type": {
           "const": "gauges.Mks937bGauge",
-          "default": "gauges.Mks937bGauge",
           "description": "MKS 937b Gauge controller",
           "enum": [
             "gauges.Mks937bGauge"
@@ -230,6 +269,7 @@
         }
       },
       "required": [
+        "type",
         "port",
         "name",
         "P"

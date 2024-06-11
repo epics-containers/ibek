@@ -39,14 +39,14 @@ defs:
           TML Configuration
         default: |-
           FILE=/tmp/,NAXIS={{numAxes}},DEV_PATH={{TTY}},HOST_ID={{hostid}}
-    values:
+    post_defines:
       - name: axisConfiguration
         description: collects the axis configuration from axis entities
         value: |-
-          {{ __utils__.set_var('motorTML.axisConfiguration',[]) }}
+          {{ _global.set_var('motorTML.axisConfiguration',[]) }}
     pre_init:
       - value: |
-          ndsCreateDevice "TechnosoftTML", "{{controllerName}}", "{{CONFIG}}{{"".join(__utils__.get_var('motorTML.axisConfiguration')) }}"
+          ndsCreateDevice "TechnosoftTML", "{{controllerName}}", "{{CONFIG}}{{"".join(_global.get_var('motorTML.axisConfiguration')) }}"
 
   - name: motorAxis
     description: |-
@@ -199,17 +199,17 @@ defs:
         default: |-
           ,AXIS_SETUP_{{num}}=$(SUPPORT)/motorTechnosoft/tml_lib/config/{{axconf}},AXIS_ID_{{num}}={{axid}},AXIS_HOMING_SW_{{num}}={{homing}}
 
-    pre_values:
+    pre_defines:
       - name: num
         description: The auto incrementing axis number
         value: |-
-          {{ __utils__.counter("motorTML.axisCount", start=0) }}
+          {{ _global.counter("motorTML.axisCount", start=0) }}
 
-    values:
+    post_defines:
       - name: axisConfiguration
         description: Adds an axis configuration entry to the controller's list
         value: |-
-          {{ __utils__.get_var('motorTML.axisConfiguration').append(CONFIG) }}
+          {{ _global.get_var('motorTML.axisConfiguration').append(CONFIG) }}
 
     pre_init:
       - value: |

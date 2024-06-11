@@ -1,4 +1,4 @@
-# yaml-language-server: $schema=https://github.com/epics-containers/ibek/releases/download/1.5.0/ibek.support.schema.json
+# yaml-language-server: $schema=../schemas/bek.support.schema.json
 
 module: epics
 defs:
@@ -83,9 +83,9 @@ defs:
         description: The number of interrupt vectors to reserve
         default: 1
 
-    values:
+    post_defines:
       - name: number
-        value: '{{  __utils__.counter("InterruptVector", start=192, stop=255, inc=count) }}'
+        value: '{{  _global.counter("InterruptVector", start=192, stop=255, inc=count) }}'
         description: Interrupt Vector number
 
     env_vars:

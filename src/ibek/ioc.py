@@ -5,6 +5,7 @@ support module definition YAML file
 
 from __future__ import annotations
 
+import json
 from enum import Enum
 from typing import Any, Dict, List, Sequence
 
@@ -71,7 +72,24 @@ class Entity(BaseSettings):
             if isinstance(value, str):
                 # Jinja expansion of any of the Entity's string args/values
                 value = UTILS.render(entity_dict, value)
-                setattr(self, arg, str(value))
+                # this is a cheesy test - any better ideas please let me know
+                if "Union" in str(model_field.annotation):
+                    # Args that were non strings and have been rendered by Jinja
+                    # must be coerced back into their original type
+                    try:
+                        # The following replace are to make the string json compatible
+                        # (maybe we should python decode instead of json.loads?)
+                        value = value.replace("'", '"')
+                        value = value.replace("True", "true")
+                        value = value.replace("False", "false")
+                        value = json.loads(value)
+                        # likewise for bools
+                    except:
+                        print(
+                            f"ERROR: fail to decode {value} as a {model_field.annotation}"
+                        )
+                        raise
+                setattr(self, arg, value)
                 # update the entity_dict with the rendered value
                 entity_dict[arg] = value
 

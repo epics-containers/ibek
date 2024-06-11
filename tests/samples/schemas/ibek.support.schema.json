@@ -29,6 +29,11 @@
               "type": "boolean"
             },
             {
+              "description": "A Jinja2 template string",
+              "pattern": ".*\\{\\{.*\\}\\}.*",
+              "type": "string"
+            },
+            {
               "type": "null"
             }
           ],
@@ -131,7 +136,20 @@
           "default": [],
           "description": "The arguments IOC instance should supply",
           "items": {
-            "anyOf": [
+            "description": "union of arg types",
+            "discriminator": {
+              "mapping": {
+                "bool": "#/$defs/BoolArg",
+                "enum": "#/$defs/EnumArg",
+                "float": "#/$defs/FloatArg",
+                "id": "#/$defs/IdArg",
+                "int": "#/$defs/IntArg",
+                "object": "#/$defs/ObjectArg",
+                "str": "#/$defs/StrArg"
+              },
+              "propertyName": "type"
+            },
+            "oneOf": [
               {
                 "$ref": "#/$defs/FloatArg"
               },
@@ -158,22 +176,22 @@
           "title": "Args",
           "type": "array"
         },
-        "values": {
+        "post_defines": {
           "default": [],
           "description": "Calculated values to use as additional arguments With Jinja evaluation after all Args",
           "items": {
             "$ref": "#/$defs/Value"
           },
-          "title": "Values",
+          "title": "Post Defines",
           "type": "array"
         },
-        "pre_values": {
+        "pre_defines": {
           "default": [],
           "description": "Calculated values to use as additional arguments With Jinja evaluation before all Args",
           "items": {
             "$ref": "#/$defs/Value"
           },
-          "title": "Pre Values",
+          "title": "Pre Defines",
           "type": "array"
         },
         "databases": {
@@ -410,6 +428,11 @@
               "type": "number"
             },
             {
+              "description": "A Jinja2 template string",
+              "pattern": ".*\\{\\{.*\\}\\}.*",
+              "type": "string"
+            },
+            {
               "type": "null"
             }
           ],
@@ -494,6 +517,11 @@
           "anyOf": [
             {
               "type": "integer"
+            },
+            {
+              "description": "A Jinja2 template string",
+              "pattern": ".*\\{\\{.*\\}\\}.*",
+              "type": "string"
             },
             {
               "type": "null"
@@ -663,8 +691,16 @@
         },
         "value": {
           "description": "The contents of the value",
-          "title": "Value",
-          "type": "string"
+          "title": "Value"
+        },
+        "type": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/ValueTypes"
+            }
+          ],
+          "default": "str",
+          "description": "The type of the value"
         }
       },
       "required": [
@@ -674,6 +710,18 @@
       ],
       "title": "Value",
       "type": "object"
+    },
+    "ValueTypes": {
+      "description": "The type of a value",
+      "enum": [
+        "str",
+        "float",
+        "int",
+        "bool",
+        "list"
+      ],
+      "title": "ValueTypes",
+      "type": "string"
     },
     "When": {
       "enum": [
@@ -688,6 +736,13 @@
   "additionalProperties": false,
   "description": "Lists the definitions for a support module, this defines what Entities it supports\n\nProvides the deserialize entry point.",
   "properties": {
+    "shared": {
+      "default": [],
+      "description": "A place to create any anchors required for repeating YAML",
+      "items": {},
+      "title": "Shared",
+      "type": "array"
+    },
     "module": {
       "description": "Support module name, normally the repo name",
       "title": "Module",

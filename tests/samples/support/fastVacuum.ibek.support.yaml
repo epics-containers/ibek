@@ -1,0 +1,170 @@
+# yaml-language-server: $schema=../schemas/ibek.support.schema.json
+
+module: dlsPLC
+
+defs:
+  - name: dummy
+    description: |-
+      dummy record
+    args:
+      - type: id
+        name: device
+        description: |-
+          name for dummy object
+
+  - name: fastVacuumMaster
+    description: |-
+      master records for fast vacuum
+    args:
+      - type: id
+        name: name
+        description: |-
+          Gui tag
+
+      - type: str
+        name: dom
+        description: |-
+          Domain, eg, FE06I
+
+      - type: object
+        name: fins_port
+        description: |-
+          FINS port
+
+      - type: str
+        name: eip_port
+        description: |-
+          EtherIP port
+
+      - type: str
+        name: device
+        description: |-
+          Device prefix
+
+    post_defines:
+      - description: device name
+        name: device
+        value: |-
+          {{dom}}-VA-FAST-01
+
+      - description: waveform element count
+        name: waveform_nelm
+        type: int
+        value: 500
+
+      - description: total waveform element count
+        name: combined_nelm
+        type: int
+        value: |-
+          {{ 6 * waveform_nelm }}
+
+    databases:
+      - file: $(DLSPLC)/db/dlsPLC_fastVacuumMaster.template
+        args: { device, eip_port }
+
+  - name: fastVacuumChannel
+    description: |-
+      Adds a fast vacuum channel to the fast vacuum master
+    args:
+      - type: id
+        name: name
+        description: |-
+          Gui tag
+
+      - type: object
+        name: master
+        description: |-
+          Master
+
+      - type: str
+        name: img
+        description: |-
+          Base IMG PV
+
+      - type: enum
+        name: id
+        description: |-
+          FV PLC gauge number
+        values:
+          "01":
+          "02":
+          "03":
+          "04":
+          "05":
+          "06":
+          "07":
+          "08":
+          "09":
+          "10":
+
+      - type: enum
+        name: em
+        description: |-
+          EM block to use
+        default: 0
+        values:
+          "0":
+          "1":
+          "2":
+
+      - type: int
+        name: timeout
+        description: |-
+          asyn fins_port timeout
+        default: 0
+
+    post_defines:
+      - description: auto gauge count
+        name: gaugeNum
+        type: int
+        value: |-
+          {{ _global.counter("fvGaugeNum", start=1) }}
+
+      - description: fan number
+        name: fan
+        value: |-
+          {{ "%02d" % (gaugeNum / 7 + 1) }}
+
+      - description: mask for the channel
+        name: mask
+        value: |-
+          {{ _global.set('fvMask', _global.get('fvMask', 0) + 2**gaugeNum) }}
+
+      - description: link number
+        name: lnk_no
+        value: |-
+          {{ ((gaugeNum - 1) % 6) + 1 }}
+
+      - description: Gauge PV
+        name: gaugePV
+        value: |-
+          {{ master.device }}:GAUGE:{{id}}_0
+
+      - description: waveform address offset for the first waveform for this channel
+        name: addr_offset
+        type: int
+        value: |-
+          {{ (gaugeNum - 1) * master.combined_nelm }}
+
+    databases:
+      - file: $(DLSPLC)/db/dlsPLC_fastVacuumLink.template
+        args: { device: "{{master.device}}", lnk_no, lnk: "{{gaugePV}}", fan, mask }
+
+      - file: $(DLSPLC)/db/dlsPLC_fastVacuumChannel.template
+        args:
+          device: "{{master.device}}"
+          img:
+          fins_port: "{{master.fins_port}}"
+          eip_port: "{{master.eip_port}}"
+          tagidx: "{{ (id | string).strip('0') }}"
+          id: "{{id}}"
+          em:
+          waveform_nelm: "{{master.waveform_nelm}}"
+          wave0_addr: "{{ addr_offset }}"
+          wave1_addr: "{{ addr_offset + master.waveform_nelm }}"
+          wave2_addr: "{{ addr_offset + master.waveform_nelm * 2 }}"
+          wave3_addr: "{{ addr_offset + master.waveform_nelm * 3 }}"
+          wave4_addr: "{{ addr_offset + master.waveform_nelm * 4 }}"
+          wave5_addr: "{{ addr_offset + master.waveform_nelm * 5 }}"
+          combined_nelm: "{{master.combined_nelm}}"
+          timeout:
