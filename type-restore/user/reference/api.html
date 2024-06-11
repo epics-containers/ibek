@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>API &#8212; ibek 3.0.0b6.dev28+g86da7110 documentation</title>
+    <title>API &#8212; ibek 3.0.0b6.dev29+gadefcefa documentation</title>
   
   
   
@@ -38,7 +38,7 @@
 <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=3ee479438cf8b5e0d341" />
   <script src="../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=3ee479438cf8b5e0d341"></script>
 
-    <script src="../../_static/documentation_options.js?v=59a1bb3f"></script>
+    <script src="../../_static/documentation_options.js?v=7113bacb"></script>
     <script src="../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -626,7 +626,7 @@ from an entity with the arguments from an Entity</p>
 <span id="ibek-utils"></span><h3><code class="docutils literal notranslate"><span class="pre">ibek.utils</span></code><a class="headerlink" href="#module-ibek.utils" title="Link to this heading">#</a></h3>
 <p>A class containing utility functions for passing into the Jinja context.</p>
 <p>This allows us to provide simple functions that can be called inside
-Jinja templates with {{ __utils__.function_name() }}. It also allows
+Jinja templates with {{ _global.function_name() }}. It also allows
 us to maintain state between calls to the Jinja templates because
 we pass a single instance of this class into all Jinja contexts.</p>
 <dl class="py class">
@@ -679,7 +679,7 @@ we pass a single instance of this class into all Jinja contexts.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="ibek.utils.Utils.render">
 <span class="sig-name descname"><span class="pre">render</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">context</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.12)"><span class="pre">Any</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">template_text</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.12)"><span class="pre">Any</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><span class="pre">str</span></a></span></span><a class="reference internal" href="../../_modules/ibek/utils.html#Utils.render"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ibek.utils.Utils.render" title="Link to this definition">#</a></dt>
-<dd><p>Render a Jinja template with the global __utils__ object in the context</p>
+<dd><p>Render a Jinja template with the global _global object in the context</p>
 </dd></dl>
 
 <dl class="py method">
