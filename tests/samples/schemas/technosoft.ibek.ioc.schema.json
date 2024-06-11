@@ -78,6 +78,12 @@
           "default": [],
           "description": "union of <class 'list'> and jinja representation of {typ}",
           "title": "Axisconfiguration"
+        },
+        "axisNum": {
+          "default": "{{ \"axes_{}\".format(controllerName) }}",
+          "description": "A name for the axis counter (used to generate unique axis numbers)",
+          "title": "Axisnum",
+          "type": "string"
         }
       },
       "required": [
@@ -124,7 +130,7 @@
               "type": "integer"
             }
           ],
-          "default": "{{ controller.axisConfiguration | length }}",
+          "default": "{{ _global.incrementor(controller.axisNum) }}",
           "description": "union of <class 'int'> and jinja representation of {typ}",
           "title": "Num"
         },
