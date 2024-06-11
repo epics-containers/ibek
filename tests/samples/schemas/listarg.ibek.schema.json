@@ -42,7 +42,7 @@
               "type": "boolean"
             }
           ],
-          "default": "{{ (name == 'Dave Lister') | lower }}",
+          "default": "{{ name == 'Dave Lister' }}",
           "description": "union of <class 'bool'> and jinja representation of {typ}",
           "title": "Is Human"
         },

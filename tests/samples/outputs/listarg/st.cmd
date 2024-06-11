@@ -4,20 +4,24 @@ cd "/epics/ioc"
 dbLoadDatabase dbd/ioc.dbd
 ioc_registerRecordDeviceDriver pdbbase
 
+
+
 Lister, age 3000029, who does not like to hear "Smoke me a kipper, I'll be back for breakfast" has friends:
-- Rimmer
-- Cat
-- Kryten
-- Holly
+o Rimmer
+o Cat
+o Kryten
+o Holly
 
 First friend is Rimmer
 Time vortex friends are ['Cat', 'Cat', 'Cat', 'Holly', 'Holly', 'Holly', 'Kryten', 'Kryten', 'Kryten', 'Rimmer', 'Rimmer', 'Rimmer']
 Fist time vortex friend is Cat
+
+
 Lister, age 42, who does not like to hear "Smoke me a kipper, I'll be back for breakfast" has friends:
-- Rimmer
-- Cat
-- Kryten
-- Holly
+o Rimmer
+o Cat
+o Kryten
+o Holly
 
 First friend is Rimmer
 Time vortex friends are ['Cat', 'Cat', 'Cat', 'Holly', 'Holly', 'Holly', 'Kryten', 'Kryten', 'Kryten', 'Rimmer', 'Rimmer', 'Rimmer']

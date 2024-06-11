@@ -28,12 +28,9 @@ defs:
         name: is_human
         description: |-
           is the character human
-        # example bool using Jinja note '| lower' because Python result is 'True'
-        # but we want 'true' for YAML (not sure I like that!!)
-        # TODO note that this only fails when rendering an instance - how to
-        # test this earlier?
+        # example bool using Jinja
         default: |-
-          {{ (name == 'Dave Lister') | lower }}
+          {{ name == 'Dave Lister' }}
 
       - type: int
         name: age
@@ -72,10 +69,12 @@ defs:
 
     pre_init:
       - value: |
+
+
           Lister, age {{age}}, who does not like to hear "{{quote}}" has friends:
           {#- example Jinja loop which is discouraged, but demos we have a list -#}
           {%- for friend in friends %}
-          - {{friend}}
+          o {{friend}}
           {%- endfor%}
 
           First friend is {{friends[0]}}

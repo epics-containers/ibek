@@ -77,8 +77,13 @@ class Entity(BaseSettings):
                     # Args that were non strings and have been rendered by Jinja
                     # must be coerced back into their original type
                     try:
-                        # shame I need the replace - why are jinja an json disagreeing?
-                        value = json.loads(value.replace("'", '"'))
+                        # The following replace are to make the string json compatible
+                        # (maybe we should python decode instead of json.loads?)
+                        value = value.replace("'", '"')
+                        value = value.replace("True", "true")
+                        value = value.replace("False", "false")
+                        value = json.loads(value)
+                        # likewise for bools
                     except:
                         print(
                             f"ERROR: fail to decode {value} as a {model_field.annotation}"
