@@ -49,34 +49,6 @@
           "title": "Entity Enabled",
           "type": "boolean"
         },
-        "gaugeNum": {
-          "anyOf": [
-            {
-              "description": "jinja that renders to <class 'int'>",
-              "pattern": ".*\\{\\{.*\\}\\}.*",
-              "type": "string"
-            },
-            {
-              "description": "auto gauge count",
-              "type": "integer"
-            }
-          ],
-          "default": "{{ _global.counter(\"fvGaugeNum\", start=1) }}",
-          "description": "union of <class 'int'> and jinja representation of {typ}",
-          "title": "Gaugenum"
-        },
-        "fan": {
-          "default": "{{ \"%02d\" % (gaugeNum / 7 + 1) }}",
-          "description": "fan number",
-          "title": "Fan",
-          "type": "string"
-        },
-        "mask": {
-          "default": "{{ _global.set('fvMask', _global.get('fvMask', 0) + 2**gaugeNum) }}",
-          "description": "mask for the channel",
-          "title": "Mask",
-          "type": "string"
-        },
         "name": {
           "description": "Gui tag",
           "title": "Name",
@@ -124,6 +96,34 @@
           "description": "union of <class 'int'> and jinja representation of {typ}",
           "title": "Timeout"
         },
+        "gaugeNum": {
+          "anyOf": [
+            {
+              "description": "jinja that renders to <class 'int'>",
+              "pattern": ".*\\{\\{.*\\}\\}.*",
+              "type": "string"
+            },
+            {
+              "description": "auto gauge count",
+              "type": "integer"
+            }
+          ],
+          "default": "{{ _global.counter(\"fvGaugeNum\", start=1) }}",
+          "description": "union of <class 'int'> and jinja representation of {typ}",
+          "title": "Gaugenum"
+        },
+        "fan": {
+          "default": "{{ \"%02d\" % (gaugeNum / 7 + 1) }}",
+          "description": "fan number",
+          "title": "Fan",
+          "type": "string"
+        },
+        "mask": {
+          "default": "{{ _global.set('fvMask', _global.get('fvMask', 0) + 2**gaugeNum) }}",
+          "description": "mask for the channel",
+          "title": "Mask",
+          "type": "string"
+        },
         "lnk_no": {
           "default": "{{ ((gaugeNum - 1) % 6) + 1 }}",
           "description": "link number",
@@ -151,40 +151,6 @@
           "default": "{{ (gaugeNum - 1) * master.combined_nelm }}",
           "description": "union of <class 'int'> and jinja representation of {typ}",
           "title": "Addr Offset"
-        },
-        "wave_addr": {
-          "anyOf": [
-            {
-              "description": "jinja that renders to <class 'list'>",
-              "pattern": ".*\\{\\{.*\\}\\}.*",
-              "type": "string"
-            },
-            {
-              "description": "waveform addresses",
-              "items": {},
-              "type": "array"
-            }
-          ],
-          "default": "{%- set addr_list = range(addr_offset,addr_offset + master.waveform_nelm * 6, master.waveform_nelm) -%}\n{{ addr_list | list }}",
-          "description": "union of <class 'list'> and jinja representation of {typ}",
-          "title": "Wave Addr"
-        },
-        "wave_addr_alternative": {
-          "anyOf": [
-            {
-              "description": "jinja that renders to <class 'list'>",
-              "pattern": ".*\\{\\{.*\\}\\}.*",
-              "type": "string"
-            },
-            {
-              "description": "waveform addresses",
-              "items": {},
-              "type": "array"
-            }
-          ],
-          "default": "{%- set addr = [] -%}\n{%- for i in range(6) -%}\n{%- set addr = addr.append(addr_offset + master.waveform_nelm * i) -%}\n{%- endfor -%}\n{{ addr }}",
-          "description": "union of <class 'list'> and jinja representation of {typ}",
-          "title": "Wave Addr Alternative"
         }
       },
       "required": [

@@ -61,6 +61,7 @@ defs:
     databases:
       - file: $(DLSPLC)/db/dlsPLC_fastVacuumMaster.template
         args: { device, eip_port }
+
   - name: fastVacuumChannel
     description: |-
       Adds a fast vacuum channel to the fast vacuum master
@@ -112,7 +113,7 @@ defs:
           asyn fins_port timeout
         default: 0
 
-    pre_defines:
+    post_defines:
       - description: auto gauge count
         name: gaugeNum
         type: int
@@ -129,7 +130,6 @@ defs:
         value: |-
           {{ _global.set('fvMask', _global.get('fvMask', 0) + 2**gaugeNum) }}
 
-    post_defines:
       - description: link number
         name: lnk_no
         value: |-
@@ -146,24 +146,6 @@ defs:
         value: |-
           {{ (gaugeNum - 1) * master.combined_nelm }}
 
-      - description: waveform addresses
-        name: wave_addr
-        type: list
-        value: |-
-          {%- set addr_list = range(addr_offset,addr_offset + master.waveform_nelm * 6, master.waveform_nelm) -%}
-          {{ addr_list | list }}
-
-      - description: waveform addresses
-        name: wave_addr_alternative
-        type: list
-        # explicit loop is uglier but more versatile
-        value: |-
-          {%- set addr = [] -%}
-          {%- for i in range(6) -%}
-          {%- set addr = addr.append(addr_offset + master.waveform_nelm * i) -%}
-          {%- endfor -%}
-          {{ addr }}
-
     databases:
       - file: $(DLSPLC)/db/dlsPLC_fastVacuumLink.template
         args: { device: "{{master.device}}", lnk_no, lnk: "{{gaugePV}}", fan, mask }
@@ -178,11 +160,11 @@ defs:
           id: "{{id}}"
           em:
           waveform_nelm: "{{master.waveform_nelm}}"
-          wave0_addr: "{{wave_addr[0]}}"
-          wave1_addr: "{{wave_addr[1]}}"
-          wave2_addr: "{{wave_addr[2]}}"
-          wave3_addr: "{{wave_addr[3]}}"
-          wave4_addr: "{{wave_addr[4]}}"
-          wave5_addr: "{{wave_addr[5]}}"
+          wave0_addr: "{{ addr_offset }}"
+          wave1_addr: "{{ addr_offset + master.waveform_nelm }}"
+          wave2_addr: "{{ addr_offset + master.waveform_nelm * 2 }}"
+          wave3_addr: "{{ addr_offset + master.waveform_nelm * 3 }}"
+          wave4_addr: "{{ addr_offset + master.waveform_nelm * 4 }}"
+          wave5_addr: "{{ addr_offset + master.waveform_nelm * 5 }}"
           combined_nelm: "{{master.combined_nelm}}"
           timeout:
