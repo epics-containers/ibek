@@ -4,23 +4,24 @@ cd "/epics/ioc"
 dbLoadDatabase dbd/ioc.dbd
 ioc_registerRecordDeviceDriver pdbbase
 
-Lister, who does not like to hear "Smoke me a kipper, I'll be back for breakfast" has friends:
-- Psiren
-- Vindaloovian
-- Polymorph
-
-First friend is Psiren
-Time vortex friends are ['Polymorph', 'Polymorph', 'Polymorph', 'Psiren', 'Psiren', 'Psiren', 'Vindaloovian', 'Vindaloovian', 'Vindaloovian']
-Fist time vortex friend is Polymorph
-Lister, who does not like to hear "Smoke me a kipper, I'll be back for breakfast" has friends:
+Lister, age 3000029, who does not like to hear "Smoke me a kipper, I'll be back for breakfast" has friends:
 - Rimmer
-- Parallel Holly
-- Rimmer
-- Parallel Holly
+- Cat
+- Kryten
+- Holly
 
 First friend is Rimmer
-Time vortex friends are ['Parallel Holly', 'Parallel Holly', 'Parallel Holly', 'Parallel Holly', 'Parallel Holly', 'Parallel Holly', 'Rimmer', 'Rimmer', 'Rimmer', 'Rimmer', 'Rimmer', 'Rimmer']
-Fist time vortex friend is Parallel Holly
+Time vortex friends are ['Cat', 'Cat', 'Cat', 'Holly', 'Holly', 'Holly', 'Kryten', 'Kryten', 'Kryten', 'Rimmer', 'Rimmer', 'Rimmer']
+Fist time vortex friend is Cat
+Lister, age 42, who does not like to hear "Smoke me a kipper, I'll be back for breakfast" has friends:
+- Rimmer
+- Cat
+- Kryten
+- Holly
+
+First friend is Rimmer
+Time vortex friends are ['Cat', 'Cat', 'Cat', 'Holly', 'Holly', 'Holly', 'Kryten', 'Kryten', 'Kryten', 'Rimmer', 'Rimmer', 'Rimmer']
+Fist time vortex friend is Cat
 
 dbLoadRecords /epics/runtime/ioc.db
 iocInit

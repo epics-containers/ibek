@@ -18,11 +18,65 @@
           "title": "Entity Enabled",
           "type": "boolean"
         },
+        "name": {
+          "default": "Dave Lister",
+          "description": "name of the character",
+          "title": "Name",
+          "type": "string"
+        },
         "quote": {
           "default": "Smoke me a kipper, I'll be back for breakfast",
           "description": "most hated quote",
           "title": "Quote",
           "type": "string"
+        },
+        "is_human": {
+          "anyOf": [
+            {
+              "description": "jinja that renders to <class 'bool'>",
+              "pattern": ".*\\{\\{.*\\}\\}.*",
+              "type": "string"
+            },
+            {
+              "description": "is the character human",
+              "type": "boolean"
+            }
+          ],
+          "default": "{{ (name == 'Dave Lister') | lower }}",
+          "description": "union of <class 'bool'> and jinja representation of {typ}",
+          "title": "Is Human"
+        },
+        "age": {
+          "anyOf": [
+            {
+              "description": "jinja that renders to <class 'int'>",
+              "pattern": ".*\\{\\{.*\\}\\}.*",
+              "type": "string"
+            },
+            {
+              "description": "Age of the character including cryogenic sleep",
+              "type": "integer"
+            }
+          ],
+          "default": "{{ 29 + cryo_years }}",
+          "description": "union of <class 'int'> and jinja representation of {typ}",
+          "title": "Age"
+        },
+        "cryo_years": {
+          "anyOf": [
+            {
+              "description": "jinja that renders to <class 'int'>",
+              "pattern": ".*\\{\\{.*\\}\\}.*",
+              "type": "string"
+            },
+            {
+              "description": "years in cryogenic sleep",
+              "type": "integer"
+            }
+          ],
+          "default": 3000000,
+          "description": "union of <class 'int'> and jinja representation of {typ}",
+          "title": "Cryo Years"
         },
         "friends": {
           "anyOf": [
@@ -32,12 +86,17 @@
               "type": "string"
             },
             {
-              "description": "List of friends",
+              "description": "friends of Lister",
               "items": {},
               "type": "array"
             }
           ],
-          "default": "{{ [\"Rimmer\"] + [ \"Cat\", \"Kryten\", \"Holly\"] }}",
+          "default": [
+            "Rimmer",
+            "Cat",
+            "Kryten",
+            "Holly"
+          ],
           "description": "union of <class 'list'> and jinja representation of {typ}",
           "title": "Friends"
         },

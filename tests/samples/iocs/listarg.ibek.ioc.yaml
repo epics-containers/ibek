@@ -1,13 +1,9 @@
 # yaml-language-server: $schema=../schemas/listarg.ibek.schema.json
 ioc_name: counter
-description: an example motion ioc for ibek testing
+description: an example for list values testing
 
 entities:
   - type: listtest.lister
-    # test an actual list of strings
-    friends: ["Psiren", "Vindaloovian", "Polymorph"]
 
   - type: listtest.lister
-    # test a jinja template that renders to a list
-    friends: |-
-      {{ (["Rimmer"] + ["Parallel Holly"]) * 2  }}
+    age: 42

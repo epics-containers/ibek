@@ -58,18 +58,11 @@ class Arg(BaseSettings):
     )
 
 
-class ListArg(Arg):
-    """An argument with a float value"""
-
-    type: Literal["list"] = "list"
-    default: Optional[list | JinjaString] = None
-
-
 class FloatArg(Arg):
     """An argument with a float value"""
 
     type: Literal["float"] = "float"
-    default: Optional[float] = None
+    default: Optional[float | JinjaString] = None
 
 
 class StrArg(Arg):
@@ -83,14 +76,14 @@ class IntArg(Arg):
     """An argument with an int value"""
 
     type: Literal["int"] = "int"
-    default: Optional[int] = None
+    default: Optional[int | JinjaString] = None
 
 
 class BoolArg(Arg):
     """An argument with an bool value"""
 
     type: Literal["bool"] = "bool"
-    default: Optional[bool] = None
+    default: Optional[bool | JinjaString] = None
 
 
 class ObjectArg(Arg):

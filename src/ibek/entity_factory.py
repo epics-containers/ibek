@@ -12,6 +12,8 @@ from pydantic import Field, create_model, field_validator
 from pydantic_core import PydanticUndefined, ValidationError
 from ruamel.yaml.main import YAML
 
+from ibek.globals import JINJA
+
 from .args import EnumArg, IdArg, ObjectArg, Value
 from .ioc import Entity, EnumVal, clear_entity_model_ids, get_entity_by_id
 from .support import EntityDefinition, Support
@@ -79,7 +81,7 @@ class EntityFactory:
                             str,
                             Field(
                                 description=f"jinja that renders to {typ}",
-                                pattern=r".*\{\{.*\}\}.*",
+                                pattern=JINJA,
                             ),
                         ]
                         | Annotated[typ, Field(description=description)],

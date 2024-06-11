@@ -29,6 +29,11 @@
               "type": "boolean"
             },
             {
+              "description": "A Jinja2 template string",
+              "pattern": ".*\\{\\{.*\\}\\}.*",
+              "type": "string"
+            },
+            {
               "type": "null"
             }
           ],
@@ -139,16 +144,12 @@
                 "float": "#/$defs/FloatArg",
                 "id": "#/$defs/IdArg",
                 "int": "#/$defs/IntArg",
-                "list": "#/$defs/ListArg",
                 "object": "#/$defs/ObjectArg",
                 "str": "#/$defs/StrArg"
               },
               "propertyName": "type"
             },
             "oneOf": [
-              {
-                "$ref": "#/$defs/ListArg"
-              },
               {
                 "$ref": "#/$defs/FloatArg"
               },
@@ -427,6 +428,11 @@
               "type": "number"
             },
             {
+              "description": "A Jinja2 template string",
+              "pattern": ".*\\{\\{.*\\}\\}.*",
+              "type": "string"
+            },
+            {
               "type": "null"
             }
           ],
@@ -513,50 +519,6 @@
               "type": "integer"
             },
             {
-              "type": "null"
-            }
-          ],
-          "default": null,
-          "title": "Default"
-        }
-      },
-      "required": [
-        "name",
-        "description"
-      ],
-      "title": "IntArg",
-      "type": "object"
-    },
-    "ListArg": {
-      "additionalProperties": false,
-      "description": "An argument with a float value",
-      "properties": {
-        "type": {
-          "const": "list",
-          "default": "list",
-          "enum": [
-            "list"
-          ],
-          "title": "Type",
-          "type": "string"
-        },
-        "name": {
-          "description": "Name of the argument that the IOC instance should pass",
-          "title": "Name",
-          "type": "string"
-        },
-        "description": {
-          "description": "Description of what the argument will be used for",
-          "title": "Description",
-          "type": "string"
-        },
-        "default": {
-          "anyOf": [
-            {
-              "items": {},
-              "type": "array"
-            },
-            {
               "description": "A Jinja2 template string",
               "pattern": ".*\\{\\{.*\\}\\}.*",
               "type": "string"
@@ -573,7 +535,7 @@
         "name",
         "description"
       ],
-      "title": "ListArg",
+      "title": "IntArg",
       "type": "object"
     },
     "ObjectArg": {
