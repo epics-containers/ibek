@@ -40,9 +40,17 @@ defs:
         type: list
         value: []
 
+      # this is not strictly required but it makes the jinja references in
+      # the motorAxis and controller's post_init sections easier to read
+      # as their association is far more obvious
+      - name: axisNum
+        description: A name for the axis counter (used to generate unique axis numbers)
+        value: |-
+          {{ "axes_{}".format(controllerName) }}
+
     pre_init:
       - value: |
-          ndsCreateDevice "TechnosoftTML", "{{controllerName}}", "FILE=/tmp/,NAXIS={{axisConfiguration | length}},{{CONFIG}}{{"".join(axisConfiguration) }}"
+          ndsCreateDevice "TechnosoftTML", "{{controllerName}}", "FILE=/tmp/,NAXIS={{_global.get(axisNum)+1}},{{CONFIG}}{{"".join(axisConfiguration) }}"
 
   - name: motorAxis
     description: |-
@@ -59,7 +67,7 @@ defs:
         description: |-
           The axis number
         default: |-
-          {{ controller.axisConfiguration | length }}
+          {{ _global.incrementor(controller.axisNum) }}
 
       - type: str
         name: CHANNEL_PREFIX

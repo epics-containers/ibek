@@ -13,23 +13,6 @@ from ibek.utils import UTILS
 from tests.conftest import run_cli
 
 
-def test_counter_reuse(tmp_epics_root: Path, samples: Path):
-    """
-    Check you cannot redefine a counter with the same name and different params
-    """
-    UTILS.__reset__()
-
-    entity_file = samples / "iocs" / "bad_counter.ibek.ioc.yaml"
-    definition_file1 = samples / "support" / "utils.ibek.support.yaml"
-
-    with pytest.raises(ValueError) as ctx:
-        run_cli("runtime", "generate", entity_file, definition_file1)
-    assert (
-        str(ctx.value)
-        == "Redefining counter InterruptVector with different start/stop values"
-    )
-
-
 def test_counter_overuse(tmp_epics_root: Path, samples: Path):
     """
     Check that counter limits are enforced
@@ -42,7 +25,7 @@ def test_counter_overuse(tmp_epics_root: Path, samples: Path):
     with pytest.raises(ValueError) as ctx:
         run_cli("runtime", "generate", entity_file, definition_file1)
 
-    assert "Counter 195 exceeded stop value of 194" in str(ctx.value)
+    assert "Counter InterruptVector exceeded maximum value of 194" in str(ctx.value)
 
 
 def test_bad_ref(samples: Path):

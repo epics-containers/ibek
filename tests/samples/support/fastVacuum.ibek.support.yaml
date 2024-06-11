@@ -118,7 +118,7 @@ defs:
         name: gaugeNum
         type: int
         value: |-
-          {{ _global.counter(master, start=1) }}
+          {{ _global.incrementor(master, start=1) }}
 
       - description: fan number
         name: fan
@@ -127,9 +127,9 @@ defs:
 
       - description: mask for the channel
         name: mask
+        # incrementor takes name, start=0, increment=1, end=10000
         value: |-
-          {%- set m = "mask_%s" % master -%}
-          {{ _global.set(m, _global.get(m, 0) + 2**gaugeNum) }}
+          {{ _global.incrementor("mask_{}".format(master), 2, 2**gaugeNum) }}
 
       - description: link number
         name: lnk_no

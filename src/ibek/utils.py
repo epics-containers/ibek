@@ -8,35 +8,10 @@ we pass a single instance of this class into all Jinja contexts.
 """
 
 import os
-from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Dict, Mapping
 
 from jinja2 import StrictUndefined, Template
-
-
-@dataclass
-class Counter:
-    """
-    Provides the ability to supply unique numbers to Jinja templates
-    """
-
-    start: int
-    current: int
-    stop: int
-
-    def increment(self, count: int):
-        self.current += count
-        if self.current > self.stop:
-            raise ValueError(
-                f"Counter {self.current} exceeded stop value of {self.stop}"
-            )
-
-    def __repr__(self) -> str:
-        return str(self.current)
-
-    def __str__(self) -> str:
-        return str(self.current)
 
 
 class Utils:
@@ -49,17 +24,12 @@ class Utils:
         self.ioc_name: str = ""
         self.__reset__()
 
-        # old names for backward compatibility
-        self.set_var = self.set
-        self.get_var = self.get
-
     def __reset__(self: "Utils"):
         """
         Reset all saved state. For use in testing where more than one
         IOC is rendered in a single session
         """
         self.variables: Dict[str, Any] = {}
-        self.counters: Dict[str, Counter] = {}
 
     def set_file_name(self: "Utils", file: Path):
         """
@@ -91,8 +61,8 @@ class Utils:
         s_key = str(key)
         return self.variables.get(s_key, default)
 
-    def counter(
-        self, name: str, start: int = 0, stop: int = 65535, inc: int = 1
+    def incrementor(
+        self, name: str, start: int = 0, increment: int = 1, stop: int = 10000
     ) -> int:
         """
         get a named counter that increments by inc each time it is called
@@ -100,20 +70,18 @@ class Utils:
         creates a new counter if it does not yet exist
         """
         index = str(name)
-        counter = self.counters.get(index)
-        if counter is None:
-            counter = Counter(start, start, stop)
-            self.counters[index] = counter
-        else:
-            if counter.start != start or counter.stop != stop:
-                raise ValueError(
-                    f"Redefining counter {name} with different start/stop values"
-                )
-        result = counter.current
-        counter.increment(inc)
-        self.counters[index] = counter
+        counter = self.variables.get(index)
 
-        return result
+        if counter is None:
+            self.variables[index] = start
+        else:
+            if not isinstance(counter, int):
+                raise ValueError(f"Variable {index} is not an integer")
+            self.variables[index] += increment
+            if self.variables[index] > stop:
+                raise ValueError(f"Counter {index} exceeded maximum value of {stop}")
+
+        return self.variables[index]
 
     def render(self, context: Any, template_text: Any) -> str:
         """
