@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Modules, Definitions and Entities &#8212; ibek 3.0.0b6.dev7+g7eb87f80 documentation</title>
+    <title>Modules, Definitions and Entities &#8212; ibek 3.0.0b6.dev33+ga0a357ea documentation</title>
   
   
   
@@ -38,7 +38,7 @@
 <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=3ee479438cf8b5e0d341" />
   <script src="../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=3ee479438cf8b5e0d341"></script>
 
-    <script src="../../_static/documentation_options.js?v=5782ea69"></script>
+    <script src="../../_static/documentation_options.js?v=d37c2223"></script>
     <script src="../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -995,6 +995,11 @@ the container or during container development.</p>
               <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;boolean&quot;</span>
             <span class="p">},</span>
             <span class="p">{</span>
+              <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;A Jinja2 template string&quot;</span><span class="p">,</span>
+              <span class="s2">&quot;pattern&quot;</span><span class="p">:</span> <span class="s2">&quot;.*</span><span class="se">\\</span><span class="s2">{</span><span class="se">\\</span><span class="s2">{.*</span><span class="se">\\</span><span class="s2">}</span><span class="se">\\</span><span class="s2">}.*&quot;</span><span class="p">,</span>
+              <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
+            <span class="p">},</span>
+            <span class="p">{</span>
               <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;null&quot;</span>
             <span class="p">}</span>
           <span class="p">],</span>
@@ -1097,7 +1102,20 @@ the container or during container development.</p>
           <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="p">[],</span>
           <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;The arguments IOC instance should supply&quot;</span><span class="p">,</span>
           <span class="s2">&quot;items&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s2">&quot;anyOf&quot;</span><span class="p">:</span> <span class="p">[</span>
+            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;union of arg types&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;discriminator&quot;</span><span class="p">:</span> <span class="p">{</span>
+              <span class="s2">&quot;mapping&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;bool&quot;</span><span class="p">:</span> <span class="s2">&quot;#/$defs/BoolArg&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;enum&quot;</span><span class="p">:</span> <span class="s2">&quot;#/$defs/EnumArg&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;float&quot;</span><span class="p">:</span> <span class="s2">&quot;#/$defs/FloatArg&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="s2">&quot;#/$defs/IdArg&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;int&quot;</span><span class="p">:</span> <span class="s2">&quot;#/$defs/IntArg&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;object&quot;</span><span class="p">:</span> <span class="s2">&quot;#/$defs/ObjectArg&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;str&quot;</span><span class="p">:</span> <span class="s2">&quot;#/$defs/StrArg&quot;</span>
+              <span class="p">},</span>
+              <span class="s2">&quot;propertyName&quot;</span><span class="p">:</span> <span class="s2">&quot;type&quot;</span>
+            <span class="p">},</span>
+            <span class="s2">&quot;oneOf&quot;</span><span class="p">:</span> <span class="p">[</span>
               <span class="p">{</span>
                 <span class="s2">&quot;$ref&quot;</span><span class="p">:</span> <span class="s2">&quot;#/$defs/FloatArg&quot;</span>
               <span class="p">},</span>
@@ -1124,22 +1142,22 @@ the container or during container development.</p>
           <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Args&quot;</span><span class="p">,</span>
           <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;array&quot;</span>
         <span class="p">},</span>
-        <span class="s2">&quot;values&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;post_defines&quot;</span><span class="p">:</span> <span class="p">{</span>
           <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="p">[],</span>
           <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Calculated values to use as additional arguments With Jinja evaluation after all Args&quot;</span><span class="p">,</span>
           <span class="s2">&quot;items&quot;</span><span class="p">:</span> <span class="p">{</span>
             <span class="s2">&quot;$ref&quot;</span><span class="p">:</span> <span class="s2">&quot;#/$defs/Value&quot;</span>
           <span class="p">},</span>
-          <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Values&quot;</span><span class="p">,</span>
+          <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Post Defines&quot;</span><span class="p">,</span>
           <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;array&quot;</span>
         <span class="p">},</span>
-        <span class="s2">&quot;pre_values&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;pre_defines&quot;</span><span class="p">:</span> <span class="p">{</span>
           <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="p">[],</span>
           <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Calculated values to use as additional arguments With Jinja evaluation before all Args&quot;</span><span class="p">,</span>
           <span class="s2">&quot;items&quot;</span><span class="p">:</span> <span class="p">{</span>
             <span class="s2">&quot;$ref&quot;</span><span class="p">:</span> <span class="s2">&quot;#/$defs/Value&quot;</span>
           <span class="p">},</span>
-          <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Pre Values&quot;</span><span class="p">,</span>
+          <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Pre Defines&quot;</span><span class="p">,</span>
           <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;array&quot;</span>
         <span class="p">},</span>
         <span class="s2">&quot;databases&quot;</span><span class="p">:</span> <span class="p">{</span>
@@ -1376,6 +1394,11 @@ the container or during container development.</p>
               <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;number&quot;</span>
             <span class="p">},</span>
             <span class="p">{</span>
+              <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;A Jinja2 template string&quot;</span><span class="p">,</span>
+              <span class="s2">&quot;pattern&quot;</span><span class="p">:</span> <span class="s2">&quot;.*</span><span class="se">\\</span><span class="s2">{</span><span class="se">\\</span><span class="s2">{.*</span><span class="se">\\</span><span class="s2">}</span><span class="se">\\</span><span class="s2">}.*&quot;</span><span class="p">,</span>
+              <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
+            <span class="p">},</span>
+            <span class="p">{</span>
               <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;null&quot;</span>
             <span class="p">}</span>
           <span class="p">],</span>
@@ -1460,6 +1483,11 @@ the container or during container development.</p>
           <span class="s2">&quot;anyOf&quot;</span><span class="p">:</span> <span class="p">[</span>
             <span class="p">{</span>
               <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;integer&quot;</span>
+            <span class="p">},</span>
+            <span class="p">{</span>
+              <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;A Jinja2 template string&quot;</span><span class="p">,</span>
+              <span class="s2">&quot;pattern&quot;</span><span class="p">:</span> <span class="s2">&quot;.*</span><span class="se">\\</span><span class="s2">{</span><span class="se">\\</span><span class="s2">{.*</span><span class="se">\\</span><span class="s2">}</span><span class="se">\\</span><span class="s2">}.*&quot;</span><span class="p">,</span>
+              <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
             <span class="p">},</span>
             <span class="p">{</span>
               <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;null&quot;</span>
@@ -1629,8 +1657,16 @@ the container or during container development.</p>
         <span class="p">},</span>
         <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="p">{</span>
           <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;The contents of the value&quot;</span><span class="p">,</span>
-          <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Value&quot;</span><span class="p">,</span>
-          <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
+          <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Value&quot;</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="p">{</span>
+          <span class="s2">&quot;allOf&quot;</span><span class="p">:</span> <span class="p">[</span>
+            <span class="p">{</span>
+              <span class="s2">&quot;$ref&quot;</span><span class="p">:</span> <span class="s2">&quot;#/$defs/ValueTypes&quot;</span>
+            <span class="p">}</span>
+          <span class="p">],</span>
+          <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="s2">&quot;str&quot;</span><span class="p">,</span>
+          <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;The type of the value&quot;</span>
         <span class="p">}</span>
       <span class="p">},</span>
       <span class="s2">&quot;required&quot;</span><span class="p">:</span> <span class="p">[</span>
@@ -1640,6 +1676,18 @@ the container or during container development.</p>
       <span class="p">],</span>
       <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Value&quot;</span><span class="p">,</span>
       <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span>
+    <span class="p">},</span>
+    <span class="s2">&quot;ValueTypes&quot;</span><span class="p">:</span> <span class="p">{</span>
+      <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;The type of a value&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;enum&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="s2">&quot;str&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;float&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;int&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;bool&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;list&quot;</span>
+      <span class="p">],</span>
+      <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;ValueTypes&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
     <span class="p">},</span>
     <span class="s2">&quot;When&quot;</span><span class="p">:</span> <span class="p">{</span>
       <span class="s2">&quot;enum&quot;</span><span class="p">:</span> <span class="p">[</span>
@@ -1654,6 +1702,13 @@ the container or during container development.</p>
   <span class="s2">&quot;additionalProperties&quot;</span><span class="p">:</span> <span class="n">false</span><span class="p">,</span>
   <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Lists the definitions for a support module, this defines what Entities it supports</span><span class="se">\n\n</span><span class="s2">Provides the deserialize entry point.&quot;</span><span class="p">,</span>
   <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="s2">&quot;shared&quot;</span><span class="p">:</span> <span class="p">{</span>
+      <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="p">[],</span>
+      <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;A place to create any anchors required for repeating YAML&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;items&quot;</span><span class="p">:</span> <span class="p">{},</span>
+      <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Shared&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;array&quot;</span>
+    <span class="p">},</span>
     <span class="s2">&quot;module&quot;</span><span class="p">:</span> <span class="p">{</span>
       <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Support module name, normally the repo name&quot;</span><span class="p">,</span>
       <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Module&quot;</span><span class="p">,</span>
@@ -1694,7 +1749,6 @@ the container or during container development.</p>
       <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span>
         <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="p">{</span>
           <span class="s2">&quot;const&quot;</span><span class="p">:</span> <span class="s2">&quot;motorSim.simMotorAxis&quot;</span><span class="p">,</span>
-          <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="s2">&quot;motorSim.simMotorAxis&quot;</span><span class="p">,</span>
           <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Creates a simulation motor axis&quot;</span><span class="p">,</span>
           <span class="s2">&quot;enum&quot;</span><span class="p">:</span> <span class="p">[</span>
             <span class="s2">&quot;motorSim.simMotorAxis&quot;</span>
@@ -1718,9 +1772,19 @@ the container or during container development.</p>
           <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
         <span class="p">},</span>
         <span class="s2">&quot;ADDR&quot;</span><span class="p">:</span> <span class="p">{</span>
-          <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;The axis number (allowed to be from 0 to controller.numAxes-1)&quot;</span><span class="p">,</span>
-          <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Addr&quot;</span><span class="p">,</span>
-          <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;integer&quot;</span>
+          <span class="s2">&quot;anyOf&quot;</span><span class="p">:</span> <span class="p">[</span>
+            <span class="p">{</span>
+              <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;jinja that renders to &lt;class &#39;int&#39;&gt;&quot;</span><span class="p">,</span>
+              <span class="s2">&quot;pattern&quot;</span><span class="p">:</span> <span class="s2">&quot;.*</span><span class="se">\\</span><span class="s2">{</span><span class="se">\\</span><span class="s2">{.*</span><span class="se">\\</span><span class="s2">}</span><span class="se">\\</span><span class="s2">}.*&quot;</span><span class="p">,</span>
+              <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
+            <span class="p">},</span>
+            <span class="p">{</span>
+              <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;The axis number (allowed to be from 0 to controller.numAxes-1)&quot;</span><span class="p">,</span>
+              <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;integer&quot;</span>
+            <span class="p">}</span>
+          <span class="p">],</span>
+          <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;union of &lt;class &#39;int&#39;&gt; and jinja representation of </span><span class="si">{typ}</span><span class="s2">&quot;</span><span class="p">,</span>
+          <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Addr&quot;</span>
         <span class="p">},</span>
         <span class="s2">&quot;DESC&quot;</span><span class="p">:</span> <span class="p">{</span>
           <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="s2">&quot;Motor {{ADDR}}&quot;</span><span class="p">,</span>
@@ -1729,22 +1793,52 @@ the container or during container development.</p>
           <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
         <span class="p">},</span>
         <span class="s2">&quot;DLLM&quot;</span><span class="p">:</span> <span class="p">{</span>
+          <span class="s2">&quot;anyOf&quot;</span><span class="p">:</span> <span class="p">[</span>
+            <span class="p">{</span>
+              <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;jinja that renders to &lt;class &#39;int&#39;&gt;&quot;</span><span class="p">,</span>
+              <span class="s2">&quot;pattern&quot;</span><span class="p">:</span> <span class="s2">&quot;.*</span><span class="se">\\</span><span class="s2">{</span><span class="se">\\</span><span class="s2">{.*</span><span class="se">\\</span><span class="s2">}</span><span class="se">\\</span><span class="s2">}.*&quot;</span><span class="p">,</span>
+              <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
+            <span class="p">},</span>
+            <span class="p">{</span>
+              <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;The low limit of the axis (in counts)&quot;</span><span class="p">,</span>
+              <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;integer&quot;</span>
+            <span class="p">}</span>
+          <span class="p">],</span>
           <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="o">-</span><span class="mi">20000</span><span class="p">,</span>
-          <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;The low limit of the axis (in counts)&quot;</span><span class="p">,</span>
-          <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Dllm&quot;</span><span class="p">,</span>
-          <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;integer&quot;</span>
+          <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;union of &lt;class &#39;int&#39;&gt; and jinja representation of </span><span class="si">{typ}</span><span class="s2">&quot;</span><span class="p">,</span>
+          <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Dllm&quot;</span>
         <span class="p">},</span>
         <span class="s2">&quot;DHLM&quot;</span><span class="p">:</span> <span class="p">{</span>
+          <span class="s2">&quot;anyOf&quot;</span><span class="p">:</span> <span class="p">[</span>
+            <span class="p">{</span>
+              <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;jinja that renders to &lt;class &#39;int&#39;&gt;&quot;</span><span class="p">,</span>
+              <span class="s2">&quot;pattern&quot;</span><span class="p">:</span> <span class="s2">&quot;.*</span><span class="se">\\</span><span class="s2">{</span><span class="se">\\</span><span class="s2">{.*</span><span class="se">\\</span><span class="s2">}</span><span class="se">\\</span><span class="s2">}.*&quot;</span><span class="p">,</span>
+              <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
+            <span class="p">},</span>
+            <span class="p">{</span>
+              <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;The high limit of the axis (in counts)&quot;</span><span class="p">,</span>
+              <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;integer&quot;</span>
+            <span class="p">}</span>
+          <span class="p">],</span>
           <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="mi">20000</span><span class="p">,</span>
-          <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;The high limit of the axis (in counts)&quot;</span><span class="p">,</span>
-          <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Dhlm&quot;</span><span class="p">,</span>
-          <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;integer&quot;</span>
+          <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;union of &lt;class &#39;int&#39;&gt; and jinja representation of </span><span class="si">{typ}</span><span class="s2">&quot;</span><span class="p">,</span>
+          <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Dhlm&quot;</span>
         <span class="p">},</span>
         <span class="s2">&quot;home&quot;</span><span class="p">:</span> <span class="p">{</span>
+          <span class="s2">&quot;anyOf&quot;</span><span class="p">:</span> <span class="p">[</span>
+            <span class="p">{</span>
+              <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;jinja that renders to &lt;class &#39;int&#39;&gt;&quot;</span><span class="p">,</span>
+              <span class="s2">&quot;pattern&quot;</span><span class="p">:</span> <span class="s2">&quot;.*</span><span class="se">\\</span><span class="s2">{</span><span class="se">\\</span><span class="s2">{.*</span><span class="se">\\</span><span class="s2">}</span><span class="se">\\</span><span class="s2">}.*&quot;</span><span class="p">,</span>
+              <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
+            <span class="p">},</span>
+            <span class="p">{</span>
+              <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;The home position of the axis (in counts)&quot;</span><span class="p">,</span>
+              <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;integer&quot;</span>
+            <span class="p">}</span>
+          <span class="p">],</span>
           <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
-          <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;The home position of the axis (in counts)&quot;</span><span class="p">,</span>
-          <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Home&quot;</span><span class="p">,</span>
-          <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;integer&quot;</span>
+          <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;union of &lt;class &#39;int&#39;&gt; and jinja representation of </span><span class="si">{typ}</span><span class="s2">&quot;</span><span class="p">,</span>
+          <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Home&quot;</span>
         <span class="p">},</span>
         <span class="s2">&quot;start&quot;</span><span class="p">:</span> <span class="p">{</span>
           <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="s2">&quot;{{home}}&quot;</span><span class="p">,</span>
@@ -1762,10 +1856,20 @@ the container or during container development.</p>
           <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;The direction of the axis&quot;</span>
         <span class="p">},</span>
         <span class="s2">&quot;VELO&quot;</span><span class="p">:</span> <span class="p">{</span>
+          <span class="s2">&quot;anyOf&quot;</span><span class="p">:</span> <span class="p">[</span>
+            <span class="p">{</span>
+              <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;jinja that renders to &lt;class &#39;float&#39;&gt;&quot;</span><span class="p">,</span>
+              <span class="s2">&quot;pattern&quot;</span><span class="p">:</span> <span class="s2">&quot;.*</span><span class="se">\\</span><span class="s2">{</span><span class="se">\\</span><span class="s2">{.*</span><span class="se">\\</span><span class="s2">}</span><span class="se">\\</span><span class="s2">}.*&quot;</span><span class="p">,</span>
+              <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
+            <span class="p">},</span>
+            <span class="p">{</span>
+              <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;The velocity of the axis (in counts/sec)&quot;</span><span class="p">,</span>
+              <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;number&quot;</span>
+            <span class="p">}</span>
+          <span class="p">],</span>
           <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="mf">10.0</span><span class="p">,</span>
-          <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;The velocity of the axis (in counts/sec)&quot;</span><span class="p">,</span>
-          <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Velo&quot;</span><span class="p">,</span>
-          <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;number&quot;</span>
+          <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;union of &lt;class &#39;float&#39;&gt; and jinja representation of </span><span class="si">{typ}</span><span class="s2">&quot;</span><span class="p">,</span>
+          <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Velo&quot;</span>
         <span class="p">},</span>
         <span class="s2">&quot;VMAX&quot;</span><span class="p">:</span> <span class="p">{</span>
           <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="s2">&quot;{{VELO}}&quot;</span><span class="p">,</span>
@@ -1774,19 +1878,40 @@ the container or during container development.</p>
           <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
         <span class="p">},</span>
         <span class="s2">&quot;is_cs&quot;</span><span class="p">:</span> <span class="p">{</span>
+          <span class="s2">&quot;anyOf&quot;</span><span class="p">:</span> <span class="p">[</span>
+            <span class="p">{</span>
+              <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;jinja that renders to &lt;class &#39;bool&#39;&gt;&quot;</span><span class="p">,</span>
+              <span class="s2">&quot;pattern&quot;</span><span class="p">:</span> <span class="s2">&quot;.*</span><span class="se">\\</span><span class="s2">{</span><span class="se">\\</span><span class="s2">{.*</span><span class="se">\\</span><span class="s2">}</span><span class="se">\\</span><span class="s2">}.*&quot;</span><span class="p">,</span>
+              <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
+            <span class="p">},</span>
+            <span class="p">{</span>
+              <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Set to True if this axis a coordinate system axis&quot;</span><span class="p">,</span>
+              <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;boolean&quot;</span>
+            <span class="p">}</span>
+          <span class="p">],</span>
           <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="n">false</span><span class="p">,</span>
-          <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Set to True if this axis a coordinate system axis&quot;</span><span class="p">,</span>
-          <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Is Cs&quot;</span><span class="p">,</span>
-          <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;boolean&quot;</span>
+          <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;union of &lt;class &#39;bool&#39;&gt; and jinja representation of </span><span class="si">{typ}</span><span class="s2">&quot;</span><span class="p">,</span>
+          <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Is Cs&quot;</span>
         <span class="p">},</span>
         <span class="s2">&quot;CS_NUM&quot;</span><span class="p">:</span> <span class="p">{</span>
+          <span class="s2">&quot;anyOf&quot;</span><span class="p">:</span> <span class="p">[</span>
+            <span class="p">{</span>
+              <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;jinja that renders to &lt;class &#39;int&#39;&gt;&quot;</span><span class="p">,</span>
+              <span class="s2">&quot;pattern&quot;</span><span class="p">:</span> <span class="s2">&quot;.*</span><span class="se">\\</span><span class="s2">{</span><span class="se">\\</span><span class="s2">{.*</span><span class="se">\\</span><span class="s2">}</span><span class="se">\\</span><span class="s2">}.*&quot;</span><span class="p">,</span>
+              <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
+            <span class="p">},</span>
+            <span class="p">{</span>
+              <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;The coordinate system number for this axis&quot;</span><span class="p">,</span>
+              <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;integer&quot;</span>
+            <span class="p">}</span>
+          <span class="p">],</span>
           <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
-          <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;The coordinate system number for this axis&quot;</span><span class="p">,</span>
-          <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Cs Num&quot;</span><span class="p">,</span>
-          <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;integer&quot;</span>
+          <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;union of &lt;class &#39;int&#39;&gt; and jinja representation of </span><span class="si">{typ}</span><span class="s2">&quot;</span><span class="p">,</span>
+          <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Cs Num&quot;</span>
         <span class="p">}</span>
       <span class="p">},</span>
       <span class="s2">&quot;required&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="s2">&quot;type&quot;</span><span class="p">,</span>
         <span class="s2">&quot;controller&quot;</span><span class="p">,</span>
         <span class="s2">&quot;M&quot;</span><span class="p">,</span>
         <span class="s2">&quot;ADDR&quot;</span>
@@ -1799,7 +1924,6 @@ the container or during container development.</p>
       <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span>
         <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="p">{</span>
           <span class="s2">&quot;const&quot;</span><span class="p">:</span> <span class="s2">&quot;motorSim.simMotorController&quot;</span><span class="p">,</span>
-          <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="s2">&quot;motorSim.simMotorController&quot;</span><span class="p">,</span>
           <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Creates a simulation motion controller&quot;</span><span class="p">,</span>
           <span class="s2">&quot;enum&quot;</span><span class="p">:</span> <span class="p">[</span>
             <span class="s2">&quot;motorSim.simMotorController&quot;</span>
@@ -1824,9 +1948,19 @@ the container or during container development.</p>
           <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
         <span class="p">},</span>
         <span class="s2">&quot;numAxes&quot;</span><span class="p">:</span> <span class="p">{</span>
-          <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;The number of axes to create&quot;</span><span class="p">,</span>
-          <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Numaxes&quot;</span><span class="p">,</span>
-          <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;integer&quot;</span>
+          <span class="s2">&quot;anyOf&quot;</span><span class="p">:</span> <span class="p">[</span>
+            <span class="p">{</span>
+              <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;jinja that renders to &lt;class &#39;int&#39;&gt;&quot;</span><span class="p">,</span>
+              <span class="s2">&quot;pattern&quot;</span><span class="p">:</span> <span class="s2">&quot;.*</span><span class="se">\\</span><span class="s2">{</span><span class="se">\\</span><span class="s2">{.*</span><span class="se">\\</span><span class="s2">}</span><span class="se">\\</span><span class="s2">}.*&quot;</span><span class="p">,</span>
+              <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
+            <span class="p">},</span>
+            <span class="p">{</span>
+              <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;The number of axes to create&quot;</span><span class="p">,</span>
+              <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;integer&quot;</span>
+            <span class="p">}</span>
+          <span class="p">],</span>
+          <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;union of &lt;class &#39;int&#39;&gt; and jinja representation of </span><span class="si">{typ}</span><span class="s2">&quot;</span><span class="p">,</span>
+          <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Numaxes&quot;</span>
         <span class="p">},</span>
         <span class="s2">&quot;port&quot;</span><span class="p">:</span> <span class="p">{</span>
           <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;a reference to the asyn port for communication with the controller&quot;</span><span class="p">,</span>
@@ -1840,6 +1974,7 @@ the container or during container development.</p>
         <span class="p">}</span>
       <span class="p">},</span>
       <span class="s2">&quot;required&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="s2">&quot;type&quot;</span><span class="p">,</span>
         <span class="s2">&quot;controllerName&quot;</span><span class="p">,</span>
         <span class="s2">&quot;P&quot;</span><span class="p">,</span>
         <span class="s2">&quot;numAxes&quot;</span><span class="p">,</span>
