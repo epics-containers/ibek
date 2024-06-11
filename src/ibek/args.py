@@ -90,7 +90,9 @@ class ObjectArg(Arg):
     """A reference to another entity defined in this IOC"""
 
     type: Literal["object"] = "object"
-    default: Optional[str] = None
+    # represented by an id string in YAML but converted to an Entity object
+    # during validation
+    default: Optional[str | object] = None
 
 
 class IdArg(Arg):

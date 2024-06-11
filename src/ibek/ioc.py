@@ -78,7 +78,7 @@ class Entity(BaseSettings):
                     # must be coerced back into their original type
                     try:
                         # The following replace are to make the string json compatible
-                        # (maybe we should python decode instead of json.loads?)
+                        # (maybe we should python decode instead of json.loads)
                         value = value.replace("'", '"')
                         value = value.replace("True", "true")
                         value = value.replace("False", "false")
@@ -94,10 +94,12 @@ class Entity(BaseSettings):
                 entity_dict[arg] = value
 
             if model_field.annotation == object:
-                # if the field is an object but the type is str then look up
-                # the actual object (this covers default values with obj ref)
+                # look up the actual object by it's id
                 if isinstance(value, str):
-                    setattr(self, arg, get_entity_by_id(value))
+                    value = get_entity_by_id(value)
+                    setattr(self, arg, value)
+                # update the entity_dict with looked up object
+                entity_dict[arg] = value
 
             if arg in ids:
                 # add this entity to the global id index

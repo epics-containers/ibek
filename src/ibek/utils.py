@@ -81,13 +81,15 @@ class Utils:
 
     def set(self, key: str, value: Any) -> Any:
         """create a global variable for our jinja context"""
-        self.variables[key] = value
+        s_key = str(key)
+        self.variables[s_key] = value
         return value
 
     def get(self, key: str, default="") -> Any:
         """get the value a global variable for our jinja context"""
         # default is used to set an initial value if the variable is not set
-        return self.variables.get(key, default)
+        s_key = str(key)
+        return self.variables.get(s_key, default)
 
     def counter(
         self, name: str, start: int = 0, stop: int = 65535, inc: int = 1
@@ -97,10 +99,11 @@ class Utils:
 
         creates a new counter if it does not yet exist
         """
-        counter = self.counters.get(name)
+        index = str(name)
+        counter = self.counters.get(index)
         if counter is None:
             counter = Counter(start, start, stop)
-            self.counters[name] = counter
+            self.counters[index] = counter
         else:
             if counter.start != start or counter.stop != stop:
                 raise ValueError(
@@ -108,7 +111,7 @@ class Utils:
                 )
         result = counter.current
         counter.increment(inc)
-        self.counters[name] = counter
+        self.counters[index] = counter
 
         return result
 

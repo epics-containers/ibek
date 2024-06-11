@@ -23,12 +23,6 @@ defs:
           TTY
 
       - type: int
-        name: numAxes
-        description: |-
-          The number of axes to create
-        default: 1
-
-      - type: int
         name: hostid
         description: |-
           Host ID
@@ -38,15 +32,17 @@ defs:
         description: |-
           TML Configuration
         default: |-
-          FILE=/tmp/,NAXIS={{numAxes}},DEV_PATH={{TTY}},HOST_ID={{hostid}}
+          DEV_PATH={{TTY}},HOST_ID={{hostid}}
+
     post_defines:
       - name: axisConfiguration
         description: collects the axis configuration from axis entities
-        value: |-
-          {{ _global.set_var('motorTML.axisConfiguration',[]) }}
+        type: list
+        value: []
+
     pre_init:
       - value: |
-          ndsCreateDevice "TechnosoftTML", "{{controllerName}}", "{{CONFIG}}{{"".join(_global.get_var('motorTML.axisConfiguration')) }}"
+          ndsCreateDevice "TechnosoftTML", "{{controllerName}}", "FILE=/tmp/,NAXIS={{axisConfiguration | length}},{{CONFIG}}{{"".join(axisConfiguration) }}"
 
   - name: motorAxis
     description: |-
@@ -57,6 +53,13 @@ defs:
         name: controller
         description: |-
           a reference to the motion controller
+
+      - type: int
+        name: num
+        description: |-
+          The axis number
+        default: |-
+          {{ controller.axisConfiguration | length }}
 
       - type: str
         name: CHANNEL_PREFIX
@@ -199,17 +202,11 @@ defs:
         default: |-
           ,AXIS_SETUP_{{num}}=$(SUPPORT)/motorTechnosoft/tml_lib/config/{{axconf}},AXIS_ID_{{num}}={{axid}},AXIS_HOMING_SW_{{num}}={{homing}}
 
-    pre_defines:
-      - name: num
-        description: The auto incrementing axis number
-        value: |-
-          {{ _global.counter("motorTML.axisCount", start=0) }}
-
     post_defines:
       - name: axisConfiguration
         description: Adds an axis configuration entry to the controller's list
         value: |-
-          {{ _global.get_var('motorTML.axisConfiguration').append(CONFIG) }}
+          {{ controller.axisConfiguration.append(CONFIG) }}
 
     pre_init:
       - value: |

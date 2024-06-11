@@ -118,7 +118,7 @@ defs:
         name: gaugeNum
         type: int
         value: |-
-          {{ _global.counter("fvGaugeNum", start=1) }}
+          {{ _global.counter(master, start=1) }}
 
       - description: fan number
         name: fan
@@ -128,7 +128,8 @@ defs:
       - description: mask for the channel
         name: mask
         value: |-
-          {{ _global.set('fvMask', _global.get('fvMask', 0) + 2**gaugeNum) }}
+          {%- set m = "mask_%s" % master -%}
+          {{ _global.set(m, _global.get(m, 0) + 2**gaugeNum) }}
 
       - description: link number
         name: lnk_no
