@@ -61,7 +61,7 @@
               "type": "integer"
             }
           ],
-          "default": "{{ _ctx_.counter(\"fvGaugeNum\", start=1) }}",
+          "default": "{{ _global.counter(\"fvGaugeNum\", start=1) }}",
           "description": "union of <class 'int'> and jinja representation of {typ}",
           "title": "Gaugenum"
         },
@@ -72,7 +72,7 @@
           "type": "string"
         },
         "mask": {
-          "default": "{{ _ctx_.set('fvMask', _ctx_.get('fvMask', 0) + 2**gaugeNum) }}",
+          "default": "{{ _global.set('fvMask', _global.get('fvMask', 0) + 2**gaugeNum) }}",
           "description": "mask for the channel",
           "title": "Mask",
           "type": "string"

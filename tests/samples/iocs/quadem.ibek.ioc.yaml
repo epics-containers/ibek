@@ -1,6 +1,6 @@
 # yaml-language-server: $schema=../schemas/quadem.ibek.ioc.schema.json
 
-ioc_name: "{{ __utils__.get_env('IOC_NAME') }}"
+ioc_name: "{{ _global.get_env('IOC_NAME') }}"
 description: Example TetrAMM for BL03I
 
 entities:

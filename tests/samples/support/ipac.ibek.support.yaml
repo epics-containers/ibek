@@ -36,7 +36,7 @@ defs:
 
     values:
       - name: card_id
-        value: '{{ __utils__.counter("Carriers", start=0) }}'
+        value: '{{ _global.counter("Carriers", start=0) }}'
         description: Carrier Card Identifier
 
     pre_init:

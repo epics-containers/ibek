@@ -2,7 +2,7 @@
 A class containing utility functions for passing into the Jinja context.
 
 This allows us to provide simple functions that can be called inside
-Jinja templates with {{ __utils__.function_name() }}. It also allows
+Jinja templates with {{ _global.function_name() }}. It also allows
 us to maintain state between calls to the Jinja templates because
 we pass a single instance of this class into all Jinja contexts.
 """
@@ -114,7 +114,7 @@ class Utils:
 
     def render(self, context: Any, template_text: Any) -> str:
         """
-        Render a Jinja template with the global __utils__ object in the context
+        Render a Jinja template with the global _global object in the context
         """
         if not isinstance(template_text, str):
             # because this function is used to template arguments, it may
@@ -125,10 +125,8 @@ class Utils:
             jinja_template = Template(template_text, undefined=StrictUndefined)
             return jinja_template.render(
                 context,
-                # old name for global context for backward compatibility
-                __utils__=self,
-                # new short name for global context
-                _ctx_=self,
+                # global context for all jinja renders
+                _global=self,
                 # put variables created with set/get directly in the context
                 **self.variables,
                 ioc_yaml_file_name=self.file_name,

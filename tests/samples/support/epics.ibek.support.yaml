@@ -85,7 +85,7 @@ defs:
 
     values:
       - name: number
-        value: '{{  __utils__.counter("InterruptVector", start=192, stop=255, inc=count) }}'
+        value: '{{  _global.counter("InterruptVector", start=192, stop=255, inc=count) }}'
         description: Interrupt Vector number
 
     env_vars:

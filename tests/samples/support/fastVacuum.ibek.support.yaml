@@ -117,7 +117,7 @@ defs:
         name: gaugeNum
         type: int
         value: |-
-          {{ _ctx_.counter("fvGaugeNum", start=1) }}
+          {{ _global.counter("fvGaugeNum", start=1) }}
 
       - description: fan number
         name: fan
@@ -127,7 +127,7 @@ defs:
       - description: mask for the channel
         name: mask
         value: |-
-          {{ _ctx_.set('fvMask', _ctx_.get('fvMask', 0) + 2**gaugeNum) }}
+          {{ _global.set('fvMask', _global.get('fvMask', 0) + 2**gaugeNum) }}
 
     values:
       - description: link number
