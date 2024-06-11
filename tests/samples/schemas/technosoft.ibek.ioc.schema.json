@@ -14,7 +14,11 @@
         "type": {
           "const": "motorTML.CreateController",
           "description": "Creates a Technosoft motion controller connected to a serial line",
-          "title": "Type"
+          "enum": [
+            "motorTML.CreateController"
+          ],
+          "title": "Type",
+          "type": "string"
         },
         "entity_enabled": {
           "default": true,
@@ -97,7 +101,11 @@
         "type": {
           "const": "motorTML.motorAxis",
           "description": "Creates a motor axis",
-          "title": "Type"
+          "enum": [
+            "motorTML.motorAxis"
+          ],
+          "title": "Type",
+          "type": "string"
         },
         "entity_enabled": {
           "default": true,

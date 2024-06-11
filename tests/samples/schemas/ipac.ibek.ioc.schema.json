@@ -25,7 +25,11 @@
         "type": {
           "const": "epics.EpicsCaMaxArrayBytes",
           "description": "Set the maximum size in bytes for sending arrays over channel access",
-          "title": "Type"
+          "enum": [
+            "epics.EpicsCaMaxArrayBytes"
+          ],
+          "title": "Type",
+          "type": "string"
         },
         "entity_enabled": {
           "default": true,
@@ -62,7 +66,11 @@
         "type": {
           "const": "epics.EpicsEnvSet",
           "description": "Set an environment variable in the ioc Shell",
-          "title": "Type"
+          "enum": [
+            "epics.EpicsEnvSet"
+          ],
+          "title": "Type",
+          "type": "string"
         },
         "entity_enabled": {
           "default": true,
@@ -95,7 +103,11 @@
         "type": {
           "const": "epics.EpicsTsMinWest",
           "description": "Set the relative time zone minutes West relative to GMT (+/-720)",
-          "title": "Type"
+          "enum": [
+            "epics.EpicsTsMinWest"
+          ],
+          "title": "Type",
+          "type": "string"
         },
         "entity_enabled": {
           "default": true,
@@ -132,7 +144,11 @@
         "type": {
           "const": "epics.InterruptVectorVME",
           "description": "Reserve a VME interrupt vector",
-          "title": "Type"
+          "enum": [
+            "epics.InterruptVectorVME"
+          ],
+          "title": "Type",
+          "type": "string"
         },
         "entity_enabled": {
           "default": true,
@@ -181,7 +197,11 @@
         "type": {
           "const": "epics.PostStartupCommand",
           "description": "Adds an arbitrary command in the startup script after iocInit",
-          "title": "Type"
+          "enum": [
+            "epics.PostStartupCommand"
+          ],
+          "title": "Type",
+          "type": "string"
         },
         "entity_enabled": {
           "default": true,
@@ -208,7 +228,11 @@
         "type": {
           "const": "epics.StartupCommand",
           "description": "Adds an arbitrary command in the startup script before iocInit",
-          "title": "Type"
+          "enum": [
+            "epics.StartupCommand"
+          ],
+          "title": "Type",
+          "type": "string"
         },
         "entity_enabled": {
           "default": true,
@@ -235,7 +259,11 @@
         "type": {
           "const": "epics.dbpf",
           "description": "Set a PV value after iocInit",
-          "title": "Type"
+          "enum": [
+            "epics.dbpf"
+          ],
+          "title": "Type",
+          "type": "string"
         },
         "entity_enabled": {
           "default": true,
@@ -287,7 +315,11 @@
         "type": {
           "const": "ipac.Hy8001",
           "description": "TODO:ADD DESCRIPTION",
-          "title": "Type"
+          "enum": [
+            "ipac.Hy8001"
+          ],
+          "title": "Type",
+          "type": "string"
         },
         "entity_enabled": {
           "default": true,
@@ -445,7 +477,11 @@
         "type": {
           "const": "ipac.Hy8002",
           "description": "Configure a Hytec 8002 Carrier card",
-          "title": "Type"
+          "enum": [
+            "ipac.Hy8002"
+          ],
+          "title": "Type",
+          "type": "string"
         },
         "entity_enabled": {
           "default": true,
@@ -521,7 +557,11 @@
         "type": {
           "const": "ipac.Hy8005",
           "description": "TODO:ADD DESCRIPTION",
-          "title": "Type"
+          "enum": [
+            "ipac.Hy8005"
+          ],
+          "title": "Type",
+          "type": "string"
         },
         "entity_enabled": {
           "default": true,
@@ -606,7 +646,11 @@
         "type": {
           "const": "ipac.Hy8005_Channel",
           "description": "TODO:ADD DESCRIPTION",
-          "title": "Type"
+          "enum": [
+            "ipac.Hy8005_Channel"
+          ],
+          "title": "Type",
+          "type": "string"
         },
         "entity_enabled": {
           "default": true,

@@ -6,7 +6,11 @@
         "type": {
           "const": "listtest.lister",
           "description": "The protagonist from Red Dwarf",
-          "title": "Type"
+          "enum": [
+            "listtest.lister"
+          ],
+          "title": "Type",
+          "type": "string"
         },
         "entity_enabled": {
           "default": true,

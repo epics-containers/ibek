@@ -6,13 +6,13 @@ from __future__ import annotations
 
 import builtins
 from pathlib import Path
-from typing import Annotated, Any, Dict, List, Literal, Tuple, Type
+from typing import Annotated, Any, Dict, List, Literal, Sequence, Tuple, Type
 
 from pydantic import Field, create_model, field_validator
 from pydantic_core import PydanticUndefined, ValidationError
 from ruamel.yaml.main import YAML
 
-from .args import EnumArg, IdArg, ObjectArg
+from .args import EnumArg, IdArg, ObjectArg, Value
 from .ioc import Entity, EnumVal, clear_entity_model_ids, get_entity_by_id
 from .support import EntityDefinition, Support
 from .utils import UTILS
@@ -60,6 +60,12 @@ class EntityFactory:
         Create an Entity Model from a Definition instance and a Support instance.
         """
 
+        def add_defines(s: Sequence[Value]) -> None:
+            # add in the pre_defines or post_defines as Args in the Entity
+            for value in s:
+                typ = getattr(builtins, str(value.type))
+                add_arg(value.name, typ, value.description, value.value)
+
         def add_arg(name, typ, description, default):
             if default is None:
                 default = PydanticUndefined
@@ -94,9 +100,7 @@ class EntityFactory:
         # add in the calculated values Jinja Templates as Fields in the Entity
         # these are the pre_values that should be Jinja rendered before any
         # Args (or post values)
-        for value in definition.pre_values:
-            typ = getattr(builtins, value.type.value)
-            add_arg(value.name, typ, value.description, value.value)
+        add_defines(definition.pre_values)
 
         # add in each of the arguments as a Field in the Entity
         for arg in definition.args:
@@ -135,9 +139,7 @@ class EntityFactory:
             add_arg(arg.name, type, arg.description, getattr(arg, "default"))  # type: ignore
 
         # add in the calculated values Jinja Templates as Fields in the Entity
-        for value in definition.values:
-            typ = getattr(builtins, value.type.value)
-            add_arg(value.name, typ, value.description, value.value)
+        add_defines(definition.values)
 
         # add the type literal which discriminates between the different Entity classes
         typ = Literal[full_name]  # type: ignore

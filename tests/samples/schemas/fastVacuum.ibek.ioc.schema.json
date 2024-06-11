@@ -6,7 +6,11 @@
         "type": {
           "const": "dlsPLC.dummy",
           "description": "dummy record",
-          "title": "Type"
+          "enum": [
+            "dlsPLC.dummy"
+          ],
+          "title": "Type",
+          "type": "string"
         },
         "entity_enabled": {
           "default": true,
@@ -33,7 +37,11 @@
         "type": {
           "const": "dlsPLC.fastVacuumChannel",
           "description": "Adds a fast vacuum channel to the fast vacuum master",
-          "title": "Type"
+          "enum": [
+            "dlsPLC.fastVacuumChannel"
+          ],
+          "title": "Type",
+          "type": "string"
         },
         "entity_enabled": {
           "default": true,
@@ -157,9 +165,26 @@
               "type": "array"
             }
           ],
-          "default": "{%- set addr = [] -%}\n{%- for i in range(6) -%}\n{%- set addr = addr.append(addr_offset + master.waveform_nelm * i) -%}\n{%- endfor -%}\n{{ addr }}",
+          "default": "{%- set addr_list = range(addr_offset,addr_offset + master.waveform_nelm * 6, master.waveform_nelm) -%}\n{{ addr_list | list }}",
           "description": "union of <class 'list'> and jinja representation of {typ}",
           "title": "Wave Addr"
+        },
+        "wave_addr_alternative": {
+          "anyOf": [
+            {
+              "description": "jinja that renders to <class 'list'>",
+              "pattern": ".*\\{\\{.*\\}\\}.*",
+              "type": "string"
+            },
+            {
+              "description": "waveform addresses",
+              "items": {},
+              "type": "array"
+            }
+          ],
+          "default": "{%- set addr = [] -%}\n{%- for i in range(6) -%}\n{%- set addr = addr.append(addr_offset + master.waveform_nelm * i) -%}\n{%- endfor -%}\n{{ addr }}",
+          "description": "union of <class 'list'> and jinja representation of {typ}",
+          "title": "Wave Addr Alternative"
         }
       },
       "required": [
@@ -178,7 +203,11 @@
         "type": {
           "const": "dlsPLC.fastVacuumMaster",
           "description": "master records for fast vacuum",
-          "title": "Type"
+          "enum": [
+            "dlsPLC.fastVacuumMaster"
+          ],
+          "title": "Type",
+          "type": "string"
         },
         "entity_enabled": {
           "default": true,
