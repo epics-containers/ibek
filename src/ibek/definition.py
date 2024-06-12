@@ -132,8 +132,12 @@ class EntityDefinition(BaseSettings):
     description: str = Field(
         description="A description of the Support module defined here"
     )
+    pre_defines: dict[str, Define] = Field(
+        description="Calculated values to use as additional arguments "
+        "With Jinja evaluation before all Args",
+        default=(),
+    )
     # declare Arg as Union of its subclasses for Pydantic to be able to deserialize
-
     params: dict[str, discriminated] = Field(  # type: ignore
         description="The arguments IOC instance should supply",
         default=(),
@@ -141,11 +145,6 @@ class EntityDefinition(BaseSettings):
     post_defines: dict[str, Define] = Field(
         description="Calculated values to use as additional arguments "
         "With Jinja evaluation after all Args",
-        default=(),
-    )
-    pre_defines: dict[str, Define] = Field(
-        description="Calculated values to use as additional arguments "
-        "With Jinja evaluation before all Args",
         default=(),
     )
     databases: Sequence[Database] = Field(
