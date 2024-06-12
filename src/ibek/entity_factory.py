@@ -14,8 +14,8 @@ from ruamel.yaml.main import YAML
 
 from ibek.globals import JINJA
 
-from .args import EnumArg, IdArg, ObjectArg, Value
 from .ioc import Entity, EnumVal, clear_entity_model_ids
+from .params import Define, EnumParam, IdParam, ObjectParam
 from .support import EntityDefinition, Support
 from .utils import UTILS
 
@@ -62,7 +62,7 @@ class EntityFactory:
         Create an Entity Model from a Definition instance and a Support instance.
         """
 
-        def add_defines(s: dict[str, Value]) -> None:
+        def add_defines(s: dict[str, Define]) -> None:
             # add in the pre_defines or post_defines as Args in the Entity
             for name, value in s.items():
                 typ = getattr(builtins, str(value.type))
@@ -105,17 +105,17 @@ class EntityFactory:
         add_defines(definition.pre_defines)
 
         # add in each of the arguments as a Field in the Entity
-        for name, arg in definition.args.items():
+        for name, arg in definition.params.items():
             type: Any
 
-            if isinstance(arg, ObjectArg):
+            if isinstance(arg, ObjectParam):
                 # we now defer the lookup of the object until whole model validation
                 type = object
 
-            elif isinstance(arg, IdArg):
+            elif isinstance(arg, IdParam):
                 type = str
 
-            elif isinstance(arg, EnumArg):
+            elif isinstance(arg, EnumParam):
                 # Pydantic uses the values of the Enum as the options in the schema.
                 # Here we arrange for the keys to be in the schema (what a user supplies)
                 # but the values to be what is rendered when jinja refers to the enum
