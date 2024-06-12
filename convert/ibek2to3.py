@@ -36,6 +36,10 @@ from ruamel.yaml import YAML, CommentedMap
 eg_file = Path(__file__).parent.parent / "tests/samples/support/ipac.ibek.support.yaml"
 
 
+class ConvertedAlready(Exception):
+    pass
+
+
 def main(files: list[Path]):
     """
     Read a list of files in and process each one
@@ -52,10 +56,14 @@ def process_file(file: Path):
     yaml = YAML()
     with open(file, "r") as f:
         data = yaml.load(f)
-    data = convert(data)
 
-    with open(file, "w") as f:
-        yaml.dump(data, f)
+    try:
+        convert(data)
+    except ConvertedAlready:
+        print(f">>>>> {file} has already been converted")
+    else:
+        with open(file, "w") as f:
+            yaml.dump(data, f)
 
 
 def convert(data: dict):
@@ -67,10 +75,9 @@ def convert(data: dict):
     # replace all definitions with converted versions
     if "defs" in data:
         data["defs"] = [convert_definition(definition) for definition in data["defs"]]
-    return data
 
 
-def convert_definition(data: dict):
+def convert_definition(data: dict) -> dict | None:
     """
     convert a single definition's args list to a params dict
     """
@@ -82,16 +89,27 @@ def convert_definition(data: dict):
     copy_verbatim(data, new_data, ["name", "description", "shared"])
 
     if "pre_defines" in data:
+        check_converted(data["pre_defines"])
         new_data["pre_defines"] = list_to_dict(data["pre_defines"])
     if "args" in data:
         new_data["params"] = list_to_dict(data["args"])
+    else:
+        raise ConvertedAlready  # probably! (or its not a support yaml file)
     if "post_defines" in data:
+        check_converted(data["post_defines"])
         new_data["post_defines"] = list_to_dict(data["post_defines"])
 
     # copy the trailing keys that are not being changed
-    copy_verbatim(data, new_data, ["pre_init", "post_init", "databases", "pvi"])
+    copy_verbatim(
+        data, new_data, ["pre_init", "post_init", "databases", "env_vars", "pvi"]
+    )
 
     return new_data
+
+
+def check_converted(item: dict | list):
+    if isinstance(item, dict):
+        raise ConvertedAlready
 
 
 def copy_verbatim(source: dict, dest: dict, keys: list[str]):
