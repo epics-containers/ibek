@@ -63,10 +63,11 @@ class EntityFactory:
         """
 
         def add_defines(s: dict[str, Define]) -> None:
-            # add in the pre_defines or post_defines as Args in the Entity
-            for name, value in s.items():
-                typ = getattr(builtins, str(value.type))
-                add_arg(name, typ, value.description, value.value)
+            if s:
+                # add in the pre_defines or post_defines as Args in the Entity
+                for name, value in s.items():
+                    typ = getattr(builtins, str(value.type))
+                    add_arg(name, typ, value.description, value.value)
 
         def add_arg(name, typ, description, default):
             if default is None:
