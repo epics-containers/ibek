@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Modules, Definitions and Entities &#8212; ibek 3.0.0b6.dev43+gf2099f4a documentation</title>
+    <title>Modules, Definitions and Entities &#8212; ibek 3.0.0b6.dev44+g09c823a0 documentation</title>
   
   
   
@@ -38,7 +38,7 @@
 <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=3ee479438cf8b5e0d341" />
   <script src="../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=3ee479438cf8b5e0d341"></script>
 
-    <script src="../../_static/documentation_options.js?v=3348f8b8"></script>
+    <script src="../../_static/documentation_options.js?v=1541f869"></script>
     <script src="../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -561,184 +561,183 @@ the above arguments</p></li>
 module: motorSim
 
 defs:
-  - name: simMotorController
-    description: |-
-      Creates a simulation motion controller
+- name: simMotorController
+  description: |-
+    Creates a simulation motion controller
+  params:
+    controllerName:
+      type: id
+      description: |-
+        The name of the controller and its Asyn Port Name
 
+    P:
+      type: str
+      description: |-
+        Device PV Prefix
+
+    numAxes:
+      type: int
+      description: |-
+        The number of axes to create
+
+    port:
+      type: object
+      description: |-
+        a reference to the asyn port for communication with the controller
+
+    DESC:
+      type: str
+      description: |-
+        The description of the controller
+      default: &#39;Simulated Motion Controller testing escaping: {% raw %} {{enclosed
+        in escaped curly braces}} {% endraw %}&#39;
+
+  pre_init:
+  - value: |
+      # motorSimCreateController(controller_asyn_port_name, axis_count)
+      # testing escaping: {% raw %} {{enclosed in escaped curly braces}} {% endraw %}
+      motorSimCreateController({{controllerName}}, {{numAxes}})
+
+  databases:
+  - file: sim_motor.db
     args:
-      - type: id
-        name: controllerName
-        description: |-
-          The name of the controller and its Asyn Port Name
+      controllerName:
+      P:
+      DESC:
 
-      - type: str
-        name: P
-        description: |-
-          Device PV Prefix
+  pvi:
+    yaml_path: simple.pvi.device.yaml
+    ui_macros:
+      P:
+    pv: true
+    pv_prefix: $(P)
 
-      - type: int
-        name: numAxes
-        description: |-
-          The number of axes to create
+- name: simMotorAxis
+  description: |-
+    Creates a simulation motor axis
+  params:
+    controller:
+      type: object
+      description: |-
+        a reference to the motion controller
 
-      - type: object
-        name: port
-        description: |-
-          a reference to the asyn port for communication with the controller
+    M:
+      type: str
+      description: |-
+        PV suffix for the motor record
 
-      - type: str
-        name: DESC
-        description: |-
-          The description of the controller
-        default: &quot;Simulated Motion Controller testing escaping: {% raw %} {{enclosed in escaped curly braces}} {% endraw %}&quot;
+    ADDR:
+      type: int
+      description: |-
+        The axis number (allowed to be from 0 to controller.numAxes-1)
 
-    pre_init:
-      - value: |
-          # motorSimCreateController(controller_asyn_port_name, axis_count)
-          # testing escaping: {% raw %} {{enclosed in escaped curly braces}} {% endraw %}
-          motorSimCreateController({{controllerName}}, {{numAxes}})
+    DESC:
+      type: str
+      description: |-
+        The description of the axis
+      default: Motor {{ADDR}}
 
-    databases:
-      - file: sim_motor.db
-        args:
-          controllerName:
-          P:
-          DESC:
+    DLLM:
+      type: int
+      description: |-
+        The low limit of the axis (in counts)
+      default: -20000
 
-    pvi:
-      yaml_path: simple.pvi.device.yaml
-      ui_macros:
-        P:
-      pv: true
-      pv_prefix: $(P)
+    DHLM:
+      type: int
+      description: |-
+        The high limit of the axis (in counts)
+      default: 20000
 
-  - name: simMotorAxis
-    description: |-
-      Creates a simulation motor axis
+    home:
+      type: int
+      description: |-
+        The home position of the axis (in counts)
+      default: 0
 
+    start:
+      type: str   # int or jinja string
+      description: |-
+        The starting position of the axis (in counts)
+      default: &#39;{{home}}&#39;
+
+    DIR:
+      type: enum
+      description: |-
+        The direction of the axis
+      default: 0
+      values:
+        Pos: 0
+        Neg: 1
+
+    VELO:
+      type: float
+      description: |-
+        The velocity of the axis (in counts/sec)
+      default: 10.0
+
+    VMAX:
+      type: str   # float or jinja string
+      description: |-
+        The maximum velocity of the axis (in counts/sec)
+      default: &#39;{{VELO}}&#39;
+
+    is_cs:
+      type: bool
+      description: |-
+        Set to True if this axis a coordinate system axis
+      default: false
+
+    CS_NUM:
+      type: int
+      description: |-
+        The coordinate system number for this axis
+      default: 0
+
+  post_init:
+  - when: once
+    value: |
+      # motorSimCreateAxis(controller_asyn_port_name, axis, axis_description)
+
+  - value: |
+      motorSimConfigAxis({{controller}}, {{ADDR}}, {{DHLM}}, {{DLLM}}, {{home}}, {{start}})
+
+  databases:
+  - file: basic_asyn_motor.db
+    enabled: &#39;{{not is_cs}}&#39;
     args:
-      - type: object
-        name: controller
-        description: |-
-          a reference to the motion controller
+      P: &#39;{{controller.P}}&#39;
+      M:
+      DTYP: asynMotor
+      PORT: &#39;{{controller}}&#39;
+      ADDR:
+      DESC:
+      EGU: degrees
+      DIR:
+      VELO:
+      VMAX:
+      MRES: &#39;.01&#39;
+      DHLM:
+      DLLM:
+      INIT: &#39;&#39;
 
-      - type: str
-        name: M
-        description: |-
-          PV suffix for the motor record
-
-      - type: int
-        name: ADDR
-        description: |-
-          The axis number (allowed to be from 0 to controller.numAxes-1)
-
-      - type: str
-        name: DESC
-        description: |-
-          The description of the axis
-        default: &quot;Motor {{ADDR}}&quot;
-
-      - type: int
-        name: DLLM
-        description: |-
-          The low limit of the axis (in counts)
-        default: -20000
-
-      - type: int
-        name: DHLM
-        description: |-
-          The high limit of the axis (in counts)
-        default: 20000
-
-      - type: int
-        name: home
-        description: |-
-          The home position of the axis (in counts)
-        default: 0
-
-      - type: str # int or jinja string
-        name: start
-        description: |-
-          The starting position of the axis (in counts)
-        default: &quot;{{home}}&quot;
-
-      - type: enum
-        name: DIR
-        description: |-
-          The direction of the axis
-        default: 0
-        values:
-          Pos: 0
-          Neg: 1
-
-      - type: float
-        name: VELO
-        description: |-
-          The velocity of the axis (in counts/sec)
-        default: 10.0
-
-      - type: str # float or jinja string
-        name: VMAX
-        description: |-
-          The maximum velocity of the axis (in counts/sec)
-        default: &quot;{{VELO}}&quot;
-
-      - type: bool
-        name: is_cs
-        description: |-
-          Set to True if this axis a coordinate system axis
-        default: false
-
-      - type: int
-        name: CS_NUM
-        description: |-
-          The coordinate system number for this axis
-        default: 0
-
-    post_init:
-      - when: once
-        value: |
-          # motorSimCreateAxis(controller_asyn_port_name, axis, axis_description)
-
-      - value: |
-          motorSimConfigAxis({{controller}}, {{ADDR}}, {{DHLM}}, {{DLLM}}, {{home}}, {{start}})
-
-    databases:
-      - file: basic_asyn_motor.db
-        enabled: &quot;{{not is_cs}}&quot;
-        args:
-          P: &quot;{{controller.P}}&quot;
-          M:
-          DTYP: &quot;asynMotor&quot;
-          PORT: &quot;{{controller}}&quot;
-          ADDR:
-          DESC:
-          EGU: &quot;degrees&quot;
-          DIR:
-          VELO:
-          VMAX:
-          MRES: &quot;.01&quot;
-          DHLM:
-          DLLM:
-          INIT: &quot;&quot;
-
-      - file: basic_cs_asyn_motor.db
-        enabled: &quot;{{is_cs}}&quot;
-        args:
-          P: &quot;{{controller.P}}&quot;
-          CS_NUM:
-          DTYP: &quot;asynMotor&quot;
-          PORT: &quot;{{controller}}&quot;
-          ADDR:
-          DESC:
-          EGU: &quot;degrees&quot;
-          DIR:
-          VELO:
-          VMAX:
-          MRES: &quot;.01&quot;
-          DHLM:
-          DLLM:
-          INIT: &quot;&quot;
+  - file: basic_cs_asyn_motor.db
+    enabled: &#39;{{is_cs}}&#39;
+    args:
+      P: &#39;{{controller.P}}&#39;
+      CS_NUM:
+      DTYP: asynMotor
+      PORT: &#39;{{controller}}&#39;
+      ADDR:
+      DESC:
+      EGU: degrees
+      DIR:
+      VELO:
+      VMAX:
+      MRES: &#39;.01&#39;
+      DHLM:
+      DLLM:
+      INIT: &#39;&#39;
 </pre></div>
 </div>
 </details></div></blockquote>
@@ -897,17 +896,17 @@ file that ibek will generate from it.</p>
 
 
 <span class="c1"># motorSimCreateAxis(controller_asyn_port_name, axis, axis_description)</span>
-<span class="n">motorSimConfigAxis</span><span class="p">(</span><span class="n">controllerOne</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">20000</span><span class="p">,</span> <span class="o">-</span><span class="mi">20000</span><span class="p">,</span> <span class="mi">500</span><span class="p">,</span> <span class="mi">500</span><span class="p">)</span>
+<span class="n">motorSimConfigAxis</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="s1">&#39;motorSim.simMotorController&#39;</span> <span class="n">entity_enabled</span><span class="o">=</span><span class="kc">True</span> <span class="n">controllerName</span><span class="o">=</span><span class="s1">&#39;controllerOne&#39;</span> <span class="n">P</span><span class="o">=</span><span class="s1">&#39;IBEK-MO-TST-01:&#39;</span> <span class="n">numAxes</span><span class="o">=</span><span class="mi">4</span> <span class="n">port</span><span class="o">=</span><span class="nb">type</span><span class="o">=</span><span class="s1">&#39;asyn.AsynIP&#39;</span> <span class="n">entity_enabled</span><span class="o">=</span><span class="kc">True</span> <span class="n">port</span><span class="o">=</span><span class="s1">&#39;192.168.0.55:2002&#39;</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;controllerOnePort&#39;</span> <span class="n">input_eos</span><span class="o">=</span><span class="s1">&#39;&quot;</span><span class="se">\\</span><span class="s1">n&quot;&#39;</span> <span class="n">output_eos</span><span class="o">=</span><span class="s1">&#39;&quot;</span><span class="se">\\</span><span class="s1">n&quot;&#39;</span> <span class="n">priority</span><span class="o">=</span><span class="mi">100</span> <span class="n">noAuto_connect</span><span class="o">=</span><span class="kc">False</span> <span class="n">noProcessEos</span><span class="o">=</span><span class="kc">False</span> <span class="n">baud</span><span class="o">=</span><span class="mi">9600</span> <span class="n">parity</span><span class="o">=</span><span class="s1">&#39;none&#39;</span> <span class="n">crtscts</span><span class="o">=</span><span class="s1">&#39;N&#39;</span> <span class="n">stop</span><span class="o">=</span><span class="s1">&#39;1&#39;</span> <span class="n">disconnectOnReadTimeout</span><span class="o">=</span><span class="s1">&#39;Y&#39;</span> <span class="n">bits</span><span class="o">=</span><span class="s1">&#39;8&#39;</span> <span class="n">DESC</span><span class="o">=</span><span class="s1">&#39;Simulated Motion Controller testing escaping:  {{enclosed in escaped curly braces}} &#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">20000</span><span class="p">,</span> <span class="o">-</span><span class="mi">20000</span><span class="p">,</span> <span class="mi">500</span><span class="p">,</span> <span class="mi">500</span><span class="p">)</span>
 <span class="c1"># motorSimCreateAxis(controller_asyn_port_name, axis, axis_description)</span>
-<span class="n">motorSimConfigAxis</span><span class="p">(</span><span class="n">controllerOne</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">20000</span><span class="p">,</span> <span class="o">-</span><span class="mi">20000</span><span class="p">,</span> <span class="mi">500</span><span class="p">,</span> <span class="mi">500</span><span class="p">)</span>
+<span class="n">motorSimConfigAxis</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="s1">&#39;motorSim.simMotorController&#39;</span> <span class="n">entity_enabled</span><span class="o">=</span><span class="kc">True</span> <span class="n">controllerName</span><span class="o">=</span><span class="s1">&#39;controllerOne&#39;</span> <span class="n">P</span><span class="o">=</span><span class="s1">&#39;IBEK-MO-TST-01:&#39;</span> <span class="n">numAxes</span><span class="o">=</span><span class="mi">4</span> <span class="n">port</span><span class="o">=</span><span class="nb">type</span><span class="o">=</span><span class="s1">&#39;asyn.AsynIP&#39;</span> <span class="n">entity_enabled</span><span class="o">=</span><span class="kc">True</span> <span class="n">port</span><span class="o">=</span><span class="s1">&#39;192.168.0.55:2002&#39;</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;controllerOnePort&#39;</span> <span class="n">input_eos</span><span class="o">=</span><span class="s1">&#39;&quot;</span><span class="se">\\</span><span class="s1">n&quot;&#39;</span> <span class="n">output_eos</span><span class="o">=</span><span class="s1">&#39;&quot;</span><span class="se">\\</span><span class="s1">n&quot;&#39;</span> <span class="n">priority</span><span class="o">=</span><span class="mi">100</span> <span class="n">noAuto_connect</span><span class="o">=</span><span class="kc">False</span> <span class="n">noProcessEos</span><span class="o">=</span><span class="kc">False</span> <span class="n">baud</span><span class="o">=</span><span class="mi">9600</span> <span class="n">parity</span><span class="o">=</span><span class="s1">&#39;none&#39;</span> <span class="n">crtscts</span><span class="o">=</span><span class="s1">&#39;N&#39;</span> <span class="n">stop</span><span class="o">=</span><span class="s1">&#39;1&#39;</span> <span class="n">disconnectOnReadTimeout</span><span class="o">=</span><span class="s1">&#39;Y&#39;</span> <span class="n">bits</span><span class="o">=</span><span class="s1">&#39;8&#39;</span> <span class="n">DESC</span><span class="o">=</span><span class="s1">&#39;Simulated Motion Controller testing escaping:  {{enclosed in escaped curly braces}} &#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">20000</span><span class="p">,</span> <span class="o">-</span><span class="mi">20000</span><span class="p">,</span> <span class="mi">500</span><span class="p">,</span> <span class="mi">500</span><span class="p">)</span>
 <span class="c1"># motorSimCreateAxis(controller_asyn_port_name, axis, axis_description)</span>
-<span class="n">motorSimConfigAxis</span><span class="p">(</span><span class="n">controllerOne</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">20000</span><span class="p">,</span> <span class="o">-</span><span class="mi">20000</span><span class="p">,</span> <span class="mi">1500</span><span class="p">,</span> <span class="mi">1500</span><span class="p">)</span>
+<span class="n">motorSimConfigAxis</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="s1">&#39;motorSim.simMotorController&#39;</span> <span class="n">entity_enabled</span><span class="o">=</span><span class="kc">True</span> <span class="n">controllerName</span><span class="o">=</span><span class="s1">&#39;controllerOne&#39;</span> <span class="n">P</span><span class="o">=</span><span class="s1">&#39;IBEK-MO-TST-01:&#39;</span> <span class="n">numAxes</span><span class="o">=</span><span class="mi">4</span> <span class="n">port</span><span class="o">=</span><span class="nb">type</span><span class="o">=</span><span class="s1">&#39;asyn.AsynIP&#39;</span> <span class="n">entity_enabled</span><span class="o">=</span><span class="kc">True</span> <span class="n">port</span><span class="o">=</span><span class="s1">&#39;192.168.0.55:2002&#39;</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;controllerOnePort&#39;</span> <span class="n">input_eos</span><span class="o">=</span><span class="s1">&#39;&quot;</span><span class="se">\\</span><span class="s1">n&quot;&#39;</span> <span class="n">output_eos</span><span class="o">=</span><span class="s1">&#39;&quot;</span><span class="se">\\</span><span class="s1">n&quot;&#39;</span> <span class="n">priority</span><span class="o">=</span><span class="mi">100</span> <span class="n">noAuto_connect</span><span class="o">=</span><span class="kc">False</span> <span class="n">noProcessEos</span><span class="o">=</span><span class="kc">False</span> <span class="n">baud</span><span class="o">=</span><span class="mi">9600</span> <span class="n">parity</span><span class="o">=</span><span class="s1">&#39;none&#39;</span> <span class="n">crtscts</span><span class="o">=</span><span class="s1">&#39;N&#39;</span> <span class="n">stop</span><span class="o">=</span><span class="s1">&#39;1&#39;</span> <span class="n">disconnectOnReadTimeout</span><span class="o">=</span><span class="s1">&#39;Y&#39;</span> <span class="n">bits</span><span class="o">=</span><span class="s1">&#39;8&#39;</span> <span class="n">DESC</span><span class="o">=</span><span class="s1">&#39;Simulated Motion Controller testing escaping:  {{enclosed in escaped curly braces}} &#39;</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">20000</span><span class="p">,</span> <span class="o">-</span><span class="mi">20000</span><span class="p">,</span> <span class="mi">1500</span><span class="p">,</span> <span class="mi">1500</span><span class="p">)</span>
 <span class="c1"># motorSimCreateAxis(controller_asyn_port_name, axis, axis_description)</span>
-<span class="n">motorSimConfigAxis</span><span class="p">(</span><span class="n">controllerOne</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">20000</span><span class="p">,</span> <span class="o">-</span><span class="mi">20000</span><span class="p">,</span> <span class="mi">2500</span><span class="p">,</span> <span class="mi">2500</span><span class="p">)</span>
+<span class="n">motorSimConfigAxis</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="s1">&#39;motorSim.simMotorController&#39;</span> <span class="n">entity_enabled</span><span class="o">=</span><span class="kc">True</span> <span class="n">controllerName</span><span class="o">=</span><span class="s1">&#39;controllerOne&#39;</span> <span class="n">P</span><span class="o">=</span><span class="s1">&#39;IBEK-MO-TST-01:&#39;</span> <span class="n">numAxes</span><span class="o">=</span><span class="mi">4</span> <span class="n">port</span><span class="o">=</span><span class="nb">type</span><span class="o">=</span><span class="s1">&#39;asyn.AsynIP&#39;</span> <span class="n">entity_enabled</span><span class="o">=</span><span class="kc">True</span> <span class="n">port</span><span class="o">=</span><span class="s1">&#39;192.168.0.55:2002&#39;</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;controllerOnePort&#39;</span> <span class="n">input_eos</span><span class="o">=</span><span class="s1">&#39;&quot;</span><span class="se">\\</span><span class="s1">n&quot;&#39;</span> <span class="n">output_eos</span><span class="o">=</span><span class="s1">&#39;&quot;</span><span class="se">\\</span><span class="s1">n&quot;&#39;</span> <span class="n">priority</span><span class="o">=</span><span class="mi">100</span> <span class="n">noAuto_connect</span><span class="o">=</span><span class="kc">False</span> <span class="n">noProcessEos</span><span class="o">=</span><span class="kc">False</span> <span class="n">baud</span><span class="o">=</span><span class="mi">9600</span> <span class="n">parity</span><span class="o">=</span><span class="s1">&#39;none&#39;</span> <span class="n">crtscts</span><span class="o">=</span><span class="s1">&#39;N&#39;</span> <span class="n">stop</span><span class="o">=</span><span class="s1">&#39;1&#39;</span> <span class="n">disconnectOnReadTimeout</span><span class="o">=</span><span class="s1">&#39;Y&#39;</span> <span class="n">bits</span><span class="o">=</span><span class="s1">&#39;8&#39;</span> <span class="n">DESC</span><span class="o">=</span><span class="s1">&#39;Simulated Motion Controller testing escaping:  {{enclosed in escaped curly braces}} &#39;</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">20000</span><span class="p">,</span> <span class="o">-</span><span class="mi">20000</span><span class="p">,</span> <span class="mi">2500</span><span class="p">,</span> <span class="mi">2500</span><span class="p">)</span>
 <span class="c1"># motorSimCreateAxis(controller_asyn_port_name, axis, axis_description)</span>
-<span class="n">motorSimConfigAxis</span><span class="p">(</span><span class="n">controllerOne</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">20000</span><span class="p">,</span> <span class="o">-</span><span class="mi">20000</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
+<span class="n">motorSimConfigAxis</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="s1">&#39;motorSim.simMotorController&#39;</span> <span class="n">entity_enabled</span><span class="o">=</span><span class="kc">True</span> <span class="n">controllerName</span><span class="o">=</span><span class="s1">&#39;controllerOne&#39;</span> <span class="n">P</span><span class="o">=</span><span class="s1">&#39;IBEK-MO-TST-01:&#39;</span> <span class="n">numAxes</span><span class="o">=</span><span class="mi">4</span> <span class="n">port</span><span class="o">=</span><span class="nb">type</span><span class="o">=</span><span class="s1">&#39;asyn.AsynIP&#39;</span> <span class="n">entity_enabled</span><span class="o">=</span><span class="kc">True</span> <span class="n">port</span><span class="o">=</span><span class="s1">&#39;192.168.0.55:2002&#39;</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;controllerOnePort&#39;</span> <span class="n">input_eos</span><span class="o">=</span><span class="s1">&#39;&quot;</span><span class="se">\\</span><span class="s1">n&quot;&#39;</span> <span class="n">output_eos</span><span class="o">=</span><span class="s1">&#39;&quot;</span><span class="se">\\</span><span class="s1">n&quot;&#39;</span> <span class="n">priority</span><span class="o">=</span><span class="mi">100</span> <span class="n">noAuto_connect</span><span class="o">=</span><span class="kc">False</span> <span class="n">noProcessEos</span><span class="o">=</span><span class="kc">False</span> <span class="n">baud</span><span class="o">=</span><span class="mi">9600</span> <span class="n">parity</span><span class="o">=</span><span class="s1">&#39;none&#39;</span> <span class="n">crtscts</span><span class="o">=</span><span class="s1">&#39;N&#39;</span> <span class="n">stop</span><span class="o">=</span><span class="s1">&#39;1&#39;</span> <span class="n">disconnectOnReadTimeout</span><span class="o">=</span><span class="s1">&#39;Y&#39;</span> <span class="n">bits</span><span class="o">=</span><span class="s1">&#39;8&#39;</span> <span class="n">DESC</span><span class="o">=</span><span class="s1">&#39;Simulated Motion Controller testing escaping:  {{enclosed in escaped curly braces}} &#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">20000</span><span class="p">,</span> <span class="o">-</span><span class="mi">20000</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
 <span class="c1"># motorSimCreateAxis(controller_asyn_port_name, axis, axis_description)</span>
-<span class="n">motorSimConfigAxis</span><span class="p">(</span><span class="n">controllerOne</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">20000</span><span class="p">,</span> <span class="o">-</span><span class="mi">20000</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
+<span class="n">motorSimConfigAxis</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="s1">&#39;motorSim.simMotorController&#39;</span> <span class="n">entity_enabled</span><span class="o">=</span><span class="kc">True</span> <span class="n">controllerName</span><span class="o">=</span><span class="s1">&#39;controllerOne&#39;</span> <span class="n">P</span><span class="o">=</span><span class="s1">&#39;IBEK-MO-TST-01:&#39;</span> <span class="n">numAxes</span><span class="o">=</span><span class="mi">4</span> <span class="n">port</span><span class="o">=</span><span class="nb">type</span><span class="o">=</span><span class="s1">&#39;asyn.AsynIP&#39;</span> <span class="n">entity_enabled</span><span class="o">=</span><span class="kc">True</span> <span class="n">port</span><span class="o">=</span><span class="s1">&#39;192.168.0.55:2002&#39;</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;controllerOnePort&#39;</span> <span class="n">input_eos</span><span class="o">=</span><span class="s1">&#39;&quot;</span><span class="se">\\</span><span class="s1">n&quot;&#39;</span> <span class="n">output_eos</span><span class="o">=</span><span class="s1">&#39;&quot;</span><span class="se">\\</span><span class="s1">n&quot;&#39;</span> <span class="n">priority</span><span class="o">=</span><span class="mi">100</span> <span class="n">noAuto_connect</span><span class="o">=</span><span class="kc">False</span> <span class="n">noProcessEos</span><span class="o">=</span><span class="kc">False</span> <span class="n">baud</span><span class="o">=</span><span class="mi">9600</span> <span class="n">parity</span><span class="o">=</span><span class="s1">&#39;none&#39;</span> <span class="n">crtscts</span><span class="o">=</span><span class="s1">&#39;N&#39;</span> <span class="n">stop</span><span class="o">=</span><span class="s1">&#39;1&#39;</span> <span class="n">disconnectOnReadTimeout</span><span class="o">=</span><span class="s1">&#39;Y&#39;</span> <span class="n">bits</span><span class="o">=</span><span class="s1">&#39;8&#39;</span> <span class="n">DESC</span><span class="o">=</span><span class="s1">&#39;Simulated Motion Controller testing escaping:  {{enclosed in escaped curly braces}} &#39;</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">20000</span><span class="p">,</span> <span class="o">-</span><span class="mi">20000</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
 
 </pre></div>
 </div>
@@ -966,7 +965,7 @@ the container or during container development.</p>
 <div><details>
 <summary><a>ibek.support.schema.json</a></summary><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
   <span class="s2">&quot;$defs&quot;</span><span class="p">:</span> <span class="p">{</span>
-    <span class="s2">&quot;BoolArg&quot;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="s2">&quot;BoolParam&quot;</span><span class="p">:</span> <span class="p">{</span>
       <span class="s2">&quot;additionalProperties&quot;</span><span class="p">:</span> <span class="n">false</span><span class="p">,</span>
       <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;An argument with an bool value&quot;</span><span class="p">,</span>
       <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span>
@@ -1005,7 +1004,7 @@ the container or during container development.</p>
       <span class="s2">&quot;required&quot;</span><span class="p">:</span> <span class="p">[</span>
         <span class="s2">&quot;description&quot;</span>
       <span class="p">],</span>
-      <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;BoolArg&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;BoolParam&quot;</span><span class="p">,</span>
       <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span>
     <span class="p">},</span>
     <span class="s2">&quot;Comment&quot;</span><span class="p">:</span> <span class="p">{</span>
@@ -1078,6 +1077,48 @@ the container or during container development.</p>
       <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Database&quot;</span><span class="p">,</span>
       <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span>
     <span class="p">},</span>
+    <span class="s2">&quot;Define&quot;</span><span class="p">:</span> <span class="p">{</span>
+      <span class="s2">&quot;additionalProperties&quot;</span><span class="p">:</span> <span class="n">false</span><span class="p">,</span>
+      <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;A calculated string value for a definition&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="p">{</span>
+          <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Description of what the value will be used for&quot;</span><span class="p">,</span>
+          <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Description&quot;</span><span class="p">,</span>
+          <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="p">{</span>
+          <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;The contents of the value&quot;</span><span class="p">,</span>
+          <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Value&quot;</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="p">{</span>
+          <span class="s2">&quot;allOf&quot;</span><span class="p">:</span> <span class="p">[</span>
+            <span class="p">{</span>
+              <span class="s2">&quot;$ref&quot;</span><span class="p">:</span> <span class="s2">&quot;#/$defs/DefinesTypes&quot;</span>
+            <span class="p">}</span>
+          <span class="p">],</span>
+          <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="s2">&quot;str&quot;</span><span class="p">,</span>
+          <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;The type of the value&quot;</span>
+        <span class="p">}</span>
+      <span class="p">},</span>
+      <span class="s2">&quot;required&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="s2">&quot;description&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;value&quot;</span>
+      <span class="p">],</span>
+      <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Define&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span>
+    <span class="p">},</span>
+    <span class="s2">&quot;DefinesTypes&quot;</span><span class="p">:</span> <span class="p">{</span>
+      <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;The type of a value&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;enum&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="s2">&quot;str&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;float&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;int&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;bool&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;list&quot;</span>
+      <span class="p">],</span>
+      <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;DefinesTypes&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
+    <span class="p">},</span>
     <span class="s2">&quot;EntityDefinition&quot;</span><span class="p">:</span> <span class="p">{</span>
       <span class="s2">&quot;additionalProperties&quot;</span><span class="p">:</span> <span class="n">false</span><span class="p">,</span>
       <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;A single definition of a class of Entity that an IOC instance may instantiate&quot;</span><span class="p">,</span>
@@ -1092,42 +1133,51 @@ the container or during container development.</p>
           <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Description&quot;</span><span class="p">,</span>
           <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
         <span class="p">},</span>
+        <span class="s2">&quot;pre_defines&quot;</span><span class="p">:</span> <span class="p">{</span>
+          <span class="s2">&quot;additionalProperties&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;$ref&quot;</span><span class="p">:</span> <span class="s2">&quot;#/$defs/Define&quot;</span>
+          <span class="p">},</span>
+          <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="p">[],</span>
+          <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Calculated values to use as additional arguments With Jinja evaluation before all Args&quot;</span><span class="p">,</span>
+          <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Pre Defines&quot;</span><span class="p">,</span>
+          <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span>
+        <span class="p">},</span>
         <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="p">{</span>
           <span class="s2">&quot;additionalProperties&quot;</span><span class="p">:</span> <span class="p">{</span>
             <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;union of arg types&quot;</span><span class="p">,</span>
             <span class="s2">&quot;discriminator&quot;</span><span class="p">:</span> <span class="p">{</span>
               <span class="s2">&quot;mapping&quot;</span><span class="p">:</span> <span class="p">{</span>
-                <span class="s2">&quot;bool&quot;</span><span class="p">:</span> <span class="s2">&quot;#/$defs/BoolArg&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;enum&quot;</span><span class="p">:</span> <span class="s2">&quot;#/$defs/EnumArg&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;float&quot;</span><span class="p">:</span> <span class="s2">&quot;#/$defs/FloatArg&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="s2">&quot;#/$defs/IdArg&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;int&quot;</span><span class="p">:</span> <span class="s2">&quot;#/$defs/IntArg&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;object&quot;</span><span class="p">:</span> <span class="s2">&quot;#/$defs/ObjectArg&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;str&quot;</span><span class="p">:</span> <span class="s2">&quot;#/$defs/StrArg&quot;</span>
+                <span class="s2">&quot;bool&quot;</span><span class="p">:</span> <span class="s2">&quot;#/$defs/BoolParam&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;enum&quot;</span><span class="p">:</span> <span class="s2">&quot;#/$defs/EnumParam&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;float&quot;</span><span class="p">:</span> <span class="s2">&quot;#/$defs/FloatParam&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="s2">&quot;#/$defs/IdParam&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;int&quot;</span><span class="p">:</span> <span class="s2">&quot;#/$defs/IntParam&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;object&quot;</span><span class="p">:</span> <span class="s2">&quot;#/$defs/ObjectParam&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;str&quot;</span><span class="p">:</span> <span class="s2">&quot;#/$defs/StrParam&quot;</span>
               <span class="p">},</span>
               <span class="s2">&quot;propertyName&quot;</span><span class="p">:</span> <span class="s2">&quot;type&quot;</span>
             <span class="p">},</span>
             <span class="s2">&quot;oneOf&quot;</span><span class="p">:</span> <span class="p">[</span>
               <span class="p">{</span>
-                <span class="s2">&quot;$ref&quot;</span><span class="p">:</span> <span class="s2">&quot;#/$defs/FloatArg&quot;</span>
+                <span class="s2">&quot;$ref&quot;</span><span class="p">:</span> <span class="s2">&quot;#/$defs/FloatParam&quot;</span>
               <span class="p">},</span>
               <span class="p">{</span>
-                <span class="s2">&quot;$ref&quot;</span><span class="p">:</span> <span class="s2">&quot;#/$defs/StrArg&quot;</span>
+                <span class="s2">&quot;$ref&quot;</span><span class="p">:</span> <span class="s2">&quot;#/$defs/StrParam&quot;</span>
               <span class="p">},</span>
               <span class="p">{</span>
-                <span class="s2">&quot;$ref&quot;</span><span class="p">:</span> <span class="s2">&quot;#/$defs/IntArg&quot;</span>
+                <span class="s2">&quot;$ref&quot;</span><span class="p">:</span> <span class="s2">&quot;#/$defs/IntParam&quot;</span>
               <span class="p">},</span>
               <span class="p">{</span>
-                <span class="s2">&quot;$ref&quot;</span><span class="p">:</span> <span class="s2">&quot;#/$defs/BoolArg&quot;</span>
+                <span class="s2">&quot;$ref&quot;</span><span class="p">:</span> <span class="s2">&quot;#/$defs/BoolParam&quot;</span>
               <span class="p">},</span>
               <span class="p">{</span>
-                <span class="s2">&quot;$ref&quot;</span><span class="p">:</span> <span class="s2">&quot;#/$defs/ObjectArg&quot;</span>
+                <span class="s2">&quot;$ref&quot;</span><span class="p">:</span> <span class="s2">&quot;#/$defs/ObjectParam&quot;</span>
               <span class="p">},</span>
               <span class="p">{</span>
-                <span class="s2">&quot;$ref&quot;</span><span class="p">:</span> <span class="s2">&quot;#/$defs/IdArg&quot;</span>
+                <span class="s2">&quot;$ref&quot;</span><span class="p">:</span> <span class="s2">&quot;#/$defs/IdParam&quot;</span>
               <span class="p">},</span>
               <span class="p">{</span>
-                <span class="s2">&quot;$ref&quot;</span><span class="p">:</span> <span class="s2">&quot;#/$defs/EnumArg&quot;</span>
+                <span class="s2">&quot;$ref&quot;</span><span class="p">:</span> <span class="s2">&quot;#/$defs/EnumParam&quot;</span>
               <span class="p">}</span>
             <span class="p">]</span>
           <span class="p">},</span>
@@ -1138,30 +1188,12 @@ the container or during container development.</p>
         <span class="p">},</span>
         <span class="s2">&quot;post_defines&quot;</span><span class="p">:</span> <span class="p">{</span>
           <span class="s2">&quot;additionalProperties&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s2">&quot;$ref&quot;</span><span class="p">:</span> <span class="s2">&quot;#/$defs/Value&quot;</span>
+            <span class="s2">&quot;$ref&quot;</span><span class="p">:</span> <span class="s2">&quot;#/$defs/Define&quot;</span>
           <span class="p">},</span>
           <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="p">[],</span>
           <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Calculated values to use as additional arguments With Jinja evaluation after all Args&quot;</span><span class="p">,</span>
           <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Post Defines&quot;</span><span class="p">,</span>
           <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span>
-        <span class="p">},</span>
-        <span class="s2">&quot;pre_defines&quot;</span><span class="p">:</span> <span class="p">{</span>
-          <span class="s2">&quot;additionalProperties&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s2">&quot;$ref&quot;</span><span class="p">:</span> <span class="s2">&quot;#/$defs/Value&quot;</span>
-          <span class="p">},</span>
-          <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="p">[],</span>
-          <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Calculated values to use as additional arguments With Jinja evaluation before all Args&quot;</span><span class="p">,</span>
-          <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Pre Defines&quot;</span><span class="p">,</span>
-          <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span>
-        <span class="p">},</span>
-        <span class="s2">&quot;databases&quot;</span><span class="p">:</span> <span class="p">{</span>
-          <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="p">[],</span>
-          <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Databases to instantiate&quot;</span><span class="p">,</span>
-          <span class="s2">&quot;items&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s2">&quot;$ref&quot;</span><span class="p">:</span> <span class="s2">&quot;#/$defs/Database&quot;</span>
-          <span class="p">},</span>
-          <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Databases&quot;</span><span class="p">,</span>
-          <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;array&quot;</span>
         <span class="p">},</span>
         <span class="s2">&quot;pre_init&quot;</span><span class="p">:</span> <span class="p">{</span>
           <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="p">[],</span>
@@ -1193,6 +1225,15 @@ the container or during container development.</p>
             <span class="p">]</span>
           <span class="p">},</span>
           <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Post Init&quot;</span><span class="p">,</span>
+          <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;array&quot;</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;databases&quot;</span><span class="p">:</span> <span class="p">{</span>
+          <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="p">[],</span>
+          <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Databases to instantiate&quot;</span><span class="p">,</span>
+          <span class="s2">&quot;items&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;$ref&quot;</span><span class="p">:</span> <span class="s2">&quot;#/$defs/Database&quot;</span>
+          <span class="p">},</span>
+          <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Databases&quot;</span><span class="p">,</span>
           <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;array&quot;</span>
         <span class="p">},</span>
         <span class="s2">&quot;env_vars&quot;</span><span class="p">:</span> <span class="p">{</span>
@@ -1290,7 +1331,7 @@ the container or during container development.</p>
       <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;EntityPVI&quot;</span><span class="p">,</span>
       <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span>
     <span class="p">},</span>
-    <span class="s2">&quot;EnumArg&quot;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="s2">&quot;EnumParam&quot;</span><span class="p">:</span> <span class="p">{</span>
       <span class="s2">&quot;additionalProperties&quot;</span><span class="p">:</span> <span class="n">false</span><span class="p">,</span>
       <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;An argument with an enum value&quot;</span><span class="p">,</span>
       <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span>
@@ -1328,7 +1369,7 @@ the container or during container development.</p>
         <span class="s2">&quot;description&quot;</span><span class="p">,</span>
         <span class="s2">&quot;values&quot;</span>
       <span class="p">],</span>
-      <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;EnumArg&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;EnumParam&quot;</span><span class="p">,</span>
       <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span>
     <span class="p">},</span>
     <span class="s2">&quot;EnvironmentVariable&quot;</span><span class="p">:</span> <span class="p">{</span>
@@ -1353,7 +1394,7 @@ the container or during container development.</p>
       <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;EnvironmentVariable&quot;</span><span class="p">,</span>
       <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span>
     <span class="p">},</span>
-    <span class="s2">&quot;FloatArg&quot;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="s2">&quot;FloatParam&quot;</span><span class="p">:</span> <span class="p">{</span>
       <span class="s2">&quot;additionalProperties&quot;</span><span class="p">:</span> <span class="n">false</span><span class="p">,</span>
       <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;An argument with a float value&quot;</span><span class="p">,</span>
       <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span>
@@ -1392,10 +1433,10 @@ the container or during container development.</p>
       <span class="s2">&quot;required&quot;</span><span class="p">:</span> <span class="p">[</span>
         <span class="s2">&quot;description&quot;</span>
       <span class="p">],</span>
-      <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;FloatArg&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;FloatParam&quot;</span><span class="p">,</span>
       <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span>
     <span class="p">},</span>
-    <span class="s2">&quot;IdArg&quot;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="s2">&quot;IdParam&quot;</span><span class="p">:</span> <span class="p">{</span>
       <span class="s2">&quot;additionalProperties&quot;</span><span class="p">:</span> <span class="n">false</span><span class="p">,</span>
       <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Explicit ID argument that an object can refer to&quot;</span><span class="p">,</span>
       <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span>
@@ -1429,10 +1470,10 @@ the container or during container development.</p>
       <span class="s2">&quot;required&quot;</span><span class="p">:</span> <span class="p">[</span>
         <span class="s2">&quot;description&quot;</span>
       <span class="p">],</span>
-      <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;IdArg&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;IdParam&quot;</span><span class="p">,</span>
       <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span>
     <span class="p">},</span>
-    <span class="s2">&quot;IntArg&quot;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="s2">&quot;IntParam&quot;</span><span class="p">:</span> <span class="p">{</span>
       <span class="s2">&quot;additionalProperties&quot;</span><span class="p">:</span> <span class="n">false</span><span class="p">,</span>
       <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;An argument with an int value&quot;</span><span class="p">,</span>
       <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span>
@@ -1471,10 +1512,10 @@ the container or during container development.</p>
       <span class="s2">&quot;required&quot;</span><span class="p">:</span> <span class="p">[</span>
         <span class="s2">&quot;description&quot;</span>
       <span class="p">],</span>
-      <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;IntArg&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;IntParam&quot;</span><span class="p">,</span>
       <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span>
     <span class="p">},</span>
-    <span class="s2">&quot;ObjectArg&quot;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="s2">&quot;ObjectParam&quot;</span><span class="p">:</span> <span class="p">{</span>
       <span class="s2">&quot;additionalProperties&quot;</span><span class="p">:</span> <span class="n">false</span><span class="p">,</span>
       <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;A reference to another entity defined in this IOC&quot;</span><span class="p">,</span>
       <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span>
@@ -1509,10 +1550,10 @@ the container or during container development.</p>
       <span class="s2">&quot;required&quot;</span><span class="p">:</span> <span class="p">[</span>
         <span class="s2">&quot;description&quot;</span>
       <span class="p">],</span>
-      <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;ObjectArg&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;ObjectParam&quot;</span><span class="p">,</span>
       <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span>
     <span class="p">},</span>
-    <span class="s2">&quot;StrArg&quot;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="s2">&quot;StrParam&quot;</span><span class="p">:</span> <span class="p">{</span>
       <span class="s2">&quot;additionalProperties&quot;</span><span class="p">:</span> <span class="n">false</span><span class="p">,</span>
       <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;An argument with a str value&quot;</span><span class="p">,</span>
       <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span>
@@ -1546,7 +1587,7 @@ the container or during container development.</p>
       <span class="s2">&quot;required&quot;</span><span class="p">:</span> <span class="p">[</span>
         <span class="s2">&quot;description&quot;</span>
       <span class="p">],</span>
-      <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;StrArg&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;StrParam&quot;</span><span class="p">,</span>
       <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span>
     <span class="p">},</span>
     <span class="s2">&quot;SubEntity&quot;</span><span class="p">:</span> <span class="p">{</span>
@@ -1599,48 +1640,6 @@ the container or during container development.</p>
       <span class="p">},</span>
       <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Text&quot;</span><span class="p">,</span>
       <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span>
-    <span class="p">},</span>
-    <span class="s2">&quot;Value&quot;</span><span class="p">:</span> <span class="p">{</span>
-      <span class="s2">&quot;additionalProperties&quot;</span><span class="p">:</span> <span class="n">false</span><span class="p">,</span>
-      <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;A calculated string value for a definition&quot;</span><span class="p">,</span>
-      <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span>
-        <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="p">{</span>
-          <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Description of what the value will be used for&quot;</span><span class="p">,</span>
-          <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Description&quot;</span><span class="p">,</span>
-          <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
-        <span class="p">},</span>
-        <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="p">{</span>
-          <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;The contents of the value&quot;</span><span class="p">,</span>
-          <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Value&quot;</span>
-        <span class="p">},</span>
-        <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="p">{</span>
-          <span class="s2">&quot;allOf&quot;</span><span class="p">:</span> <span class="p">[</span>
-            <span class="p">{</span>
-              <span class="s2">&quot;$ref&quot;</span><span class="p">:</span> <span class="s2">&quot;#/$defs/ValueTypes&quot;</span>
-            <span class="p">}</span>
-          <span class="p">],</span>
-          <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="s2">&quot;str&quot;</span><span class="p">,</span>
-          <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;The type of the value&quot;</span>
-        <span class="p">}</span>
-      <span class="p">},</span>
-      <span class="s2">&quot;required&quot;</span><span class="p">:</span> <span class="p">[</span>
-        <span class="s2">&quot;description&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;value&quot;</span>
-      <span class="p">],</span>
-      <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Value&quot;</span><span class="p">,</span>
-      <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span>
-    <span class="p">},</span>
-    <span class="s2">&quot;ValueTypes&quot;</span><span class="p">:</span> <span class="p">{</span>
-      <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;The type of a value&quot;</span><span class="p">,</span>
-      <span class="s2">&quot;enum&quot;</span><span class="p">:</span> <span class="p">[</span>
-        <span class="s2">&quot;str&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;float&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;int&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;bool&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;list&quot;</span>
-      <span class="p">],</span>
-      <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;ValueTypes&quot;</span><span class="p">,</span>
-      <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
     <span class="p">},</span>
     <span class="s2">&quot;When&quot;</span><span class="p">:</span> <span class="p">{</span>
       <span class="s2">&quot;enum&quot;</span><span class="p">:</span> <span class="p">[</span>
