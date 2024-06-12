@@ -5,22 +5,27 @@
 module: listtest
 
 shared:
-  - args1: &args1
-      quote:
-        type: str
-        description: |-
-          most hated quote
-        default: |-
-          Smoke me a kipper, I'll be back for breakfast
+  - &params1
+    quote:
+      type: str
+      description: |-
+        most hated quote
+      default: |-
+        Smoke me a kipper, I'll be back for breakfast
+    height:
+      type: float
+      description: |-
+        height of the character in cm
+      default: 180.0
 
-  - args2: &args2
-      age:
-        type: int
-        description: |-
-          Age of the character including cryogenic sleep
-        # example int using Jinja
-        default: |-
-          {{ 29 + cryo_years }}
+  - &params2
+    age:
+      type: int
+      description: |-
+        Age of the character including cryogenic sleep
+      # example int using Jinja
+      default: |-
+        {{ 29 + cryo_years }}
 
 defs:
   - name: lister
@@ -34,9 +39,9 @@ defs:
         value: |-
           Dave Lister
 
-    args:
+    params:
       # example of using aliases to merge multiple dictionaries into this one
-      <<: [*args1, *args2]
+      <<: [*params1, *params2]
 
       is_human:
         type: bool

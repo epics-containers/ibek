@@ -10,8 +10,8 @@ from typing import Annotated, Any, Mapping, Optional, Sequence, Union
 from pydantic import Field, PydanticUndefinedAnnotation
 from typing_extensions import Literal
 
-from .args import Arg, IdArg, Value
 from .globals import BaseSettings
+from .params import Define, IdParam, Param
 from .sub_entity import SubEntity
 
 
@@ -116,7 +116,7 @@ class EntityPVI(BaseSettings):
 
 
 discriminated = Annotated[  # type: ignore
-    Union[tuple(Arg.__subclasses__())],
+    Union[tuple(Param.__subclasses__())],
     Field(discriminator="type", description="union of arg types"),
 ]
 
@@ -134,16 +134,16 @@ class EntityDefinition(BaseSettings):
     )
     # declare Arg as Union of its subclasses for Pydantic to be able to deserialize
 
-    args: dict[str, discriminated] = Field(  # type: ignore
+    params: dict[str, discriminated] = Field(  # type: ignore
         description="The arguments IOC instance should supply",
         default=(),
     )
-    post_defines: dict[str, Value] = Field(
+    post_defines: dict[str, Define] = Field(
         description="Calculated values to use as additional arguments "
         "With Jinja evaluation after all Args",
         default=(),
     )
-    pre_defines: dict[str, Value] = Field(
+    pre_defines: dict[str, Define] = Field(
         description="Calculated values to use as additional arguments "
         "With Jinja evaluation before all Args",
         default=(),
@@ -178,6 +178,6 @@ class EntityDefinition(BaseSettings):
 
     def _get_id_arg(self):
         """Returns the name of the ID argument for this definition, if it exists"""
-        for arg in self.args:
-            if isinstance(arg, IdArg):
+        for arg in self.params:
+            if isinstance(arg, IdParam):
                 return arg.name

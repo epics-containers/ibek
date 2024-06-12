@@ -126,7 +126,7 @@
           "title": "Description",
           "type": "string"
         },
-        "args": {
+        "params": {
           "additionalProperties": {
             "description": "union of arg types",
             "discriminator": {
@@ -167,7 +167,7 @@
           },
           "default": [],
           "description": "The arguments IOC instance should supply",
-          "title": "Args",
+          "title": "Params",
           "type": "object"
         },
         "post_defines": {

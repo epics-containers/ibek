@@ -8,10 +8,10 @@ import jinja2
 import pytest
 from ruamel.yaml.main import YAML
 
-from ibek.args import IdArg, ObjectArg
 from ibek.commands import semver_compare
 from ibek.ioc import id_to_entity
 from ibek.ioc_factory import IocFactory
+from ibek.params import IdParam, ObjectParam
 from ibek.support import EntityDefinition, Support
 from ibek.utils import UTILS
 
@@ -26,12 +26,12 @@ def test_object_references(entity_factory):
             EntityDefinition(
                 name="port",
                 description="a port",
-                args=[IdArg(name="name", description="an id")],
+                params=[IdParam(name="name", description="an id")],
             ),
             EntityDefinition(
                 name="device",
                 description="a device",
-                args=[ObjectArg(name="port", description="the port")],
+                params=[ObjectParam(name="port", description="the port")],
             ),
         ],
     )

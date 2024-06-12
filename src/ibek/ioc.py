@@ -14,9 +14,9 @@ from pydantic import (
     model_validator,
 )
 
-from .args import IdArg
 from .definition import EntityDefinition
 from .globals import BaseSettings
+from .params import IdParam
 from .utils import UTILS
 
 # a global dict of all entity instances indexed by their ID
@@ -63,7 +63,7 @@ class Entity(BaseSettings):
         """
 
         # find the id field in this Entity if it has one
-        ids = {a.name for a in self.__definition__.args if isinstance(a, IdArg)}
+        ids = {a.name for a in self.__definition__.params if isinstance(a, IdParam)}
 
         entity_dict = self.model_dump()
         for arg, value in entity_dict.items():
