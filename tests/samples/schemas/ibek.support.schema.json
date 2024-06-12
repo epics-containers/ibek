@@ -1,6 +1,6 @@
 {
   "$defs": {
-    "BoolArg": {
+    "BoolParam": {
       "additionalProperties": false,
       "description": "An argument with an bool value",
       "properties": {
@@ -39,7 +39,7 @@
       "required": [
         "description"
       ],
-      "title": "BoolArg",
+      "title": "BoolParam",
       "type": "object"
     },
     "Comment": {
@@ -112,6 +112,48 @@
       "title": "Database",
       "type": "object"
     },
+    "Define": {
+      "additionalProperties": false,
+      "description": "A calculated string value for a definition",
+      "properties": {
+        "description": {
+          "description": "Description of what the value will be used for",
+          "title": "Description",
+          "type": "string"
+        },
+        "value": {
+          "description": "The contents of the value",
+          "title": "Value"
+        },
+        "type": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/DefinesTypes"
+            }
+          ],
+          "default": "str",
+          "description": "The type of the value"
+        }
+      },
+      "required": [
+        "description",
+        "value"
+      ],
+      "title": "Define",
+      "type": "object"
+    },
+    "DefinesTypes": {
+      "description": "The type of a value",
+      "enum": [
+        "str",
+        "float",
+        "int",
+        "bool",
+        "list"
+      ],
+      "title": "DefinesTypes",
+      "type": "string"
+    },
     "EntityDefinition": {
       "additionalProperties": false,
       "description": "A single definition of a class of Entity that an IOC instance may instantiate",
@@ -126,42 +168,51 @@
           "title": "Description",
           "type": "string"
         },
+        "pre_defines": {
+          "additionalProperties": {
+            "$ref": "#/$defs/Define"
+          },
+          "default": [],
+          "description": "Calculated values to use as additional arguments With Jinja evaluation before all Args",
+          "title": "Pre Defines",
+          "type": "object"
+        },
         "params": {
           "additionalProperties": {
             "description": "union of arg types",
             "discriminator": {
               "mapping": {
-                "bool": "#/$defs/BoolArg",
-                "enum": "#/$defs/EnumArg",
-                "float": "#/$defs/FloatArg",
-                "id": "#/$defs/IdArg",
-                "int": "#/$defs/IntArg",
-                "object": "#/$defs/ObjectArg",
-                "str": "#/$defs/StrArg"
+                "bool": "#/$defs/BoolParam",
+                "enum": "#/$defs/EnumParam",
+                "float": "#/$defs/FloatParam",
+                "id": "#/$defs/IdParam",
+                "int": "#/$defs/IntParam",
+                "object": "#/$defs/ObjectParam",
+                "str": "#/$defs/StrParam"
               },
               "propertyName": "type"
             },
             "oneOf": [
               {
-                "$ref": "#/$defs/FloatArg"
+                "$ref": "#/$defs/FloatParam"
               },
               {
-                "$ref": "#/$defs/StrArg"
+                "$ref": "#/$defs/StrParam"
               },
               {
-                "$ref": "#/$defs/IntArg"
+                "$ref": "#/$defs/IntParam"
               },
               {
-                "$ref": "#/$defs/BoolArg"
+                "$ref": "#/$defs/BoolParam"
               },
               {
-                "$ref": "#/$defs/ObjectArg"
+                "$ref": "#/$defs/ObjectParam"
               },
               {
-                "$ref": "#/$defs/IdArg"
+                "$ref": "#/$defs/IdParam"
               },
               {
-                "$ref": "#/$defs/EnumArg"
+                "$ref": "#/$defs/EnumParam"
               }
             ]
           },
@@ -172,30 +223,12 @@
         },
         "post_defines": {
           "additionalProperties": {
-            "$ref": "#/$defs/Value"
+            "$ref": "#/$defs/Define"
           },
           "default": [],
           "description": "Calculated values to use as additional arguments With Jinja evaluation after all Args",
           "title": "Post Defines",
           "type": "object"
-        },
-        "pre_defines": {
-          "additionalProperties": {
-            "$ref": "#/$defs/Value"
-          },
-          "default": [],
-          "description": "Calculated values to use as additional arguments With Jinja evaluation before all Args",
-          "title": "Pre Defines",
-          "type": "object"
-        },
-        "databases": {
-          "default": [],
-          "description": "Databases to instantiate",
-          "items": {
-            "$ref": "#/$defs/Database"
-          },
-          "title": "Databases",
-          "type": "array"
         },
         "pre_init": {
           "default": [],
@@ -227,6 +260,15 @@
             ]
           },
           "title": "Post Init",
+          "type": "array"
+        },
+        "databases": {
+          "default": [],
+          "description": "Databases to instantiate",
+          "items": {
+            "$ref": "#/$defs/Database"
+          },
+          "title": "Databases",
           "type": "array"
         },
         "env_vars": {
@@ -324,7 +366,7 @@
       "title": "EntityPVI",
       "type": "object"
     },
-    "EnumArg": {
+    "EnumParam": {
       "additionalProperties": false,
       "description": "An argument with an enum value",
       "properties": {
@@ -362,7 +404,7 @@
         "description",
         "values"
       ],
-      "title": "EnumArg",
+      "title": "EnumParam",
       "type": "object"
     },
     "EnvironmentVariable": {
@@ -387,7 +429,7 @@
       "title": "EnvironmentVariable",
       "type": "object"
     },
-    "FloatArg": {
+    "FloatParam": {
       "additionalProperties": false,
       "description": "An argument with a float value",
       "properties": {
@@ -426,10 +468,10 @@
       "required": [
         "description"
       ],
-      "title": "FloatArg",
+      "title": "FloatParam",
       "type": "object"
     },
-    "IdArg": {
+    "IdParam": {
       "additionalProperties": false,
       "description": "Explicit ID argument that an object can refer to",
       "properties": {
@@ -463,10 +505,10 @@
       "required": [
         "description"
       ],
-      "title": "IdArg",
+      "title": "IdParam",
       "type": "object"
     },
-    "IntArg": {
+    "IntParam": {
       "additionalProperties": false,
       "description": "An argument with an int value",
       "properties": {
@@ -505,10 +547,10 @@
       "required": [
         "description"
       ],
-      "title": "IntArg",
+      "title": "IntParam",
       "type": "object"
     },
-    "ObjectArg": {
+    "ObjectParam": {
       "additionalProperties": false,
       "description": "A reference to another entity defined in this IOC",
       "properties": {
@@ -543,10 +585,10 @@
       "required": [
         "description"
       ],
-      "title": "ObjectArg",
+      "title": "ObjectParam",
       "type": "object"
     },
-    "StrArg": {
+    "StrParam": {
       "additionalProperties": false,
       "description": "An argument with a str value",
       "properties": {
@@ -580,7 +622,7 @@
       "required": [
         "description"
       ],
-      "title": "StrArg",
+      "title": "StrParam",
       "type": "object"
     },
     "SubEntity": {
@@ -633,48 +675,6 @@
       },
       "title": "Text",
       "type": "object"
-    },
-    "Value": {
-      "additionalProperties": false,
-      "description": "A calculated string value for a definition",
-      "properties": {
-        "description": {
-          "description": "Description of what the value will be used for",
-          "title": "Description",
-          "type": "string"
-        },
-        "value": {
-          "description": "The contents of the value",
-          "title": "Value"
-        },
-        "type": {
-          "allOf": [
-            {
-              "$ref": "#/$defs/ValueTypes"
-            }
-          ],
-          "default": "str",
-          "description": "The type of the value"
-        }
-      },
-      "required": [
-        "description",
-        "value"
-      ],
-      "title": "Value",
-      "type": "object"
-    },
-    "ValueTypes": {
-      "description": "The type of a value",
-      "enum": [
-        "str",
-        "float",
-        "int",
-        "bool",
-        "list"
-      ],
-      "title": "ValueTypes",
-      "type": "string"
     },
     "When": {
       "enum": [

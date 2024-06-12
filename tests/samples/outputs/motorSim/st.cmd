@@ -22,15 +22,15 @@ iocInit
 
 
 # motorSimCreateAxis(controller_asyn_port_name, axis, axis_description)
-motorSimConfigAxis(controllerOne, 0, 20000, -20000, 500, 500)
+motorSimConfigAxis(type='motorSim.simMotorController' entity_enabled=True controllerName='controllerOne' P='IBEK-MO-TST-01:' numAxes=4 port=type='asyn.AsynIP' entity_enabled=True port='192.168.0.55:2002' name='controllerOnePort' input_eos='"\\n"' output_eos='"\\n"' priority=100 noAuto_connect=False noProcessEos=False baud=9600 parity='none' crtscts='N' stop='1' disconnectOnReadTimeout='Y' bits='8' DESC='Simulated Motion Controller testing escaping:  {{enclosed in escaped curly braces}} ', 0, 20000, -20000, 500, 500)
 # motorSimCreateAxis(controller_asyn_port_name, axis, axis_description)
-motorSimConfigAxis(controllerOne, 1, 20000, -20000, 500, 500)
+motorSimConfigAxis(type='motorSim.simMotorController' entity_enabled=True controllerName='controllerOne' P='IBEK-MO-TST-01:' numAxes=4 port=type='asyn.AsynIP' entity_enabled=True port='192.168.0.55:2002' name='controllerOnePort' input_eos='"\\n"' output_eos='"\\n"' priority=100 noAuto_connect=False noProcessEos=False baud=9600 parity='none' crtscts='N' stop='1' disconnectOnReadTimeout='Y' bits='8' DESC='Simulated Motion Controller testing escaping:  {{enclosed in escaped curly braces}} ', 1, 20000, -20000, 500, 500)
 # motorSimCreateAxis(controller_asyn_port_name, axis, axis_description)
-motorSimConfigAxis(controllerOne, 2, 20000, -20000, 1500, 1500)
+motorSimConfigAxis(type='motorSim.simMotorController' entity_enabled=True controllerName='controllerOne' P='IBEK-MO-TST-01:' numAxes=4 port=type='asyn.AsynIP' entity_enabled=True port='192.168.0.55:2002' name='controllerOnePort' input_eos='"\\n"' output_eos='"\\n"' priority=100 noAuto_connect=False noProcessEos=False baud=9600 parity='none' crtscts='N' stop='1' disconnectOnReadTimeout='Y' bits='8' DESC='Simulated Motion Controller testing escaping:  {{enclosed in escaped curly braces}} ', 2, 20000, -20000, 1500, 1500)
 # motorSimCreateAxis(controller_asyn_port_name, axis, axis_description)
-motorSimConfigAxis(controllerOne, 3, 20000, -20000, 2500, 2500)
+motorSimConfigAxis(type='motorSim.simMotorController' entity_enabled=True controllerName='controllerOne' P='IBEK-MO-TST-01:' numAxes=4 port=type='asyn.AsynIP' entity_enabled=True port='192.168.0.55:2002' name='controllerOnePort' input_eos='"\\n"' output_eos='"\\n"' priority=100 noAuto_connect=False noProcessEos=False baud=9600 parity='none' crtscts='N' stop='1' disconnectOnReadTimeout='Y' bits='8' DESC='Simulated Motion Controller testing escaping:  {{enclosed in escaped curly braces}} ', 3, 20000, -20000, 2500, 2500)
 # motorSimCreateAxis(controller_asyn_port_name, axis, axis_description)
-motorSimConfigAxis(controllerOne, 1, 20000, -20000, 100, 100)
+motorSimConfigAxis(type='motorSim.simMotorController' entity_enabled=True controllerName='controllerOne' P='IBEK-MO-TST-01:' numAxes=4 port=type='asyn.AsynIP' entity_enabled=True port='192.168.0.55:2002' name='controllerOnePort' input_eos='"\\n"' output_eos='"\\n"' priority=100 noAuto_connect=False noProcessEos=False baud=9600 parity='none' crtscts='N' stop='1' disconnectOnReadTimeout='Y' bits='8' DESC='Simulated Motion Controller testing escaping:  {{enclosed in escaped curly braces}} ', 1, 20000, -20000, 100, 100)
 # motorSimCreateAxis(controller_asyn_port_name, axis, axis_description)
-motorSimConfigAxis(controllerOne, 2, 20000, -20000, 100, 100)
+motorSimConfigAxis(type='motorSim.simMotorController' entity_enabled=True controllerName='controllerOne' P='IBEK-MO-TST-01:' numAxes=4 port=type='asyn.AsynIP' entity_enabled=True port='192.168.0.55:2002' name='controllerOnePort' input_eos='"\\n"' output_eos='"\\n"' priority=100 noAuto_connect=False noProcessEos=False baud=9600 parity='none' crtscts='N' stop='1' disconnectOnReadTimeout='Y' bits='8' DESC='Simulated Motion Controller testing escaping:  {{enclosed in escaped curly braces}} ', 2, 20000, -20000, 100, 100)
 
