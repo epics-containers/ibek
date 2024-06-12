@@ -6,7 +6,7 @@ from __future__ import annotations
 
 import builtins
 from pathlib import Path
-from typing import Annotated, Any, Dict, List, Literal, Sequence, Tuple, Type
+from typing import Annotated, Any, Dict, List, Literal, Tuple, Type
 
 from pydantic import Field, create_model
 from pydantic_core import PydanticUndefined, ValidationError
