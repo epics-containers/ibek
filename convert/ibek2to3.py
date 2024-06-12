@@ -86,7 +86,7 @@ def convert_definition(data: dict) -> dict | None:
     new_data = CommentedMap()
 
     # copy the leading keys that are not being changed
-    copy_verbatim(data, new_data, ["name", "description", "shared"])
+    copy_verbatim(data, new_data, ["name", "description"])
 
     if "pre_defines" in data:
         check_converted(data["pre_defines"])

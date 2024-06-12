@@ -6,45 +6,38 @@ defs:
   - name: TetrAMM
     description: |-
       TODO:ADD DESCRIPTION
-    args:
-      - type: id
-        name: PORT
+    params:
+      PORT:
+        type: id
         description: |-
           Template argument
 
-      - type: str
-        name: P
+      P:
+        type: str
         description: |-
           Base name of PV.
 
-      - type: str
-        name: R
+      R:
+        type: str
         description: |-
           Second macro for name of PV.
 
-      - type: int
-        name: QSIZE
+      QSIZE:
+        type: int
         description: |-
           ..
         default: 20
 
-      - type: int
-        name: RING_SIZE
+      RING_SIZE:
+        type: int
         description: |-
           ..
         default: 10000
 
-      - type: str
-        name: IP
+      IP:
+        type: str
         description: |-
           IP address of the TetrAMM device
-
-    databases:
-      - file: $(QUADEM)/db/TetrAMM.template
-        args:
-          P:
-          R:
-          PORT:
 
     pre_init:
       - value: |
@@ -60,41 +53,48 @@ defs:
           # Increase precision of sample time for TetrAMM
           dbpf("{{P}}{{R}}SampleTime_RBV.PREC", "5")
 
+    databases:
+      - file: $(QUADEM)/db/TetrAMM.template
+        args:
+          P:
+          R:
+          PORT:
+
   - name: Plugins
     description: |-
       Instantiates
         12 NDStats plugins for Current, Sum, Diff and Pos Channels
         12 NDTimeSeries plugins
         12 NDArray plugins
-    args:
-      - type: object
-        name: DEVICE
+    params:
+      DEVICE:
+        type: object
         description: |-
           Reference to the parent quadEM device
 
-      - type: id
-        name: PORTPREFIX
+      PORTPREFIX:
+        type: id
         description: |-
           The prefix for plugin asyn port names
 
-      - type: int
-        name: STAT_NCHAN
+      STAT_NCHAN:
+        type: int
         description: |-
           Template argument
 
-      - type: int
-        name: STAT_XSIZE
+      STAT_XSIZE:
+        type: int
         description: |-
           Template argument
 
-      - type: int
-        name: HIST_SIZE
+      HIST_SIZE:
+        type: int
         description: |-
           Template argument
         default: 256
 
-      - type: int
-        name: QUEUE
+      QUEUE:
+        type: int
         description: |-
           length of NDArray queue
         default: 16
@@ -102,16 +102,14 @@ defs:
     pre_init:
       - value: |
 
-          ################################################################################
-          # Just demonstrating that Entities can have their own pre_init AND SubEntities.
-          # This is the pre_init for quadem.Plugins device with id {{PORTPREFIX}}
-          ################################################################################
-
-          #
+      ################################################################################
+      # Just demonstrating that Entities can have their own pre_init AND SubEntities.
+      # This is the pre_init for quadem.Plugins device with id {{PORTPREFIX}}
+      ################################################################################
 
     shared:
       - &stats { type: ADCore.NDStats, P: "{{DEVICE.P}}", NCHANS: "{{STAT_NCHAN}}", XSIZE: "{{STAT_XSIZE}}", YSIZE: 0, HIST_SIZE: "{{HIST_SIZE}}", NDARRAY_PORT: "{{DEVICE}}", ENABLED: 1 }
-      - &arrays { type: ADCore.NDStdArrays, P: "{{DEVICE.P}}", NDARRAY_PORT: "{{DEVICE}}", ENABLED: 1, TYPE: "Float64", FTVL: "DOUBLE", NELEMENTS: "{{STAT_XSIZE}}" }
+      - &arrays { type: ADCore.NDStdArrays, P: "{{DEVICE.P}}", NDARRAY_PORT: "{{DEVICE}}", ENABLED: 1, TYPE: Float64, FTVL: DOUBLE, NELEMENTS: "{{STAT_XSIZE}}" }
 
     sub_entities:
       - { <<: *stats, PORT: "{{PORTPREFIX}}.STATS.I1", R: Cur1 }

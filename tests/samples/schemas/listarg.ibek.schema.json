@@ -24,11 +24,43 @@
           "title": "Name",
           "type": "string"
         },
+        "age": {
+          "anyOf": [
+            {
+              "description": "jinja that renders to <class 'int'>",
+              "pattern": ".*\\{\\{.*\\}\\}.*",
+              "type": "string"
+            },
+            {
+              "description": "Age of the character including cryogenic sleep",
+              "type": "integer"
+            }
+          ],
+          "default": "{{ 29 + cryo_years }}",
+          "description": "union of <class 'int'> and jinja representation of {typ}",
+          "title": "Age"
+        },
         "quote": {
           "default": "Smoke me a kipper, I'll be back for breakfast",
           "description": "most hated quote",
           "title": "Quote",
           "type": "string"
+        },
+        "height": {
+          "anyOf": [
+            {
+              "description": "jinja that renders to <class 'float'>",
+              "pattern": ".*\\{\\{.*\\}\\}.*",
+              "type": "string"
+            },
+            {
+              "description": "height of the character in cm",
+              "type": "number"
+            }
+          ],
+          "default": 180.0,
+          "description": "union of <class 'float'> and jinja representation of {typ}",
+          "title": "Height"
         },
         "is_human": {
           "anyOf": [
@@ -45,22 +77,6 @@
           "default": "{{ name == 'Dave Lister' }}",
           "description": "union of <class 'bool'> and jinja representation of {typ}",
           "title": "Is Human"
-        },
-        "age": {
-          "anyOf": [
-            {
-              "description": "jinja that renders to <class 'int'>",
-              "pattern": ".*\\{\\{.*\\}\\}.*",
-              "type": "string"
-            },
-            {
-              "description": "Age of the character including cryogenic sleep",
-              "type": "integer"
-            }
-          ],
-          "default": "{{ 29 + cryo_years }}",
-          "description": "union of <class 'int'> and jinja representation of {typ}",
-          "title": "Age"
         },
         "cryo_years": {
           "anyOf": [
