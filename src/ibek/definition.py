@@ -147,15 +147,15 @@ class EntityDefinition(BaseSettings):
         "With Jinja evaluation after all Args",
         default=(),
     )
-    databases: Sequence[Database] = Field(
-        description="Databases to instantiate", default=[]
-    )
     pre_init: Script = Field(
         description="Startup script snippets to add before iocInit()", default=()
     )
     post_init: Script = Field(
         description="Startup script snippets to add post iocInit(), such as dbpf",
         default=(),
+    )
+    databases: Sequence[Database] = Field(
+        description="Databases to instantiate", default=[]
     )
     env_vars: Sequence[EnvironmentVariable] = Field(
         description="Environment variables to set in the boot script", default=()

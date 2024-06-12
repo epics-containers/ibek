@@ -101,7 +101,17 @@ def convert_definition(data: dict) -> dict | None:
 
     # copy the trailing keys that are not being changed
     copy_verbatim(
-        data, new_data, ["pre_init", "post_init", "databases", "env_vars", "pvi"]
+        data,
+        new_data,
+        [
+            "pre_init",
+            "post_init",
+            "databases",
+            "env_vars",
+            "pvi",
+            "shared",
+            "sub_entities",
+        ],
     )
 
     return new_data

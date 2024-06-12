@@ -63,7 +63,11 @@ class Entity(BaseSettings):
         """
 
         # find the id field in this Entity if it has one
-        ids = {a.name for a in self.__definition__.params if isinstance(a, IdParam)}
+        ids = {
+            name
+            for name, value in self.__definition__.params.items()
+            if isinstance(value, IdParam)
+        }
 
         entity_dict = self.model_dump()
         for arg, value in entity_dict.items():
