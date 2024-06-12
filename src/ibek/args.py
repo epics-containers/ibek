@@ -36,7 +36,6 @@ class ValueTypes(Enum):
 class Value(BaseSettings):
     """A calculated string value for a definition"""
 
-    name: str = Field(description="Name of the value that the IOC instance will expose")
     description: str = Field(
         description="Description of what the value will be used for"
     )
@@ -50,9 +49,7 @@ class Arg(BaseSettings):
     """Base class for all Argument Types"""
 
     type: str
-    name: str = Field(
-        description="Name of the argument that the IOC instance should pass"
-    )
+
     description: str = Field(
         description="Description of what the argument will be used for"
     )

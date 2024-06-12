@@ -13,11 +13,6 @@
           "title": "Type",
           "type": "string"
         },
-        "name": {
-          "description": "Name of the argument that the IOC instance should pass",
-          "title": "Name",
-          "type": "string"
-        },
         "description": {
           "description": "Description of what the argument will be used for",
           "title": "Description",
@@ -42,7 +37,6 @@
         }
       },
       "required": [
-        "name",
         "description"
       ],
       "title": "BoolArg",
@@ -133,9 +127,7 @@
           "type": "string"
         },
         "args": {
-          "default": [],
-          "description": "The arguments IOC instance should supply",
-          "items": {
+          "additionalProperties": {
             "description": "union of arg types",
             "discriminator": {
               "mapping": {
@@ -173,26 +165,28 @@
               }
             ]
           },
+          "default": [],
+          "description": "The arguments IOC instance should supply",
           "title": "Args",
-          "type": "array"
+          "type": "object"
         },
         "post_defines": {
+          "additionalProperties": {
+            "$ref": "#/$defs/Value"
+          },
           "default": [],
           "description": "Calculated values to use as additional arguments With Jinja evaluation after all Args",
-          "items": {
-            "$ref": "#/$defs/Value"
-          },
           "title": "Post Defines",
-          "type": "array"
+          "type": "object"
         },
         "pre_defines": {
-          "default": [],
-          "description": "Calculated values to use as additional arguments With Jinja evaluation before all Args",
-          "items": {
+          "additionalProperties": {
             "$ref": "#/$defs/Value"
           },
+          "default": [],
+          "description": "Calculated values to use as additional arguments With Jinja evaluation before all Args",
           "title": "Pre Defines",
-          "type": "array"
+          "type": "object"
         },
         "databases": {
           "default": [],
@@ -343,11 +337,6 @@
           "title": "Type",
           "type": "string"
         },
-        "name": {
-          "description": "Name of the argument that the IOC instance should pass",
-          "title": "Name",
-          "type": "string"
-        },
         "description": {
           "description": "Description of what the argument will be used for",
           "title": "Description",
@@ -370,7 +359,6 @@
         }
       },
       "required": [
-        "name",
         "description",
         "values"
       ],
@@ -412,11 +400,6 @@
           "title": "Type",
           "type": "string"
         },
-        "name": {
-          "description": "Name of the argument that the IOC instance should pass",
-          "title": "Name",
-          "type": "string"
-        },
         "description": {
           "description": "Description of what the argument will be used for",
           "title": "Description",
@@ -441,7 +424,6 @@
         }
       },
       "required": [
-        "name",
         "description"
       ],
       "title": "FloatArg",
@@ -458,11 +440,6 @@
             "id"
           ],
           "title": "Type",
-          "type": "string"
-        },
-        "name": {
-          "description": "Name of the argument that the IOC instance should pass",
-          "title": "Name",
           "type": "string"
         },
         "description": {
@@ -484,7 +461,6 @@
         }
       },
       "required": [
-        "name",
         "description"
       ],
       "title": "IdArg",
@@ -501,11 +477,6 @@
             "int"
           ],
           "title": "Type",
-          "type": "string"
-        },
-        "name": {
-          "description": "Name of the argument that the IOC instance should pass",
-          "title": "Name",
           "type": "string"
         },
         "description": {
@@ -532,7 +503,6 @@
         }
       },
       "required": [
-        "name",
         "description"
       ],
       "title": "IntArg",
@@ -549,11 +519,6 @@
             "object"
           ],
           "title": "Type",
-          "type": "string"
-        },
-        "name": {
-          "description": "Name of the argument that the IOC instance should pass",
-          "title": "Name",
           "type": "string"
         },
         "description": {
@@ -576,7 +541,6 @@
         }
       },
       "required": [
-        "name",
         "description"
       ],
       "title": "ObjectArg",
@@ -593,11 +557,6 @@
             "str"
           ],
           "title": "Type",
-          "type": "string"
-        },
-        "name": {
-          "description": "Name of the argument that the IOC instance should pass",
-          "title": "Name",
           "type": "string"
         },
         "description": {
@@ -619,7 +578,6 @@
         }
       },
       "required": [
-        "name",
         "description"
       ],
       "title": "StrArg",
@@ -680,11 +638,6 @@
       "additionalProperties": false,
       "description": "A calculated string value for a definition",
       "properties": {
-        "name": {
-          "description": "Name of the value that the IOC instance will expose",
-          "title": "Name",
-          "type": "string"
-        },
         "description": {
           "description": "Description of what the value will be used for",
           "title": "Description",
@@ -705,7 +658,6 @@
         }
       },
       "required": [
-        "name",
         "description",
         "value"
       ],

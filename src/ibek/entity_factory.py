@@ -62,11 +62,11 @@ class EntityFactory:
         Create an Entity Model from a Definition instance and a Support instance.
         """
 
-        def add_defines(s: Sequence[Value]) -> None:
+        def add_defines(s: dict[str, Value]) -> None:
             # add in the pre_defines or post_defines as Args in the Entity
-            for value in s:
+            for name, value in s.items():
                 typ = getattr(builtins, str(value.type))
-                add_arg(value.name, typ, value.description, value.value)
+                add_arg(name, typ, value.description, value.value)
 
         def add_arg(name, typ, description, default):
             if default is None:
@@ -105,7 +105,7 @@ class EntityFactory:
         add_defines(definition.pre_defines)
 
         # add in each of the arguments as a Field in the Entity
-        for arg in definition.args:
+        for name, arg in definition.args.items():
             type: Any
 
             if isinstance(arg, ObjectArg):
@@ -123,14 +123,13 @@ class EntityFactory:
                 for k, v in arg.values.items():
                     enum_swapped[str(v) if v else str(k)] = k
                 # TODO review enums especially with respect to Pydantic 2.7.1
-                val_enum = EnumVal(arg.name, enum_swapped)  # type: ignore
+                val_enum = EnumVal(name, enum_swapped)  # type: ignore
                 type = val_enum
 
             else:
                 # arg.type is str, int, float, etc.
                 type = getattr(builtins, arg.type)
-            # TODO look into why arg.name requires type ignore
-            add_arg(arg.name, type, arg.description, getattr(arg, "default"))  # type: ignore
+            add_arg(name, type, arg.description, getattr(arg, "default"))
 
         # add in the calculated values Jinja Templates as Fields in the Entity
         add_defines(definition.post_defines)
