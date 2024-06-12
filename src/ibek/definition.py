@@ -134,16 +134,16 @@ class EntityDefinition(BaseSettings):
     )
     # declare Arg as Union of its subclasses for Pydantic to be able to deserialize
 
-    args: Sequence[discriminated] = Field(  # type: ignore
+    args: dict[str, discriminated] = Field(  # type: ignore
         description="The arguments IOC instance should supply",
         default=(),
     )
-    post_defines: Sequence[Value] = Field(
+    post_defines: dict[str, Value] = Field(
         description="Calculated values to use as additional arguments "
         "With Jinja evaluation after all Args",
         default=(),
     )
-    pre_defines: Sequence[Value] = Field(
+    pre_defines: dict[str, Value] = Field(
         description="Calculated values to use as additional arguments "
         "With Jinja evaluation before all Args",
         default=(),
