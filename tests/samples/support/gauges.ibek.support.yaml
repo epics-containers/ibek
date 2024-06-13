@@ -1,65 +1,65 @@
-# yaml-language-server: $schema=https://github.com/epics-containers/ibek/releases/download/1.5.3/ibek.support.schema.json
+# yaml-language-server: $schema=../schemas/ibek.support.schema.json
 
 module: gauges
 
 # Pretend support for vacuum space to test initialisation of a gauge group
 
 defs:
-- name: Mks937bGauge
-  description: |-
-    MKS 937b Gauge controller
-  params:
-    port:
-      type: object
-      description: |-
-        Asyn port that connects to the device
-    name:
-      type: id
-      description: |-
-        name for the Device
-    P:
-      type: str
-      description: |-
-        PV prefix
+  - name: Mks937bGauge
+    description: |-
+      MKS 937b Gauge controller
+    params:
+      port:
+        type: object
+        description: |-
+          Asyn port that connects to the device
+      name:
+        type: id
+        description: |-
+          name for the Device
+      P:
+        type: str
+        description: |-
+          PV prefix
 
-- name: GaugeGroup
-  description: |-
-    Group of gauges
-  params:
-    name:
-      type: id
-      description: |-
-        name for the
-    gauge1:
-      type: object
-      description: |-
-        First gauge
-    gauge2:
-      type: object
-      description: |-
-        Second gauge
-       # default to the id of the gauge object we want as default
-      default: |-
-        {{gauge1.name}}
-    gauge3:
-      type: object
-      description: |-
-        Third gauge
-      default: |
-        {{gauge1.name}}
-    gauge4:
-      type: object
-      description: |-
-        Fourth gauge
-      default: |
-        {{gauge1.name}}
+  - name: GaugeGroup
+    description: |-
+      Group of gauges
+    params:
+      name:
+        type: id
+        description: |-
+          name for the
+      gauge1:
+        type: object
+        description: |-
+          First gauge
+      gauge2:
+        type: object
+        description: |-
+          Second gauge
+        # default to the first gauge object
+        default: |-
+          {{gauge1}}
+      gauge3:
+        type: object
+        description: |-
+          Third gauge
+        default: |
+          {{gauge1}}
+      gauge4:
+        type: object
+        description: |-
+          Fourth gauge
+        default: |
+          {{gauge1}}
 
-  pre_init:
-  - value: |2
+    pre_init:
+      - value: |
 
-      # GAUGE GROUP GAUGE DEFAULTS TEST
-      # gauge1 P is {{gauge1.P}}
-      # gauge2 P is {{gauge2.P}}
-      # gauge3 P is {{gauge3.P}}
-      # gauge4 P is {{gauge4.P}}
-      # gauge4 baud is {{gauge4.port.baud}}
+          # GAUGE GROUP GAUGE DEFAULTS TEST
+          # gauge1 P is {{gauge1.P}}
+          # gauge2 P is {{gauge2.P}}
+          # gauge3 P is {{gauge3.P}}
+          # gauge4 P is {{gauge4.P}}
+          # gauge4 baud is {{gauge4.port.baud}}

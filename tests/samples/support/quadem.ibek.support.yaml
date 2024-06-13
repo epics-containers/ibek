@@ -102,10 +102,12 @@ defs:
     pre_init:
       - value: |
 
-      ################################################################################
-      # Just demonstrating that Entities can have their own pre_init AND SubEntities.
-      # This is the pre_init for quadem.Plugins device with id {{PORTPREFIX}}
-      ################################################################################
+          ################################################################################
+          # Just demonstrating that Entities can have their own pre_init AND SubEntities.
+          # This is the pre_init for quadem.Plugins device with id {{PORTPREFIX}}
+          ################################################################################
+
+          #
 
     shared:
       - &stats { type: ADCore.NDStats, P: "{{DEVICE.P}}", NCHANS: "{{STAT_NCHAN}}", XSIZE: "{{STAT_XSIZE}}", YSIZE: 0, HIST_SIZE: "{{HIST_SIZE}}", NDARRAY_PORT: "{{DEVICE}}", ENABLED: 1 }
