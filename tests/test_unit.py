@@ -6,7 +6,6 @@ import dataclasses
 
 import jinja2
 import pytest
-from ruamel.yaml.main import YAML
 
 from ibek.commands import semver_compare
 from ibek.ioc import id_to_entity
@@ -26,12 +25,12 @@ def test_object_references(entity_factory):
             EntityDefinition(
                 name="port",
                 description="a port",
-                params=[IdParam(name="name", description="an id")],
+                params={"name": IdParam(description="an id")},
             ),
             EntityDefinition(
                 name="device",
                 description="a device",
-                params=[ObjectParam(name="port", description="the port")],
+                params={"port": ObjectParam(description="the port")},
             ),
         ],
     )
