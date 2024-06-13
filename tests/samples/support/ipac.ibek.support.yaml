@@ -3,232 +3,232 @@
 module: ipac
 
 defs:
-- name: Hy8002
-  description: |-
-    Configure a Hytec 8002 Carrier card
-  params:
-    slot:
-      type: int
-      description: |-
-        VME Slot number
+  - name: Hy8002
+    description: |-
+      Configure a Hytec 8002 Carrier card
+    params:
+      slot:
+        type: int
+        description: |-
+          VME Slot number
 
-    IPACid:
-      type: id
-      description: |-
-        Identifier for this device
-      default: IPAC{{ slot }}
+      IPACid:
+        type: id
+        description: |-
+          Identifier for this device
+        default: IPAC{{ slot }}
 
-    intLevel:
-      type: int
-      description: |-
-        VME Interrupt Level
-      default: 2
+      intLevel:
+        type: int
+        description: |-
+          VME Interrupt Level
+        default: 2
 
-    test:
-      type: str
-      description: test
-      default: |
-        {{ slot }}
+      test:
+        type: str
+        description: test
+        default: |
+          {{ slot }}
 
-    interrupt_vector:
-      type: object
-      description: Interrupt Vector reserved with epics.InterruptVectorVME, count=1
+      interrupt_vector:
+        type: object
+        description: Interrupt Vector reserved with epics.InterruptVectorVME, count=1
 
-  post_defines:
-    card_id:
-      value: '{{ _global.incrementor("Carriers", start=0) }}'
-      description: Carrier Card Identifier
+    post_defines:
+      card_id:
+        value: '{{ _global.incrementor("Carriers", start=0) }}'
+        description: Carrier Card Identifier
 
-  pre_init:
-  - value: |
-      # Hy8002 carrier card: slot: {{ slot }}, intLevel: {{ intLevel }}, interrupt: {{ interrupt_vector.name }} ({{ interrupt_vector.number }})
-      ipacAddHy8002("{{ slot }}, {{ intLevel}}, $({{interrupt_vector.name}})")
-      epicsEnvSet {{ IPACid }} = {{ card_id }}
+    pre_init:
+      - value: |
+          # Hy8002 carrier card: slot: {{ slot }}, intLevel: {{ intLevel }}, interrupt: {{ interrupt_vector.name }} ({{ interrupt_vector.number }})
+          ipacAddHy8002("{{ slot }}, {{ intLevel}}, $({{interrupt_vector.name}})")
+          epicsEnvSet {{ IPACid }} = {{ card_id }}
 
-- name: Hy8001
-  description: |-
-    TODO:ADD DESCRIPTION
-  params:
-    slot:
-      type: int
-      description: |-
-        VME Slot number
+  - name: Hy8001
+    description: |-
+      TODO:ADD DESCRIPTION
+    params:
+      slot:
+        type: int
+        description: |-
+          VME Slot number
 
-    direction:
-      type: enum
-      description: |-
-        Direction of digital IO
-      values:
-        Mixed:
-        Input:
-        Output:
-    cardid:
-      type: int
-      description: |-
-        cardid?
+      direction:
+        type: enum
+        description: |-
+          Direction of digital IO
+        values:
+          Mixed:
+          Input:
+          Output:
+      cardid:
+        type: int
+        description: |-
+          cardid?
 
-    intLevel:
-      type: int
-      description: |-
-        intLevel?
-      default: 0
+      intLevel:
+        type: int
+        description: |-
+          intLevel?
+        default: 0
 
-    clock:
-      type: int
-      description: |-
-        clock?
-      default: 0
+      clock:
+        type: int
+        description: |-
+          clock?
+        default: 0
 
-    scan:
-      type: int
-      description: |-
-        scan?
-      default: 0
+      scan:
+        type: int
+        description: |-
+          scan?
+        default: 0
 
-    invertin:
-      type: bool
-      description: |-
-        invertin?
-      default: false
+      invertin:
+        type: bool
+        description: |-
+          invertin?
+        default: false
 
-    invertout:
-      type: bool
-      description: |-
-        invertout?
-      default: false
+      invertout:
+        type: bool
+        description: |-
+          invertout?
+        default: false
 
-    ip_support:
-      type: bool
-      description: |-
-        ip_support?
-      default: false
+      ip_support:
+        type: bool
+        description: |-
+          ip_support?
+        default: false
 
-  pre_init:
-  - value: |
-      Hy8001Configure({{cardid}}, {{slot}}, {{vector}}, {{intLevel}}, 0, 0, {{clock}}, {{scan}}, {{direction}}, {{invertin}}, {{invertout}})
+    pre_init:
+      - value: |
+          Hy8001Configure({{cardid}}, {{slot}}, {{vector}}, {{intLevel}}, 0, 0, {{clock}}, {{scan}}, {{direction}}, {{invertin}}, {{invertout}})
   # TODO - MISSING ARGS: vector
   # WARNING - non print commands in Initialise not parsed
 
-- name: Hy8005
-  description: |-
-    TODO:ADD DESCRIPTION
-  params:
-    slot:
-      type: int
-      description: |-
-        VME Slot number
+  - name: Hy8005
+    description: |-
+      TODO:ADD DESCRIPTION
+    params:
+      slot:
+        type: int
+        description: |-
+          VME Slot number
 
-    cardnum:
-      type: int
-      description: |-
-        Card number
+      cardnum:
+        type: int
+        description: |-
+          Card number
 
-    int_level:
-      type: int
-      description: |-
-        VME Interrupt Level
-      default: 1
+      int_level:
+        type: int
+        description: |-
+          VME Interrupt Level
+        default: 1
 
-    hs_int:
-      type: int
-      description: |-
-        Dunno actually
-      default: 0
+      hs_int:
+        type: int
+        description: |-
+          Dunno actually
+        default: 0
 
-  pre_init:
-  - value: |
-      Hy8005Configure({{cardnum}}, {{slot}}, {{int_vec}}, {{int_level}}, {{hs_int}})
+    pre_init:
+      - value: |
+          Hy8005Configure({{cardnum}}, {{slot}}, {{int_vec}}, {{int_level}}, {{hs_int}})
   # TODO - MISSING ARGS: int_vec
-- name: Hy8005_Channel
-  description: |-
-    TODO:ADD DESCRIPTION
-  params:
-    parent:
-      type: object
-      description: |-
-        Hy8005 card
+  - name: Hy8005_Channel
+    description: |-
+      TODO:ADD DESCRIPTION
+    params:
+      parent:
+        type: object
+        description: |-
+          Hy8005 card
 
-    ipslot:
-      type: enum
-      description: |-
-        IP slot
-      values:
-        A:
-        C:
-        B:
-        D:
-    cardnum:
-      type: int
-      description: |-
-        EPICS card identification
+      ipslot:
+        type: enum
+        description: |-
+          IP slot
+        values:
+          A:
+          C:
+          B:
+          D:
+      cardnum:
+        type: int
+        description: |-
+          EPICS card identification
 
-    debrate:
-      type: enum
-      description: |-
-        debrate
-      values:
-        No_Debounce:
-        1KHz:
-        200Hz:
-        100Hz:
-        500Hz:
-    pwidth:
-      type: enum
-      description: |-
-        pwidth
-      default: 0
-      values:
-        100sec:
-        5sec:
-        10sec:
-        1sec:
-        10msec:
-        20sec:
-        100msec:
-        2sec:
-        50sec:
-        1msec:
-    scanrate:
-      type: enum
-      description: |-
-        scanrate
-      default: 0
-      values:
-        1MHz:
-        100KHz:
-        10KHz:
-        1KHz:
-    direction:
-      type: enum
-      description: |-
-        direction
-      default: 0
-      values:
-        inputs:
-        low in/high out:
-        outputs:
-        low out/high in:
-    clock:
-      type: enum
-      description: |-
-        clock
-      default: 0
-      values:
-        internal:
-        external:
-    invertInputs:
-      type: bool
-      description: |-
-        invert inputs
-      default: false
+      debrate:
+        type: enum
+        description: |-
+          debrate
+        values:
+          No_Debounce:
+          1KHz:
+          200Hz:
+          100Hz:
+          500Hz:
+      pwidth:
+        type: enum
+        description: |-
+          pwidth
+        default: 0
+        values:
+          100sec:
+          5sec:
+          10sec:
+          1sec:
+          10msec:
+          20sec:
+          100msec:
+          2sec:
+          50sec:
+          1msec:
+      scanrate:
+        type: enum
+        description: |-
+          scanrate
+        default: 0
+        values:
+          1MHz:
+          100KHz:
+          10KHz:
+          1KHz:
+      direction:
+        type: enum
+        description: |-
+          direction
+        default: 0
+        values:
+          inputs:
+          low in/high out:
+          outputs:
+          low out/high in:
+      clock:
+        type: enum
+        description: |-
+          clock
+        default: 0
+        values:
+          internal:
+          external:
+      invertInputs:
+        type: bool
+        description: |-
+          invert inputs
+        default: false
 
-    invertOutputs:
-      type: bool
-      description: |-
-        invert outputs
-      default: false
+      invertOutputs:
+        type: bool
+        description: |-
+          invert outputs
+        default: false
 
-  pre_init:
-  - value: |
-      Hy8005IOConfigure({{cardnum}}, {{carrier}}, {{ipslot}}, {{debrate}}, {{pwidth}}, {{scanrate}}, {{direction}}, {{intr}}, {{clock}})
+    pre_init:
+      - value: |
+          Hy8005IOConfigure({{cardnum}}, {{carrier}}, {{ipslot}}, {{debrate}}, {{pwidth}}, {{scanrate}}, {{direction}}, {{intr}}, {{clock}})
   # TODO - MISSING ARGS: carrier, intr

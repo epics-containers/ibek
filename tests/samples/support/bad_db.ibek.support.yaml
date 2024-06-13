@@ -6,18 +6,18 @@
 module: object_module
 
 defs:
-- name: RefObject
-  description: |
-    Example object with a database containing a non-existant arg
-  params:
-    name:
-      type: id
-      description: Port name
-
-  databases:
-  - file: test.db
-    args:
+  - name: RefObject
+    description: |
+      Example object with a database containing a non-existant arg
+    params:
       name:
-      fixed: A fixed value
-      calculated: value containing the name arg = {{ name }}
-      non-existant:
+        type: id
+        description: Port name
+
+    databases:
+      - file: test.db
+        args:
+          name:
+          fixed: A fixed value
+          calculated: value containing the name arg = {{ name }}
+          non-existant:

@@ -3,215 +3,215 @@
 module: motorTML
 
 defs:
-- name: CreateController
-  description: |-
-    Creates a Technosoft motion controller connected to a serial line
-  params:
-    controllerName:
-      type: id
-      description: |-
-        The name of the controller
-    P:
-      type: str
-      description: |-
-        Device PV Prefix
+  - name: CreateController
+    description: |-
+      Creates a Technosoft motion controller connected to a serial line
+    params:
+      controllerName:
+        type: id
+        description: |-
+          The name of the controller
+      P:
+        type: str
+        description: |-
+          Device PV Prefix
 
-    TTY:
-      type: str
-      description: |-
-        TTY
+      TTY:
+        type: str
+        description: |-
+          TTY
 
-    hostid:
-      type: int
-      description: |-
-        Host ID
+      hostid:
+        type: int
+        description: |-
+          Host ID
 
-    CONFIG:
-      type: str
-      description: |-
-        TML Configuration
-      default: |-
-        DEV_PATH={{TTY}},HOST_ID={{hostid}}
+      CONFIG:
+        type: str
+        description: |-
+          TML Configuration
+        default: |-
+          DEV_PATH={{TTY}},HOST_ID={{hostid}}
 
-  post_defines:
-    axisConfiguration:
-      description: collects the axis configuration from axis entities
-      type: list
-      value: []
-    axisNum:
-      description: A name for the axis counter (used to generate unique axis numbers)
-      value: |-
-        {{ "axes_{}".format(controllerName) }}
+    post_defines:
+      axisConfiguration:
+        description: collects the axis configuration from axis entities
+        type: list
+        value: []
+      axisNum:
+        description: A name for the axis counter (used to generate unique axis numbers)
+        value: |-
+          {{ "axes_{}".format(controllerName) }}
 
-  pre_init:
-  - value: |
-      ndsCreateDevice "TechnosoftTML", "{{controllerName}}", "FILE=/tmp/,NAXIS={{_global.get(axisNum)+1}},{{CONFIG}}{{"".join(axisConfiguration) }}"
+    pre_init:
+      - value: |
+          ndsCreateDevice "TechnosoftTML", "{{controllerName}}", "FILE=/tmp/,NAXIS={{_global.get(axisNum)+1}},{{CONFIG}}{{"".join(axisConfiguration) }}"
 
-- name: motorAxis
-  description: |-
-    Creates a motor axis
-  params:
-    controller:
-      type: object
-      description: |-
-        a reference to the motion controller
+  - name: motorAxis
+    description: |-
+      Creates a motor axis
+    params:
+      controller:
+        type: object
+        description: |-
+          a reference to the motion controller
 
-    num:
-      type: int
-      description: |-
-        The axis number
-      default: |-
-        {{ _global.incrementor(controller.axisNum) }}
+      num:
+        type: int
+        description: |-
+          The axis number
+        default: |-
+          {{ _global.incrementor(controller.axisNum) }}
 
-    CHANNEL_PREFIX:
-      type: str
-      description: |-
-        The axis prefix
-      default: ax0
+      CHANNEL_PREFIX:
+        type: str
+        description: |-
+          The axis prefix
+        default: ax0
 
-    CHANNEL_ID:
-      type: str
-      description: |-
-        The axis ID
-      default: MOT
+      CHANNEL_ID:
+        type: str
+        description: |-
+          The axis ID
+        default: MOT
 
-    axid:
-      type: int
-      description: |-
-        The axis ID
+      axid:
+        type: int
+        description: |-
+          The axis ID
 
-    axconf:
-      type: str
-      description: |-
-        The axis configuration
-      default: star_vat_phs.t.zip
+      axconf:
+        type: str
+        description: |-
+          The axis configuration
+        default: star_vat_phs.t.zip
 
-    homing:
-      type: enum
-      description: |-
-        Homing direction
-      default: LSN
-      values:
-        LSN:
-        LSP:
-    NSTEPS:
-      type: int
-      description: |-
-        Number of steps
-      default: 200
+      homing:
+        type: enum
+        description: |-
+          Homing direction
+        default: LSN
+        values:
+          LSN:
+          LSP:
+      NSTEPS:
+        type: int
+        description: |-
+          Number of steps
+        default: 200
 
-    NMICROSTEPS:
-      type: int
-      description: |-
-        Number of microsteps
-      default: 256
+      NMICROSTEPS:
+        type: int
+        description: |-
+          Number of microsteps
+        default: 256
 
-    VELO:
-      type: int
-      description: |-
-        Velocity
-      default: 20
+      VELO:
+        type: int
+        description: |-
+          Velocity
+        default: 20
 
-    VELO_MIN:
-      type: float
-      description: |-
-        Velocity min
-      default: 0.1
+      VELO_MIN:
+        type: float
+        description: |-
+          Velocity min
+        default: 0.1
 
-    VELO_MAX:
-      type: float
-      description: |-
-        Velocity Max
-      default: 50
+      VELO_MAX:
+        type: float
+        description: |-
+          Velocity Max
+        default: 50
 
-    ACCL:
-      type: float
-      description: |-
-        Seconds to Velocity
-      default: 0.5
+      ACCL:
+        type: float
+        description: |-
+          Seconds to Velocity
+        default: 0.5
 
-    ACCL_MIN:
-      type: float
-      description: |-
-        Seconds to Velocity
-      default: 0.01
+      ACCL_MIN:
+        type: float
+        description: |-
+          Seconds to Velocity
+        default: 0.01
 
-    ACCL_MAX:
-      type: float
-      description: |-
-        Seconds to Velocity
-      default: 1.5
+      ACCL_MAX:
+        type: float
+        description: |-
+          Seconds to Velocity
+        default: 1.5
 
-    HAR:
-      type: float
-      description: |-
-        Homing acceleration
-      default: 0.5
+      HAR:
+        type: float
+        description: |-
+          Homing acceleration
+        default: 0.5
 
-    HVEL:
-      type: float
-      description: |-
-        Homing Velocity
-      default: 10
+      HVEL:
+        type: float
+        description: |-
+          Homing Velocity
+        default: 10
 
-    JAR:
-      type: int
-      description: |-
-        JAR
-      default: 1
+      JAR:
+        type: int
+        description: |-
+          JAR
+        default: 1
 
-    JVEL:
-      type: int
-      description: |-
-        JVEL
-      default: 5
+      JVEL:
+        type: int
+        description: |-
+          JVEL
+        default: 5
 
-    EGU:
-      type: str
-      description: |-
-        Engineering Units
-      default: ustep
+      EGU:
+        type: str
+        description: |-
+          Engineering Units
+        default: ustep
 
-    SLSP:
-      type: float
-      description: |-
-        Limit
-      default: 0.8
+      SLSP:
+        type: float
+        description: |-
+          Limit
+        default: 0.8
 
-    ENABLED:
-      type: int
-      description: |-
-        Enabled
-      default: 1
+      ENABLED:
+        type: int
+        description: |-
+          Enabled
+        default: 1
 
-    TIMEOUT:
-      type: int
-      description: |-
-        Timeout
-      default: 0
+      TIMEOUT:
+        type: int
+        description: |-
+          Timeout
+        default: 0
 
-    ASYN_ADDR:
-      type: str
-      description: |-
-        Asyn Addr?
-      default: '0'
+      ASYN_ADDR:
+        type: str
+        description: |-
+          Asyn Addr?
+        default: "0"
 
-    CONFIG:
-      type: str
-      description: |-
-        Axis configuration string to add to the controller configuration
-      default: |-
-        ,AXIS_SETUP_{{num}}=$(SUPPORT)/motorTechnosoft/tml_lib/config/{{axconf}},AXIS_ID_{{num}}={{axid}},AXIS_HOMING_SW_{{num}}={{homing}}
+      CONFIG:
+        type: str
+        description: |-
+          Axis configuration string to add to the controller configuration
+        default: |-
+          ,AXIS_SETUP_{{num}}=$(SUPPORT)/motorTechnosoft/tml_lib/config/{{axconf}},AXIS_ID_{{num}}={{axid}},AXIS_HOMING_SW_{{num}}={{homing}}
 
-  post_defines:
-    axisConfiguration:
-      description: Adds an axis configuration entry to the controller's list
-      value: |-
-        {{ controller.axisConfiguration.append(CONFIG) }}
+    post_defines:
+      axisConfiguration:
+        description: Adds an axis configuration entry to the controller's list
+        value: |-
+          {{ controller.axisConfiguration.append(CONFIG) }}
 
-  pre_init:
-  - value: |
-      dbLoadRecords("$(SUPPORT)/motorTechnosoft/db/tmlAxis.template","PREFIX={{controller.P}}, CHANNEL_ID={{CHANNEL_ID}}, CHANNEL_PREFIX=ax{{num}}, ASYN_PORT={{controller.controllerName}}, ASYN_ADDR={{ASYN_ADDR}}, NSTEPS={{NSTEPS}}, NMICROSTEPS={{NMICROSTEPS}}, VELO={{VELO}}, VELO_MIN={{VELO_MIN}}, VELO_MAX={{VELO_MAX}}, ACCL={{ACCL}}, ACCL_MIN={{ACCL_MIN}}, ACCL_MAX={{ACCL_MAX}}, HAR={{HAR}}, HVEL={{HVEL}}, JAR={{JAR}}, JVEL={{JVEL}}, ENABLED={{ENABLED}}, SLSP={{SLSP}}, EGU={{EGU}}, TIMEOUT={{TIMEOUT}}")
+    pre_init:
+      - value: |
+          dbLoadRecords("$(SUPPORT)/motorTechnosoft/db/tmlAxis.template","PREFIX={{controller.P}}, CHANNEL_ID={{CHANNEL_ID}}, CHANNEL_PREFIX=ax{{num}}, ASYN_PORT={{controller.controllerName}}, ASYN_ADDR={{ASYN_ADDR}}, NSTEPS={{NSTEPS}}, NMICROSTEPS={{NMICROSTEPS}}, VELO={{VELO}}, VELO_MIN={{VELO_MIN}}, VELO_MAX={{VELO_MAX}}, ACCL={{ACCL}}, ACCL_MIN={{ACCL_MIN}}, ACCL_MAX={{ACCL_MAX}}, HAR={{HAR}}, HVEL={{HVEL}}, JAR={{JAR}}, JVEL={{JVEL}}, ENABLED={{ENABLED}}, SLSP={{SLSP}}, EGU={{EGU}}, TIMEOUT={{TIMEOUT}}")
 
     # databases:
     #   # TODO as this is a simulation I have hard coded some of the DB fields,
@@ -244,8 +244,8 @@ defs:
     #       SLSP:
     #       EGU:
     #       TIMEOUT:
-  post_init:
-  - value: |2
+    post_init:
+      - value: |
 
-      dbpf("{{controller.P}}:{{CHANNEL_ID}}:MSGRS","START")
-      dbl
+          dbpf("{{controller.P}}:{{CHANNEL_ID}}:MSGRS","START")
+          dbl
