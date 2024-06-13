@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>ibek.ioc &#8212; ibek 3.0.0b6.dev44+g09c823a0 documentation</title>
+    <title>ibek.ioc &#8212; ibek 3.0.0b6.dev46+g14d2ef50 documentation</title>
   
   
   
@@ -37,7 +37,7 @@
 <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=3ee479438cf8b5e0d341" />
   <script src="../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=3ee479438cf8b5e0d341"></script>
 
-    <script src="../../_static/documentation_options.js?v=1541f869"></script>
+    <script src="../../_static/documentation_options.js?v=5a9f4745"></script>
     <script src="../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -552,23 +552,21 @@ document.write(`
                         <span class="n">value</span> <span class="o">=</span> <span class="n">value</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;True&quot;</span><span class="p">,</span> <span class="s2">&quot;true&quot;</span><span class="p">)</span>
                         <span class="n">value</span> <span class="o">=</span> <span class="n">value</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;False&quot;</span><span class="p">,</span> <span class="s2">&quot;false&quot;</span><span class="p">)</span>
                         <span class="n">value</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
-                        <span class="c1"># likewise for bools</span>
                     <span class="k">except</span><span class="p">:</span>
                         <span class="nb">print</span><span class="p">(</span>
                             <span class="sa">f</span><span class="s2">&quot;ERROR: fail to decode </span><span class="si">{</span><span class="n">value</span><span class="si">}</span><span class="s2"> as a </span><span class="si">{</span><span class="n">model_field</span><span class="o">.</span><span class="n">annotation</span><span class="si">}</span><span class="s2">&quot;</span>
                         <span class="p">)</span>
                         <span class="k">raise</span>
-                <span class="nb">setattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">arg</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
-                <span class="c1"># update the entity_dict with the rendered value</span>
-                <span class="n">entity_dict</span><span class="p">[</span><span class="n">arg</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
 
             <span class="k">if</span> <span class="n">model_field</span><span class="o">.</span><span class="n">annotation</span> <span class="o">==</span> <span class="nb">object</span><span class="p">:</span>
                 <span class="c1"># look up the actual object by it&#39;s id</span>
                 <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
                     <span class="n">value</span> <span class="o">=</span> <span class="n">get_entity_by_id</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
-                    <span class="nb">setattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">arg</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
-                <span class="c1"># update the entity_dict with looked up object</span>
-                <span class="n">entity_dict</span><span class="p">[</span><span class="n">arg</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+
+            <span class="c1"># update this entity instance with the rendered value</span>
+            <span class="nb">setattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">arg</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+            <span class="c1"># update the entity_dict with the rendered value</span>
+            <span class="n">entity_dict</span><span class="p">[</span><span class="n">arg</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
 
             <span class="k">if</span> <span class="n">arg</span> <span class="ow">in</span> <span class="n">ids</span><span class="p">:</span>
                 <span class="c1"># add this entity to the global id index</span>
