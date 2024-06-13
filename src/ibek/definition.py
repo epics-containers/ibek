@@ -176,7 +176,7 @@ class EntityDefinition(BaseSettings):
     )
 
     def _get_id_arg(self):
-        """Returns the name of the ID argument for this definition, if it exists"""
-        for arg in self.params:
-            if isinstance(arg, IdParam):
-                return arg.name
+        """Returns the value of the ID argument for this definition, if it exists"""
+        for name, value in self.params.items():
+            if isinstance(value, IdParam):
+                return name

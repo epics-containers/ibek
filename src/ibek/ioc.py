@@ -87,23 +87,21 @@ class Entity(BaseSettings):
                         value = value.replace("True", "true")
                         value = value.replace("False", "false")
                         value = json.loads(value)
-                        # likewise for bools
                     except:
                         print(
                             f"ERROR: fail to decode {value} as a {model_field.annotation}"
                         )
                         raise
-                setattr(self, arg, value)
-                # update the entity_dict with the rendered value
-                entity_dict[arg] = value
 
             if model_field.annotation == object:
                 # look up the actual object by it's id
                 if isinstance(value, str):
                     value = get_entity_by_id(value)
-                    setattr(self, arg, value)
-                # update the entity_dict with looked up object
-                entity_dict[arg] = value
+
+            # update this entity instance with the rendered value
+            setattr(self, arg, value)
+            # update the entity_dict with the rendered value
+            entity_dict[arg] = value
 
             if arg in ids:
                 # add this entity to the global id index
