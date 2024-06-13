@@ -130,7 +130,7 @@ class EntityFactory:
             else:
                 # arg.type is str, int, float, etc.
                 type = getattr(builtins, arg.type)
-            add_arg(name, type, arg.description, getattr(arg, "default"))
+            add_arg(name, type, arg.description, getattr(arg, "default"))  # type: ignore
 
         # add in the calculated values Jinja Templates as Fields in the Entity
         add_defines(definition.post_defines)
