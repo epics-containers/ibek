@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 """
 Converts .ibek.support.yaml files from the v2.0 format to the v3.0 format.
+Can also convert ioc.yaml files as the changes re __utils__ are the same.
 
 Changes:
 - args are now params
@@ -35,8 +36,6 @@ from pathlib import Path
 import typer
 from ruamel.yaml import YAML, CommentedMap
 
-eg_file = Path(__file__).parent.parent / "tests/samples/support/ipac.ibek.support.yaml"
-
 
 class ConvertedAlready(Exception):
     pass
@@ -46,7 +45,7 @@ def main(files: list[Path]):
     """
     Read a list of files in and process each one
     """
-    for f in files or [eg_file]:
+    for f in files:
         print(f"Processing {f} ...")
         process_file(f)
 
@@ -69,7 +68,16 @@ def tidy_up(yaml):
     ]:
         # insert a blank line before the field unless it already has one
         yaml = re.sub(r"^[ \t]*(\n%s)" % field, "\n\\g<1>", yaml)
+        yaml = re.sub(r"__utils__", "_global", yaml)
+        yaml = re.sub(r"_ctx_", "_global", yaml)
+        yaml = re.sub(r"\.counter", ".incrementor", yaml)
+        yaml = re.sub(r"\.get_var", ".get", yaml)
+        yaml = re.sub(r"\.setvar", ".incrementor", yaml)
     return yaml
+
+
+def report(message: str):
+    print(f">>>>>>> {message}")
 
 
 def process_file(file: Path):
@@ -81,9 +89,21 @@ def process_file(file: Path):
         data = yaml.load(f)
 
     try:
-        convert(data)
+        if data is None:
+            report("empty file !!")
+            return
+
+        if "module" in data:
+            report("module yaml")
+            convert(data)
+        elif "ioc_name" in data:
+            report("ioc yaml")
+        else:
+            report("not a supported yaml file !!")
+            return
+
     except ConvertedAlready:
-        print(f">>>>> {file} has already been converted")
+        report("already converted")
     else:
         with open(file, "w") as f:
             yaml.default_flow_style = False
