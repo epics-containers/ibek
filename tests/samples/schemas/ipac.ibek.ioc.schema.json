@@ -178,7 +178,7 @@
           "title": "Count"
         },
         "number": {
-          "default": "{{  _global.counter(\"InterruptVector\", start=192, stop=255, inc=count) }}",
+          "default": "{{  _global.incrementor(\"InterruptVector\", start=192, stop=255, increment=count) }}",
           "description": "Interrupt Vector number",
           "title": "Number",
           "type": "string"
@@ -537,7 +537,7 @@
           "title": "Interrupt Vector"
         },
         "card_id": {
-          "default": "{{ _global.counter(\"Carriers\", start=0) }}",
+          "default": "{{ _global.incrementor(\"Carriers\", start=0) }}",
           "description": "Carrier Card Identifier",
           "title": "Card Id",
           "type": "string"

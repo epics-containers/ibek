@@ -8,14 +8,14 @@ import builtins
 from pathlib import Path
 from typing import Annotated, Any, Dict, List, Literal, Sequence, Tuple, Type
 
-from pydantic import Field, create_model, field_validator
+from pydantic import Field, create_model
 from pydantic_core import PydanticUndefined, ValidationError
 from ruamel.yaml.main import YAML
 
 from ibek.globals import JINJA
 
 from .args import EnumArg, IdArg, ObjectArg, Value
-from .ioc import Entity, EnumVal, clear_entity_model_ids, get_entity_by_id
+from .ioc import Entity, EnumVal, clear_entity_model_ids
 from .support import EntityDefinition, Support
 from .utils import UTILS
 
@@ -106,18 +106,10 @@ class EntityFactory:
 
         # add in each of the arguments as a Field in the Entity
         for arg in definition.args:
-            # TODO - don't understand why I need type ignore here
-            # arg is 'discriminated' which is a Union of all the Arg subclasses
-            full_arg_name = f"{full_name}.{arg.name}"  # type: ignore
             type: Any
 
             if isinstance(arg, ObjectArg):
-                # TODO look into why arg.name requires type ignore
-                @field_validator(arg.name, mode="after")  # type: ignore
-                def lookup_instance(cls, id):
-                    return get_entity_by_id(id)
-
-                validators[full_arg_name] = lookup_instance
+                # we now defer the lookup of the object until whole model validation
                 type = object
 
             elif isinstance(arg, IdArg):

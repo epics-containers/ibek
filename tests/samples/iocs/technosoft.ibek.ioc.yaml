@@ -29,7 +29,6 @@ entities:
     controllerName: TML
     P: "SPARC:TML"
     TTY: /tmp # /var/tmp/ttyV0
-    numAxes: 1
     hostid: 15
 
   - <<: *motor

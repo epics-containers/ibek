@@ -41,22 +41,6 @@
           "title": "Tty",
           "type": "string"
         },
-        "numAxes": {
-          "anyOf": [
-            {
-              "description": "jinja that renders to <class 'int'>",
-              "pattern": ".*\\{\\{.*\\}\\}.*",
-              "type": "string"
-            },
-            {
-              "description": "The number of axes to create",
-              "type": "integer"
-            }
-          ],
-          "default": 1,
-          "description": "union of <class 'int'> and jinja representation of {typ}",
-          "title": "Numaxes"
-        },
         "hostid": {
           "anyOf": [
             {
@@ -73,15 +57,32 @@
           "title": "Hostid"
         },
         "CONFIG": {
-          "default": "FILE=/tmp/,NAXIS={{numAxes}},DEV_PATH={{TTY}},HOST_ID={{hostid}}",
+          "default": "DEV_PATH={{TTY}},HOST_ID={{hostid}}",
           "description": "TML Configuration",
           "title": "Config",
           "type": "string"
         },
         "axisConfiguration": {
-          "default": "{{ _global.set_var('motorTML.axisConfiguration',[]) }}",
-          "description": "collects the axis configuration from axis entities",
-          "title": "Axisconfiguration",
+          "anyOf": [
+            {
+              "description": "jinja that renders to <class 'list'>",
+              "pattern": ".*\\{\\{.*\\}\\}.*",
+              "type": "string"
+            },
+            {
+              "description": "collects the axis configuration from axis entities",
+              "items": {},
+              "type": "array"
+            }
+          ],
+          "default": [],
+          "description": "union of <class 'list'> and jinja representation of {typ}",
+          "title": "Axisconfiguration"
+        },
+        "axisNum": {
+          "default": "{{ \"axes_{}\".format(controllerName) }}",
+          "description": "A name for the axis counter (used to generate unique axis numbers)",
+          "title": "Axisnum",
           "type": "string"
         }
       },
@@ -113,15 +114,25 @@
           "title": "Entity Enabled",
           "type": "boolean"
         },
-        "num": {
-          "default": "{{ _global.counter(\"motorTML.axisCount\", start=0) }}",
-          "description": "The auto incrementing axis number",
-          "title": "Num",
-          "type": "string"
-        },
         "controller": {
           "description": "a reference to the motion controller",
           "title": "Controller"
+        },
+        "num": {
+          "anyOf": [
+            {
+              "description": "jinja that renders to <class 'int'>",
+              "pattern": ".*\\{\\{.*\\}\\}.*",
+              "type": "string"
+            },
+            {
+              "description": "The axis number",
+              "type": "integer"
+            }
+          ],
+          "default": "{{ _global.incrementor(controller.axisNum) }}",
+          "description": "union of <class 'int'> and jinja representation of {typ}",
+          "title": "Num"
         },
         "CHANNEL_PREFIX": {
           "default": "ax0",
@@ -424,7 +435,7 @@
           "type": "string"
         },
         "axisConfiguration": {
-          "default": "{{ _global.get_var('motorTML.axisConfiguration').append(CONFIG) }}",
+          "default": "{{ controller.axisConfiguration.append(CONFIG) }}",
           "description": "Adds an axis configuration entry to the controller's list",
           "title": "Axisconfiguration",
           "type": "string"

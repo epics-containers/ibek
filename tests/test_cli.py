@@ -128,8 +128,8 @@ def test_ipac(tmp_epics_root: Path, samples: Path):
     """
 
     # reset the InterruptVector counter to its initial state (if already used)
-    if "InterruptVector" in utils.UTILS.counters:
-        utils.UTILS.counters["InterruptVector"].current = 192
+    if "InterruptVector" in utils.UTILS.variables:
+        utils.UTILS.variables["InterruptVector"] = 191
 
     generic_generate(
         tmp_epics_root,

@@ -108,7 +108,7 @@
               "type": "integer"
             }
           ],
-          "default": "{{ _global.counter(\"fvGaugeNum\", start=1) }}",
+          "default": "{{ _global.incrementor(master, start=1) }}",
           "description": "union of <class 'int'> and jinja representation of {typ}",
           "title": "Gaugenum"
         },
@@ -119,7 +119,7 @@
           "type": "string"
         },
         "mask": {
-          "default": "{{ _global.set('fvMask', _global.get('fvMask', 0) + 2**gaugeNum) }}",
+          "default": "{{ _global.incrementor(\"mask_{}\".format(master), 2, 2**gaugeNum) }}",
           "description": "mask for the channel",
           "title": "Mask",
           "type": "string"
@@ -135,22 +135,6 @@
           "description": "Gauge PV",
           "title": "Gaugepv",
           "type": "string"
-        },
-        "addr_offset": {
-          "anyOf": [
-            {
-              "description": "jinja that renders to <class 'int'>",
-              "pattern": ".*\\{\\{.*\\}\\}.*",
-              "type": "string"
-            },
-            {
-              "description": "waveform address offset for the first waveform for this channel",
-              "type": "integer"
-            }
-          ],
-          "default": "{{ (gaugeNum - 1) * master.combined_nelm }}",
-          "description": "union of <class 'int'> and jinja representation of {typ}",
-          "title": "Addr Offset"
         }
       },
       "required": [

@@ -24,13 +24,13 @@
           "type": "string"
         },
         "test_global_var": {
-          "default": "{{  _global.set_var(\"magic_global\", 42) }}",
+          "default": "{{  _global.set(\"magic_global\", 42) }}",
           "description": "test global variable setter",
           "title": "Test Global Var",
           "type": "string"
         },
         "get_global": {
-          "default": "{{  _global.get_var(\"magic_global\") }}",
+          "default": "{{  _global.get(\"magic_global\") }}",
           "description": "test global variable getter",
           "title": "Get Global",
           "type": "string"
