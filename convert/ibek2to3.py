@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 """
 Converts .ibek.support.yaml files from the v2.0 format to the v3.0 format.
 
@@ -28,6 +29,7 @@ Backward compatible changes:
   by aliases
 """
 
+import re
 from pathlib import Path
 
 import typer
@@ -49,6 +51,27 @@ def main(files: list[Path]):
         process_file(f)
 
 
+def tidy_up(yaml):
+    # add blank lines between major fields - this is an opinionated
+    # formatting choice for legibility
+    for field in [
+        "  - name:",
+        "    databases:",
+        "    pre_init:",
+        "    post_init:",
+        "    pre_defines:",
+        "    post_defines:",
+        "    shared:",
+        "module",
+        "defs",
+        "      - file:",
+        "      - value:",
+    ]:
+        # insert a blank line before the field unless it already has one
+        yaml = re.sub(r"^[ \t]*(\n%s)" % field, "\n\\g<1>", yaml)
+    return yaml
+
+
 def process_file(file: Path):
     """
     process a single file by reading its yaml - transforming it and writing it back
@@ -63,7 +86,14 @@ def process_file(file: Path):
         print(f">>>>> {file} has already been converted")
     else:
         with open(file, "w") as f:
-            yaml.dump(data, f)
+            yaml.default_flow_style = False
+            # these indents match the defaults for vscode RedHat yaml extension
+            yaml.indent(mapping=2, sequence=4, offset=2)
+            # we like to allow really wide lines for db subst lists etc so
+            # we recommend this setting for the yaml extension
+            yaml.width = 8000
+            yaml.preserve_quotes = True
+            yaml.dump(data, f, transform=tidy_up)
 
 
 def convert(data: dict):

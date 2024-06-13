@@ -3,165 +3,163 @@
 module: dlsPLC
 
 defs:
-- name: dummy
-  description: |-
-    dummy record
-  params:
-    device:
-      type: id
-      description: |-
-        name for dummy object
+  - name: dummy
+    description: |-
+      dummy record
+    params:
+      device:
+        type: id
+        description: |-
+          name for dummy object
 
-- name: fastVacuumMaster
-  description: |-
-    master records for fast vacuum
-  params:
-    name:
-      type: id
-      description: |-
-        Gui tag
+  - name: fastVacuumMaster
+    description: |-
+      master records for fast vacuum
+    params:
+      name:
+        type: id
+        description: |-
+          Gui tag
 
-    dom:
-      type: str
-      description: |-
-        Domain, eg, FE06I
+      dom:
+        type: str
+        description: |-
+          Domain, eg, FE06I
 
-    fins_port:
-      type: object
-      description: |-
-        FINS port
+      fins_port:
+        type: object
+        description: |-
+          FINS port
 
-    eip_port:
-      type: str
-      description: |-
-        EtherIP port
+      eip_port:
+        type: str
+        description: |-
+          EtherIP port
 
-    device:
-      type: str
-      description: |-
-        Device prefix
+      device:
+        type: str
+        description: |-
+          Device prefix
 
-  post_defines:
-    device:
-      description: device name
-      value: |-
-        {{dom}}-VA-FAST-01
+    post_defines:
+      device:
+        description: device name
+        value: |-
+          {{dom}}-VA-FAST-01
 
-    waveform_nelm:
-      description: waveform element count
-      type: int
-      value: 500
+      waveform_nelm:
+        description: waveform element count
+        type: int
+        value: 500
 
-    combined_nelm:
-      description: total waveform element count
-      type: int
-      value: |-
-        {{ 6 * waveform_nelm }}
+      combined_nelm:
+        description: total waveform element count
+        type: int
+        value: |-
+          {{ 6 * waveform_nelm }}
 
-  databases:
-  - file: $(DLSPLC)/db/dlsPLC_fastVacuumMaster.template
-    args: {device: null, eip_port: null}
+    databases:
+      - file: $(DLSPLC)/db/dlsPLC_fastVacuumMaster.template
+        args: { device: null, eip_port: null }
 
-- name: fastVacuumChannel
-  description: |-
-    Adds a fast vacuum channel to the fast vacuum master
-  params:
-    name:
-      type: id
-      description: |-
-        Gui tag
+  - name: fastVacuumChannel
+    description: |-
+      Adds a fast vacuum channel to the fast vacuum master
+    params:
+      name:
+        type: id
+        description: |-
+          Gui tag
 
-    master:
-      type: object
-      description: |-
-        Master
+      master:
+        type: object
+        description: |-
+          Master
 
-    img:
-      type: str
-      description: |-
-        Base IMG PV
-
-    id:
-      type: enum
-      description: |-
-        FV PLC gauge number
-      values:
-        '01':
-        '02':
-        '03':
-        '04':
-        '05':
-        '06':
-        '07':
-        '08':
-        '09':
-        '10':
-    em:
-      type: enum
-      description: |-
-        EM block to use
-      default: 0
-      values:
-        '0':
-        '1':
-        '2':
-    timeout:
-      type: int
-      description: |-
-        asyn fins_port timeout
-      default: 0
-
-  post_defines:
-    gaugeNum:
-      description: auto gauge count
-      type: int
-      value: |-
-        {{ _global.incrementor(master, start=1) }}
-
-    fan:
-      description: fan number
-      value: |-
-        {{ "%02d" % (gaugeNum / 7 + 1) }}
-
-    mask:
-      description: mask for the channel
-      value: |-
-        {{ _global.incrementor("mask_{}".format(master), 2, 2**gaugeNum) }}
-
-    lnk_no:
-      description: link number
-      value: |-
-        {{ ((gaugeNum - 1) % 6) + 1 }}
-
-    gaugePV:
-      description: Gauge PV
-      value: |-
-        {{ master.device }}:GAUGE:{{id}}_0
-
-  databases:
-  - file: $(DLSPLC)/db/dlsPLC_fastVacuumLink.template
-    args: {device: '{{master.device}}', lnk_no: null, lnk: '{{gaugePV}}', fan: null,
-      mask: null}
-
-  - file: $(DLSPLC)/db/dlsPLC_fastVacuumChannel.template
-    args:
-      device: '{{master.device}}'
       img:
-      fins_port: '{{master.fins_port}}'
-      eip_port: '{{master.eip_port}}'
-      tagidx: "{{ (id | string).strip('0') }}"
-      id: '{{id}}'
-      em:
-      waveform_nelm: '{{master.waveform_nelm}}'
-      wave0_addr: &wave_addr "{{ _global.incrementor('wave_addr_{}'.format(master),
-        0, master.waveform_nelm) }}"
+        type: str
+        description: |-
+          Base IMG PV
 
-      wave1_addr: *wave_addr
-      wave2_addr: *wave_addr
-      wave3_addr: *wave_addr
-      wave4_addr: *wave_addr
-      wave5_addr: *wave_addr
-      combined_nelm: '{{master.combined_nelm}}'
+      id:
+        type: enum
+        description: |-
+          FV PLC gauge number
+        values:
+          "01":
+          "02":
+          "03":
+          "04":
+          "05":
+          "06":
+          "07":
+          "08":
+          "09":
+          "10":
+      em:
+        type: enum
+        description: |-
+          EM block to use
+        default: 0
+        values:
+          "0":
+          "1":
+          "2":
       timeout:
-  shared:
-  - *wave_addr
+        type: int
+        description: |-
+          asyn fins_port timeout
+        default: 0
+
+    post_defines:
+      gaugeNum:
+        description: auto gauge count
+        type: int
+        value: |-
+          {{ _global.incrementor(master, start=1) }}
+
+      fan:
+        description: fan number
+        value: |-
+          {{ "%02d" % (gaugeNum / 7 + 1) }}
+
+      mask:
+        description: mask for the channel
+        value: |-
+          {{ _global.incrementor("mask_{}".format(master), 2, 2**gaugeNum) }}
+
+      lnk_no:
+        description: link number
+        value: |-
+          {{ ((gaugeNum - 1) % 6) + 1 }}
+
+      gaugePV:
+        description: Gauge PV
+        value: |-
+          {{ master.device }}:GAUGE:{{id}}_0
+
+    databases:
+      - file: $(DLSPLC)/db/dlsPLC_fastVacuumLink.template
+        args: { device: "{{master.device}}", lnk_no: null, lnk: "{{gaugePV}}", fan: null, mask: null }
+
+      - file: $(DLSPLC)/db/dlsPLC_fastVacuumChannel.template
+        args:
+          device: "{{master.device}}"
+          img:
+          fins_port: "{{master.fins_port}}"
+          eip_port: "{{master.eip_port}}"
+          tagidx: "{{ (id | string).strip('0') }}"
+          id: "{{id}}"
+          em:
+          waveform_nelm: "{{master.waveform_nelm}}"
+          wave0_addr: &wave_addr "{{ _global.incrementor('wave_addr_{}'.format(master), 0, master.waveform_nelm) }}"
+
+          wave1_addr: *wave_addr
+          wave2_addr: *wave_addr
+          wave3_addr: *wave_addr
+          wave4_addr: *wave_addr
+          wave5_addr: *wave_addr
+          combined_nelm: "{{master.combined_nelm}}"
+          timeout:
+    shared:
+      - *wave_addr

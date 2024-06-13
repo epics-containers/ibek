@@ -1,121 +1,120 @@
-# yaml-language-server: $schema=https://github.com/epics-containers/ibek/releases/download/1.5.3/ibek.support.schema.json
+# yaml-language-server: $schema=../schemas/ibek.support.schema.json
 
 module: asyn
 
 defs:
-- name: AsynIP
-  description: |-
-    Asyn IP Port
-  params:
-    port:
-      type: str
-      description: |-
-        Serial port tty name / IP address optionally followed by protocol
+  - name: AsynIP
+    description: |-
+      Asyn IP Port
+    params:
+      port:
+        type: str
+        description: |-
+          Serial port tty name / IP address optionally followed by protocol
 
-    name:
-      type: id
-      description: |-
-        Override name
+      name:
+        type: id
+        description: |-
+          Override name
 
-    input_eos:
-      type: str
-      description: |-
-        Input end of string (terminator)
-       # test escaping of quotes
-      default: '"\n"'
+      input_eos:
+        type: str
+        description: |-
+          Input end of string (terminator)
+        # test escaping of quotes
+        default: '"\n"'
 
-    output_eos:
-      type: str
-      description: |-
-        Output end of string (terminator)
-      default: '"\n"'
+      output_eos:
+        type: str
+        description: |-
+          Output end of string (terminator)
+        default: '"\n"'
 
-    priority:
-      type: int
-      description: |-
-        Priority
-      default: 100
+      priority:
+        type: int
+        description: |-
+          Priority
+        default: 100
 
-    noAuto_connect:
-      type: bool
-      description: |-
-        Set to stop auto_connect
-      default: false
+      noAuto_connect:
+        type: bool
+        description: |-
+          Set to stop auto_connect
+        default: false
 
-    noProcessEos:
-      type: bool
-      description: |-
-        Set to avoid processing end of string
-      default: false
+      noProcessEos:
+        type: bool
+        description: |-
+          Set to avoid processing end of string
+        default: false
 
-    baud:
-      type: int
-      description: |-
-        Baud Rate
-      default: 9600
+      baud:
+        type: int
+        description: |-
+          Baud Rate
+        default: 9600
 
-    parity:
-      type: enum
-      description: |-
-        Parity
-      values:
-        even:
-        none:
-        odd:
-      default: none
+      parity:
+        type: enum
+        description: |-
+          Parity
+        values:
+          even:
+          none:
+          odd:
+        default: none
 
-    crtscts:
-      type: enum
-      description: |-
-        Set hardware flow control on
-      values:
-        Y:
-        N:
-      default: N
+      crtscts:
+        type: enum
+        description: |-
+          Set hardware flow control on
+        values:
+          Y:
+          N:
+        default: N
 
-    stop:
-      type: enum
-      description: |-
-        Stop Bits
-      values:
-        '1':
-        '2':
-      default: '1'
+      stop:
+        type: enum
+        description: |-
+          Stop Bits
+        values:
+          "1":
+          "2":
+        default: "1"
 
-    disconnectOnReadTimeout:
-      type: enum
-      description: |-
-        Disconnect when a read times out
-      values:
-        Y:
-        N:
-      default: Y
+      disconnectOnReadTimeout:
+        type: enum
+        description: |-
+          Disconnect when a read times out
+        values:
+          Y:
+          N:
+        default: Y
 
-    bits:
-      type: enum
-      description: |-
-        Bits
-      values:
-        '8':
-        '5':
-        '7':
-        '6':
-      default: '8'
+      bits:
+        type: enum
+        description: |-
+          Bits
+        values:
+          "8":
+          "5":
+          "7":
+          "6":
+        default: "8"
 
     # test environment variables declaration
-  pre_init:
-  - value: |
-      # Setting up Asyn Port {{name}} on {{port}}:
-  - when: first
+    pre_init:
+      - value: |
+          # Setting up Asyn Port {{name}} on {{port}}:
+      - when: first
         # test escaping of jinja directives and use of 'first' to only print this line once
-    value: |
-      # {% raw %}AsynIPConfigure({{name}}, {{port}}, {{stop}}, {{parity}}, {{bits}}) {% endraw %}
-  - value: |
-      AsynIPConfigure({{name}}, {{port}}, {{stop}}, {{parity}}, {{bits}})
-      asynSetOption({{baud}}, 0, {{crtscts}}, {{disconnectOnReadTimeout}})
-      asynOctetSetInputEos({{input_eos}})
-      asynOctetSetOutputEos({{output_eos}})
-  env_vars:
-  - name: NAME_AS_ENV_VAR
-    value: my name is {{ name }}
-
+        value: |
+          # {% raw %}AsynIPConfigure({{name}}, {{port}}, {{stop}}, {{parity}}, {{bits}}) {% endraw %}
+      - value: |
+          AsynIPConfigure({{name}}, {{port}}, {{stop}}, {{parity}}, {{bits}})
+          asynSetOption({{baud}}, 0, {{crtscts}}, {{disconnectOnReadTimeout}})
+          asynOctetSetInputEos({{input_eos}})
+          asynOctetSetOutputEos({{output_eos}})
+    env_vars:
+      - name: NAME_AS_ENV_VAR
+        value: my name is {{ name }}

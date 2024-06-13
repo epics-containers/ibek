@@ -6,180 +6,179 @@
 module: motorSim
 
 defs:
-- name: simMotorController
-  description: |-
-    Creates a simulation motion controller
-  params:
-    controllerName:
-      type: id
-      description: |-
-        The name of the controller and its Asyn Port Name
-
-    P:
-      type: str
-      description: |-
-        Device PV Prefix
-
-    numAxes:
-      type: int
-      description: |-
-        The number of axes to create
-
-    port:
-      type: object
-      description: |-
-        a reference to the asyn port for communication with the controller
-
-    DESC:
-      type: str
-      description: |-
-        The description of the controller
-      default: 'Simulated Motion Controller testing escaping: {% raw %} {{enclosed
-        in escaped curly braces}} {% endraw %}'
-
-  pre_init:
-  - value: |
-      # motorSimCreateController(controller_asyn_port_name, axis_count)
-      # testing escaping: {% raw %} {{enclosed in escaped curly braces}} {% endraw %}
-      motorSimCreateController({{controllerName}}, {{numAxes}})
-
-  databases:
-  - file: sim_motor.db
-    args:
+  - name: simMotorController
+    description: |-
+      Creates a simulation motion controller
+    params:
       controllerName:
+        type: id
+        description: |-
+          The name of the controller and its Asyn Port Name
+
       P:
+        type: str
+        description: |-
+          Device PV Prefix
+
+      numAxes:
+        type: int
+        description: |-
+          The number of axes to create
+
+      port:
+        type: object
+        description: |-
+          a reference to the asyn port for communication with the controller
+
       DESC:
+        type: str
+        description: |-
+          The description of the controller
+        default: "Simulated Motion Controller testing escaping: {% raw %} {{enclosed in escaped curly braces}} {% endraw %}"
 
-  pvi:
-    yaml_path: simple.pvi.device.yaml
-    ui_macros:
-      P:
-    pv: true
-    pv_prefix: $(P)
+    pre_init:
+      - value: |
+          # motorSimCreateController(controller_asyn_port_name, axis_count)
+          # testing escaping: {% raw %} {{enclosed in escaped curly braces}} {% endraw %}
+          motorSimCreateController({{controllerName}}, {{numAxes}})
 
-- name: simMotorAxis
-  description: |-
-    Creates a simulation motor axis
-  params:
-    controller:
-      type: object
-      description: |-
-        a reference to the motion controller
+    databases:
+      - file: sim_motor.db
+        args:
+          controllerName:
+          P:
+          DESC:
 
-    M:
-      type: str
-      description: |-
-        PV suffix for the motor record
+    pvi:
+      yaml_path: simple.pvi.device.yaml
+      ui_macros:
+        P:
+      pv: true
+      pv_prefix: $(P)
 
-    ADDR:
-      type: int
-      description: |-
-        The axis number (allowed to be from 0 to controller.numAxes-1)
+  - name: simMotorAxis
+    description: |-
+      Creates a simulation motor axis
+    params:
+      controller:
+        type: object
+        description: |-
+          a reference to the motion controller
 
-    DESC:
-      type: str
-      description: |-
-        The description of the axis
-      default: Motor {{ADDR}}
-
-    DLLM:
-      type: int
-      description: |-
-        The low limit of the axis (in counts)
-      default: -20000
-
-    DHLM:
-      type: int
-      description: |-
-        The high limit of the axis (in counts)
-      default: 20000
-
-    home:
-      type: int
-      description: |-
-        The home position of the axis (in counts)
-      default: 0
-
-    start:
-      type: str   # int or jinja string
-      description: |-
-        The starting position of the axis (in counts)
-      default: '{{home}}'
-
-    DIR:
-      type: enum
-      description: |-
-        The direction of the axis
-      default: 0
-      values:
-        Pos: 0
-        Neg: 1
-
-    VELO:
-      type: float
-      description: |-
-        The velocity of the axis (in counts/sec)
-      default: 10.0
-
-    VMAX:
-      type: str   # float or jinja string
-      description: |-
-        The maximum velocity of the axis (in counts/sec)
-      default: '{{VELO}}'
-
-    is_cs:
-      type: bool
-      description: |-
-        Set to True if this axis a coordinate system axis
-      default: false
-
-    CS_NUM:
-      type: int
-      description: |-
-        The coordinate system number for this axis
-      default: 0
-
-  post_init:
-  - when: once
-    value: |
-      # motorSimCreateAxis(controller_asyn_port_name, axis, axis_description)
-
-  - value: |
-      motorSimConfigAxis({{controller}}, {{ADDR}}, {{DHLM}}, {{DLLM}}, {{home}}, {{start}})
-
-  databases:
-  - file: basic_asyn_motor.db
-    enabled: '{{not is_cs}}'
-    args:
-      P: '{{controller.P}}'
       M:
-      DTYP: asynMotor
-      PORT: '{{controller}}'
-      ADDR:
-      DESC:
-      EGU: degrees
-      DIR:
-      VELO:
-      VMAX:
-      MRES: '.01'
-      DHLM:
-      DLLM:
-      INIT: ''
+        type: str
+        description: |-
+          PV suffix for the motor record
 
-  - file: basic_cs_asyn_motor.db
-    enabled: '{{is_cs}}'
-    args:
-      P: '{{controller.P}}'
-      CS_NUM:
-      DTYP: asynMotor
-      PORT: '{{controller}}'
       ADDR:
+        type: int
+        description: |-
+          The axis number (allowed to be from 0 to controller.numAxes-1)
+
       DESC:
-      EGU: degrees
-      DIR:
-      VELO:
-      VMAX:
-      MRES: '.01'
-      DHLM:
+        type: str
+        description: |-
+          The description of the axis
+        default: Motor {{ADDR}}
+
       DLLM:
-      INIT: ''
+        type: int
+        description: |-
+          The low limit of the axis (in counts)
+        default: -20000
+
+      DHLM:
+        type: int
+        description: |-
+          The high limit of the axis (in counts)
+        default: 20000
+
+      home:
+        type: int
+        description: |-
+          The home position of the axis (in counts)
+        default: 0
+
+      start:
+        type: str # int or jinja string
+        description: |-
+          The starting position of the axis (in counts)
+        default: "{{home}}"
+
+      DIR:
+        type: enum
+        description: |-
+          The direction of the axis
+        default: 0
+        values:
+          Pos: 0
+          Neg: 1
+
+      VELO:
+        type: float
+        description: |-
+          The velocity of the axis (in counts/sec)
+        default: 10.0
+
+      VMAX:
+        type: str # float or jinja string
+        description: |-
+          The maximum velocity of the axis (in counts/sec)
+        default: "{{VELO}}"
+
+      is_cs:
+        type: bool
+        description: |-
+          Set to True if this axis a coordinate system axis
+        default: false
+
+      CS_NUM:
+        type: int
+        description: |-
+          The coordinate system number for this axis
+        default: 0
+
+    post_init:
+      - when: once
+        value: |
+          # motorSimCreateAxis(controller_asyn_port_name, axis, axis_description)
+
+      - value: |
+          motorSimConfigAxis({{controller}}, {{ADDR}}, {{DHLM}}, {{DLLM}}, {{home}}, {{start}})
+
+    databases:
+      - file: basic_asyn_motor.db
+        enabled: "{{not is_cs}}"
+        args:
+          P: "{{controller.P}}"
+          M:
+          DTYP: asynMotor
+          PORT: "{{controller}}"
+          ADDR:
+          DESC:
+          EGU: degrees
+          DIR:
+          VELO:
+          VMAX:
+          MRES: ".01"
+          DHLM:
+          DLLM:
+          INIT: ""
+
+      - file: basic_cs_asyn_motor.db
+        enabled: "{{is_cs}}"
+        args:
+          P: "{{controller.P}}"
+          CS_NUM:
+          DTYP: asynMotor
+          PORT: "{{controller}}"
+          ADDR:
+          DESC:
+          EGU: degrees
+          DIR:
+          VELO:
+          VMAX:
+          MRES: ".01"
+          DHLM:
+          DLLM:
+          INIT: ""
