@@ -138,16 +138,22 @@ def convert_definition(data: dict) -> dict | None:
     # copy the leading keys that are not being changed
     copy_verbatim(data, new_data, ["name", "description"])
 
-    if "pre_defines" in data:
-        check_converted(data["pre_defines"])
-        new_data["pre_defines"] = list_to_dict(data["pre_defines"])
-    if "args" in data:
-        new_data["params"] = list_to_dict(data["args"])
-    else:
-        raise ConvertedAlready  # probably! (or its not a support yaml file)
-    if "post_defines" in data:
-        check_converted(data["post_defines"])
-        new_data["post_defines"] = list_to_dict(data["post_defines"])
+    try:
+        if "pre_defines" in data:
+            check_converted(data["pre_defines"])
+            new_data["pre_defines"] = list_to_dict(data["pre_defines"])
+        if "args" in data:
+            new_data["params"] = list_to_dict(data["args"])
+        else:
+            raise ConvertedAlready  # probably! (or its not a support yaml file)
+        if "post_defines" in data:
+            check_converted(data["post_defines"])
+            new_data["post_defines"] = list_to_dict(data["post_defines"])
+    except ConvertedAlready:
+        raise
+    except Exception:
+        print(f"Failed to convert {data}")
+        raise
 
     # copy the trailing keys that are not being changed
     copy_verbatim(
@@ -187,11 +193,16 @@ def list_to_dict(args: list[dict]) -> dict[str, dict]:
     becomes the key in the dictionary
     """
     params = CommentedMap()
-    for arg in args:
-        name = arg["name"]
-        del arg["name"]
-        params[name] = arg
-    return params
+    try:
+        for arg in args:
+            name = arg["name"]
+            params[name] = arg.copy()
+            # name is the param key so we no longer need it
+            del params[name]["name"]
+        return params
+    except Exception:
+        print(f"Failed to convert {arg}")
+        raise
 
 
 if __name__ == "__main__":
