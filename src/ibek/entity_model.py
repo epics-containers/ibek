@@ -121,9 +121,9 @@ discriminated = Annotated[  # type: ignore
 ]
 
 
-class EntityDefinition(BaseSettings):
+class EntityModel(BaseSettings):
     """
-    A single definition of a class of Entity that an IOC instance may instantiate
+    A Model for a class of Entity that an IOC instance may instantiate
     """
 
     name: str = Field(
