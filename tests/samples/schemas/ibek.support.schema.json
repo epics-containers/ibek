@@ -114,7 +114,7 @@
     },
     "Define": {
       "additionalProperties": false,
-      "description": "A calculated string value for a definition",
+      "description": "A calculated value for an Entity Model",
       "properties": {
         "description": {
           "description": "Description of what the value will be used for",
@@ -126,9 +126,12 @@
           "title": "Value"
         },
         "type": {
-          "allOf": [
+          "anyOf": [
             {
-              "$ref": "#/$defs/DefinesTypes"
+              "$ref": "#/$defs/DefineTypes"
+            },
+            {
+              "type": "null"
             }
           ],
           "default": "str",
@@ -142,7 +145,7 @@
       "title": "Define",
       "type": "object"
     },
-    "DefinesTypes": {
+    "DefineTypes": {
       "description": "The type of a value",
       "enum": [
         "str",
@@ -151,12 +154,12 @@
         "bool",
         "list"
       ],
-      "title": "DefinesTypes",
+      "title": "DefineTypes",
       "type": "string"
     },
-    "EntityDefinition": {
+    "EntityModel": {
       "additionalProperties": false,
-      "description": "A single definition of a class of Entity that an IOC instance may instantiate",
+      "description": "A Model for a class of Entity that an IOC instance may instantiate",
       "properties": {
         "name": {
           "description": "Publish Definition as type <module>.<name> for IOC instances",
@@ -313,7 +316,7 @@
         "name",
         "description"
       ],
-      "title": "EntityDefinition",
+      "title": "EntityModel",
       "type": "object"
     },
     "EntityPVI": {
@@ -704,7 +707,7 @@
     "defs": {
       "description": "The definitions an IOC can create using this module",
       "items": {
-        "$ref": "#/$defs/EntityDefinition"
+        "$ref": "#/$defs/EntityModel"
       },
       "title": "Defs",
       "type": "array"

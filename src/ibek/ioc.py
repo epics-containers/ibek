@@ -58,31 +58,29 @@ class Entity(BaseSettings):
     )
     __definition__: EntityModel
 
-    def _process_field(
-        self: Entity, name: str, value: Any, typ_str: str, ids: list[str]
-    ) -> Any:
+    def _process_field(self: Entity, name: str, value: Any, typ: str):
         """
-        Process an Entity field - doing jinja rendering and type coercion as required
+        Process an Entity field - doing jinja rendering, type coercion and
+        object id storing/lookup as required.
         """
 
         # these fields don't need any rendering
         if name in ["type", "entity_enabled"]:
-            return value
-
-        typ = getattr(builtins, typ_str)
+            return
 
         if isinstance(value, str):
             # Jinja expansion always performed on string fields
             value = UTILS.render(self, value)
-            if typ is not str:
+            if typ in ["list", "int", "float", "bool"]:
                 # coerce the rendered parameter to its intended type
                 try:
-                    value = typ(ast.literal_eval(value))
+                    cast_type = getattr(builtins, typ)
+                    value = cast_type(ast.literal_eval(value))
                 except:
                     print(f"ERROR: decoding field '{name}', value '{value}' as {typ}")
                     raise
 
-        if typ == object:
+        if typ == "object":
             # look up the actual object by it's id
             if isinstance(value, str):
                 value = get_entity_by_id(value)
@@ -94,7 +92,7 @@ class Entity(BaseSettings):
         # update the attribute with the rendered value
         setattr(self, name, value)
 
-        if name in ids:
+        if typ == "id":
             # add this entity to the global id index
             if value in id_to_entity:
                 raise ValueError(f"Duplicate id {value} in {list(id_to_entity)}")
@@ -105,12 +103,6 @@ class Entity(BaseSettings):
         """
         Whole Entity model validation
         """
-        # find the id field in this Entity if it has one
-        ids = {
-            name
-            for name, value in self.__definition__.params.items()
-            if isinstance(value, IdParam)
-        }
 
         # Do jinja rendering of pre_defines/ parameters / post_defines
         # in the correct order. self._process_field also adds the field to this model
@@ -118,19 +110,21 @@ class Entity(BaseSettings):
         # the model instance and are available for the phase 2 (final) jinja
         # rendering performed in ibek.commands.generate().
 
-        for name, define in self.__definition__.pre_defines.items():
-            self._process_field(name, define.value, define.type, ids)
+        if self.__definition__.pre_defines:
+            for name, define in self.__definition__.pre_defines.items():
+                self._process_field(name, define.value, define.type)
 
-        for name, parameter in self.__definition__.params.items():
-            self._process_field(name, getattr(self, name), parameter.type, ids)
+        if self.__definition__.params:
+            for name, parameter in self.__definition__.params.items():
+                self._process_field(name, getattr(self, name), parameter.type)
 
-        for name, define in self.__definition__.post_defines.items():
-            self._process_field(name, define.value, define.type, ids)
+        if self.__definition__.post_defines:
+            for name, define in self.__definition__.post_defines.items():
+                self._process_field(name, define.value, define.type)
 
         # we have updated the model with jinja rendered values and also with
         # pre/post_defines so allow extras and rebuild the model
         self.model_config["extra"] = "allow"
-        self.model_rebuild(force=True)
 
         return self
 

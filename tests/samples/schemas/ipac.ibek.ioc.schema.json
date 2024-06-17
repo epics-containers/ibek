@@ -176,12 +176,6 @@
           "default": 1,
           "description": "union of <class 'int'> and jinja representation of {typ}",
           "title": "Count"
-        },
-        "number": {
-          "default": "{{  _global.incrementor(\"InterruptVector\", start=192, stop=255, increment=count) }}",
-          "description": "Interrupt Vector number",
-          "title": "Number",
-          "type": "string"
         }
       },
       "required": [
@@ -535,12 +529,6 @@
         "interrupt_vector": {
           "description": "Interrupt Vector reserved with epics.InterruptVectorVME, count=1",
           "title": "Interrupt Vector"
-        },
-        "card_id": {
-          "default": "{{ _global.incrementor(\"Carriers\", start=0) }}",
-          "description": "Carrier Card Identifier",
-          "title": "Card Id",
-          "type": "string"
         }
       },
       "required": [
