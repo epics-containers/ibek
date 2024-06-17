@@ -18,7 +18,6 @@ from pydantic.fields import FieldInfo
 
 from .entity_model import EntityModel
 from .globals import BaseSettings
-from .params import IdParam
 from .utils import UTILS
 
 # a global dict of all entity instances indexed by their ID
@@ -87,7 +86,7 @@ class Entity(BaseSettings):
 
         # pre/post_defines are added into the model instance fields list here
         if name not in self.model_fields:
-            self.model_fields[name] = FieldInfo(annotation=typ, default=value)
+            self.model_fields[name] = FieldInfo(annotation=str, default=value)
 
         # update the attribute with the rendered value
         setattr(self, name, value)

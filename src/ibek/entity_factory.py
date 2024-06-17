@@ -15,7 +15,7 @@ from ruamel.yaml.main import YAML
 from ibek.globals import JINJA
 
 from .ioc import Entity, EnumVal, clear_entity_model_ids
-from .params import Define, EnumParam, IdParam, ObjectParam
+from .params import EnumParam, IdParam, ObjectParam
 from .support import EntityModel, Support
 from .utils import UTILS
 
