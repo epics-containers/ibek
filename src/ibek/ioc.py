@@ -5,14 +5,12 @@ support module definition YAML file
 
 from __future__ import annotations
 
+import ast
 import builtins
-import json
-from collections import OrderedDict
 from enum import Enum
 from typing import Any, Dict, List, Sequence
 
 from pydantic import (
-    ConfigDict,
     Field,
     model_validator,
 )
@@ -20,7 +18,7 @@ from pydantic.fields import FieldInfo
 
 from .entity_model import EntityModel
 from .globals import BaseSettings
-from .params import Define, IdParam
+from .params import IdParam
 from .utils import UTILS
 
 # a global dict of all entity instances indexed by their ID
@@ -61,28 +59,27 @@ class Entity(BaseSettings):
     __definition__: EntityModel
 
     def _process_field(
-        self: Entity, name: str, typ: str, value: Any, ids: list[str]
+        self: Entity, name: str, value: Any, typ_str: str, ids: list[str]
     ) -> Any:
         """
-        Process an Entitiy field - doing jinja rendering and type coercion as required
+        Process an Entity field - doing jinja rendering and type coercion as required
         """
+
+        # these fields don't need any rendering
+        if name in ["type", "entity_enabled"]:
+            return value
+
+        typ = getattr(builtins, typ_str)
 
         if isinstance(value, str):
             # Jinja expansion always performed on string fields
             value = UTILS.render(self, value)
-            # TODO this is a cheesy test - any better ideas please let me know
-            if "Union" in str(typ):
-                # Args that were non strings and have been rendered by Jinja
-                # must be coerced back into their original type
+            if typ is not str:
+                # coerce the rendered parameter to its intended type
                 try:
-                    # The following replace are to make the string json compatible
-                    # (maybe we should python decode instead of json.loads)
-                    value = value.replace("'", '"')
-                    value = value.replace("True", "true")
-                    value = value.replace("False", "false")
-                    value = json.loads(value)
+                    value = typ(ast.literal_eval(value))
                 except:
-                    print(f"ERROR: fail to decode {value} as a {typ}")
+                    print(f"ERROR: decoding field '{name}', value '{value}' as {typ}")
                     raise
 
         if typ == object:
@@ -92,7 +89,7 @@ class Entity(BaseSettings):
 
         # pre/post_defines are added into the model instance fields list here
         if name not in self.model_fields:
-            self.model_fields[name] = FieldInfo(annotation=type(typ), default=value)
+            self.model_fields[name] = FieldInfo(annotation=typ, default=value)
 
         # update the attribute with the rendered value
         setattr(self, name, value)
@@ -116,16 +113,16 @@ class Entity(BaseSettings):
         }
 
         # Do jinja rendering of pre_defines/ parameters / post_defines
-        # in the correct order. _process_parameter also adds the pre/post_defines
-        # into the model instance itself so that they are available later in the
-        # second phase of jinja rendering for pre_init, post_init and databases.
+        # in the correct order. self._process_field also adds the field to this model
+        # instance if it does not already exist. Hence pre/post_defines are added to
+        # the model instance and are available for the phase 2 (final) jinja
+        # rendering performed in ibek.commands.generate().
 
         for name, define in self.__definition__.pre_defines.items():
             self._process_field(name, define.value, define.type, ids)
 
-        for name, parameter in self.model_dump().items():
-            typ = self.model_fields[name].annotation
-            self._process_field(name, parameter, typ, ids)
+        for name, parameter in self.__definition__.params.items():
+            self._process_field(name, getattr(self, name), parameter.type, ids)
 
         for name, define in self.__definition__.post_defines.items():
             self._process_field(name, define.value, define.type, ids)
