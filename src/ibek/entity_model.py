@@ -175,7 +175,7 @@ class EntityModel(BaseSettings):
         default=(),
     )
 
-    def _get_id_arg(self):
+    def _get_id(self) -> str | None:
         """Return the name of the `IdParam` in this `EntityModel`s parameters"""
         for name, param in self.parameters.items():
             if isinstance(param, IdParam):
