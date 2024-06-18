@@ -17,7 +17,7 @@ JinjaString = Annotated[
 ]
 
 
-class DefineTypes(Enum):
+class DefineType(Enum):
     """The type of a value"""
 
     string = "str"
@@ -40,8 +40,8 @@ class Define(BaseSettings):
         description="Description of what the value will be used for"
     )
     value: Any = Field(description="The contents of the value")
-    type: DefineTypes | None = Field(
-        description="The type of the value", default=DefineTypes.string
+    type: DefineType | None = Field(
+        description="The type of the value", default=DefineType.string
     )
 
 

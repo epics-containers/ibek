@@ -128,7 +128,7 @@
         "type": {
           "anyOf": [
             {
-              "$ref": "#/$defs/DefineTypes"
+              "$ref": "#/$defs/DefineType"
             },
             {
               "type": "null"
@@ -145,7 +145,7 @@
       "title": "Define",
       "type": "object"
     },
-    "DefineTypes": {
+    "DefineType": {
       "description": "The type of a value",
       "enum": [
         "str",
@@ -154,7 +154,7 @@
         "bool",
         "list"
       ],
-      "title": "DefineTypes",
+      "title": "DefineType",
       "type": "string"
     },
     "EntityModel": {
