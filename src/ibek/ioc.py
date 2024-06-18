@@ -122,7 +122,7 @@ class Entity(BaseSettings):
         return self
 
     def __str__(self):
-        # if this entity has an id then its string representation is the value of id
+        """Render this Entity as the name of its IdParam within Jinja contexts"""
         id_name = self._model._get_id_arg()
         return getattr(self, id_name) if id_name else super().__str__()
 
