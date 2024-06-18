@@ -176,7 +176,7 @@ class EntityModel(BaseSettings):
     )
 
     def _get_id_arg(self):
-        """Returns the value of the ID argument for this Model, if it exists"""
-        for name, value in self.parameters.items():
-            if isinstance(value, IdParam):
+        """Return the name of the `IdParam` in this `EntityModel`s parameters"""
+        for name, param in self.parameters.items():
+            if isinstance(param, IdParam):
                 return name
