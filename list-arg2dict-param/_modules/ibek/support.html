@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>ibek.support &#8212; ibek 3.0.0b6.dev76+g2bd5cb3a documentation</title>
+    <title>ibek.support &#8212; ibek 3.0.0b6.dev77+gc191ef85 documentation</title>
   
   
   
@@ -37,7 +37,7 @@
 <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=3ee479438cf8b5e0d341" />
   <script src="../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=3ee479438cf8b5e0d341"></script>
 
-    <script src="../../_static/documentation_options.js?v=ddf4d978"></script>
+    <script src="../../_static/documentation_options.js?v=358ec9ff"></script>
     <script src="../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -472,9 +472,7 @@ document.write(`
 <a class="viewcode-back" href="../../user/reference/api.html#ibek.support.Support">[docs]</a>
 <span class="k">class</span> <span class="nc">Support</span><span class="p">(</span><span class="n">BaseSettings</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Lists the definitions for a support module, this defines what Entities it supports</span>
-
-<span class="sd">    Provides the deserialize entry point.</span>
+<span class="sd">    Lists the EntityModels for a support module, this defines what Entities it supports</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">shared</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
@@ -484,7 +482,7 @@ document.write(`
 
     <span class="n">module</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s2">&quot;Support module name, normally the repo name&quot;</span><span class="p">)</span>
     <span class="n">entity_models</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="n">EntityModel</span><span class="p">]</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
-        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;The definitions an IOC can create using this module&quot;</span>
+        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;The Entity Models an IOC can create using this module&quot;</span>
     <span class="p">)</span>
 
     <span class="nd">@classmethod</span>

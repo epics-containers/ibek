@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Modules, Definitions and Entities &#8212; ibek 3.0.0b6.dev76+g2bd5cb3a documentation</title>
+    <title>Modules, Definitions and Entities &#8212; ibek 3.0.0b6.dev77+gc191ef85 documentation</title>
   
   
   
@@ -38,7 +38,7 @@
 <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=3ee479438cf8b5e0d341" />
   <script src="../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=3ee479438cf8b5e0d341"></script>
 
-    <script src="../../_static/documentation_options.js?v=ddf4d978"></script>
+    <script src="../../_static/documentation_options.js?v=358ec9ff"></script>
     <script src="../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -1126,7 +1126,7 @@ the container or during container development.</p>
       <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;A Model for a class of Entity that an IOC instance may instantiate&quot;</span><span class="p">,</span>
       <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span>
         <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="p">{</span>
-          <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Publish Definition as type &lt;module&gt;.&lt;name&gt; for IOC instances&quot;</span><span class="p">,</span>
+          <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Publish EntityModel as type &lt;module&gt;.&lt;name&gt; for IOC instances&quot;</span><span class="p">,</span>
           <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Name&quot;</span><span class="p">,</span>
           <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
         <span class="p">},</span>
@@ -1654,7 +1654,7 @@ the container or during container development.</p>
     <span class="p">}</span>
   <span class="p">},</span>
   <span class="s2">&quot;additionalProperties&quot;</span><span class="p">:</span> <span class="n">false</span><span class="p">,</span>
-  <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Lists the definitions for a support module, this defines what Entities it supports</span><span class="se">\n\n</span><span class="s2">Provides the deserialize entry point.&quot;</span><span class="p">,</span>
+  <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Lists the EntityModels for a support module, this defines what Entities it supports&quot;</span><span class="p">,</span>
   <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span>
     <span class="s2">&quot;shared&quot;</span><span class="p">:</span> <span class="p">{</span>
       <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="p">[],</span>
@@ -1669,7 +1669,7 @@ the container or during container development.</p>
       <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
     <span class="p">},</span>
     <span class="s2">&quot;entity_models&quot;</span><span class="p">:</span> <span class="p">{</span>
-      <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;The definitions an IOC can create using this module&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;The Entity Models an IOC can create using this module&quot;</span><span class="p">,</span>
       <span class="s2">&quot;items&quot;</span><span class="p">:</span> <span class="p">{</span>
         <span class="s2">&quot;$ref&quot;</span><span class="p">:</span> <span class="s2">&quot;#/$defs/EntityModel&quot;</span>
       <span class="p">},</span>
