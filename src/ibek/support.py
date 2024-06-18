@@ -15,9 +15,7 @@ from .globals import BaseSettings
 
 class Support(BaseSettings):
     """
-    Lists the definitions for a support module, this defines what Entities it supports
-
-    Provides the deserialize entry point.
+    Lists the EntityModels for a support module, this defines what Entities it supports
     """
 
     shared: Sequence[Any] = Field(
@@ -27,7 +25,7 @@ class Support(BaseSettings):
 
     module: str = Field(description="Support module name, normally the repo name")
     entity_models: Sequence[EntityModel] = Field(
-        description="The definitions an IOC can create using this module"
+        description="The Entity Models an IOC can create using this module"
     )
 
     @classmethod

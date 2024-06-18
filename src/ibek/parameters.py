@@ -1,5 +1,5 @@
 """
-Classes to specify arguments to Definitions
+Classes to specify arguments to Entity Models
 """
 
 from __future__ import annotations

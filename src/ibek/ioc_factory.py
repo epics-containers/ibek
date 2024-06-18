@@ -24,7 +24,7 @@ class IocFactory:
         self, ioc_instance_yaml: Path, entity_models: List[Type[Entity]]
     ) -> IOC:
         """
-        Takes an ioc instance entities file, list of generic ioc definitions files.
+        Takes an ioc instance entities file, list of generic ioc yaml files.
 
         Returns a model of the resulting ioc instance
         """

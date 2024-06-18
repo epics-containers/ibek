@@ -1,5 +1,5 @@
 """
-The Definition class describes what a given support module can instantiate.
+The EntityModel class describes what a given support module can instantiate.
 """
 
 from __future__ import annotations
@@ -127,7 +127,7 @@ class EntityModel(BaseSettings):
     """
 
     name: str = Field(
-        description="Publish Definition as type <module>.<name> for IOC instances"
+        description="Publish EntityModel as type <module>.<name> for IOC instances"
     )
     description: str = Field(
         description="A description of the Support module defined here"
@@ -176,7 +176,7 @@ class EntityModel(BaseSettings):
     )
 
     def _get_id_arg(self):
-        """Returns the value of the ID argument for this definition, if it exists"""
+        """Returns the value of the ID argument for this Model, if it exists"""
         for name, value in self.parameters.items():
             if isinstance(value, IdParam):
                 return name

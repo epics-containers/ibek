@@ -1,6 +1,6 @@
 """
-Classes for generating an IocInstance derived class from a
-support module definition YAML file
+Classes for generating an IocInstance derived class from a set of
+support module YAML files
 """
 
 from __future__ import annotations
@@ -55,7 +55,7 @@ class Entity(BaseSettings):
     entity_enabled: bool = Field(
         description="enable or disable this entity instance", default=True
     )
-    __definition__: EntityModel
+    _model: EntityModel
 
     def _process_field(self: Entity, name: str, value: Any, typ: str):
         """
@@ -107,23 +107,23 @@ class Entity(BaseSettings):
         ibek.runtime_cmds.generate().
         """
 
-        if self.__definition__.pre_defines:
-            for name, define in self.__definition__.pre_defines.items():
+        if self._model.pre_defines:
+            for name, define in self._model.pre_defines.items():
                 self._process_field(name, define.value, define.type)
 
-        if self.__definition__.parameters:
-            for name, parameter in self.__definition__.parameters.items():
+        if self._model.parameters:
+            for name, parameter in self._model.parameters.items():
                 self._process_field(name, getattr(self, name), parameter.type)
 
-        if self.__definition__.post_defines:
-            for name, define in self.__definition__.post_defines.items():
+        if self._model.post_defines:
+            for name, define in self._model.post_defines.items():
                 self._process_field(name, define.value, define.type)
 
         return self
 
     def __str__(self):
         # if this entity has an id then its string representation is the value of id
-        id_name = self.__definition__._get_id_arg()
+        id_name = self._model._get_id_arg()
         return getattr(self, id_name) if id_name else super().__str__()
 
     def __repr__(self):

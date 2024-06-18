@@ -1,5 +1,5 @@
 """
-A class for constructing Entity classes from Definitions
+A class for constructing Entity classes from EntityModels
 """
 
 from __future__ import annotations
@@ -23,9 +23,10 @@ from .utils import UTILS
 class EntityFactory:
     def __init__(self) -> None:
         """
-        A class to create `Entity` models from `EntityDefinition`s.
+        A class to create `Entity` models from `EntityModel`s.
 
-        Created models are stored in `self._entity_models` to lookup when resolving nested `SubEntity`s.
+        Created models are stored in `self._entity_models` to lookup when
+        resolving nested `SubEntity`s.
         """
         self._entity_models: Dict[str, Type[Entity]] = {}
         # starting a new EntityFactory implies we should throw away any existing
@@ -33,33 +34,31 @@ class EntityFactory:
         # EntityFactories
         clear_entity_model_ids()
 
-    def make_entity_models(self, definition_yaml: List[Path]) -> List[Type[Entity]]:
+    def make_entity_models(self, entity_model_yaml: List[Path]) -> List[Type[Entity]]:
         """
         Read a set of *.ibek.support.yaml files and generate Entity classes
-        from their Definition entries
+        from their EntityModel entries
         """
 
-        for definition in definition_yaml:
-            support_dict = YAML(typ="safe").load(definition)
+        for entity_model in entity_model_yaml:
+            support_dict = YAML(typ="safe").load(entity_model)
 
             try:
                 Support.model_validate(support_dict)
 
-                # deserialize the support module definition file
+                # deserialize the support module yaml file
                 support = Support(**support_dict)
-                # make Entity classes described in the support module definition file
+                # make Entity classes described in the support module yaml file
                 self._make_entity_models(support)
             except ValidationError:
-                print(f"PYDANTIC VALIDATION ERROR IN {definition}")
+                print(f"PYDANTIC VALIDATION ERROR IN {entity_model}")
                 raise
 
         return list(self._entity_models.values())
 
-    def _make_entity_model(
-        self, definition: EntityModel, support: Support
-    ) -> Type[Entity]:
+    def _make_entity_model(self, model: EntityModel, support: Support) -> Type[Entity]:
         """
-        Create an Entity Model from a Definition instance and a Support instance.
+        Create an Entity Model from a EntityModel instance and a Support instance.
         """
 
         def add_arg(name, typ, description, default):
@@ -91,10 +90,10 @@ class EntityFactory:
         validators: Dict[str, Any] = {}
 
         # fully qualified name of the Entity class including support module
-        full_name = f"{support.module}.{definition.name}"
+        full_name = f"{support.module}.{model.name}"
 
         # add in each of the arguments as a Field in the Entity
-        for name, arg in definition.parameters.items():
+        for name, arg in model.parameters.items():
             type: Any
 
             if isinstance(arg, ObjectParam):
@@ -122,7 +121,7 @@ class EntityFactory:
 
         # add the type literal which discriminates between the different Entity classes
         typ = Literal[full_name]  # type: ignore
-        args["type"] = (typ, Field(description=definition.description))
+        args["type"] = (typ, Field(description=model.description))
 
         class_name = full_name.replace(".", "_")
         entity_cls = create_model(
@@ -132,8 +131,8 @@ class EntityFactory:
             __base__=Entity,
         )  # type: ignore
 
-        # add a link back to the Definition Instance that generated this Entity Class
-        entity_cls.__definition__ = definition
+        # add a link back to the EntityModel Instance that generated this Entity Class
+        entity_cls._model = model
 
         # store this Entity class in the factory
         self._entity_models[full_name] = entity_cls
@@ -142,20 +141,20 @@ class EntityFactory:
 
     def _make_entity_models(self, support: Support) -> List[Type[Entity]]:
         """
-        Create Entity subclasses for all Definition instances in the given
+        Create Entity subclasses for all EntityModel instances in the given
         Support instance. Returns a list of the Entity subclasses Models.
         """
         entity_names = []
         entity_models = []
 
-        for definition in support.entity_models:
-            if definition.name in entity_names:
+        for model in support.entity_models:
+            if model.name in entity_names:
                 # not tested because schema validation will always catch this first
-                raise ValueError(f"Duplicate entity name {definition.name}")
+                raise ValueError(f"Duplicate entity name {model.name}")
 
-            entity_models.append(self._make_entity_model(definition, support))
+            entity_models.append(self._make_entity_model(model, support))
 
-            entity_names.append(definition.name)
+            entity_names.append(model.name)
         return entity_models
 
     def resolve_sub_entities(self, entities: List[Entity]) -> List[Entity]:
@@ -164,11 +163,11 @@ class EntityFactory:
         """
         resolved_entities: List[Entity] = []
         for parent_entity in entities:
-            definition = parent_entity.__definition__
+            model = parent_entity._model
             # add the parent standard entity
             resolved_entities.append(parent_entity)
             # add in SubEntities if any
-            for sub_entity in definition.sub_entities:
+            for sub_entity in model.sub_entities:
                 # find the Entity Class that the SubEntity represents
                 entity_cls = self._entity_models[sub_entity.type]
                 # get the SubEntity arguments

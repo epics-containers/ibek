@@ -28,7 +28,7 @@ def generate(
     ),
     definitions: List[Path] = typer.Argument(
         ...,
-        help="The filepath to a support module definition file",
+        help="The filepath to a support module yaml file",
         autocompletion=lambda: [],  # Forces path autocompletion
     ),
 ):
@@ -85,7 +85,7 @@ def generate_pvi(ioc: IOC) -> Tuple[List[IndexEntry], List[Tuple[Database, Entit
 
     formatted_pvi_devices: List[str] = []
     for entity in ioc.entities:
-        definition = entity.__definition__
+        definition = entity._model
         if not hasattr(definition, "pvi") or definition.pvi is None:
             continue
         entity_pvi = definition.pvi

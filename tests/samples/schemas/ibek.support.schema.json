@@ -162,7 +162,7 @@
       "description": "A Model for a class of Entity that an IOC instance may instantiate",
       "properties": {
         "name": {
-          "description": "Publish Definition as type <module>.<name> for IOC instances",
+          "description": "Publish EntityModel as type <module>.<name> for IOC instances",
           "title": "Name",
           "type": "string"
         },
@@ -690,7 +690,7 @@
     }
   },
   "additionalProperties": false,
-  "description": "Lists the definitions for a support module, this defines what Entities it supports\n\nProvides the deserialize entry point.",
+  "description": "Lists the EntityModels for a support module, this defines what Entities it supports",
   "properties": {
     "shared": {
       "default": [],
@@ -705,7 +705,7 @@
       "type": "string"
     },
     "entity_models": {
-      "description": "The definitions an IOC can create using this module",
+      "description": "The Entity Models an IOC can create using this module",
       "items": {
         "$ref": "#/$defs/EntityModel"
       },

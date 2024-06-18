@@ -28,8 +28,8 @@ def test_pre_init_script(asyn_classes):
     port2 = definition(name="asyn2", port="10.0.1.2", type="asyn.AsynIP")
 
     render = Render()
-    script_txt = render.render_script(port1, port1.__definition__.pre_init)
-    script_txt += render.render_script(port2, port2.__definition__.pre_init)
+    script_txt = render.render_script(port1, port1._model.pre_init)
+    script_txt += render.render_script(port2, port2._model.pre_init)
     assert script_txt == (
         "# Setting up Asyn Port asyn1 on 10.0.1.1:\n"
         "# AsynIPConfigure({{name}}, {{port}}, {{stop}}, {{parity}}, {{bits}}) \n"
@@ -59,7 +59,7 @@ def test_obj_ref_script(motor_classes):
     )
 
     render = Render()
-    script_txt = render.render_script(motor_obj, motor_obj.__definition__.pre_init)
+    script_txt = render.render_script(motor_obj, motor_obj._model.pre_init)
 
     assert script_txt == (
         "# motorSimCreateController(controller_asyn_port_name, axis_count)\n"

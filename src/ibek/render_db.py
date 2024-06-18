@@ -1,6 +1,6 @@
 """
 A class for rendering a substitution file from multiple instantiations of
-support module definitions
+support module yaml files.
 """
 
 from dataclasses import dataclass
@@ -56,7 +56,7 @@ class RenderDb:
         while validating the arguments
         """
         for entity in self.entities:
-            databases = entity.__definition__.databases
+            databases = entity._model.databases
 
             # Not all entities instantiate database templates
             if entity.entity_enabled and databases is not None:
@@ -85,7 +85,7 @@ class RenderDb:
             self.add_row(database.file, database.args, entity)
 
     def add_extra_databases(self, databases: List[Tuple[Database, Entity]]) -> None:
-        """Add databases that are not part of Entity definitions
+        """Add databases that are not part of EntityModels
 
         Args:
             databases: Databases to add, each mapped against an Entity to use as context

@@ -37,8 +37,8 @@ def test_object_references(entity_factory):
 
     entities = entity_factory._make_entity_models(support)
     ioc_model = IocFactory().make_ioc_model(entities)
-    assert entities[0].__definition__ == support.entity_models[0]
-    assert entities[1].__definition__ == support.entity_models[1]
+    assert entities[0]._model == support.entity_models[0]
+    assert entities[1]._model == support.entity_models[1]
 
     d = dict(
         ioc_name="",
