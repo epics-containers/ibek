@@ -124,7 +124,10 @@ class Entity(BaseSettings):
     def __str__(self):
         """Render this Entity as the name of its IdParam within Jinja contexts"""
         id_name = self._model._get_id_arg()
-        return getattr(self, id_name) if id_name else super().__str__()
+        if id_name:
+            return getattr(self, id_name)
+        else:
+            raise ValueError(f"Entity {self} has no id field")
 
     def __repr__(self):
         return str(self)
