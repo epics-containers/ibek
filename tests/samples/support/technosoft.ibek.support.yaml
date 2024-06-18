@@ -245,7 +245,7 @@ entity_models:
     #       EGU:
     #       TIMEOUT:
     post_init:
-      - value: |2
+      - value: |
 
           dbpf("{{controller.P}}:{{CHANNEL_ID}}:MSGRS","START")
           dbl

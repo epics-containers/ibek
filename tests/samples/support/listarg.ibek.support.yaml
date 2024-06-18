@@ -84,7 +84,7 @@ entity_models:
           {{ (friends * 3) | sort }}
 
     pre_init:
-      - value: |2
+      - value: |
 
           Lister, age {{age}}, who does not like to hear
             "{{quote}}"

@@ -102,7 +102,7 @@ class Entity(BaseSettings):
         Do jinja rendering of pre_defines/ parameters / post_defines
         in the correct order.
 
-        Also adds  pre_define and post_defines to the model instance, making
+        Also adds pre_defines and post_defines to the model instance, making
         them available for the phase 2 (final) jinja rendering performed in
         ibek.runtime_cmds.generate().
         """

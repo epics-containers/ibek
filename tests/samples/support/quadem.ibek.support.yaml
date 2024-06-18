@@ -100,7 +100,7 @@ entity_models:
         default: 16
 
     pre_init:
-      - value: |2
+      - value: |
 
           ################################################################################
           # Just demonstrating that Entities can have their own pre_init AND SubEntities.
