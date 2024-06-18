@@ -180,7 +180,7 @@
           "title": "Pre Defines",
           "type": "object"
         },
-        "params": {
+        "parameters": {
           "additionalProperties": {
             "description": "union of arg types",
             "discriminator": {
@@ -221,7 +221,7 @@
           },
           "default": [],
           "description": "The arguments IOC instance should supply",
-          "title": "Params",
+          "title": "Parameters",
           "type": "object"
         },
         "post_defines": {
@@ -704,18 +704,18 @@
       "title": "Module",
       "type": "string"
     },
-    "defs": {
+    "entity_models": {
       "description": "The definitions an IOC can create using this module",
       "items": {
         "$ref": "#/$defs/EntityModel"
       },
-      "title": "Defs",
+      "title": "Entity Models",
       "type": "array"
     }
   },
   "required": [
     "module",
-    "defs"
+    "entity_models"
   ],
   "title": "Support",
   "type": "object"
