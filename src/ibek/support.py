@@ -26,7 +26,7 @@ class Support(BaseSettings):
     )
 
     module: str = Field(description="Support module name, normally the repo name")
-    defs: Sequence[EntityModel] = Field(
+    entity_models: Sequence[EntityModel] = Field(
         description="The definitions an IOC can create using this module"
     )
 

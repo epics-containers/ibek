@@ -2,11 +2,11 @@
 
 module: ipac
 
-defs:
+entity_models:
   - name: Hy8002
     description: |-
       Configure a Hytec 8002 Carrier card
-    params:
+    parameters:
       slot:
         type: int
         description: |-
@@ -48,7 +48,7 @@ defs:
   - name: Hy8001
     description: |-
       TODO:ADD DESCRIPTION
-    params:
+    parameters:
       slot:
         type: int
         description: |-
@@ -112,7 +112,7 @@ defs:
   - name: Hy8005
     description: |-
       TODO:ADD DESCRIPTION
-    params:
+    parameters:
       slot:
         type: int
         description: |-
@@ -142,7 +142,7 @@ defs:
   - name: Hy8005_Channel
     description: |-
       TODO:ADD DESCRIPTION
-    params:
+    parameters:
       parent:
         type: object
         description: |-

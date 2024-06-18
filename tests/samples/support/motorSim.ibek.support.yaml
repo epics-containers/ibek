@@ -5,11 +5,11 @@
 # of the ibek.support schema
 module: motorSim
 
-defs:
+entity_models:
   - name: simMotorController
     description: |-
       Creates a simulation motion controller
-    params:
+    parameters:
       controllerName:
         type: id
         description: |-
@@ -59,7 +59,7 @@ defs:
   - name: simMotorAxis
     description: |-
       Creates a simulation motor axis
-    params:
+    parameters:
       controller:
         type: object
         description: |-

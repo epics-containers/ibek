@@ -1,12 +1,12 @@
-# yaml-language-server: $schema=../schemas/ibek.support.schema.json
+# yaml-language-server: $schema=https://github.com/epics-containers/ibek/releases/download/1.5.3/ibek.support.schema.json
 
 module: asyn
 
-defs:
+entity_models:
   - name: AsynIP
     description: |-
       Asyn IP Port
-    params:
+    parameters:
       port:
         type: str
         description: |-

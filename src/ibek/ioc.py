@@ -111,8 +111,8 @@ class Entity(BaseSettings):
             for name, define in self.__definition__.pre_defines.items():
                 self._process_field(name, define.value, define.type)
 
-        if self.__definition__.params:
-            for name, parameter in self.__definition__.params.items():
+        if self.__definition__.parameters:
+            for name, parameter in self.__definition__.parameters.items():
                 self._process_field(name, getattr(self, name), parameter.type)
 
         if self.__definition__.post_defines:

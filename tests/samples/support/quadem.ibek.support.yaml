@@ -2,11 +2,11 @@
 
 module: quadEM
 
-defs:
+entity_models:
   - name: TetrAMM
     description: |-
       TODO:ADD DESCRIPTION
-    params:
+    parameters:
       PORT:
         type: id
         description: |-
@@ -66,7 +66,7 @@ defs:
         12 NDStats plugins for Current, Sum, Diff and Pos Channels
         12 NDTimeSeries plugins
         12 NDArray plugins
-    params:
+    parameters:
       DEVICE:
         type: object
         description: |-
@@ -100,7 +100,7 @@ defs:
         default: 16
 
     pre_init:
-      - value: |
+      - value: |2
 
           ################################################################################
           # Just demonstrating that Entities can have their own pre_init AND SubEntities.

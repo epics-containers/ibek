@@ -20,7 +20,7 @@ entities:
     M: M{{ADDR}}
     ADDR: 0
     # Also use ioc_name to verify jinja templating of ioc_name
-    DESC: "Motor {{ADDR}} for ioc {{ioc_name}}"
+    DESC: Motor {{ADDR}} for ioc {{ioc_name}}
     home: 500
 
   - type: motorSim.simMotorAxis
@@ -28,7 +28,7 @@ entities:
     M: M{{ADDR}}
     ADDR: 1
     # verify escaping for jinja templating
-    DESC: "Motor {{ADDR}} {% raw %} {{enclosed in escaped curly braces}} {% endraw %}"
+    DESC: Motor {{ADDR}} {% raw %} {{enclosed in escaped curly braces}} {% endraw %}
     home: 500
 
   - type: motorSim.simMotorAxis
@@ -42,14 +42,14 @@ entities:
     controller: controllerOne
     M: M{{ADDR}}
     ADDR: 3
-    DESC: "Motor {{ADDR}}"
+    DESC: Motor {{ADDR}}
     home: 2500
 
   - type: motorSim.simMotorAxis
     controller: controllerOne
     M: CS_M{{ADDR}}
     ADDR: 1
-    DESC: "CS Motor {{ADDR}}"
+    DESC: CS Motor {{ADDR}}
     home: 100
     CS_NUM: 3
     is_cs: true
@@ -58,7 +58,7 @@ entities:
     controller: controllerOne
     M: CS_M{{ADDR}}
     ADDR: 2
-    DESC: "CS Motor {{ADDR}}"
+    DESC: CS Motor {{ADDR}}
     home: 100
     CS_NUM: 3
     is_cs: true

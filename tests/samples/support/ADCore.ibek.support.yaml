@@ -2,11 +2,11 @@
 
 module: ADCore
 
-defs:
+entity_models:
   - name: NDFileNexus
     description: |-
       This plugin can compress NDArrays to Nexus and write them to file
-    params:
+    parameters:
       P:
         type: str
         description: |-
@@ -100,7 +100,7 @@ defs:
   - name: NDFFT
     description: |-
       This plugin is used to calculate the FFT of a time series
-    params:
+    parameters:
       P:
         type: str
         description: |-
@@ -232,7 +232,7 @@ defs:
   - name: NDPosPlugin
     description: |-
       This plugin attaches position information to NDArrays
-    params:
+    parameters:
       P:
         type: str
         description: |-
@@ -338,7 +338,7 @@ defs:
   - name: NDOverlay
     description: |-
       This plugin writes overlays on the array, like cursors and boxes
-    params:
+    parameters:
       P:
         type: str
         description: |-
@@ -512,7 +512,7 @@ defs:
   - name: NDColorConvert
     description: |-
       This plugin converts arrays from one colour type to another, e.g. Bayer -> RGB1
-    params:
+    parameters:
       P:
         type: str
         description: |-
@@ -612,7 +612,7 @@ defs:
   - name: NDFileHDF5
     description: |-
       This plugin can compress NDArrays to HDF5 and write them to file
-    params:
+    parameters:
       P:
         type: str
         description: |-
@@ -721,7 +721,7 @@ defs:
   - name: NDFileNull
     description: |-
       Null file plugin for deleting driver files
-    params:
+    parameters:
       P:
         type: str
         description: |-
@@ -816,7 +816,7 @@ defs:
     description: |-
       This plugin provides a waveform record that can display the NDArrays
           produced by its NDARRAY_PORT
-    params:
+    parameters:
       P:
         type: str
         description: |-
@@ -947,7 +947,7 @@ defs:
   - name: _NDCircularBuff
     description: |-
       TODO:ADD DESCRIPTION
-    params:
+    parameters:
       P:
         type: str
         description: |-
@@ -1039,7 +1039,7 @@ defs:
     description: |-
       This plugin can compress NDArrays to a range of formats supported by
           graphics magick and write them to file
-    params:
+    parameters:
       P:
         type: str
         description: |-
@@ -1133,7 +1133,7 @@ defs:
   - name: NDCircularBuff
     description: |-
       This plugin provides a pre and post external trigger frame capture buffer
-    params:
+    parameters:
       P:
         type: str
         description: |-
@@ -1247,7 +1247,7 @@ defs:
   - name: NDAttrPlot
     description: |-
       TODO:ADD DESCRIPTION
-    params:
+    parameters:
       P:
         type: str
         description: |-
@@ -1383,7 +1383,7 @@ defs:
   - name: NDCodec
     description: |-
       This plugin can compress or decompress NDArrays
-    params:
+    parameters:
       P:
         type: str
         description: |-
@@ -1483,7 +1483,7 @@ defs:
   - name: NDGather
     description: |-
       This plugin is used to gather NDArrays from multiple upstream plugins and merge them into a single stream
-    params:
+    parameters:
       NDARRAY_PORT:
         type: str
         description: |-
@@ -1585,7 +1585,7 @@ defs:
     description: |-
       This plugin selects a region of interest and optionally scales it to
           fit in a particular data type
-    params:
+    parameters:
       P:
         type: str
         description: |-
@@ -1693,7 +1693,7 @@ defs:
   - name: NDAttribute
     description: |-
       This plugin displays NDArray attributes
-    params:
+    parameters:
       P:
         type: str
         description: |-
@@ -1823,7 +1823,7 @@ defs:
   - name: NDStats
     description: |-
       This plugin calculates statistics like X and Y profile, centroid, and plots a histogram of binned pixels
-    params:
+    parameters:
       PORT:
         type: id
         description: |-
@@ -1972,7 +1972,7 @@ defs:
   - name: NDTimeSeries
     description: |-
       This plugin creates time series arrays from callback data
-    params:
+    parameters:
       P:
         type: str
         description: |-
@@ -2115,7 +2115,7 @@ defs:
     description: |-
       Add an attribute to the NDAttributes file for a particular ADDriver or
           NDPlugin, and associate it with the NDAttributes file
-    params:
+    parameters:
       port:
         type: object
         description: |-
@@ -2186,7 +2186,7 @@ defs:
     description: |-
       This plugin does image processing like flat field correction, background
           subtraction, and recursive filtering
-    params:
+    parameters:
       P:
         type: str
         description: |-
@@ -2288,7 +2288,7 @@ defs:
   - name: NDFileTIFF
     description: |-
       This plugin can compress NDArrays to TIFF and write them to file
-    params:
+    parameters:
       P:
         type: str
         description: |-
@@ -2382,7 +2382,7 @@ defs:
   - name: NDGather8
     description: |-
       This plugin is used to gather NDArrays from multiple upstream plugins and merge them into a single stream
-    params:
+    parameters:
       NDARRAY_PORT:
         type: str
         description: |-
@@ -2493,7 +2493,7 @@ defs:
   - name: NDROIStat
     description: |-
       This plugin calculates statistics of ROIs
-    params:
+    parameters:
       P:
         type: str
         description: |-
@@ -2615,7 +2615,7 @@ defs:
   - name: NDFileNetCDF
     description: |-
       This plugin can compress NDArrays to NetCDF and write them to file
-    params:
+    parameters:
       P:
         type: str
         description: |-
@@ -2709,7 +2709,7 @@ defs:
   - name: NDPvaPlugin
     description: |-
       This plugin makes NDArrays available through PVAccess
-    params:
+    parameters:
       P:
         type: str
         description: |-
@@ -2829,7 +2829,7 @@ defs:
   - name: NDTransform
     description: |-
       This plugin selects a region of interest and optionally scales it to fit in a particular data type
-    params:
+    parameters:
       P:
         type: str
         description: |-
@@ -2929,7 +2929,7 @@ defs:
   - name: NDFileJPEG
     description: |-
       This plugin can compress NDArrays to JPEG and write them to file
-    params:
+    parameters:
       P:
         type: str
         description: |-
@@ -3023,7 +3023,7 @@ defs:
   - name: NDScatter
     description: |-
       This plugin is used to distribute processing of NDArrays to multiple downstream plugins
-    params:
+    parameters:
       P:
         type: str
         description: |-

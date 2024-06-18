@@ -1,13 +1,14 @@
-# yaml-language-server: $schema=../schemas/ibek.support.schema.json
+# yaml-language-server: $schema=https://github.com/epics-containers/ibek/releases/download/1.5.3/ibek.support.schema.json
+
 module: gauges
 
 # Pretend support for vacuum space to test initialisation of a gauge group
 
-defs:
+entity_models:
   - name: Mks937bGauge
     description: |-
       MKS 937b Gauge controller
-    params:
+    parameters:
       port:
         type: object
         description: |-
@@ -24,7 +25,7 @@ defs:
   - name: GaugeGroup
     description: |-
       Group of gauges
-    params:
+    parameters:
       name:
         type: id
         description: |-
@@ -37,7 +38,7 @@ defs:
         type: object
         description: |-
           Second gauge
-        # default to the first gauge object
+        # default to the id of the gauge object we want as default
         default: |-
           {{gauge1}}
       gauge3:
@@ -51,7 +52,7 @@ defs:
         description: |-
           Fourth gauge
         default: |
-          {{gauge1}}
+          {{gauge1.name}}
 
     pre_init:
       - value: |
