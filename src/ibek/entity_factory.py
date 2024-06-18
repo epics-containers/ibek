@@ -171,12 +171,12 @@ class EntityFactory:
                 # find the Entity Class that the SubEntity represents
                 entity_cls = self._entity_models[sub_entity.type]
                 # get the SubEntity arguments
-                sub_args_dict = sub_entity.model_dump()
-                # jinja render any references to parent Args in the SubEntity Args
-                for key, arg in sub_args_dict.items():
-                    sub_args_dict[key] = UTILS.render(parent_entity, arg)
+                sub_params_dict = sub_entity.model_dump()
+                # jinja render any references to parent Params in the SubEntity Args
+                for key, param in sub_params_dict.items():
+                    sub_params_dict[key] = UTILS.render(parent_entity, param)
                 # cast the SubEntity to its concrete Entity subclass
-                entity = entity_cls(**sub_args_dict)
+                entity = entity_cls(**sub_params_dict)
                 # recursively scan the SubEntity for more SubEntities
                 resolved_entities.extend(self.resolve_sub_entities([entity]))
         return resolved_entities
