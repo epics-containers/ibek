@@ -27,7 +27,7 @@ class RenderDb:
         # a mapping from template file name to details of instances of that template
         self.render_templates: Dict[str, RenderDb.RenderDbTemplate] = {}
 
-    def add_row(self, filename: str, args: Mapping[str, Any], entity: Entity) -> None:
+    def add_row(self, filename: str, params: Mapping[str, Any], entity: Entity) -> None:
         """
         Accumulate rows of arguments for each template file,
         Adding a new template file if it does not already exist.
@@ -37,15 +37,15 @@ class RenderDb:
 
         if filename not in self.render_templates:
             # for new filenames create a new RenderDbTemplate entry
-            headings = [str(i) for i in list(args.keys())]
+            headings = [str(i) for i in list(params.keys())]
             self.render_templates[filename] = RenderDb.RenderDbTemplate(
                 filename=filename,
                 rows=[headings],  # first row is the headings
-                columns=[0] * len(args),
+                columns=[0] * len(params),
             )
 
         # add a new row of argument values, rendering any Jinja template fields
-        row = list(UTILS.render_map(dict(entity), args).values())
+        row = list(UTILS.render_map(dict(entity), params).values())
 
         # save the new row
         self.render_templates[filename].rows.append(row)

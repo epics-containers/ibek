@@ -92,23 +92,23 @@ class EntityFactory:
         # fully qualified name of the Entity class including support module
         full_name = f"{support.module}.{model.name}"
 
-        # add in each of the arguments as a Field in the Entity
-        for name, arg in model.parameters.items():
+        # add in each of the parameters as a Field in the Entity
+        for name, param in model.parameters.items():
             type: Any
 
-            if isinstance(arg, ObjectParam):
+            if isinstance(param, ObjectParam):
                 # we now defer the lookup of the object until whole model validation
                 type = object
 
-            elif isinstance(arg, IdParam):
+            elif isinstance(param, IdParam):
                 type = str
 
-            elif isinstance(arg, EnumParam):
+            elif isinstance(param, EnumParam):
                 # Pydantic uses the values of the Enum as the options in the schema.
                 # Here we arrange for the keys to be in the schema (what a user supplies)
                 # but the values to be what is rendered when jinja refers to the enum
                 enum_swapped = {}
-                for k, v in arg.values.items():
+                for k, v in param.values.items():
                     enum_swapped[str(v) if v else str(k)] = k
                 # TODO review enums especially with respect to Pydantic 2.7.1
                 val_enum = EnumVal(name, enum_swapped)  # type: ignore
@@ -116,8 +116,8 @@ class EntityFactory:
 
             else:
                 # arg.type is str, int, float, etc.
-                type = getattr(builtins, arg.type)
-            add_arg(name, type, arg.description, getattr(arg, "default"))  # type: ignore
+                type = getattr(builtins, param.type)
+            add_arg(name, type, param.description, getattr(param, "default"))  # type: ignore
 
         # add the type literal which discriminates between the different Entity classes
         typ = Literal[full_name]  # type: ignore
