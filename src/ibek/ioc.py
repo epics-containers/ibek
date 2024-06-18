@@ -20,22 +20,6 @@ from .entity_model import EntityModel
 from .globals import BaseSettings
 from .utils import UTILS
 
-# a global dict of all entity instances indexed by their ID
-id_to_entity: Dict[str, Entity] = {}
-
-
-def get_entity_by_id(id: str) -> Entity:
-    try:
-        return id_to_entity[id]
-    except KeyError:
-        raise ValueError(f"object {id} not found in {list(id_to_entity)}")
-
-
-def clear_entity_model_ids():
-    """Resets the global id_to_entity dict"""
-
-    id_to_entity.clear()
-
 
 class EnumVal(Enum):
     """
@@ -57,15 +41,21 @@ class Entity(BaseSettings):
     )
     __definition__: EntityModel
 
+    def __init__(self, **data):
+        super().__init__(**data)
+        self.__id_to_entity = {}
+
+    def get_entity_by_id(self, id: str) -> Entity:
+        try:
+            return self.__id_to_entity[id]
+        except KeyError:
+            raise ValueError(f"object {id} not found in {list(self.__id_to_entity)}")
+
     def _process_field(self: Entity, name: str, value: Any, typ: str):
         """
         Process an Entity field - doing jinja rendering, type coercion and
-        object id storing/lookup as required.
+        object id storage/lookup as required.
         """
-
-        # these fields don't need any rendering
-        if name in ["type", "entity_enabled"]:
-            return
 
         if isinstance(value, str):
             # Jinja expansion always performed on string fields
@@ -82,32 +72,34 @@ class Entity(BaseSettings):
         if typ == "object":
             # look up the actual object by it's id
             if isinstance(value, str):
-                value = get_entity_by_id(value)
+                value = self.get_entity_by_id(value)
 
-        # pre/post_defines are added into the model instance fields list here
+        # If this field is not pre-existing, add it into the model instance.
+        # This is how pre/post_defines are added.
         if name not in self.model_fields:
             self.model_fields[name] = FieldInfo(annotation=str, default=value)
 
-        # update the attribute with the rendered value
+        # update the model instance attribute with the rendered value
         setattr(self, name, value)
 
         if typ == "id":
             # add this entity to the global id index
-            if value in id_to_entity:
-                raise ValueError(f"Duplicate id {value} in {list(id_to_entity)}")
-            id_to_entity[value] = self
+            if value in self.__id_to_entity:
+                raise ValueError(f"Duplicate id {value} in {list(self.__id_to_entity)}")
+            self.__id_to_entity[value] = self
 
     @model_validator(mode="after")
     def add_ibek_attributes(self):
         """
         Whole Entity model validation
-        """
 
-        # Do jinja rendering of pre_defines/ parameters / post_defines
-        # in the correct order. self._process_field also adds the field to this model
-        # instance if it does not already exist. Hence pre/post_defines are added to
-        # the model instance and are available for the phase 2 (final) jinja
-        # rendering performed in ibek.commands.generate().
+        Do jinja rendering of pre_defines/ parameters / post_defines
+        in the correct order.
+
+        Also adds  pre_define and post_defines to the model instance, making
+        them available for the phase 2 (final) jinja rendering performed in
+        ibek.runtime_cmds.generate().
+        """
 
         if self.__definition__.pre_defines:
             for name, define in self.__definition__.pre_defines.items():
@@ -120,10 +112,6 @@ class Entity(BaseSettings):
         if self.__definition__.post_defines:
             for name, define in self.__definition__.post_defines.items():
                 self._process_field(name, define.value, define.type)
-
-        # we have updated the model with jinja rendered values and also with
-        # pre/post_defines so allow extras and rebuild the model
-        self.model_config["extra"] = "allow"
 
         return self
 
@@ -148,3 +136,6 @@ class IOC(BaseSettings):
         description="A place to create any anchors required for repeating YAML",
         default=(),
     )
+
+    # a dict of all entity instances in this IOC, indexed by their ID
+    __id_to_entity: Dict[str, Entity]

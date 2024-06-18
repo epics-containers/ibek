@@ -36,8 +36,6 @@ defs:
       name:
         description: |-
           name of the character
-        type: str # TODO - do we want to enforce this ? at present schema allows
-        # no value for type and should default to str but the code fails.
         value: |-
           Dave Lister
 
