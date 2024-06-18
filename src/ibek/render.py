@@ -4,7 +4,7 @@ Functions for rendering lines in the boot script using Jinja2
 
 from typing import Callable, List, Optional, Sequence, Union
 
-from .definition import Comment, Script, Text, When
+from .entity_model import Comment, Script, Text, When
 from .ioc import Entity
 from .utils import UTILS
 

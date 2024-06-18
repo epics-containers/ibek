@@ -8,8 +8,8 @@ from pvi._format.dls import DLSFormatter
 from pvi._format.template import format_template
 from pvi.device import Device
 
-from ibek.definition import Database
 from ibek.entity_factory import EntityFactory
+from ibek.entity_model import Database
 from ibek.gen_scripts import create_boot_script, create_db_script
 from ibek.globals import GLOBALS, NaturalOrderGroup
 from ibek.ioc import IOC, Entity

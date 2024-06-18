@@ -39,6 +39,13 @@ defs:
         value: |-
           Dave Lister
 
+      cryo_years:
+        description: |-
+          years in cryogenic sleep
+        type: int
+        value: 3000000
+        # https://en.wikipedia.org/wiki/Dave_Lister#:~:text=As%20a%20result%2C%20Holly%20keeps,radiation%20levels%20return%20to%20normal.
+
     params:
       # example of using aliases to merge multiple dictionaries into this one
       <<: [*params1, *params2]
@@ -52,13 +59,6 @@ defs:
           {{ name == 'Dave Lister' }}
 
     post_defines:
-      cryo_years:
-        description: |-
-          years in cryogenic sleep
-        type: int
-        value: 3000000
-        # https://en.wikipedia.org/wiki/Dave_Lister#:~:text=As%20a%20result%2C%20Holly%20keeps,radiation%20levels%20return%20to%20normal.
-
       # example type list value not using Jinja
       friends:
         description: |-

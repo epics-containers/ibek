@@ -40,6 +40,8 @@ defs:
         type: str
         description: |-
           Device prefix
+        default: |-
+          {{dom}}-VA-FAST-01
 
     post_defines:
       device:
