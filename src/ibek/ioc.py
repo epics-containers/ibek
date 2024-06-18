@@ -20,6 +20,22 @@ from .entity_model import EntityModel
 from .globals import BaseSettings
 from .utils import UTILS
 
+# a global dict of all entity instances indexed by their ID
+id_to_entity: Dict[str, Entity] = {}
+
+
+def get_entity_by_id(id: str) -> Entity:
+    try:
+        return id_to_entity[id]
+    except KeyError:
+        raise ValueError(f"object {id} not found in {list(id_to_entity)}")
+
+
+def clear_entity_model_ids():
+    """Resets the global id_to_entity dict"""
+
+    id_to_entity.clear()
+
 
 class EnumVal(Enum):
     """
@@ -40,16 +56,6 @@ class Entity(BaseSettings):
         description="enable or disable this entity instance", default=True
     )
     __definition__: EntityModel
-
-    def __init__(self, **data):
-        super().__init__(**data)
-        self.__id_to_entity = {}
-
-    def get_entity_by_id(self, id: str) -> Entity:
-        try:
-            return self.__id_to_entity[id]
-        except KeyError:
-            raise ValueError(f"object {id} not found in {list(self.__id_to_entity)}")
 
     def _process_field(self: Entity, name: str, value: Any, typ: str):
         """
@@ -72,7 +78,7 @@ class Entity(BaseSettings):
         if typ == "object":
             # look up the actual object by it's id
             if isinstance(value, str):
-                value = self.get_entity_by_id(value)
+                value = get_entity_by_id(value)
 
         # If this field is not pre-existing, add it into the model instance.
         # This is how pre/post_defines are added.
@@ -84,9 +90,9 @@ class Entity(BaseSettings):
 
         if typ == "id":
             # add this entity to the global id index
-            if value in self.__id_to_entity:
-                raise ValueError(f"Duplicate id {value} in {list(self.__id_to_entity)}")
-            self.__id_to_entity[value] = self
+            if value in id_to_entity:
+                raise ValueError(f"Duplicate id {value} in {list(id_to_entity)}")
+            id_to_entity[value] = self
 
     @model_validator(mode="after")
     def add_ibek_attributes(self):
@@ -136,6 +142,3 @@ class IOC(BaseSettings):
         description="A place to create any anchors required for repeating YAML",
         default=(),
     )
-
-    # a dict of all entity instances in this IOC, indexed by their ID
-    __id_to_entity: Dict[str, Entity]
