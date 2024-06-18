@@ -95,46 +95,6 @@
           "default": 0,
           "description": "union of <class 'int'> and jinja representation of {typ}",
           "title": "Timeout"
-        },
-        "gaugeNum": {
-          "anyOf": [
-            {
-              "description": "jinja that renders to <class 'int'>",
-              "pattern": ".*\\{\\{.*\\}\\}.*",
-              "type": "string"
-            },
-            {
-              "description": "auto gauge count",
-              "type": "integer"
-            }
-          ],
-          "default": "{{ _global.incrementor(master, start=1) }}",
-          "description": "union of <class 'int'> and jinja representation of {typ}",
-          "title": "Gaugenum"
-        },
-        "fan": {
-          "default": "{{ \"%02d\" % (gaugeNum / 7 + 1) }}",
-          "description": "fan number",
-          "title": "Fan",
-          "type": "string"
-        },
-        "mask": {
-          "default": "{{ _global.incrementor(\"mask_{}\".format(master), 2, 2**gaugeNum) }}",
-          "description": "mask for the channel",
-          "title": "Mask",
-          "type": "string"
-        },
-        "lnk_no": {
-          "default": "{{ ((gaugeNum - 1) % 6) + 1 }}",
-          "description": "link number",
-          "title": "Lnk No",
-          "type": "string"
-        },
-        "gaugePV": {
-          "default": "{{ master.device }}:GAUGE:{{id}}_0",
-          "description": "Gauge PV",
-          "title": "Gaugepv",
-          "type": "string"
         }
       },
       "required": [
@@ -186,41 +146,9 @@
         },
         "device": {
           "default": "{{dom}}-VA-FAST-01",
-          "description": "device name",
+          "description": "Device prefix",
           "title": "Device",
           "type": "string"
-        },
-        "waveform_nelm": {
-          "anyOf": [
-            {
-              "description": "jinja that renders to <class 'int'>",
-              "pattern": ".*\\{\\{.*\\}\\}.*",
-              "type": "string"
-            },
-            {
-              "description": "waveform element count",
-              "type": "integer"
-            }
-          ],
-          "default": 500,
-          "description": "union of <class 'int'> and jinja representation of {typ}",
-          "title": "Waveform Nelm"
-        },
-        "combined_nelm": {
-          "anyOf": [
-            {
-              "description": "jinja that renders to <class 'int'>",
-              "pattern": ".*\\{\\{.*\\}\\}.*",
-              "type": "string"
-            },
-            {
-              "description": "total waveform element count",
-              "type": "integer"
-            }
-          ],
-          "default": "{{ 6 * waveform_nelm }}",
-          "description": "union of <class 'int'> and jinja representation of {typ}",
-          "title": "Combined Nelm"
         }
       },
       "required": [

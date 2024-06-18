@@ -15,8 +15,8 @@ from ruamel.yaml.main import YAML
 from ibek.globals import JINJA
 
 from .ioc import Entity, EnumVal, clear_entity_model_ids
-from .params import Define, EnumParam, IdParam, ObjectParam
-from .support import EntityDefinition, Support
+from .params import EnumParam, IdParam, ObjectParam
+from .support import EntityModel, Support
 from .utils import UTILS
 
 
@@ -56,18 +56,11 @@ class EntityFactory:
         return list(self._entity_models.values())
 
     def _make_entity_model(
-        self, definition: EntityDefinition, support: Support
+        self, definition: EntityModel, support: Support
     ) -> Type[Entity]:
         """
         Create an Entity Model from a Definition instance and a Support instance.
         """
-
-        def add_defines(s: dict[str, Define]) -> None:
-            if s:
-                # add in the pre_defines or post_defines as Args in the Entity
-                for name, value in s.items():
-                    typ = getattr(builtins, str(value.type))
-                    add_arg(name, typ, value.description, value.value)
 
         def add_arg(name, typ, description, default):
             if default is None:
@@ -100,11 +93,6 @@ class EntityFactory:
         # fully qualified name of the Entity class including support module
         full_name = f"{support.module}.{definition.name}"
 
-        # add in the calculated values Jinja Templates as Fields in the Entity
-        # these are the pre_values that should be Jinja rendered before any
-        # Args (or post values)
-        add_defines(definition.pre_defines)
-
         # add in each of the arguments as a Field in the Entity
         for name, arg in definition.params.items():
             type: Any
@@ -131,9 +119,6 @@ class EntityFactory:
                 # arg.type is str, int, float, etc.
                 type = getattr(builtins, arg.type)
             add_arg(name, type, arg.description, getattr(arg, "default"))  # type: ignore
-
-        # add in the calculated values Jinja Templates as Fields in the Entity
-        add_defines(definition.post_defines)
 
         # add the type literal which discriminates between the different Entity classes
         typ = Literal[full_name]  # type: ignore

@@ -5,7 +5,8 @@ support module definition YAML file
 
 from __future__ import annotations
 
-import json
+import ast
+import builtins
 from enum import Enum
 from typing import Any, Dict, List, Sequence
 
@@ -13,10 +14,10 @@ from pydantic import (
     Field,
     model_validator,
 )
+from pydantic.fields import FieldInfo
 
-from .definition import EntityDefinition
+from .entity_model import EntityModel
 from .globals import BaseSettings
-from .params import IdParam
 from .utils import UTILS
 
 # a global dict of all entity instances indexed by their ID
@@ -54,60 +55,69 @@ class Entity(BaseSettings):
     entity_enabled: bool = Field(
         description="enable or disable this entity instance", default=True
     )
-    __definition__: EntityDefinition
+    __definition__: EntityModel
+
+    def _process_field(self: Entity, name: str, value: Any, typ: str):
+        """
+        Process an Entity field - doing jinja rendering, type coercion and
+        object id storage/lookup as required.
+        """
+
+        if isinstance(value, str):
+            # Jinja expansion always performed on string fields
+            value = UTILS.render(self, value)
+            if typ in ["list", "int", "float", "bool"]:
+                # coerce the rendered parameter to its intended type
+                try:
+                    cast_type = getattr(builtins, typ)
+                    value = cast_type(ast.literal_eval(value))
+                except:
+                    print(f"ERROR: decoding field '{name}', value '{value}' as {typ}")
+                    raise
+
+        if typ == "object":
+            # look up the actual object by it's id
+            if isinstance(value, str):
+                value = get_entity_by_id(value)
+
+        # If this field is not pre-existing, add it into the model instance.
+        # This is how pre/post_defines are added.
+        if name not in self.model_fields:
+            self.model_fields[name] = FieldInfo(annotation=str, default=value)
+
+        # update the model instance attribute with the rendered value
+        setattr(self, name, value)
+
+        if typ == "id":
+            # add this entity to the global id index
+            if value in id_to_entity:
+                raise ValueError(f"Duplicate id {value} in {list(id_to_entity)}")
+            id_to_entity[value] = self
 
     @model_validator(mode="after")
     def add_ibek_attributes(self):
         """
         Whole Entity model validation
+
+        Do jinja rendering of pre_defines/ parameters / post_defines
+        in the correct order.
+
+        Also adds  pre_define and post_defines to the model instance, making
+        them available for the phase 2 (final) jinja rendering performed in
+        ibek.runtime_cmds.generate().
         """
 
-        # find the id field in this Entity if it has one
-        ids = {
-            name
-            for name, value in self.__definition__.params.items()
-            if isinstance(value, IdParam)
-        }
+        if self.__definition__.pre_defines:
+            for name, define in self.__definition__.pre_defines.items():
+                self._process_field(name, define.value, define.type)
 
-        entity_dict = self.model_dump()
-        for arg, value in entity_dict.items():
-            model_field = self.model_fields[arg]
+        if self.__definition__.params:
+            for name, parameter in self.__definition__.params.items():
+                self._process_field(name, getattr(self, name), parameter.type)
 
-            if isinstance(value, str):
-                # Jinja expansion of any of the Entity's string args/values
-                value = UTILS.render(entity_dict, value)
-                # this is a cheesy test - any better ideas please let me know
-                if "Union" in str(model_field.annotation):
-                    # Args that were non strings and have been rendered by Jinja
-                    # must be coerced back into their original type
-                    try:
-                        # The following replace are to make the string json compatible
-                        # (maybe we should python decode instead of json.loads)
-                        value = value.replace("'", '"')
-                        value = value.replace("True", "true")
-                        value = value.replace("False", "false")
-                        value = json.loads(value)
-                    except:
-                        print(
-                            f"ERROR: fail to decode {value} as a {model_field.annotation}"
-                        )
-                        raise
-
-            if model_field.annotation == object:
-                # look up the actual object by it's id
-                if isinstance(value, str):
-                    value = get_entity_by_id(value)
-
-            # update this entity instance with the rendered value
-            setattr(self, arg, value)
-            # update the entity_dict with the rendered value
-            entity_dict[arg] = value
-
-            if arg in ids:
-                # add this entity to the global id index
-                if value in id_to_entity:
-                    raise ValueError(f"Duplicate id {value} in {list(id_to_entity)}")
-                id_to_entity[value] = self
+        if self.__definition__.post_defines:
+            for name, define in self.__definition__.post_defines.items():
+                self._process_field(name, define.value, define.type)
 
         return self
 

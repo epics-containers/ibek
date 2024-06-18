@@ -9,7 +9,7 @@ from jinja2 import StrictUndefined, Template
 
 from ibek.utils import UTILS
 
-from .definition import Database
+from .entity_model import Database
 from .globals import TEMPLATES
 from .ioc import Entity
 from .render import Render
