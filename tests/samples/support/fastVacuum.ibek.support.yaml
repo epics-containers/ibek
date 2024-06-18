@@ -2,11 +2,11 @@
 
 module: dlsPLC
 
-defs:
+entity_models:
   - name: dummy
     description: |-
       dummy record
-    params:
+    parameters:
       device:
         type: id
         description: |-
@@ -15,7 +15,7 @@ defs:
   - name: fastVacuumMaster
     description: |-
       master records for fast vacuum
-    params:
+    parameters:
       name:
         type: id
         description: |-
@@ -67,7 +67,7 @@ defs:
   - name: fastVacuumChannel
     description: |-
       Adds a fast vacuum channel to the fast vacuum master
-    params:
+    parameters:
       name:
         type: id
         description: |-

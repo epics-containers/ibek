@@ -19,7 +19,7 @@ shared:
     HVEL: 10
     JAR: 1
     JVEL: 5
-    EGU: "ustep"
+    EGU: ustep
     SLSP: 0.8
     ENABLED: 1
     TIMEOUT: 0
@@ -27,7 +27,7 @@ shared:
 entities:
   - type: motorTML.CreateController
     controllerName: TML
-    P: "SPARC:TML"
+    P: SPARC:TML
     TTY: /tmp # /var/tmp/ttyV0
     hostid: 15
 

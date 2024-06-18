@@ -2,11 +2,11 @@
 
 module: motorTML
 
-defs:
+entity_models:
   - name: CreateController
     description: |-
       Creates a Technosoft motion controller connected to a serial line
-    params:
+    parameters:
       controllerName:
         type: id
         description: |-
@@ -50,7 +50,7 @@ defs:
   - name: motorAxis
     description: |-
       Creates a motor axis
-    params:
+    parameters:
       controller:
         type: object
         description: |-
@@ -245,7 +245,7 @@ defs:
     #       EGU:
     #       TIMEOUT:
     post_init:
-      - value: |
+      - value: |2
 
           dbpf("{{controller.P}}:{{CHANNEL_ID}}:MSGRS","START")
           dbl

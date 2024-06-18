@@ -4,9 +4,10 @@ Converts .ibek.support.yaml files from the v2.0 format to the v3.0 format.
 Can also convert ioc.yaml files as the changes re __utils__ are the same.
 
 Changes:
-- args are now params
-- params are a dictionary of dictionaries instead of a list of dictionaries
-- params no longer have a name field as the key in the dictionary is the name
+- 'defs' are now 'enitiy_definitions'
+- 'args' are now 'parameters'
+- parameters are a dictionary of dictionaries instead of a list of dictionaries
+- parameters no longer have a name field as the key in the dictionary is the name
 - values is now post_defines and is also a dictionary of dictionaries
 - pre_values is now pre_defines and is also a dictionary of dictionaries
 - __utils__ is now _global
@@ -62,7 +63,7 @@ def tidy_up(yaml):
         "    post_defines:",
         "    shared:",
         "module",
-        "defs",
+        "entity_models",
         "      - file:",
         "      - value:",
     ]:
@@ -124,12 +125,15 @@ def convert(data: dict):
 
     # replace all definitions with converted versions
     if "defs" in data:
-        data["defs"] = [convert_definition(definition) for definition in data["defs"]]
+        data["entity_models"] = [
+            convert_definition(definition) for definition in data["defs"]
+        ]
+        del data["defs"]
 
 
 def convert_definition(data: dict) -> dict | None:
     """
-    convert a single definition's args list to a params dict
+    convert a single definition's args list to a parameters dict
     """
 
     # rebuild the definition from scratch to enforce order
@@ -143,7 +147,7 @@ def convert_definition(data: dict) -> dict | None:
             check_converted(data["pre_defines"])
             new_data["pre_defines"] = list_to_dict(data["pre_defines"])
         if "args" in data:
-            new_data["params"] = list_to_dict(data["args"])
+            new_data["parameters"] = list_to_dict(data["args"])
         else:
             raise ConvertedAlready  # probably! (or its not a support yaml file)
         if "post_defines" in data:
@@ -192,14 +196,14 @@ def list_to_dict(args: list[dict]) -> dict[str, dict]:
     convert a list of args to a dictionary, removing the name field as that
     becomes the key in the dictionary
     """
-    params = CommentedMap()
+    parameters = CommentedMap()
     try:
         for arg in args:
             name = arg["name"]
-            params[name] = arg.copy()
+            parameters[name] = arg.copy()
             # name is the param key so we no longer need it
-            del params[name]["name"]
-        return params
+            del parameters[name]["name"]
+        return parameters
     except Exception:
         print(f"Failed to convert {arg}")
         raise

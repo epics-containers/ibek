@@ -5,11 +5,11 @@
 ################################################################################
 
 module: epics
-defs:
+entity_models:
   - name: InterruptVectorVME
     description: |
       Reserve an interrupt vector for use with VME hardware.
-    params:
+    parameters:
       name:
         type: id
         description: A name for an interrupt vector variable
@@ -36,7 +36,7 @@ defs:
 
   - name: InterruptVectorVME2
     description: naughty second use of same counter
-    params:
+    parameters:
       name:
         type: id
         description: A name for an interrupt vector variable

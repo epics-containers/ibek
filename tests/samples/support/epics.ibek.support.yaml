@@ -1,10 +1,10 @@
 # yaml-language-server: $schema=../schemas/ibek.support.schema.json
 
 module: epics
-defs:
+entity_models:
   - name: EpicsCaMaxArrayBytes
     description: Set the maximum size in bytes for sending arrays over channel access
-    params:
+    parameters:
       max_bytes:
         type: int
         description: Max size in bytes for sending arrays over channel access
@@ -15,7 +15,7 @@ defs:
 
   - name: EpicsTsMinWest
     description: Set the relative time zone minutes West relative to GMT (+/-720)
-    params:
+    parameters:
       minutes_west:
         type: int
         description: relative time zone minutes
@@ -26,7 +26,7 @@ defs:
 
   - name: dbpf
     description: Set a PV value after iocInit
-    params:
+    parameters:
       pv:
         type: str
         description: Name of PV
@@ -38,7 +38,7 @@ defs:
 
   - name: EpicsEnvSet
     description: Set an environment variable in the ioc Shell
-    params:
+    parameters:
       name:
         type: str
         description: Name of environment variable
@@ -51,7 +51,7 @@ defs:
 
   - name: StartupCommand
     description: Adds an arbitrary command in the startup script before iocInit
-    params:
+    parameters:
       command:
         type: str
         description: command string
@@ -62,7 +62,7 @@ defs:
 
   - name: PostStartupCommand
     description: Adds an arbitrary command in the startup script after iocInit
-    params:
+    parameters:
       command:
         type: str
         description: command string
@@ -73,7 +73,7 @@ defs:
 
   - name: InterruptVectorVME
     description: Reserve a VME interrupt vector
-    params:
+    parameters:
       name:
         type: id
         description: A name for an interrupt vector variable

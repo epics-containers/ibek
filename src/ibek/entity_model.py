@@ -11,7 +11,7 @@ from pydantic import Field, PydanticUndefinedAnnotation
 from typing_extensions import Literal
 
 from .globals import BaseSettings
-from .params import Define, IdParam, Param
+from .parameters import Define, IdParam, Param
 from .sub_entity import SubEntity
 
 
@@ -138,7 +138,7 @@ class EntityModel(BaseSettings):
         default=(),
     )
     # declare Arg as Union of its subclasses for Pydantic to be able to deserialize
-    params: dict[str, discriminated] = Field(  # type: ignore
+    parameters: dict[str, discriminated] = Field(  # type: ignore
         description="The arguments IOC instance should supply",
         default=(),
     )
@@ -177,6 +177,6 @@ class EntityModel(BaseSettings):
 
     def _get_id_arg(self):
         """Returns the value of the ID argument for this definition, if it exists"""
-        for name, value in self.params.items():
+        for name, value in self.parameters.items():
             if isinstance(value, IdParam):
                 return name

@@ -10,7 +10,7 @@ import pytest
 from ibek.commands import semver_compare
 from ibek.ioc import id_to_entity
 from ibek.ioc_factory import IocFactory
-from ibek.params import IdParam, ObjectParam
+from ibek.parameters import IdParam, ObjectParam
 from ibek.support import EntityModel, Support
 from ibek.utils import UTILS
 
@@ -21,24 +21,24 @@ def test_object_references(entity_factory):
     """
     support = Support(
         module="mymodule",
-        defs=[
+        entity_models=[
             EntityModel(
                 name="port",
                 description="a port",
-                params={"name": IdParam(description="an id")},
+                parameters={"name": IdParam(description="an id")},
             ),
             EntityModel(
                 name="device",
                 description="a device",
-                params={"port": ObjectParam(description="the port")},
+                parameters={"port": ObjectParam(description="the port")},
             ),
         ],
     )
 
     entities = entity_factory._make_entity_models(support)
     ioc_model = IocFactory().make_ioc_model(entities)
-    assert entities[0].__definition__ == support.defs[0]
-    assert entities[1].__definition__ == support.defs[1]
+    assert entities[0].__definition__ == support.entity_models[0]
+    assert entities[1].__definition__ == support.entity_models[1]
 
     d = dict(
         ioc_name="",

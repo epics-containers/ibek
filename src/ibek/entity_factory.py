@@ -15,7 +15,7 @@ from ruamel.yaml.main import YAML
 from ibek.globals import JINJA
 
 from .ioc import Entity, EnumVal, clear_entity_model_ids
-from .params import EnumParam, IdParam, ObjectParam
+from .parameters import EnumParam, IdParam, ObjectParam
 from .support import EntityModel, Support
 from .utils import UTILS
 
@@ -94,7 +94,7 @@ class EntityFactory:
         full_name = f"{support.module}.{definition.name}"
 
         # add in each of the arguments as a Field in the Entity
-        for name, arg in definition.params.items():
+        for name, arg in definition.parameters.items():
             type: Any
 
             if isinstance(arg, ObjectParam):
@@ -148,7 +148,7 @@ class EntityFactory:
         entity_names = []
         entity_models = []
 
-        for definition in support.defs:
+        for definition in support.entity_models:
             if definition.name in entity_names:
                 # not tested because schema validation will always catch this first
                 raise ValueError(f"Duplicate entity name {definition.name}")

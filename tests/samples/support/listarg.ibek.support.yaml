@@ -27,18 +27,16 @@ shared:
       default: |-
         {{ 29 + cryo_years }}
 
-defs:
+entity_models:
   - name: lister
     description: |-
       The protagonist from Red Dwarf
-
     pre_defines:
       name:
         description: |-
           name of the character
         value: |-
           Dave Lister
-
       cryo_years:
         description: |-
           years in cryogenic sleep
@@ -46,7 +44,7 @@ defs:
         value: 3000000
         # https://en.wikipedia.org/wiki/Dave_Lister#:~:text=As%20a%20result%2C%20Holly%20keeps,radiation%20levels%20return%20to%20normal.
 
-    params:
+    parameters:
       # example of using aliases to merge multiple dictionaries into this one
       <<: [*params1, *params2]
 
@@ -58,8 +56,15 @@ defs:
         default: |-
           {{ name == 'Dave Lister' }}
 
+      age:
+        type: int
+        description: |-
+          Age of the character including cryogenic sleep
+        # example int using Jinja
+        default: |-
+          {{ 29 + cryo_years }}
+
     post_defines:
-      # example type list value not using Jinja
       friends:
         description: |-
           friends of Lister
@@ -79,7 +84,7 @@ defs:
           {{ (friends * 3) | sort }}
 
     pre_init:
-      - value: |
+      - value: |2
 
           Lister, age {{age}}, who does not like to hear
             "{{quote}}"
