@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>ibek.ioc &#8212; ibek 3.0.0b7.dev6+gf558efb3 documentation</title>
+    <title>ibek.ioc &#8212; ibek 3.0.0b7.dev8+gdb46dbae documentation</title>
   
   
   
@@ -37,7 +37,7 @@
 <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=3ee479438cf8b5e0d341" />
   <script src="../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=3ee479438cf8b5e0d341"></script>
 
-    <script src="../../_static/documentation_options.js?v=b8946917"></script>
+    <script src="../../_static/documentation_options.js?v=82a83f09"></script>
     <script src="../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -588,7 +588,16 @@ document.write(`
 
 
     <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Render this Entity as the name of its IdParam within Jinja contexts&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        When a jinja template refers to an object by itself e.g.</span>
+<span class="sd">            # this is the startup entry for {{ my_entity }}</span>
+<span class="sd">        Jinja will attempt to render the object as a string and this</span>
+<span class="sd">        method will be called.</span>
+
+<span class="sd">        The behaviour is to print the ID of the object. Thus we look up</span>
+<span class="sd">        which of our object&#39;s fields is the ID field and return the</span>
+<span class="sd">        value of that field.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">id_name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_model</span><span class="o">.</span><span class="n">_get_id_arg</span><span class="p">()</span>
         <span class="k">if</span> <span class="n">id_name</span><span class="p">:</span>
             <span class="k">return</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">id_name</span><span class="p">)</span>
