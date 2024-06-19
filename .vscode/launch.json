@@ -7,15 +7,13 @@
         {
             // To use this debug configuration you must have access to dls-python
             // (python 2.7) and downgrade vscode Python extension to 2021.9.1246542782
-            "name": "builder2ibek",
+            "name": "ibek2to3",
             "type": "python",
-            "python": "/dls_sw/prod/tools/RHEL7-x86_64/defaults/bin/dls-python",
             "request": "launch",
-            "program": "builder2ibek.support.py",
+            "program": "convert/ibek2to3.py",
             "console": "integratedTerminal",
             "args": [
-                "/dls_sw/prod/R3.14.12.7/support/quadEM/9-4dls1",
-                "../quadEM.ibek.support.yaml"
+                "tests/samples/support/listarg.ibek.support.yaml"
             ],
             "justMyCode": false
         },

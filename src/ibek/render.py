@@ -4,7 +4,7 @@ Functions for rendering lines in the boot script using Jinja2
 
 from typing import Callable, List, Optional, Sequence, Union
 
-from .definition import Comment, Script, Text, When
+from .entity_model import Comment, Script, Text, When
 from .ioc import Entity
 from .utils import UTILS
 
@@ -13,7 +13,7 @@ class Render:
     """
     A class for generating snippets of startup script / EPICS DB
     by using Jinja to combine snippet templates from support module
-    definition yaml with substitution values supplied in ioc entity yaml
+    yaml with substitution values supplied in ioc entity yaml
     """
 
     def __init__(self: "Render"):
@@ -30,13 +30,13 @@ class Render:
         but we pass all strings though jinja again to render any other jinja
         in the IOC (e.g. database and function entries)
 
-        once uses the name of the definition + suffix to track which lines
+        once uses the name of the model + suffix to track which lines
         have been rendered already. The suffix can be used where a given
         Entity has more than one element to render once (e.g. functions)
         """
 
         if when == When.first.value:
-            name = instance.__definition__.name + suffix
+            name = instance._model.name + suffix
             if name not in self.once_done:
                 self.once_done.append(name)
             else:
@@ -73,7 +73,7 @@ class Render:
         render the startup script by combining the jinja template from
         an entity with the arguments from an Entity
         """
-        pre_init = instance.__definition__.pre_init
+        pre_init = instance._model.pre_init
         return self.render_script(instance, pre_init)
 
     def render_post_ioc_init(self, instance: Entity) -> Optional[str]:
@@ -81,7 +81,7 @@ class Render:
         render the post-iocInit entries by combining the jinja template
         from an entity with the arguments from an Entity
         """
-        post_init = instance.__definition__.post_init
+        post_init = instance._model.post_init
         return self.render_script(instance, post_init)
 
     def render_environment_variables(self, instance: Entity) -> Optional[str]:
@@ -89,7 +89,7 @@ class Render:
         render the environment variable elements by combining the jinja template
         from an entity with the arguments from an Entity
         """
-        variables = getattr(instance.__definition__, "env_vars")
+        variables = getattr(instance._model, "env_vars")
         if not variables:
             return None
 

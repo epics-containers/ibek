@@ -69,12 +69,12 @@ class _Globals:
 
     @property
     def IBEK_DEFS(self):
-        """Directory containing ibek support yaml definitions."""
+        """Directory containing ibek support yaml files."""
         return self._EPICS_ROOT / "ibek-defs"
 
     @property
     def PVI_DEFS(self):
-        """Directory containing pvi device yaml definitions."""
+        """Directory containing pvi device yaml files."""
         return self._EPICS_ROOT / "pvi-defs"
 
     @property

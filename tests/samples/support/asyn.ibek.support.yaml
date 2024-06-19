@@ -2,60 +2,60 @@
 
 module: asyn
 
-defs:
+entity_models:
   - name: AsynIP
     description: |-
       Asyn IP Port
-    args:
-      - type: str
-        name: port
+    parameters:
+      port:
+        type: str
         description: |-
           Serial port tty name / IP address optionally followed by protocol
 
-      - type: id
-        name: name
+      name:
+        type: id
         description: |-
           Override name
 
-      - type: str
-        name: input_eos
+      input_eos:
+        type: str
         description: |-
           Input end of string (terminator)
         # test escaping of quotes
         default: '"\n"'
 
-      - type: str
-        name: output_eos
+      output_eos:
+        type: str
         description: |-
           Output end of string (terminator)
         default: '"\n"'
 
-      - type: int
-        name: priority
+      priority:
+        type: int
         description: |-
           Priority
         default: 100
 
-      - type: bool
-        name: noAuto_connect
+      noAuto_connect:
+        type: bool
         description: |-
           Set to stop auto_connect
         default: false
 
-      - type: bool
-        name: noProcessEos
+      noProcessEos:
+        type: bool
         description: |-
           Set to avoid processing end of string
         default: false
 
-      - type: int
-        name: baud
+      baud:
+        type: int
         description: |-
           Baud Rate
         default: 9600
 
-      - type: enum
-        name: parity
+      parity:
+        type: enum
         description: |-
           Parity
         values:
@@ -64,8 +64,8 @@ defs:
           odd:
         default: none
 
-      - type: enum
-        name: crtscts
+      crtscts:
+        type: enum
         description: |-
           Set hardware flow control on
         values:
@@ -73,8 +73,8 @@ defs:
           N:
         default: N
 
-      - type: enum
-        name: stop
+      stop:
+        type: enum
         description: |-
           Stop Bits
         values:
@@ -82,8 +82,8 @@ defs:
           "2":
         default: "1"
 
-      - type: enum
-        name: disconnectOnReadTimeout
+      disconnectOnReadTimeout:
+        type: enum
         description: |-
           Disconnect when a read times out
         values:
@@ -91,8 +91,8 @@ defs:
           N:
         default: Y
 
-      - type: enum
-        name: bits
+      bits:
+        type: enum
         description: |-
           Bits
         values:
@@ -103,10 +103,6 @@ defs:
         default: "8"
 
     # test environment variables declaration
-    env_vars:
-      - name: NAME_AS_ENV_VAR
-        value: "my name is {{ name }}"
-
     pre_init:
       - value: |
           # Setting up Asyn Port {{name}} on {{port}}:
@@ -119,3 +115,6 @@ defs:
           asynSetOption({{baud}}, 0, {{crtscts}}, {{disconnectOnReadTimeout}})
           asynOctetSetInputEos({{input_eos}})
           asynOctetSetOutputEos({{output_eos}})
+    env_vars:
+      - name: NAME_AS_ENV_VAR
+        value: my name is {{ name }}

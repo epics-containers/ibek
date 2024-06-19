@@ -5,26 +5,22 @@
 ################################################################################
 
 module: epics
-defs:
+entity_models:
   - name: InterruptVectorVME
     description: |
       Reserve an interrupt vector for use with VME hardware.
-    args:
-      - type: id
-        name: name
+    parameters:
+      name:
+        type: id
         description: A name for an interrupt vector variable
 
     post_defines:
-      - name: test_global_var
+      test_global_var:
         description: test global variable setter
         value: '{{  _global.set("magic_global", 42) }}'
-      - name: get_global
+      get_global:
         description: test global variable getter
         value: '{{  _global.get("magic_global") }}'
-
-    env_vars:
-      - name: "{{ name }}"
-        value: '{{  _global.incrementor("InterruptVector", start=192, stop=255) }}'
 
     pre_init:
       - type: comment
@@ -34,13 +30,17 @@ defs:
       - type: comment
         value: counter "InterruptVector" is now {{ _global.incrementor("InterruptVector", start=192, stop=255) }}
 
+    env_vars:
+      - name: "{{ name }}"
+        value: '{{  _global.incrementor("InterruptVector", start=192, stop=255) }}'
+
   - name: InterruptVectorVME2
     description: naughty second use of same counter
-    args:
-      - type: id
-        name: name
+    parameters:
+      name:
+        type: id
         description: A name for an interrupt vector variable
 
     env_vars:
-      - name: "second_{{ name }}"
+      - name: second_{{ name }}
         value: '{{  _global.incrementor("InterruptVector", start=193, stop=194) }}'

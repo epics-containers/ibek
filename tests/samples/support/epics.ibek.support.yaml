@@ -1,12 +1,12 @@
 # yaml-language-server: $schema=../schemas/ibek.support.schema.json
 
 module: epics
-defs:
+entity_models:
   - name: EpicsCaMaxArrayBytes
     description: Set the maximum size in bytes for sending arrays over channel access
-    args:
-      - type: int
-        name: max_bytes
+    parameters:
+      max_bytes:
+        type: int
         description: Max size in bytes for sending arrays over channel access
         default: 6000000
     env_vars:
@@ -15,9 +15,9 @@ defs:
 
   - name: EpicsTsMinWest
     description: Set the relative time zone minutes West relative to GMT (+/-720)
-    args:
-      - type: int
-        name: minutes_west
+    parameters:
+      minutes_west:
+        type: int
         description: relative time zone minutes
         default: 0
     env_vars:
@@ -26,24 +26,24 @@ defs:
 
   - name: dbpf
     description: Set a PV value after iocInit
-    args:
-      - type: str
-        name: pv
+    parameters:
+      pv:
+        type: str
         description: Name of PV
-      - type: str
-        name: value
+      value:
+        type: str
         description: Value to set
     post_init:
       - value: dbpf "{{ pv }}" "{{ value }}"
 
   - name: EpicsEnvSet
     description: Set an environment variable in the ioc Shell
-    args:
-      - type: str
-        name: name
+    parameters:
+      name:
+        type: str
         description: Name of environment variable
-      - type: str
-        name: value
+      value:
+        type: str
         description: Value of environment variable
     env_vars:
       - name: "{{ name }}"
@@ -51,9 +51,9 @@ defs:
 
   - name: StartupCommand
     description: Adds an arbitrary command in the startup script before iocInit
-    args:
-      - type: str
-        name: command
+    parameters:
+      command:
+        type: str
         description: command string
         default: ""
     pre_init:
@@ -62,9 +62,9 @@ defs:
 
   - name: PostStartupCommand
     description: Adds an arbitrary command in the startup script after iocInit
-    args:
-      - type: str
-        name: command
+    parameters:
+      command:
+        type: str
         description: command string
         default: ""
     post_init:
@@ -73,18 +73,18 @@ defs:
 
   - name: InterruptVectorVME
     description: Reserve a VME interrupt vector
-    args:
-      - type: id
-        name: name
+    parameters:
+      name:
+        type: id
         description: A name for an interrupt vector variable
 
-      - type: int
-        name: count
+      count:
+        type: int
         description: The number of interrupt vectors to reserve
         default: 1
 
     post_defines:
-      - name: number
+      number:
         value: '{{  _global.incrementor("InterruptVector", start=192, stop=255, increment=count) }}'
         description: Interrupt Vector number
 

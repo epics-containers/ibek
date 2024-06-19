@@ -212,12 +212,12 @@
           "title": "Gauge1"
         },
         "gauge2": {
-          "default": "{{gauge1.name}}",
+          "default": "{{gauge1}}",
           "description": "Second gauge",
           "title": "Gauge2"
         },
         "gauge3": {
-          "default": "{{gauge1.name}}\n",
+          "default": "{{gauge1}}\n",
           "description": "Third gauge",
           "title": "Gauge3"
         },

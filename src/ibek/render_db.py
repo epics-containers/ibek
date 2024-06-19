@@ -1,12 +1,12 @@
 """
 A class for rendering a substitution file from multiple instantiations of
-support module definitions
+support module yaml files.
 """
 
 from dataclasses import dataclass
 from typing import Any, Dict, List, Mapping, Optional, Sequence, Tuple
 
-from ibek.definition import Database
+from ibek.entity_model import Database
 from ibek.ioc import Entity
 from ibek.utils import UTILS
 
@@ -27,7 +27,7 @@ class RenderDb:
         # a mapping from template file name to details of instances of that template
         self.render_templates: Dict[str, RenderDb.RenderDbTemplate] = {}
 
-    def add_row(self, filename: str, args: Mapping[str, Any], entity: Entity) -> None:
+    def add_row(self, filename: str, params: Mapping[str, Any], entity: Entity) -> None:
         """
         Accumulate rows of arguments for each template file,
         Adding a new template file if it does not already exist.
@@ -37,15 +37,15 @@ class RenderDb:
 
         if filename not in self.render_templates:
             # for new filenames create a new RenderDbTemplate entry
-            headings = [str(i) for i in list(args.keys())]
+            headings = [str(i) for i in list(params.keys())]
             self.render_templates[filename] = RenderDb.RenderDbTemplate(
                 filename=filename,
                 rows=[headings],  # first row is the headings
-                columns=[0] * len(args),
+                columns=[0] * len(params),
             )
 
         # add a new row of argument values, rendering any Jinja template fields
-        row = list(UTILS.render_map(dict(entity), args).values())
+        row = list(UTILS.render_map(dict(entity), params).values())
 
         # save the new row
         self.render_templates[filename].rows.append(row)
@@ -56,7 +56,7 @@ class RenderDb:
         while validating the arguments
         """
         for entity in self.entities:
-            databases = entity.__definition__.databases
+            databases = entity._model.databases
 
             # Not all entities instantiate database templates
             if entity.entity_enabled and databases is not None:
@@ -85,7 +85,7 @@ class RenderDb:
             self.add_row(database.file, database.args, entity)
 
     def add_extra_databases(self, databases: List[Tuple[Database, Entity]]) -> None:
-        """Add databases that are not part of Entity definitions
+        """Add databases that are not part of EntityModels
 
         Args:
             databases: Databases to add, each mapped against an Entity to use as context

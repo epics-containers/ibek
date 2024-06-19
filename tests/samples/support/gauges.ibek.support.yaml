@@ -4,51 +4,51 @@ module: gauges
 
 # Pretend support for vacuum space to test initialisation of a gauge group
 
-defs:
+entity_models:
   - name: Mks937bGauge
     description: |-
       MKS 937b Gauge controller
-    args:
-      - type: object
-        name: port
+    parameters:
+      port:
+        type: object
         description: |-
           Asyn port that connects to the device
-      - type: id
-        name: name
+      name:
+        type: id
         description: |-
           name for the Device
-      - type: str
-        name: P
+      P:
+        type: str
         description: |-
           PV prefix
 
   - name: GaugeGroup
     description: |-
       Group of gauges
-    args:
-      - type: id
-        name: name
+    parameters:
+      name:
+        type: id
         description: |-
           name for the
-      - type: object
-        name: gauge1
+      gauge1:
+        type: object
         description: |-
           First gauge
-      - type: object
-        name: gauge2
+      gauge2:
+        type: object
         description: |-
           Second gauge
         # default to the id of the gauge object we want as default
         default: |-
-          {{gauge1.name}}
-      - type: object
-        name: gauge3
+          {{gauge1}}
+      gauge3:
+        type: object
         description: |-
           Third gauge
         default: |
-          {{gauge1.name}}
-      - type: object
-        name: gauge4
+          {{gauge1}}
+      gauge4:
+        type: object
         description: |-
           Fourth gauge
         default: |

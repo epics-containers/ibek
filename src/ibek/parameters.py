@@ -1,5 +1,5 @@
 """
-Classes to specify arguments to Definitions
+Classes to specify arguments to Entity Models
 """
 
 from __future__ import annotations
@@ -17,7 +17,7 @@ JinjaString = Annotated[
 ]
 
 
-class ValueTypes(Enum):
+class DefineType(Enum):
     """The type of a value"""
 
     string = "str"
@@ -33,60 +33,57 @@ class ValueTypes(Enum):
         return str(self.value)
 
 
-class Value(BaseSettings):
-    """A calculated string value for a definition"""
+class Define(BaseSettings):
+    """A calculated value for an Entity Model"""
 
-    name: str = Field(description="Name of the value that the IOC instance will expose")
     description: str = Field(
         description="Description of what the value will be used for"
     )
     value: Any = Field(description="The contents of the value")
-    type: ValueTypes = Field(
-        description="The type of the value", default=ValueTypes.string
+    type: DefineType | None = Field(
+        description="The type of the value", default=DefineType.string
     )
 
 
-class Arg(BaseSettings):
+class Param(BaseSettings):
     """Base class for all Argument Types"""
 
     type: str
-    name: str = Field(
-        description="Name of the argument that the IOC instance should pass"
-    )
+
     description: str = Field(
         description="Description of what the argument will be used for"
     )
 
 
-class FloatArg(Arg):
+class FloatParam(Param):
     """An argument with a float value"""
 
     type: Literal["float"] = "float"
     default: Optional[float | JinjaString] = None
 
 
-class StrArg(Arg):
+class StrParam(Param):
     """An argument with a str value"""
 
     type: Literal["str"] = "str"
     default: Optional[str] = None
 
 
-class IntArg(Arg):
+class IntParam(Param):
     """An argument with an int value"""
 
     type: Literal["int"] = "int"
     default: Optional[int | JinjaString] = None
 
 
-class BoolArg(Arg):
+class BoolParam(Param):
     """An argument with an bool value"""
 
     type: Literal["bool"] = "bool"
     default: Optional[bool | JinjaString] = None
 
 
-class ObjectArg(Arg):
+class ObjectParam(Param):
     """A reference to another entity defined in this IOC"""
 
     type: Literal["object"] = "object"
@@ -95,14 +92,14 @@ class ObjectArg(Arg):
     default: Optional[str | object] = None
 
 
-class IdArg(Arg):
+class IdParam(Param):
     """Explicit ID argument that an object can refer to"""
 
     type: Literal["id"] = "id"
     default: Optional[str] = None
 
 
-class EnumArg(Arg):
+class EnumParam(Param):
     """An argument with an enum value"""
 
     type: Literal["enum"] = "enum"

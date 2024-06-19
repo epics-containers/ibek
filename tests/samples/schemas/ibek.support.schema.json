@@ -1,6 +1,6 @@
 {
   "$defs": {
-    "BoolArg": {
+    "BoolParam": {
       "additionalProperties": false,
       "description": "An argument with an bool value",
       "properties": {
@@ -11,11 +11,6 @@
             "bool"
           ],
           "title": "Type",
-          "type": "string"
-        },
-        "name": {
-          "description": "Name of the argument that the IOC instance should pass",
-          "title": "Name",
           "type": "string"
         },
         "description": {
@@ -42,10 +37,9 @@
         }
       },
       "required": [
-        "name",
         "description"
       ],
-      "title": "BoolArg",
+      "title": "BoolParam",
       "type": "object"
     },
     "Comment": {
@@ -118,12 +112,57 @@
       "title": "Database",
       "type": "object"
     },
-    "EntityDefinition": {
+    "Define": {
       "additionalProperties": false,
-      "description": "A single definition of a class of Entity that an IOC instance may instantiate",
+      "description": "A calculated value for an Entity Model",
+      "properties": {
+        "description": {
+          "description": "Description of what the value will be used for",
+          "title": "Description",
+          "type": "string"
+        },
+        "value": {
+          "description": "The contents of the value",
+          "title": "Value"
+        },
+        "type": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/DefineType"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": "str",
+          "description": "The type of the value"
+        }
+      },
+      "required": [
+        "description",
+        "value"
+      ],
+      "title": "Define",
+      "type": "object"
+    },
+    "DefineType": {
+      "description": "The type of a value",
+      "enum": [
+        "str",
+        "float",
+        "int",
+        "bool",
+        "list"
+      ],
+      "title": "DefineType",
+      "type": "string"
+    },
+    "EntityModel": {
+      "additionalProperties": false,
+      "description": "A Model for a class of Entity that an IOC instance may instantiate",
       "properties": {
         "name": {
-          "description": "Publish Definition as type <module>.<name> for IOC instances",
+          "description": "Publish EntityModel as type <module>.<name> for IOC instances",
           "title": "Name",
           "type": "string"
         },
@@ -132,76 +171,67 @@
           "title": "Description",
           "type": "string"
         },
-        "args": {
+        "pre_defines": {
+          "additionalProperties": {
+            "$ref": "#/$defs/Define"
+          },
           "default": [],
-          "description": "The arguments IOC instance should supply",
-          "items": {
+          "description": "Calculated values to use as additional arguments With Jinja evaluation before all Args",
+          "title": "Pre Defines",
+          "type": "object"
+        },
+        "parameters": {
+          "additionalProperties": {
             "description": "union of arg types",
             "discriminator": {
               "mapping": {
-                "bool": "#/$defs/BoolArg",
-                "enum": "#/$defs/EnumArg",
-                "float": "#/$defs/FloatArg",
-                "id": "#/$defs/IdArg",
-                "int": "#/$defs/IntArg",
-                "object": "#/$defs/ObjectArg",
-                "str": "#/$defs/StrArg"
+                "bool": "#/$defs/BoolParam",
+                "enum": "#/$defs/EnumParam",
+                "float": "#/$defs/FloatParam",
+                "id": "#/$defs/IdParam",
+                "int": "#/$defs/IntParam",
+                "object": "#/$defs/ObjectParam",
+                "str": "#/$defs/StrParam"
               },
               "propertyName": "type"
             },
             "oneOf": [
               {
-                "$ref": "#/$defs/FloatArg"
+                "$ref": "#/$defs/FloatParam"
               },
               {
-                "$ref": "#/$defs/StrArg"
+                "$ref": "#/$defs/StrParam"
               },
               {
-                "$ref": "#/$defs/IntArg"
+                "$ref": "#/$defs/IntParam"
               },
               {
-                "$ref": "#/$defs/BoolArg"
+                "$ref": "#/$defs/BoolParam"
               },
               {
-                "$ref": "#/$defs/ObjectArg"
+                "$ref": "#/$defs/ObjectParam"
               },
               {
-                "$ref": "#/$defs/IdArg"
+                "$ref": "#/$defs/IdParam"
               },
               {
-                "$ref": "#/$defs/EnumArg"
+                "$ref": "#/$defs/EnumParam"
               }
             ]
           },
-          "title": "Args",
-          "type": "array"
+          "default": [],
+          "description": "The arguments IOC instance should supply",
+          "title": "Parameters",
+          "type": "object"
         },
         "post_defines": {
+          "additionalProperties": {
+            "$ref": "#/$defs/Define"
+          },
           "default": [],
           "description": "Calculated values to use as additional arguments With Jinja evaluation after all Args",
-          "items": {
-            "$ref": "#/$defs/Value"
-          },
           "title": "Post Defines",
-          "type": "array"
-        },
-        "pre_defines": {
-          "default": [],
-          "description": "Calculated values to use as additional arguments With Jinja evaluation before all Args",
-          "items": {
-            "$ref": "#/$defs/Value"
-          },
-          "title": "Pre Defines",
-          "type": "array"
-        },
-        "databases": {
-          "default": [],
-          "description": "Databases to instantiate",
-          "items": {
-            "$ref": "#/$defs/Database"
-          },
-          "title": "Databases",
-          "type": "array"
+          "type": "object"
         },
         "pre_init": {
           "default": [],
@@ -233,6 +263,15 @@
             ]
           },
           "title": "Post Init",
+          "type": "array"
+        },
+        "databases": {
+          "default": [],
+          "description": "Databases to instantiate",
+          "items": {
+            "$ref": "#/$defs/Database"
+          },
+          "title": "Databases",
           "type": "array"
         },
         "env_vars": {
@@ -277,7 +316,7 @@
         "name",
         "description"
       ],
-      "title": "EntityDefinition",
+      "title": "EntityModel",
       "type": "object"
     },
     "EntityPVI": {
@@ -330,7 +369,7 @@
       "title": "EntityPVI",
       "type": "object"
     },
-    "EnumArg": {
+    "EnumParam": {
       "additionalProperties": false,
       "description": "An argument with an enum value",
       "properties": {
@@ -341,11 +380,6 @@
             "enum"
           ],
           "title": "Type",
-          "type": "string"
-        },
-        "name": {
-          "description": "Name of the argument that the IOC instance should pass",
-          "title": "Name",
           "type": "string"
         },
         "description": {
@@ -370,11 +404,10 @@
         }
       },
       "required": [
-        "name",
         "description",
         "values"
       ],
-      "title": "EnumArg",
+      "title": "EnumParam",
       "type": "object"
     },
     "EnvironmentVariable": {
@@ -399,7 +432,7 @@
       "title": "EnvironmentVariable",
       "type": "object"
     },
-    "FloatArg": {
+    "FloatParam": {
       "additionalProperties": false,
       "description": "An argument with a float value",
       "properties": {
@@ -410,11 +443,6 @@
             "float"
           ],
           "title": "Type",
-          "type": "string"
-        },
-        "name": {
-          "description": "Name of the argument that the IOC instance should pass",
-          "title": "Name",
           "type": "string"
         },
         "description": {
@@ -441,13 +469,12 @@
         }
       },
       "required": [
-        "name",
         "description"
       ],
-      "title": "FloatArg",
+      "title": "FloatParam",
       "type": "object"
     },
-    "IdArg": {
+    "IdParam": {
       "additionalProperties": false,
       "description": "Explicit ID argument that an object can refer to",
       "properties": {
@@ -458,11 +485,6 @@
             "id"
           ],
           "title": "Type",
-          "type": "string"
-        },
-        "name": {
-          "description": "Name of the argument that the IOC instance should pass",
-          "title": "Name",
           "type": "string"
         },
         "description": {
@@ -484,13 +506,12 @@
         }
       },
       "required": [
-        "name",
         "description"
       ],
-      "title": "IdArg",
+      "title": "IdParam",
       "type": "object"
     },
-    "IntArg": {
+    "IntParam": {
       "additionalProperties": false,
       "description": "An argument with an int value",
       "properties": {
@@ -501,11 +522,6 @@
             "int"
           ],
           "title": "Type",
-          "type": "string"
-        },
-        "name": {
-          "description": "Name of the argument that the IOC instance should pass",
-          "title": "Name",
           "type": "string"
         },
         "description": {
@@ -532,13 +548,12 @@
         }
       },
       "required": [
-        "name",
         "description"
       ],
-      "title": "IntArg",
+      "title": "IntParam",
       "type": "object"
     },
-    "ObjectArg": {
+    "ObjectParam": {
       "additionalProperties": false,
       "description": "A reference to another entity defined in this IOC",
       "properties": {
@@ -549,11 +564,6 @@
             "object"
           ],
           "title": "Type",
-          "type": "string"
-        },
-        "name": {
-          "description": "Name of the argument that the IOC instance should pass",
-          "title": "Name",
           "type": "string"
         },
         "description": {
@@ -576,13 +586,12 @@
         }
       },
       "required": [
-        "name",
         "description"
       ],
-      "title": "ObjectArg",
+      "title": "ObjectParam",
       "type": "object"
     },
-    "StrArg": {
+    "StrParam": {
       "additionalProperties": false,
       "description": "An argument with a str value",
       "properties": {
@@ -593,11 +602,6 @@
             "str"
           ],
           "title": "Type",
-          "type": "string"
-        },
-        "name": {
-          "description": "Name of the argument that the IOC instance should pass",
-          "title": "Name",
           "type": "string"
         },
         "description": {
@@ -619,10 +623,9 @@
         }
       },
       "required": [
-        "name",
         "description"
       ],
-      "title": "StrArg",
+      "title": "StrParam",
       "type": "object"
     },
     "SubEntity": {
@@ -676,54 +679,6 @@
       "title": "Text",
       "type": "object"
     },
-    "Value": {
-      "additionalProperties": false,
-      "description": "A calculated string value for a definition",
-      "properties": {
-        "name": {
-          "description": "Name of the value that the IOC instance will expose",
-          "title": "Name",
-          "type": "string"
-        },
-        "description": {
-          "description": "Description of what the value will be used for",
-          "title": "Description",
-          "type": "string"
-        },
-        "value": {
-          "description": "The contents of the value",
-          "title": "Value"
-        },
-        "type": {
-          "allOf": [
-            {
-              "$ref": "#/$defs/ValueTypes"
-            }
-          ],
-          "default": "str",
-          "description": "The type of the value"
-        }
-      },
-      "required": [
-        "name",
-        "description",
-        "value"
-      ],
-      "title": "Value",
-      "type": "object"
-    },
-    "ValueTypes": {
-      "description": "The type of a value",
-      "enum": [
-        "str",
-        "float",
-        "int",
-        "bool",
-        "list"
-      ],
-      "title": "ValueTypes",
-      "type": "string"
-    },
     "When": {
       "enum": [
         "first",
@@ -735,7 +690,7 @@
     }
   },
   "additionalProperties": false,
-  "description": "Lists the definitions for a support module, this defines what Entities it supports\n\nProvides the deserialize entry point.",
+  "description": "Lists the EntityModels for a support module, this defines what Entities it supports",
   "properties": {
     "shared": {
       "default": [],
@@ -749,18 +704,18 @@
       "title": "Module",
       "type": "string"
     },
-    "defs": {
-      "description": "The definitions an IOC can create using this module",
+    "entity_models": {
+      "description": "The Entity Models an IOC can create using this module",
       "items": {
-        "$ref": "#/$defs/EntityDefinition"
+        "$ref": "#/$defs/EntityModel"
       },
-      "title": "Defs",
+      "title": "Entity Models",
       "type": "array"
     }
   },
   "required": [
     "module",
-    "defs"
+    "entity_models"
   ],
   "title": "Support",
   "type": "object"

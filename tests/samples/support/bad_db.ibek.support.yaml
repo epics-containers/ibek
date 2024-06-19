@@ -5,13 +5,13 @@
 ################################################################################
 module: object_module
 
-defs:
+entity_models:
   - name: RefObject
     description: |
       Example object with a database containing a non-existant arg
-    args:
-      - type: id
-        name: name
+    parameters:
+      name:
+        type: id
         description: Port name
 
     databases:

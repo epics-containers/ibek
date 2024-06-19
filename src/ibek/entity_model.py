@@ -1,5 +1,5 @@
 """
-The Definition class describes what a given support module can instantiate.
+The EntityModel class describes what a given support module can instantiate.
 """
 
 from __future__ import annotations
@@ -10,8 +10,8 @@ from typing import Annotated, Any, Mapping, Optional, Sequence, Union
 from pydantic import Field, PydanticUndefinedAnnotation
 from typing_extensions import Literal
 
-from .args import Arg, IdArg, Value
 from .globals import BaseSettings
+from .parameters import Define, IdParam, Param
 from .sub_entity import SubEntity
 
 
@@ -116,40 +116,36 @@ class EntityPVI(BaseSettings):
 
 
 discriminated = Annotated[  # type: ignore
-    Union[tuple(Arg.__subclasses__())],
+    Union[tuple(Param.__subclasses__())],
     Field(discriminator="type", description="union of arg types"),
 ]
 
 
-class EntityDefinition(BaseSettings):
+class EntityModel(BaseSettings):
     """
-    A single definition of a class of Entity that an IOC instance may instantiate
+    A Model for a class of Entity that an IOC instance may instantiate
     """
 
     name: str = Field(
-        description="Publish Definition as type <module>.<name> for IOC instances"
+        description="Publish EntityModel as type <module>.<name> for IOC instances"
     )
     description: str = Field(
         description="A description of the Support module defined here"
     )
-    # declare Arg as Union of its subclasses for Pydantic to be able to deserialize
-
-    args: Sequence[discriminated] = Field(  # type: ignore
-        description="The arguments IOC instance should supply",
-        default=(),
-    )
-    post_defines: Sequence[Value] = Field(
-        description="Calculated values to use as additional arguments "
-        "With Jinja evaluation after all Args",
-        default=(),
-    )
-    pre_defines: Sequence[Value] = Field(
+    pre_defines: dict[str, Define] = Field(
         description="Calculated values to use as additional arguments "
         "With Jinja evaluation before all Args",
         default=(),
     )
-    databases: Sequence[Database] = Field(
-        description="Databases to instantiate", default=[]
+    # declare Arg as Union of its subclasses for Pydantic to be able to deserialize
+    parameters: dict[str, discriminated] = Field(  # type: ignore
+        description="The arguments IOC instance should supply",
+        default=(),
+    )
+    post_defines: dict[str, Define] = Field(
+        description="Calculated values to use as additional arguments "
+        "With Jinja evaluation after all Args",
+        default=(),
     )
     pre_init: Script = Field(
         description="Startup script snippets to add before iocInit()", default=()
@@ -157,6 +153,9 @@ class EntityDefinition(BaseSettings):
     post_init: Script = Field(
         description="Startup script snippets to add post iocInit(), such as dbpf",
         default=(),
+    )
+    databases: Sequence[Database] = Field(
+        description="Databases to instantiate", default=[]
     )
     env_vars: Sequence[EnvironmentVariable] = Field(
         description="Environment variables to set in the boot script", default=()
@@ -176,8 +175,16 @@ class EntityDefinition(BaseSettings):
         default=(),
     )
 
-    def _get_id_arg(self):
-        """Returns the name of the ID argument for this definition, if it exists"""
-        for arg in self.args:
-            if isinstance(arg, IdArg):
-                return arg.name
+    def _get_id_arg(self) -> str | None:
+        """
+        Lookup which of this object's fields represents its ID. The ID is the
+        field of type IdParam whose value is the identifying name for
+        this object.
+
+        The jinja templates of other objects can refer to this object by the
+        value of its ID field.
+        """
+        for name, param in self.parameters.items():
+            if isinstance(param, IdParam):
+                return name
+        return None

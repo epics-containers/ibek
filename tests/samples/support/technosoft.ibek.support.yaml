@@ -2,48 +2,43 @@
 
 module: motorTML
 
-defs:
+entity_models:
   - name: CreateController
     description: |-
       Creates a Technosoft motion controller connected to a serial line
-
-    args:
-      - type: id
-        name: controllerName
+    parameters:
+      controllerName:
+        type: id
         description: |-
           The name of the controller
-      - type: str
-        name: P
+      P:
+        type: str
         description: |-
           Device PV Prefix
 
-      - type: str
-        name: TTY
+      TTY:
+        type: str
         description: |-
           TTY
 
-      - type: int
-        name: hostid
+      hostid:
+        type: int
         description: |-
           Host ID
 
-      - type: str
-        name: CONFIG
+      CONFIG:
+        type: str
         description: |-
           TML Configuration
         default: |-
           DEV_PATH={{TTY}},HOST_ID={{hostid}}
 
     post_defines:
-      - name: axisConfiguration
+      axisConfiguration:
         description: collects the axis configuration from axis entities
         type: list
         value: []
-
-      # this is not strictly required but it makes the jinja references in
-      # the motorAxis and controller's post_init sections easier to read
-      # as their association is far more obvious
-      - name: axisNum
+      axisNum:
         description: A name for the axis counter (used to generate unique axis numbers)
         value: |-
           {{ "axes_{}".format(controllerName) }}
@@ -55,163 +50,161 @@ defs:
   - name: motorAxis
     description: |-
       Creates a motor axis
-
-    args:
-      - type: object
-        name: controller
+    parameters:
+      controller:
+        type: object
         description: |-
           a reference to the motion controller
 
-      - type: int
-        name: num
+      num:
+        type: int
         description: |-
           The axis number
         default: |-
           {{ _global.incrementor(controller.axisNum) }}
 
-      - type: str
-        name: CHANNEL_PREFIX
+      CHANNEL_PREFIX:
+        type: str
         description: |-
           The axis prefix
         default: ax0
 
-      - type: str
-        name: CHANNEL_ID
+      CHANNEL_ID:
+        type: str
         description: |-
           The axis ID
         default: MOT
 
-      - type: int
-        name: axid
+      axid:
+        type: int
         description: |-
           The axis ID
 
-      - type: str
-        name: axconf
+      axconf:
+        type: str
         description: |-
           The axis configuration
         default: star_vat_phs.t.zip
 
-      - type: enum
-        name: homing
+      homing:
+        type: enum
         description: |-
           Homing direction
         default: LSN
         values:
           LSN:
           LSP:
-
-      - type: int
-        name: NSTEPS
+      NSTEPS:
+        type: int
         description: |-
           Number of steps
         default: 200
 
-      - type: int
-        name: NMICROSTEPS
+      NMICROSTEPS:
+        type: int
         description: |-
           Number of microsteps
         default: 256
 
-      - type: int
-        name: VELO
+      VELO:
+        type: int
         description: |-
           Velocity
         default: 20
 
-      - type: float
-        name: VELO_MIN
+      VELO_MIN:
+        type: float
         description: |-
           Velocity min
         default: 0.1
 
-      - type: float
-        name: VELO_MAX
+      VELO_MAX:
+        type: float
         description: |-
           Velocity Max
         default: 50
 
-      - type: float
-        name: ACCL
+      ACCL:
+        type: float
         description: |-
           Seconds to Velocity
         default: 0.5
 
-      - type: float
-        name: ACCL_MIN
+      ACCL_MIN:
+        type: float
         description: |-
           Seconds to Velocity
         default: 0.01
 
-      - type: float
-        name: ACCL_MAX
+      ACCL_MAX:
+        type: float
         description: |-
           Seconds to Velocity
         default: 1.5
 
-      - type: float
-        name: HAR
+      HAR:
+        type: float
         description: |-
           Homing acceleration
         default: 0.5
 
-      - type: float
-        name: HVEL
+      HVEL:
+        type: float
         description: |-
           Homing Velocity
         default: 10
 
-      - type: int
-        name: JAR
+      JAR:
+        type: int
         description: |-
           JAR
         default: 1
 
-      - type: int
-        name: JVEL
+      JVEL:
+        type: int
         description: |-
           JVEL
         default: 5
 
-      - type: str
-        name: EGU
+      EGU:
+        type: str
         description: |-
           Engineering Units
-        default: "ustep"
+        default: ustep
 
-      - type: float
-        name: SLSP
+      SLSP:
+        type: float
         description: |-
           Limit
         default: 0.8
 
-      - type: int
-        name: ENABLED
+      ENABLED:
+        type: int
         description: |-
           Enabled
         default: 1
 
-      - type: int
-        name: TIMEOUT
+      TIMEOUT:
+        type: int
         description: |-
           Timeout
         default: 0
 
-      - type: str
-        name: ASYN_ADDR
+      ASYN_ADDR:
+        type: str
         description: |-
           Asyn Addr?
         default: "0"
 
-      - type: str
-        name: CONFIG
+      CONFIG:
+        type: str
         description: |-
           Axis configuration string to add to the controller configuration
         default: |-
           ,AXIS_SETUP_{{num}}=$(SUPPORT)/motorTechnosoft/tml_lib/config/{{axconf}},AXIS_ID_{{num}}={{axid}},AXIS_HOMING_SW_{{num}}={{homing}}
 
     post_defines:
-      - name: axisConfiguration
+      axisConfiguration:
         description: Adds an axis configuration entry to the controller's list
         value: |-
           {{ controller.axisConfiguration.append(CONFIG) }}

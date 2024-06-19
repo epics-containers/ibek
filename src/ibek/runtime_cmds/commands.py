@@ -8,8 +8,8 @@ from pvi._format.dls import DLSFormatter
 from pvi._format.template import format_template
 from pvi.device import Device
 
-from ibek.definition import Database
 from ibek.entity_factory import EntityFactory
+from ibek.entity_model import Database
 from ibek.gen_scripts import create_boot_script, create_db_script
 from ibek.globals import GLOBALS, NaturalOrderGroup
 from ibek.ioc import IOC, Entity
@@ -28,7 +28,7 @@ def generate(
     ),
     definitions: List[Path] = typer.Argument(
         ...,
-        help="The filepath to a support module definition file",
+        help="The filepath to a support module yaml file",
         autocompletion=lambda: [],  # Forces path autocompletion
     ),
 ):
@@ -85,7 +85,7 @@ def generate_pvi(ioc: IOC) -> Tuple[List[IndexEntry], List[Tuple[Database, Entit
 
     formatted_pvi_devices: List[str] = []
     for entity in ioc.entities:
-        definition = entity.__definition__
+        definition = entity._model
         if not hasattr(definition, "pvi") or definition.pvi is None:
             continue
         entity_pvi = definition.pvi

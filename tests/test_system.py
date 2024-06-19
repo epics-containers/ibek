@@ -41,12 +41,23 @@ def run_command(command: str, error_OK=False, show=False):
 def test_container_build_and_run(tmp_path: Path):
     """
     make sure that a container build works and that the container can run an IOC
+
+    IMPORTANT: this test runs against the ibek-test-KEEP branch of the
+    ioc-template-example project.
+
+    To update - clone ioc-template-example repo, then:
+      - 'copier update --trust'.
+      - update the ibek-support submodule to the desired version.
+      - update its requirements.txt to point a compatible (this) version of ibek
+      - push the changes to ibek-test-KEEP branch.
+      - verify that it's CI tests pass.
     """
     ioc = "ioc-template-example"
 
-    # get the lakeshore generic container source
+    # get the ioc-template-example generic container source
     os.chdir(tmp_path)
     run_command(f"git clone https://github.com/epics-containers/{ioc}")
+    run_command(f"cd {ioc} && git checkout ibek-test-KEEP")
 
     # patch the dockerfile to include this version of ibek
     ibek = Path(__file__).parent.parent
@@ -61,7 +72,9 @@ def test_container_build_and_run(tmp_path: Path):
     # build the container with latest ibek and latest ibek-support
     os.chdir(ioc)
     run_command("git submodule update --init")
-    run_command("cd ibek-support && git checkout main")
+    # use the submodule version that comes with ibek-test-KEEP branch
+    # so don't do the checkout below.
+    # run_command("cd ibek-support && git checkout main")
     run_command("./build")
 
     # run the container test script

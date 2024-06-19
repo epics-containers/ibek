@@ -5,34 +5,33 @@
 # of the ibek.support schema
 module: motorSim
 
-defs:
+entity_models:
   - name: simMotorController
     description: |-
       Creates a simulation motion controller
-
-    args:
-      - type: id
-        name: controllerName
+    parameters:
+      controllerName:
+        type: id
         description: |-
           The name of the controller and its Asyn Port Name
 
-      - type: str
-        name: P
+      P:
+        type: str
         description: |-
           Device PV Prefix
 
-      - type: int
-        name: numAxes
+      numAxes:
+        type: int
         description: |-
           The number of axes to create
 
-      - type: object
-        name: port
+      port:
+        type: object
         description: |-
           a reference to the asyn port for communication with the controller
 
-      - type: str
-        name: DESC
+      DESC:
+        type: str
         description: |-
           The description of the controller
         default: "Simulated Motion Controller testing escaping: {% raw %} {{enclosed in escaped curly braces}} {% endraw %}"
@@ -60,55 +59,54 @@ defs:
   - name: simMotorAxis
     description: |-
       Creates a simulation motor axis
-
-    args:
-      - type: object
-        name: controller
+    parameters:
+      controller:
+        type: object
         description: |-
           a reference to the motion controller
 
-      - type: str
-        name: M
+      M:
+        type: str
         description: |-
           PV suffix for the motor record
 
-      - type: int
-        name: ADDR
+      ADDR:
+        type: int
         description: |-
           The axis number (allowed to be from 0 to controller.numAxes-1)
 
-      - type: str
-        name: DESC
+      DESC:
+        type: str
         description: |-
           The description of the axis
-        default: "Motor {{ADDR}}"
+        default: Motor {{ADDR}}
 
-      - type: int
-        name: DLLM
+      DLLM:
+        type: int
         description: |-
           The low limit of the axis (in counts)
         default: -20000
 
-      - type: int
-        name: DHLM
+      DHLM:
+        type: int
         description: |-
           The high limit of the axis (in counts)
         default: 20000
 
-      - type: int
-        name: home
+      home:
+        type: int
         description: |-
           The home position of the axis (in counts)
         default: 0
 
-      - type: str # int or jinja string
-        name: start
+      start:
+        type: str # int or jinja string
         description: |-
           The starting position of the axis (in counts)
         default: "{{home}}"
 
-      - type: enum
-        name: DIR
+      DIR:
+        type: enum
         description: |-
           The direction of the axis
         default: 0
@@ -116,26 +114,26 @@ defs:
           Pos: 0
           Neg: 1
 
-      - type: float
-        name: VELO
+      VELO:
+        type: float
         description: |-
           The velocity of the axis (in counts/sec)
         default: 10.0
 
-      - type: str # float or jinja string
-        name: VMAX
+      VMAX:
+        type: str # float or jinja string
         description: |-
           The maximum velocity of the axis (in counts/sec)
         default: "{{VELO}}"
 
-      - type: bool
-        name: is_cs
+      is_cs:
+        type: bool
         description: |-
           Set to True if this axis a coordinate system axis
         default: false
 
-      - type: int
-        name: CS_NUM
+      CS_NUM:
+        type: int
         description: |-
           The coordinate system number for this axis
         default: 0
@@ -154,11 +152,11 @@ defs:
         args:
           P: "{{controller.P}}"
           M:
-          DTYP: "asynMotor"
+          DTYP: asynMotor
           PORT: "{{controller}}"
           ADDR:
           DESC:
-          EGU: "degrees"
+          EGU: degrees
           DIR:
           VELO:
           VMAX:
@@ -172,11 +170,11 @@ defs:
         args:
           P: "{{controller.P}}"
           CS_NUM:
-          DTYP: "asynMotor"
+          DTYP: asynMotor
           PORT: "{{controller}}"
           ADDR:
           DESC:
-          EGU: "degrees"
+          EGU: degrees
           DIR:
           VELO:
           VMAX:

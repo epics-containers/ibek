@@ -2,40 +2,40 @@
 
 module: ipac
 
-defs:
+entity_models:
   - name: Hy8002
     description: |-
       Configure a Hytec 8002 Carrier card
-    args:
-      - type: int
-        name: slot
+    parameters:
+      slot:
+        type: int
         description: |-
           VME Slot number
 
-      - type: id
-        name: IPACid
+      IPACid:
+        type: id
         description: |-
           Identifier for this device
         default: IPAC{{ slot }}
 
-      - type: int
-        name: intLevel
+      intLevel:
+        type: int
         description: |-
           VME Interrupt Level
         default: 2
 
-      - name: test
+      test:
         type: str
         description: test
         default: |
           {{ slot }}
 
-      - name: interrupt_vector
+      interrupt_vector:
         type: object
         description: Interrupt Vector reserved with epics.InterruptVectorVME, count=1
 
     post_defines:
-      - name: card_id
+      card_id:
         value: '{{ _global.incrementor("Carriers", start=0) }}'
         description: Carrier Card Identifier
 
@@ -48,58 +48,57 @@ defs:
   - name: Hy8001
     description: |-
       TODO:ADD DESCRIPTION
-    args:
-      - type: int
-        name: slot
+    parameters:
+      slot:
+        type: int
         description: |-
           VME Slot number
 
-      - type: enum
-        name: direction
+      direction:
+        type: enum
         description: |-
           Direction of digital IO
         values:
           Mixed:
           Input:
           Output:
-
-      - type: int
-        name: cardid
+      cardid:
+        type: int
         description: |-
           cardid?
 
-      - type: int
-        name: intLevel
+      intLevel:
+        type: int
         description: |-
           intLevel?
         default: 0
 
-      - type: int
-        name: clock
+      clock:
+        type: int
         description: |-
           clock?
         default: 0
 
-      - type: int
-        name: scan
+      scan:
+        type: int
         description: |-
           scan?
         default: 0
 
-      - type: bool
-        name: invertin
+      invertin:
+        type: bool
         description: |-
           invertin?
         default: false
 
-      - type: bool
-        name: invertout
+      invertout:
+        type: bool
         description: |-
           invertout?
         default: false
 
-      - type: bool
-        name: ip_support
+      ip_support:
+        type: bool
         description: |-
           ip_support?
         default: false
@@ -113,25 +112,25 @@ defs:
   - name: Hy8005
     description: |-
       TODO:ADD DESCRIPTION
-    args:
-      - type: int
-        name: slot
+    parameters:
+      slot:
+        type: int
         description: |-
           VME Slot number
 
-      - type: int
-        name: cardnum
+      cardnum:
+        type: int
         description: |-
           Card number
 
-      - type: int
-        name: int_level
+      int_level:
+        type: int
         description: |-
           VME Interrupt Level
         default: 1
 
-      - type: int
-        name: hs_int
+      hs_int:
+        type: int
         description: |-
           Dunno actually
         default: 0
@@ -143,14 +142,14 @@ defs:
   - name: Hy8005_Channel
     description: |-
       TODO:ADD DESCRIPTION
-    args:
-      - type: object
-        name: parent
+    parameters:
+      parent:
+        type: object
         description: |-
           Hy8005 card
 
-      - type: enum
-        name: ipslot
+      ipslot:
+        type: enum
         description: |-
           IP slot
         values:
@@ -158,14 +157,13 @@ defs:
           C:
           B:
           D:
-
-      - type: int
-        name: cardnum
+      cardnum:
+        type: int
         description: |-
           EPICS card identification
 
-      - type: enum
-        name: debrate
+      debrate:
+        type: enum
         description: |-
           debrate
         values:
@@ -174,9 +172,8 @@ defs:
           200Hz:
           100Hz:
           500Hz:
-
-      - type: enum
-        name: pwidth
+      pwidth:
+        type: enum
         description: |-
           pwidth
         default: 0
@@ -191,9 +188,8 @@ defs:
           2sec:
           50sec:
           1msec:
-
-      - type: enum
-        name: scanrate
+      scanrate:
+        type: enum
         description: |-
           scanrate
         default: 0
@@ -202,9 +198,8 @@ defs:
           100KHz:
           10KHz:
           1KHz:
-
-      - type: enum
-        name: direction
+      direction:
+        type: enum
         description: |-
           direction
         default: 0
@@ -213,24 +208,22 @@ defs:
           low in/high out:
           outputs:
           low out/high in:
-
-      - type: enum
-        name: clock
+      clock:
+        type: enum
         description: |-
           clock
         default: 0
         values:
           internal:
           external:
-
-      - type: bool
-        name: invertInputs
+      invertInputs:
+        type: bool
         description: |-
           invert inputs
         default: false
 
-      - type: bool
-        name: invertOutputs
+      invertOutputs:
+        type: bool
         description: |-
           invert outputs
         default: false

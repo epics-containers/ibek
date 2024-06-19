@@ -4,36 +4,60 @@
 # 'jinja str/type' capability in Arg default values
 module: listtest
 
-defs:
+shared:
+  - &params1
+    quote:
+      type: str
+      description: |-
+        most hated quote
+      default: |-
+        Smoke me a kipper, I'll be back for breakfast
+    height:
+      type: float
+      description: |-
+        height of the character in cm
+      default: 180.0
+
+  - &params2
+    age:
+      type: int
+      description: |-
+        Age of the character including cryogenic sleep
+      # example int using Jinja
+      default: |-
+        {{ 29 + cryo_years }}
+
+entity_models:
   - name: lister
     description: |-
       The protagonist from Red Dwarf
-
     pre_defines:
-      - name: name
+      name:
         description: |-
           name of the character
         value: |-
           Dave Lister
-
-    args:
-      - type: str
-        name: quote
+      cryo_years:
         description: |-
-          most hated quote
-        default: |-
-          Smoke me a kipper, I'll be back for breakfast
+          years in cryogenic sleep
+        type: int
+        value: 3000000
+        # https://en.wikipedia.org/wiki/Dave_Lister#:~:text=As%20a%20result%2C%20Holly%20keeps,radiation%20levels%20return%20to%20normal.
 
-      - type: bool
-        name: is_human
+    parameters:
+      # example of using aliases to merge multiple dictionaries into this one
+      <<: [*params1, *params2]
+
+      is_human:
+        type: bool
         description: |-
           is the character human
         # example bool using Jinja
         default: |-
           {{ name == 'Dave Lister' }}
 
-      - type: int
-        name: age
+      age:
+        type: int
         description: |-
           Age of the character including cryogenic sleep
         # example int using Jinja
@@ -41,15 +65,7 @@ defs:
           {{ 29 + cryo_years }}
 
     post_defines:
-      - name: cryo_years
-        description: |-
-          years in cryogenic sleep
-        type: int
-        value: 3000000
-        # https://en.wikipedia.org/wiki/Dave_Lister#:~:text=As%20a%20result%2C%20Holly%20keeps,radiation%20levels%20return%20to%20normal.
-
-      # example type list value not using Jinja
-      - name: friends
+      friends:
         description: |-
           friends of Lister
         type: list
@@ -60,7 +76,7 @@ defs:
           - Holly
 
       # example type list value using Jinja
-      - name: time_vortex
+      time_vortex:
         description: |-
           friends after the Time Hole episode
         type: list
@@ -70,8 +86,9 @@ defs:
     pre_init:
       - value: |
 
-
-          Lister, age {{age}}, who does not like to hear "{{quote}}" has friends:
+          Lister, age {{age}}, who does not like to hear
+            "{{quote}}"
+          has friends-
           {#- example Jinja loop which is discouraged, but demos we have a list -#}
           {%- for friend in friends %}
           o {{friend}}

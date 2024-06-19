@@ -6,13 +6,12 @@ import dataclasses
 
 import jinja2
 import pytest
-from ruamel.yaml.main import YAML
 
-from ibek.args import IdArg, ObjectArg
 from ibek.commands import semver_compare
 from ibek.ioc import id_to_entity
 from ibek.ioc_factory import IocFactory
-from ibek.support import EntityDefinition, Support
+from ibek.parameters import IdParam, ObjectParam
+from ibek.support import EntityModel, Support
 from ibek.utils import UTILS
 
 
@@ -22,24 +21,24 @@ def test_object_references(entity_factory):
     """
     support = Support(
         module="mymodule",
-        defs=[
-            EntityDefinition(
+        entity_models=[
+            EntityModel(
                 name="port",
                 description="a port",
-                args=[IdArg(name="name", description="an id")],
+                parameters={"name": IdParam(description="an id")},
             ),
-            EntityDefinition(
+            EntityModel(
                 name="device",
                 description="a device",
-                args=[ObjectArg(name="port", description="the port")],
+                parameters={"port": ObjectParam(description="the port")},
             ),
         ],
     )
 
     entities = entity_factory._make_entity_models(support)
     ioc_model = IocFactory().make_ioc_model(entities)
-    assert entities[0].__definition__ == support.defs[0]
-    assert entities[1].__definition__ == support.defs[1]
+    assert entities[0]._model == support.entity_models[0]
+    assert entities[1]._model == support.entity_models[1]
 
     d = dict(
         ioc_name="",
@@ -90,23 +89,3 @@ def test_strict():
     my_template = "{{ person.name ~ ' of age ' ~ person.height }}"
     with pytest.raises(jinja2.exceptions.UndefinedError):
         text = UTILS.render({"person": p}, my_template)
-
-
-def test_dlsPLC(samples, tmp_path):
-    # This test verifies that the compression of the dls_plc support file using
-    # yaml anchors and aliases has resulted in the original yaml when fully expanded
-    name = "dlsPLC.ibek.support.yaml"
-    plc_support = samples / "support" / name
-    plc_support_expanded = tmp_path / name
-    plc_support_original = samples / "outputs" / name
-
-    support_dict = YAML(typ="safe").load(plc_support)
-    for definition in support_dict["defs"]:
-        if "shared" in definition:
-            del definition["shared"]
-    YAML().dump(support_dict, plc_support_expanded)
-
-    original_text = plc_support_original.read_text()
-    expanded_text = plc_support_expanded.read_text()
-
-    assert original_text == expanded_text

@@ -18,34 +18,6 @@
           "title": "Entity Enabled",
           "type": "boolean"
         },
-        "name": {
-          "default": "Dave Lister",
-          "description": "name of the character",
-          "title": "Name",
-          "type": "string"
-        },
-        "quote": {
-          "default": "Smoke me a kipper, I'll be back for breakfast",
-          "description": "most hated quote",
-          "title": "Quote",
-          "type": "string"
-        },
-        "is_human": {
-          "anyOf": [
-            {
-              "description": "jinja that renders to <class 'bool'>",
-              "pattern": ".*\\{\\{.*\\}\\}.*",
-              "type": "string"
-            },
-            {
-              "description": "is the character human",
-              "type": "boolean"
-            }
-          ],
-          "default": "{{ name == 'Dave Lister' }}",
-          "description": "union of <class 'bool'> and jinja representation of {typ}",
-          "title": "Is Human"
-        },
         "age": {
           "anyOf": [
             {
@@ -62,60 +34,43 @@
           "description": "union of <class 'int'> and jinja representation of {typ}",
           "title": "Age"
         },
-        "cryo_years": {
-          "anyOf": [
-            {
-              "description": "jinja that renders to <class 'int'>",
-              "pattern": ".*\\{\\{.*\\}\\}.*",
-              "type": "string"
-            },
-            {
-              "description": "years in cryogenic sleep",
-              "type": "integer"
-            }
-          ],
-          "default": 3000000,
-          "description": "union of <class 'int'> and jinja representation of {typ}",
-          "title": "Cryo Years"
+        "quote": {
+          "default": "Smoke me a kipper, I'll be back for breakfast",
+          "description": "most hated quote",
+          "title": "Quote",
+          "type": "string"
         },
-        "friends": {
+        "height": {
           "anyOf": [
             {
-              "description": "jinja that renders to <class 'list'>",
+              "description": "jinja that renders to <class 'float'>",
               "pattern": ".*\\{\\{.*\\}\\}.*",
               "type": "string"
             },
             {
-              "description": "friends of Lister",
-              "items": {},
-              "type": "array"
+              "description": "height of the character in cm",
+              "type": "number"
             }
           ],
-          "default": [
-            "Rimmer",
-            "Cat",
-            "Kryten",
-            "Holly"
-          ],
-          "description": "union of <class 'list'> and jinja representation of {typ}",
-          "title": "Friends"
+          "default": 180.0,
+          "description": "union of <class 'float'> and jinja representation of {typ}",
+          "title": "Height"
         },
-        "time_vortex": {
+        "is_human": {
           "anyOf": [
             {
-              "description": "jinja that renders to <class 'list'>",
+              "description": "jinja that renders to <class 'bool'>",
               "pattern": ".*\\{\\{.*\\}\\}.*",
               "type": "string"
             },
             {
-              "description": "friends after the Time Hole episode",
-              "items": {},
-              "type": "array"
+              "description": "is the character human",
+              "type": "boolean"
             }
           ],
-          "default": "{{ (friends * 3) | sort }}",
-          "description": "union of <class 'list'> and jinja representation of {typ}",
-          "title": "Time Vortex"
+          "default": "{{ name == 'Dave Lister' }}",
+          "description": "union of <class 'bool'> and jinja representation of {typ}",
+          "title": "Is Human"
         }
       },
       "required": [
