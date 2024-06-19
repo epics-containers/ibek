@@ -175,8 +175,16 @@ class EntityModel(BaseSettings):
         default=(),
     )
 
-    def _get_id(self) -> str | None:
-        """Return the name of the `IdParam` in this `EntityModel`s parameters"""
+    def _get_id_arg(self) -> str | None:
+        """
+        Lookup which of this object's fields represents its ID. The ID is the
+        field of type IdParam whose value is the identifying name for
+        this object.
+
+        The jinja templates of other objects can refer to this object by the
+        value of its ID field.
+        """
         for name, param in self.parameters.items():
             if isinstance(param, IdParam):
                 return name
+        return None

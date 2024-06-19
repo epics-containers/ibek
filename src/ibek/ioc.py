@@ -122,7 +122,16 @@ class Entity(BaseSettings):
         return self
 
     def __str__(self):
-        """Render this Entity as the name of its IdParam within Jinja contexts"""
+        """
+        When a jinja template refers to an object by itself e.g.
+            # this is the startup entry for {{ my_entity }}
+        Jinja will attempt to render the object as a string and this
+        method will be called.
+
+        The behaviour is to print the ID of the object. Thus we look up
+        which of our object's fields is the ID field and return the
+        value of that field.
+        """
         id_name = self._model._get_id_arg()
         if id_name:
             return getattr(self, id_name)
