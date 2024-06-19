@@ -3,32 +3,33 @@
 Converts .ibek.support.yaml files from the v2.0 format to the v3.0 format.
 Can also convert ioc.yaml files as the changes re __utils__ are the same.
 
-Changes:
-- 'defs' are now 'enitiy_definitions'
-- 'args' are now 'parameters'
-- parameters are a dictionary of dictionaries instead of a list of dictionaries
-- parameters no longer have a name field as the key in the dictionary is the name
-- values is now post_defines and is also a dictionary of dictionaries
-- pre_values is now pre_defines and is also a dictionary of dictionaries
-- __utils__ is now _global
-- __utils__ functions have changed:
-    - get_var -> get
-    - set_var -> set
-    - counter -> incrementor
+The schema changes are as follows:
+
+- `defs` are now `entity_models`
+- `args` are now `parameters`
+- `parameters` are a dictionary of dictionaries instead of a list of dictionaries
+- `parameters` no longer have a name field as the key in the dictionary is the name
+- `values` is now `post_defines` and is also a dictionary of dictionaries
+- `pre_values` is now `pre_defines` and is also a dictionary of dictionaries
+- `__utils__` is now `_global`
+- `_global` functions have changed:
+    - `get_var` -> `get`
+    - `set_var` -> `set`
+    - `counter` -> `incrementor`
       - behaviour has changed: the --increment and --stop flags are interpreted
         on every invocation of the incrementor function (so non linear counters
         are possible)
-      - counters current value is accessible via _global.get(counterName)
+      - incrementors current value is accessible via _global.get(incrementorName)
 
 Backward compatible changes:
 - object refs are literally the object - so you can modify a referenced object's
-  attributes (with appropriate care)
-- defines now may have optional type: which defaults to str and may be
-    - list (of Any), int, float, bool
-- each definition may have 'shared' field which is a list of Any
-- there is also a global 'shared' at the root level
-- shared are scratch areas in which to place anchors that can be referred to
-  by aliases
+  attributes (with appropriate care!!)
+- `pre_defines` and `post_defines` now may have optional `type:` which defaults to `str` and may be
+    - `list` (of Any), `int`, `float`, `bool`
+- each `entity_model` may have a `shared:` field which is a `list` of `Any`
+- there is also a global `shared:` at the root level
+- `shared:` are scratch areas in which to place anchors that can be referred to by aliases - and are therefore useful for placing repeating patterns (especially of 'parameters') and then using aliases where these repeats are required.
+
 """
 
 import re
