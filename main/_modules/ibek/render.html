@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>ibek.render &#8212; ibek 3.0.0b6.dev40+g9c20f5a7 documentation</title>
+    <title>ibek.render &#8212; ibek 3.0.0b6.dev41+g7db3a3d2 documentation</title>
   
   
   
@@ -37,7 +37,7 @@
 <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=3ee479438cf8b5e0d341" />
   <script src="../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=3ee479438cf8b5e0d341"></script>
 
-    <script src="../../_static/documentation_options.js?v=df5c64c2"></script>
+    <script src="../../_static/documentation_options.js?v=e334ce59"></script>
     <script src="../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -459,7 +459,7 @@ document.write(`
 
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">,</span> <span class="n">Union</span>
 
-<span class="kn">from</span> <span class="nn">.definition</span> <span class="kn">import</span> <span class="n">Comment</span><span class="p">,</span> <span class="n">Script</span><span class="p">,</span> <span class="n">Text</span><span class="p">,</span> <span class="n">When</span>
+<span class="kn">from</span> <span class="nn">.entity_model</span> <span class="kn">import</span> <span class="n">Comment</span><span class="p">,</span> <span class="n">Script</span><span class="p">,</span> <span class="n">Text</span><span class="p">,</span> <span class="n">When</span>
 <span class="kn">from</span> <span class="nn">.ioc</span> <span class="kn">import</span> <span class="n">Entity</span>
 <span class="kn">from</span> <span class="nn">.utils</span> <span class="kn">import</span> <span class="n">UTILS</span>
 
@@ -470,7 +470,7 @@ document.write(`
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    A class for generating snippets of startup script / EPICS DB</span>
 <span class="sd">    by using Jinja to combine snippet templates from support module</span>
-<span class="sd">    definition yaml with substitution values supplied in ioc entity yaml</span>
+<span class="sd">    yaml with substitution values supplied in ioc entity yaml</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">:</span> <span class="s2">&quot;Render&quot;</span><span class="p">):</span>
@@ -489,13 +489,13 @@ document.write(`
 <span class="sd">        but we pass all strings though jinja again to render any other jinja</span>
 <span class="sd">        in the IOC (e.g. database and function entries)</span>
 
-<span class="sd">        once uses the name of the definition + suffix to track which lines</span>
+<span class="sd">        once uses the name of the model + suffix to track which lines</span>
 <span class="sd">        have been rendered already. The suffix can be used where a given</span>
 <span class="sd">        Entity has more than one element to render once (e.g. functions)</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="k">if</span> <span class="n">when</span> <span class="o">==</span> <span class="n">When</span><span class="o">.</span><span class="n">first</span><span class="o">.</span><span class="n">value</span><span class="p">:</span>
-            <span class="n">name</span> <span class="o">=</span> <span class="n">instance</span><span class="o">.</span><span class="n">__definition__</span><span class="o">.</span><span class="n">name</span> <span class="o">+</span> <span class="n">suffix</span>
+            <span class="n">name</span> <span class="o">=</span> <span class="n">instance</span><span class="o">.</span><span class="n">_model</span><span class="o">.</span><span class="n">name</span> <span class="o">+</span> <span class="n">suffix</span>
             <span class="k">if</span> <span class="n">name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">once_done</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">once_done</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
@@ -535,7 +535,7 @@ document.write(`
 <span class="sd">        render the startup script by combining the jinja template from</span>
 <span class="sd">        an entity with the arguments from an Entity</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">pre_init</span> <span class="o">=</span> <span class="n">instance</span><span class="o">.</span><span class="n">__definition__</span><span class="o">.</span><span class="n">pre_init</span>
+        <span class="n">pre_init</span> <span class="o">=</span> <span class="n">instance</span><span class="o">.</span><span class="n">_model</span><span class="o">.</span><span class="n">pre_init</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">render_script</span><span class="p">(</span><span class="n">instance</span><span class="p">,</span> <span class="n">pre_init</span><span class="p">)</span></div>
 
 
@@ -546,7 +546,7 @@ document.write(`
 <span class="sd">        render the post-iocInit entries by combining the jinja template</span>
 <span class="sd">        from an entity with the arguments from an Entity</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">post_init</span> <span class="o">=</span> <span class="n">instance</span><span class="o">.</span><span class="n">__definition__</span><span class="o">.</span><span class="n">post_init</span>
+        <span class="n">post_init</span> <span class="o">=</span> <span class="n">instance</span><span class="o">.</span><span class="n">_model</span><span class="o">.</span><span class="n">post_init</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">render_script</span><span class="p">(</span><span class="n">instance</span><span class="p">,</span> <span class="n">post_init</span><span class="p">)</span></div>
 
 
@@ -557,7 +557,7 @@ document.write(`
 <span class="sd">        render the environment variable elements by combining the jinja template</span>
 <span class="sd">        from an entity with the arguments from an Entity</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">variables</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">instance</span><span class="o">.</span><span class="n">__definition__</span><span class="p">,</span> <span class="s2">&quot;env_vars&quot;</span><span class="p">)</span>
+        <span class="n">variables</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">instance</span><span class="o">.</span><span class="n">_model</span><span class="p">,</span> <span class="s2">&quot;env_vars&quot;</span><span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">variables</span><span class="p">:</span>
             <span class="k">return</span> <span class="kc">None</span>
 

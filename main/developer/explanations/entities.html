@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Modules, Definitions and Entities &#8212; ibek 3.0.0b6.dev40+g9c20f5a7 documentation</title>
+    <title>Modules, Definitions and Entities &#8212; ibek 3.0.0b6.dev41+g7db3a3d2 documentation</title>
   
   
   
@@ -38,7 +38,7 @@
 <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=3ee479438cf8b5e0d341" />
   <script src="../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=3ee479438cf8b5e0d341"></script>
 
-    <script src="../../_static/documentation_options.js?v=df5c64c2"></script>
+    <script src="../../_static/documentation_options.js?v=e334ce59"></script>
     <script src="../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -560,34 +560,33 @@ the above arguments</p></li>
 # of the ibek.support schema
 module: motorSim
 
-defs:
+entity_models:
   - name: simMotorController
     description: |-
       Creates a simulation motion controller
-
-    args:
-      - type: id
-        name: controllerName
+    parameters:
+      controllerName:
+        type: id
         description: |-
           The name of the controller and its Asyn Port Name
 
-      - type: str
-        name: P
+      P:
+        type: str
         description: |-
           Device PV Prefix
 
-      - type: int
-        name: numAxes
+      numAxes:
+        type: int
         description: |-
           The number of axes to create
 
-      - type: object
-        name: port
+      port:
+        type: object
         description: |-
           a reference to the asyn port for communication with the controller
 
-      - type: str
-        name: DESC
+      DESC:
+        type: str
         description: |-
           The description of the controller
         default: &quot;Simulated Motion Controller testing escaping: {% raw %} {{enclosed in escaped curly braces}} {% endraw %}&quot;
@@ -615,55 +614,54 @@ defs:
   - name: simMotorAxis
     description: |-
       Creates a simulation motor axis
-
-    args:
-      - type: object
-        name: controller
+    parameters:
+      controller:
+        type: object
         description: |-
           a reference to the motion controller
 
-      - type: str
-        name: M
+      M:
+        type: str
         description: |-
           PV suffix for the motor record
 
-      - type: int
-        name: ADDR
+      ADDR:
+        type: int
         description: |-
           The axis number (allowed to be from 0 to controller.numAxes-1)
 
-      - type: str
-        name: DESC
+      DESC:
+        type: str
         description: |-
           The description of the axis
-        default: &quot;Motor {{ADDR}}&quot;
+        default: Motor {{ADDR}}
 
-      - type: int
-        name: DLLM
+      DLLM:
+        type: int
         description: |-
           The low limit of the axis (in counts)
         default: -20000
 
-      - type: int
-        name: DHLM
+      DHLM:
+        type: int
         description: |-
           The high limit of the axis (in counts)
         default: 20000
 
-      - type: int
-        name: home
+      home:
+        type: int
         description: |-
           The home position of the axis (in counts)
         default: 0
 
-      - type: str # int or jinja string
-        name: start
+      start:
+        type: str # int or jinja string
         description: |-
           The starting position of the axis (in counts)
         default: &quot;{{home}}&quot;
 
-      - type: enum
-        name: DIR
+      DIR:
+        type: enum
         description: |-
           The direction of the axis
         default: 0
@@ -671,26 +669,26 @@ defs:
           Pos: 0
           Neg: 1
 
-      - type: float
-        name: VELO
+      VELO:
+        type: float
         description: |-
           The velocity of the axis (in counts/sec)
         default: 10.0
 
-      - type: str # float or jinja string
-        name: VMAX
+      VMAX:
+        type: str # float or jinja string
         description: |-
           The maximum velocity of the axis (in counts/sec)
         default: &quot;{{VELO}}&quot;
 
-      - type: bool
-        name: is_cs
+      is_cs:
+        type: bool
         description: |-
           Set to True if this axis a coordinate system axis
         default: false
 
-      - type: int
-        name: CS_NUM
+      CS_NUM:
+        type: int
         description: |-
           The coordinate system number for this axis
         default: 0
@@ -709,11 +707,11 @@ defs:
         args:
           P: &quot;{{controller.P}}&quot;
           M:
-          DTYP: &quot;asynMotor&quot;
+          DTYP: asynMotor
           PORT: &quot;{{controller}}&quot;
           ADDR:
           DESC:
-          EGU: &quot;degrees&quot;
+          EGU: degrees
           DIR:
           VELO:
           VMAX:
@@ -727,11 +725,11 @@ defs:
         args:
           P: &quot;{{controller.P}}&quot;
           CS_NUM:
-          DTYP: &quot;asynMotor&quot;
+          DTYP: asynMotor
           PORT: &quot;{{controller}}&quot;
           ADDR:
           DESC:
-          EGU: &quot;degrees&quot;
+          EGU: degrees
           DIR:
           VELO:
           VMAX:
@@ -827,7 +825,7 @@ file that ibek will generate from it.</p>
     <span class="n">M</span><span class="p">:</span> <span class="n">M</span><span class="p">{{</span><span class="n">ADDR</span><span class="p">}}</span>
     <span class="n">ADDR</span><span class="p">:</span> <span class="mi">0</span>
     <span class="c1"># Also use ioc_name to verify jinja templating of ioc_name</span>
-    <span class="n">DESC</span><span class="p">:</span> <span class="s2">&quot;Motor {{ADDR}} for ioc {{ioc_name}}&quot;</span>
+    <span class="n">DESC</span><span class="p">:</span> <span class="n">Motor</span> <span class="p">{{</span><span class="n">ADDR</span><span class="p">}}</span> <span class="k">for</span> <span class="n">ioc</span> <span class="p">{{</span><span class="n">ioc_name</span><span class="p">}}</span>
     <span class="n">home</span><span class="p">:</span> <span class="mi">500</span>
 
   <span class="o">-</span> <span class="nb">type</span><span class="p">:</span> <span class="n">motorSim</span><span class="o">.</span><span class="n">simMotorAxis</span>
@@ -835,7 +833,7 @@ file that ibek will generate from it.</p>
     <span class="n">M</span><span class="p">:</span> <span class="n">M</span><span class="p">{{</span><span class="n">ADDR</span><span class="p">}}</span>
     <span class="n">ADDR</span><span class="p">:</span> <span class="mi">1</span>
     <span class="c1"># verify escaping for jinja templating</span>
-    <span class="n">DESC</span><span class="p">:</span> <span class="s2">&quot;Motor {{ADDR}} {</span><span class="si">% r</span><span class="s2">aw %} {{enclosed in escaped curly braces}} {</span><span class="si">% e</span><span class="s2">ndraw %}&quot;</span>
+    <span class="n">DESC</span><span class="p">:</span> <span class="n">Motor</span> <span class="p">{{</span><span class="n">ADDR</span><span class="p">}}</span> <span class="p">{</span><span class="o">%</span> <span class="n">raw</span> <span class="o">%</span><span class="p">}</span> <span class="p">{{</span><span class="n">enclosed</span> <span class="ow">in</span> <span class="n">escaped</span> <span class="n">curly</span> <span class="n">braces</span><span class="p">}}</span> <span class="p">{</span><span class="o">%</span> <span class="n">endraw</span> <span class="o">%</span><span class="p">}</span>
     <span class="n">home</span><span class="p">:</span> <span class="mi">500</span>
 
   <span class="o">-</span> <span class="nb">type</span><span class="p">:</span> <span class="n">motorSim</span><span class="o">.</span><span class="n">simMotorAxis</span>
@@ -849,14 +847,14 @@ file that ibek will generate from it.</p>
     <span class="n">controller</span><span class="p">:</span> <span class="n">controllerOne</span>
     <span class="n">M</span><span class="p">:</span> <span class="n">M</span><span class="p">{{</span><span class="n">ADDR</span><span class="p">}}</span>
     <span class="n">ADDR</span><span class="p">:</span> <span class="mi">3</span>
-    <span class="n">DESC</span><span class="p">:</span> <span class="s2">&quot;Motor {{ADDR}}&quot;</span>
+    <span class="n">DESC</span><span class="p">:</span> <span class="n">Motor</span> <span class="p">{{</span><span class="n">ADDR</span><span class="p">}}</span>
     <span class="n">home</span><span class="p">:</span> <span class="mi">2500</span>
 
   <span class="o">-</span> <span class="nb">type</span><span class="p">:</span> <span class="n">motorSim</span><span class="o">.</span><span class="n">simMotorAxis</span>
     <span class="n">controller</span><span class="p">:</span> <span class="n">controllerOne</span>
     <span class="n">M</span><span class="p">:</span> <span class="n">CS_M</span><span class="p">{{</span><span class="n">ADDR</span><span class="p">}}</span>
     <span class="n">ADDR</span><span class="p">:</span> <span class="mi">1</span>
-    <span class="n">DESC</span><span class="p">:</span> <span class="s2">&quot;CS Motor {{ADDR}}&quot;</span>
+    <span class="n">DESC</span><span class="p">:</span> <span class="n">CS</span> <span class="n">Motor</span> <span class="p">{{</span><span class="n">ADDR</span><span class="p">}}</span>
     <span class="n">home</span><span class="p">:</span> <span class="mi">100</span>
     <span class="n">CS_NUM</span><span class="p">:</span> <span class="mi">3</span>
     <span class="n">is_cs</span><span class="p">:</span> <span class="n">true</span>
@@ -865,7 +863,7 @@ file that ibek will generate from it.</p>
     <span class="n">controller</span><span class="p">:</span> <span class="n">controllerOne</span>
     <span class="n">M</span><span class="p">:</span> <span class="n">CS_M</span><span class="p">{{</span><span class="n">ADDR</span><span class="p">}}</span>
     <span class="n">ADDR</span><span class="p">:</span> <span class="mi">2</span>
-    <span class="n">DESC</span><span class="p">:</span> <span class="s2">&quot;CS Motor {{ADDR}}&quot;</span>
+    <span class="n">DESC</span><span class="p">:</span> <span class="n">CS</span> <span class="n">Motor</span> <span class="p">{{</span><span class="n">ADDR</span><span class="p">}}</span>
     <span class="n">home</span><span class="p">:</span> <span class="mi">100</span>
     <span class="n">CS_NUM</span><span class="p">:</span> <span class="mi">3</span>
     <span class="n">is_cs</span><span class="p">:</span> <span class="n">true</span>
@@ -966,7 +964,7 @@ the container or during container development.</p>
 <div><details>
 <summary><a>ibek.support.schema.json</a></summary><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
   <span class="s2">&quot;$defs&quot;</span><span class="p">:</span> <span class="p">{</span>
-    <span class="s2">&quot;BoolArg&quot;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="s2">&quot;BoolParam&quot;</span><span class="p">:</span> <span class="p">{</span>
       <span class="s2">&quot;additionalProperties&quot;</span><span class="p">:</span> <span class="n">false</span><span class="p">,</span>
       <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;An argument with an bool value&quot;</span><span class="p">,</span>
       <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span>
@@ -977,11 +975,6 @@ the container or during container development.</p>
             <span class="s2">&quot;bool&quot;</span>
           <span class="p">],</span>
           <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Type&quot;</span><span class="p">,</span>
-          <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
-        <span class="p">},</span>
-        <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="p">{</span>
-          <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Name of the argument that the IOC instance should pass&quot;</span><span class="p">,</span>
-          <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Name&quot;</span><span class="p">,</span>
           <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
         <span class="p">},</span>
         <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="p">{</span>
@@ -1008,10 +1001,9 @@ the container or during container development.</p>
         <span class="p">}</span>
       <span class="p">},</span>
       <span class="s2">&quot;required&quot;</span><span class="p">:</span> <span class="p">[</span>
-        <span class="s2">&quot;name&quot;</span><span class="p">,</span>
         <span class="s2">&quot;description&quot;</span>
       <span class="p">],</span>
-      <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;BoolArg&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;BoolParam&quot;</span><span class="p">,</span>
       <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span>
     <span class="p">},</span>
     <span class="s2">&quot;Comment&quot;</span><span class="p">:</span> <span class="p">{</span>
@@ -1084,12 +1076,57 @@ the container or during container development.</p>
       <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Database&quot;</span><span class="p">,</span>
       <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span>
     <span class="p">},</span>
-    <span class="s2">&quot;EntityDefinition&quot;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="s2">&quot;Define&quot;</span><span class="p">:</span> <span class="p">{</span>
       <span class="s2">&quot;additionalProperties&quot;</span><span class="p">:</span> <span class="n">false</span><span class="p">,</span>
-      <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;A single definition of a class of Entity that an IOC instance may instantiate&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;A calculated value for an Entity Model&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="p">{</span>
+          <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Description of what the value will be used for&quot;</span><span class="p">,</span>
+          <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Description&quot;</span><span class="p">,</span>
+          <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="p">{</span>
+          <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;The contents of the value&quot;</span><span class="p">,</span>
+          <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Value&quot;</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="p">{</span>
+          <span class="s2">&quot;anyOf&quot;</span><span class="p">:</span> <span class="p">[</span>
+            <span class="p">{</span>
+              <span class="s2">&quot;$ref&quot;</span><span class="p">:</span> <span class="s2">&quot;#/$defs/DefineType&quot;</span>
+            <span class="p">},</span>
+            <span class="p">{</span>
+              <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;null&quot;</span>
+            <span class="p">}</span>
+          <span class="p">],</span>
+          <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="s2">&quot;str&quot;</span><span class="p">,</span>
+          <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;The type of the value&quot;</span>
+        <span class="p">}</span>
+      <span class="p">},</span>
+      <span class="s2">&quot;required&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="s2">&quot;description&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;value&quot;</span>
+      <span class="p">],</span>
+      <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Define&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span>
+    <span class="p">},</span>
+    <span class="s2">&quot;DefineType&quot;</span><span class="p">:</span> <span class="p">{</span>
+      <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;The type of a value&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;enum&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="s2">&quot;str&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;float&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;int&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;bool&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;list&quot;</span>
+      <span class="p">],</span>
+      <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;DefineType&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
+    <span class="p">},</span>
+    <span class="s2">&quot;EntityModel&quot;</span><span class="p">:</span> <span class="p">{</span>
+      <span class="s2">&quot;additionalProperties&quot;</span><span class="p">:</span> <span class="n">false</span><span class="p">,</span>
+      <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;A Model for a class of Entity that an IOC instance may instantiate&quot;</span><span class="p">,</span>
       <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span>
         <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="p">{</span>
-          <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Publish Definition as type &lt;module&gt;.&lt;name&gt; for IOC instances&quot;</span><span class="p">,</span>
+          <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Publish EntityModel as type &lt;module&gt;.&lt;name&gt; for IOC instances&quot;</span><span class="p">,</span>
           <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Name&quot;</span><span class="p">,</span>
           <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
         <span class="p">},</span>
@@ -1098,76 +1135,67 @@ the container or during container development.</p>
           <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Description&quot;</span><span class="p">,</span>
           <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
         <span class="p">},</span>
-        <span class="s2">&quot;args&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;pre_defines&quot;</span><span class="p">:</span> <span class="p">{</span>
+          <span class="s2">&quot;additionalProperties&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;$ref&quot;</span><span class="p">:</span> <span class="s2">&quot;#/$defs/Define&quot;</span>
+          <span class="p">},</span>
           <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="p">[],</span>
-          <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;The arguments IOC instance should supply&quot;</span><span class="p">,</span>
-          <span class="s2">&quot;items&quot;</span><span class="p">:</span> <span class="p">{</span>
+          <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Calculated values to use as additional arguments With Jinja evaluation before all Args&quot;</span><span class="p">,</span>
+          <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Pre Defines&quot;</span><span class="p">,</span>
+          <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;parameters&quot;</span><span class="p">:</span> <span class="p">{</span>
+          <span class="s2">&quot;additionalProperties&quot;</span><span class="p">:</span> <span class="p">{</span>
             <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;union of arg types&quot;</span><span class="p">,</span>
             <span class="s2">&quot;discriminator&quot;</span><span class="p">:</span> <span class="p">{</span>
               <span class="s2">&quot;mapping&quot;</span><span class="p">:</span> <span class="p">{</span>
-                <span class="s2">&quot;bool&quot;</span><span class="p">:</span> <span class="s2">&quot;#/$defs/BoolArg&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;enum&quot;</span><span class="p">:</span> <span class="s2">&quot;#/$defs/EnumArg&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;float&quot;</span><span class="p">:</span> <span class="s2">&quot;#/$defs/FloatArg&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="s2">&quot;#/$defs/IdArg&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;int&quot;</span><span class="p">:</span> <span class="s2">&quot;#/$defs/IntArg&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;object&quot;</span><span class="p">:</span> <span class="s2">&quot;#/$defs/ObjectArg&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;str&quot;</span><span class="p">:</span> <span class="s2">&quot;#/$defs/StrArg&quot;</span>
+                <span class="s2">&quot;bool&quot;</span><span class="p">:</span> <span class="s2">&quot;#/$defs/BoolParam&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;enum&quot;</span><span class="p">:</span> <span class="s2">&quot;#/$defs/EnumParam&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;float&quot;</span><span class="p">:</span> <span class="s2">&quot;#/$defs/FloatParam&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="s2">&quot;#/$defs/IdParam&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;int&quot;</span><span class="p">:</span> <span class="s2">&quot;#/$defs/IntParam&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;object&quot;</span><span class="p">:</span> <span class="s2">&quot;#/$defs/ObjectParam&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;str&quot;</span><span class="p">:</span> <span class="s2">&quot;#/$defs/StrParam&quot;</span>
               <span class="p">},</span>
               <span class="s2">&quot;propertyName&quot;</span><span class="p">:</span> <span class="s2">&quot;type&quot;</span>
             <span class="p">},</span>
             <span class="s2">&quot;oneOf&quot;</span><span class="p">:</span> <span class="p">[</span>
               <span class="p">{</span>
-                <span class="s2">&quot;$ref&quot;</span><span class="p">:</span> <span class="s2">&quot;#/$defs/FloatArg&quot;</span>
+                <span class="s2">&quot;$ref&quot;</span><span class="p">:</span> <span class="s2">&quot;#/$defs/FloatParam&quot;</span>
               <span class="p">},</span>
               <span class="p">{</span>
-                <span class="s2">&quot;$ref&quot;</span><span class="p">:</span> <span class="s2">&quot;#/$defs/StrArg&quot;</span>
+                <span class="s2">&quot;$ref&quot;</span><span class="p">:</span> <span class="s2">&quot;#/$defs/StrParam&quot;</span>
               <span class="p">},</span>
               <span class="p">{</span>
-                <span class="s2">&quot;$ref&quot;</span><span class="p">:</span> <span class="s2">&quot;#/$defs/IntArg&quot;</span>
+                <span class="s2">&quot;$ref&quot;</span><span class="p">:</span> <span class="s2">&quot;#/$defs/IntParam&quot;</span>
               <span class="p">},</span>
               <span class="p">{</span>
-                <span class="s2">&quot;$ref&quot;</span><span class="p">:</span> <span class="s2">&quot;#/$defs/BoolArg&quot;</span>
+                <span class="s2">&quot;$ref&quot;</span><span class="p">:</span> <span class="s2">&quot;#/$defs/BoolParam&quot;</span>
               <span class="p">},</span>
               <span class="p">{</span>
-                <span class="s2">&quot;$ref&quot;</span><span class="p">:</span> <span class="s2">&quot;#/$defs/ObjectArg&quot;</span>
+                <span class="s2">&quot;$ref&quot;</span><span class="p">:</span> <span class="s2">&quot;#/$defs/ObjectParam&quot;</span>
               <span class="p">},</span>
               <span class="p">{</span>
-                <span class="s2">&quot;$ref&quot;</span><span class="p">:</span> <span class="s2">&quot;#/$defs/IdArg&quot;</span>
+                <span class="s2">&quot;$ref&quot;</span><span class="p">:</span> <span class="s2">&quot;#/$defs/IdParam&quot;</span>
               <span class="p">},</span>
               <span class="p">{</span>
-                <span class="s2">&quot;$ref&quot;</span><span class="p">:</span> <span class="s2">&quot;#/$defs/EnumArg&quot;</span>
+                <span class="s2">&quot;$ref&quot;</span><span class="p">:</span> <span class="s2">&quot;#/$defs/EnumParam&quot;</span>
               <span class="p">}</span>
             <span class="p">]</span>
           <span class="p">},</span>
-          <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Args&quot;</span><span class="p">,</span>
-          <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;array&quot;</span>
+          <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="p">[],</span>
+          <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;The arguments IOC instance should supply&quot;</span><span class="p">,</span>
+          <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Parameters&quot;</span><span class="p">,</span>
+          <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span>
         <span class="p">},</span>
         <span class="s2">&quot;post_defines&quot;</span><span class="p">:</span> <span class="p">{</span>
+          <span class="s2">&quot;additionalProperties&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;$ref&quot;</span><span class="p">:</span> <span class="s2">&quot;#/$defs/Define&quot;</span>
+          <span class="p">},</span>
           <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="p">[],</span>
           <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Calculated values to use as additional arguments With Jinja evaluation after all Args&quot;</span><span class="p">,</span>
-          <span class="s2">&quot;items&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s2">&quot;$ref&quot;</span><span class="p">:</span> <span class="s2">&quot;#/$defs/Value&quot;</span>
-          <span class="p">},</span>
           <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Post Defines&quot;</span><span class="p">,</span>
-          <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;array&quot;</span>
-        <span class="p">},</span>
-        <span class="s2">&quot;pre_defines&quot;</span><span class="p">:</span> <span class="p">{</span>
-          <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="p">[],</span>
-          <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Calculated values to use as additional arguments With Jinja evaluation before all Args&quot;</span><span class="p">,</span>
-          <span class="s2">&quot;items&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s2">&quot;$ref&quot;</span><span class="p">:</span> <span class="s2">&quot;#/$defs/Value&quot;</span>
-          <span class="p">},</span>
-          <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Pre Defines&quot;</span><span class="p">,</span>
-          <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;array&quot;</span>
-        <span class="p">},</span>
-        <span class="s2">&quot;databases&quot;</span><span class="p">:</span> <span class="p">{</span>
-          <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="p">[],</span>
-          <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Databases to instantiate&quot;</span><span class="p">,</span>
-          <span class="s2">&quot;items&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s2">&quot;$ref&quot;</span><span class="p">:</span> <span class="s2">&quot;#/$defs/Database&quot;</span>
-          <span class="p">},</span>
-          <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Databases&quot;</span><span class="p">,</span>
-          <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;array&quot;</span>
+          <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span>
         <span class="p">},</span>
         <span class="s2">&quot;pre_init&quot;</span><span class="p">:</span> <span class="p">{</span>
           <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="p">[],</span>
@@ -1199,6 +1227,15 @@ the container or during container development.</p>
             <span class="p">]</span>
           <span class="p">},</span>
           <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Post Init&quot;</span><span class="p">,</span>
+          <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;array&quot;</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;databases&quot;</span><span class="p">:</span> <span class="p">{</span>
+          <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="p">[],</span>
+          <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Databases to instantiate&quot;</span><span class="p">,</span>
+          <span class="s2">&quot;items&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;$ref&quot;</span><span class="p">:</span> <span class="s2">&quot;#/$defs/Database&quot;</span>
+          <span class="p">},</span>
+          <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Databases&quot;</span><span class="p">,</span>
           <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;array&quot;</span>
         <span class="p">},</span>
         <span class="s2">&quot;env_vars&quot;</span><span class="p">:</span> <span class="p">{</span>
@@ -1243,7 +1280,7 @@ the container or during container development.</p>
         <span class="s2">&quot;name&quot;</span><span class="p">,</span>
         <span class="s2">&quot;description&quot;</span>
       <span class="p">],</span>
-      <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;EntityDefinition&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;EntityModel&quot;</span><span class="p">,</span>
       <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span>
     <span class="p">},</span>
     <span class="s2">&quot;EntityPVI&quot;</span><span class="p">:</span> <span class="p">{</span>
@@ -1296,7 +1333,7 @@ the container or during container development.</p>
       <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;EntityPVI&quot;</span><span class="p">,</span>
       <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span>
     <span class="p">},</span>
-    <span class="s2">&quot;EnumArg&quot;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="s2">&quot;EnumParam&quot;</span><span class="p">:</span> <span class="p">{</span>
       <span class="s2">&quot;additionalProperties&quot;</span><span class="p">:</span> <span class="n">false</span><span class="p">,</span>
       <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;An argument with an enum value&quot;</span><span class="p">,</span>
       <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span>
@@ -1307,11 +1344,6 @@ the container or during container development.</p>
             <span class="s2">&quot;enum&quot;</span>
           <span class="p">],</span>
           <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Type&quot;</span><span class="p">,</span>
-          <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
-        <span class="p">},</span>
-        <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="p">{</span>
-          <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Name of the argument that the IOC instance should pass&quot;</span><span class="p">,</span>
-          <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Name&quot;</span><span class="p">,</span>
           <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
         <span class="p">},</span>
         <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="p">{</span>
@@ -1336,11 +1368,10 @@ the container or during container development.</p>
         <span class="p">}</span>
       <span class="p">},</span>
       <span class="s2">&quot;required&quot;</span><span class="p">:</span> <span class="p">[</span>
-        <span class="s2">&quot;name&quot;</span><span class="p">,</span>
         <span class="s2">&quot;description&quot;</span><span class="p">,</span>
         <span class="s2">&quot;values&quot;</span>
       <span class="p">],</span>
-      <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;EnumArg&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;EnumParam&quot;</span><span class="p">,</span>
       <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span>
     <span class="p">},</span>
     <span class="s2">&quot;EnvironmentVariable&quot;</span><span class="p">:</span> <span class="p">{</span>
@@ -1365,7 +1396,7 @@ the container or during container development.</p>
       <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;EnvironmentVariable&quot;</span><span class="p">,</span>
       <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span>
     <span class="p">},</span>
-    <span class="s2">&quot;FloatArg&quot;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="s2">&quot;FloatParam&quot;</span><span class="p">:</span> <span class="p">{</span>
       <span class="s2">&quot;additionalProperties&quot;</span><span class="p">:</span> <span class="n">false</span><span class="p">,</span>
       <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;An argument with a float value&quot;</span><span class="p">,</span>
       <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span>
@@ -1376,11 +1407,6 @@ the container or during container development.</p>
             <span class="s2">&quot;float&quot;</span>
           <span class="p">],</span>
           <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Type&quot;</span><span class="p">,</span>
-          <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
-        <span class="p">},</span>
-        <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="p">{</span>
-          <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Name of the argument that the IOC instance should pass&quot;</span><span class="p">,</span>
-          <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Name&quot;</span><span class="p">,</span>
           <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
         <span class="p">},</span>
         <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="p">{</span>
@@ -1407,13 +1433,12 @@ the container or during container development.</p>
         <span class="p">}</span>
       <span class="p">},</span>
       <span class="s2">&quot;required&quot;</span><span class="p">:</span> <span class="p">[</span>
-        <span class="s2">&quot;name&quot;</span><span class="p">,</span>
         <span class="s2">&quot;description&quot;</span>
       <span class="p">],</span>
-      <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;FloatArg&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;FloatParam&quot;</span><span class="p">,</span>
       <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span>
     <span class="p">},</span>
-    <span class="s2">&quot;IdArg&quot;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="s2">&quot;IdParam&quot;</span><span class="p">:</span> <span class="p">{</span>
       <span class="s2">&quot;additionalProperties&quot;</span><span class="p">:</span> <span class="n">false</span><span class="p">,</span>
       <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Explicit ID argument that an object can refer to&quot;</span><span class="p">,</span>
       <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span>
@@ -1424,11 +1449,6 @@ the container or during container development.</p>
             <span class="s2">&quot;id&quot;</span>
           <span class="p">],</span>
           <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Type&quot;</span><span class="p">,</span>
-          <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
-        <span class="p">},</span>
-        <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="p">{</span>
-          <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Name of the argument that the IOC instance should pass&quot;</span><span class="p">,</span>
-          <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Name&quot;</span><span class="p">,</span>
           <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
         <span class="p">},</span>
         <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="p">{</span>
@@ -1450,13 +1470,12 @@ the container or during container development.</p>
         <span class="p">}</span>
       <span class="p">},</span>
       <span class="s2">&quot;required&quot;</span><span class="p">:</span> <span class="p">[</span>
-        <span class="s2">&quot;name&quot;</span><span class="p">,</span>
         <span class="s2">&quot;description&quot;</span>
       <span class="p">],</span>
-      <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;IdArg&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;IdParam&quot;</span><span class="p">,</span>
       <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span>
     <span class="p">},</span>
-    <span class="s2">&quot;IntArg&quot;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="s2">&quot;IntParam&quot;</span><span class="p">:</span> <span class="p">{</span>
       <span class="s2">&quot;additionalProperties&quot;</span><span class="p">:</span> <span class="n">false</span><span class="p">,</span>
       <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;An argument with an int value&quot;</span><span class="p">,</span>
       <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span>
@@ -1467,11 +1486,6 @@ the container or during container development.</p>
             <span class="s2">&quot;int&quot;</span>
           <span class="p">],</span>
           <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Type&quot;</span><span class="p">,</span>
-          <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
-        <span class="p">},</span>
-        <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="p">{</span>
-          <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Name of the argument that the IOC instance should pass&quot;</span><span class="p">,</span>
-          <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Name&quot;</span><span class="p">,</span>
           <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
         <span class="p">},</span>
         <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="p">{</span>
@@ -1498,13 +1512,12 @@ the container or during container development.</p>
         <span class="p">}</span>
       <span class="p">},</span>
       <span class="s2">&quot;required&quot;</span><span class="p">:</span> <span class="p">[</span>
-        <span class="s2">&quot;name&quot;</span><span class="p">,</span>
         <span class="s2">&quot;description&quot;</span>
       <span class="p">],</span>
-      <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;IntArg&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;IntParam&quot;</span><span class="p">,</span>
       <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span>
     <span class="p">},</span>
-    <span class="s2">&quot;ObjectArg&quot;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="s2">&quot;ObjectParam&quot;</span><span class="p">:</span> <span class="p">{</span>
       <span class="s2">&quot;additionalProperties&quot;</span><span class="p">:</span> <span class="n">false</span><span class="p">,</span>
       <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;A reference to another entity defined in this IOC&quot;</span><span class="p">,</span>
       <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span>
@@ -1515,11 +1528,6 @@ the container or during container development.</p>
             <span class="s2">&quot;object&quot;</span>
           <span class="p">],</span>
           <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Type&quot;</span><span class="p">,</span>
-          <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
-        <span class="p">},</span>
-        <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="p">{</span>
-          <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Name of the argument that the IOC instance should pass&quot;</span><span class="p">,</span>
-          <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Name&quot;</span><span class="p">,</span>
           <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
         <span class="p">},</span>
         <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="p">{</span>
@@ -1542,13 +1550,12 @@ the container or during container development.</p>
         <span class="p">}</span>
       <span class="p">},</span>
       <span class="s2">&quot;required&quot;</span><span class="p">:</span> <span class="p">[</span>
-        <span class="s2">&quot;name&quot;</span><span class="p">,</span>
         <span class="s2">&quot;description&quot;</span>
       <span class="p">],</span>
-      <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;ObjectArg&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;ObjectParam&quot;</span><span class="p">,</span>
       <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span>
     <span class="p">},</span>
-    <span class="s2">&quot;StrArg&quot;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="s2">&quot;StrParam&quot;</span><span class="p">:</span> <span class="p">{</span>
       <span class="s2">&quot;additionalProperties&quot;</span><span class="p">:</span> <span class="n">false</span><span class="p">,</span>
       <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;An argument with a str value&quot;</span><span class="p">,</span>
       <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span>
@@ -1559,11 +1566,6 @@ the container or during container development.</p>
             <span class="s2">&quot;str&quot;</span>
           <span class="p">],</span>
           <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Type&quot;</span><span class="p">,</span>
-          <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
-        <span class="p">},</span>
-        <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="p">{</span>
-          <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Name of the argument that the IOC instance should pass&quot;</span><span class="p">,</span>
-          <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Name&quot;</span><span class="p">,</span>
           <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
         <span class="p">},</span>
         <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="p">{</span>
@@ -1585,10 +1587,9 @@ the container or during container development.</p>
         <span class="p">}</span>
       <span class="p">},</span>
       <span class="s2">&quot;required&quot;</span><span class="p">:</span> <span class="p">[</span>
-        <span class="s2">&quot;name&quot;</span><span class="p">,</span>
         <span class="s2">&quot;description&quot;</span>
       <span class="p">],</span>
-      <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;StrArg&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;StrParam&quot;</span><span class="p">,</span>
       <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span>
     <span class="p">},</span>
     <span class="s2">&quot;SubEntity&quot;</span><span class="p">:</span> <span class="p">{</span>
@@ -1642,54 +1643,6 @@ the container or during container development.</p>
       <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Text&quot;</span><span class="p">,</span>
       <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span>
     <span class="p">},</span>
-    <span class="s2">&quot;Value&quot;</span><span class="p">:</span> <span class="p">{</span>
-      <span class="s2">&quot;additionalProperties&quot;</span><span class="p">:</span> <span class="n">false</span><span class="p">,</span>
-      <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;A calculated string value for a definition&quot;</span><span class="p">,</span>
-      <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span>
-        <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="p">{</span>
-          <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Name of the value that the IOC instance will expose&quot;</span><span class="p">,</span>
-          <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Name&quot;</span><span class="p">,</span>
-          <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
-        <span class="p">},</span>
-        <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="p">{</span>
-          <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Description of what the value will be used for&quot;</span><span class="p">,</span>
-          <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Description&quot;</span><span class="p">,</span>
-          <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
-        <span class="p">},</span>
-        <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="p">{</span>
-          <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;The contents of the value&quot;</span><span class="p">,</span>
-          <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Value&quot;</span>
-        <span class="p">},</span>
-        <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="p">{</span>
-          <span class="s2">&quot;allOf&quot;</span><span class="p">:</span> <span class="p">[</span>
-            <span class="p">{</span>
-              <span class="s2">&quot;$ref&quot;</span><span class="p">:</span> <span class="s2">&quot;#/$defs/ValueTypes&quot;</span>
-            <span class="p">}</span>
-          <span class="p">],</span>
-          <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="s2">&quot;str&quot;</span><span class="p">,</span>
-          <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;The type of the value&quot;</span>
-        <span class="p">}</span>
-      <span class="p">},</span>
-      <span class="s2">&quot;required&quot;</span><span class="p">:</span> <span class="p">[</span>
-        <span class="s2">&quot;name&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;description&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;value&quot;</span>
-      <span class="p">],</span>
-      <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Value&quot;</span><span class="p">,</span>
-      <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span>
-    <span class="p">},</span>
-    <span class="s2">&quot;ValueTypes&quot;</span><span class="p">:</span> <span class="p">{</span>
-      <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;The type of a value&quot;</span><span class="p">,</span>
-      <span class="s2">&quot;enum&quot;</span><span class="p">:</span> <span class="p">[</span>
-        <span class="s2">&quot;str&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;float&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;int&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;bool&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;list&quot;</span>
-      <span class="p">],</span>
-      <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;ValueTypes&quot;</span><span class="p">,</span>
-      <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
-    <span class="p">},</span>
     <span class="s2">&quot;When&quot;</span><span class="p">:</span> <span class="p">{</span>
       <span class="s2">&quot;enum&quot;</span><span class="p">:</span> <span class="p">[</span>
         <span class="s2">&quot;first&quot;</span><span class="p">,</span>
@@ -1701,7 +1654,7 @@ the container or during container development.</p>
     <span class="p">}</span>
   <span class="p">},</span>
   <span class="s2">&quot;additionalProperties&quot;</span><span class="p">:</span> <span class="n">false</span><span class="p">,</span>
-  <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Lists the definitions for a support module, this defines what Entities it supports</span><span class="se">\n\n</span><span class="s2">Provides the deserialize entry point.&quot;</span><span class="p">,</span>
+  <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Lists the EntityModels for a support module, this defines what Entities it supports&quot;</span><span class="p">,</span>
   <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span>
     <span class="s2">&quot;shared&quot;</span><span class="p">:</span> <span class="p">{</span>
       <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="p">[],</span>
@@ -1715,18 +1668,18 @@ the container or during container development.</p>
       <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Module&quot;</span><span class="p">,</span>
       <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
     <span class="p">},</span>
-    <span class="s2">&quot;defs&quot;</span><span class="p">:</span> <span class="p">{</span>
-      <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;The definitions an IOC can create using this module&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;entity_models&quot;</span><span class="p">:</span> <span class="p">{</span>
+      <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;The Entity Models an IOC can create using this module&quot;</span><span class="p">,</span>
       <span class="s2">&quot;items&quot;</span><span class="p">:</span> <span class="p">{</span>
-        <span class="s2">&quot;$ref&quot;</span><span class="p">:</span> <span class="s2">&quot;#/$defs/EntityDefinition&quot;</span>
+        <span class="s2">&quot;$ref&quot;</span><span class="p">:</span> <span class="s2">&quot;#/$defs/EntityModel&quot;</span>
       <span class="p">},</span>
-      <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Defs&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Entity Models&quot;</span><span class="p">,</span>
       <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;array&quot;</span>
     <span class="p">}</span>
   <span class="p">},</span>
   <span class="s2">&quot;required&quot;</span><span class="p">:</span> <span class="p">[</span>
     <span class="s2">&quot;module&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;defs&quot;</span>
+    <span class="s2">&quot;entity_models&quot;</span>
   <span class="p">],</span>
   <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Support&quot;</span><span class="p">,</span>
   <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span>
