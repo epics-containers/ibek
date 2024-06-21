@@ -217,3 +217,15 @@ def test_fast_vacuum(tmp_epics_root: Path, samples: Path):
         "fastVacuum",
         ["fastVacuum"],
     )
+
+
+def test_dls_plc(tmp_epics_root: Path, samples: Path):
+    """
+    Cut down copy of dlsPLC containing fast vacuum master and channel
+    """
+    generic_generate(
+        tmp_epics_root,
+        samples,
+        "dlsPLC",
+        ["dlsPLC", "asyn"],
+    )

@@ -1,0 +1,643 @@
+# yaml-language-server: $schema=../schemas/ibek.support.schema.json
+
+# an excerpt from the dlsPLC.ibek.support.yaml file to test the following
+# features:
+# - anchors and aliases
+# - use of <<: [*alias1, *alias2] to merge multiple aliases into a single Parameter
+# - use of regex in database arguments (see .*)
+
+shared:
+  # These shared sections are used to define common parameters for the
+  # various Definitions described in the dlsPLC.ibek.support.yaml file.
+  #
+  # They are in the form of anchors that can be merged into each Definition
+  # via aliases. This allows for a more DRY approach and makes the file
+  # considerably smaller.
+  #
+  # e.g.
+  #
+  #  params:
+  #    <<: [*ilk, *gilk, *cilk, *con_label, *sta_label, *sta_sv, *ilksta, *ilksta_sv]
+  #    con_label0:
+  #      type: str
+  #      description: |-
+  #        Label string for control value 0
+  #      default: On
+  #
+  # merges all the shared sections into the params section of a Definition, but
+  # would still allow override of individual parameters as shown for con_label0.
+
+  - PQ: &PQ
+      P:
+        type: str
+        description: |-
+          Device Prefix
+      Q:
+        type: str
+        description: |-
+          Device Suffix
+
+  - tagidx: &tagidx
+      tagidx:
+        type: int
+        description: |-
+          Template argument
+
+  - tag: &tag
+      tag:
+        type: str
+        description: |-
+          NX PLC tag string e.g. V (from V.Control[1])
+      ILKNUM:
+        type: int
+        description: |-
+          Part of Gauge PLC tag (Gauge.PIRG[dollar(ILKNUM)])
+
+  - delay: &delay
+      delay:
+        type: int
+        description: |-
+          delay between opening valves
+
+  - vlvcc: &vlvcc
+      vlvcc:
+        type: str
+        description: |-
+          device name of valve control crate (prefix of device name), NOTE: make sure there is a read100 component whose century (0 means 0-99) includes the object address
+      addr:
+        type: str
+        description: |-
+          First address in the DM variable range decade. E.g. if valve is in DM110..119 then addr=110
+
+  - ilk: &ilk
+      ilk0:
+        type: str
+        description: |-
+          Interlock description 0
+        default: unused
+      ilk1:
+        type: str
+        description: |-
+          Interlock description 1
+        default: unused
+      ilk2:
+        type: str
+        description: |-
+          Interlock description 2
+        default: unused
+      ilk3:
+        type: str
+        description: |-
+          Interlock description 3
+        default: unused
+      ilk4:
+        type: str
+        description: |-
+          Interlock description 4
+        default: unused
+      ilk5:
+        type: str
+        description: |-
+          Interlock description 5
+        default: unused
+      ilk6:
+        type: str
+        description: |-
+          Interlock description 6
+        default: unused
+      ilk7:
+        type: str
+        description: |-
+          Interlock description 7
+        default: unused
+      ilk8:
+        type: str
+        description: |-
+          Interlock description 8
+        default: unused
+      ilk9:
+        type: str
+        description: |-
+          Interlock description 9
+        default: unused
+      ilk10:
+        type: str
+        description: |-
+          Interlock description 10
+        default: unused
+      ilk11:
+        type: str
+        description: |-
+          Interlock description 11
+        default: unused
+      ilk12:
+        type: str
+        description: |-
+          Interlock description 12
+        default: unused
+      ilk13:
+        type: str
+        description: |-
+          Interlock description 13
+        default: unused
+      ilk14:
+        type: str
+        description: |-
+          Interlock description 14
+        default: unused
+      ilk15:
+        type: str
+        description: |-
+          Interlock description 15
+        default: unused
+
+  - gilk: &gilk
+      gilk0:
+        type: str
+        description: |-
+          Gauge interlock description 0
+        default: unused
+      gilk1:
+        type: str
+        description: |-
+          Gauge interlock description 1
+        default: unused
+      gilk2:
+        type: str
+        description: |-
+          Gauge interlock description 2
+        default: unused
+      gilk3:
+        type: str
+        description: |-
+          Gauge interlock description 3
+        default: unused
+      gilk4:
+        type: str
+        description: |-
+          Gauge interlock description 4
+        default: unused
+      gilk5:
+        type: str
+        description: |-
+          Gauge interlock description 5
+        default: unused
+      gilk6:
+        type: str
+        description: |-
+          Gauge interlock description 6
+        default: unused
+      gilk7:
+        type: str
+        description: |-
+          Gauge interlock description 7
+        default: unused
+      gilk8:
+        type: str
+        description: |-
+          Gauge interlock description 8
+        default: unused
+      gilk9:
+        type: str
+        description: |-
+          Gauge interlock description 9
+        default: unused
+      gilk10:
+        type: str
+        description: |-
+          Gauge interlock description 10
+        default: unused
+      gilk11:
+        type: str
+        description: |-
+          Gauge interlock description 11
+        default: unused
+      gilk12:
+        type: str
+        description: |-
+          Gauge interlock description 12
+        default: unused
+      gilk13:
+        type: str
+        description: |-
+          Gauge interlock description 13
+        default: unused
+      gilk14:
+        type: str
+        description: |-
+          Gauge interlock description 14
+        default: unused
+      gilk15:
+        type: str
+        description: |-
+          Gauge interlock description 15
+        default: unused
+
+  - cilk: &cilk
+      cilk0:
+        type: str
+        description: |-
+          Gauge interlock description 0
+        default: unused
+      cilk1:
+        type: str
+        description: |-
+          Gauge interlock description 1
+        default: unused
+      cilk2:
+        type: str
+        description: |-
+          Gauge interlock description 2
+        default: unused
+      cilk3:
+        type: str
+        description: |-
+          Gauge interlock description 3
+        default: unused
+      cilk4:
+        type: str
+        description: |-
+          Gauge interlock description 4
+        default: unused
+      cilk5:
+        type: str
+        description: |-
+          Gauge interlock description 5
+        default: unused
+      cilk6:
+        type: str
+        description: |-
+          Gauge interlock description 6
+        default: unused
+      cilk7:
+        type: str
+        description: |-
+          Gauge interlock description 7
+        default: unused
+      cilk8:
+        type: str
+        description: |-
+          Gauge interlock description 8
+        default: unused
+      cilk9:
+        type: str
+        description: |-
+          Gauge interlock description 9
+        default: unused
+      cilk10:
+        type: str
+        description: |-
+          Gauge interlock description 10
+        default: unused
+      cilk11:
+        type: str
+        description: |-
+          Gauge interlock description 11
+        default: unused
+      cilk12:
+        type: str
+        description: |-
+          Gauge interlock description 12
+        default: unused
+      cilk13:
+        type: str
+        description: |-
+          Gauge interlock description 13
+        default: unused
+      cilk14:
+        type: str
+        description: |-
+          Gauge interlock description 14
+        default: unused
+      cilk15:
+        type: str
+        description: |-
+          Gauge interlock description 15
+        default: unused
+
+  - con_label: &con_label
+      con_label0:
+        type: str
+        description: |-
+          Label string for control value 0
+        default: Open
+      con_label1:
+        type: str
+        description: |-
+          Label string for control value 1
+        default: Close
+      con_label2:
+        type: str
+        description: |-
+          Label string for control value 2
+        default: Reset
+      con_label3:
+        type: str
+        description: |-
+          Label string for control value 3
+        default: ""
+      con_label4:
+        type: str
+        description: |-
+          Label string for control value 4
+        default: ""
+      con_label5:
+        type: str
+        description: |-
+          Label string for control value 5
+        default: ""
+      con_label6:
+        type: str
+        description: |-
+          Label string for control value 6
+        default: ""
+
+  - sta_label: &sta_label
+      sta_label0:
+        type: str
+        description: |-
+          Label string for status value 0
+        default: Fault
+      sta_label1:
+        type: str
+        description: |-
+          Label string for status value 1
+        default: Open
+      sta_label2:
+        type: str
+        description: |-
+          Label string for status value 2
+        default: Opening
+      sta_label3:
+        type: str
+        description: |-
+          Label string for status value 3
+        default: Closed
+      sta_label4:
+        type: str
+        description: |-
+          Label string for status value 4
+        default: Closing
+      sta_label5:
+        type: str
+        description: |-
+          Label string for status value 5
+        default: ""
+      sta_label6:
+        type: str
+        description: |-
+          Label string for status value 6
+        default: ""
+
+  - sta_sv: &sta_sv
+      sta_sv0:
+        type: str
+        description: |-
+          Alarm severity for status value 0.
+        default: MAJOR
+      sta_sv1:
+        type: str
+        description: |-
+          Alarm severity for status value 1.
+        default: NO_ALARM
+      sta_sv2:
+        type: str
+        description: |-
+          Alarm severity for status value 2.
+        default: NO_ALARM
+      sta_sv3:
+        type: str
+        description: |-
+          Alarm severity for status value 3.
+        default: NO_ALARM
+      sta_sv4:
+        type: str
+        description: |-
+          Alarm severity for status value 4.
+        default: NO_ALARM
+      sta_sv5:
+        type: str
+        description: |-
+          Alarm severity for status value 5.
+        default: NO_ALARM
+      sta_sv6:
+        type: str
+        description: |-
+          Alarm severity for status value 6.
+        default: NO_ALARM
+
+  - ilksta_label: &ilksta_label
+      ilksta_label0:
+        type: str
+        description: |-
+          Template argument
+        default: Failed
+      ilksta_label1:
+        type: str
+        description: |-
+          Template argument
+        default: Run Ilks Ok
+      ilksta_label2:
+        type: str
+        description: |-
+          Template argument
+        default: OK
+      ilksta_label3:
+        type: str
+        description: |-
+          Template argument
+        default: Disarmed
+      ilksta_label4:
+        type: str
+        description: |-
+          Template argument
+        default: ""
+      ilksta_label5:
+        type: str
+        description: |-
+          Template argument
+        default: ""
+
+  - ilksta_sv: &ilksta_sv
+      ilksta_sv0:
+        type: str
+        description: |-
+          Template argument
+        default: MAJOR
+      ilksta_sv1:
+        type: str
+        description: |-
+          Template argument
+        default: NO_ALARM
+      ilksta_sv2:
+        type: str
+        description: |-
+          Template argument
+        default: NO_ALARM
+      ilksta_sv3:
+        type: str
+        description: |-
+          Template argument
+        default: NO_ALARM
+      ilksta_sv4:
+        type: str
+        description: |-
+          Template argument
+        default: NO_ALARM
+      ilksta_sv5:
+        type: str
+        description: |-
+          Template argument
+        default: NO_ALARM
+
+  - mode: &mode
+      mode1:
+        type: str
+        description: |-
+          name of remote operational mode (:MODE)
+        default: Operational
+      mode2:
+        type: str
+        description: |-
+          name of local operational mode (:MODE)
+        default: Service
+
+  - allowpv: &allowpv
+      allowpv:
+        type: str
+        description: |-
+          If specified, then only write an open command when this is non-zero. MUST have CP at the end of it
+        default: ""
+
+  - whylocked: &whylocked
+      whylocked:
+        type: str
+        description: |-
+          String to output to EDM synoptic as to precisely why the device is locked and by whom
+        default: Open command not allowed
+
+  - timeout: &timeout
+      timeout:
+        type: int
+        description: |-
+          Timeout in seconds for the FINS protocol
+        default: 0
+
+  - alarm_limits: &alarm_limits
+      lolo:
+        type: str
+        description: |-
+          Lolo alarm limit
+      low:
+        type: str
+        description: |-
+          Low alarm limit
+      high:
+        type: str
+        description: |-
+          High alarm limit
+      hihi:
+        type: str
+        description: |-
+          Hihi alarm limit
+      hopr:
+        type: str
+        description: |-
+          High operating range
+      lopr:
+        type: str
+        description: |-
+          Low operating range
+      llsv:
+        type: str
+        description: |-
+          Lolo severity
+        default: NO_ALARM
+      lsv:
+        type: str
+        description: |-
+          Low severity
+        default: NO_ALARM
+      hyst:
+        type: int
+        description: |-
+          alarm deadband
+        default: 0
+
+module: dlsPLC
+
+entity_models:
+  - name: NX102_vacValveDebounce
+    description: |-
+      Template database for a vacuum valve without debounce or raw air records
+    parameters:
+      # TODO the ordering of the subst file headings is rather mixed up by this alias and override approach
+      # TODO what can we do about that? - one approach is not use .* for database arguments but list explicity
+      <<: [*tag, *tagidx, *allowpv, *whylocked, *con_label, *sta_label, *sta_sv, *ilksta_label, *ilksta_sv, *mode]
+      device:
+        type: str
+        description: |-
+          device name
+      port:
+        type: str
+        description: |-
+          EtherIP Port Name
+      con_label7:
+        type: str
+        description: |-
+          Label string for control value 7 (Optional - defaults to "")
+        default: ""
+      sta_label7:
+        type: str
+        description: |-
+          Label string for status value 7 (Optional - defaults to "")
+        default: ""
+      sta_sv7:
+        type: str
+        description: |-
+          Alarm severity for status value 7 (Optional - defaults to NO_ALARM)
+        default: NO_ALARM
+      ilksta_label6:
+        type: str
+        description: |-
+          Label string for status value 6 (Optional - defaults to "")
+        default: ""
+      ilksta_label7:
+        type: str
+        description: |-
+          Label string for status value 7 (Optional - defaults to "")
+        default: ""
+      ilksta_sv6:
+        type: str
+        description: |-
+          Alarm severity for interlock status value 6 (Optional - defaults to NO_ALARM)
+        default: NO_ALARM
+      ilksta_sv7:
+        type: str
+        description: |-
+          Alarm severity for interlock status value 7 (Optional - defaults to NO_ALARM)
+        default: NO_ALARM
+      DIRILK1:
+        type: str
+        description: |-
+          Part of ILK1 PV name (dollar(device):dollar(DIRILK1)ILK), named for "direction" of operation controlled by ILK1, e.g. set to OPEN for Bistable valve or leave blank for ordinary valve.  (Optional - defaults to "")
+        default: ""
+      DIRILK2:
+        type: str
+        description: |-
+          Part of ILK2 PV name (dollar(device):dollar(DIRILK2)ILK), named for "direction" of operation controlled by ILK2, e.g. set to CLOSE for Bistable valves (Optional - defaults to "ILK2")
+        default: ILK2
+      name:
+        type: id
+        description: |-
+          Object name and associated gui name      (Optional - defaults to "")
+      desc:
+        type: str
+        description: |-
+          Box label for gui                        (Optional - defaults to value of device macro)
+        default: $(device)
+
+    databases:
+      - file: $(DLSPLC)/db/NX102_vacValveDebounce.template
+        args:
+          .*:
