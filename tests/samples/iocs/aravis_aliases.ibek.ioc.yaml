@@ -1,0 +1,90 @@
+# yaml-language-server: $schema=/tmp/adcore.schema.json
+
+# TODO add a test to validate the use of aliases like this
+
+ioc_name: "{{ _global.get_env('IOC_NAME') }}"
+description: Example multiple Basler cameras with aliases
+
+shared:
+  - &camera1 { P: "SPARC01:", NDARRAY_PORT: TESTACE01 }
+  - &camera2 { P: "SPARC02:", NDARRAY_PORT: TESTACE02 }
+  - &camera3 { P: "SPARC03:", NDARRAY_PORT: TESTACE03 }
+
+  - &cam
+    type: ADAravis.aravisCamera
+    R: ":CAM:"
+    CLASS: Basler-a2A2600-20gmBAS
+
+  - &pva
+    type: ADCore.NDPvaPlugin
+    PORT: "{{ NDARRAY_PORT }}.PVA"
+    PVNAME: "SPARC:CAM:TESTACE01:PVA:OUTPUT"
+    R: ":Pva1:"
+    ENABLED: 1
+
+  - &std
+    type: ADCore.NDStdArrays
+    R: ":image1:"
+    PORT: "{{ NDARRAY_PORT }}.NTD"
+    TYPE: "Int8"
+    FTVL: UCHAR
+    NELEMENTS: 0
+    ENABLED: 1
+
+  - &stats
+    type: ADCore.NDStats
+    PORT: "{{ NDARRAY_PORT }}.STATS"
+    HIST_SIZE: 50
+    R: ":Stats1:"
+    XSIZE: 1400
+    YSIZE: 768
+    ENABLED: 1
+
+  - &tiff
+    type: ADCore.NDFileTIFF
+    PORT: "{{ NDARRAY_PORT }}.TIFF"
+    R: ":TIFF1:"
+    ENABLED: 1
+
+entities:
+  # FIRST CAMERA
+  - <<: *cam
+    ID: "Basler-a2A1920-51gcBAS-40XXXX1"
+    P: "SPARC02:"
+    PORT: TESTACE02
+
+  - <<: [*pva, *camera1]
+
+  - <<: [*std, *camera1]
+
+  - <<: [*stats, *camera1]
+
+  - <<: [*tiff, *camera1]
+
+  # SECOND CAMERA
+  - <<: *cam
+    ID: "Basler-a2A1920-51gcBAS-40XXXX2"
+    P: "SPARC02:"
+    PORT: TESTACE02
+
+  - <<: [*pva, *camera2]
+
+  - <<: [*std, *camera2]
+
+  - <<: [*stats, *camera2]
+
+  - <<: [*tiff, *camera2]
+
+  # THIRD CAMERA
+  - <<: *cam
+    ID: "Basler-a2A1920-51gcBAS-40XXXY3"
+    P: "SPARC02:"
+    PORT: TESTACE02
+
+  - <<: [*pva, *camera3]
+
+  - <<: [*std, *camera3]
+
+  - <<: [*stats, *camera3]
+
+  - <<: [*tiff, *camera3]

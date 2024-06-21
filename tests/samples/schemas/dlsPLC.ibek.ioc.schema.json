@@ -1,0 +1,617 @@
+{
+  "$defs": {
+    "asyn_AsynIP": {
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "const": "asyn.AsynIP",
+          "description": "Asyn IP Port",
+          "enum": [
+            "asyn.AsynIP"
+          ],
+          "title": "Type",
+          "type": "string"
+        },
+        "entity_enabled": {
+          "default": true,
+          "description": "enable or disable this entity instance",
+          "title": "Entity Enabled",
+          "type": "boolean"
+        },
+        "port": {
+          "description": "Serial port tty name / IP address optionally followed by protocol",
+          "title": "Port",
+          "type": "string"
+        },
+        "name": {
+          "description": "Override name",
+          "title": "Name",
+          "type": "string"
+        },
+        "input_eos": {
+          "default": "\"\\n\"",
+          "description": "Input end of string (terminator)",
+          "title": "Input Eos",
+          "type": "string"
+        },
+        "output_eos": {
+          "default": "\"\\n\"",
+          "description": "Output end of string (terminator)",
+          "title": "Output Eos",
+          "type": "string"
+        },
+        "priority": {
+          "anyOf": [
+            {
+              "description": "jinja that renders to <class 'int'>",
+              "pattern": ".*\\{\\{.*\\}\\}.*",
+              "type": "string"
+            },
+            {
+              "description": "Priority",
+              "type": "integer"
+            }
+          ],
+          "default": 100,
+          "description": "union of <class 'int'> and jinja representation of {typ}",
+          "title": "Priority"
+        },
+        "noAuto_connect": {
+          "anyOf": [
+            {
+              "description": "jinja that renders to <class 'bool'>",
+              "pattern": ".*\\{\\{.*\\}\\}.*",
+              "type": "string"
+            },
+            {
+              "description": "Set to stop auto_connect",
+              "type": "boolean"
+            }
+          ],
+          "default": false,
+          "description": "union of <class 'bool'> and jinja representation of {typ}",
+          "title": "Noauto Connect"
+        },
+        "noProcessEos": {
+          "anyOf": [
+            {
+              "description": "jinja that renders to <class 'bool'>",
+              "pattern": ".*\\{\\{.*\\}\\}.*",
+              "type": "string"
+            },
+            {
+              "description": "Set to avoid processing end of string",
+              "type": "boolean"
+            }
+          ],
+          "default": false,
+          "description": "union of <class 'bool'> and jinja representation of {typ}",
+          "title": "Noprocesseos"
+        },
+        "baud": {
+          "anyOf": [
+            {
+              "description": "jinja that renders to <class 'int'>",
+              "pattern": ".*\\{\\{.*\\}\\}.*",
+              "type": "string"
+            },
+            {
+              "description": "Baud Rate",
+              "type": "integer"
+            }
+          ],
+          "default": 9600,
+          "description": "union of <class 'int'> and jinja representation of {typ}",
+          "title": "Baud"
+        },
+        "parity": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/parity"
+            }
+          ],
+          "default": "none",
+          "description": "Parity"
+        },
+        "crtscts": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/crtscts"
+            }
+          ],
+          "default": "N",
+          "description": "Set hardware flow control on"
+        },
+        "stop": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/stop"
+            }
+          ],
+          "default": "1",
+          "description": "Stop Bits"
+        },
+        "disconnectOnReadTimeout": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/disconnectOnReadTimeout"
+            }
+          ],
+          "default": "Y",
+          "description": "Disconnect when a read times out"
+        },
+        "bits": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/bits"
+            }
+          ],
+          "default": "8",
+          "description": "Bits"
+        }
+      },
+      "required": [
+        "type",
+        "port",
+        "name"
+      ],
+      "title": "asyn_AsynIP",
+      "type": "object"
+    },
+    "bits": {
+      "enum": [
+        "8",
+        "5",
+        "7",
+        "6"
+      ],
+      "title": "bits",
+      "type": "string"
+    },
+    "crtscts": {
+      "enum": [
+        "Y",
+        "N"
+      ],
+      "title": "crtscts",
+      "type": "string"
+    },
+    "disconnectOnReadTimeout": {
+      "enum": [
+        "Y",
+        "N"
+      ],
+      "title": "disconnectOnReadTimeout",
+      "type": "string"
+    },
+    "dlsPLC_NX102_vacValveDebounce": {
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "const": "dlsPLC.NX102_vacValveDebounce",
+          "description": "Template database for a vacuum valve without debounce or raw air records",
+          "enum": [
+            "dlsPLC.NX102_vacValveDebounce"
+          ],
+          "title": "Type",
+          "type": "string"
+        },
+        "entity_enabled": {
+          "default": true,
+          "description": "enable or disable this entity instance",
+          "title": "Entity Enabled",
+          "type": "boolean"
+        },
+        "mode1": {
+          "default": "Operational",
+          "description": "name of remote operational mode (:MODE)",
+          "title": "Mode1",
+          "type": "string"
+        },
+        "mode2": {
+          "default": "Service",
+          "description": "name of local operational mode (:MODE)",
+          "title": "Mode2",
+          "type": "string"
+        },
+        "ilksta_sv0": {
+          "default": "MAJOR",
+          "description": "Template argument",
+          "title": "Ilksta Sv0",
+          "type": "string"
+        },
+        "ilksta_sv1": {
+          "default": "NO_ALARM",
+          "description": "Template argument",
+          "title": "Ilksta Sv1",
+          "type": "string"
+        },
+        "ilksta_sv2": {
+          "default": "NO_ALARM",
+          "description": "Template argument",
+          "title": "Ilksta Sv2",
+          "type": "string"
+        },
+        "ilksta_sv3": {
+          "default": "NO_ALARM",
+          "description": "Template argument",
+          "title": "Ilksta Sv3",
+          "type": "string"
+        },
+        "ilksta_sv4": {
+          "default": "NO_ALARM",
+          "description": "Template argument",
+          "title": "Ilksta Sv4",
+          "type": "string"
+        },
+        "ilksta_sv5": {
+          "default": "NO_ALARM",
+          "description": "Template argument",
+          "title": "Ilksta Sv5",
+          "type": "string"
+        },
+        "ilksta_label0": {
+          "default": "Failed",
+          "description": "Template argument",
+          "title": "Ilksta Label0",
+          "type": "string"
+        },
+        "ilksta_label1": {
+          "default": "Run Ilks Ok",
+          "description": "Template argument",
+          "title": "Ilksta Label1",
+          "type": "string"
+        },
+        "ilksta_label2": {
+          "default": "OK",
+          "description": "Template argument",
+          "title": "Ilksta Label2",
+          "type": "string"
+        },
+        "ilksta_label3": {
+          "default": "Disarmed",
+          "description": "Template argument",
+          "title": "Ilksta Label3",
+          "type": "string"
+        },
+        "ilksta_label4": {
+          "default": "",
+          "description": "Template argument",
+          "title": "Ilksta Label4",
+          "type": "string"
+        },
+        "ilksta_label5": {
+          "default": "",
+          "description": "Template argument",
+          "title": "Ilksta Label5",
+          "type": "string"
+        },
+        "sta_sv0": {
+          "default": "MAJOR",
+          "description": "Alarm severity for status value 0.",
+          "title": "Sta Sv0",
+          "type": "string"
+        },
+        "sta_sv1": {
+          "default": "NO_ALARM",
+          "description": "Alarm severity for status value 1.",
+          "title": "Sta Sv1",
+          "type": "string"
+        },
+        "sta_sv2": {
+          "default": "NO_ALARM",
+          "description": "Alarm severity for status value 2.",
+          "title": "Sta Sv2",
+          "type": "string"
+        },
+        "sta_sv3": {
+          "default": "NO_ALARM",
+          "description": "Alarm severity for status value 3.",
+          "title": "Sta Sv3",
+          "type": "string"
+        },
+        "sta_sv4": {
+          "default": "NO_ALARM",
+          "description": "Alarm severity for status value 4.",
+          "title": "Sta Sv4",
+          "type": "string"
+        },
+        "sta_sv5": {
+          "default": "NO_ALARM",
+          "description": "Alarm severity for status value 5.",
+          "title": "Sta Sv5",
+          "type": "string"
+        },
+        "sta_sv6": {
+          "default": "NO_ALARM",
+          "description": "Alarm severity for status value 6.",
+          "title": "Sta Sv6",
+          "type": "string"
+        },
+        "sta_label0": {
+          "default": "Fault",
+          "description": "Label string for status value 0",
+          "title": "Sta Label0",
+          "type": "string"
+        },
+        "sta_label1": {
+          "default": "Open",
+          "description": "Label string for status value 1",
+          "title": "Sta Label1",
+          "type": "string"
+        },
+        "sta_label2": {
+          "default": "Opening",
+          "description": "Label string for status value 2",
+          "title": "Sta Label2",
+          "type": "string"
+        },
+        "sta_label3": {
+          "default": "Closed",
+          "description": "Label string for status value 3",
+          "title": "Sta Label3",
+          "type": "string"
+        },
+        "sta_label4": {
+          "default": "Closing",
+          "description": "Label string for status value 4",
+          "title": "Sta Label4",
+          "type": "string"
+        },
+        "sta_label5": {
+          "default": "",
+          "description": "Label string for status value 5",
+          "title": "Sta Label5",
+          "type": "string"
+        },
+        "sta_label6": {
+          "default": "",
+          "description": "Label string for status value 6",
+          "title": "Sta Label6",
+          "type": "string"
+        },
+        "con_label0": {
+          "default": "Open",
+          "description": "Label string for control value 0",
+          "title": "Con Label0",
+          "type": "string"
+        },
+        "con_label1": {
+          "default": "Close",
+          "description": "Label string for control value 1",
+          "title": "Con Label1",
+          "type": "string"
+        },
+        "con_label2": {
+          "default": "Reset",
+          "description": "Label string for control value 2",
+          "title": "Con Label2",
+          "type": "string"
+        },
+        "con_label3": {
+          "default": "",
+          "description": "Label string for control value 3",
+          "title": "Con Label3",
+          "type": "string"
+        },
+        "con_label4": {
+          "default": "",
+          "description": "Label string for control value 4",
+          "title": "Con Label4",
+          "type": "string"
+        },
+        "con_label5": {
+          "default": "",
+          "description": "Label string for control value 5",
+          "title": "Con Label5",
+          "type": "string"
+        },
+        "con_label6": {
+          "default": "",
+          "description": "Label string for control value 6",
+          "title": "Con Label6",
+          "type": "string"
+        },
+        "whylocked": {
+          "default": "Open command not allowed",
+          "description": "String to output to EDM synoptic as to precisely why the device is locked and by whom",
+          "title": "Whylocked",
+          "type": "string"
+        },
+        "allowpv": {
+          "default": "",
+          "description": "If specified, then only write an open command when this is non-zero. MUST have CP at the end of it",
+          "title": "Allowpv",
+          "type": "string"
+        },
+        "tagidx": {
+          "anyOf": [
+            {
+              "description": "jinja that renders to <class 'int'>",
+              "pattern": ".*\\{\\{.*\\}\\}.*",
+              "type": "string"
+            },
+            {
+              "description": "Template argument",
+              "type": "integer"
+            }
+          ],
+          "description": "union of <class 'int'> and jinja representation of {typ}",
+          "title": "Tagidx"
+        },
+        "tag": {
+          "description": "NX PLC tag string e.g. V (from V.Control[1])",
+          "title": "Tag",
+          "type": "string"
+        },
+        "ILKNUM": {
+          "anyOf": [
+            {
+              "description": "jinja that renders to <class 'int'>",
+              "pattern": ".*\\{\\{.*\\}\\}.*",
+              "type": "string"
+            },
+            {
+              "description": "Part of Gauge PLC tag (Gauge.PIRG[dollar(ILKNUM)])",
+              "type": "integer"
+            }
+          ],
+          "description": "union of <class 'int'> and jinja representation of {typ}",
+          "title": "Ilknum"
+        },
+        "device": {
+          "description": "device name",
+          "title": "Device",
+          "type": "string"
+        },
+        "port": {
+          "description": "EtherIP Port Name",
+          "title": "Port",
+          "type": "string"
+        },
+        "con_label7": {
+          "default": "",
+          "description": "Label string for control value 7 (Optional - defaults to \"\")",
+          "title": "Con Label7",
+          "type": "string"
+        },
+        "sta_label7": {
+          "default": "",
+          "description": "Label string for status value 7 (Optional - defaults to \"\")",
+          "title": "Sta Label7",
+          "type": "string"
+        },
+        "sta_sv7": {
+          "default": "NO_ALARM",
+          "description": "Alarm severity for status value 7 (Optional - defaults to NO_ALARM)",
+          "title": "Sta Sv7",
+          "type": "string"
+        },
+        "ilksta_label6": {
+          "default": "",
+          "description": "Label string for status value 6 (Optional - defaults to \"\")",
+          "title": "Ilksta Label6",
+          "type": "string"
+        },
+        "ilksta_label7": {
+          "default": "",
+          "description": "Label string for status value 7 (Optional - defaults to \"\")",
+          "title": "Ilksta Label7",
+          "type": "string"
+        },
+        "ilksta_sv6": {
+          "default": "NO_ALARM",
+          "description": "Alarm severity for interlock status value 6 (Optional - defaults to NO_ALARM)",
+          "title": "Ilksta Sv6",
+          "type": "string"
+        },
+        "ilksta_sv7": {
+          "default": "NO_ALARM",
+          "description": "Alarm severity for interlock status value 7 (Optional - defaults to NO_ALARM)",
+          "title": "Ilksta Sv7",
+          "type": "string"
+        },
+        "DIRILK1": {
+          "default": "",
+          "description": "Part of ILK1 PV name (dollar(device):dollar(DIRILK1)ILK), named for \"direction\" of operation controlled by ILK1, e.g. set to OPEN for Bistable valve or leave blank for ordinary valve.  (Optional - defaults to \"\")",
+          "title": "Dirilk1",
+          "type": "string"
+        },
+        "DIRILK2": {
+          "default": "ILK2",
+          "description": "Part of ILK2 PV name (dollar(device):dollar(DIRILK2)ILK), named for \"direction\" of operation controlled by ILK2, e.g. set to CLOSE for Bistable valves (Optional - defaults to \"ILK2\")",
+          "title": "Dirilk2",
+          "type": "string"
+        },
+        "name": {
+          "description": "Object name and associated gui name      (Optional - defaults to \"\")",
+          "title": "Name",
+          "type": "string"
+        },
+        "desc": {
+          "default": "$(device)",
+          "description": "Box label for gui                        (Optional - defaults to value of device macro)",
+          "title": "Desc",
+          "type": "string"
+        }
+      },
+      "required": [
+        "type",
+        "tagidx",
+        "tag",
+        "ILKNUM",
+        "device",
+        "port",
+        "name"
+      ],
+      "title": "dlsPLC_NX102_vacValveDebounce",
+      "type": "object"
+    },
+    "parity": {
+      "enum": [
+        "even",
+        "none",
+        "odd"
+      ],
+      "title": "parity",
+      "type": "string"
+    },
+    "stop": {
+      "enum": [
+        "1",
+        "2"
+      ],
+      "title": "stop",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "ioc_name": {
+      "description": "Name of IOC instance",
+      "title": "Ioc Name",
+      "type": "string"
+    },
+    "description": {
+      "description": "Description of what the IOC does",
+      "title": "Description",
+      "type": "string"
+    },
+    "entities": {
+      "description": "List of entities this IOC instantiates",
+      "items": {
+        "discriminator": {
+          "mapping": {
+            "asyn.AsynIP": "#/$defs/asyn_AsynIP",
+            "dlsPLC.NX102_vacValveDebounce": "#/$defs/dlsPLC_NX102_vacValveDebounce"
+          },
+          "propertyName": "type"
+        },
+        "oneOf": [
+          {
+            "$ref": "#/$defs/dlsPLC_NX102_vacValveDebounce"
+          },
+          {
+            "$ref": "#/$defs/asyn_AsynIP"
+          }
+        ]
+      },
+      "title": "Entities",
+      "type": "array"
+    },
+    "shared": {
+      "default": [],
+      "description": "A place to create any anchors required for repeating YAML",
+      "items": {},
+      "title": "Shared",
+      "type": "array"
+    }
+  },
+  "required": [
+    "ioc_name",
+    "description",
+    "entities"
+  ],
+  "title": "NewIOC",
+  "type": "object"
+}

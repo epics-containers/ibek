@@ -3,6 +3,7 @@ A class for rendering a substitution file from multiple instantiations of
 support module yaml files.
 """
 
+import re
 from dataclasses import dataclass
 from typing import Any, Dict, List, Mapping, Optional, Sequence, Tuple
 
@@ -74,7 +75,22 @@ class RenderDb:
         if str_to_bool(UTILS.render(entity, database.enabled)):
             database.file = database.file.strip("\n")
 
+            parameters = entity.__dict__.keys()
+            # take each database parameter and expand it into the set of
+            # entity parameters that it matches using regex
+            expanded_database_entries: dict[str, str | None] = {}
             for arg, value in database.args.items():
+                if "*" in arg or "?" in arg:
+                    # this is a regex - match the parameters to the regex
+                    for parameter in parameters:
+                        if re.match(arg, parameter):
+                            # TODO - should we perform regex subst on the value as well?
+                            expanded_database_entries[parameter] = value
+                else:
+                    # simple db argument name
+                    expanded_database_entries[arg] = value
+
+            for arg, value in expanded_database_entries.items():
                 if value is None:
                     if arg not in entity.__dict__ and arg not in UTILS.variables:
                         raise ValueError(
@@ -82,7 +98,7 @@ class RenderDb:
                             f"'{database.file}' not found in context"
                         )
 
-            self.add_row(database.file, database.args, entity)
+            self.add_row(database.file, expanded_database_entries, entity)
 
     def add_extra_databases(self, databases: List[Tuple[Database, Entity]]) -> None:
         """Add databases that are not part of EntityModels
