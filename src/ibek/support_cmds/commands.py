@@ -340,3 +340,17 @@ def generate_schema(
         typer.echo(Support.get_schema())
     else:
         output.write_text(Support.get_schema())
+
+
+@support_cli.command()
+def add_runtime_files(
+    files: List[str] = typer.Argument(
+        None, help="list of file or folders to add to the runtime image"
+    ),
+):
+    """
+    Adds to the list of folders or filesthat are copied over to the runtime
+    stage of the container build.
+    """
+    files = files or []
+    add_list_to_file(GLOBALS.RUNTIME_FILES, files)

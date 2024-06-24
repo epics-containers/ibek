@@ -124,8 +124,13 @@ class _Globals:
 
     @property
     def RUNTIME_DEBS(self):
-        """ibek-support list of declared libs"""
+        """ibek-support list of declared deb packages to install in runtime stage"""
         return self.SUPPORT / "configure" / "runtime_debs"
+
+    @property
+    def RUNTIME_FILES(self):
+        """ibek-support list of files to copy to the runtime stage"""
+        return self.SUPPORT / "configure" / "runtime_files_list"
 
 
 # Folder containing templates for IOC src etc.

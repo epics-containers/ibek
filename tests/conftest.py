@@ -63,15 +63,26 @@ def entity_factory():
 def tmp_epics_root(samples: Path, tmp_path: Path, mocker: MockerFixture):
     # create an partially populated epics_root structure in a temporary folder
     epics = tmp_path / "epics"
+    epics_source = samples / "epics"
     epics.mkdir()
-    shutil.copytree(samples / "epics" / "pvi-defs", epics / "pvi-defs")
-    shutil.copytree(samples / "epics" / "support", epics / "support")
-    Path.mkdir(epics / "opi")
-    Path.mkdir(epics / "epics-base")
-    Path.mkdir(epics / "ioc/config", parents=True)
-    Path.mkdir(epics / "ibek-defs")
-    Path.mkdir(epics / "runtime")
+    # a dummy venv for testing extract_assets
+    Path.mkdir(tmp_path / "venv")
 
+    # create the minimal structure under epics root
+    files = epics_source.glob("*")
+    for f in files:
+        if f.is_dir():
+            shutil.copytree(f, epics / f.name)
+        else:
+            shutil.copy(f, epics / f.name)
+    Path.mkdir(epics / "opi", exist_ok=True)
+    Path.mkdir(epics / "epics-base", exist_ok=True)
+    Path.mkdir(epics / "generic-source" / "ioc" / "config", parents=True)
+    (epics / "ioc").symlink_to(epics / "generic-source" / "ioc")
+    Path.mkdir(epics / "ibek-defs", exist_ok=True)
+    Path.mkdir(epics / "runtime", exist_ok=True)
+
+    # patch the global EPICS_ROOT to point to this temporary folder
     mocker.patch.object(GLOBALS, "_EPICS_ROOT", epics)
 
     # this should not be needed - what gives?

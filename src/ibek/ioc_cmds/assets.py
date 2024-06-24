@@ -47,11 +47,11 @@ def extract_assets(
     """
 
     if GLOBALS.STATIC_BUILD:
-        # static builds only need database files from support modules
-        asset_matches = "db"
+        # static builds only need database and .proto files from support modules
+        asset_matches = "db|*/protocol"
     else:
-        # dynamically linked builds need binaries
-        asset_matches = "bin|db|lib"
+        # dynamically linked builds need binaries and protocol files
+        asset_matches = "bin|db|lib|*/protocol"
 
     # chdir out of the folders we will move
     os.chdir(source)
@@ -66,18 +66,23 @@ def extract_assets(
             Path.readlink(
                 GLOBALS.IOC_FOLDER
             ).parent,  # get contents of IOC folder and its source (parent)
-            Path("/venv"),  # get the virtualenv
-        ] + list(
-            source.glob("ibek*")
-        )  # get ibek-support and related folders
+            GLOBALS.EPICS_ROOT.parent / "venv",  # virtualenv is a peer to /epics
+        ]
     else:
         default_assets = []
 
     # folder names with binary files in them
     binary = ["bin", "lib"]
 
+    # get the list of additional files supplied by add_runtime_files
+    if GLOBALS.RUNTIME_FILES.exists():
+        with GLOBALS.RUNTIME_FILES.open("r") as f:
+            runtime_files = [Path(line.strip()) for line in f.readlines()]
+    else:
+        runtime_files = []
+
     # move the default assets and extras in their entirety
-    extra_files = default_assets + extras
+    extra_files = default_assets + extras + runtime_files
     for asset in extra_files:
         src = source / asset
         if src.exists():
