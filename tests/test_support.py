@@ -4,7 +4,7 @@ from pathlib import Path
 
 import pytest
 
-from ibek.support_cmds.checks import check_deps
+from ibek.support_cmds.checks import check_deps, do_dependencies
 from ibek.support_cmds.files import symlink_files
 
 
@@ -38,8 +38,27 @@ def test_symlink_pvi(tmp_path: Path, samples: Path):
 # the support files
 def test_check_dependencies(tmp_epics_root: Path):
     # Check Passes vs test data
-    check_deps(["ADSimDetector"])
+    check_deps(["ADSimDetector", "some-other-module"])
 
     # Check fails
     with pytest.raises(Exception):
         check_deps(["FakeDetector"])
+
+
+def test_check_release_sh(tmp_epics_root: Path):
+    """validate generation of RELEASE.sh for issue #227"""
+
+    do_dependencies()
+
+    release_sh = tmp_epics_root / "support" / "configure" / "RELEASE.shell"
+    assert release_sh.exists()
+    text = release_sh.read_text()
+    assert (
+        text
+        == """export SUPPORT="/epics/support"
+export EPICS_BASE="/epics/epics-base"
+export ADSIMDETECTOR="/epics/support/ADSimDetector"
+export SOME-OTHER-MODULE="/epics/support/some-other-module"
+export EPICS_DB_INCLUDE_PATH=""
+"""
+    )

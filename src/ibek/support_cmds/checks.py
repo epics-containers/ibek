@@ -15,7 +15,7 @@ SHELL_FIND = re.compile(r"\$\(([^\)]*)\)")
 SHELL_REPLACE = r"${\1}"
 
 # find macros, including ones with blank values
-PARSE_MACROS_NULL = re.compile(r"^([A-Z_a-z0-9]*)\s*=(.*)$", flags=re.M)
+PARSE_MACROS_NULL = re.compile(r"^([A-Z_\-\.a-z0-9]*)\s*=(.*)$", flags=re.M)
 
 
 def verify_release_includes_local(configure_folder: Path):
