@@ -9,7 +9,7 @@ from pathlib import Path
 from typing import Annotated, Any, Dict, List, Literal, Tuple, Type
 
 from pydantic import Field, create_model
-from pydantic_core import PydanticUndefined, ValidationError
+from pydantic_core import PydanticUndefined
 from ruamel.yaml.main import YAML
 
 from ibek.globals import JINJA
@@ -40,19 +40,19 @@ class EntityFactory:
         from their EntityModel entries
         """
 
-        for entity_model in entity_model_yaml:
-            support_dict = YAML(typ="safe").load(entity_model)
+        try:
+            for entity_model in entity_model_yaml:
+                support_dict = YAML(typ="safe").load(entity_model)
 
-            try:
                 Support.model_validate(support_dict)
 
                 # deserialize the support module yaml file
                 support = Support(**support_dict)
                 # make Entity classes described in the support module yaml file
                 self._make_entity_models(support)
-            except ValidationError:
-                print(f"PYDANTIC VALIDATION ERROR IN {entity_model}")
-                raise
+        except Exception:
+            print(f"VALIDATION ERROR READING {entity_model}")
+            raise
 
         return list(self._entity_models.values())
 
