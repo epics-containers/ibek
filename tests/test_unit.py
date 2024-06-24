@@ -3,15 +3,19 @@ Some unit tests for ibek.
 """
 
 import dataclasses
+import shutil
+from pathlib import Path
 
 import jinja2
 import pytest
 
 from ibek.commands import semver_compare
 from ibek.ioc import id_to_entity
+from ibek.ioc_cmds.assets import extract_assets
 from ibek.ioc_factory import IocFactory
 from ibek.parameters import IdParam, ObjectParam
 from ibek.support import EntityModel, Support
+from ibek.support_cmds.commands import add_runtime_files
 from ibek.utils import UTILS
 
 
@@ -89,3 +93,25 @@ def test_strict():
     my_template = "{{ person.name ~ ' of age ' ~ person.height }}"
     with pytest.raises(jinja2.exceptions.UndefinedError):
         text = UTILS.render({"person": p}, my_template)
+
+
+def test_extract_assets(tmp_epics_root: Path, samples: Path):
+    """
+    Test the extract_assets function
+    """
+    runtime_files = [
+        str(tmp_epics_root / "runtime_file"),
+        str(tmp_epics_root / "runtime_folder"),
+    ]
+    add_runtime_files(runtime_files)
+
+    dest = Path("/tmp/ibek_test_assests")
+    shutil.rmtree(dest, ignore_errors=True)
+    dest.mkdir()
+
+    extract_assets(dest, tmp_epics_root, [], True)
+    new_epics_root = list(dest.glob("tmp/*/*/*/epics"))[0]
+
+    assert Path.exists(new_epics_root / "runtime_file")
+    assert Path.exists(new_epics_root / "runtime_folder/text1.txt")
+    assert Path.exists(new_epics_root / "runtime_folder/text2.txt")
