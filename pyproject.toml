@@ -12,7 +12,7 @@ classifiers = [
 ]
 description = "IOC Builder for EPICS and Kubernetes"
 dependencies = [
-    "pydantic==2.7.4",
+    "pydantic==2.8.2",
     "typer",
     "ruamel.yaml",
     "jinja2",
