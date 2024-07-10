@@ -90,7 +90,7 @@ def generate_pvi(ioc: IOC) -> Tuple[List[IndexEntry], List[Tuple[Database, Entit
             continue
         entity_pvi = definition.pvi
 
-        pvi_yaml = GLOBALS.PVI_DEFS / entity_pvi.yaml_path
+        pvi_yaml = GLOBALS.PVI_DEFS / UTILS.render(entity, entity_pvi.yaml_path)
         device_name = pvi_yaml.name.split(".")[0]
         device_bob = GLOBALS.OPI_OUTPUT / f"{device_name}.pvi.bob"
 
