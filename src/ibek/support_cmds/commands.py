@@ -17,7 +17,6 @@ from typing_extensions import Annotated
 
 from ibek.globals import (
     GLOBALS,
-    IBEK_GLOBALS,
     PVI_YAML_PATTERN,
     SUPPORT_YAML_PATTERN,
     NaturalOrderGroup,

@@ -23,6 +23,50 @@ record("*", "$(P)$(R)Net_RBV") {
     })
 }
 
+record("*", "$(P)$(R)MinY") {
+    info(Q:group, {
+        "$(P)$(R)PVI": {
+            "pvi.MinY.w": {
+                "+channel": "NAME",
+                "+type": "plain",
+            }
+        }
+    })
+}
+
+record("*", "$(P)$(R)MinY_RBV") {
+    info(Q:group, {
+        "$(P)$(R)PVI": {
+            "pvi.MinY.r": {
+                "+channel": "NAME",
+                "+type": "plain",
+            }
+        }
+    })
+}
+
+record("*", "$(P)$(R)MinX") {
+    info(Q:group, {
+        "$(P)$(R)PVI": {
+            "pvi.MinX.w": {
+                "+channel": "NAME",
+                "+type": "plain",
+            }
+        }
+    })
+}
+
+record("*", "$(P)$(R)MinX_RBV") {
+    info(Q:group, {
+        "$(P)$(R)PVI": {
+            "pvi.MinX.r": {
+                "+channel": "NAME",
+                "+type": "plain",
+            }
+        }
+    })
+}
+
 record("*", "$(P)$(R)ArraySizeX_RBV") {
     info(Q:group, {
         "$(P)$(R)PVI": {
@@ -93,50 +137,6 @@ record("*", "$(P)$(R)ColorMode_RBV") {
     info(Q:group, {
         "$(P)$(R)PVI": {
             "pvi.ColorMode.r": {
-                "+channel": "NAME",
-                "+type": "plain",
-            }
-        }
-    })
-}
-
-record("*", "$(P)$(R)MinY") {
-    info(Q:group, {
-        "$(P)$(R)PVI": {
-            "pvi.MinY.w": {
-                "+channel": "NAME",
-                "+type": "plain",
-            }
-        }
-    })
-}
-
-record("*", "$(P)$(R)MinY_RBV") {
-    info(Q:group, {
-        "$(P)$(R)PVI": {
-            "pvi.MinY.r": {
-                "+channel": "NAME",
-                "+type": "plain",
-            }
-        }
-    })
-}
-
-record("*", "$(P)$(R)MinX") {
-    info(Q:group, {
-        "$(P)$(R)PVI": {
-            "pvi.MinX.w": {
-                "+channel": "NAME",
-                "+type": "plain",
-            }
-        }
-    })
-}
-
-record("*", "$(P)$(R)MinX_RBV") {
-    info(Q:group, {
-        "$(P)$(R)PVI": {
-            "pvi.MinX.r": {
                 "+channel": "NAME",
                 "+type": "plain",
             }

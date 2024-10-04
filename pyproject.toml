@@ -18,7 +18,7 @@ dependencies = [
     "jinja2",
     "GitPython",
     "semantic-version",
-    "pvi~=0.8",         # pvi currently tracks breaking changes with minor version
+    "pvi",
 ] # Add project dependencies here, e.g. ["click", "numpy"]
 dynamic = ["version"]
 license.file = "LICENSE"
