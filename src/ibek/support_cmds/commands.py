@@ -17,7 +17,6 @@ from typing_extensions import Annotated
 
 from ibek.globals import (
     GLOBALS,
-    IBEK_GLOBALS,
     PVI_YAML_PATTERN,
     SUPPORT_YAML_PATTERN,
     NaturalOrderGroup,
@@ -293,9 +292,10 @@ def compile(
 
     command = f"make -C {path} -j $(nproc) " + " ".join(ctx.args)
     result = subprocess.call(["bash", "-c", command])
-    # save size of developer container with make clean
-    command = f"make -C {path} -j $(nproc) clean"
-    subprocess.call(["bash", "-c", command])
+    if result == 0:
+        # save size of developer container with make clean
+        command = f"make -C {path} -j $(nproc) clean"
+        subprocess.call(["bash", "-c", command])
     exit(result)
 
 
@@ -317,11 +317,7 @@ def generate_links(
                 module of the ioc-xxx Generic IOC project and may be the
                 public ibek-support repo or a private ibek-support-xxx repo.
     """
-    support_globals = folder / ".." / IBEK_GLOBALS
-
     symlink_files(folder, SUPPORT_YAML_PATTERN, GLOBALS.IBEK_DEFS)
-    if support_globals.exists():
-        symlink_files(support_globals, SUPPORT_YAML_PATTERN, GLOBALS.IBEK_DEFS)
     symlink_files(folder, PVI_YAML_PATTERN, GLOBALS.PVI_DEFS)
 
 

@@ -73,135 +73,9 @@
     <transparent>true</transparent>
     <widget type="label" version="2.0.0">
       <name>Label</name>
-      <text>Array Size X</text>
-      <x>0</x>
-      <y>0</y>
-      <width>150</width>
-      <height>20</height>
-      <tooltip>$(text)</tooltip>
-    </widget>
-    <widget type="textupdate" version="2.0.0">
-      <name>TextUpdate</name>
-      <pv_name>$(P)$(R)ArraySizeX_RBV</pv_name>
-      <x>155</x>
-      <y>0</y>
-      <width>205</width>
-      <height>20</height>
-      <font>
-        <font name="Default Bold" family="Liberation Sans" style="BOLD" size="14.0">
-      </font>
-      </font>
-      <horizontal_alignment>1</horizontal_alignment>
-    </widget>
-    <widget type="label" version="2.0.0">
-      <name>Label</name>
-      <text>Array Size Y</text>
-      <x>0</x>
-      <y>25</y>
-      <width>150</width>
-      <height>20</height>
-      <tooltip>$(text)</tooltip>
-    </widget>
-    <widget type="textupdate" version="2.0.0">
-      <name>TextUpdate</name>
-      <pv_name>$(P)$(R)ArraySizeY_RBV</pv_name>
-      <x>155</x>
-      <y>25</y>
-      <width>205</width>
-      <height>20</height>
-      <font>
-        <font name="Default Bold" family="Liberation Sans" style="BOLD" size="14.0">
-      </font>
-      </font>
-      <horizontal_alignment>1</horizontal_alignment>
-    </widget>
-    <widget type="label" version="2.0.0">
-      <name>Label</name>
-      <text>Array Size</text>
-      <x>0</x>
-      <y>50</y>
-      <width>150</width>
-      <height>20</height>
-      <tooltip>$(text)</tooltip>
-    </widget>
-    <widget type="textupdate" version="2.0.0">
-      <name>TextUpdate</name>
-      <pv_name>$(P)$(R)ArraySize_RBV</pv_name>
-      <x>155</x>
-      <y>50</y>
-      <width>205</width>
-      <height>20</height>
-      <font>
-        <font name="Default Bold" family="Liberation Sans" style="BOLD" size="14.0">
-      </font>
-      </font>
-      <horizontal_alignment>1</horizontal_alignment>
-    </widget>
-    <widget type="label" version="2.0.0">
-      <name>Label</name>
-      <text>Data Type</text>
-      <x>0</x>
-      <y>75</y>
-      <width>150</width>
-      <height>20</height>
-      <tooltip>$(text)</tooltip>
-    </widget>
-    <widget type="combo" version="2.0.0">
-      <name>ComboBox</name>
-      <pv_name>$(P)$(R)DataType</pv_name>
-      <x>155</x>
-      <y>75</y>
-      <width>100</width>
-      <height>20</height>
-    </widget>
-    <widget type="textupdate" version="2.0.0">
-      <name>TextUpdate</name>
-      <pv_name>$(P)$(R)DataType_RBV</pv_name>
-      <x>260</x>
-      <y>75</y>
-      <width>100</width>
-      <height>20</height>
-      <font>
-        <font name="Default Bold" family="Liberation Sans" style="BOLD" size="14.0">
-      </font>
-      </font>
-      <horizontal_alignment>1</horizontal_alignment>
-    </widget>
-    <widget type="label" version="2.0.0">
-      <name>Label</name>
-      <text>Color Mode</text>
-      <x>0</x>
-      <y>100</y>
-      <width>150</width>
-      <height>20</height>
-      <tooltip>$(text)</tooltip>
-    </widget>
-    <widget type="combo" version="2.0.0">
-      <name>ComboBox</name>
-      <pv_name>$(P)$(R)ColorMode</pv_name>
-      <x>155</x>
-      <y>100</y>
-      <width>100</width>
-      <height>20</height>
-    </widget>
-    <widget type="textupdate" version="2.0.0">
-      <name>TextUpdate</name>
-      <pv_name>$(P)$(R)ColorMode_RBV</pv_name>
-      <x>260</x>
-      <y>100</y>
-      <width>100</width>
-      <height>20</height>
-      <font>
-        <font name="Default Bold" family="Liberation Sans" style="BOLD" size="14.0">
-      </font>
-      </font>
-      <horizontal_alignment>1</horizontal_alignment>
-    </widget>
-    <widget type="label" version="2.0.0">
-      <name>Label</name>
       <text>Min Y</text>
       <x>0</x>
-      <y>125</y>
+      <y>0</y>
       <width>150</width>
       <height>20</height>
       <tooltip>$(text)</tooltip>
@@ -210,7 +84,7 @@
       <name>TextEntry</name>
       <pv_name>$(P)$(R)MinY</pv_name>
       <x>155</x>
-      <y>125</y>
+      <y>0</y>
       <width>100</width>
       <height>20</height>
       <horizontal_alignment>1</horizontal_alignment>
@@ -219,7 +93,7 @@
       <name>TextUpdate</name>
       <pv_name>$(P)$(R)MinY_RBV</pv_name>
       <x>260</x>
-      <y>125</y>
+      <y>0</y>
       <width>100</width>
       <height>20</height>
       <font>
@@ -232,7 +106,7 @@
       <name>Label</name>
       <text>Min X</text>
       <x>0</x>
-      <y>150</y>
+      <y>25</y>
       <width>150</width>
       <height>20</height>
       <tooltip>$(text)</tooltip>
@@ -241,7 +115,7 @@
       <name>TextEntry</name>
       <pv_name>$(P)$(R)MinX</pv_name>
       <x>155</x>
-      <y>150</y>
+      <y>25</y>
       <width>100</width>
       <height>20</height>
       <horizontal_alignment>1</horizontal_alignment>
@@ -249,6 +123,132 @@
     <widget type="textupdate" version="2.0.0">
       <name>TextUpdate</name>
       <pv_name>$(P)$(R)MinX_RBV</pv_name>
+      <x>260</x>
+      <y>25</y>
+      <width>100</width>
+      <height>20</height>
+      <font>
+        <font name="Default Bold" family="Liberation Sans" style="BOLD" size="14.0">
+      </font>
+      </font>
+      <horizontal_alignment>1</horizontal_alignment>
+    </widget>
+    <widget type="label" version="2.0.0">
+      <name>Label</name>
+      <text>Array Size X</text>
+      <x>0</x>
+      <y>50</y>
+      <width>150</width>
+      <height>20</height>
+      <tooltip>$(text)</tooltip>
+    </widget>
+    <widget type="textupdate" version="2.0.0">
+      <name>TextUpdate</name>
+      <pv_name>$(P)$(R)ArraySizeX_RBV</pv_name>
+      <x>155</x>
+      <y>50</y>
+      <width>205</width>
+      <height>20</height>
+      <font>
+        <font name="Default Bold" family="Liberation Sans" style="BOLD" size="14.0">
+      </font>
+      </font>
+      <horizontal_alignment>1</horizontal_alignment>
+    </widget>
+    <widget type="label" version="2.0.0">
+      <name>Label</name>
+      <text>Array Size Y</text>
+      <x>0</x>
+      <y>75</y>
+      <width>150</width>
+      <height>20</height>
+      <tooltip>$(text)</tooltip>
+    </widget>
+    <widget type="textupdate" version="2.0.0">
+      <name>TextUpdate</name>
+      <pv_name>$(P)$(R)ArraySizeY_RBV</pv_name>
+      <x>155</x>
+      <y>75</y>
+      <width>205</width>
+      <height>20</height>
+      <font>
+        <font name="Default Bold" family="Liberation Sans" style="BOLD" size="14.0">
+      </font>
+      </font>
+      <horizontal_alignment>1</horizontal_alignment>
+    </widget>
+    <widget type="label" version="2.0.0">
+      <name>Label</name>
+      <text>Array Size</text>
+      <x>0</x>
+      <y>100</y>
+      <width>150</width>
+      <height>20</height>
+      <tooltip>$(text)</tooltip>
+    </widget>
+    <widget type="textupdate" version="2.0.0">
+      <name>TextUpdate</name>
+      <pv_name>$(P)$(R)ArraySize_RBV</pv_name>
+      <x>155</x>
+      <y>100</y>
+      <width>205</width>
+      <height>20</height>
+      <font>
+        <font name="Default Bold" family="Liberation Sans" style="BOLD" size="14.0">
+      </font>
+      </font>
+      <horizontal_alignment>1</horizontal_alignment>
+    </widget>
+    <widget type="label" version="2.0.0">
+      <name>Label</name>
+      <text>Data Type</text>
+      <x>0</x>
+      <y>125</y>
+      <width>150</width>
+      <height>20</height>
+      <tooltip>$(text)</tooltip>
+    </widget>
+    <widget type="combo" version="2.0.0">
+      <name>ComboBox</name>
+      <pv_name>$(P)$(R)DataType</pv_name>
+      <x>155</x>
+      <y>125</y>
+      <width>100</width>
+      <height>20</height>
+    </widget>
+    <widget type="textupdate" version="2.0.0">
+      <name>TextUpdate</name>
+      <pv_name>$(P)$(R)DataType_RBV</pv_name>
+      <x>260</x>
+      <y>125</y>
+      <width>100</width>
+      <height>20</height>
+      <font>
+        <font name="Default Bold" family="Liberation Sans" style="BOLD" size="14.0">
+      </font>
+      </font>
+      <horizontal_alignment>1</horizontal_alignment>
+    </widget>
+    <widget type="label" version="2.0.0">
+      <name>Label</name>
+      <text>Color Mode</text>
+      <x>0</x>
+      <y>150</y>
+      <width>150</width>
+      <height>20</height>
+      <tooltip>$(text)</tooltip>
+    </widget>
+    <widget type="combo" version="2.0.0">
+      <name>ComboBox</name>
+      <pv_name>$(P)$(R)ColorMode</pv_name>
+      <x>155</x>
+      <y>150</y>
+      <width>100</width>
+      <height>20</height>
+    </widget>
+    <widget type="textupdate" version="2.0.0">
+      <name>TextUpdate</name>
+      <pv_name>$(P)$(R)ColorMode_RBV</pv_name>
       <x>260</x>
       <y>150</y>
       <width>100</width>

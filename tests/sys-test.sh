@@ -68,7 +68,7 @@ ioc_args=(
     --name ${cont}
     --entrypoint bash
     -dit
-    ghcr.io/epics-containers/ioc-template-linux-developer:23.3.1
+    ghcr.io/epics-containers/ioc-template-example-developer:4.0.0
 )
 mounts=(
     -v ${THIS_DIR}/samples/example-ibek-config:${config}
@@ -91,11 +91,11 @@ podman exec ${cont} pip install /ibek
 podman exec -dit ${cont} bash -c "/epics/ioc/start.sh >> /ibek/start.log 2>&1"
 # wait for ibek to get the IOC up and running.
 for retry in {1..10} ; do
-    if check_pv 'test-ibek-ioc:EPICS_VERS' 'R7.0.7'; then break; fi
+    if check_pv 'test-ibek-ioc:EPICS_VERS' 'R7.0.8'; then break; fi
     sleep 1
 done
 # output the log from the IOC
 cat start.log
 # verify expected PVs
-check_pv 'test-ibek-ioc:EPICS_VERS' 'R7.0.7'
+check_pv 'test-ibek-ioc:EPICS_VERS' 'R7.0.8'
 check_ioc 'EXAMPLE:IBEK'
