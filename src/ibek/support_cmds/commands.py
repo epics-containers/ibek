@@ -318,11 +318,7 @@ def generate_links(
                 module of the ioc-xxx Generic IOC project and may be the
                 public ibek-support repo or a private ibek-support-xxx repo.
     """
-    support_globals = folder / ".." / IBEK_GLOBALS
-
     symlink_files(folder, SUPPORT_YAML_PATTERN, GLOBALS.IBEK_DEFS)
-    if support_globals.exists():
-        symlink_files(support_globals, SUPPORT_YAML_PATTERN, GLOBALS.IBEK_DEFS)
     symlink_files(folder, PVI_YAML_PATTERN, GLOBALS.PVI_DEFS)
 
 
