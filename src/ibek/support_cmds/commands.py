@@ -293,9 +293,10 @@ def compile(
 
     command = f"make -C {path} -j $(nproc) " + " ".join(ctx.args)
     result = subprocess.call(["bash", "-c", command])
-    # save size of developer container with make clean
-    command = f"make -C {path} -j $(nproc) clean"
-    subprocess.call(["bash", "-c", command])
+    if result == 0:
+        # save size of developer container with make clean
+        command = f"make -C {path} -j $(nproc) clean"
+        subprocess.call(["bash", "-c", command])
     exit(result)
 
 
