@@ -71,8 +71,8 @@ def extract_assets(
     else:
         default_assets = []
 
-    # folder names with binary files in them
-    binary = ["bin", "lib"]
+    # folder names with useful files in them
+    useful_files = ["bin", "lib", "db"]
 
     # get the list of additional files supplied by add_runtime_files
     if GLOBALS.RUNTIME_FILES.exists():
@@ -88,16 +88,18 @@ def extract_assets(
         if src.exists():
             dest_file = destination / asset.relative_to("/")
             if dry_run:
-                typer.echo(f"Would move extra asset {src} to {dest_file} with {binary}")
+                typer.echo(
+                    f"Would move extra asset {src} to {dest_file} with {useful_files}"
+                )
             else:
-                move_file(src, dest_file, binary)
+                move_file(src, dest_file, useful_files)
         else:
             typer.echo(f"WARNING: runtime asset {src} missing")
 
     # identify EPICS modules as folders with binary output folders
     # and move only their output folders as specified by asset_matches
     binaries: List[Path] = []
-    for find in binary:
+    for find in useful_files:
         # only look two levels deep
         binaries.extend(source.glob(f"*/*/{find}"))
         binaries.extend(source.glob(f"*/{find}"))
@@ -120,6 +122,6 @@ def extract_assets(
             if src.exists():
                 dest_file = destination_module / asset.relative_to(module)
                 if dry_run:
-                    typer.echo(f"Would move {src} to {dest_file} with {binary}")
+                    typer.echo(f"Would move {src} to {dest_file} with {useful_files}")
                 else:
-                    move_file(src, dest_file, binary)
+                    move_file(src, dest_file, useful_files)
