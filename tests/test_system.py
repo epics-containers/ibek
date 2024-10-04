@@ -54,10 +54,10 @@ def test_container_build_and_run(tmp_path: Path):
     """
     ioc = "ioc-template-example"
 
-    # get the ioc-template-example generic container source
+    # get the ioc-template-example generic container source latest
     os.chdir(tmp_path)
     run_command(f"git clone https://github.com/epics-containers/{ioc}")
-    run_command(f"cd {ioc} && git checkout ibek-test-KEEP")
+    run_command(f"cd {ioc}")
 
     # patch the dockerfile to include this version of ibek
     ibek = Path(__file__).parent.parent
