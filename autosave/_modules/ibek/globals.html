@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>ibek.globals &#8212; ibek 3.1.0 documentation</title>
+    <title>ibek.globals &#8212; ibek 3.1.1.dev1+g33c03702 documentation</title>
   
   
   
@@ -40,7 +40,7 @@
   <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549" />
 <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549" />
 
-    <script src="../../_static/documentation_options.js?v=0ffc2956"></script>
+    <script src="../../_static/documentation_options.js?v=b98ddb9e"></script>
     <script src="../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -50,7 +50,7 @@
     <script>
         DOCUMENTATION_OPTIONS.theme_version = '0.16.0';
         DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://epics-containers.github.io/ibek/switcher.json';
-        DOCUMENTATION_OPTIONS.theme_switcher_version_match = '3.1.0';
+        DOCUMENTATION_OPTIONS.theme_switcher_version_match = 'autosave';
         DOCUMENTATION_OPTIONS.show_version_warning_banner = false;
         </script>
     <link rel="icon" href="../../_static/ibek-favicon.ico"/>
@@ -58,7 +58,7 @@
     <link rel="search" title="Search" href="../../search.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="3.1.0" />
+  <meta name="docsearch:version" content="autosave" />
   </head>
   
   
@@ -472,6 +472,11 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_EPICS_ROOT</span> <span class="o">/</span> <span class="s2">&quot;runtime&quot;</span>
 
     <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">RUNTIME_SUBSTITUTION</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Directory containing runtime generated assets for IOC boot.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">RUNTIME_OUTPUT</span> <span class="o">/</span> <span class="s2">&quot;ioc.subst&quot;</span>
+
+    <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">EPICS_TARGET_ARCH</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;The target architecture for the current container.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;EPICS_TARGET_ARCH&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_DEFAULT_ARCH</span><span class="p">)</span>
@@ -505,6 +510,11 @@
     <span class="k">def</span> <span class="nf">OPI_OUTPUT</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Directory containing runtime generated opis to serve over http.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_EPICS_ROOT</span> <span class="o">/</span> <span class="s2">&quot;opi&quot;</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">AUTOSAVE_OVERRIDES</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Directory containing runtime generated opis to serve over http.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_EPICS_ROOT</span> <span class="o">/</span> <span class="s2">&quot;autosave_overrides&quot;</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">EPICS_BASE</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
