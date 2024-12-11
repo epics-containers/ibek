@@ -14,6 +14,7 @@ from ibek.gen_scripts import create_boot_script, create_db_script
 from ibek.globals import GLOBALS, NaturalOrderGroup
 from ibek.ioc import IOC, Entity
 from ibek.ioc_factory import IocFactory
+from ibek.runtime_cmds.autosave import AutosaveGenerator
 from ibek.utils import UTILS
 
 runtime_cli = typer.Typer(cls=NaturalOrderGroup)
@@ -140,3 +141,12 @@ def generate_index(title: str, index_entries: List[IndexEntry]):
 
     """
     DLSFormatter().format_index(title, index_entries, GLOBALS.OPI_OUTPUT / "index.bob")
+
+
+@runtime_cli.command()
+def generate_autosave():
+    """
+    Generate autosave request files
+    """
+    asg = AutosaveGenerator(GLOBALS.RUNTIME_SUBSTITUTION)
+    asg.generate_req_files()
