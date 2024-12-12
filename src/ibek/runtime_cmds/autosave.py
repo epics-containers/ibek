@@ -57,7 +57,7 @@ class AutosaveGenerator:
         """
         self.db_substitution_file = db_substitution_file
         self.subst_entries = self.parse_subst()
-        self.settings_req: Dict[str, List[self.SubstEntry]] = {}
+        self.settings_req: Dict[str, List[self.SubstEntry]] = {}  # type: ignore
         for suffix in ["settings", "positions"]:
             self.settings_req[suffix] = self.find_req(suffix)
 
