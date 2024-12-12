@@ -78,13 +78,12 @@ class AutosaveGenerator:
 
             with open(GLOBALS.RUNTIME_OUTPUT / subst_name, "w") as f:
                 for entry in entries:
+                    short_name = entry.template_file.name
                     f.write(
-                        self.entry_fmt.format(
-                            file=entry.template_file, pattern=entry.pattern
-                        )
+                        self.entry_fmt.format(file=short_name, pattern=entry.pattern)
                     )
             run(
-                f"msi -S {subst_name} > {req_name}",
+                f"msi -S {subst_name} > {req_name} -I{GLOBALS.AUTOSAVE}",
                 shell=True,
             )
 
