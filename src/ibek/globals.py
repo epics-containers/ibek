@@ -88,9 +88,9 @@ class _Globals:
         return self._EPICS_ROOT / "opi"
 
     @property
-    def AUTOSAVE_OVERRIDES(self):
+    def AUTOSAVE(self):
         """Directory containing runtime generated opis to serve over http."""
-        return self._EPICS_ROOT / "autosave_overrides"
+        return self._EPICS_ROOT / "autosave"
 
     @property
     def EPICS_BASE(self):
@@ -150,6 +150,7 @@ TEMPLATES = Path(__file__).parent / "templates"
 IBEK_GLOBALS = Path("_global")
 SUPPORT_YAML_PATTERN = "*ibek.support.yaml"
 PVI_YAML_PATTERN = "*pvi.device.yaml"
+AUTOSAVE_PATTERN = "*.req"
 
 GLOBALS = _Globals()
 

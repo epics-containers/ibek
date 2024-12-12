@@ -16,6 +16,7 @@ except ImportError:
 from typing_extensions import Annotated
 
 from ibek.globals import (
+    AUTOSAVE_PATTERN,
     GLOBALS,
     PVI_YAML_PATTERN,
     SUPPORT_YAML_PATTERN,
@@ -321,6 +322,7 @@ def generate_links(
     """
     symlink_files(folder, SUPPORT_YAML_PATTERN, GLOBALS.IBEK_DEFS)
     symlink_files(folder, PVI_YAML_PATTERN, GLOBALS.PVI_DEFS)
+    symlink_files(folder, AUTOSAVE_PATTERN, GLOBALS.AUTOSAVE)
 
 
 @support_cli.command()

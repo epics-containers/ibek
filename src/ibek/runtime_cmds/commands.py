@@ -14,7 +14,7 @@ from ibek.gen_scripts import create_boot_script, create_db_script
 from ibek.globals import GLOBALS, NaturalOrderGroup
 from ibek.ioc import IOC, Entity
 from ibek.ioc_factory import IocFactory
-from ibek.runtime_cmds.autosave import AutosaveGenerator
+from ibek.runtime_cmds.autosave import AutosaveGenerator, link_req_files
 from ibek.utils import UTILS
 
 runtime_cli = typer.Typer(cls=NaturalOrderGroup)
@@ -144,9 +144,47 @@ def generate_index(title: str, index_entries: List[IndexEntry]):
 
 
 @runtime_cli.command()
-def generate_autosave():
+def generate_autosave(subst_file: Path = typer.Argument(GLOBALS.RUNTIME_SUBSTITUTION)):
     """
-    Generate autosave request files
+    Generate autosave request files from autosave settings and positions
+    template files found in support module db folders. Allow overrides
+    from ibek-support/* and /epics/ioc/config folders.
+
+    CONVENTION: req template files must be in the support module db folder after
+    the module is built. The template files must be named with the same stem
+    as the db file that defines the PVs to be saved. The naming convention is:
+
+    DbTemplateFileStem_positions.req : for autosave stage 0 settings
+    DbTemplateFileStem_settings.req : for autosave stage 1 settings
+
+    The steps are:
+    1. at build time "ibek support generate-links" creates symlinks to override
+       req files in /epics/autosave. These override req files come from individual
+       ibek-support folders
+    2. at runtime "ibek runtime generate-autosave" handles the remaining steps:
+    3. All req files in /epics/support/*/db/ are symlinked to /epics/autosave
+       except if that req file name already exists (from 1.)
+    4. All req files in /epics/ioc/config are symlinked to /epics/autosave
+       overwriting any existing req file (thus supplying instance overrides)
+    5. AutosaveGenerator generates two substitution files for settings and positions.
+       These substitution files are the same as ioc.db except that they contain
+       the file names of the req templates instead of the db files. If ioc.db
+       contains a database template that has no corresponding req template, then
+       that line is omitted from the new substitution file.
+    6. Two req files are generated from the two substitution files using MSI.
+
+    Incredibly, this approach can cope with template name clashes between support
+    modules.
+
+    If there is a name clash this approach will work as long as ioc.db contains
+    a full path reference to the db template. The corresponding entry in the
+    req substitutions will also use a full path.
+
+    Unfortunately, this is not true for name clashes in req file include statements.
+    Autosave search path will be /epics/autosave only. I'm not expecting this to
+    ever come come up in practice. If it does, the solution is to rename the
+    template in one of the modules.
     """
-    asg = AutosaveGenerator(GLOBALS.RUNTIME_SUBSTITUTION)
+    link_req_files()
+    asg = AutosaveGenerator(subst_file)
     asg.generate_req_files()
