@@ -4,7 +4,6 @@ substitution file and generating an equivalent substitution file for
 the autosave request files.
 """
 
-import os
 import re
 from dataclasses import dataclass
 from pathlib import Path
