@@ -4,6 +4,7 @@ substitution file and generating an equivalent substitution file for
 the autosave request files.
 """
 
+import os
 import re
 from dataclasses import dataclass
 from pathlib import Path
@@ -25,7 +26,7 @@ def link_req_files() -> None:
     3a.  do overwrite existing req files
     """
     Path.mkdir(GLOBALS.AUTOSAVE, exist_ok=True)
-    for req in GLOBALS.SUPPORT.glob("**/db/*.req"):
+    for req in GLOBALS.SUPPORT.glob("**/*.req"):
         link = GLOBALS.AUTOSAVE / req.name
         if not link.exists():
             link.symlink_to(req)
