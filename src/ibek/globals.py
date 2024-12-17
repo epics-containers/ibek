@@ -48,6 +48,11 @@ class _Globals:
         return self._EPICS_ROOT / "runtime"
 
     @property
+    def RUNTIME_SUBSTITUTION(self):
+        """Directory containing runtime generated assets for IOC boot."""
+        return self.RUNTIME_OUTPUT / "ioc.subst"
+
+    @property
     def EPICS_TARGET_ARCH(self):
         """The target architecture for the current container."""
         return os.getenv("EPICS_TARGET_ARCH", self._DEFAULT_ARCH)
@@ -81,6 +86,11 @@ class _Globals:
     def OPI_OUTPUT(self):
         """Directory containing runtime generated opis to serve over http."""
         return self._EPICS_ROOT / "opi"
+
+    @property
+    def AUTOSAVE(self):
+        """Directory containing runtime generated opis to serve over http."""
+        return self._EPICS_ROOT / "autosave"
 
     @property
     def EPICS_BASE(self):
@@ -140,6 +150,7 @@ TEMPLATES = Path(__file__).parent / "templates"
 IBEK_GLOBALS = Path("_global")
 SUPPORT_YAML_PATTERN = "*ibek.support.yaml"
 PVI_YAML_PATTERN = "*pvi.device.yaml"
+AUTOSAVE_PATTERN = "*.req"
 
 GLOBALS = _Globals()
 

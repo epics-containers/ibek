@@ -144,16 +144,16 @@ def convert_definition(data: dict) -> dict | None:
     copy_verbatim(data, new_data, ["name", "description"])
 
     try:
-        if "pre_defines" in data:
-            check_converted(data["pre_defines"])
-            new_data["pre_defines"] = list_to_dict(data["pre_defines"])
+        if "pre_values" in data:
+            check_converted(data["pre_values"])
+            new_data["pre_defines"] = list_to_dict(data["pre_values"])
         if "args" in data:
             new_data["parameters"] = list_to_dict(data["args"])
         else:
             raise ConvertedAlready  # probably! (or its not a support yaml file)
-        if "post_defines" in data:
-            check_converted(data["post_defines"])
-            new_data["post_defines"] = list_to_dict(data["post_defines"])
+        if "values" in data:
+            check_converted(data["values"])
+            new_data["post_defines"] = list_to_dict(data["values"])
     except ConvertedAlready:
         raise
     except Exception:

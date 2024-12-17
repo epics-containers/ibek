@@ -48,10 +48,10 @@ def extract_assets(
 
     if GLOBALS.STATIC_BUILD:
         # static builds only need database and .proto files from support modules
-        asset_matches = "db|*/protocol"
+        asset_matches = "db|*/protocol|*/Db"
     else:
-        # dynamically linked builds need binaries and protocol files
-        asset_matches = "bin|db|lib|*/protocol"
+        # dynamically linked builds need binaries, protocol files and Db folders
+        asset_matches = "bin|db|lib|*/protocol|*/Db"
 
     # chdir out of the folders we will move
     os.chdir(source)
