@@ -77,7 +77,9 @@ def _install_debs(debs: List[str]) -> None:
     sudo = "sudo" if os.geteuid() != 0 else ""
     command = (
         f"{sudo} apt-get update && {sudo} apt-get upgrade -y && "
-        f"{sudo} apt-get install -y --no-install-recommends " + " ".join(debs)
+        f"{sudo} apt-get install -y --no-install-recommends "
+        + " ".join(debs)
+        + f" && {sudo} rm -rf /var/lib/apt/lists/*"
     )
     exit(subprocess.call(["bash", "-c", command]))
 
