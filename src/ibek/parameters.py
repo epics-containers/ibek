@@ -105,6 +105,6 @@ class EnumParam(Param):
     type: Literal["enum"] = "enum"
     default: Optional[Any] = None
 
-    values: Dict[str, Any] = Field(
+    values: Dict[Any, Any] = Field(
         description="provides a list of values to make this argument an Enum",
     )
