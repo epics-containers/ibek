@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>ibek.globals &#8212; ibek 3.1.1b5.dev3+g96d28d96 documentation</title>
+    <title>ibek.globals &#8212; ibek 3.1.2.dev2+g948bd1a6 documentation</title>
   
   
   
@@ -29,7 +29,7 @@
   <link href="../../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 <link href="../../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 
-    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=fd3f3429" />
     <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=95c83b7e" />
@@ -40,7 +40,7 @@
   <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
 <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
-    <script src="../../_static/documentation_options.js?v=dd3677ef"></script>
+    <script src="../../_static/documentation_options.js?v=e53bb3d7"></script>
     <script src="../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -432,16 +432,16 @@
 <span class="sd">A few global definitions</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
-<span class="kn">import</span> <span class="nn">os</span>
-<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
 
-<span class="kn">from</span> <span class="nn">pydantic</span> <span class="kn">import</span> <span class="n">BaseModel</span><span class="p">,</span> <span class="n">ConfigDict</span>
-<span class="kn">from</span> <span class="nn">typer.core</span> <span class="kn">import</span> <span class="n">TyperGroup</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pydantic</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseModel</span><span class="p">,</span> <span class="n">ConfigDict</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typer.core</span><span class="w"> </span><span class="kn">import</span> <span class="n">TyperGroup</span>
 
 <span class="n">DEFAULT_ARCH</span> <span class="o">=</span> <span class="s2">&quot;linux-x86_64&quot;</span>
 
 
-<span class="k">class</span> <span class="nc">_Globals</span><span class="p">:</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">_Globals</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Helper class for accessing global constants.</span>
 
@@ -449,7 +449,7 @@
 <span class="sd">    ibek commands.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize the global constants.&quot;&quot;&quot;</span>
 
         <span class="c1"># Can be overridden by defining an environment variable &quot;EPICS_ROOT&quot;</span>
@@ -458,117 +458,117 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_DEFAULT_ARCH</span> <span class="o">=</span> <span class="s2">&quot;linux-x86_64&quot;</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">EPICS_ROOT</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">EPICS_ROOT</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Root of epics directory tree&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_EPICS_ROOT</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">SUPPORT</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">SUPPORT</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Directory containing support module clones&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_EPICS_ROOT</span> <span class="o">/</span> <span class="s2">&quot;support&quot;</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">RELEASE</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">RELEASE</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;The global RELEASE file which lists all support modules&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_EPICS_ROOT</span> <span class="o">/</span> <span class="s2">&quot;support&quot;</span> <span class="o">/</span> <span class="s2">&quot;configure&quot;</span> <span class="o">/</span> <span class="s2">&quot;RELEASE&quot;</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">RUNTIME_OUTPUT</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">RUNTIME_OUTPUT</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Directory containing runtime generated assets for IOC boot.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_EPICS_ROOT</span> <span class="o">/</span> <span class="s2">&quot;runtime&quot;</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">RUNTIME_SUBSTITUTION</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">RUNTIME_SUBSTITUTION</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Directory containing runtime generated assets for IOC boot.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">RUNTIME_OUTPUT</span> <span class="o">/</span> <span class="s2">&quot;ioc.subst&quot;</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">EPICS_TARGET_ARCH</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">EPICS_TARGET_ARCH</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;The target architecture for the current container.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;EPICS_TARGET_ARCH&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_DEFAULT_ARCH</span><span class="p">)</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">EPICS_HOST_ARCH</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">EPICS_HOST_ARCH</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;The host architecture for the current container.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;EPICS_HOST_ARCH&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_DEFAULT_ARCH</span><span class="p">)</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">NATIVE</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">NATIVE</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;True if the target architecture is the same as the host architecture.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">EPICS_TARGET_ARCH</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">EPICS_HOST_ARCH</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">STATIC_BUILD</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">STATIC_BUILD</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;True if the target architecture is not the default architecture.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;STATIC_BUILD&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">EPICS_TARGET_ARCH</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_DEFAULT_ARCH</span><span class="p">)</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">IBEK_DEFS</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">IBEK_DEFS</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Directory containing ibek support yaml files.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_EPICS_ROOT</span> <span class="o">/</span> <span class="s2">&quot;ibek-defs&quot;</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">PVI_DEFS</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">PVI_DEFS</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Directory containing pvi device yaml files.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_EPICS_ROOT</span> <span class="o">/</span> <span class="s2">&quot;pvi-defs&quot;</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">OPI_OUTPUT</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">OPI_OUTPUT</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Directory containing runtime generated opis to serve over http.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_EPICS_ROOT</span> <span class="o">/</span> <span class="s2">&quot;opi&quot;</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">AUTOSAVE</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">AUTOSAVE</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Directory containing runtime generated opis to serve over http.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_EPICS_ROOT</span> <span class="o">/</span> <span class="s2">&quot;autosave&quot;</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">EPICS_BASE</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">EPICS_BASE</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;The folder containing the epics base source and binaries&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_EPICS_ROOT</span> <span class="o">/</span> <span class="s2">&quot;epics-base&quot;</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">IOC_FOLDER</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">IOC_FOLDER</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;root folder of a generic IOC source inside the container&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_EPICS_ROOT</span> <span class="o">/</span> <span class="s2">&quot;ioc&quot;</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">CONFIG_DIR_NAME</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">CONFIG_DIR_NAME</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Name of config directory within IOC directory&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="s2">&quot;config&quot;</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">IOC_DIR_NAME</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">IOC_DIR_NAME</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;folder of the IOC source&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="s2">&quot;ioc&quot;</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">RELEASE_SH</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">RELEASE_SH</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;a bash script to export the macros defined in RELEASE as environment vars&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">SUPPORT</span> <span class="o">/</span> <span class="s2">&quot;configure&quot;</span> <span class="o">/</span> <span class="s2">&quot;RELEASE.shell&quot;</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">MODULES</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">MODULES</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;global MODULES file used to determine order of build&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">SUPPORT</span> <span class="o">/</span> <span class="s2">&quot;configure&quot;</span> <span class="o">/</span> <span class="s2">&quot;MODULES&quot;</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">IOC_DBDS</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">IOC_DBDS</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;ibek-support list of declared dbds&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">SUPPORT</span> <span class="o">/</span> <span class="s2">&quot;configure&quot;</span> <span class="o">/</span> <span class="s2">&quot;dbd_list&quot;</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">IOC_LIBS</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">IOC_LIBS</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;ibek-support list of declared libs&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">SUPPORT</span> <span class="o">/</span> <span class="s2">&quot;configure&quot;</span> <span class="o">/</span> <span class="s2">&quot;lib_list&quot;</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">RUNTIME_DEBS</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">RUNTIME_DEBS</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;ibek-support list of declared deb packages to install in runtime stage&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">SUPPORT</span> <span class="o">/</span> <span class="s2">&quot;configure&quot;</span> <span class="o">/</span> <span class="s2">&quot;runtime_debs&quot;</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">RUNTIME_FILES</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">RUNTIME_FILES</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;ibek-support list of files to copy to the runtime stage&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">SUPPORT</span> <span class="o">/</span> <span class="s2">&quot;configure&quot;</span> <span class="o">/</span> <span class="s2">&quot;runtime_files_list&quot;</span>
 
@@ -589,7 +589,7 @@
 
 <div class="viewcode-block" id="BaseSettings">
 <a class="viewcode-back" href="../../user/reference/api.html#ibek.globals.BaseSettings">[docs]</a>
-<span class="k">class</span> <span class="nc">BaseSettings</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">BaseSettings</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;A Base class for setting consistent Pydantic model configuration&quot;&quot;&quot;</span>
 
     <span class="n">model_config</span> <span class="o">=</span> <span class="n">ConfigDict</span><span class="p">(</span>
@@ -599,8 +599,8 @@
 
 
 
-<span class="k">class</span> <span class="nc">NaturalOrderGroup</span><span class="p">(</span><span class="n">TyperGroup</span><span class="p">):</span>
-    <span class="k">def</span> <span class="nf">list_commands</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ctx</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">NaturalOrderGroup</span><span class="p">(</span><span class="n">TyperGroup</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">list_commands</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ctx</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">commands</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
 </pre></div>
 
