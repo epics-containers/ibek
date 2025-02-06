@@ -4,11 +4,11 @@ The EntityModel class describes what a given support module can instantiate.
 
 from __future__ import annotations
 
+from collections.abc import Mapping, Sequence
 from enum import Enum
-from typing import Annotated, Any, Mapping, Optional, Sequence, Union
+from typing import Annotated, Any, Literal, Optional, Union
 
 from pydantic import Field, PydanticUndefinedAnnotation
-from typing_extensions import Literal
 
 from .globals import BaseSettings
 from .parameters import Define, IdParam, Param

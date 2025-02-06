@@ -1,17 +1,16 @@
 import os
 import subprocess
 from pathlib import Path
-from typing import List
 
 
-def expand_env_vars(tokens: List[str]):
+def expand_env_vars(tokens: list[str]):
     for i in range(len(tokens)):
         tokens[i] = os.path.expandvars(tokens[i])
     return tokens
 
 
-def handle_command(context: Path, tokens: List[str], step, start):
-    msg = f'step {step} {" ".join(tokens)}'
+def handle_command(context: Path, tokens: list[str], step, start):
+    msg = f"step {step} {' '.join(tokens)}"
     docker_action = tokens[0]
     tokens = expand_env_vars(tokens)
 
@@ -52,7 +51,7 @@ def build_dockerfile(dockerfile: Path, start: int, stop: int):
         )
     context = dockerfile.parent
 
-    dockerfile_lines: List[str] = dockerfile.read_text().split("\n")
+    dockerfile_lines: list[str] = dockerfile.read_text().split("\n")
 
     stop = min(stop, len(dockerfile_lines))
     while index < len(dockerfile_lines):

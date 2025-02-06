@@ -8,7 +8,6 @@ __pycache__/
 # Distribution / packaging
 .Python
 env/
-.venv
 build/
 develop-eggs/
 dist/
@@ -56,6 +55,7 @@ cov.xml
 
 # Sphinx documentation
 docs/_build/
+docs/_api
 
 # PyBuilder
 target/
@@ -69,14 +69,3 @@ lockfiles/
 
 # ruff cache
 .ruff_cache/
-
-# default filename for builder2ibek
-**/ibek.support.yaml
-# this file may be created accidentally by ibek being run in its own directory
-# so we ignore it
-config/
-
-# generated test files
-tests/samples/epics/runtime
-tests/samples/epics/opi
-tests/samples/*-old

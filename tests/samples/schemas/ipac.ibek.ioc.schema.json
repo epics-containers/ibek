@@ -308,7 +308,7 @@
       "properties": {
         "type": {
           "const": "ipac.Hy8001",
-          "description": "TODO:ADD DESCRIPTION",
+          "description": "Configure a Hytec 8001 IO card",
           "enum": [
             "ipac.Hy8001"
           ],
@@ -335,6 +335,10 @@
           ],
           "description": "union of <class 'int'> and jinja representation of {typ}",
           "title": "Slot"
+        },
+        "interrupt_vector": {
+          "description": "Interrupt Vector reserved with epics.InterruptVectorVME, count=1",
+          "title": "Interrupt Vector"
         },
         "direction": {
           "allOf": [
@@ -459,6 +463,7 @@
       "required": [
         "type",
         "slot",
+        "interrupt_vector",
         "direction",
         "cardid"
       ],
@@ -498,10 +503,10 @@
           "description": "union of <class 'int'> and jinja representation of {typ}",
           "title": "Slot"
         },
-        "IPACid": {
+        "name": {
           "default": "IPAC{{ slot }}",
-          "description": "Identifier for this device",
-          "title": "Ipacid",
+          "description": "Identifier for this device - typically IPAC{{ slot }}",
+          "title": "Name",
           "type": "string"
         },
         "intLevel": {
@@ -525,16 +530,11 @@
           "description": "test",
           "title": "Test",
           "type": "string"
-        },
-        "interrupt_vector": {
-          "description": "Interrupt Vector reserved with epics.InterruptVectorVME, count=1",
-          "title": "Interrupt Vector"
         }
       },
       "required": [
         "type",
-        "slot",
-        "interrupt_vector"
+        "slot"
       ],
       "title": "ipac_Hy8002",
       "type": "object"
@@ -544,7 +544,7 @@
       "properties": {
         "type": {
           "const": "ipac.Hy8005",
-          "description": "TODO:ADD DESCRIPTION",
+          "description": "Configure a Hytec 8005 IO card",
           "enum": [
             "ipac.Hy8005"
           ],

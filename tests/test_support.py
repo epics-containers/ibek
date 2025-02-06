@@ -13,6 +13,7 @@ def test_symlink_ibek(tmp_path: Path, samples: Path):
 
     assert sorted([f.name for f in tmp_path.iterdir()]) == [
         "ADCore.ibek.support.yaml",
+        "DLS8515.ibek.support.yaml",
         "asyn.ibek.support.yaml",
         "bad_db.ibek.support.yaml",
         "dlsPLC.ibek.support.yaml",
@@ -41,7 +42,7 @@ def test_check_dependencies(tmp_epics_root: Path):
     check_deps(["ADSimDetector", "some-other-module"])
 
     # Check fails
-    with pytest.raises(Exception):
+    with pytest.raises(Exception):  # noqa
         check_deps(["FakeDetector"])
 
 

@@ -8,7 +8,6 @@ import re
 from dataclasses import dataclass
 from pathlib import Path
 from subprocess import run
-from typing import Dict, List
 
 from ibek.globals import GLOBALS
 
@@ -57,7 +56,7 @@ class AutosaveGenerator:
         """
         self.db_substitution_file = db_substitution_file
         self.subst_entries = self.parse_subst()
-        self.settings_req: Dict[str, List[self.SubstEntry]] = {}  # type: ignore
+        self.settings_req: dict[str, list[self.SubstEntry]] = {}  # type: ignore
         for suffix in ["settings", "positions"]:
             self.settings_req[suffix] = self.find_req(suffix)
 
@@ -87,13 +86,13 @@ class AutosaveGenerator:
                 shell=True,
             )
 
-    def parse_subst(self) -> List[SubstEntry]:
+    def parse_subst(self) -> list[SubstEntry]:
         """
         parse an EPICS DB substitution file and return a list of SubstEntry objects
         """
         result = []
 
-        with open(self.db_substitution_file, "r") as f:
+        with open(self.db_substitution_file) as f:
             text = f.read()
 
         match = self.entry_pat.findall(text, re.MULTILINE)
@@ -103,7 +102,7 @@ class AutosaveGenerator:
 
         return result
 
-    def find_req(self, suffix: str) -> List[SubstEntry]:
+    def find_req(self, suffix: str) -> list[SubstEntry]:
         """
         Find autosave req files for each DB template file in
         self.db_substitution_file

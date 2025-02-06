@@ -8,8 +8,9 @@ we pass a single instance of this class into all Jinja contexts.
 """
 
 import os
+from collections.abc import Mapping
 from pathlib import Path
-from typing import Any, Dict, Mapping
+from typing import Any
 
 from jinja2 import StrictUndefined, Template
 
@@ -29,7 +30,7 @@ class Utils:
         Reset all saved state. For use in testing where more than one
         IOC is rendered in a single session
         """
-        self.variables: Dict[str, Any] = {}
+        self.variables: dict[str, Any] = {}
 
     def set_file_name(self: "Utils", file: Path):
         """
@@ -121,7 +122,8 @@ class Utils:
         """
         return {
             key: self.render(
-                context, template if template is not None else "{{ %s }}" % key
+                context,
+                template if template is not None else "{{ %s }}" % key,  # noqa
             )
             for key, template in map.items()
         }

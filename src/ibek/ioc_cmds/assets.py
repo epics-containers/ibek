@@ -3,7 +3,6 @@ import os
 import shutil
 import subprocess
 from pathlib import Path
-from typing import List
 
 import typer
 
@@ -12,7 +11,7 @@ from ibek.globals import GLOBALS
 log = logging.getLogger(__name__)
 
 
-def move_file(src: Path, dest: Path, binary: List[str]):
+def move_file(src: Path, dest: Path, binary: list[str]):
     """
     Move a file / tree / symlink from src to dest, stripping symbols from
     binaries if they are in the binary list.
@@ -38,7 +37,7 @@ def move_file(src: Path, dest: Path, binary: List[str]):
 def extract_assets(
     destination: Path,
     source: Path,
-    extras: List[Path],
+    extras: list[Path],
     defaults: bool,
     dry_run: bool = False,
 ):
@@ -98,7 +97,7 @@ def extract_assets(
 
     # identify EPICS modules as folders with binary output folders
     # and move only their output folders as specified by asset_matches
-    binaries: List[Path] = []
+    binaries: list[Path] = []
     for find in useful_files:
         # only look two levels deep
         binaries.extend(source.glob(f"*/*/{find}"))
@@ -113,7 +112,7 @@ def extract_assets(
 
         # use globs to make a list of the things we want to copy
         asset_globs = [module.glob(match) for match in asset_matches.split("|")]
-        assets: List[Path] = [
+        assets: list[Path] = [
             asset for asset_glob in asset_globs for asset in asset_glob
         ]
 

@@ -61,7 +61,7 @@ def do_dependencies():
     ]
     if "IOC" in global_release_paths:
         paths.append(global_release_paths["IOC"])
-    mod_list = f'MODULES := {" ".join(paths)}\n'
+    mod_list = f"MODULES := {' '.join(paths)}\n"
     GLOBALS.MODULES.write_text(mod_list)
 
     # generate RELEASE.shell file for inclusion into the ioc launch shell script.

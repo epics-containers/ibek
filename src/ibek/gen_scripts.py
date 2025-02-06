@@ -3,7 +3,7 @@ Functions for building the db and boot scripts
 """
 
 import logging
-from typing import List, Sequence, Tuple
+from collections.abc import Sequence
 
 from jinja2 import StrictUndefined, Template
 
@@ -19,12 +19,12 @@ log = logging.getLogger(__name__)
 
 
 def create_db_script(
-    entities: Sequence[Entity], extra_databases: List[Tuple[Database, Entity]]
+    entities: Sequence[Entity], extra_databases: list[tuple[Database, Entity]]
 ) -> str:
     """
     Create make_db.sh script for expanding the database templates
     """
-    with open(TEMPLATES / "ioc.subst.jinja", "r") as f:
+    with open(TEMPLATES / "ioc.subst.jinja") as f:
         jinja_txt = f.read()
 
         renderer = RenderDb(entities)
@@ -44,7 +44,7 @@ def create_boot_script(entities: Sequence[Entity]) -> str:
     """
     Create the boot script for an IOC
     """
-    with open(TEMPLATES / "st.cmd.jinja", "r") as f:
+    with open(TEMPLATES / "st.cmd.jinja") as f:
         template = Template(f.read())
 
     renderer = Render()

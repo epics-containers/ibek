@@ -4,8 +4,9 @@ support module yaml files.
 """
 
 import re
+from collections.abc import Mapping, Sequence
 from dataclasses import dataclass
-from typing import Any, Dict, List, Mapping, Optional, Sequence, Tuple
+from typing import Any, Optional
 
 from ibek.entity_model import Database
 from ibek.ioc import Entity
@@ -20,13 +21,13 @@ class RenderDb:
     @dataclass
     class RenderDbTemplate:
         filename: str
-        rows: List[List[str]]
-        columns: List[int]
+        rows: list[list[str]]
+        columns: list[int]
 
     def __init__(self, entities: Sequence[Entity]) -> None:
         self.entities = entities
         # a mapping from template file name to details of instances of that template
-        self.render_templates: Dict[str, RenderDb.RenderDbTemplate] = {}
+        self.render_templates: dict[str, RenderDb.RenderDbTemplate] = {}
 
     def add_row(self, filename: str, params: Mapping[str, Any], entity: Entity) -> None:
         """
@@ -100,7 +101,7 @@ class RenderDb:
 
             self.add_row(database.file, expanded_database_entries, entity)
 
-    def add_extra_databases(self, databases: List[Tuple[Database, Entity]]) -> None:
+    def add_extra_databases(self, databases: list[tuple[Database, Entity]]) -> None:
         """Add databases that are not part of EntityModels
 
         Args:
@@ -119,8 +120,8 @@ class RenderDb:
         # first calculate the column width for each template
         # including escaping spaces and quotes
         for template in self.render_templates.values():
-            for n, row in enumerate(template.rows):
-                for i, arg in enumerate(row):
+            for _, row in enumerate(template.rows):
+                for i, _ in enumerate(row):
                     row[i] = f'"{row[i]}"'
                     if i < len(template.columns) - 1:
                         row[i] += ", "
@@ -133,8 +134,8 @@ class RenderDb:
                     row[i] = arg.ljust(template.columns[i])
 
     def render_database(
-        self, extra_databases: Optional[List[Tuple[Database, Entity]]] = None
-    ) -> Dict[str, List[str]]:
+        self, extra_databases: Optional[list[tuple[Database, Entity]]] = None
+    ) -> dict[str, list[str]]:
         """Render a database substitution file.
 
         Args:
