@@ -120,8 +120,8 @@ class RenderDb:
         # first calculate the column width for each template
         # including escaping spaces and quotes
         for template in self.render_templates.values():
-            for n, row in enumerate(template.rows):
-                for i, arg in enumerate(row):
+            for _, row in enumerate(template.rows):
+                for i, _ in enumerate(row):
                     row[i] = f'"{row[i]}"'
                     if i < len(template.columns) - 1:
                         row[i] += ", "

@@ -122,7 +122,8 @@ class Utils:
         """
         return {
             key: self.render(
-                context, template if template is not None else "{{ %s }}" % key
+                context,
+                template if template is not None else "{{ %s }}" % key,  # noqa
             )
             for key, template in map.items()
         }

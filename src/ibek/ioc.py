@@ -28,8 +28,8 @@ id_to_entity: dict[str, Entity] = {}
 def get_entity_by_id(id: str) -> Entity:
     try:
         return id_to_entity[id]
-    except KeyError:
-        raise ValueError(f"object {id} not found in {list(id_to_entity)}")
+    except KeyError as e:
+        raise ValueError(f"object {id} not found in {list(id_to_entity)}") from e
 
 
 def clear_entity_model_ids():

@@ -10,7 +10,7 @@ def expand_env_vars(tokens: list[str]):
 
 
 def handle_command(context: Path, tokens: list[str], step, start):
-    msg = f'step {step} {" ".join(tokens)}'
+    msg = f"step {step} {' '.join(tokens)}"
     docker_action = tokens[0]
     tokens = expand_env_vars(tokens)
 
