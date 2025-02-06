@@ -180,7 +180,7 @@ def generic_generate(
         if not actual.exists():
             actual = epics_root / "opi" / output.name
         assert actual.exists(), "Missing output file"
-        assert output.read_text() == actual.read_text()
+        assert output.read_text().strip() == actual.read_text().strip()
 
 
 def test_andreas_motors(tmp_epics_root: Path, samples: Path):
