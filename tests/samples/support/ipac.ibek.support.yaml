@@ -1,5 +1,3 @@
-# yaml-language-server: $schema=../schemas/ibek.support.schema.json
-
 module: ipac
 
 entity_models:
@@ -12,10 +10,10 @@ entity_models:
         description: |-
           VME Slot number
 
-      IPACid:
+      name:
         type: id
         description: |-
-          Identifier for this device
+          Identifier for this device - typically IPAC{{ slot }}
         default: IPAC{{ slot }}
 
       intLevel:
@@ -30,38 +28,45 @@ entity_models:
         default: |
           {{ slot }}
 
-      interrupt_vector:
-        type: object
-        description: Interrupt Vector reserved with epics.InterruptVectorVME, count=1
-
-    post_defines:
-      card_id:
-        value: '{{ _global.incrementor("Carriers", start=0) }}'
-        description: Carrier Card Identifier
+    pre_defines:
+      carrier_id:
+        description: |-
+          carrier card ID - zero based and auto incremented on each new carrier
+        type: int
+        value: |-
+          {{ _global.incrementor("CarrierCardId", start=0, stop=64) }}
 
     pre_init:
       - value: |
-          # Hy8002 carrier card: slot: {{ slot }}, intLevel: {{ intLevel }}, interrupt: {{ interrupt_vector.name }} ({{ interrupt_vector.number }})
-          ipacAddHy8002("{{ slot }}, {{ intLevel}}, $({{interrupt_vector.name}})")
-          epicsEnvSet {{ IPACid }} = {{ card_id }}
+          # ipacAddHy8002("slot, intLevel")
+        when: first
+
+      - value: |
+          ipacAddHy8002("{{ slot }}, {{ intLevel}}")
+          # record above carrier card ID {{ carrier_id }} in '{{ name }}'
+          epicsEnvSet {{ name }} {{ carrier_id }}
 
   - name: Hy8001
     description: |-
-      TODO:ADD DESCRIPTION
+      Configure a Hytec 8001 IO card
     parameters:
       slot:
         type: int
         description: |-
           VME Slot number
 
+      interrupt_vector:
+        type: object
+        description: Interrupt Vector reserved with epics.InterruptVectorVME, count=1
+
       direction:
         type: enum
         description: |-
           Direction of digital IO
         values:
-          Mixed:
-          Input:
-          Output:
+          Mixed: 0
+          Input: 1
+          Output: 2
       cardid:
         type: int
         description: |-
@@ -105,13 +110,11 @@ entity_models:
 
     pre_init:
       - value: |
-          Hy8001Configure({{cardid}}, {{slot}}, {{vector}}, {{intLevel}}, 0, 0, {{clock}}, {{scan}}, {{direction}}, {{invertin}}, {{invertout}})
-  # TODO - MISSING ARGS: vector
-  # WARNING - non print commands in Initialise not parsed
+          Hy8001Configure({{cardid}}, {{slot}}, $({{interrupt_vector}}), {{intLevel}}, 0, 0, {{clock}}, {{scan}}, {{direction | int}}, {{invertin | int}}, {{invertout | int}})
 
   - name: Hy8005
     description: |-
-      TODO:ADD DESCRIPTION
+      Configure a Hytec 8005 IO card
     parameters:
       slot:
         type: int

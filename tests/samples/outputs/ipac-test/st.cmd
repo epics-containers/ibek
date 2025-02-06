@@ -8,12 +8,13 @@ epicsEnvSet Vec2 193
 dbLoadDatabase dbd/ioc.dbd
 ioc_registerRecordDeviceDriver pdbbase
 
-# Hy8002 carrier card: slot: 4, intLevel: 2, interrupt: Vec1 (192)
-ipacAddHy8002("4, 2, $(Vec1)")
-epicsEnvSet IPAC4 = 0
-# Hy8002 carrier card: slot: 5, intLevel: 2, interrupt: Vec2 (193)
-ipacAddHy8002("5, 2, $(Vec2)")
-epicsEnvSet IPAC5 = 1
+# ipacAddHy8002("slot, intLevel")
+ipacAddHy8002("4, 2")
+# record above carrier card ID 0 in 'IPAC4'
+epicsEnvSet IPAC4 0
+ipacAddHy8002("5, 2")
+# record above carrier card ID 1 in 'IPAC5'
+epicsEnvSet IPAC5 1
 
 dbLoadRecords /epics/runtime/ioc.db
 iocInit

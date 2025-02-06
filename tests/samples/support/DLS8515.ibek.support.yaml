@@ -1,0 +1,280 @@
+# yaml-language-server: $schema=https://github.com/epics-containers/ibek/releases/download/3.1.1/ibek.support.schema.json
+
+module: DLS8515
+
+entity_models:
+  - name: DLS8516
+    description: |-
+      Configure a Hy8516 ip module for RS422/RS485 serial communication
+    parameters:
+      name:
+        type: id
+        description: |-
+          Identifier for a Hy8516 card
+
+      carrier:
+        type: object
+        description: |-
+          Carrier card
+
+      ipslot:
+        type: int
+        description: |-
+          IP slot in carrier
+
+      prefix:
+        type: str
+        description: |-
+          Prefix to create serial ports as, e.g. "ty" to create "/ty/70/0".
+        default: ty
+
+      interrupt_vector:
+        type: object
+        description: Interrupt Vector reserved with epics.InterruptVectorVME, count=1
+
+    post_defines:
+      cardid:
+        description: card id
+        type: int
+        value: "{{ 10 * carrier.slot + ipslot }}"
+
+    pre_init:
+      - when: first
+        value: |
+          # DLS8516Configure(card_id, carrier_index, interrupt_vector, prefix)
+
+      - value: |
+          DLS8516Configure({{ cardid }}, $({{ carrier }}), $({{ interrupt_vector }}), "{{ prefix }}")
+
+  - name: DLS8516channel
+    description: |-
+      Setup a single channel on a DLS8516 for RS422/RS485 serial
+          communication
+    parameters:
+      card:
+        type: object
+        description: |-
+          Hy8515 card
+
+      channel:
+        type: int
+        description: |-
+          Channel number
+
+      baud:
+        type: enum
+        description: |-
+          Baud rate
+        default: 9600
+        values:
+          4800:
+          9600:
+          115200:
+          19200:
+          38400:
+          1200:
+          2400:
+          230400:
+          57600:
+      data:
+        type: enum
+        description: |-
+          Number of data bits
+        default: 8
+        values:
+          8:
+          5:
+          7:
+          6:
+      parity:
+        type: enum
+        description: |-
+          Parity: None, Even, Odd
+        default: N
+        values:
+          E:
+          O:
+          N:
+      stop:
+        type: enum
+        description: |-
+          Number of stop bits
+        default: 1
+        values:
+          1:
+          2:
+      flow:
+        type: enum
+        description: |-
+          Flow Control: None, Software (xon/xoff), Hardware (rts/cts)
+        default: N
+        values:
+          H:
+          S:
+          N:
+      delay:
+        type: int
+        description: |-
+          Delay in bit time (0-15) after transmit before Tx lines are dropped
+        default: 0
+
+      fullduplex:
+        type: bool
+        description: |-
+          If True then run in full duplex (4 wire RS422) mode, otherwise run in half duplex (2 wire RS485)
+        default: false
+
+    post_defines:
+      port_name:
+        description: identifier for serial port
+        type: str
+        value: |
+          {{ "/ty/%d/%d" % (card.cardid, channel) }}
+
+    pre_init:
+      - when: first
+        value: |
+          # DLS8516DevConfigure(device, baud, data, stop, parity, flow)
+
+      - value: |
+          DLS8516DevConfigure("{{port_name}}", {{baud}}, {{data}}, {{stop}}, "{{parity}}", "{{flow}}")
+
+  - name: DLS8515
+    description: |-
+      Configure a Hy8515 ip module for RS232 serial communication
+    parameters:
+      name:
+        type: id
+        description: |-
+          Identifier for a Hy8515 card
+
+      carrier:
+        type: object
+        description: |-
+          Carrier card (IPAC)
+
+      ipslot:
+        type: int
+        description: |-
+          IP slot in a carrier (0 - 3)
+
+      prefix:
+        type: str
+        description: |-
+          Prefix to create serial ports as, e.g. "ty" to create "/ty/70/0".
+        default: ty
+
+      interrupt_vector:
+        type: object
+        description: Interrupt Vector reserved with epics.InterruptVectorVME, count=1
+
+    post_defines:
+      cardid:
+        description: card id
+        type: int
+        value: "{{ 10 * carrier.slot + ipslot }}"
+
+    pre_init:
+      - when: first
+        value: |
+          # DLS8515Configure(card id, carrier_index, interrupt_vector, prefix)
+
+      - value: |
+          DLS8515Configure({{ cardid }}, $({{ carrier }}), $({{ interrupt_vector }}), "{{ prefix }}")
+
+  - name: DLS8515channel
+    description: |-
+      Setup a single channel on a DLS8515 for RS232 serial communication
+    parameters:
+      name:
+        type: id
+        description: |-
+          Identifier for a Hy8515 card (auto generated to validate uniqueness)
+        default: |-
+          {{ card.prefix }}_{{ card.card_id }}_{{ channel }}
+
+      card:
+        type: object
+        description: |-
+          Hy8515 card
+
+      channel:
+        type: int
+        description: |-
+          Channel number
+
+      priority:
+        type: int
+        description: |-
+          Priority of the channel
+        default: 0
+
+      noAutoConnect:
+        type: bool
+        description: |-
+          set to true to disable auto connect
+        default: false
+
+      noProcessEos:
+        type: bool
+        description: |-
+          set to true to disable end of string processing
+        default: false
+
+      baud:
+        type: int
+        description: |-
+          Baud rate
+        default: 9600
+
+      data:
+        type: enum
+        description: |-
+          Number of data bits
+        default: 8
+        values:
+          8:
+          5:
+          7:
+          6:
+      parity:
+        type: enum
+        description: |-
+          Parity: None, Even, Odd
+        default: N
+        values:
+          E:
+          O:
+          N:
+      stop:
+        type: enum
+        description: |-
+          Number of stop bits
+        default: 1
+        values:
+          1:
+          2:
+      flow:
+        type: enum
+        description: |-
+          Flow Control: None, Software (xon/xoff), Hardware (rts/cts)
+        default: N
+        values:
+          H:
+          S:
+          N:
+
+    post_defines:
+      port_name:
+        description: identifier for serial port
+        type: str
+        value: |
+          {{ "/ty/%d/%d" % (card.cardid, channel) }}
+
+    pre_init:
+      - when: first
+        value: |
+          # DLS8515DevConfigure(device, baud, data, stop, parity, flow)
+
+      - value: |
+          DLS8515DevConfigure("{{port_name}}", {{baud}}, {{data}}, {{stop}}, "{{parity}}", "{{flow}}")

@@ -229,3 +229,17 @@ def test_dls_plc(tmp_epics_root: Path, samples: Path):
         "dlsPLC",
         ["dlsPLC", "asyn"],
     )
+
+
+def test_dls_8515(tmp_epics_root: Path, samples: Path):
+    """
+    Checking DL8515 and DLS8515 Channel
+
+    In particular this tests one object referring to the post_define of another
+    """
+    generic_generate(
+        tmp_epics_root,
+        samples,
+        "DLS8515",
+        ["DLS8515", "epics", "ipac"],
+    )

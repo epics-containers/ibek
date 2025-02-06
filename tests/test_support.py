@@ -13,6 +13,7 @@ def test_symlink_ibek(tmp_path: Path, samples: Path):
 
     assert sorted([f.name for f in tmp_path.iterdir()]) == [
         "ADCore.ibek.support.yaml",
+        "DLS8515.ibek.support.yaml",
         "asyn.ibek.support.yaml",
         "bad_db.ibek.support.yaml",
         "dlsPLC.ibek.support.yaml",
