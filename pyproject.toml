@@ -12,7 +12,15 @@ classifiers = [
     "Programming Language :: Python :: 3.12",
 ]
 description = "IOC builder for EPICS and Kubernetes"
-dependencies = [] # Add project dependencies here, e.g. ["click", "numpy"]
+dependencies = [
+    "pydantic==2.8.2",
+    "typer",
+    "ruamel.yaml",
+    "jinja2",
+    "GitPython",
+    "semantic-version",
+    "pvi",
+]
 dynamic = ["version"]
 license.file = "LICENSE"
 readme = "README.md"
