@@ -6,7 +6,6 @@ import dataclasses
 import shutil
 from pathlib import Path
 
-import jinja2
 import pytest
 
 from ibek.commands import semver_compare
@@ -87,11 +86,11 @@ def test_strict():
     assert text == "giles of age 59"
 
     my_template = "{{ person.name ~ ' of age ' ~ height }}"
-    with pytest.raises(jinja2.exceptions.UndefinedError):
+    with pytest.raises(ValueError):
         text = UTILS.render({"person": p}, my_template)
 
     my_template = "{{ person.name ~ ' of age ' ~ person.height }}"
-    with pytest.raises(jinja2.exceptions.UndefinedError):
+    with pytest.raises(ValueError):
         text = UTILS.render({"person": p}, my_template)
 
 

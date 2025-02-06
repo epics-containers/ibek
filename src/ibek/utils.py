@@ -105,7 +105,9 @@ class Utils:
                 ioc_name=self.ioc_name,
             )
         except Exception as e:
-            raise ValueError(f"Error rendering template:\n{template_text}") from e
+            raise ValueError(
+                f"Error rendering template:\n{template_text}\nError:{e}"
+            ) from e
 
     def render_map(self, context: Any, map: Mapping[str, str | None]) -> dict[str, str]:
         """
