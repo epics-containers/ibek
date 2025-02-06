@@ -30,7 +30,7 @@ class Entities(BaseModel):
 
 
 model1 = Entities(
-    **{
+    **{  # type: ignore
         "entities": [
             {"name": "one", "value": "OneValue"},
             {"name": "two", "value": "TwoValue", "ref": "one"},
@@ -39,7 +39,7 @@ model1 = Entities(
 )
 
 # demonstrate that entity two has a reference to entity one
-assert model1.entities[1].ref.value == "OneValue"
+assert model1.entities[1].ref.value == "OneValue"  # type: ignore
 
 # this should throw an error because entity one_again has illegal arguments
 # BUT the error shown is:
@@ -47,7 +47,7 @@ assert model1.entities[1].ref.value == "OneValue"
 # which masks the underlying schema violation error that should look like:
 #    Extra inputs are not permitted [type=extra_forbidden, input_value='bad argument',
 model2 = Entities(
-    **{
+    **{  # type: ignore
         "entities": [
             {"name": "one_again", "value": "OneValue", "illegal": "bad argument"},
             {"name": "two_again", "value": "TwoValue", "ref": "one_again"},
