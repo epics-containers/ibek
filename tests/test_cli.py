@@ -8,6 +8,7 @@ import subprocess
 import sys
 from pathlib import Path
 
+import pytest
 from pytest_mock import MockerFixture
 
 import ibek.utils as utils
@@ -235,9 +236,12 @@ def test_dls8515(tmp_epics_root: Path, samples: Path):
     """
     Cut down copy of dlsPLC containing fast vacuum master and channel
     """
-    generic_generate(
-        tmp_epics_root,
-        samples,
-        "DLS8515",
-        ["DLS8515", "ipac", "epics"],
-    )
+    with pytest.raises(ValueError) as ctx:
+        generic_generate(
+            tmp_epics_root,
+            samples,
+            "DLS8515",
+            ["DLS8515", "ipac", "epics"],
+        )
+
+    assert "`ipac.Hy8002`.interrupt_vector" in str(ctx.value)
