@@ -6,7 +6,7 @@ from __future__ import annotations
 
 import builtins
 from pathlib import Path
-from typing import Annotated, Any, Dict, List, Literal, Tuple, Type
+from typing import Annotated, Any, Literal
 
 from pydantic import Field, create_model
 from pydantic_core import PydanticUndefined
@@ -28,13 +28,13 @@ class EntityFactory:
         Created models are stored in `self._entity_models` to lookup when
         resolving nested `SubEntity`s.
         """
-        self._entity_models: Dict[str, Type[Entity]] = {}
+        self._entity_models: dict[str, type[Entity]] = {}
         # starting a new EntityFactory implies we should throw away any existing
         # Entity instances - this is required for tests which create multiple
         # EntityFactories
         clear_entity_model_ids()
 
-    def make_entity_models(self, entity_model_yaml: List[Path]) -> List[Type[Entity]]:
+    def make_entity_models(self, entity_model_yaml: list[Path]) -> list[type[Entity]]:
         """
         Read a set of *.ibek.support.yaml files and generate Entity classes
         from their EntityModel entries
@@ -56,7 +56,7 @@ class EntityFactory:
 
         return list(self._entity_models.values())
 
-    def _make_entity_model(self, model: EntityModel, support: Support) -> Type[Entity]:
+    def _make_entity_model(self, model: EntityModel, support: Support) -> type[Entity]:
         """
         Create an Entity Model from a EntityModel instance and a Support instance.
         """
@@ -86,8 +86,8 @@ class EntityFactory:
                     default,
                 )
 
-        args: Dict[str, Tuple[type, Any]] = {}
-        validators: Dict[str, Any] = {}
+        args: dict[str, tuple[type, Any]] = {}
+        validators: dict[str, Any] = {}
 
         # fully qualified name of the Entity class including support module
         full_name = f"{support.module}.{model.name}"
@@ -117,7 +117,7 @@ class EntityFactory:
             else:
                 # arg.type is str, int, float, etc.
                 type = getattr(builtins, param.type)
-            add_arg(name, type, param.description, getattr(param, "default"))  # type: ignore
+            add_arg(name, type, param.description, param.default)  # type: ignore
 
         # add the type literal which discriminates between the different Entity classes
         typ = Literal[full_name]  # type: ignore
@@ -139,7 +139,7 @@ class EntityFactory:
 
         return entity_cls
 
-    def _make_entity_models(self, support: Support) -> List[Type[Entity]]:
+    def _make_entity_models(self, support: Support) -> list[type[Entity]]:
         """
         Create Entity subclasses for all EntityModel instances in the given
         Support instance. Returns a list of the Entity subclasses Models.
@@ -157,11 +157,11 @@ class EntityFactory:
             entity_names.append(model.name)
         return entity_models
 
-    def resolve_sub_entities(self, entities: List[Entity]) -> List[Entity]:
+    def resolve_sub_entities(self, entities: list[Entity]) -> list[Entity]:
         """
         Recursively resolve SubEntity collections in a list of Entity instances
         """
-        resolved_entities: List[Entity] = []
+        resolved_entities: list[Entity] = []
         for parent_entity in entities:
             model = parent_entity._model
             # add the parent standard entity

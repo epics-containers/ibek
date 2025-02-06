@@ -7,8 +7,9 @@ from __future__ import annotations
 
 import ast
 import builtins
+from collections.abc import Sequence
 from enum import Enum
-from typing import Any, Dict, List, Sequence
+from typing import Any
 
 from pydantic import (
     Field,
@@ -21,7 +22,7 @@ from .globals import BaseSettings
 from .utils import UTILS
 
 # a global dict of all entity instances indexed by their ID
-id_to_entity: Dict[str, Entity] = {}
+id_to_entity: dict[str, Entity] = {}
 
 
 def get_entity_by_id(id: str) -> Entity:
@@ -149,7 +150,7 @@ class IOC(BaseSettings):
 
     ioc_name: str = Field(description="Name of IOC instance")
     description: str = Field(description="Description of what the IOC does")
-    entities: List[Entity]
+    entities: list[Entity]
     shared: Sequence[Any] = Field(
         description="A place to create any anchors required for repeating YAML",
         default=(),

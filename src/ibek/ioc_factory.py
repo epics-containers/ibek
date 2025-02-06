@@ -4,8 +4,9 @@ functions for making Entity models
 
 from __future__ import annotations
 
+from collections.abc import Sequence
 from pathlib import Path
-from typing import Annotated, List, Sequence, Type, Union
+from typing import Annotated, Union
 
 from pydantic import Field
 from ruamel.yaml.main import YAML
@@ -21,7 +22,7 @@ class IocFactory:
     """
 
     def deserialize_ioc(
-        self, ioc_instance_yaml: Path, entity_models: List[Type[Entity]]
+        self, ioc_instance_yaml: Path, entity_models: list[type[Entity]]
     ) -> IOC:
         """
         Takes an ioc instance entities file, list of generic ioc yaml files.
@@ -50,7 +51,7 @@ class IocFactory:
 
         return ioc_instance
 
-    def make_ioc_model(self, entity_models: List[Type[Entity]]) -> Type[IOC]:
+    def make_ioc_model(self, entity_models: list[type[Entity]]) -> type[IOC]:
         """
         Create an IOC derived model, by setting its entities attribute to
         be of type 'list of Entity derived classes'.

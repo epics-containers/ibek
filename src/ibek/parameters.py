@@ -5,10 +5,9 @@ Classes to specify arguments to Entity Models
 from __future__ import annotations
 
 from enum import Enum
-from typing import Any, Dict, Optional
+from typing import Annotated, Any, Literal, Optional
 
 from pydantic import Field
-from typing_extensions import Annotated, Literal
 
 from .globals import JINJA, BaseSettings
 
@@ -105,6 +104,6 @@ class EnumParam(Param):
     type: Literal["enum"] = "enum"
     default: Optional[Any] = None
 
-    values: Dict[Any, Any] = Field(
+    values: dict[Any, Any] = Field(
         description="provides a list of values to make this argument an Enum",
     )

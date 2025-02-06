@@ -101,6 +101,7 @@ lint.ignore = [
     "C408",   # Unnecessary collection call - e.g. list(...) instead of [...]
     "E501",   # Line too long, should be fixed by black.
     "SLF001", # Private member accessed: `_model`
+    "UP007",
 ]
 line-length = 88
 lint.select = [

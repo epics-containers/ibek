@@ -4,7 +4,7 @@ import subprocess
 from enum import Enum
 from pathlib import Path
 from shutil import rmtree
-from typing import List, Optional
+from typing import Optional
 
 import typer
 
@@ -13,7 +13,7 @@ try:
 except ImportError:
     pass  # Git Python is not needed for runtime (container build time only)
 
-from typing_extensions import Annotated
+from typing import Annotated
 
 from ibek.globals import (
     AUTOSAVE_PATTERN,
@@ -52,7 +52,7 @@ PARSE_MACROS = re.compile(r"^([A-Z_a-z0-9]*)\s*=\s*(.*/.*)$", flags=re.M)
 support_cli = typer.Typer(cls=NaturalOrderGroup)
 
 
-def _install_debs(debs: List[str]) -> None:
+def _install_debs(debs: list[str]) -> None:
     """
     Install a list of debian packages.
 
@@ -87,7 +87,7 @@ def _install_debs(debs: List[str]) -> None:
 
 @support_cli.command()
 def apt_install(
-    debs: List[str] = typer.Argument(
+    debs: list[str] = typer.Argument(
         None,
         help=(
             "list of debian packages to install. Also may include any "
@@ -104,7 +104,7 @@ def apt_install(
 
 @support_cli.command()
 def add_runtime_packages(
-    debs: List[str] = typer.Argument(None, help="list of debian packages to install"),
+    debs: list[str] = typer.Argument(None, help="list of debian packages to install"),
 ):
     """
     Add packages to RUNTIME_DEBS for later install with apt_install_runtime_packages
@@ -204,7 +204,7 @@ def register(
 
 @support_cli.command()
 def add_libs(
-    libs: List[str] = typer.Argument(None, help="list of libraries to add"),
+    libs: list[str] = typer.Argument(None, help="list of libraries to add"),
 ) -> None:
     """
     declare the libraries for this support module for inclusion in IOC Makefile
@@ -215,7 +215,7 @@ def add_libs(
 
 @support_cli.command()
 def add_dbds(
-    dbds: List[str] = typer.Argument(None, help="list of dbd files to add"),
+    dbds: list[str] = typer.Argument(None, help="list of dbd files to add"),
 ) -> None:
     """
     declare the dbd files for this support module for inclusion in IOC Makefile
@@ -271,7 +271,7 @@ def add_to_config_site(
 
 @support_cli.command()
 def check_dependencies(
-    deps: List[str] = typer.Argument(help="list of dependencies to check"),
+    deps: list[str] = typer.Argument(help="list of dependencies to check"),
 ):
     """
     Check if specified dependencies have been supplied
@@ -344,7 +344,7 @@ def generate_schema(
 
 @support_cli.command()
 def add_runtime_files(
-    files: List[str] = typer.Argument(
+    files: list[str] = typer.Argument(
         None, help="list of file or folders to add to the runtime image"
     ),
 ):

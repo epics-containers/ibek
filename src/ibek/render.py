@@ -2,7 +2,8 @@
 Functions for rendering lines in the boot script using Jinja2
 """
 
-from typing import Callable, List, Optional, Sequence, Union
+from collections.abc import Callable, Sequence
+from typing import Optional, Union
 
 from .entity_model import Comment, Script, Text, When
 from .ioc import Entity
@@ -17,7 +18,7 @@ class Render:
     """
 
     def __init__(self: "Render"):
-        self.once_done: List[str] = []
+        self.once_done: list[str] = []
 
     def render_text(
         self, instance: Entity, text: str, when=When.every, suffix=""
@@ -89,7 +90,7 @@ class Render:
         render the environment variable elements by combining the jinja template
         from an entity with the arguments from an Entity
         """
-        variables = getattr(instance._model, "env_vars")
+        variables = instance._model.env_vars
         if not variables:
             return None
 

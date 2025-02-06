@@ -1,7 +1,7 @@
 import json
 import logging
 from pathlib import Path
-from typing import Annotated, List, Optional
+from typing import Annotated, Optional
 
 import typer
 
@@ -45,7 +45,7 @@ def build_docker(
 
 @ioc_cli.command()
 def generate_schema(
-    definitions: List[Path] = typer.Argument(
+    definitions: list[Path] = typer.Argument(
         None,  # Note: typer converts None to an empty list because the type is List
         help="File paths to one or more support module YAML files",
         autocompletion=lambda: [],  # Forces path autocompletion
@@ -99,7 +99,7 @@ def extract_runtime_assets(
         help="The root folder to extract assets into",
         autocompletion=lambda: [],  # Forces path autocompletion
     ),
-    extras: List[Path] = typer.Argument(None, help="list of files to also extract"),
+    extras: list[Path] = typer.Argument(None, help="list of files to also extract"),
     source: Path = typer.Option(
         Path("/epics"),
         help="The root folder to extract assets from",

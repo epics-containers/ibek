@@ -1,6 +1,5 @@
 import shutil
 from pathlib import Path
-from typing import List, Tuple
 
 import typer
 from pvi._format.base import IndexEntry
@@ -27,7 +26,7 @@ def generate(
         help="The filepath to the ioc instance entity file",
         autocompletion=lambda: [],  # Forces path autocompletion
     ),
-    definitions: List[Path] = typer.Argument(
+    definitions: list[Path] = typer.Argument(
         ...,
         help="The filepath to a support module yaml file",
         autocompletion=lambda: [],  # Forces path autocompletion
@@ -68,7 +67,7 @@ def generate(
         stream.write(db_txt)
 
 
-def generate_pvi(ioc: IOC) -> Tuple[List[IndexEntry], List[Tuple[Database, Entity]]]:
+def generate_pvi(ioc: IOC) -> tuple[list[IndexEntry], list[tuple[Database, Entity]]]:
     """Generate pvi bob and template files to add to UI index and IOC database.
 
     Args:
@@ -79,12 +78,12 @@ def generate_pvi(ioc: IOC) -> Tuple[List[IndexEntry], List[Tuple[Database, Entit
         substitution file
 
     """
-    index_entries: List[IndexEntry] = []
-    databases: List[Tuple[Database, Entity]] = []
+    index_entries: list[IndexEntry] = []
+    databases: list[tuple[Database, Entity]] = []
 
     formatter = DLSFormatter()
 
-    formatted_pvi_devices: List[str] = []
+    formatted_pvi_devices: list[str] = []
     for entity in ioc.entities:
         definition = entity._model
         if not hasattr(definition, "pvi") or definition.pvi is None:
@@ -132,7 +131,7 @@ def generate_pvi(ioc: IOC) -> Tuple[List[IndexEntry], List[Tuple[Database, Entit
     return index_entries, databases
 
 
-def generate_index(title: str, index_entries: List[IndexEntry]):
+def generate_index(title: str, index_entries: list[IndexEntry]):
     """Generate an index bob using pvi.
 
     Args:

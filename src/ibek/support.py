@@ -5,7 +5,8 @@ Support Class to represent a deserialized <MODULE_NAME>.ibek.support.yaml file.
 from __future__ import annotations
 
 import json
-from typing import Any, Sequence
+from collections.abc import Sequence
+from typing import Any
 
 from pydantic import Field
 
