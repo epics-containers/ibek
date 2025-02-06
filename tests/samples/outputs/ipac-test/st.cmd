@@ -18,4 +18,3 @@ epicsEnvSet IPAC5 1
 
 dbLoadRecords /epics/runtime/ioc.db
 iocInit
-

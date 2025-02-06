@@ -7,4 +7,3 @@ ioc_registerRecordDeviceDriver pdbbase
 
 dbLoadRecords /epics/runtime/ioc.db
 iocInit
-
