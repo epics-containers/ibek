@@ -42,7 +42,7 @@ def test_check_dependencies(tmp_epics_root: Path):
     check_deps(["ADSimDetector", "some-other-module"])
 
     # Check fails
-    with pytest.raises(Exception):
+    with pytest.raises(Exception):  # noqa
         check_deps(["FakeDetector"])
 
 

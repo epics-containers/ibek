@@ -44,14 +44,14 @@ def test_object_references(entity_factory):
     assert entities[0]._model == support.entity_models[0]
     assert entities[1]._model == support.entity_models[1]
 
-    d = dict(
-        ioc_name="",
-        description="",
-        entities=[
-            dict(type="mymodule.port", name="PORT"),
-            dict(type="mymodule.device", port="PORT"),
+    d = {
+        "ioc_name": "",
+        "description": "",
+        "entities": [
+            {"type": "mymodule.port", "name": "PORT"},
+            {"type": "mymodule.device", "port": "PORT"},
         ],
-    )
+    }
     ioc = ioc_model(**d)
     port, device = ioc.entities
     # TODO try to get rid of the need for ''

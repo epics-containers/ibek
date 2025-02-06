@@ -69,7 +69,7 @@ def tidy_up(yaml):
         "      - value:",
     ]:
         # insert a blank line before the field unless it already has one
-        yaml = re.sub(r"^[ \t]*(\n%s)" % field, "\n\\g<1>", yaml)
+        yaml = re.sub(rf"^[ \t]*(\n{field})", "\n\\g<1>", yaml)
         yaml = re.sub(r"__utils__", "_global", yaml)
         yaml = re.sub(r"_ctx_", "_global", yaml)
         yaml = re.sub(r"\.counter", ".incrementor", yaml)
@@ -87,7 +87,7 @@ def process_file(file: Path):
     process a single file by reading its yaml - transforming it and writing it back
     """
     yaml = YAML()
-    with open(file, "r") as f:
+    with open(file) as f:
         data = yaml.load(f)
 
     try:

@@ -33,4 +33,3 @@ motorSimConfigAxis(controllerOne, 3, 20000, -20000, 2500, 2500)
 motorSimConfigAxis(controllerOne, 1, 20000, -20000, 100, 100)
 # motorSimCreateAxis(controller_asyn_port_name, axis, axis_description)
 motorSimConfigAxis(controllerOne, 2, 20000, -20000, 100, 100)
-

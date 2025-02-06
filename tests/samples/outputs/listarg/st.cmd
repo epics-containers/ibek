@@ -31,4 +31,3 @@ Fist time vortex friend is Cat
 
 dbLoadRecords /epics/runtime/ioc.db
 iocInit
-
