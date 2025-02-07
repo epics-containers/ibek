@@ -104,9 +104,10 @@ class Utils:
                 ioc_yaml_file_name=self.file_name,
                 ioc_name=self.ioc_name,
             )
-        except Exception:
-            print(f"ERROR RENDERING TEMPLATE:\n{template_text}")
-            raise
+        except Exception as e:
+            raise ValueError(
+                f"Error rendering template:\n{template_text}\nError:{e}"
+            ) from e
 
     def render_map(self, context: Any, map: Mapping[str, str | None]) -> dict[str, str]:
         """
