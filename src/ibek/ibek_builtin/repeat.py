@@ -16,12 +16,28 @@ e.g.
 ```
 """
 
+from typing import Literal
+
 from ibek.entity_model import EntityModel
+from ibek.ioc import Entity
 from ibek.parameters import DictParam, ListParam, Param, StrParam
 
 
+# TODO this class is an idea to get the schema to work for
+# the repeat's entity model.
 class EntityModelParam(EntityModel, Param):
     pass
+
+
+class RepeatEntity(Entity):
+    """
+    A baseclass for all generated Entity classes.
+    """
+
+    type: Literal["ibek.repeat"] = "ibek.repeat"
+    entity: dict
+    values: list
+    variable: str
 
 
 def make_entity_model() -> EntityModel:

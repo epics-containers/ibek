@@ -118,7 +118,7 @@ class DictParam(Param):
 
 
 class ListParam(Param):
-    """An argument with dict value"""
+    """An argument with list value"""
 
     type: Literal["list"] = "list"
     # represented yaml map or jinja ' | list'

@@ -137,7 +137,9 @@ class Entity(BaseSettings):
         if id_name:
             return getattr(self, id_name)
         else:
-            raise ValueError(f"Entity {self} has no id field")
+            raise ValueError(
+                f"Entity {self.type} has no id field - convert to str failed"
+            )
 
     def __repr__(self):
         return str(self)

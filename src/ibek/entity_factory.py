@@ -14,6 +14,7 @@ from ruamel.yaml.main import YAML
 
 from ibek.globals import JINJA
 from ibek.ibek_builtin.built_ins import get_all_builtin_entity_types
+from ibek.ibek_builtin.repeat import RepeatEntity
 
 from .ioc import Entity, EnumVal, clear_entity_model_ids
 from .parameters import EnumParam, IdParam, ObjectParam
@@ -165,17 +166,20 @@ class EntityFactory:
             entity_names.append(model.name)
         return entity_types
 
-    def _resolve_repeat(self, repeat_entity: Entity) -> list[Entity]:
+    def _resolve_repeat(self, repeat_entity: RepeatEntity) -> list[Entity]:
         """
         Resolve a repeat Entity into a list of Entity instances
         """
         resolved_entities: list[Entity] = []
-        for _ in repeat_entity.values:
+        for value in repeat_entity.values:
             new_entity_cls = self._entity_types[repeat_entity.entity.get("type")]
             new_params = {}
-            # jinja render all parameters in the repeat entity
             for key, param in repeat_entity.entity.items():
-                new_params[key] = UTILS.render(repeat_entity, param)
+                # insert the iterator variable into the context
+                context = repeat_entity.model_dump()
+                context[repeat_entity.variable] = value
+                # jinja render the parameter in the repeat entity
+                new_params[key] = UTILS.render(context, param)
 
             # create the new repeated entity from its type and parameters
             new_entity = new_entity_cls(**new_params)
