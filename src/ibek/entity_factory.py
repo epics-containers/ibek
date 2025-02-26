@@ -13,6 +13,7 @@ from pydantic_core import PydanticUndefined
 from ruamel.yaml.main import YAML
 
 from ibek.globals import JINJA
+from ibek.ibek_builtin.built_ins import get_all_builtin_entity_types
 
 from .ioc import Entity, EnumVal, clear_entity_model_ids
 from .parameters import EnumParam, IdParam, ObjectParam
@@ -23,18 +24,18 @@ from .utils import UTILS
 class EntityFactory:
     def __init__(self) -> None:
         """
-        A class to create `Entity` models from `EntityModel`s.
+        A class to create `Entity` types from `EntityModel` instances.
 
         Created models are stored in `self._entity_models` to lookup when
         resolving nested `SubEntity`s.
         """
-        self._entity_models: dict[str, type[Entity]] = {}
+        self._entity_types: dict[str, type[Entity]] = {}
         # starting a new EntityFactory implies we should throw away any existing
         # Entity instances - this is required for tests which create multiple
         # EntityFactories
         clear_entity_model_ids()
 
-    def make_entity_models(self, entity_model_yaml: list[Path]) -> list[type[Entity]]:
+    def make_entity_types(self, entity_model_yaml: list[Path]) -> list[type[Entity]]:
         """
         Read a set of *.ibek.support.yaml files and generate Entity classes
         from their EntityModel entries
@@ -49,16 +50,23 @@ class EntityFactory:
                 # deserialize the support module yaml file
                 support = Support(**support_dict)
                 # make Entity classes described in the support module yaml file
-                self._make_entity_models(support)
+                self._make_entity_types(support)
+
+            # also add builtin entity types "ibek.*"
+            ibek_support = Support(
+                module="ibek", entity_models=get_all_builtin_entity_types()
+            )
+            self._make_entity_types(ibek_support)
         except Exception:
             print(f"VALIDATION ERROR READING {entity_model}")
             raise
 
-        return list(self._entity_models.values())
+        return list(self._entity_types.values())
 
-    def _make_entity_model(self, model: EntityModel, support: Support) -> type[Entity]:
+    def _make_entity_type(self, model: EntityModel, support: Support) -> type[Entity]:
         """
-        Create an Entity Model from a EntityModel instance and a Support instance.
+        Create an Entity type from a EntityModel instance and it's containing
+        Support instance.
         """
 
         def add_arg(name, typ, description, default):
@@ -135,27 +143,27 @@ class EntityFactory:
         entity_cls._model = model
 
         # store this Entity class in the factory
-        self._entity_models[full_name] = entity_cls
+        self._entity_types[full_name] = entity_cls
 
         return entity_cls
 
-    def _make_entity_models(self, support: Support) -> list[type[Entity]]:
+    def _make_entity_types(self, support: Support) -> list[type[Entity]]:
         """
         Create Entity subclasses for all EntityModel instances in the given
         Support instance. Returns a list of the Entity subclasses Models.
         """
         entity_names = []
-        entity_models = []
+        entity_types = []
 
         for model in support.entity_models:
             if model.name in entity_names:
                 # not tested because schema validation will always catch this first
                 raise ValueError(f"Duplicate entity name {model.name}")
 
-            entity_models.append(self._make_entity_model(model, support))
+            entity_types.append(self._make_entity_type(model, support))
 
             entity_names.append(model.name)
-        return entity_models
+        return entity_types
 
     def resolve_sub_entities(self, entities: list[Entity]) -> list[Entity]:
         """
@@ -169,7 +177,7 @@ class EntityFactory:
             # add in SubEntities if any
             for sub_entity in model.sub_entities:
                 # find the Entity Class that the SubEntity represents
-                entity_cls = self._entity_models[sub_entity.type]
+                entity_cls = self._entity_types[sub_entity.type]
                 # get the SubEntity arguments
                 sub_params_dict = sub_entity.model_dump()
                 # jinja render any references to parent Params in the SubEntity Args
