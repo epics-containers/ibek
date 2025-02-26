@@ -31,7 +31,10 @@ class EntityModelParam(EntityModel, Param):
 
 class RepeatEntity(Entity):
     """
-    A baseclass for all generated Entity classes.
+    A definition of RepeatEntity for the type checker
+
+    This is not really used - instead the dynamic class is created
+    by the make_entity_model function is used.
     """
 
     type: Literal["ibek.repeat"] = "ibek.repeat"
@@ -40,7 +43,10 @@ class RepeatEntity(Entity):
     variable: str
 
 
-def make_entity_model() -> type[Entity]:
+def make_entity_model() -> EntityModel:
+    """
+    Create a type[Entity] for the RepeatEntity
+    """
     variable = StrParam(
         description="The variable name to use for the index in the values list",
         default="index",
@@ -61,5 +67,5 @@ def make_entity_model() -> type[Entity]:
             "entity": entity,
         },
     )
-    # type[Entity] and EntityModel are equivalent
+    # EntityModel and EntityModel are equivalent
     return model  # type: ignore

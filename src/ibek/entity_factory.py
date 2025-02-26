@@ -27,16 +27,32 @@ class EntityFactory:
         """
         A class to create `Entity` types from `EntityModel` instances.
 
+        To understand this class be aware that EntityModel == type[Entity].
+        i.e. when we instantiate an EntityModel we are creating a new
+        dynamic Entity class.
+
+        EntityModel instantiation happens when:-
+
+        1. Deserializing a support module yaml file
+        2. calling make_entity_model() in ibek_builtin.repeat.py
+
+        Instantiating an Entity itself is the step that happens when
+        deserializing a ioc.yaml. Entities in turn know how to make database
+        and startup script entries for IOC instance.
+
+        I have replaced all references in the code to type[Entity] with
+        EntityModel for consistency.
+
         Created models are stored in `self._entity_models` to lookup when
         resolving nested `SubEntity`s.
         """
-        self._entity_types: dict[str, type[Entity]] = {}
+        self._entity_types: dict[str, EntityModel] = {}
         # starting a new EntityFactory implies we should throw away any existing
         # Entity instances - this is required for tests which create multiple
         # EntityFactories
         clear_entity_model_ids()
 
-    def make_entity_types(self, entity_model_yaml: list[Path]) -> list[type[Entity]]:
+    def make_entity_types(self, entity_model_yaml: list[Path]) -> list[EntityModel]:
         """
         Read a set of *.ibek.support.yaml files and generate Entity classes
         from their EntityModel entries
@@ -64,7 +80,7 @@ class EntityFactory:
 
         return list(self._entity_types.values())
 
-    def _make_entity_type(self, model: EntityModel, support: Support) -> type[Entity]:
+    def _make_entity_type(self, model: EntityModel, support: Support) -> EntityModel:
         """
         Create an Entity type from a EntityModel instance and it's containing
         Support instance.
@@ -148,7 +164,7 @@ class EntityFactory:
 
         return entity_cls
 
-    def _make_entity_types(self, support: Support) -> list[type[Entity]]:
+    def _make_entity_types(self, support: Support) -> list[EntityModel]:
         """
         Create Entity subclasses for all EntityModel instances in the given
         Support instance. Returns a list of the Entity subclasses Models.
@@ -172,7 +188,7 @@ class EntityFactory:
         """
         resolved_entities: list[Entity] = []
         for value in repeat_entity.values:
-            new_entity_cls = self._entity_types[repeat_entity.entity.get("type")]
+            new_entity_cls = self._entity_types[repeat_entity.entity["type"]]
             new_params = {}
             for key, param in repeat_entity.entity.items():
                 # insert the iterator variable into the context
@@ -182,7 +198,7 @@ class EntityFactory:
                 new_params[key] = UTILS.render(context, param)
 
             # create the new repeated entity from its type and parameters
-            new_entity = new_entity_cls(**new_params)
+            new_entity = new_entity_cls(**new_params)  # type: ignore
             resolved_entities.append(new_entity)
         return resolved_entities
 
@@ -205,13 +221,14 @@ class EntityFactory:
                 for key, param in sub_params_dict.items():
                     sub_params_dict[key] = UTILS.render(parent_entity, param)
                 # cast the SubEntity to its concrete Entity subclass
-                entity = entity_cls(**sub_params_dict)
+                entity = entity_cls(**sub_params_dict)  # type: ignore
                 # recursively scan the SubEntity for more SubEntities
                 resolved_entities.extend(self.resolve_sub_entities([entity]))
 
             if parent_entity.type == "ibek.repeat":
                 # if the parent entity is a repeat, we need to resolve the repeat
                 # and add the resolved entities to the list
+                assert isinstance(parent_entity, RepeatEntity)
                 resolved_entities.extend(self._resolve_repeat(parent_entity))
 
         return resolved_entities
