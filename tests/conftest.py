@@ -97,7 +97,7 @@ def asyn_classes(support_defs, entity_factory):
     asyn_support = get_support(support_defs / "asyn.ibek.support.yaml")
 
     # make entity subclasses for everything defined in it
-    namespace = entity_factory._make_entity_models(asyn_support)
+    namespace = entity_factory._make_entity_types(asyn_support)
 
     # return the namespace so that callers have access to all of the
     # generated dataclasses
@@ -110,8 +110,8 @@ def motor_classes(support_defs, entity_factory):
     motor_support = get_support(support_defs / "motorSim.ibek.support.yaml")
 
     # make entity subclasses for everything defined in it
-    namespace = entity_factory._make_entity_models(asyn_support)
-    namespace.extend(entity_factory._make_entity_models(motor_support))
+    namespace = entity_factory._make_entity_types(asyn_support)
+    namespace.extend(entity_factory._make_entity_types(motor_support))
 
     # return the namespace so that callers have access to all of the
     # generated dataclasses

@@ -303,6 +303,70 @@
       "title": "direction",
       "type": "string"
     },
+    "ibek_repeat": {
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "const": "ibek.repeat",
+          "description": "A repeating entity",
+          "enum": [
+            "ibek.repeat"
+          ],
+          "title": "Type",
+          "type": "string"
+        },
+        "entity_enabled": {
+          "default": true,
+          "description": "enable or disable this entity instance",
+          "title": "Entity Enabled",
+          "type": "boolean"
+        },
+        "variable": {
+          "default": "index",
+          "description": "The variable name to use for the index in the values list",
+          "title": "Variable",
+          "type": "string"
+        },
+        "values": {
+          "anyOf": [
+            {
+              "description": "jinja that renders to <class 'list'>",
+              "pattern": ".*\\{\\{.*\\}\\}.*",
+              "type": "string"
+            },
+            {
+              "description": "A list of values to use for the variable in the entity",
+              "items": {},
+              "type": "array"
+            }
+          ],
+          "description": "union of <class 'list'> and jinja representation of {typ}",
+          "title": "Values"
+        },
+        "entity": {
+          "anyOf": [
+            {
+              "description": "jinja that renders to <class 'dict'>",
+              "pattern": ".*\\{\\{.*\\}\\}.*",
+              "type": "string"
+            },
+            {
+              "description": "The entity to repeat",
+              "type": "object"
+            }
+          ],
+          "description": "union of <class 'dict'> and jinja representation of {typ}",
+          "title": "Entity"
+        }
+      },
+      "required": [
+        "type",
+        "values",
+        "entity"
+      ],
+      "title": "ibek_repeat",
+      "type": "object"
+    },
     "ipac_Hy8001": {
       "additionalProperties": false,
       "properties": {
@@ -821,6 +885,7 @@
             "epics.PostStartupCommand": "#/$defs/epics_PostStartupCommand",
             "epics.StartupCommand": "#/$defs/epics_StartupCommand",
             "epics.dbpf": "#/$defs/epics_dbpf",
+            "ibek.repeat": "#/$defs/ibek_repeat",
             "ipac.Hy8001": "#/$defs/ipac_Hy8001",
             "ipac.Hy8002": "#/$defs/ipac_Hy8002",
             "ipac.Hy8005": "#/$defs/ipac_Hy8005",
@@ -861,6 +926,9 @@
           },
           {
             "$ref": "#/$defs/epics_InterruptVectorVME"
+          },
+          {
+            "$ref": "#/$defs/ibek_repeat"
           }
         ]
       },

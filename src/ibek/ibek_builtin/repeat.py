@@ -40,7 +40,7 @@ class RepeatEntity(Entity):
     variable: str
 
 
-def make_entity_model() -> EntityModel:
+def make_entity_model() -> type[Entity]:
     variable = StrParam(
         description="The variable name to use for the index in the values list",
         default="index",
@@ -61,4 +61,5 @@ def make_entity_model() -> EntityModel:
             "entity": entity,
         },
     )
-    return model
+    # type[Entity] and EntityModel are equivalent
+    return model  # type: ignore
