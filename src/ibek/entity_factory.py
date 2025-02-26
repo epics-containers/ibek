@@ -165,6 +165,23 @@ class EntityFactory:
             entity_names.append(model.name)
         return entity_types
 
+    def _resolve_repeat(self, repeat_entity: Entity) -> list[Entity]:
+        """
+        Resolve a repeat Entity into a list of Entity instances
+        """
+        resolved_entities: list[Entity] = []
+        for _ in repeat_entity.values:
+            new_entity_cls = self._entity_types[repeat_entity.entity.get("type")]
+            new_params = {}
+            # jinja render all parameters in the repeat entity
+            for key, param in repeat_entity.entity.items():
+                new_params[key] = UTILS.render(repeat_entity, param)
+
+            # create the new repeated entity from its type and parameters
+            new_entity = new_entity_cls(**new_params)
+            resolved_entities.append(new_entity)
+        return resolved_entities
+
     def resolve_sub_entities(self, entities: list[Entity]) -> list[Entity]:
         """
         Recursively resolve SubEntity collections in a list of Entity instances
@@ -187,4 +204,10 @@ class EntityFactory:
                 entity = entity_cls(**sub_params_dict)
                 # recursively scan the SubEntity for more SubEntities
                 resolved_entities.extend(self.resolve_sub_entities([entity]))
+
+            if parent_entity.type == "ibek.repeat":
+                # if the parent entity is a repeat, we need to resolve the repeat
+                # and add the resolved entities to the list
+                resolved_entities.extend(self._resolve_repeat(parent_entity))
+
         return resolved_entities
