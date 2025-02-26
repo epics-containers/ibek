@@ -1,5 +1,5 @@
 """
-A built in entity model for generating N instances of another entity.
+A built in entity model instance for generating N instances of another entity.
 
 e.g.
 ```yaml
@@ -17,16 +17,32 @@ e.g.
 """
 
 from ibek.entity_model import EntityModel
+from ibek.parameters import DictParam, ListParam, Param, StrParam
+
+
+class EntityModelParam(EntityModel, Param):
+    pass
 
 
 def make_entity_model() -> EntityModel:
+    variable = StrParam(
+        description="The variable name to use for the index in the values list",
+        default="index",
+    )
+    values = ListParam(
+        description="A list of values to use for the variable in the entity",
+    )
+    entity = DictParam(
+        description="The entity to repeat",
+    )
+
     model = EntityModel(
         name="repeat",
         description="A repeating entity",
-        parameters={},
-        #     "variable": StrParam,
-        #     "values": StrParam,
-        #     "entity": EntityModel,
-        # },
+        parameters={
+            "variable": variable,
+            "values": values,
+            "entity": entity,
+        },
     )
     return model

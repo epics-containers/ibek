@@ -107,3 +107,19 @@ class EnumParam(Param):
     values: dict[Any, Any] = Field(
         description="provides a list of values to make this argument an Enum",
     )
+
+
+class DictParam(Param):
+    """An argument with dict value"""
+
+    type: Literal["dict"] = "dict"
+    # represented yaml map or jinja ' | dict'
+    default: Optional[dict | JinjaString] = None
+
+
+class ListParam(Param):
+    """An argument with dict value"""
+
+    type: Literal["list"] = "list"
+    # represented yaml map or jinja ' | list'
+    default: Optional[list | JinjaString] = None
