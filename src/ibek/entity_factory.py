@@ -14,7 +14,7 @@ from ruamel.yaml.main import YAML
 
 from ibek.globals import JINJA
 from ibek.ibek_builtin.built_ins import get_all_builtin_entity_types
-from ibek.ibek_builtin.repeat import RepeatEntity
+from ibek.ibek_builtin.repeat import REPEAT_TYPE, RepeatEntity
 
 from .ioc import Entity, EnumVal, clear_entity_model_ids
 from .parameters import EnumParam, IdParam, ObjectParam
@@ -182,7 +182,9 @@ class EntityFactory:
             entity_names.append(model.name)
         return entity_types
 
-    def _resolve_repeat(self, repeat_entity: RepeatEntity) -> list[Entity]:
+    def _resolve_repeat(
+        self, repeat_entity: RepeatEntity, parent_entity: Entity
+    ) -> list[Entity]:
         """
         Resolve a repeat Entity into a list of Entity instances
         """
@@ -191,12 +193,14 @@ class EntityFactory:
             new_entity_cls = self._entity_types[repeat_entity.entity["type"]]
             new_params = {}
             for key, param in repeat_entity.entity.items():
-                if key == "entity" and new_params.get("type") == "ibek.repeat":
+                if key == "entity" and new_params.get("type") == REPEAT_TYPE:
                     # defer rendering of the inner entity in nested repeats
                     new_params[key] = param
                 else:
                     # insert the iterator variable into the context
                     context = repeat_entity.model_dump()
+                    if parent_entity:
+                        context.update(parent_entity.model_dump())
                     context[repeat_entity.variable] = value
                     # jinja render the parameter in the repeat entity
                     new_params[key] = UTILS.render(context, param)
@@ -204,10 +208,8 @@ class EntityFactory:
             # create the new repeated entity from its type and parameters
             new_entity = new_entity_cls(**new_params)  # type: ignore
             assert isinstance(new_entity, Entity)
-            resolved_entities.append(new_entity)
 
-            if new_entity.type == "ibek.repeat":
-                resolved_entities += self._resolve_repeat(new_entity)  # type: ignore
+            resolved_entities.extend(self.resolve_sub_entities([new_entity]))
 
         return resolved_entities
 
@@ -217,26 +219,33 @@ class EntityFactory:
         """
         resolved_entities: list[Entity] = []
         for parent_entity in entities:
-            model = parent_entity._model
-            # add the parent standard entity
-            resolved_entities.append(parent_entity)
-            # add in SubEntities if any
-            for sub_entity in model.sub_entities:
-                # find the Entity Class that the SubEntity represents
-                entity_cls = self._entity_types[sub_entity.type]
-                # get the SubEntity arguments
-                sub_params_dict = sub_entity.model_dump()
-                # jinja render any references to parent Params in the SubEntity Args
-                for key, param in sub_params_dict.items():
-                    sub_params_dict[key] = UTILS.render(parent_entity, param)
-                # cast the SubEntity to its concrete Entity subclass
-                entity = entity_cls(**sub_params_dict)  # type: ignore
-                # recursively scan the SubEntity for more SubEntities
-                resolved_entities.extend(self.resolve_sub_entities([entity]))
-
-            if parent_entity.type == "ibek.repeat":
-                # if the parent entity is a repeat, we need to resolve the repeat
-                # and add the resolved entities to the list
-                resolved_entities.extend(self._resolve_repeat(parent_entity))  # type: ignore
+            if parent_entity.type == REPEAT_TYPE:
+                # resolve repeats in the parent entity if needed
+                resolved_entities.extend(self._resolve_repeat(parent_entity, {}))  # type: ignore
+            else:
+                # add the current parent entity
+                resolved_entities.append(parent_entity)
+                # add in SubEntities if any
+                for sub_entity in parent_entity._model.sub_entities:
+                    if sub_entity.type == REPEAT_TYPE:
+                        # if the sub entity is a repeat resolve repeats
+                        # passing parent in, so it's arguments can be merged into context
+                        resolved_entities.extend(
+                            self._resolve_repeat(sub_entity, parent_entity)
+                        )  # type: ignore
+                    else:
+                        # find the Entity Class that the SubEntity represents
+                        entity_cls = self._entity_types[sub_entity.type]
+                        # get the SubEntity arguments
+                        sub_params_dict = sub_entity.model_dump()
+                        # jinja render any references to parent Params in the SubEntity Args
+                        for key, param in sub_params_dict.items():
+                            sub_params_dict[key] = UTILS.render(parent_entity, param)
+                        # cast the SubEntity to its concrete Entity subclass
+                        new_entity = entity_cls(**sub_params_dict)  # type: ignore
+                        # recursively scan the SubEntity for more SubEntities
+                        resolved_entities.extend(
+                            self.resolve_sub_entities([new_entity])
+                        )
 
         return resolved_entities

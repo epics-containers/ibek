@@ -1,0 +1,347 @@
+<display version="2.0.0">
+  <name></name>
+  <x>0</x>
+  <y use_class="true">0</y>
+  <width>388</width>
+  <height>305</height>
+  <grid_step_x>4</grid_step_x>
+  <grid_step_y>4</grid_step_y>
+  <widget type="label" version="2.0.0">
+    <name>Title</name>
+    <class>TITLE</class>
+    <text>Title</text>
+    <x use_class="true">0</x>
+    <y use_class="true">0</y>
+    <width>388</width>
+    <height>25</height>
+    <font use_class="true">
+      <font name="Header 1" family="Liberation Sans" style="BOLD" size="22.0">
+      </font>
+    </font>
+    <foreground_color use_class="true">
+      <color name="Text" red="0" green="0" blue="0">
+      </color>
+    </foreground_color>
+    <transparent use_class="true">true</transparent>
+    <horizontal_alignment>1</horizontal_alignment>
+  </widget>
+  <widget type="label" version="2.0.0">
+    <name>Label</name>
+    <text>NDPluginStats</text>
+    <x>23</x>
+    <y>30</y>
+    <width>150</width>
+    <height>20</height>
+    <tooltip>$(text)</tooltip>
+  </widget>
+  <widget type="action_button" version="3.0.0">
+    <name>OpenDisplay</name>
+    <actions>
+      <action type="open_display">
+        <file>NDPluginStats.pvi.bob</file>
+        <target>tab</target>
+        <description>Open Display</description>
+        <macros>
+          <P>BL03I-EA-XBPM-01</P>
+          <R>Cur1</R>
+        </macros>
+      </action>
+    </actions>
+    <text>BL03I-EA-XBPM-01 Cur1</text>
+    <x>178</x>
+    <y>30</y>
+    <width>205</width>
+    <height>20</height>
+    <tooltip>$(actions)</tooltip>
+  </widget>
+  <widget type="label" version="2.0.0">
+    <name>Label</name>
+    <text>NDPluginStats</text>
+    <x>23</x>
+    <y>55</y>
+    <width>150</width>
+    <height>20</height>
+    <tooltip>$(text)</tooltip>
+  </widget>
+  <widget type="action_button" version="3.0.0">
+    <name>OpenDisplay</name>
+    <actions>
+      <action type="open_display">
+        <file>NDPluginStats.pvi.bob</file>
+        <target>tab</target>
+        <description>Open Display</description>
+        <macros>
+          <P>BL03I-EA-XBPM-01</P>
+          <R>Cur2</R>
+        </macros>
+      </action>
+    </actions>
+    <text>BL03I-EA-XBPM-01 Cur2</text>
+    <x>178</x>
+    <y>55</y>
+    <width>205</width>
+    <height>20</height>
+    <tooltip>$(actions)</tooltip>
+  </widget>
+  <widget type="label" version="2.0.0">
+    <name>Label</name>
+    <text>NDPluginStats</text>
+    <x>23</x>
+    <y>80</y>
+    <width>150</width>
+    <height>20</height>
+    <tooltip>$(text)</tooltip>
+  </widget>
+  <widget type="action_button" version="3.0.0">
+    <name>OpenDisplay</name>
+    <actions>
+      <action type="open_display">
+        <file>NDPluginStats.pvi.bob</file>
+        <target>tab</target>
+        <description>Open Display</description>
+        <macros>
+          <P>BL03I-EA-XBPM-01</P>
+          <R>Cur3</R>
+        </macros>
+      </action>
+    </actions>
+    <text>BL03I-EA-XBPM-01 Cur3</text>
+    <x>178</x>
+    <y>80</y>
+    <width>205</width>
+    <height>20</height>
+    <tooltip>$(actions)</tooltip>
+  </widget>
+  <widget type="label" version="2.0.0">
+    <name>Label</name>
+    <text>NDPluginStats</text>
+    <x>23</x>
+    <y>105</y>
+    <width>150</width>
+    <height>20</height>
+    <tooltip>$(text)</tooltip>
+  </widget>
+  <widget type="action_button" version="3.0.0">
+    <name>OpenDisplay</name>
+    <actions>
+      <action type="open_display">
+        <file>NDPluginStats.pvi.bob</file>
+        <target>tab</target>
+        <description>Open Display</description>
+        <macros>
+          <P>BL03I-EA-XBPM-01</P>
+          <R>Cur4</R>
+        </macros>
+      </action>
+    </actions>
+    <text>BL03I-EA-XBPM-01 Cur4</text>
+    <x>178</x>
+    <y>105</y>
+    <width>205</width>
+    <height>20</height>
+    <tooltip>$(actions)</tooltip>
+  </widget>
+  <widget type="label" version="2.0.0">
+    <name>Label</name>
+    <text>NDPluginStats</text>
+    <x>23</x>
+    <y>130</y>
+    <width>150</width>
+    <height>20</height>
+    <tooltip>$(text)</tooltip>
+  </widget>
+  <widget type="action_button" version="3.0.0">
+    <name>OpenDisplay</name>
+    <actions>
+      <action type="open_display">
+        <file>NDPluginStats.pvi.bob</file>
+        <target>tab</target>
+        <description>Open Display</description>
+        <macros>
+          <P>BL03I-EA-XBPM-01</P>
+          <R>SumX</R>
+        </macros>
+      </action>
+    </actions>
+    <text>BL03I-EA-XBPM-01 SumX</text>
+    <x>178</x>
+    <y>130</y>
+    <width>205</width>
+    <height>20</height>
+    <tooltip>$(actions)</tooltip>
+  </widget>
+  <widget type="label" version="2.0.0">
+    <name>Label</name>
+    <text>NDPluginStats</text>
+    <x>23</x>
+    <y>155</y>
+    <width>150</width>
+    <height>20</height>
+    <tooltip>$(text)</tooltip>
+  </widget>
+  <widget type="action_button" version="3.0.0">
+    <name>OpenDisplay</name>
+    <actions>
+      <action type="open_display">
+        <file>NDPluginStats.pvi.bob</file>
+        <target>tab</target>
+        <description>Open Display</description>
+        <macros>
+          <P>BL03I-EA-XBPM-01</P>
+          <R>SumY</R>
+        </macros>
+      </action>
+    </actions>
+    <text>BL03I-EA-XBPM-01 SumY</text>
+    <x>178</x>
+    <y>155</y>
+    <width>205</width>
+    <height>20</height>
+    <tooltip>$(actions)</tooltip>
+  </widget>
+  <widget type="label" version="2.0.0">
+    <name>Label</name>
+    <text>NDPluginStats</text>
+    <x>23</x>
+    <y>180</y>
+    <width>150</width>
+    <height>20</height>
+    <tooltip>$(text)</tooltip>
+  </widget>
+  <widget type="action_button" version="3.0.0">
+    <name>OpenDisplay</name>
+    <actions>
+      <action type="open_display">
+        <file>NDPluginStats.pvi.bob</file>
+        <target>tab</target>
+        <description>Open Display</description>
+        <macros>
+          <P>BL03I-EA-XBPM-01</P>
+          <R>SumAll</R>
+        </macros>
+      </action>
+    </actions>
+    <text>BL03I-EA-XBPM-01 SumAll</text>
+    <x>178</x>
+    <y>180</y>
+    <width>205</width>
+    <height>20</height>
+    <tooltip>$(actions)</tooltip>
+  </widget>
+  <widget type="label" version="2.0.0">
+    <name>Label</name>
+    <text>NDPluginStats</text>
+    <x>23</x>
+    <y>205</y>
+    <width>150</width>
+    <height>20</height>
+    <tooltip>$(text)</tooltip>
+  </widget>
+  <widget type="action_button" version="3.0.0">
+    <name>OpenDisplay</name>
+    <actions>
+      <action type="open_display">
+        <file>NDPluginStats.pvi.bob</file>
+        <target>tab</target>
+        <description>Open Display</description>
+        <macros>
+          <P>BL03I-EA-XBPM-01</P>
+          <R>DiffX</R>
+        </macros>
+      </action>
+    </actions>
+    <text>BL03I-EA-XBPM-01 DiffX</text>
+    <x>178</x>
+    <y>205</y>
+    <width>205</width>
+    <height>20</height>
+    <tooltip>$(actions)</tooltip>
+  </widget>
+  <widget type="label" version="2.0.0">
+    <name>Label</name>
+    <text>NDPluginStats</text>
+    <x>23</x>
+    <y>230</y>
+    <width>150</width>
+    <height>20</height>
+    <tooltip>$(text)</tooltip>
+  </widget>
+  <widget type="action_button" version="3.0.0">
+    <name>OpenDisplay</name>
+    <actions>
+      <action type="open_display">
+        <file>NDPluginStats.pvi.bob</file>
+        <target>tab</target>
+        <description>Open Display</description>
+        <macros>
+          <P>BL03I-EA-XBPM-01</P>
+          <R>DiffY</R>
+        </macros>
+      </action>
+    </actions>
+    <text>BL03I-EA-XBPM-01 DiffY</text>
+    <x>178</x>
+    <y>230</y>
+    <width>205</width>
+    <height>20</height>
+    <tooltip>$(actions)</tooltip>
+  </widget>
+  <widget type="label" version="2.0.0">
+    <name>Label</name>
+    <text>NDPluginStats</text>
+    <x>23</x>
+    <y>255</y>
+    <width>150</width>
+    <height>20</height>
+    <tooltip>$(text)</tooltip>
+  </widget>
+  <widget type="action_button" version="3.0.0">
+    <name>OpenDisplay</name>
+    <actions>
+      <action type="open_display">
+        <file>NDPluginStats.pvi.bob</file>
+        <target>tab</target>
+        <description>Open Display</description>
+        <macros>
+          <P>BL03I-EA-XBPM-01</P>
+          <R>PosX</R>
+        </macros>
+      </action>
+    </actions>
+    <text>BL03I-EA-XBPM-01 PosX</text>
+    <x>178</x>
+    <y>255</y>
+    <width>205</width>
+    <height>20</height>
+    <tooltip>$(actions)</tooltip>
+  </widget>
+  <widget type="label" version="2.0.0">
+    <name>Label</name>
+    <text>NDPluginStats</text>
+    <x>23</x>
+    <y>280</y>
+    <width>150</width>
+    <height>20</height>
+    <tooltip>$(text)</tooltip>
+  </widget>
+  <widget type="action_button" version="3.0.0">
+    <name>OpenDisplay</name>
+    <actions>
+      <action type="open_display">
+        <file>NDPluginStats.pvi.bob</file>
+        <target>tab</target>
+        <description>Open Display</description>
+        <macros>
+          <P>BL03I-EA-XBPM-01</P>
+          <R>PosY</R>
+        </macros>
+      </action>
+    </actions>
+    <text>BL03I-EA-XBPM-01 PosY</text>
+    <x>178</x>
+    <y>280</y>
+    <width>205</width>
+    <height>20</height>
+    <tooltip>$(actions)</tooltip>
+  </widget>
+</display>

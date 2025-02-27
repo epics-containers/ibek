@@ -1,0 +1,2050 @@
+
+### PV Interface for NDPluginStats ###
+
+record("*", "$(P)$(R)Net") {
+    info(Q:group, {
+        "$(P)$(R)PVI": {
+            "pvi.Net.w": {
+                "+channel": "NAME",
+                "+type": "plain",
+            }
+        }
+    })
+}
+
+record("*", "$(P)$(R)Net_RBV") {
+    info(Q:group, {
+        "$(P)$(R)PVI": {
+            "pvi.Net.r": {
+                "+channel": "NAME",
+                "+type": "plain",
+            }
+        }
+    })
+}
+
+record("*", "$(P)$(R)MinY") {
+    info(Q:group, {
+        "$(P)$(R)PVI": {
+            "pvi.MinY.w": {
+                "+channel": "NAME",
+                "+type": "plain",
+            }
+        }
+    })
+}
+
+record("*", "$(P)$(R)MinY_RBV") {
+    info(Q:group, {
+        "$(P)$(R)PVI": {
+            "pvi.MinY.r": {
+                "+channel": "NAME",
+                "+type": "plain",
+            }
+        }
+    })
+}
+
+record("*", "$(P)$(R)MinX") {
+    info(Q:group, {
+        "$(P)$(R)PVI": {
+            "pvi.MinX.w": {
+                "+channel": "NAME",
+                "+type": "plain",
+            }
+        }
+    })
+}
+
+record("*", "$(P)$(R)MinX_RBV") {
+    info(Q:group, {
+        "$(P)$(R)PVI": {
+            "pvi.MinX.r": {
+                "+channel": "NAME",
+                "+type": "plain",
+            }
+        }
+    })
+}
+
+record("*", "$(P)$(R)ArraySizeX_RBV") {
+    info(Q:group, {
+        "$(P)$(R)PVI": {
+            "pvi.ArraySizeX.r": {
+                "+channel": "NAME",
+                "+type": "plain",
+            }
+        }
+    })
+}
+
+record("*", "$(P)$(R)ArraySizeY_RBV") {
+    info(Q:group, {
+        "$(P)$(R)PVI": {
+            "pvi.ArraySizeY.r": {
+                "+channel": "NAME",
+                "+type": "plain",
+            }
+        }
+    })
+}
+
+record("*", "$(P)$(R)ArraySize_RBV") {
+    info(Q:group, {
+        "$(P)$(R)PVI": {
+            "pvi.ArraySize.r": {
+                "+channel": "NAME",
+                "+type": "plain",
+            }
+        }
+    })
+}
+
+record("*", "$(P)$(R)DataType") {
+    info(Q:group, {
+        "$(P)$(R)PVI": {
+            "pvi.DataType.w": {
+                "+channel": "NAME",
+                "+type": "plain",
+            }
+        }
+    })
+}
+
+record("*", "$(P)$(R)DataType_RBV") {
+    info(Q:group, {
+        "$(P)$(R)PVI": {
+            "pvi.DataType.r": {
+                "+channel": "NAME",
+                "+type": "plain",
+            }
+        }
+    })
+}
+
+record("*", "$(P)$(R)ColorMode") {
+    info(Q:group, {
+        "$(P)$(R)PVI": {
+            "pvi.ColorMode.w": {
+                "+channel": "NAME",
+                "+type": "plain",
+            }
+        }
+    })
+}
+
+record("*", "$(P)$(R)ColorMode_RBV") {
+    info(Q:group, {
+        "$(P)$(R)PVI": {
+            "pvi.ColorMode.r": {
+                "+channel": "NAME",
+                "+type": "plain",
+            }
+        }
+    })
+}
+
+record("*", "$(P)$(R)TSMinValue") {
+    info(Q:group, {
+        "$(P)$(R)PVI": {
+            "pvi.TSMinValue.r": {
+                "+channel": "NAME",
+                "+type": "plain",
+            }
+        }
+    })
+}
+
+record("*", "$(P)$(R)TSMaxValue") {
+    info(Q:group, {
+        "$(P)$(R)PVI": {
+            "pvi.TSMaxValue.r": {
+                "+channel": "NAME",
+                "+type": "plain",
+            }
+        }
+    })
+}
+
+record("*", "$(P)$(R)TSMeanValue") {
+    info(Q:group, {
+        "$(P)$(R)PVI": {
+            "pvi.TSMeanValue.r": {
+                "+channel": "NAME",
+                "+type": "plain",
+            }
+        }
+    })
+}
+
+record("*", "$(P)$(R)TSTotal") {
+    info(Q:group, {
+        "$(P)$(R)PVI": {
+            "pvi.TSTotal.r": {
+                "+channel": "NAME",
+                "+type": "plain",
+            }
+        }
+    })
+}
+
+record("*", "$(P)$(R)TSNet") {
+    info(Q:group, {
+        "$(P)$(R)PVI": {
+            "pvi.TSNet.r": {
+                "+channel": "NAME",
+                "+type": "plain",
+            }
+        }
+    })
+}
+
+record("*", "$(P)$(R)MinValue") {
+    info(Q:group, {
+        "$(P)$(R)PVI": {
+            "pvi.MinValue.w": {
+                "+channel": "NAME",
+                "+type": "plain",
+            }
+        }
+    })
+}
+
+record("*", "$(P)$(R)MinValue_RBV") {
+    info(Q:group, {
+        "$(P)$(R)PVI": {
+            "pvi.MinValue.r": {
+                "+channel": "NAME",
+                "+type": "plain",
+            }
+        }
+    })
+}
+
+record("*", "$(P)$(R)MaxValue") {
+    info(Q:group, {
+        "$(P)$(R)PVI": {
+            "pvi.MaxValue.w": {
+                "+channel": "NAME",
+                "+type": "plain",
+            }
+        }
+    })
+}
+
+record("*", "$(P)$(R)MaxValue_RBV") {
+    info(Q:group, {
+        "$(P)$(R)PVI": {
+            "pvi.MaxValue.r": {
+                "+channel": "NAME",
+                "+type": "plain",
+            }
+        }
+    })
+}
+
+record("*", "$(P)$(R)MeanValue") {
+    info(Q:group, {
+        "$(P)$(R)PVI": {
+            "pvi.MeanValue.w": {
+                "+channel": "NAME",
+                "+type": "plain",
+            }
+        }
+    })
+}
+
+record("*", "$(P)$(R)MeanValue_RBV") {
+    info(Q:group, {
+        "$(P)$(R)PVI": {
+            "pvi.MeanValue.r": {
+                "+channel": "NAME",
+                "+type": "plain",
+            }
+        }
+    })
+}
+
+record("*", "$(P)$(R)Total") {
+    info(Q:group, {
+        "$(P)$(R)PVI": {
+            "pvi.Total.w": {
+                "+channel": "NAME",
+                "+type": "plain",
+            }
+        }
+    })
+}
+
+record("*", "$(P)$(R)Total_RBV") {
+    info(Q:group, {
+        "$(P)$(R)PVI": {
+            "pvi.Total.r": {
+                "+channel": "NAME",
+                "+type": "plain",
+            }
+        }
+    })
+}
+
+record("*", "$(P)$(R)BgdWidth") {
+    info(Q:group, {
+        "$(P)$(R)PVI": {
+            "pvi.BgdWidth.w": {
+                "+channel": "NAME",
+                "+type": "plain",
+            }
+        }
+    })
+}
+
+record("*", "$(P)$(R)BgdWidth_RBV") {
+    info(Q:group, {
+        "$(P)$(R)PVI": {
+            "pvi.BgdWidth.r": {
+                "+channel": "NAME",
+                "+type": "plain",
+            }
+        }
+    })
+}
+
+record("*", "$(P)$(R)ComputeStatistics") {
+    info(Q:group, {
+        "$(P)$(R)PVI": {
+            "pvi.ComputeStatistics.w": {
+                "+channel": "NAME",
+                "+type": "plain",
+            }
+        }
+    })
+}
+
+record("*", "$(P)$(R)ComputeStatistics_RBV") {
+    info(Q:group, {
+        "$(P)$(R)PVI": {
+            "pvi.ComputeStatistics.r": {
+                "+channel": "NAME",
+                "+type": "plain",
+            }
+        }
+    })
+}
+
+record("*", "$(P)$(R)ComputeProfiles") {
+    info(Q:group, {
+        "$(P)$(R)PVI": {
+            "pvi.ComputeProfiles.w": {
+                "+channel": "NAME",
+                "+type": "plain",
+            }
+        }
+    })
+}
+
+record("*", "$(P)$(R)ComputeProfiles_RBV") {
+    info(Q:group, {
+        "$(P)$(R)PVI": {
+            "pvi.ComputeProfiles.r": {
+                "+channel": "NAME",
+                "+type": "plain",
+            }
+        }
+    })
+}
+
+record("*", "$(P)$(R)ProfileSizeX_RBV") {
+    info(Q:group, {
+        "$(P)$(R)PVI": {
+            "pvi.ProfileSizeX.r": {
+                "+channel": "NAME",
+                "+type": "plain",
+            }
+        }
+    })
+}
+
+record("*", "$(P)$(R)ProfileSizeY_RBV") {
+    info(Q:group, {
+        "$(P)$(R)PVI": {
+            "pvi.ProfileSizeY.r": {
+                "+channel": "NAME",
+                "+type": "plain",
+            }
+        }
+    })
+}
+
+record("*", "$(P)$(R)ProfileAverageX_RBV") {
+    info(Q:group, {
+        "$(P)$(R)PVI": {
+            "pvi.ProfileAverageX.r": {
+                "+channel": "NAME",
+                "+type": "plain",
+            }
+        }
+    })
+}
+
+record("*", "$(P)$(R)ProfileAverageY_RBV") {
+    info(Q:group, {
+        "$(P)$(R)PVI": {
+            "pvi.ProfileAverageY.r": {
+                "+channel": "NAME",
+                "+type": "plain",
+            }
+        }
+    })
+}
+
+record("*", "$(P)$(R)ProfileThresholdX_RBV") {
+    info(Q:group, {
+        "$(P)$(R)PVI": {
+            "pvi.ProfileThresholdX.r": {
+                "+channel": "NAME",
+                "+type": "plain",
+            }
+        }
+    })
+}
+
+record("*", "$(P)$(R)ProfileThresholdY_RBV") {
+    info(Q:group, {
+        "$(P)$(R)PVI": {
+            "pvi.ProfileThresholdY.r": {
+                "+channel": "NAME",
+                "+type": "plain",
+            }
+        }
+    })
+}
+
+record("*", "$(P)$(R)ProfileCentroidX_RBV") {
+    info(Q:group, {
+        "$(P)$(R)PVI": {
+            "pvi.ProfileCentroidX.r": {
+                "+channel": "NAME",
+                "+type": "plain",
+            }
+        }
+    })
+}
+
+record("*", "$(P)$(R)ProfileCentroidY_RBV") {
+    info(Q:group, {
+        "$(P)$(R)PVI": {
+            "pvi.ProfileCentroidY.r": {
+                "+channel": "NAME",
+                "+type": "plain",
+            }
+        }
+    })
+}
+
+record("*", "$(P)$(R)ProfileCursorX_RBV") {
+    info(Q:group, {
+        "$(P)$(R)PVI": {
+            "pvi.ProfileCursorX.r": {
+                "+channel": "NAME",
+                "+type": "plain",
+            }
+        }
+    })
+}
+
+record("*", "$(P)$(R)ProfileCursorY_RBV") {
+    info(Q:group, {
+        "$(P)$(R)PVI": {
+            "pvi.ProfileCursorY.r": {
+                "+channel": "NAME",
+                "+type": "plain",
+            }
+        }
+    })
+}
+
+record("*", "$(P)$(R)CursorX") {
+    info(Q:group, {
+        "$(P)$(R)PVI": {
+            "pvi.CursorX.w": {
+                "+channel": "NAME",
+                "+type": "plain",
+            }
+        }
+    })
+}
+
+record("*", "$(P)$(R)CursorX_RBV") {
+    info(Q:group, {
+        "$(P)$(R)PVI": {
+            "pvi.CursorX.r": {
+                "+channel": "NAME",
+                "+type": "plain",
+            }
+        }
+    })
+}
+
+record("*", "$(P)$(R)CursorY") {
+    info(Q:group, {
+        "$(P)$(R)PVI": {
+            "pvi.CursorY.w": {
+                "+channel": "NAME",
+                "+type": "plain",
+            }
+        }
+    })
+}
+
+record("*", "$(P)$(R)CursorY_RBV") {
+    info(Q:group, {
+        "$(P)$(R)PVI": {
+            "pvi.CursorY.r": {
+                "+channel": "NAME",
+                "+type": "plain",
+            }
+        }
+    })
+}
+
+record("*", "$(P)$(R)TSMinX") {
+    info(Q:group, {
+        "$(P)$(R)PVI": {
+            "pvi.TSMinX.r": {
+                "+channel": "NAME",
+                "+type": "plain",
+            }
+        }
+    })
+}
+
+record("*", "$(P)$(R)TSMinY") {
+    info(Q:group, {
+        "$(P)$(R)PVI": {
+            "pvi.TSMinY.r": {
+                "+channel": "NAME",
+                "+type": "plain",
+            }
+        }
+    })
+}
+
+record("*", "$(P)$(R)TSMaxX") {
+    info(Q:group, {
+        "$(P)$(R)PVI": {
+            "pvi.TSMaxX.r": {
+                "+channel": "NAME",
+                "+type": "plain",
+            }
+        }
+    })
+}
+
+record("*", "$(P)$(R)TSMaxY") {
+    info(Q:group, {
+        "$(P)$(R)PVI": {
+            "pvi.TSMaxY.r": {
+                "+channel": "NAME",
+                "+type": "plain",
+            }
+        }
+    })
+}
+
+record("*", "$(P)$(R)TSTimestamp") {
+    info(Q:group, {
+        "$(P)$(R)PVI": {
+            "pvi.TSTimestamp.r": {
+                "+channel": "NAME",
+                "+type": "plain",
+            }
+        }
+    })
+}
+
+record("*", "$(P)$(R)MaxX") {
+    info(Q:group, {
+        "$(P)$(R)PVI": {
+            "pvi.MaxX.w": {
+                "+channel": "NAME",
+                "+type": "plain",
+            }
+        }
+    })
+}
+
+record("*", "$(P)$(R)MaxX_RBV") {
+    info(Q:group, {
+        "$(P)$(R)PVI": {
+            "pvi.MaxX.r": {
+                "+channel": "NAME",
+                "+type": "plain",
+            }
+        }
+    })
+}
+
+record("*", "$(P)$(R)MaxY") {
+    info(Q:group, {
+        "$(P)$(R)PVI": {
+            "pvi.MaxY.w": {
+                "+channel": "NAME",
+                "+type": "plain",
+            }
+        }
+    })
+}
+
+record("*", "$(P)$(R)MaxY_RBV") {
+    info(Q:group, {
+        "$(P)$(R)PVI": {
+            "pvi.MaxY.r": {
+                "+channel": "NAME",
+                "+type": "plain",
+            }
+        }
+    })
+}
+
+record("*", "$(P)$(R)ComputeHistogram") {
+    info(Q:group, {
+        "$(P)$(R)PVI": {
+            "pvi.ComputeHistogram.w": {
+                "+channel": "NAME",
+                "+type": "plain",
+            }
+        }
+    })
+}
+
+record("*", "$(P)$(R)ComputeHistogram_RBV") {
+    info(Q:group, {
+        "$(P)$(R)PVI": {
+            "pvi.ComputeHistogram.r": {
+                "+channel": "NAME",
+                "+type": "plain",
+            }
+        }
+    })
+}
+
+record("*", "$(P)$(R)HistSize") {
+    info(Q:group, {
+        "$(P)$(R)PVI": {
+            "pvi.HistSize.w": {
+                "+channel": "NAME",
+                "+type": "plain",
+            }
+        }
+    })
+}
+
+record("*", "$(P)$(R)HistSize_RBV") {
+    info(Q:group, {
+        "$(P)$(R)PVI": {
+            "pvi.HistSize.r": {
+                "+channel": "NAME",
+                "+type": "plain",
+            }
+        }
+    })
+}
+
+record("*", "$(P)$(R)ComputeCentroid") {
+    info(Q:group, {
+        "$(P)$(R)PVI": {
+            "pvi.ComputeCentroid.w": {
+                "+channel": "NAME",
+                "+type": "plain",
+            }
+        }
+    })
+}
+
+record("*", "$(P)$(R)ComputeCentroid_RBV") {
+    info(Q:group, {
+        "$(P)$(R)PVI": {
+            "pvi.ComputeCentroid.r": {
+                "+channel": "NAME",
+                "+type": "plain",
+            }
+        }
+    })
+}
+
+record("*", "$(P)$(R)HistMin") {
+    info(Q:group, {
+        "$(P)$(R)PVI": {
+            "pvi.HistMin.w": {
+                "+channel": "NAME",
+                "+type": "plain",
+            }
+        }
+    })
+}
+
+record("*", "$(P)$(R)HistMin_RBV") {
+    info(Q:group, {
+        "$(P)$(R)PVI": {
+            "pvi.HistMin.r": {
+                "+channel": "NAME",
+                "+type": "plain",
+            }
+        }
+    })
+}
+
+record("*", "$(P)$(R)CentroidThreshold") {
+    info(Q:group, {
+        "$(P)$(R)PVI": {
+            "pvi.CentroidThreshold.w": {
+                "+channel": "NAME",
+                "+type": "plain",
+            }
+        }
+    })
+}
+
+record("*", "$(P)$(R)CentroidThreshold_RBV") {
+    info(Q:group, {
+        "$(P)$(R)PVI": {
+            "pvi.CentroidThreshold.r": {
+                "+channel": "NAME",
+                "+type": "plain",
+            }
+        }
+    })
+}
+
+record("*", "$(P)$(R)HistMax") {
+    info(Q:group, {
+        "$(P)$(R)PVI": {
+            "pvi.HistMax.w": {
+                "+channel": "NAME",
+                "+type": "plain",
+            }
+        }
+    })
+}
+
+record("*", "$(P)$(R)HistMax_RBV") {
+    info(Q:group, {
+        "$(P)$(R)PVI": {
+            "pvi.HistMax.r": {
+                "+channel": "NAME",
+                "+type": "plain",
+            }
+        }
+    })
+}
+
+record("*", "$(P)$(R)HistBelow") {
+    info(Q:group, {
+        "$(P)$(R)PVI": {
+            "pvi.HistBelow.w": {
+                "+channel": "NAME",
+                "+type": "plain",
+            }
+        }
+    })
+}
+
+record("*", "$(P)$(R)HistBelow_RBV") {
+    info(Q:group, {
+        "$(P)$(R)PVI": {
+            "pvi.HistBelow.r": {
+                "+channel": "NAME",
+                "+type": "plain",
+            }
+        }
+    })
+}
+
+record("*", "$(P)$(R)HistAbove") {
+    info(Q:group, {
+        "$(P)$(R)PVI": {
+            "pvi.HistAbove.w": {
+                "+channel": "NAME",
+                "+type": "plain",
+            }
+        }
+    })
+}
+
+record("*", "$(P)$(R)HistAbove_RBV") {
+    info(Q:group, {
+        "$(P)$(R)PVI": {
+            "pvi.HistAbove.r": {
+                "+channel": "NAME",
+                "+type": "plain",
+            }
+        }
+    })
+}
+
+record("*", "$(P)$(R)HistEntropy") {
+    info(Q:group, {
+        "$(P)$(R)PVI": {
+            "pvi.HistEntropy.w": {
+                "+channel": "NAME",
+                "+type": "plain",
+            }
+        }
+    })
+}
+
+record("*", "$(P)$(R)HistEntropy_RBV") {
+    info(Q:group, {
+        "$(P)$(R)PVI": {
+            "pvi.HistEntropy.r": {
+                "+channel": "NAME",
+                "+type": "plain",
+            }
+        }
+    })
+}
+
+record("*", "$(P)$(R)Histogram_RBV") {
+    info(Q:group, {
+        "$(P)$(R)PVI": {
+            "pvi.Histogram.r": {
+                "+channel": "NAME",
+                "+type": "plain",
+            }
+        }
+    })
+}
+
+record("*", "$(P)$(R)HistogramX_RBV") {
+    info(Q:group, {
+        "$(P)$(R)PVI": {
+            "pvi.HistogramX.r": {
+                "+channel": "NAME",
+                "+type": "plain",
+            }
+        }
+    })
+}
+
+record("*", "$(P)$(R)Eccentricity") {
+    info(Q:group, {
+        "$(P)$(R)PVI": {
+            "pvi.Eccentricity.w": {
+                "+channel": "NAME",
+                "+type": "plain",
+            }
+        }
+    })
+}
+
+record("*", "$(P)$(R)Eccentricity_RBV") {
+    info(Q:group, {
+        "$(P)$(R)PVI": {
+            "pvi.Eccentricity.r": {
+                "+channel": "NAME",
+                "+type": "plain",
+            }
+        }
+    })
+}
+
+record("*", "$(P)$(R)Orientation") {
+    info(Q:group, {
+        "$(P)$(R)PVI": {
+            "pvi.Orientation.w": {
+                "+channel": "NAME",
+                "+type": "plain",
+            }
+        }
+    })
+}
+
+record("*", "$(P)$(R)Orientation_RBV") {
+    info(Q:group, {
+        "$(P)$(R)PVI": {
+            "pvi.Orientation.r": {
+                "+channel": "NAME",
+                "+type": "plain",
+            }
+        }
+    })
+}
+
+record("*", "$(P)$(R)TSSigma") {
+    info(Q:group, {
+        "$(P)$(R)PVI": {
+            "pvi.TSSigma.r": {
+                "+channel": "NAME",
+                "+type": "plain",
+            }
+        }
+    })
+}
+
+record("*", "$(P)$(R)TSCentroidTotal") {
+    info(Q:group, {
+        "$(P)$(R)PVI": {
+            "pvi.TSCentroidTotal.r": {
+                "+channel": "NAME",
+                "+type": "plain",
+            }
+        }
+    })
+}
+
+record("*", "$(P)$(R)TSCentroidX") {
+    info(Q:group, {
+        "$(P)$(R)PVI": {
+            "pvi.TSCentroidX.r": {
+                "+channel": "NAME",
+                "+type": "plain",
+            }
+        }
+    })
+}
+
+record("*", "$(P)$(R)TSCentroidY") {
+    info(Q:group, {
+        "$(P)$(R)PVI": {
+            "pvi.TSCentroidY.r": {
+                "+channel": "NAME",
+                "+type": "plain",
+            }
+        }
+    })
+}
+
+record("*", "$(P)$(R)TSSigmaX") {
+    info(Q:group, {
+        "$(P)$(R)PVI": {
+            "pvi.TSSigmaX.r": {
+                "+channel": "NAME",
+                "+type": "plain",
+            }
+        }
+    })
+}
+
+record("*", "$(P)$(R)TSSigmaY") {
+    info(Q:group, {
+        "$(P)$(R)PVI": {
+            "pvi.TSSigmaY.r": {
+                "+channel": "NAME",
+                "+type": "plain",
+            }
+        }
+    })
+}
+
+record("*", "$(P)$(R)TSSigmaXY") {
+    info(Q:group, {
+        "$(P)$(R)PVI": {
+            "pvi.TSSigmaXY.r": {
+                "+channel": "NAME",
+                "+type": "plain",
+            }
+        }
+    })
+}
+
+record("*", "$(P)$(R)TSSkewX") {
+    info(Q:group, {
+        "$(P)$(R)PVI": {
+            "pvi.TSSkewX.r": {
+                "+channel": "NAME",
+                "+type": "plain",
+            }
+        }
+    })
+}
+
+record("*", "$(P)$(R)TSSkewY") {
+    info(Q:group, {
+        "$(P)$(R)PVI": {
+            "pvi.TSSkewY.r": {
+                "+channel": "NAME",
+                "+type": "plain",
+            }
+        }
+    })
+}
+
+record("*", "$(P)$(R)TSKurtosisX") {
+    info(Q:group, {
+        "$(P)$(R)PVI": {
+            "pvi.TSKurtosisX.r": {
+                "+channel": "NAME",
+                "+type": "plain",
+            }
+        }
+    })
+}
+
+record("*", "$(P)$(R)TSKurtosisY") {
+    info(Q:group, {
+        "$(P)$(R)PVI": {
+            "pvi.TSKurtosisY.r": {
+                "+channel": "NAME",
+                "+type": "plain",
+            }
+        }
+    })
+}
+
+record("*", "$(P)$(R)TSEccentricity") {
+    info(Q:group, {
+        "$(P)$(R)PVI": {
+            "pvi.TSEccentricity.r": {
+                "+channel": "NAME",
+                "+type": "plain",
+            }
+        }
+    })
+}
+
+record("*", "$(P)$(R)TSOrientation") {
+    info(Q:group, {
+        "$(P)$(R)PVI": {
+            "pvi.TSOrientation.r": {
+                "+channel": "NAME",
+                "+type": "plain",
+            }
+        }
+    })
+}
+
+record("*", "$(P)$(R)CentroidTotal") {
+    info(Q:group, {
+        "$(P)$(R)PVI": {
+            "pvi.CentroidTotal.w": {
+                "+channel": "NAME",
+                "+type": "plain",
+            }
+        }
+    })
+}
+
+record("*", "$(P)$(R)CentroidTotal_RBV") {
+    info(Q:group, {
+        "$(P)$(R)PVI": {
+            "pvi.CentroidTotal.r": {
+                "+channel": "NAME",
+                "+type": "plain",
+            }
+        }
+    })
+}
+
+record("*", "$(P)$(R)CentroidX") {
+    info(Q:group, {
+        "$(P)$(R)PVI": {
+            "pvi.CentroidX.w": {
+                "+channel": "NAME",
+                "+type": "plain",
+            }
+        }
+    })
+}
+
+record("*", "$(P)$(R)CentroidX_RBV") {
+    info(Q:group, {
+        "$(P)$(R)PVI": {
+            "pvi.CentroidX.r": {
+                "+channel": "NAME",
+                "+type": "plain",
+            }
+        }
+    })
+}
+
+record("*", "$(P)$(R)CentroidY") {
+    info(Q:group, {
+        "$(P)$(R)PVI": {
+            "pvi.CentroidY.w": {
+                "+channel": "NAME",
+                "+type": "plain",
+            }
+        }
+    })
+}
+
+record("*", "$(P)$(R)CentroidY_RBV") {
+    info(Q:group, {
+        "$(P)$(R)PVI": {
+            "pvi.CentroidY.r": {
+                "+channel": "NAME",
+                "+type": "plain",
+            }
+        }
+    })
+}
+
+record("*", "$(P)$(R)SigmaX") {
+    info(Q:group, {
+        "$(P)$(R)PVI": {
+            "pvi.SigmaX.w": {
+                "+channel": "NAME",
+                "+type": "plain",
+            }
+        }
+    })
+}
+
+record("*", "$(P)$(R)SigmaX_RBV") {
+    info(Q:group, {
+        "$(P)$(R)PVI": {
+            "pvi.SigmaX.r": {
+                "+channel": "NAME",
+                "+type": "plain",
+            }
+        }
+    })
+}
+
+record("*", "$(P)$(R)SigmaY") {
+    info(Q:group, {
+        "$(P)$(R)PVI": {
+            "pvi.SigmaY.w": {
+                "+channel": "NAME",
+                "+type": "plain",
+            }
+        }
+    })
+}
+
+record("*", "$(P)$(R)SigmaY_RBV") {
+    info(Q:group, {
+        "$(P)$(R)PVI": {
+            "pvi.SigmaY.r": {
+                "+channel": "NAME",
+                "+type": "plain",
+            }
+        }
+    })
+}
+
+record("*", "$(P)$(R)SigmaXY") {
+    info(Q:group, {
+        "$(P)$(R)PVI": {
+            "pvi.SigmaXY.w": {
+                "+channel": "NAME",
+                "+type": "plain",
+            }
+        }
+    })
+}
+
+record("*", "$(P)$(R)SigmaXY_RBV") {
+    info(Q:group, {
+        "$(P)$(R)PVI": {
+            "pvi.SigmaXY.r": {
+                "+channel": "NAME",
+                "+type": "plain",
+            }
+        }
+    })
+}
+
+record("*", "$(P)$(R)SkewX") {
+    info(Q:group, {
+        "$(P)$(R)PVI": {
+            "pvi.SkewX.w": {
+                "+channel": "NAME",
+                "+type": "plain",
+            }
+        }
+    })
+}
+
+record("*", "$(P)$(R)SkewX_RBV") {
+    info(Q:group, {
+        "$(P)$(R)PVI": {
+            "pvi.SkewX.r": {
+                "+channel": "NAME",
+                "+type": "plain",
+            }
+        }
+    })
+}
+
+record("*", "$(P)$(R)SkewY") {
+    info(Q:group, {
+        "$(P)$(R)PVI": {
+            "pvi.SkewY.w": {
+                "+channel": "NAME",
+                "+type": "plain",
+            }
+        }
+    })
+}
+
+record("*", "$(P)$(R)SkewY_RBV") {
+    info(Q:group, {
+        "$(P)$(R)PVI": {
+            "pvi.SkewY.r": {
+                "+channel": "NAME",
+                "+type": "plain",
+            }
+        }
+    })
+}
+
+record("*", "$(P)$(R)KurtosisX") {
+    info(Q:group, {
+        "$(P)$(R)PVI": {
+            "pvi.KurtosisX.w": {
+                "+channel": "NAME",
+                "+type": "plain",
+            }
+        }
+    })
+}
+
+record("*", "$(P)$(R)KurtosisX_RBV") {
+    info(Q:group, {
+        "$(P)$(R)PVI": {
+            "pvi.KurtosisX.r": {
+                "+channel": "NAME",
+                "+type": "plain",
+            }
+        }
+    })
+}
+
+record("*", "$(P)$(R)KurtosisY") {
+    info(Q:group, {
+        "$(P)$(R)PVI": {
+            "pvi.KurtosisY.w": {
+                "+channel": "NAME",
+                "+type": "plain",
+            }
+        }
+    })
+}
+
+record("*", "$(P)$(R)KurtosisY_RBV") {
+    info(Q:group, {
+        "$(P)$(R)PVI": {
+            "pvi.KurtosisY.r": {
+                "+channel": "NAME",
+                "+type": "plain",
+            }
+        }
+    })
+}
+
+record("*", "$(P)$(R)CursorVal") {
+    info(Q:group, {
+        "$(P)$(R)PVI": {
+            "pvi.CursorVal.r": {
+                "+channel": "NAME",
+                "+type": "plain",
+            }
+        }
+    })
+}
+
+record("*", "$(P)$(R)SigmaValue") {
+    info(Q:group, {
+        "$(P)$(R)PVI": {
+            "pvi.SigmaValue.w": {
+                "+channel": "NAME",
+                "+type": "plain",
+            }
+        }
+    })
+}
+
+record("*", "$(P)$(R)Sigma_RBV") {
+    info(Q:group, {
+        "$(P)$(R)PVI": {
+            "pvi.SigmaValue.r": {
+                "+channel": "NAME",
+                "+type": "plain",
+            }
+        }
+    })
+}
+
+record("*", "$(P)$(R)PluginType_RBV") {
+    info(Q:group, {
+        "$(P)$(R)PVI": {
+            "pvi.PluginType.r": {
+                "+channel": "NAME",
+                "+type": "plain",
+            }
+        }
+    })
+}
+
+record("*", "$(P)$(R)NDArrayPort") {
+    info(Q:group, {
+        "$(P)$(R)PVI": {
+            "pvi.NDArrayPort.w": {
+                "+channel": "NAME",
+                "+type": "plain",
+            }
+        }
+    })
+}
+
+record("*", "$(P)$(R)NDArrayPort_RBV") {
+    info(Q:group, {
+        "$(P)$(R)PVI": {
+            "pvi.NDArrayPort.r": {
+                "+channel": "NAME",
+                "+type": "plain",
+            }
+        }
+    })
+}
+
+record("*", "$(P)$(R)NDArrayAddress") {
+    info(Q:group, {
+        "$(P)$(R)PVI": {
+            "pvi.NDArrayAddress.w": {
+                "+channel": "NAME",
+                "+type": "plain",
+            }
+        }
+    })
+}
+
+record("*", "$(P)$(R)NDArrayAddress_RBV") {
+    info(Q:group, {
+        "$(P)$(R)PVI": {
+            "pvi.NDArrayAddress.r": {
+                "+channel": "NAME",
+                "+type": "plain",
+            }
+        }
+    })
+}
+
+record("*", "$(P)$(R)EnableCallbacks") {
+    info(Q:group, {
+        "$(P)$(R)PVI": {
+            "pvi.EnableCallbacks.w": {
+                "+channel": "NAME",
+                "+type": "plain",
+            }
+        }
+    })
+}
+
+record("*", "$(P)$(R)EnableCallbacks_RBV") {
+    info(Q:group, {
+        "$(P)$(R)PVI": {
+            "pvi.EnableCallbacks.r": {
+                "+channel": "NAME",
+                "+type": "plain",
+            }
+        }
+    })
+}
+
+record("*", "$(P)$(R)MinCallbackTime") {
+    info(Q:group, {
+        "$(P)$(R)PVI": {
+            "pvi.MinCallbackTime.w": {
+                "+channel": "NAME",
+                "+type": "plain",
+            }
+        }
+    })
+}
+
+record("*", "$(P)$(R)MinCallbackTime_RBV") {
+    info(Q:group, {
+        "$(P)$(R)PVI": {
+            "pvi.MinCallbackTime.r": {
+                "+channel": "NAME",
+                "+type": "plain",
+            }
+        }
+    })
+}
+
+record("*", "$(P)$(R)QueueFree") {
+    info(Q:group, {
+        "$(P)$(R)PVI": {
+            "pvi.QueueFree.r": {
+                "+channel": "NAME",
+                "+type": "plain",
+            }
+        }
+    })
+}
+
+record("*", "$(P)$(R)QueueSize") {
+    info(Q:group, {
+        "$(P)$(R)PVI": {
+            "pvi.QueueSize.w": {
+                "+channel": "NAME",
+                "+type": "plain",
+            }
+        }
+    })
+}
+
+record("*", "$(P)$(R)QueueSize_RBV") {
+    info(Q:group, {
+        "$(P)$(R)PVI": {
+            "pvi.QueueSize.r": {
+                "+channel": "NAME",
+                "+type": "plain",
+            }
+        }
+    })
+}
+
+record("*", "$(P)$(R)ExecutionTime_RBV") {
+    info(Q:group, {
+        "$(P)$(R)PVI": {
+            "pvi.ExecutionTime.r": {
+                "+channel": "NAME",
+                "+type": "plain",
+            }
+        }
+    })
+}
+
+record("*", "$(P)$(R)DroppedArrays") {
+    info(Q:group, {
+        "$(P)$(R)PVI": {
+            "pvi.DroppedArrays.w": {
+                "+channel": "NAME",
+                "+type": "plain",
+            }
+        }
+    })
+}
+
+record("*", "$(P)$(R)DroppedArrays_RBV") {
+    info(Q:group, {
+        "$(P)$(R)PVI": {
+            "pvi.DroppedArrays.r": {
+                "+channel": "NAME",
+                "+type": "plain",
+            }
+        }
+    })
+}
+
+record("*", "$(P)$(R)ProcessPlugin") {
+    info(Q:group, {
+        "$(P)$(R)PVI": {
+            "pvi.ProcessPlugin.w": {
+                "+channel": "NAME",
+                "+type": "plain",
+            }
+        }
+    })
+}
+
+record("*", "$(P)$(R)DroppedOutputArrays") {
+    info(Q:group, {
+        "$(P)$(R)PVI": {
+            "pvi.DroppedOutputArrays.w": {
+                "+channel": "NAME",
+                "+type": "plain",
+            }
+        }
+    })
+}
+
+record("*", "$(P)$(R)DroppedOutputArrays_RBV") {
+    info(Q:group, {
+        "$(P)$(R)PVI": {
+            "pvi.DroppedOutputArrays.r": {
+                "+channel": "NAME",
+                "+type": "plain",
+            }
+        }
+    })
+}
+
+record("*", "$(P)$(R)MaxByteRate") {
+    info(Q:group, {
+        "$(P)$(R)PVI": {
+            "pvi.MaxByteRate.w": {
+                "+channel": "NAME",
+                "+type": "plain",
+            }
+        }
+    })
+}
+
+record("*", "$(P)$(R)MaxByteRate_RBV") {
+    info(Q:group, {
+        "$(P)$(R)PVI": {
+            "pvi.MaxByteRate.r": {
+                "+channel": "NAME",
+                "+type": "plain",
+            }
+        }
+    })
+}
+
+record("*", "$(P)$(R)BlockingCallbacks") {
+    info(Q:group, {
+        "$(P)$(R)PVI": {
+            "pvi.BlockingCallbacks.w": {
+                "+channel": "NAME",
+                "+type": "plain",
+            }
+        }
+    })
+}
+
+record("*", "$(P)$(R)BlockingCallbacks_RBV") {
+    info(Q:group, {
+        "$(P)$(R)PVI": {
+            "pvi.BlockingCallbacks.r": {
+                "+channel": "NAME",
+                "+type": "plain",
+            }
+        }
+    })
+}
+
+record("*", "$(P)$(R)NumThreads") {
+    info(Q:group, {
+        "$(P)$(R)PVI": {
+            "pvi.NumThreads.w": {
+                "+channel": "NAME",
+                "+type": "plain",
+            }
+        }
+    })
+}
+
+record("*", "$(P)$(R)NumThreads_RBV") {
+    info(Q:group, {
+        "$(P)$(R)PVI": {
+            "pvi.NumThreads.r": {
+                "+channel": "NAME",
+                "+type": "plain",
+            }
+        }
+    })
+}
+
+record("*", "$(P)$(R)MaxThreads_RBV") {
+    info(Q:group, {
+        "$(P)$(R)PVI": {
+            "pvi.MaxThreads.r": {
+                "+channel": "NAME",
+                "+type": "plain",
+            }
+        }
+    })
+}
+
+record("*", "$(P)$(R)SortMode") {
+    info(Q:group, {
+        "$(P)$(R)PVI": {
+            "pvi.SortMode.w": {
+                "+channel": "NAME",
+                "+type": "plain",
+            }
+        }
+    })
+}
+
+record("*", "$(P)$(R)SortMode_RBV") {
+    info(Q:group, {
+        "$(P)$(R)PVI": {
+            "pvi.SortMode.r": {
+                "+channel": "NAME",
+                "+type": "plain",
+            }
+        }
+    })
+}
+
+record("*", "$(P)$(R)SortTime") {
+    info(Q:group, {
+        "$(P)$(R)PVI": {
+            "pvi.SortTime.w": {
+                "+channel": "NAME",
+                "+type": "plain",
+            }
+        }
+    })
+}
+
+record("*", "$(P)$(R)SortTime_RBV") {
+    info(Q:group, {
+        "$(P)$(R)PVI": {
+            "pvi.SortTime.r": {
+                "+channel": "NAME",
+                "+type": "plain",
+            }
+        }
+    })
+}
+
+record("*", "$(P)$(R)SortFree") {
+    info(Q:group, {
+        "$(P)$(R)PVI": {
+            "pvi.SortFree.r": {
+                "+channel": "NAME",
+                "+type": "plain",
+            }
+        }
+    })
+}
+
+record("*", "$(P)$(R)SortSize") {
+    info(Q:group, {
+        "$(P)$(R)PVI": {
+            "pvi.SortSize.w": {
+                "+channel": "NAME",
+                "+type": "plain",
+            }
+        }
+    })
+}
+
+record("*", "$(P)$(R)SortSize_RBV") {
+    info(Q:group, {
+        "$(P)$(R)PVI": {
+            "pvi.SortSize.r": {
+                "+channel": "NAME",
+                "+type": "plain",
+            }
+        }
+    })
+}
+
+record("*", "$(P)$(R)DisorderedArrays") {
+    info(Q:group, {
+        "$(P)$(R)PVI": {
+            "pvi.DisorderedArrays.w": {
+                "+channel": "NAME",
+                "+type": "plain",
+            }
+        }
+    })
+}
+
+record("*", "$(P)$(R)DisorderedArrays_RBV") {
+    info(Q:group, {
+        "$(P)$(R)PVI": {
+            "pvi.DisorderedArrays.r": {
+                "+channel": "NAME",
+                "+type": "plain",
+            }
+        }
+    })
+}
+
+record("*", "$(P)$(R)PortName_RBV") {
+    info(Q:group, {
+        "$(P)$(R)PVI": {
+            "pvi.PortName.r": {
+                "+channel": "NAME",
+                "+type": "plain",
+            }
+        }
+    })
+}
+
+record("*", "$(P)$(R)Manufacturer_RBV") {
+    info(Q:group, {
+        "$(P)$(R)PVI": {
+            "pvi.Manufacturer.r": {
+                "+channel": "NAME",
+                "+type": "plain",
+            }
+        }
+    })
+}
+
+record("*", "$(P)$(R)Model_RBV") {
+    info(Q:group, {
+        "$(P)$(R)PVI": {
+            "pvi.Model.r": {
+                "+channel": "NAME",
+                "+type": "plain",
+            }
+        }
+    })
+}
+
+record("*", "$(P)$(R)SerialNumber_RBV") {
+    info(Q:group, {
+        "$(P)$(R)PVI": {
+            "pvi.SerialNumber.r": {
+                "+channel": "NAME",
+                "+type": "plain",
+            }
+        }
+    })
+}
+
+record("*", "$(P)$(R)FirmwareVersion_RBV") {
+    info(Q:group, {
+        "$(P)$(R)PVI": {
+            "pvi.FirmwareVersion.r": {
+                "+channel": "NAME",
+                "+type": "plain",
+            }
+        }
+    })
+}
+
+record("*", "$(P)$(R)SDKVersion_RBV") {
+    info(Q:group, {
+        "$(P)$(R)PVI": {
+            "pvi.SDKVersion.r": {
+                "+channel": "NAME",
+                "+type": "plain",
+            }
+        }
+    })
+}
+
+record("*", "$(P)$(R)DriverVersion_RBV") {
+    info(Q:group, {
+        "$(P)$(R)PVI": {
+            "pvi.DriverVersion.r": {
+                "+channel": "NAME",
+                "+type": "plain",
+            }
+        }
+    })
+}
+
+record("*", "$(P)$(R)ADCoreVersion_RBV") {
+    info(Q:group, {
+        "$(P)$(R)PVI": {
+            "pvi.ADCoreVersion.r": {
+                "+channel": "NAME",
+                "+type": "plain",
+            }
+        }
+    })
+}
+
+record("*", "$(P)$(R)NumQueuedArrays") {
+    info(Q:group, {
+        "$(P)$(R)PVI": {
+            "pvi.NumQueuedArrays.r": {
+                "+channel": "NAME",
+                "+type": "plain",
+            }
+        }
+    })
+}
+
+record("*", "$(P)$(R)WaitForPlugins") {
+    info(Q:group, {
+        "$(P)$(R)PVI": {
+            "pvi.WaitForPlugins.w": {
+                "+channel": "NAME",
+                "+type": "plain",
+            }
+        }
+    })
+}
+
+record("*", "$(P)$(R)Acquire") {
+    info(Q:group, {
+        "$(P)$(R)PVI": {
+            "pvi.Acquire.w": {
+                "+channel": "NAME",
+                "+type": "plain",
+            }
+        }
+    })
+}
+
+record("*", "$(P)$(R)Acquire_RBV") {
+    info(Q:group, {
+        "$(P)$(R)PVI": {
+            "pvi.Acquire.r": {
+                "+channel": "NAME",
+                "+type": "plain",
+            }
+        }
+    })
+}
+
+record("*", "$(P)$(R)ArrayCounter") {
+    info(Q:group, {
+        "$(P)$(R)PVI": {
+            "pvi.ArrayCounter.w": {
+                "+channel": "NAME",
+                "+type": "plain",
+            }
+        }
+    })
+}
+
+record("*", "$(P)$(R)ArrayCounter_RBV") {
+    info(Q:group, {
+        "$(P)$(R)PVI": {
+            "pvi.ArrayCounter.r": {
+                "+channel": "NAME",
+                "+type": "plain",
+            }
+        }
+    })
+}
+
+record("*", "$(P)$(R)ArrayCallbacks") {
+    info(Q:group, {
+        "$(P)$(R)PVI": {
+            "pvi.ArrayCallbacks.w": {
+                "+channel": "NAME",
+                "+type": "plain",
+            }
+        }
+    })
+}
+
+record("*", "$(P)$(R)ArrayCallbacks_RBV") {
+    info(Q:group, {
+        "$(P)$(R)PVI": {
+            "pvi.ArrayCallbacks.r": {
+                "+channel": "NAME",
+                "+type": "plain",
+            }
+        }
+    })
+}
+
+record("*", "$(P)$(R)NDAttributesFile") {
+    info(Q:group, {
+        "$(P)$(R)PVI": {
+            "pvi.NDAttributesFile.w": {
+                "+channel": "NAME",
+                "+type": "plain",
+            }
+        }
+    })
+}
+
+record("*", "$(P)$(R)NDAttributesMacros") {
+    info(Q:group, {
+        "$(P)$(R)PVI": {
+            "pvi.NDAttributesMacros.w": {
+                "+channel": "NAME",
+                "+type": "plain",
+            }
+        }
+    })
+}
+
+record("*", "$(P)$(R)NDAttributesStatus") {
+    info(Q:group, {
+        "$(P)$(R)PVI": {
+            "pvi.NDAttributesStatus.r": {
+                "+channel": "NAME",
+                "+type": "plain",
+            }
+        }
+    })
+}
+
+record("*", "$(P)$(R)EmptyFreeList") {
+    info(Q:group, {
+        "$(P)$(R)PVI": {
+            "pvi.EmptyFreeList.w": {
+                "+channel": "NAME",
+                "+type": "plain",
+            }
+        }
+    })
+}
+
+record("*", "$(P)$(R)AcquireBusyCB") {
+    info(Q:group, {
+        "$(P)$(R)PVI": {
+            "pvi.AcquireBusyCB.r": {
+                "+channel": "NAME",
+                "+type": "plain",
+            }
+        }
+    })
+}
+
+record("*", "$(P)$(R)BayerPattern_RBV") {
+    info(Q:group, {
+        "$(P)$(R)PVI": {
+            "pvi.BayerPattern.r": {
+                "+channel": "NAME",
+                "+type": "plain",
+            }
+        }
+    })
+}
+
+record("*", "$(P)$(R)ArraySizeZ_RBV") {
+    info(Q:group, {
+        "$(P)$(R)PVI": {
+            "pvi.ArraySizeZ.r": {
+                "+channel": "NAME",
+                "+type": "plain",
+            }
+        }
+    })
+}
+
+record("*", "$(P)$(R)Codec_RBV") {
+    info(Q:group, {
+        "$(P)$(R)PVI": {
+            "pvi.Codec.r": {
+                "+channel": "NAME",
+                "+type": "plain",
+            }
+        }
+    })
+}
+
+record("*", "$(P)$(R)CompressedSize_RBV") {
+    info(Q:group, {
+        "$(P)$(R)PVI": {
+            "pvi.CompressedSize.r": {
+                "+channel": "NAME",
+                "+type": "plain",
+            }
+        }
+    })
+}
+
+record("*", "$(P)$(R)UniqueId_RBV") {
+    info(Q:group, {
+        "$(P)$(R)PVI": {
+            "pvi.UniqueId.r": {
+                "+channel": "NAME",
+                "+type": "plain",
+            }
+        }
+    })
+}
+
+record("*", "$(P)$(R)TimeStamp_RBV") {
+    info(Q:group, {
+        "$(P)$(R)PVI": {
+            "pvi.TimeStamp.r": {
+                "+channel": "NAME",
+                "+type": "plain",
+            }
+        }
+    })
+}
+
+record("*", "$(P)$(R)EpicsTSSec_RBV") {
+    info(Q:group, {
+        "$(P)$(R)PVI": {
+            "pvi.EpicsTSSec.r": {
+                "+channel": "NAME",
+                "+type": "plain",
+            }
+        }
+    })
+}
+
+record("*", "$(P)$(R)EpicsTSNsec_RBV") {
+    info(Q:group, {
+        "$(P)$(R)PVI": {
+            "pvi.EpicsTSNsec.r": {
+                "+channel": "NAME",
+                "+type": "plain",
+            }
+        }
+    })
+}
+
+record("*", "$(P)$(R)PoolMaxMem") {
+    info(Q:group, {
+        "$(P)$(R)PVI": {
+            "pvi.PoolMaxMem.r": {
+                "+channel": "NAME",
+                "+type": "plain",
+            }
+        }
+    })
+}
+
+record("*", "$(P)$(R)PoolUsedMem") {
+    info(Q:group, {
+        "$(P)$(R)PVI": {
+            "pvi.PoolUsedMem.r": {
+                "+channel": "NAME",
+                "+type": "plain",
+            }
+        }
+    })
+}
+
+record("*", "$(P)$(R)PoolAllocBuffers") {
+    info(Q:group, {
+        "$(P)$(R)PVI": {
+            "pvi.PoolAllocBuffers.r": {
+                "+channel": "NAME",
+                "+type": "plain",
+            }
+        }
+    })
+}
+
+record("*", "$(P)$(R)PoolFreeBuffers") {
+    info(Q:group, {
+        "$(P)$(R)PVI": {
+            "pvi.PoolFreeBuffers.r": {
+                "+channel": "NAME",
+                "+type": "plain",
+            }
+        }
+    })
+}
+
+record("*", "$(P)$(R)NDimensions") {
+    info(Q:group, {
+        "$(P)$(R)PVI": {
+            "pvi.NDimensions.w": {
+                "+channel": "NAME",
+                "+type": "plain",
+            }
+        }
+    })
+}
+
+record("*", "$(P)$(R)NDimensions_RBV") {
+    info(Q:group, {
+        "$(P)$(R)PVI": {
+            "pvi.NDimensions.r": {
+                "+channel": "NAME",
+                "+type": "plain",
+            }
+        }
+    })
+}
+
+record("*", "$(P)$(R)Dimensions") {
+    info(Q:group, {
+        "$(P)$(R)PVI": {
+            "pvi.Dimensions.w": {
+                "+channel": "NAME",
+                "+type": "plain",
+            }
+        }
+    })
+}
+
+record("*", "$(P)$(R)Dimensions_RBV") {
+    info(Q:group, {
+        "$(P)$(R)PVI": {
+            "pvi.Dimensions.r": {
+                "+channel": "NAME",
+                "+type": "plain",
+            }
+        }
+    })
+}
+
+### End of PV Interface for NDPluginStats ###

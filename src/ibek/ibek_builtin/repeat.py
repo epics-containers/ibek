@@ -22,6 +22,8 @@ from ibek.entity_model import EntityModel
 from ibek.ioc import Entity
 from ibek.parameters import DictParam, ListParam, Param, StrParam
 
+REPEAT_TYPE = "ibek.repeat"
+
 
 # TODO this class is an idea to get the schema to work for
 # the repeat's entity model.
@@ -37,10 +39,10 @@ class RepeatEntity(Entity):
     by the make_entity_model function is used.
     """
 
-    type: Literal["ibek.repeat"] = "ibek.repeat"
+    type: Literal["ibek.repeat"] = REPEAT_TYPE
     entity: dict
     values: list
-    variable: str
+    variable: str = "index"
 
 
 def make_entity_model() -> EntityModel:
