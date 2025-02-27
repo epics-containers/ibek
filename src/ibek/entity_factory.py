@@ -186,6 +186,9 @@ class EntityFactory:
         """
         resolved_entities: list[Entity] = []
 
+        # ensure correct class - it will be a generic Entity in subentities
+        repeat_entity = RepeatEntity(**repeat_entity.model_dump())
+
         for value in repeat_entity.values:
             new_entity_cls = self._entity_types[repeat_entity.entity["type"]]
             new_params = {}

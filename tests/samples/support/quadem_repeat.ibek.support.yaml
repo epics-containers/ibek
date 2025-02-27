@@ -121,6 +121,5 @@ entity_models:
         values: [["I1", "Cur1"], ["I2", "Cur2"], ["I3", "Cur3"], ["I4", "Cur4"], ["SumX", "SumX"], ["SumY", "SumY"], ["SumAll", "SumAll"], ["DiffX", "DiffX"], ["DiffY", "DiffY"], ["PosX", "PosX"], ["PosY", "PosY"]]
         entity: { <<: *stats, PORT: "{{PORTPREFIX}}.STATS.{{index[0]}}", R: "{{index[1]}}" }
       - type: ibek.repeat
-        variable: index
         values: ["Arr1", "Arr2", "Arr3", "Arr4", "SumX", "SumY", "SumAll", "DiffX", "DiffY", "PosX", "PosY"]
         entity: { <<: *arrays, PORT: "{{PORTPREFIX}}.ARRAYS.{{index}}", R: "{{index}}" }
