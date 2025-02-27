@@ -166,17 +166,20 @@ def test_quadem(tmp_epics_root: Path, samples: Path):
 
 
 def generic_generate(
-    epics_root: Path, samples: Path, ioc_name: str, support_names: list[str]
+    epics_root: Path, samples: Path, ioc_yaml_name: str, support_names: list[str]
 ):
-    ioc_yaml = samples / "iocs" / f"{ioc_name}.ibek.ioc.yaml"
+    ioc_yaml = samples / "iocs" / f"{ioc_yaml_name}.ibek.ioc.yaml"
     support_yamls = [
         samples / "support" / f"{name}.ibek.support.yaml" for name in support_names
     ]
-    expected_outputs = samples / "outputs" / ioc_name
+    expected_outputs = samples / "outputs" / ioc_yaml_name
 
     generate(ioc_yaml, support_yamls)
 
-    for output in expected_outputs.glob("*"):
+    outputs = expected_outputs.glob("*")
+    assert len(list(outputs)) > 0, "No expected output files found"
+
+    for output in outputs:
         actual = epics_root / "runtime" / output.name
         if not actual.exists():
             actual = epics_root / "opi" / output.name

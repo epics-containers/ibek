@@ -191,15 +191,24 @@ class EntityFactory:
             new_entity_cls = self._entity_types[repeat_entity.entity["type"]]
             new_params = {}
             for key, param in repeat_entity.entity.items():
-                # insert the iterator variable into the context
-                context = repeat_entity.model_dump()
-                context[repeat_entity.variable] = value
-                # jinja render the parameter in the repeat entity
-                new_params[key] = UTILS.render(context, param)
+                if key == "entity" and new_params.get("type") == "ibek.repeat":
+                    # defer rendering of the inner entity in nested repeats
+                    new_params[key] = param
+                else:
+                    # insert the iterator variable into the context
+                    context = repeat_entity.model_dump()
+                    context[repeat_entity.variable] = value
+                    # jinja render the parameter in the repeat entity
+                    new_params[key] = UTILS.render(context, param)
 
             # create the new repeated entity from its type and parameters
             new_entity = new_entity_cls(**new_params)  # type: ignore
+            assert isinstance(new_entity, Entity)
             resolved_entities.append(new_entity)
+
+            if new_entity.type == "ibek.repeat":
+                resolved_entities += self._resolve_repeat(new_entity)  # type: ignore
+
         return resolved_entities
 
     def resolve_sub_entities(self, entities: list[Entity]) -> list[Entity]:
@@ -228,7 +237,6 @@ class EntityFactory:
             if parent_entity.type == "ibek.repeat":
                 # if the parent entity is a repeat, we need to resolve the repeat
                 # and add the resolved entities to the list
-                assert isinstance(parent_entity, RepeatEntity)
-                resolved_entities.extend(self._resolve_repeat(parent_entity))
+                resolved_entities.extend(self._resolve_repeat(parent_entity))  # type: ignore
 
         return resolved_entities

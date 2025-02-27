@@ -88,7 +88,14 @@ class Utils:
         """
         Render a Jinja template with the global _global object in the context
         """
-        if not isinstance(template_text, str):
+        if isinstance(template_text, list):
+            result = (self.render(context, item) for item in template_text)
+            return list(result)
+        elif isinstance(template_text, dict):
+            return {
+                key: self.render(context, value) for key, value in template_text.items()
+            }
+        elif not isinstance(template_text, str):
             # because this function is used to template arguments, it may
             # be passed a non string which will always render to itself
             return template_text
