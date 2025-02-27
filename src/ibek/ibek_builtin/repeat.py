@@ -18,9 +18,11 @@ e.g.
 
 from typing import Literal
 
+from pydantic import Field
+
 from ibek.entity_model import EntityModel
 from ibek.ioc import Entity
-from ibek.parameters import DictParam, ListParam, Param, StrParam
+from ibek.parameters import Param
 
 REPEAT_TYPE = "ibek.repeat"
 
@@ -40,34 +42,16 @@ class RepeatEntity(Entity):
     """
 
     type: Literal["ibek.repeat"] = REPEAT_TYPE
-    entity: dict
-    values: list
-    variable: str = "index"
-
-
-def make_entity_model() -> EntityModel:
-    """
-    Create a type[Entity] for the RepeatEntity
-    """
-    variable = StrParam(
-        description="The variable name to use for the index in the values list",
-        default="index",
+    values: list = Field(
+        description="The list of values to iterate over",
     )
-    values = ListParam(
-        description="A list of values to use for the variable in the entity",
+    variable: str = Field(
+        description="The variable name to use in the entity model",
     )
-    entity = DictParam(
-        description="The entity to repeat",
+    entity: dict = Field(
+        description="The entity model to repeat",
     )
-
-    model = EntityModel(
-        name="repeat",
-        description="A repeating entity",
-        parameters={
-            "variable": variable,
-            "values": values,
-            "entity": entity,
-        },
-    )
-    # EntityModel and EntityModel are equivalent
-    return model  # type: ignore
+    # description: str = Field(
+    #     description="A built in entity model instance for generating N instances of another entity.",
+    # )
+    # name: str = Field(description="The name of the entity model")

@@ -13,7 +13,6 @@ from pydantic_core import PydanticUndefined
 from ruamel.yaml.main import YAML
 
 from ibek.globals import JINJA
-from ibek.ibek_builtin.built_ins import get_all_builtin_entity_types
 from ibek.ibek_builtin.repeat import REPEAT_TYPE, RepeatEntity
 
 from .ioc import Entity, EnumVal, clear_entity_model_ids
@@ -70,10 +69,7 @@ class EntityFactory:
                 self._make_entity_types(support)
 
             # also add builtin entity types "ibek.*"
-            ibek_support = Support(
-                module="ibek", entity_models=get_all_builtin_entity_types()
-            )
-            self._make_entity_types(ibek_support)
+            self._entity_types[REPEAT_TYPE] = RepeatEntity
         except Exception:
             print(f"VALIDATION ERROR READING {entity_model}")
             raise
@@ -189,6 +185,7 @@ class EntityFactory:
         Resolve a repeat Entity into a list of Entity instances
         """
         resolved_entities: list[Entity] = []
+
         for value in repeat_entity.values:
             new_entity_cls = self._entity_types[repeat_entity.entity["type"]]
             new_params = {}
@@ -220,7 +217,7 @@ class EntityFactory:
         resolved_entities: list[Entity] = []
         for parent_entity in entities:
             if parent_entity.type == REPEAT_TYPE:
-                # resolve repeats in the parent entity if needed
+                # resolve repeats in the parent entity
                 resolved_entities.extend(self._resolve_repeat(parent_entity, {}))  # type: ignore
             else:
                 # add the current parent entity
