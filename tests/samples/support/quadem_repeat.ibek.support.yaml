@@ -1,0 +1,125 @@
+# yaml-language-server: $schema=../schemas/ibek.support.schema.json
+
+module: quadEM
+
+entity_models:
+  - name: TetrAMM
+    description: |-
+      TODO:ADD DESCRIPTION
+    parameters:
+      PORT:
+        type: id
+        description: |-
+          Template argument
+
+      P:
+        type: str
+        description: |-
+          Base name of PV.
+
+      R:
+        type: str
+        description: |-
+          Second macro for name of PV.
+
+      QSIZE:
+        type: int
+        description: |-
+          ..
+        default: 20
+
+      RING_SIZE:
+        type: int
+        description: |-
+          ..
+        default: 10000
+
+      IP:
+        type: str
+        description: |-
+          IP address of the TetrAMM device
+
+    pre_init:
+      - value: |
+          drvAsynIPPortConfigure({{PORT}}ip, {{IP}}, 100, 0, 0)
+          asynOctetSetInputEos({{PORT}}ip, 0, "\r\n")
+          asynOctetSetOutputEos({{PORT}}ip, 0, "\r")
+
+          # drvTetrAMMConfigure(portName, IPportName, RingSize)
+          drvTetrAMMConfigure("{{PORT}}", "{{PORT}}ip", {{RING_SIZE}})
+
+    post_init:
+      - value: |
+          # Increase precision of sample time for TetrAMM
+          dbpf("{{P}}{{R}}SampleTime_RBV.PREC", "5")
+
+    databases:
+      - file: $(QUADEM)/db/TetrAMM.template
+        args:
+          P:
+          R:
+          PORT:
+
+  - name: Plugins
+    description: |-
+      Instantiates
+        12 NDStats plugins for Current, Sum, Diff and Pos Channels
+        12 NDTimeSeries plugins
+        12 NDArray plugins
+    parameters:
+      DEVICE:
+        type: object
+        description: |-
+          Reference to the parent quadEM device
+
+      PORTPREFIX:
+        type: id
+        description: |-
+          The prefix for plugin asyn port names
+
+      STAT_NCHAN:
+        type: int
+        description: |-
+          Template argument
+
+      STAT_XSIZE:
+        type: int
+        description: |-
+          Template argument
+
+      HIST_SIZE:
+        type: int
+        description: |-
+          Template argument
+        default: 256
+
+      QUEUE:
+        type: int
+        description: |-
+          length of NDArray queue
+        default: 16
+
+    pre_init:
+      - value: |
+
+          ################################################################################
+          # Just demonstrating that Entities can have their own pre_init AND SubEntities.
+          # This is the pre_init for quadem.Plugins device with id {{PORTPREFIX}}
+          ################################################################################
+
+          #
+
+    shared:
+      # these anchors are now redundant but I'm keeping this test data as similar to
+      # quadem.ibek.support.yaml as possible
+      - &stats { type: ADCore.NDStats, P: "{{DEVICE.P}}", NCHANS: "{{STAT_NCHAN}}", XSIZE: "{{STAT_XSIZE}}", YSIZE: 0, HIST_SIZE: "{{HIST_SIZE}}", NDARRAY_PORT: "{{DEVICE.PORT}}", ENABLED: 1 }
+      - &arrays { type: ADCore.NDStdArrays, P: "{{DEVICE.P}}", NDARRAY_PORT: "{{DEVICE.PORT}}", ENABLED: 1, TYPE: Float64, FTVL: DOUBLE, NELEMENTS: "{{STAT_XSIZE}}" }
+
+    sub_entities:
+      - type: ibek.repeat
+        variable: index
+        values: [["I1", "Cur1"], ["I2", "Cur2"], ["I3", "Cur3"], ["I4", "Cur4"], ["SumX", "SumX"], ["SumY", "SumY"], ["SumAll", "SumAll"], ["DiffX", "DiffX"], ["DiffY", "DiffY"], ["PosX", "PosX"], ["PosY", "PosY"]]
+        entity: { <<: *stats, PORT: "{{PORTPREFIX}}.STATS.{{index[0]}}", R: "{{index[1]}}" }
+      - type: ibek.repeat
+        values: ["Arr1", "Arr2", "Arr3", "Arr4", "SumX", "SumY", "SumAll", "DiffX", "DiffY", "PosX", "PosY"]
+        entity: { <<: *arrays, PORT: "{{PORTPREFIX}}.ARRAYS.{{index}}", R: "{{index}}" }

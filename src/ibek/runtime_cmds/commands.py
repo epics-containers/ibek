@@ -39,7 +39,7 @@ def generate(
     UTILS.set_file_name(instance)
 
     entity_factory = EntityFactory()
-    entity_models = entity_factory.make_entity_models(definitions)
+    entity_models = entity_factory.make_entity_types(definitions)
     ioc_instance = IocFactory().deserialize_ioc(instance, entity_models)
 
     # post processing to insert SubEntity instances

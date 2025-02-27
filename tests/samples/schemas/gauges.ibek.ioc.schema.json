@@ -1,5 +1,56 @@
 {
   "$defs": {
+    "RepeatEntity": {
+      "additionalProperties": false,
+      "description": "A definition of RepeatEntity for the type checker\n\nThis is not really used - instead the dynamic class is created\nby the make_entity_model function is used.",
+      "properties": {
+        "type": {
+          "const": "ibek.repeat",
+          "default": "ibek.repeat",
+          "enum": [
+            "ibek.repeat"
+          ],
+          "title": "Type",
+          "type": "string"
+        },
+        "entity_enabled": {
+          "default": true,
+          "description": "enable or disable this entity instance",
+          "title": "Entity Enabled",
+          "type": "boolean"
+        },
+        "values": {
+          "anyOf": [
+            {
+              "items": {},
+              "type": "array"
+            },
+            {
+              "type": "string"
+            }
+          ],
+          "description": "The list of values to iterate over",
+          "title": "Values"
+        },
+        "variable": {
+          "default": "index",
+          "description": "The variable name to use in the entity model",
+          "title": "Variable",
+          "type": "string"
+        },
+        "entity": {
+          "description": "The entity model to repeat",
+          "title": "Entity",
+          "type": "object"
+        }
+      },
+      "required": [
+        "values",
+        "entity"
+      ],
+      "title": "RepeatEntity",
+      "type": "object"
+    },
     "asyn_AsynIP": {
       "additionalProperties": false,
       "properties": {
@@ -314,7 +365,8 @@
           "mapping": {
             "asyn.AsynIP": "#/$defs/asyn_AsynIP",
             "gauges.GaugeGroup": "#/$defs/gauges_GaugeGroup",
-            "gauges.Mks937bGauge": "#/$defs/gauges_Mks937bGauge"
+            "gauges.Mks937bGauge": "#/$defs/gauges_Mks937bGauge",
+            "ibek.repeat": "#/$defs/RepeatEntity"
           },
           "propertyName": "type"
         },
@@ -327,6 +379,9 @@
           },
           {
             "$ref": "#/$defs/gauges_GaugeGroup"
+          },
+          {
+            "$ref": "#/$defs/RepeatEntity"
           }
         ]
       },

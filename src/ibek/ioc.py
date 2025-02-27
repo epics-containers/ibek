@@ -108,17 +108,19 @@ class Entity(BaseSettings):
         ibek.runtime_cmds.generate().
         """
 
-        if self._model.pre_defines:
-            for name, define in self._model.pre_defines.items():
-                self._process_field(name, define.value, define.type)
+        # internal 'ibek.' Entity Types do not have _model
+        if hasattr(self, "_model"):
+            if self._model.pre_defines:
+                for name, define in self._model.pre_defines.items():
+                    self._process_field(name, define.value, define.type)
 
-        if self._model.parameters:
-            for name, parameter in self._model.parameters.items():
-                self._process_field(name, getattr(self, name), parameter.type)
+            if self._model.parameters:
+                for name, parameter in self._model.parameters.items():
+                    self._process_field(name, getattr(self, name), parameter.type)
 
-        if self._model.post_defines:
-            for name, define in self._model.post_defines.items():
-                self._process_field(name, define.value, define.type)
+            if self._model.post_defines:
+                for name, define in self._model.post_defines.items():
+                    self._process_field(name, define.value, define.type)
 
         return self
 
@@ -137,7 +139,9 @@ class Entity(BaseSettings):
         if id_name:
             return getattr(self, id_name)
         else:
-            raise ValueError(f"Entity {self} has no id field")
+            raise ValueError(
+                f"Entity {self.type} has no id field - convert to str failed"
+            )
 
     def __repr__(self):
         return str(self)

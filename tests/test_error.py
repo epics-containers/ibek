@@ -66,8 +66,8 @@ def test_loading_module_twice(entity_factory, samples: Path):
     instance_file = samples / "iocs" / "utils.ibek.ioc.yaml"
 
     support = Support(**YAML(typ="safe").load(definition_file))
-    entities1 = entity_factory._make_entity_models(support)
-    entities2 = entity_factory._make_entity_models(support)
+    entities1 = entity_factory._make_entity_types(support)
+    entities2 = entity_factory._make_entity_types(support)
 
     ioc_factory = IocFactory()
     generic_ioc1 = ioc_factory.make_ioc_model(entities1)

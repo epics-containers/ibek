@@ -13,6 +13,7 @@ from pydantic_core import PydanticUndefined
 from ruamel.yaml.main import YAML
 
 from ibek.globals import JINJA
+from ibek.ibek_builtin.repeat import REPEAT_TYPE, RepeatEntity
 
 from .ioc import Entity, EnumVal, clear_entity_model_ids
 from .parameters import EnumParam, IdParam, ObjectParam
@@ -23,18 +24,35 @@ from .utils import UTILS
 class EntityFactory:
     def __init__(self) -> None:
         """
-        A class to create `Entity` models from `EntityModel`s.
+        A class to create `Entity` types from `EntityModel` instances.
+
+        To understand this class be aware that these are equivalent:-
+          EntityModel instance == Entity class.
+        i.e. when we instantiate an EntityModel we are creating a new
+        dynamic Entity class.
+
+        EntityModel instantiation happens when:-
+
+        1. Deserializing a support module yaml file
+        2. calling make_entity_model() in ibek_builtin.repeat.py
+
+        Instantiating an Entity itself is the step that happens when
+        deserializing a ioc.yaml. Entities in turn know how to make database
+        and startup script entries for IOC instance.
+
+        I have replaced all references in the code to type[Entity] with
+        EntityModel for consistency.
 
         Created models are stored in `self._entity_models` to lookup when
         resolving nested `SubEntity`s.
         """
-        self._entity_models: dict[str, type[Entity]] = {}
+        self._entity_types: dict[str, EntityModel] = {}
         # starting a new EntityFactory implies we should throw away any existing
         # Entity instances - this is required for tests which create multiple
         # EntityFactories
         clear_entity_model_ids()
 
-    def make_entity_models(self, entity_model_yaml: list[Path]) -> list[type[Entity]]:
+    def make_entity_types(self, entity_model_yaml: list[Path]) -> list[EntityModel]:
         """
         Read a set of *.ibek.support.yaml files and generate Entity classes
         from their EntityModel entries
@@ -49,16 +67,20 @@ class EntityFactory:
                 # deserialize the support module yaml file
                 support = Support(**support_dict)
                 # make Entity classes described in the support module yaml file
-                self._make_entity_models(support)
+                self._make_entity_types(support)
+
+            # also add builtin entity types "ibek.*"
+            self._entity_types[REPEAT_TYPE] = RepeatEntity  # type: ignore
         except Exception:
             print(f"VALIDATION ERROR READING {entity_model}")
             raise
 
-        return list(self._entity_models.values())
+        return list(self._entity_types.values())
 
-    def _make_entity_model(self, model: EntityModel, support: Support) -> type[Entity]:
+    def _make_entity_type(self, model: EntityModel, support: Support) -> EntityModel:
         """
-        Create an Entity Model from a EntityModel instance and a Support instance.
+        Create an Entity type from a EntityModel instance and it's containing
+        Support instance.
         """
 
         def add_arg(name, typ, description, default):
@@ -135,27 +157,62 @@ class EntityFactory:
         entity_cls._model = model
 
         # store this Entity class in the factory
-        self._entity_models[full_name] = entity_cls
+        self._entity_types[full_name] = entity_cls
 
         return entity_cls
 
-    def _make_entity_models(self, support: Support) -> list[type[Entity]]:
+    def _make_entity_types(self, support: Support) -> list[EntityModel]:
         """
         Create Entity subclasses for all EntityModel instances in the given
         Support instance. Returns a list of the Entity subclasses Models.
         """
         entity_names = []
-        entity_models = []
+        entity_types = []
 
         for model in support.entity_models:
             if model.name in entity_names:
                 # not tested because schema validation will always catch this first
                 raise ValueError(f"Duplicate entity name {model.name}")
 
-            entity_models.append(self._make_entity_model(model, support))
+            entity_types.append(self._make_entity_type(model, support))
 
             entity_names.append(model.name)
-        return entity_models
+        return entity_types
+
+    def _resolve_repeat(
+        self, repeat_entity: RepeatEntity, parent_entity: Entity
+    ) -> list[Entity]:
+        """
+        Resolve a repeat Entity into a list of Entity instances
+        """
+        resolved_entities: list[Entity] = []
+
+        # ensure correct class - it will be a generic Entity in subentities
+        repeat_entity = RepeatEntity(**repeat_entity.model_dump())
+
+        for value in repeat_entity.values:
+            new_entity_cls = self._entity_types[repeat_entity.entity["type"]]
+            new_params: dict[str, Any] = {}
+            for key, param in repeat_entity.entity.items():
+                if key == "entity" and new_params.get("type") == REPEAT_TYPE:
+                    # defer rendering of the inner entity in nested repeats
+                    new_params[key] = param
+                else:
+                    # insert the iterator variable into the context
+                    context = repeat_entity.model_dump()
+                    if parent_entity:
+                        context.update(parent_entity.model_dump())
+                    context[repeat_entity.variable] = value
+                    # jinja render the parameter in the repeat entity
+                    new_params[key] = UTILS.render(context, param)
+
+            # create the new repeated entity from its type and parameters
+            new_entity = new_entity_cls(**new_params)  # type: ignore
+            assert isinstance(new_entity, Entity)
+
+            resolved_entities.extend(self.resolve_sub_entities([new_entity]))
+
+        return resolved_entities
 
     def resolve_sub_entities(self, entities: list[Entity]) -> list[Entity]:
         """
@@ -163,20 +220,33 @@ class EntityFactory:
         """
         resolved_entities: list[Entity] = []
         for parent_entity in entities:
-            model = parent_entity._model
-            # add the parent standard entity
-            resolved_entities.append(parent_entity)
-            # add in SubEntities if any
-            for sub_entity in model.sub_entities:
-                # find the Entity Class that the SubEntity represents
-                entity_cls = self._entity_models[sub_entity.type]
-                # get the SubEntity arguments
-                sub_params_dict = sub_entity.model_dump()
-                # jinja render any references to parent Params in the SubEntity Args
-                for key, param in sub_params_dict.items():
-                    sub_params_dict[key] = UTILS.render(parent_entity, param)
-                # cast the SubEntity to its concrete Entity subclass
-                entity = entity_cls(**sub_params_dict)
-                # recursively scan the SubEntity for more SubEntities
-                resolved_entities.extend(self.resolve_sub_entities([entity]))
+            if parent_entity.type == REPEAT_TYPE:
+                # resolve repeats in the parent entity
+                resolved_entities.extend(self._resolve_repeat(parent_entity, {}))  # type: ignore
+            else:
+                # add the current parent entity
+                resolved_entities.append(parent_entity)
+                # add in SubEntities if any
+                for sub_entity in parent_entity._model.sub_entities:
+                    if sub_entity.type == REPEAT_TYPE:
+                        # if the sub entity is a repeat resolve repeats
+                        # passing parent in, so it's arguments can be merged into context
+                        resolved_entities.extend(
+                            self._resolve_repeat(sub_entity, parent_entity)  # type: ignore
+                        )
+                    else:
+                        # find the Entity Class that the SubEntity represents
+                        entity_cls = self._entity_types[sub_entity.type]
+                        # get the SubEntity arguments
+                        sub_params_dict = sub_entity.model_dump()
+                        # jinja render any references to parent Params in the SubEntity Args
+                        for key, param in sub_params_dict.items():
+                            sub_params_dict[key] = UTILS.render(parent_entity, param)
+                        # cast the SubEntity to its concrete Entity subclass
+                        new_entity = entity_cls(**sub_params_dict)  # type: ignore
+                        # recursively scan the SubEntity for more SubEntities
+                        resolved_entities.extend(
+                            self.resolve_sub_entities([new_entity])
+                        )
+
         return resolved_entities

@@ -29,6 +29,35 @@ echo making the support yaml schema
 ibek support generate-schema --output schemas/ibek.support.schema.json
 
 
+
+############################################################################
+# ibek.repeat example IOC
+############################################################################
+
+echo making repeat ioc
+EPICS_ROOT=`pwd`/epics ibek runtime generate iocs/repeat.ibek.ioc.yaml support/asyn.ibek.support.yaml support/epics.ibek.support.yaml support/motorSim.ibek.support.yaml
+mv `pwd`/epics/{runtime,opi}/* `pwd`/outputs/repeat
+
+
+############################################################################
+# quadem example
+############################################################################
+
+echo making an ioc schema using ADCore and quadem support yaml
+ibek ioc generate-schema --no-ibek-defs support/ADCore.ibek.support.yaml support/quadem.ibek.support.yaml --output schemas/quadem.ibek.ioc.schema.json
+
+echo making ioc based on quadem support yaml
+EPICS_ROOT=`pwd`/epics ibek runtime generate iocs/quadem.ibek.ioc.yaml support/ADCore.ibek.support.yaml support/quadem.ibek.support.yaml
+mv `pwd`/epics/{runtime,opi}/* `pwd`/outputs/quadem
+
+echo making an ioc schema using ADCore and quadem repeat support yaml
+ibek ioc generate-schema --no-ibek-defs support/ADCore.ibek.support.yaml support/quadem_repeat.ibek.support.yaml --output schemas/quadem_repeat.ibek.ioc.schema.json
+
+echo making ioc based on quadem_repeat support yaml
+EPICS_ROOT=`pwd`/epics ibek runtime generate iocs/quadem.ibek.ioc.yaml support/ADCore.ibek.support.yaml support/quadem_repeat.ibek.support.yaml
+mv `pwd`/epics/{runtime,opi}/* `pwd`/outputs/quadem_repeat
+
+
 ############################################################################
 # motorSim example
 ############################################################################
@@ -78,18 +107,6 @@ ibek ioc generate-schema --no-ibek-defs support/asyn.ibek.support.yaml support/g
 echo making ioc based on gauges support yaml
 EPICS_ROOT=`pwd`/epics ibek runtime generate iocs/gauges.ibek.ioc.yaml support/asyn.ibek.support.yaml support/gauges.ibek.support.yaml
 mv `pwd`/epics/{runtime,opi}/* `pwd`/outputs/gauges
-
-
-############################################################################
-# quadem example
-############################################################################
-
-echo making an ioc schema using ADCore and quadem support yaml
-ibek ioc generate-schema --no-ibek-defs support/ADCore.ibek.support.yaml support/quadem.ibek.support.yaml --output schemas/quadem.ibek.ioc.schema.json
-
-echo making ioc based on quadem support yaml
-EPICS_ROOT=`pwd`/epics ibek runtime generate iocs/quadem.ibek.ioc.yaml support/ADCore.ibek.support.yaml support/quadem.ibek.support.yaml
-mv `pwd`/epics/{runtime,opi}/* `pwd`/outputs/quadem
 
 
 ############################################################################
