@@ -42,16 +42,13 @@ class RepeatEntity(Entity):
     """
 
     type: Literal["ibek.repeat"] = REPEAT_TYPE
-    values: list = Field(
+    values: list | str = Field(
         description="The list of values to iterate over",
     )
     variable: str = Field(
         description="The variable name to use in the entity model",
+        default="index",
     )
     entity: dict = Field(
         description="The entity model to repeat",
     )
-    # description: str = Field(
-    #     description="A built in entity model instance for generating N instances of another entity.",
-    # )
-    # name: str = Field(description="The name of the entity model")

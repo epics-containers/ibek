@@ -5003,12 +5003,20 @@
           "type": "boolean"
         },
         "values": {
+          "anyOf": [
+            {
+              "items": {},
+              "type": "array"
+            },
+            {
+              "type": "string"
+            }
+          ],
           "description": "The list of values to iterate over",
-          "items": {},
-          "title": "Values",
-          "type": "array"
+          "title": "Values"
         },
         "variable": {
+          "default": "index",
           "description": "The variable name to use in the entity model",
           "title": "Variable",
           "type": "string"
@@ -5021,7 +5029,6 @@
       },
       "required": [
         "values",
-        "variable",
         "entity"
       ],
       "title": "RepeatEntity",
