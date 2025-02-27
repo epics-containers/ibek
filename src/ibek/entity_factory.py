@@ -26,7 +26,8 @@ class EntityFactory:
         """
         A class to create `Entity` types from `EntityModel` instances.
 
-        To understand this class be aware that EntityModel == type[Entity].
+        To understand this class be aware that these are equivalent:-
+          EntityModel instance == Entity class.
         i.e. when we instantiate an EntityModel we are creating a new
         dynamic Entity class.
 
@@ -69,7 +70,7 @@ class EntityFactory:
                 self._make_entity_types(support)
 
             # also add builtin entity types "ibek.*"
-            self._entity_types[REPEAT_TYPE] = RepeatEntity
+            self._entity_types[REPEAT_TYPE] = RepeatEntity  # type: ignore
         except Exception:
             print(f"VALIDATION ERROR READING {entity_model}")
             raise
@@ -191,7 +192,7 @@ class EntityFactory:
 
         for value in repeat_entity.values:
             new_entity_cls = self._entity_types[repeat_entity.entity["type"]]
-            new_params = {}
+            new_params: dict[str, Any] = {}
             for key, param in repeat_entity.entity.items():
                 if key == "entity" and new_params.get("type") == REPEAT_TYPE:
                     # defer rendering of the inner entity in nested repeats
@@ -231,8 +232,8 @@ class EntityFactory:
                         # if the sub entity is a repeat resolve repeats
                         # passing parent in, so it's arguments can be merged into context
                         resolved_entities.extend(
-                            self._resolve_repeat(sub_entity, parent_entity)
-                        )  # type: ignore
+                            self._resolve_repeat(sub_entity, parent_entity)  # type: ignore
+                        )
                     else:
                         # find the Entity Class that the SubEntity represents
                         entity_cls = self._entity_types[sub_entity.type]

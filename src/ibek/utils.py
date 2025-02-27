@@ -84,7 +84,7 @@ class Utils:
 
         return self.variables[index]
 
-    def render(self, context: Any, template_text: Any) -> str:
+    def render(self, context: Any, template_text: Any) -> Any:
         """
         Render a Jinja template with the global _global object in the context
         """

@@ -41,7 +41,7 @@ class RepeatEntity(Entity):
     by the make_entity_model function is used.
     """
 
-    type: Literal["ibek.repeat"] = REPEAT_TYPE
+    type: Literal["ibek.repeat"] = "ibek.repeat"
     values: list | str = Field(
         description="The list of values to iterate over",
     )
