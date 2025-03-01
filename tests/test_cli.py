@@ -176,14 +176,14 @@ def generic_generate(
 
     generate(ioc_yaml, support_yamls)
 
-    outputs = expected_outputs.glob("*")
-    assert len(list(outputs)) > 0, "No expected output files found"
+    outputs = list(expected_outputs.glob("*"))
+    assert len(outputs) > 0, "No expected output files found"
 
     for output in outputs:
         actual = epics_root / "runtime" / output.name
         if not actual.exists():
             actual = epics_root / "opi" / output.name
-        assert actual.exists(), "Missing output file"
+        assert actual.exists(), f"Missing output file {actual}"
         assert output.read_text().strip() == actual.read_text().strip()
 
 

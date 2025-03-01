@@ -10,3 +10,4 @@ Command number 3 for subentity_test
 
 dbLoadRecords /epics/runtime/ioc.db
 iocInit
+

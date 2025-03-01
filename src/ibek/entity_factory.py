@@ -180,76 +180,70 @@ class EntityFactory:
         return entity_types
 
     def _resolve_repeat(
-        self, repeat_entity: RepeatEntity, parent_entity: Entity
+        self, repeat_entity: RepeatEntity, context: dict[str, Any]
     ) -> list[Entity]:
         """
         Resolve a repeat Entity into a list of Entity instances
         """
         resolved_entities: list[Entity] = []
 
-        # ensure correct class - it will be a generic Entity in subentities
-        repeat_entity = RepeatEntity(**repeat_entity.model_dump())
-        # also ensure repeat fields are rendered (in subentities they are not)
-        repeat_entity.values = UTILS.render(parent_entity, repeat_entity.values, "list")
-        repeat_entity.variable = UTILS.render(parent_entity, repeat_entity.variable)
-
         for value in repeat_entity.values:
-            new_entity_cls = self._entity_types[repeat_entity.entity["type"]]
-            new_params: dict[str, Any] = {}
-            for key, param in repeat_entity.entity.items():
-                if key == "entity" and new_params.get("type") == REPEAT_TYPE:
-                    # defer rendering of the inner entity in nested repeats
-                    new_params[key] = param
-                else:
-                    # insert the iterator variable into the context
-                    context = repeat_entity.model_dump()
-                    if parent_entity:
-                        context.update(parent_entity.model_dump())
-                    context[repeat_entity.variable] = value
-                    # jinja render the parameter in the repeat entity
-                    new_params[key] = UTILS.render(context, param)
+            context[repeat_entity.variable] = value
 
-            # create the new repeated entity from its type and parameters
-            new_entity = new_entity_cls(**new_params)  # type: ignore
-            assert isinstance(new_entity, Entity)
-
-            resolved_entities.extend(self.resolve_sub_entities([new_entity]))
+            # create the new repeated entity using a dict of arguments
+            new_entity = repeat_entity.entity.copy()
+            resolved_entities.extend(
+                self.resolve_sub_entities([new_entity], context.copy())
+            )
 
         return resolved_entities
 
-    def resolve_sub_entities(self, entities: list[Entity]) -> list[Entity]:
+    def resolve_sub_entities(
+        self,
+        entities: list[Entity | dict[str, Any]],
+        context: dict[str, Any] | None = None,
+    ) -> list[Entity]:
         """
-        Recursively resolve SubEntity collections in a list of Entity instances
+        Recursively resolve SubEntity collections and Repeat Entities
+        in a list of Entity instances
+
+        entities:   list of Entity instances to resolve. These will be Enity
+                    subclasses in the root call, but will be dicts in recursive
+                    calls via subentities or repeats.
+        context:    dictionary of variables to pass to jinja when rendering,
+                    this list accumulates as we recurse subentities/repeats
         """
         resolved_entities: list[Entity] = []
+
+        # copy the context for the recursive branches
+        context = {} if context is None else context.copy()
+
         for parent_entity in entities:
+            if isinstance(parent_entity, dict):
+                parent_params = parent_entity
+            else:
+                parent_params: dict[str, Any] = parent_entity.model_dump()
+
+            # jinja render the parent entity parameters
+            for key, param in parent_params.items():
+                parent_params[key] = UTILS.render(context, param)
+                context[key] = parent_params[key]
+
+            # coerce correct class - it will be a generic Entity in subentities
+            parent_cls = self._entity_types[parent_params["type"]]
+            parent_entity = parent_cls(**parent_params)
+
             if parent_entity.type == REPEAT_TYPE:
-                # resolve repeats in the parent entity
-                resolved_entities.extend(self._resolve_repeat(parent_entity, {}))  # type: ignore
+                # resolve repeats in this parent entity
+                resolved_entities.extend(self._resolve_repeat(parent_entity, context))  # type: ignore
             else:
                 # add the current parent entity
                 resolved_entities.append(parent_entity)
                 # add in SubEntities if any
                 for sub_entity in parent_entity._model.sub_entities:
-                    if sub_entity.type == REPEAT_TYPE:
-                        # if the sub entity is a repeat resolve repeats
-                        # passing parent in, so it's arguments can be merged into context
-                        resolved_entities.extend(
-                            self._resolve_repeat(sub_entity, parent_entity)  # type: ignore
-                        )
-                    else:
-                        # find the Entity Class that the SubEntity represents
-                        entity_cls = self._entity_types[sub_entity.type]
-                        # get the SubEntity arguments
-                        sub_params_dict = sub_entity.model_dump()
-                        # jinja render any references to parent Params in the SubEntity Args
-                        for key, param in sub_params_dict.items():
-                            sub_params_dict[key] = UTILS.render(parent_entity, param)
-                        # cast the SubEntity to its concrete Entity subclass
-                        new_entity = entity_cls(**sub_params_dict)  # type: ignore
-                        # recursively scan the SubEntity for more SubEntities
-                        resolved_entities.extend(
-                            self.resolve_sub_entities([new_entity])
-                        )
+                    # recursively scan the SubEntity for more SubEntities
+                    resolved_entities.extend(
+                        self.resolve_sub_entities([sub_entity.copy()], context)
+                    )
 
         return resolved_entities
