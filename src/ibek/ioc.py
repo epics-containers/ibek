@@ -5,8 +5,6 @@ support module YAML files
 
 from __future__ import annotations
 
-import ast
-import builtins
 from collections.abc import Sequence
 from enum import Enum
 from typing import Any
@@ -66,15 +64,7 @@ class Entity(BaseSettings):
 
         if isinstance(value, str):
             # Jinja expansion always performed on string fields
-            value = UTILS.render(self, value)
-            if typ in ["list", "int", "float", "bool"]:
-                # coerce the rendered parameter to its intended type
-                try:
-                    cast_type = getattr(builtins, typ)
-                    value = cast_type(ast.literal_eval(value))
-                except:
-                    print(f"ERROR: decoding field '{name}', value '{value}' as {typ}")
-                    raise
+            value = UTILS.render(self, value, typ)
 
         if typ == "object":
             # look up the actual object by it's id

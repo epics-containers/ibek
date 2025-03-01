@@ -7,6 +7,8 @@ us to maintain state between calls to the Jinja templates because
 we pass a single instance of this class into all Jinja contexts.
 """
 
+import ast
+import builtins
 import os
 from collections.abc import Mapping
 from pathlib import Path
@@ -84,37 +86,47 @@ class Utils:
 
         return self.variables[index]
 
-    def render(self, context: Any, template_text: Any) -> Any:
+    def render(self, context: Any, template_text: Any, typ: str = "str") -> Any:
         """
         Render a Jinja template with the global _global object in the context
         """
         if isinstance(template_text, list):
             result = (self.render(context, item) for item in template_text)
-            return list(result)
+            result = list(result)
         elif isinstance(template_text, dict):
-            return {
+            result = {
                 key: self.render(context, value) for key, value in template_text.items()
             }
-        elif not isinstance(template_text, str):
+        elif isinstance(template_text, str):
+            # if the template is not a string, jinja render it
+            try:
+                jinja_template = Template(template_text, undefined=StrictUndefined)
+                result = jinja_template.render(
+                    context,
+                    # global context for all jinja renders
+                    _global=self,
+                    # put variables created with set/get directly in the context
+                    **self.variables,
+                    ioc_yaml_file_name=self.file_name,
+                    ioc_name=self.ioc_name,
+                )
+
+                # make sure the result is the correct type as expected by the argument
+                if typ in ["list", "int", "float", "dict", "bool"]:
+                    # coerce the rendered parameter to its intended type
+                    cast_type = getattr(builtins, typ)
+                    result = cast_type(ast.literal_eval(result))
+
+            except Exception as e:
+                raise ValueError(
+                    f"Error rendering template type {typ}:\n{template_text}\nError"
+                ) from e
+        else:
             # because this function is used to template arguments, it may
             # be passed a non string which will always render to itself
             return template_text
 
-        try:
-            jinja_template = Template(template_text, undefined=StrictUndefined)
-            return jinja_template.render(
-                context,
-                # global context for all jinja renders
-                _global=self,
-                # put variables created with set/get directly in the context
-                **self.variables,
-                ioc_yaml_file_name=self.file_name,
-                ioc_name=self.ioc_name,
-            )
-        except Exception as e:
-            raise ValueError(
-                f"Error rendering template:\n{template_text}\nError:{e}"
-            ) from e
+        return result
 
     def render_map(self, context: Any, map: Mapping[str, str | None]) -> dict[str, str]:
         """
