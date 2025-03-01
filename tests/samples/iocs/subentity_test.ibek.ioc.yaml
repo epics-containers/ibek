@@ -1,0 +1,8 @@
+ioc_name: "{{ _global.get_env('IOC_NAME') }}"
+
+description: Example for testing ibek.repeat
+
+entities:
+  - type: subentity.SubEntityTest
+    count: 3
+    name: "subentity_test"

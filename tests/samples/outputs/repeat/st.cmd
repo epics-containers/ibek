@@ -12,102 +12,18 @@ ioc_registerRecordDeviceDriver pdbbase
 hello world from a
 hello world from b
 hello world from c
-hello world from {
-hello world from {
-hello world from  
-hello world from r
-hello world from a
-hello world from n
-hello world from g
-hello world from e
-hello world from (
 hello world from 1
-hello world from ,
-hello world from  
-hello world from 4
-hello world from )
-hello world from  
-hello world from |
-hello world from  
-hello world from l
-hello world from i
-hello world from s
-hello world from t
-hello world from  
-hello world from }
-hello world from }
-NESTED {a
-NESTED {b
-NESTED {c
-NESTED {a
-NESTED {b
-NESTED {c
-NESTED  a
-NESTED  b
-NESTED  c
-NESTED ra
-NESTED rb
-NESTED rc
-NESTED aa
-NESTED ab
-NESTED ac
-NESTED na
-NESTED nb
-NESTED nc
-NESTED ga
-NESTED gb
-NESTED gc
-NESTED ea
-NESTED eb
-NESTED ec
-NESTED (a
-NESTED (b
-NESTED (c
+hello world from 2
+hello world from 3
 NESTED 1a
 NESTED 1b
 NESTED 1c
-NESTED ,a
-NESTED ,b
-NESTED ,c
-NESTED  a
-NESTED  b
-NESTED  c
-NESTED 4a
-NESTED 4b
-NESTED 4c
-NESTED )a
-NESTED )b
-NESTED )c
-NESTED  a
-NESTED  b
-NESTED  c
-NESTED |a
-NESTED |b
-NESTED |c
-NESTED  a
-NESTED  b
-NESTED  c
-NESTED la
-NESTED lb
-NESTED lc
-NESTED ia
-NESTED ib
-NESTED ic
-NESTED sa
-NESTED sb
-NESTED sc
-NESTED ta
-NESTED tb
-NESTED tc
-NESTED  a
-NESTED  b
-NESTED  c
-NESTED }a
-NESTED }b
-NESTED }c
-NESTED }a
-NESTED }b
-NESTED }c
+NESTED 2a
+NESTED 2b
+NESTED 2c
+NESTED 3a
+NESTED 3b
+NESTED 3c
 # Setting up Asyn Port controllerPort1 on 192.168.0.55:2003:
 # AsynIPConfigure({{name}}, {{port}}, {{stop}}, {{parity}}, {{bits}}) 
 AsynIPConfigure(controllerPort1, 192.168.0.55:2003, 1, none, 8)

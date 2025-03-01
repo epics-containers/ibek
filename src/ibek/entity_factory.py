@@ -189,6 +189,9 @@ class EntityFactory:
 
         # ensure correct class - it will be a generic Entity in subentities
         repeat_entity = RepeatEntity(**repeat_entity.model_dump())
+        # also ensure repeat fields are rendered (in subentities they are not)
+        repeat_entity.values = UTILS.render(parent_entity, repeat_entity.values, "list")
+        repeat_entity.variable = UTILS.render(parent_entity, repeat_entity.variable)
 
         for value in repeat_entity.values:
             new_entity_cls = self._entity_types[repeat_entity.entity["type"]]

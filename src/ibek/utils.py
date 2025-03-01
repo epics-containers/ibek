@@ -92,16 +92,16 @@ class Utils:
         """
         if isinstance(template_text, list):
             result = (self.render(context, item) for item in template_text)
-            result = list(result)
+            result = list(result)  # type: ignore
         elif isinstance(template_text, dict):
-            result = {
+            result = {  # type: ignore
                 key: self.render(context, value) for key, value in template_text.items()
             }
         elif isinstance(template_text, str):
             # if the template is not a string, jinja render it
             try:
                 jinja_template = Template(template_text, undefined=StrictUndefined)
-                result = jinja_template.render(
+                result = jinja_template.render(  # type: ignore
                     context,
                     # global context for all jinja renders
                     _global=self,
@@ -115,11 +115,11 @@ class Utils:
                 if typ in ["list", "int", "float", "dict", "bool"]:
                     # coerce the rendered parameter to its intended type
                     cast_type = getattr(builtins, typ)
-                    result = cast_type(ast.literal_eval(result))
+                    result = cast_type(ast.literal_eval(result))  # type: ignore
 
             except Exception as e:
                 raise ValueError(
-                    f"Error rendering template type {typ}:\n{template_text}\nError"
+                    f"Error rendering template type {typ}:\n{template_text}\nError: {e}"
                 ) from e
         else:
             # because this function is used to template arguments, it may

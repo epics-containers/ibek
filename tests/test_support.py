@@ -25,6 +25,7 @@ def test_symlink_ibek(tmp_path: Path, samples: Path):
         "motorSim.ibek.support.yaml",
         "quadem.ibek.support.yaml",
         "quadem_repeat.ibek.support.yaml",
+        "subentity_test.ibek.support.yaml",
         "technosoft.ibek.support.yaml",
         "utils.ibek.support.yaml",
     ]

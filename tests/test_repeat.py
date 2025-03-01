@@ -31,3 +31,12 @@ def test_subentity_repeats(tmp_epics_root: Path, tmp_path, samples):
 
     for f in files:
         assert (samples / "outputs" / "quadem" / f.name).read_text() == f.read_text()
+
+
+def test_subentity_repeats_with_substitutions(tmp_epics_root: Path, tmp_path, samples):
+    generic_generate(
+        tmp_epics_root,
+        samples,
+        "subentity_test",
+        ["subentity_test", "epics"],
+    )

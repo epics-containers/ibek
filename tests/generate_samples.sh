@@ -29,14 +29,17 @@ echo making the support yaml schema
 ibek support generate-schema --output schemas/ibek.support.schema.json
 
 
-
 ############################################################################
-# ibek.repeat example IOC
+# repeat tests IOCs
 ############################################################################
 
 echo making repeat ioc
 EPICS_ROOT=`pwd`/epics ibek runtime generate iocs/repeat.ibek.ioc.yaml support/asyn.ibek.support.yaml support/epics.ibek.support.yaml support/motorSim.ibek.support.yaml
 mv `pwd`/epics/{runtime,opi}/* `pwd`/outputs/repeat
+
+echo making subentity repeat ioc
+EPICS_ROOT=`pwd`/epics ibek runtime generate iocs/subentity_test.ibek.ioc.yaml support/subentity_test.ibek.support.yaml support/epics.ibek.support.yaml
+mv `pwd`/epics/{runtime,opi}/* `pwd`/outputs/subentity_test
 
 
 ############################################################################
