@@ -9,7 +9,7 @@ from ibek.ioc_cmds.commands import ioc_cli
 from ibek.runtime_cmds.commands import runtime_cli
 from ibek.support_cmds.commands import support_cli
 
-cli = typer.Typer(cls=NaturalOrderGroup)
+cli = typer.Typer(cls=NaturalOrderGroup, pretty_exceptions_enable=False)
 
 cli.add_typer(
     support_cli,
@@ -37,6 +37,7 @@ yaml = YAML()
 
 def version_callback(value: bool):
     if value:
+        raise RuntimeError("This should never be called")
         typer.echo(__version__)
         raise typer.Exit()
 
