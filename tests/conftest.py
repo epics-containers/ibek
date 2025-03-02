@@ -88,6 +88,7 @@ def tmp_epics_root(samples: Path, tmp_path: Path, mocker: MockerFixture):
     # this should not be needed - what gives?
     os.environ["IOC"] = "/epics/ioc"
     os.environ["RUNTIME_DIR"] = "/epics/runtime"
+    os.environ["IOC_NAME"] = "TEST_IOC"
 
     return epics
 

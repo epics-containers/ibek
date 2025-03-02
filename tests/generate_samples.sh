@@ -12,6 +12,7 @@ export SAMPLES_DIR=$(realpath $(dirname "${BASH_SOURCE[0]}"))/samples
 export EPICS_ROOT=${SAMPLES_DIR}/epics
 export IOC="/epics/ioc"
 export RUNTIME_DIR="/epics/runtime"
+export IOC_NAME=TEST_IOC
 
 # this is so relative schema mode lines work
 cd $SAMPLES_DIR
