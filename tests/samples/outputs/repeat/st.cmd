@@ -52,4 +52,3 @@ motorSimCreateController(controller3, 4)
 
 dbLoadRecords /epics/runtime/ioc.db
 iocInit
-

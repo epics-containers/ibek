@@ -100,7 +100,7 @@ class Utils:
                 cast_type = getattr(builtins, typ)
                 return cast_type(ast.literal_eval(value))  # type: ignore
             else:
-                raise ValueError(f"Jinja template type '{typ}' not in {typs}")
+                raise ValueError(f"Jinja template type '{typ}' not in {self.typs}")
         return value
 
     def render(self, context: Any, template_text: Any, typ: str = "") -> Any:

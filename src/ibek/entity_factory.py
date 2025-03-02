@@ -5,6 +5,7 @@ A class for constructing Entity classes from EntityModels
 from __future__ import annotations
 
 import builtins
+from collections.abc import Sequence
 from pathlib import Path
 from typing import Annotated, Any, Literal
 
@@ -206,16 +207,16 @@ class EntityFactory:
 
         # create the correct class with new params
         parent_cls = self._entity_types[params["type"]]
-        return parent_cls(**params)
+        return parent_cls(**params)  # type: ignore
 
     def resolve_sub_entities(
-        self, entities: list[Entity | dict[str, Any]], context: dict[str, Any]
+        self, entities: Sequence[Any], context: dict[str, Any]
     ) -> list[Entity]:
         """
         Recursively resolve SubEntity collections and Repeat Entities
         in a list of Entity instances
 
-        entities:   list of Entity instances to resolve. These will be Enity
+        entities:   list of Entity instances to resolve. These will be Entity
                     subclasses in the root call, but will be dicts in recursive
                     calls via subentities or repeats.
         context:    dictionary of variables to pass to jinja when rendering,
@@ -227,24 +228,23 @@ class EntityFactory:
         context = context.copy()
 
         for parent_entity in entities:
-            # TODO refactor
             if isinstance(parent_entity, dict):
                 parent_params = parent_entity
-                parent_entity = self.make_entity(parent_params, context)
             else:
-                parent_params: dict[str, Any] = parent_entity.model_dump()
+                parent_params = parent_entity.model_dump()
 
-            if isinstance(parent_entity, RepeatEntity) or isinstance(
-                parent_entity, SubEntity
+            if (
+                isinstance(parent_entity, dict)
+                or isinstance(parent_entity, SubEntity)
+                or isinstance(parent_entity, RepeatEntity)
             ):
                 parent_entity = self.make_entity(parent_params, context)
 
             context.update(parent_entity.model_dump())
-            # end TODO
 
-            if parent_entity.type == REPEAT_TYPE:
+            if isinstance(parent_entity, RepeatEntity):
                 # resolve repeats in this parent entity
-                resolved_entities.extend(self._resolve_repeat(parent_entity, context))  # type: ignore
+                resolved_entities.extend(self._resolve_repeat(parent_entity, context))
             else:
                 # add the current parent entity
                 resolved_entities.append(parent_entity)
