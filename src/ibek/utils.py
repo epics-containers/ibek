@@ -17,6 +17,22 @@ from typing import Any
 
 from jinja2 import StrictUndefined, Template
 
+# a global dict of all entity instances indexed by their ID
+id_to_entity: dict[str, object] = {}
+
+
+def get_entity_by_id(id: str) -> object:
+    try:
+        return id_to_entity[id]
+    except KeyError as e:
+        raise ValueError(f"object {id} not found in {list(id_to_entity)}") from e
+
+
+def clear_entity_model_ids():
+    """Resets the global id_to_entity dict"""
+
+    id_to_entity.clear()
+
 
 class Utils:
     """
@@ -88,19 +104,23 @@ class Utils:
         return self.variables[index]
 
     re_get_type = re.compile(r"\| *([a-z]*) *}}")
-    typs = ["int", "float", "bool", "list", "dict"]
+    typs = ["int", "float", "bool", "list", "dict", "object"]
 
     def _coerce(self, value: Any, typ: str) -> Any:
         """
         Coerce a value to a given type
         """
-        if typ in self.typs:
+        if typ == "object":
+            # look up the actual object by it's id
+            if isinstance(value, str):
+                value = get_entity_by_id(value)
+        elif typ in self.typs:
             if typ in self.typs:
                 # make sure the result is the correct type
                 cast_type = getattr(builtins, typ)
-                return cast_type(ast.literal_eval(value))  # type: ignore
+                value = cast_type(ast.literal_eval(value))  # type: ignore
             else:
-                raise ValueError(f"Jinja template type '{typ}' not in {typs}")
+                raise ValueError(f"Jinja template type '{typ}' not in {self.typs}")
         return value
 
     def render(self, context: Any, template_text: Any, typ: str = "") -> Any:
