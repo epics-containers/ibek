@@ -5,6 +5,7 @@ A class for constructing Entity classes from EntityModels
 from __future__ import annotations
 
 import builtins
+from collections.abc import Sequence
 from pathlib import Path
 from typing import Annotated, Any, Literal
 
@@ -14,6 +15,7 @@ from ruamel.yaml.main import YAML
 
 from ibek.globals import JINJA
 from ibek.ibek_builtin.repeat import REPEAT_TYPE, RepeatEntity
+from ibek.sub_entity import SubEntity
 
 from .ioc import Entity, EnumVal, clear_entity_model_ids
 from .parameters import EnumParam, IdParam, ObjectParam
@@ -217,15 +219,51 @@ class EntityFactory:
 
         return resolved_entities
 
-    def resolve_sub_entities(self, entities: list[Entity]) -> list[Entity]:
+    def make_entity(self, params: dict[str, Any], context: dict[str, Any]) -> Entity:
+        # jinja render the parent entity parameters
+        for key, param in params.items():
+            params[key] = UTILS.render(context, param)
+
+        # create the correct class with new params
+        parent_cls = self._entity_types[params["type"]]
+        return parent_cls(**params)  # type: ignore
+
+    def resolve_sub_entities(
+        self, entities: Sequence[Any], context: dict[str, Any]
+    ) -> list[Entity]:
         """
-        Recursively resolve SubEntity collections in a list of Entity instances
+        Recursively resolve SubEntity collections and Repeat Entities
+        in a list of Entity instances
+
+        entities:   list of Entity instances to resolve. These will be Entity
+                    subclasses in the root call, but will be dicts in recursive
+                    calls via subentities or repeats.
+        context:    dictionary of variables to pass to jinja when rendering,
+                    this list accumulates as we recurse subentities/repeats
         """
         resolved_entities: list[Entity] = []
+
+        # copy the context for the recursive branches
+        context = context.copy()
+
         for parent_entity in entities:
-            if parent_entity.type == REPEAT_TYPE:
-                # resolve repeats in the parent entity
-                resolved_entities.extend(self._resolve_repeat(parent_entity, {}))  # type: ignore
+            if isinstance(parent_entity, dict):
+                parent_params = parent_entity
+            else:
+                parent_params = parent_entity.model_dump()
+
+            if (
+                isinstance(parent_entity, dict)
+                or isinstance(parent_entity, SubEntity)
+                or isinstance(parent_entity, RepeatEntity)
+            ):
+                parent_entity = self.make_entity(parent_params, context)
+
+            context.update(parent_entity.model_dump())
+
+            if isinstance(parent_entity, RepeatEntity):
+                # resolve repeats in this parent entity
+                resolved_entities.extend(self._resolve_repeat(parent_entity, context))
             else:
                 # add the current parent entity
                 resolved_entities.append(parent_entity)

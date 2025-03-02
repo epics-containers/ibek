@@ -86,7 +86,23 @@ class Utils:
 
         return self.variables[index]
 
-    def render(self, context: Any, template_text: Any, typ: str = "str") -> Any:
+    re_get_type = re.compile(r"\| *([a-z]*) *}}")
+    typs = ["int", "float", "bool", "list", "dict"]
+
+    def _coerce(self, value: Any, typ: str) -> Any:
+        """
+        Coerce a value to a given type
+        """
+        if typ in self.typs:
+            if typ in self.typs:
+                # make sure the result is the correct type
+                cast_type = getattr(builtins, typ)
+                return cast_type(ast.literal_eval(value))  # type: ignore
+            else:
+                raise ValueError(f"Jinja template type '{typ}' not in {self.typs}")
+        return value
+
+    def render(self, context: Any, template_text: Any, typ: str = "") -> Any:
         """
         Render a Jinja template with the global _global object in the context
         """
@@ -111,11 +127,13 @@ class Utils:
                     ioc_name=self.ioc_name,
                 )
 
-                # make sure the result is the correct type as expected by the argument
-                if typ in ["list", "int", "float", "dict", "bool"]:
-                    # coerce the rendered parameter to its intended type
-                    cast_type = getattr(builtins, typ)
-                    result = cast_type(ast.literal_eval(result))  # type: ignore
+                if typ:
+                    result = self._coerce(result, typ)
+                else:
+                    match = self.re_get_type.search(template_text)
+                    if match:
+                        typ = match.group(1)
+                        result = self._coerce(result, typ)
 
             except Exception as e:
                 raise ValueError(
