@@ -240,7 +240,7 @@ class EntityFactory:
             ):
                 parent_entity = self.make_entity(parent_params, context)
 
-            context.update(parent_params)
+            context.update(parent_entity.model_dump())
             # end TODO
 
             if parent_entity.type == REPEAT_TYPE:

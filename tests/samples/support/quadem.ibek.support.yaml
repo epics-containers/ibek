@@ -110,8 +110,10 @@ entity_models:
           #
 
     shared:
-      - &stats { type: ADCore.NDStats, P: "{{DEVICE.P}}", NCHANS: "{{STAT_NCHAN}}", XSIZE: "{{STAT_XSIZE}}", YSIZE: 0, HIST_SIZE: "{{HIST_SIZE}}", NDARRAY_PORT: "{{DEVICE}}", ENABLED: 1 }
-      - &arrays { type: ADCore.NDStdArrays, P: "{{DEVICE.P}}", NDARRAY_PORT: "{{DEVICE}}", ENABLED: 1, TYPE: Float64, FTVL: DOUBLE, NELEMENTS: "{{STAT_XSIZE}}" }
+      # IMPORTANT - you must use DEVICE.PORT instead of DEVICE in sub_entities
+      # because there is no type info and DEVICE is just a dictionary
+      - &stats { type: ADCore.NDStats, P: "{{DEVICE.P}}", NCHANS: "{{STAT_NCHAN}}", XSIZE: "{{STAT_XSIZE}}", YSIZE: 0, HIST_SIZE: "{{HIST_SIZE}}", NDARRAY_PORT: "{{DEVICE.PORT}}", ENABLED: 1 }
+      - &arrays { type: ADCore.NDStdArrays, P: "{{DEVICE.P}}", NDARRAY_PORT: "{{DEVICE.PORT}}", ENABLED: 1, TYPE: Float64, FTVL: DOUBLE, NELEMENTS: "{{STAT_XSIZE}}" }
 
     sub_entities:
       - { <<: *stats, PORT: "{{PORTPREFIX}}.STATS.I1", R: Cur1 }
