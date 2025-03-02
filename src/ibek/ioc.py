@@ -64,7 +64,7 @@ class Entity(BaseSettings):
 
         if isinstance(value, str):
             # Jinja expansion always performed on string fields
-            value = UTILS.render(self, value)
+            value = UTILS.render(self, value, typ)
 
         if typ == "object":
             # look up the actual object by it's id

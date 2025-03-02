@@ -88,8 +88,22 @@ class Utils:
         return self.variables[index]
 
     re_get_type = re.compile(r"\| *([a-z]*) *}}")
+    typs = ["int", "float", "bool", "list", "dict"]
 
-    def render(self, context: Any, template_text: Any) -> Any:
+    def _coerce(self, value: Any, typ: str) -> Any:
+        """
+        Coerce a value to a given type
+        """
+        if typ in self.typs:
+            if typ in self.typs:
+                # make sure the result is the correct type
+                cast_type = getattr(builtins, typ)
+                return cast_type(ast.literal_eval(value))  # type: ignore
+            else:
+                raise ValueError(f"Jinja template type '{typ}' not in {typs}")
+        return value
+
+    def render(self, context: Any, template_text: Any, typ: str = "") -> Any:
         """
         Render a Jinja template with the global _global object in the context
         """
@@ -109,16 +123,14 @@ class Utils:
                     ioc_yaml_file_name=self.file_name,
                     ioc_name=self.ioc_name,
                 )
-                typs = ["int", "float", "str", "bool", "list", "dict"]
-                match = self.re_get_type.search(template_text)
-                if match:
-                    typ = match.group(1)
-                    if typ in typs:
-                        # make sure the result is the correct type
-                        cast_type = getattr(builtins, typ)
-                        result = cast_type(ast.literal_eval(result))  # type: ignore
-                    else:
-                        raise ValueError(f"Jinja template type {typ} not in {typs}")
+
+                if typ:
+                    result = self._coerce(result, typ)
+                else:
+                    match = self.re_get_type.search(template_text)
+                    if match:
+                        typ = match.group(1)
+                        result = self._coerce(result, typ)
 
             except Exception as e:
                 raise ValueError(
