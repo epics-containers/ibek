@@ -9,12 +9,12 @@ epicsEnvSet NAME_AS_ENV_VAR my name is controllerPort3
 dbLoadDatabase dbd/ioc.dbd
 ioc_registerRecordDeviceDriver pdbbase
 
-hello world from 1
-hello world from 2
-hello world from 3
 hello world from a
 hello world from b
 hello world from c
+hello world from 1
+hello world from 2
+hello world from 3
 NESTED 1a
 NESTED 1b
 NESTED 1c
@@ -52,4 +52,3 @@ motorSimCreateController(controller3, 4)
 
 dbLoadRecords /epics/runtime/ioc.db
 iocInit
-

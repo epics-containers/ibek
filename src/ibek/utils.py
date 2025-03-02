@@ -10,7 +10,6 @@ we pass a single instance of this class into all Jinja contexts.
 import ast
 import builtins
 import os
-import re
 from collections.abc import Mapping
 from pathlib import Path
 from typing import Any
@@ -87,15 +86,17 @@ class Utils:
 
         return self.variables[index]
 
-    re_get_type = re.compile(r"\| *([a-z]*) *}}")
-
-    def render(self, context: Any, template_text: Any) -> Any:
+    def render(self, context: Any, template_text: Any, typ: str = "str") -> Any:
         """
         Render a Jinja template with the global _global object in the context
         """
         if isinstance(template_text, list):
             result = (self.render(context, item) for item in template_text)
             result = list(result)  # type: ignore
+        elif isinstance(template_text, dict):
+            result = {  # type: ignore
+                key: self.render(context, value) for key, value in template_text.items()
+            }
         elif isinstance(template_text, str):
             # if the template is not a string, jinja render it
             try:
@@ -110,10 +111,9 @@ class Utils:
                     ioc_name=self.ioc_name,
                 )
 
-                match = self.re_get_type.search(template_text)
-                if match:
-                    typ = match.group(1)
-                    # make sure the result is the correct type as expected by the argument
+                # make sure the result is the correct type as expected by the argument
+                if typ in ["list", "int", "float", "dict", "bool"]:
+                    # coerce the rendered parameter to its intended type
                     cast_type = getattr(builtins, typ)
                     result = cast_type(ast.literal_eval(result))  # type: ignore
 

@@ -6,17 +6,17 @@ description: Example for testing ibek.repeat
 
 entities:
   - type: ibek.repeat
-    values: "{{ range(1, 4) | list }}"
-    entity:
-      type: epics.StartupCommand
-      command: hello world from {{ index }}
-
-  - type: ibek.repeat
     values: [a, b, c]
     variable: thing
     entity:
       type: epics.StartupCommand
       command: hello world from {{ thing }}
+
+  - type: ibek.repeat
+    values: "{{ range(1, 4) | list }}"
+    entity:
+      type: epics.StartupCommand
+      command: hello world from {{ index }}
 
   # nested repeats!
   - type: ibek.repeat
