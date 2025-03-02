@@ -109,20 +109,17 @@ class Utils:
                     ioc_yaml_file_name=self.file_name,
                     ioc_name=self.ioc_name,
                 )
-                typs = ["int", "float", "str", "bool", "list", "dict"]
+
                 match = self.re_get_type.search(template_text)
                 if match:
                     typ = match.group(1)
-                    if typ in typs:
-                        # make sure the result is the correct type
-                        cast_type = getattr(builtins, typ)
-                        result = cast_type(ast.literal_eval(result))  # type: ignore
-                    else:
-                        raise ValueError(f"Jinja template type {typ} not in {typs}")
+                    # make sure the result is the correct type as expected by the argument
+                    cast_type = getattr(builtins, typ)
+                    result = cast_type(ast.literal_eval(result))  # type: ignore
 
             except Exception as e:
                 raise ValueError(
-                    f"Error rendering template:\n{template_text}\nError: {e}"
+                    f"Error rendering template type {typ}:\n{template_text}\nError: {e}"
                 ) from e
         else:
             # because this function is used to template arguments, it may
