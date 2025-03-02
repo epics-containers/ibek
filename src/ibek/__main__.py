@@ -37,7 +37,6 @@ yaml = YAML()
 
 def version_callback(value: bool):
     if value:
-        raise RuntimeError("This should never be called")
         typer.echo(__version__)
         raise typer.Exit()
 
