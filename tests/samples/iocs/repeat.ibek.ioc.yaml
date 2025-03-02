@@ -24,10 +24,10 @@ entities:
     entity:
       type: ibek.repeat
       variable: inner
-      values: ["{{index}}a", "{{index}}b", "{{index}}c"]
+      values: ["a", "b", "c"]
       entity:
         type: epics.StartupCommand
-        command: NESTED {{ inner }}
+        command: NESTED {{ index }}{{ inner }}
 
   # object refs in repeats and use of int indexes
   - type: ibek.repeat
