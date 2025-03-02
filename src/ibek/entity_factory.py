@@ -229,9 +229,13 @@ class EntityFactory:
                 parent_params[key] = UTILS.render(context, param)
                 context[key] = parent_params[key]
 
-            # coerce correct class - it will be a generic Entity in subentities
-            parent_cls = self._entity_types[parent_params["type"]]
-            parent_entity = parent_cls(**parent_params)
+            if isinstance(parent_entity, dict):
+                # create the correct class with new params
+                parent_cls = self._entity_types[parent_params["type"]]
+                parent_entity = parent_cls(**parent_params)
+            else:
+                # merge the rendered param changes into the original root entity
+                parent_entity = parent_entity.model_copy(update=parent_params)
 
             if parent_entity.type == REPEAT_TYPE:
                 # resolve repeats in this parent entity
@@ -243,7 +247,7 @@ class EntityFactory:
                 for sub_entity in parent_entity._model.sub_entities:
                     # recursively scan the SubEntity for more SubEntities
                     resolved_entities.extend(
-                        self.resolve_sub_entities([sub_entity.copy()], context)
+                        self.resolve_sub_entities([sub_entity], context)
                     )
 
         return resolved_entities
