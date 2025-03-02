@@ -14,6 +14,7 @@ from ruamel.yaml.main import YAML
 
 from ibek.globals import JINJA
 from ibek.ibek_builtin.repeat import REPEAT_TYPE, RepeatEntity
+from ibek.sub_entity import SubEntity
 
 from .ioc import Entity, EnumVal, clear_entity_model_ids
 from .parameters import EnumParam, IdParam, ObjectParam
@@ -198,10 +199,18 @@ class EntityFactory:
 
         return resolved_entities
 
+    def make_entity(self, params: dict[str, Any], context: dict[str, Any]) -> Entity:
+        # jinja render the parent entity parameters
+        for key, param in params.items():
+            params[key] = UTILS.render(context, param)
+            context[key] = params[key]
+
+        # create the correct class with new params
+        parent_cls = self._entity_types[params["type"]]
+        return parent_cls(**params)
+
     def resolve_sub_entities(
-        self,
-        entities: list[Entity | dict[str, Any]],
-        context: dict[str, Any] | None = None,
+        self, entities: list[Entity | dict[str, Any]], context: dict[str, Any]
     ) -> list[Entity]:
         """
         Recursively resolve SubEntity collections and Repeat Entities
@@ -216,26 +225,23 @@ class EntityFactory:
         resolved_entities: list[Entity] = []
 
         # copy the context for the recursive branches
-        context = {} if context is None else context.copy()
+        context = context.copy()
 
         for parent_entity in entities:
+            # TODO refactor
             if isinstance(parent_entity, dict):
                 parent_params = parent_entity
+                parent_entity = self.make_entity(parent_params, context)
             else:
                 parent_params: dict[str, Any] = parent_entity.model_dump()
 
-            # jinja render the parent entity parameters
-            for key, param in parent_params.items():
-                parent_params[key] = UTILS.render(context, param)
-                context[key] = parent_params[key]
+            if isinstance(parent_entity, RepeatEntity) or isinstance(
+                parent_entity, SubEntity
+            ):
+                parent_entity = self.make_entity(parent_params, context)
 
-            if isinstance(parent_entity, dict):
-                # create the correct class with new params
-                parent_cls = self._entity_types[parent_params["type"]]
-                parent_entity = parent_cls(**parent_params)
-            else:
-                # merge the rendered param changes into the original root entity
-                parent_entity = parent_entity.model_copy(update=parent_params)
+            context.update(parent_params)
+            # end TODO
 
             if parent_entity.type == REPEAT_TYPE:
                 # resolve repeats in this parent entity
