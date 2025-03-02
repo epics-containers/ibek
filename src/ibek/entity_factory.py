@@ -16,10 +16,10 @@ from ibek.globals import JINJA
 from ibek.ibek_builtin.repeat import REPEAT_TYPE, RepeatEntity
 from ibek.sub_entity import SubEntity
 
-from .ioc import Entity, EnumVal
+from .ioc import Entity, EnumVal, clear_entity_model_ids
 from .parameters import EnumParam, IdParam, ObjectParam
 from .support import EntityModel, Support
-from .utils import UTILS, clear_entity_model_ids
+from .utils import UTILS
 
 
 class EntityFactory:
@@ -202,8 +202,7 @@ class EntityFactory:
     def make_entity(self, params: dict[str, Any], context: dict[str, Any]) -> Entity:
         # jinja render the parent entity parameters
         for key, param in params.items():
-            if isinstance(param, str) and "{{" in param:
-                params[key] = UTILS.render(context, param)
+            params[key] = UTILS.render(context, param)
             context[key] = params[key]
 
         # create the correct class with new params

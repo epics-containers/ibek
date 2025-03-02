@@ -17,7 +17,23 @@ from pydantic.fields import FieldInfo
 
 from .entity_model import EntityModel
 from .globals import BaseSettings
-from .utils import UTILS, id_to_entity
+from .utils import UTILS
+
+# a global dict of all entity instances indexed by their ID
+id_to_entity: dict[str, Entity] = {}
+
+
+def get_entity_by_id(id: str) -> Entity:
+    try:
+        return id_to_entity[id]
+    except KeyError as e:
+        raise ValueError(f"object {id} not found in {list(id_to_entity)}") from e
+
+
+def clear_entity_model_ids():
+    """Resets the global id_to_entity dict"""
+
+    id_to_entity.clear()
 
 
 class EnumVal(Enum):
@@ -49,6 +65,11 @@ class Entity(BaseSettings):
         if isinstance(value, str):
             # Jinja expansion always performed on string fields
             value = UTILS.render(self, value, typ)
+
+        if typ == "object":
+            # look up the actual object by it's id
+            if isinstance(value, str):
+                value = get_entity_by_id(value)
 
         # If this field is not pre-existing, add it into the model instance.
         # This is how pre/post_defines are added.
