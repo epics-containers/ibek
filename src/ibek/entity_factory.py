@@ -210,7 +210,7 @@ class EntityFactory:
         return parent_cls(**params)  # type: ignore
 
     def resolve_sub_entities(
-        self, entities: Sequence[Any], context: dict[str, Any]
+        self, entities: Sequence[dict | Entity | SubEntity], context: dict[str, Any]
     ) -> list[Entity]:
         """
         Recursively resolve SubEntity collections and Repeat Entities
