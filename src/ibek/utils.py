@@ -10,7 +10,6 @@ we pass a single instance of this class into all Jinja contexts.
 import ast
 import builtins
 import os
-import re
 from collections.abc import Mapping
 from pathlib import Path
 from typing import Any
@@ -110,6 +109,10 @@ class Utils:
         if isinstance(template_text, list):
             result = (self.render(context, item) for item in template_text)
             result = list(result)  # type: ignore
+        elif isinstance(template_text, dict):
+            result = {  # type: ignore
+                key: self.render(context, value) for key, value in template_text.items()
+            }
         elif isinstance(template_text, str):
             # if the template is not a string, jinja render it
             try:
@@ -134,7 +137,7 @@ class Utils:
 
             except Exception as e:
                 raise ValueError(
-                    f"Error rendering template:\n{template_text}\nError: {e}"
+                    f"Error rendering template type {typ}:\n{template_text}\nError: {e}"
                 ) from e
         else:
             # because this function is used to template arguments, it may
