@@ -203,7 +203,6 @@ class EntityFactory:
         # jinja render the parent entity parameters
         for key, param in params.items():
             params[key] = UTILS.render(context, param)
-            context[key] = params[key]
 
         # create the correct class with new params
         parent_cls = self._entity_types[params["type"]]

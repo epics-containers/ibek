@@ -26,34 +26,34 @@ pattern
 
 file "$(ADCORE)/db/NDTimeSeries.template" {
 pattern 
-	{ "NDARRAY_PORT",          "ADDR", "TIME_LINK", "NDARRAY_ADDR", "NCHANS", "ENABLED", "PORT",                  "P",                "R",         "TIMEOUT", "SCANRATE" }
-	{ "XBPM1.STATS.I1_TS",     "0",    "0.1",       "1",            "1000",   "1",       "XBPM1.STATS.I1_TS",     "BL03I-EA-XBPM-01", "Cur1TS:",   "1",       "I/O Intr" }
-	{ "XBPM1.STATS.I2_TS",     "0",    "0.1",       "1",            "1000",   "1",       "XBPM1.STATS.I2_TS",     "BL03I-EA-XBPM-01", "Cur2TS:",   "1",       "I/O Intr" }
-	{ "XBPM1.STATS.I3_TS",     "0",    "0.1",       "1",            "1000",   "1",       "XBPM1.STATS.I3_TS",     "BL03I-EA-XBPM-01", "Cur3TS:",   "1",       "I/O Intr" }
-	{ "XBPM1.STATS.I4_TS",     "0",    "0.1",       "1",            "1000",   "1",       "XBPM1.STATS.I4_TS",     "BL03I-EA-XBPM-01", "Cur4TS:",   "1",       "I/O Intr" }
-	{ "XBPM1.STATS.SumX_TS",   "0",    "0.1",       "1",            "1000",   "1",       "XBPM1.STATS.SumX_TS",   "BL03I-EA-XBPM-01", "SumXTS:",   "1",       "I/O Intr" }
-	{ "XBPM1.STATS.SumY_TS",   "0",    "0.1",       "1",            "1000",   "1",       "XBPM1.STATS.SumY_TS",   "BL03I-EA-XBPM-01", "SumYTS:",   "1",       "I/O Intr" }
-	{ "XBPM1.STATS.SumAll_TS", "0",    "0.1",       "1",            "1000",   "1",       "XBPM1.STATS.SumAll_TS", "BL03I-EA-XBPM-01", "SumAllTS:", "1",       "I/O Intr" }
-	{ "XBPM1.STATS.DiffX_TS",  "0",    "0.1",       "1",            "1000",   "1",       "XBPM1.STATS.DiffX_TS",  "BL03I-EA-XBPM-01", "DiffXTS:",  "1",       "I/O Intr" }
-	{ "XBPM1.STATS.DiffY_TS",  "0",    "0.1",       "1",            "1000",   "1",       "XBPM1.STATS.DiffY_TS",  "BL03I-EA-XBPM-01", "DiffYTS:",  "1",       "I/O Intr" }
-	{ "XBPM1.STATS.PosX_TS",   "0",    "0.1",       "1",            "1000",   "1",       "XBPM1.STATS.PosX_TS",   "BL03I-EA-XBPM-01", "PosXTS:",   "1",       "I/O Intr" }
-	{ "XBPM1.STATS.PosY_TS",   "0",    "0.1",       "1",            "1000",   "1",       "XBPM1.STATS.PosY_TS",   "BL03I-EA-XBPM-01", "PosYTS:",   "1",       "I/O Intr" }
+	{ "NDARRAY_PORT",       "ADDR", "TIME_LINK", "NDARRAY_ADDR", "NCHANS", "ENABLED", "PORT",                  "P",                "R",         "TIMEOUT", "SCANRATE" }
+	{ "XBPM1.STATS.I1",     "0",    "0.1",       "1",            "1000",   "1",       "XBPM1.STATS.I1_TS",     "BL03I-EA-XBPM-01", "Cur1TS:",   "1",       "I/O Intr" }
+	{ "XBPM1.STATS.I2",     "0",    "0.1",       "1",            "1000",   "1",       "XBPM1.STATS.I2_TS",     "BL03I-EA-XBPM-01", "Cur2TS:",   "1",       "I/O Intr" }
+	{ "XBPM1.STATS.I3",     "0",    "0.1",       "1",            "1000",   "1",       "XBPM1.STATS.I3_TS",     "BL03I-EA-XBPM-01", "Cur3TS:",   "1",       "I/O Intr" }
+	{ "XBPM1.STATS.I4",     "0",    "0.1",       "1",            "1000",   "1",       "XBPM1.STATS.I4_TS",     "BL03I-EA-XBPM-01", "Cur4TS:",   "1",       "I/O Intr" }
+	{ "XBPM1.STATS.SumX",   "0",    "0.1",       "1",            "1000",   "1",       "XBPM1.STATS.SumX_TS",   "BL03I-EA-XBPM-01", "SumXTS:",   "1",       "I/O Intr" }
+	{ "XBPM1.STATS.SumY",   "0",    "0.1",       "1",            "1000",   "1",       "XBPM1.STATS.SumY_TS",   "BL03I-EA-XBPM-01", "SumYTS:",   "1",       "I/O Intr" }
+	{ "XBPM1.STATS.SumAll", "0",    "0.1",       "1",            "1000",   "1",       "XBPM1.STATS.SumAll_TS", "BL03I-EA-XBPM-01", "SumAllTS:", "1",       "I/O Intr" }
+	{ "XBPM1.STATS.DiffX",  "0",    "0.1",       "1",            "1000",   "1",       "XBPM1.STATS.DiffX_TS",  "BL03I-EA-XBPM-01", "DiffXTS:",  "1",       "I/O Intr" }
+	{ "XBPM1.STATS.DiffY",  "0",    "0.1",       "1",            "1000",   "1",       "XBPM1.STATS.DiffY_TS",  "BL03I-EA-XBPM-01", "DiffYTS:",  "1",       "I/O Intr" }
+	{ "XBPM1.STATS.PosX",   "0",    "0.1",       "1",            "1000",   "1",       "XBPM1.STATS.PosX_TS",   "BL03I-EA-XBPM-01", "PosXTS:",   "1",       "I/O Intr" }
+	{ "XBPM1.STATS.PosY",   "0",    "0.1",       "1",            "1000",   "1",       "XBPM1.STATS.PosY_TS",   "BL03I-EA-XBPM-01", "PosYTS:",   "1",       "I/O Intr" }
 }
 
 file "$(ADCORE)/db/NDTimeSeriesN.template" {
 pattern 
-	{ "ADDR", "NCHANS", "P",                "R",         "TIMEOUT", "PORT",                  "NAME"                     }
-	{ "0",    "1000",   "BL03I-EA-XBPM-01", "Cur1TS:",   "1",       "XBPM1.STATS.I1_TS",     "XBPM1.STATS.I1_TS_TS"     }
-	{ "0",    "1000",   "BL03I-EA-XBPM-01", "Cur2TS:",   "1",       "XBPM1.STATS.I2_TS",     "XBPM1.STATS.I2_TS_TS"     }
-	{ "0",    "1000",   "BL03I-EA-XBPM-01", "Cur3TS:",   "1",       "XBPM1.STATS.I3_TS",     "XBPM1.STATS.I3_TS_TS"     }
-	{ "0",    "1000",   "BL03I-EA-XBPM-01", "Cur4TS:",   "1",       "XBPM1.STATS.I4_TS",     "XBPM1.STATS.I4_TS_TS"     }
-	{ "0",    "1000",   "BL03I-EA-XBPM-01", "SumXTS:",   "1",       "XBPM1.STATS.SumX_TS",   "XBPM1.STATS.SumX_TS_TS"   }
-	{ "0",    "1000",   "BL03I-EA-XBPM-01", "SumYTS:",   "1",       "XBPM1.STATS.SumY_TS",   "XBPM1.STATS.SumY_TS_TS"   }
-	{ "0",    "1000",   "BL03I-EA-XBPM-01", "SumAllTS:", "1",       "XBPM1.STATS.SumAll_TS", "XBPM1.STATS.SumAll_TS_TS" }
-	{ "0",    "1000",   "BL03I-EA-XBPM-01", "DiffXTS:",  "1",       "XBPM1.STATS.DiffX_TS",  "XBPM1.STATS.DiffX_TS_TS"  }
-	{ "0",    "1000",   "BL03I-EA-XBPM-01", "DiffYTS:",  "1",       "XBPM1.STATS.DiffY_TS",  "XBPM1.STATS.DiffY_TS_TS"  }
-	{ "0",    "1000",   "BL03I-EA-XBPM-01", "PosXTS:",   "1",       "XBPM1.STATS.PosX_TS",   "XBPM1.STATS.PosX_TS_TS"   }
-	{ "0",    "1000",   "BL03I-EA-XBPM-01", "PosYTS:",   "1",       "XBPM1.STATS.PosY_TS",   "XBPM1.STATS.PosY_TS_TS"   }
+	{ "ADDR", "NCHANS", "P",                "R",         "TIMEOUT", "PORT",                  "NAME"                  }
+	{ "0",    "1000",   "BL03I-EA-XBPM-01", "Cur1TS:",   "1",       "XBPM1.STATS.I1_TS",     "XBPM1.STATS.I1_TS"     }
+	{ "0",    "1000",   "BL03I-EA-XBPM-01", "Cur2TS:",   "1",       "XBPM1.STATS.I2_TS",     "XBPM1.STATS.I2_TS"     }
+	{ "0",    "1000",   "BL03I-EA-XBPM-01", "Cur3TS:",   "1",       "XBPM1.STATS.I3_TS",     "XBPM1.STATS.I3_TS"     }
+	{ "0",    "1000",   "BL03I-EA-XBPM-01", "Cur4TS:",   "1",       "XBPM1.STATS.I4_TS",     "XBPM1.STATS.I4_TS"     }
+	{ "0",    "1000",   "BL03I-EA-XBPM-01", "SumXTS:",   "1",       "XBPM1.STATS.SumX_TS",   "XBPM1.STATS.SumX_TS"   }
+	{ "0",    "1000",   "BL03I-EA-XBPM-01", "SumYTS:",   "1",       "XBPM1.STATS.SumY_TS",   "XBPM1.STATS.SumY_TS"   }
+	{ "0",    "1000",   "BL03I-EA-XBPM-01", "SumAllTS:", "1",       "XBPM1.STATS.SumAll_TS", "XBPM1.STATS.SumAll_TS" }
+	{ "0",    "1000",   "BL03I-EA-XBPM-01", "DiffXTS:",  "1",       "XBPM1.STATS.DiffX_TS",  "XBPM1.STATS.DiffX_TS"  }
+	{ "0",    "1000",   "BL03I-EA-XBPM-01", "DiffYTS:",  "1",       "XBPM1.STATS.DiffY_TS",  "XBPM1.STATS.DiffY_TS"  }
+	{ "0",    "1000",   "BL03I-EA-XBPM-01", "PosXTS:",   "1",       "XBPM1.STATS.PosX_TS",   "XBPM1.STATS.PosX_TS"   }
+	{ "0",    "1000",   "BL03I-EA-XBPM-01", "PosYTS:",   "1",       "XBPM1.STATS.PosY_TS",   "XBPM1.STATS.PosY_TS"   }
 }
 
 file "$(ADCORE)/db/NDStdArrays.template" {
