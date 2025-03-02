@@ -200,7 +200,7 @@ class EntityFactory:
 
         return resolved_entities
 
-    def make_entity(self, params: dict[str, Any], context: dict[str, Any]) -> Entity:
+    def _make_entity(self, params: dict[str, Any], context: dict[str, Any]) -> Entity:
         # jinja render the parent entity parameters
         for key, param in params.items():
             params[key] = UTILS.render(context, param)
@@ -229,24 +229,23 @@ class EntityFactory:
 
         for parent_entity in entities:
             if isinstance(parent_entity, dict):
-                parent_params = parent_entity
-            else:
-                parent_params = parent_entity.model_dump()
+                # convert dictionary to specific Entity with jinja rendering
+                parent_entity = self._make_entity(parent_entity, context)
 
-            if (
-                isinstance(parent_entity, dict)
-                or isinstance(parent_entity, SubEntity)
-                or isinstance(parent_entity, RepeatEntity)
+            elif isinstance(parent_entity, SubEntity) or isinstance(
+                parent_entity, RepeatEntity
             ):
-                parent_entity = self.make_entity(parent_params, context)
+                # jinja render the arguments of the SubEntity/RepeatEntity
+                parent_entity = self._make_entity(parent_entity.model_dump(), context)
 
+            # this parent entity's parameters are passed to children via context
             context.update(parent_entity.model_dump())
 
             if isinstance(parent_entity, RepeatEntity):
                 # resolve repeats in this parent entity
                 resolved_entities.extend(self._resolve_repeat(parent_entity, context))
             else:
-                # add the current parent entity
+                # add the current parent entity to the resolved list
                 resolved_entities.append(parent_entity)
                 # add in SubEntities if any
                 for sub_entity in parent_entity._model.sub_entities:
