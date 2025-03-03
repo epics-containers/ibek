@@ -80,7 +80,7 @@ def generate_schema(
         raise typer.Exit(1)
 
     entity_factory = EntityFactory()
-    entity_models = entity_factory.make_entity_types(definitions)
+    entity_models = entity_factory.make_entity_models(definitions)
     ioc_factory = IocFactory()
     ioc_model = ioc_factory.make_ioc_model(entity_models)
 

@@ -48,13 +48,13 @@ class EntityFactory:
         Created models are stored in `self._entity_models` to lookup when
         resolving nested `SubEntity`s.
         """
-        self._entity_types: dict[str, EntityModel] = {}
+        self._entity_models: dict[str, EntityModel] = {}
         # starting a new EntityFactory implies we should throw away any existing
         # Entity instances - this is required for tests which create multiple
         # EntityFactories
         clear_entity_model_ids()
 
-    def make_entity_types(self, entity_model_yaml: list[Path]) -> list[EntityModel]:
+    def make_entity_models(self, entity_model_yaml: list[Path]) -> list[EntityModel]:
         """
         Read a set of *.ibek.support.yaml files and generate Entity classes
         from their EntityModel entries
@@ -72,12 +72,12 @@ class EntityFactory:
                 self._make_entity_types(support)
 
             # also add builtin entity types "ibek.*"
-            self._entity_types[REPEAT_TYPE] = RepeatEntity  # type: ignore
+            self._entity_models[REPEAT_TYPE] = RepeatEntity  # type: ignore
         except Exception:
             print(f"VALIDATION ERROR READING {entity_model}")
             raise
 
-        return list(self._entity_types.values())
+        return list(self._entity_models.values())
 
     def _make_entity_type(self, model: EntityModel, support: Support) -> EntityModel:
         """
@@ -159,7 +159,7 @@ class EntityFactory:
         entity_cls._model = model
 
         # store this Entity class in the factory
-        self._entity_types[full_name] = entity_cls
+        self._entity_models[full_name] = entity_cls
 
         return entity_cls
 
@@ -206,7 +206,7 @@ class EntityFactory:
             params[key] = UTILS.render(context, param)
 
         # create the correct class with new params
-        parent_cls = self._entity_types[params["type"]]
+        parent_cls = self._entity_models[params["type"]]
         return parent_cls(**params)  # type: ignore
 
     def resolve_sub_entities(
