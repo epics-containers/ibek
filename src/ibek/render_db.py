@@ -35,7 +35,7 @@ class RenderDb:
         Adding a new template file if it does not already exist.
         Convert all arguments to strings.
         """
-        filename = UTILS.render(dict(entity), filename)
+        filename = UTILS.render(dict(entity), filename, "str")
 
         if filename not in self.render_templates:
             # for new filenames create a new RenderDbTemplate entry
@@ -73,7 +73,7 @@ class RenderDb:
             entity: Entity to use as context for Jinja template expansion
 
         """
-        if str_to_bool(UTILS.render(entity, database.enabled)):
+        if str_to_bool(UTILS.render(entity, database.enabled, "str")):
             database.file = database.file.strip("\n")
 
             parameters = entity.__dict__.keys()

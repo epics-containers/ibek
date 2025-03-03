@@ -43,7 +43,7 @@ class IocFactory:
             )
 
         # extract the ioc name into UTILS for use in jinja renders
-        name = UTILS.render({}, ioc_instance_dict["ioc_name"])
+        name = UTILS.render({}, ioc_instance_dict["ioc_name"], "str")
         UTILS.set_ioc_name(name)
         ioc_instance_dict["ioc_name"] = name
 
