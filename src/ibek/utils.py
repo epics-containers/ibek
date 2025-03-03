@@ -7,7 +7,10 @@ us to maintain state between calls to the Jinja templates because
 we pass a single instance of this class into all Jinja contexts.
 """
 
+import ast
+import builtins
 import os
+import re
 from collections.abc import Mapping
 from pathlib import Path
 from typing import Any
@@ -84,30 +87,61 @@ class Utils:
 
         return self.variables[index]
 
-    def render(self, context: Any, template_text: Any) -> str:
+    re_get_type = re.compile(r"\| *([a-z]*) *}}")
+    typs = ["int", "float", "bool", "list", "dict"]
+
+    def _coerce(self, value: Any, typ: str) -> Any:
+        """
+        Coerce a value to a given type
+        """
+        if typ in self.typs:
+            if typ in self.typs:
+                # make sure the result is the correct type
+                cast_type = getattr(builtins, typ)
+                return cast_type(ast.literal_eval(value))  # type: ignore
+            else:
+                raise ValueError(f"Jinja template type '{typ}' not in {self.typs}")
+        return value
+
+    def render(self, context: Any, template_text: Any, typ: str = "") -> Any:
         """
         Render a Jinja template with the global _global object in the context
         """
-        if not isinstance(template_text, str):
+        if isinstance(template_text, list):
+            result = (self.render(context, item) for item in template_text)
+            result = list(result)  # type: ignore
+        elif isinstance(template_text, str):
+            # if the template is not a string, jinja render it
+            try:
+                jinja_template = Template(template_text, undefined=StrictUndefined)
+                result = jinja_template.render(  # type: ignore
+                    context,
+                    # global context for all jinja renders
+                    _global=self,
+                    # put variables created with set/get directly in the context
+                    **self.variables,
+                    ioc_yaml_file_name=self.file_name,
+                    ioc_name=self.ioc_name,
+                )
+
+                if typ:
+                    result = self._coerce(result, typ)
+                else:
+                    match = self.re_get_type.search(template_text)
+                    if match:
+                        typ = match.group(1)
+                        result = self._coerce(result, typ)
+
+            except Exception as e:
+                raise ValueError(
+                    f"Error rendering template:\n{template_text}\nError: {e}"
+                ) from e
+        else:
             # because this function is used to template arguments, it may
             # be passed a non string which will always render to itself
             return template_text
 
-        try:
-            jinja_template = Template(template_text, undefined=StrictUndefined)
-            return jinja_template.render(
-                context,
-                # global context for all jinja renders
-                _global=self,
-                # put variables created with set/get directly in the context
-                **self.variables,
-                ioc_yaml_file_name=self.file_name,
-                ioc_name=self.ioc_name,
-            )
-        except Exception as e:
-            raise ValueError(
-                f"Error rendering template:\n{template_text}\nError:{e}"
-            ) from e
+        return result
 
     def render_map(self, context: Any, map: Mapping[str, str | None]) -> dict[str, str]:
         """

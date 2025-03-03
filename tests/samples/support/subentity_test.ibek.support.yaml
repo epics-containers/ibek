@@ -1,0 +1,22 @@
+module: subentity
+
+entity_models:
+  - name: SubEntityTest
+    description: Example for testing ibek.repeat
+    parameters:
+      count:
+        description: Number of sub entities to create
+        type: int
+        default: 5
+
+      name:
+        description: Name to use in the sub entities
+        type: str
+
+    sub_entities:
+      - type: ibek.repeat
+        values: "{{ range(count) | list }}"
+        variable: number
+        entity:
+          type: epics.StartupCommand
+          command: "Command number {{ number | int + 1}} for {{ name }}"

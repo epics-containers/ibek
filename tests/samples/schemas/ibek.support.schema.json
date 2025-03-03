@@ -157,6 +157,48 @@
       "title": "DefineType",
       "type": "string"
     },
+    "DictParam": {
+      "additionalProperties": false,
+      "description": "An argument with dict value",
+      "properties": {
+        "type": {
+          "const": "dict",
+          "default": "dict",
+          "enum": [
+            "dict"
+          ],
+          "title": "Type",
+          "type": "string"
+        },
+        "description": {
+          "description": "Description of what the argument will be used for",
+          "title": "Description",
+          "type": "string"
+        },
+        "default": {
+          "anyOf": [
+            {
+              "type": "object"
+            },
+            {
+              "description": "A Jinja2 template string",
+              "pattern": ".*\\{\\{.*\\}\\}.*",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Default"
+        }
+      },
+      "required": [
+        "description"
+      ],
+      "title": "DictParam",
+      "type": "object"
+    },
     "EntityModel": {
       "additionalProperties": false,
       "description": "A Model for a class of Entity that an IOC instance may instantiate",
@@ -186,10 +228,12 @@
             "discriminator": {
               "mapping": {
                 "bool": "#/$defs/BoolParam",
+                "dict": "#/$defs/DictParam",
                 "enum": "#/$defs/EnumParam",
                 "float": "#/$defs/FloatParam",
                 "id": "#/$defs/IdParam",
                 "int": "#/$defs/IntParam",
+                "list": "#/$defs/ListParam",
                 "object": "#/$defs/ObjectParam",
                 "str": "#/$defs/StrParam"
               },
@@ -216,6 +260,12 @@
               },
               {
                 "$ref": "#/$defs/EnumParam"
+              },
+              {
+                "$ref": "#/$defs/DictParam"
+              },
+              {
+                "$ref": "#/$defs/ListParam"
               }
             ]
           },
@@ -551,6 +601,49 @@
         "description"
       ],
       "title": "IntParam",
+      "type": "object"
+    },
+    "ListParam": {
+      "additionalProperties": false,
+      "description": "An argument with list value",
+      "properties": {
+        "type": {
+          "const": "list",
+          "default": "list",
+          "enum": [
+            "list"
+          ],
+          "title": "Type",
+          "type": "string"
+        },
+        "description": {
+          "description": "Description of what the argument will be used for",
+          "title": "Description",
+          "type": "string"
+        },
+        "default": {
+          "anyOf": [
+            {
+              "items": {},
+              "type": "array"
+            },
+            {
+              "description": "A Jinja2 template string",
+              "pattern": ".*\\{\\{.*\\}\\}.*",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Default"
+        }
+      },
+      "required": [
+        "description"
+      ],
+      "title": "ListParam",
       "type": "object"
     },
     "ObjectParam": {

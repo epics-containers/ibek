@@ -1,0 +1,47 @@
+# yaml-language-server: $schema=/epics/ibek-defs/ioc.schema.json
+
+ioc_name: "{{ _global.get_env('IOC_NAME') }}"
+
+description: Example for testing ibek.repeat
+
+entities:
+  - type: ibek.repeat
+    values: "{{ range(1, 4) | list }}"
+    entity:
+      type: epics.StartupCommand
+      command: hello world from {{ index }}
+
+  - type: ibek.repeat
+    values: [a, b, c]
+    variable: thing
+    entity:
+      type: epics.StartupCommand
+      command: hello world from {{ thing }}
+
+  # nested repeats!
+  - type: ibek.repeat
+    values: "{{ range(1, 4) | list }}"
+    entity:
+      type: ibek.repeat
+      variable: inner
+      values: ["a", "b", "c"]
+      entity:
+        type: epics.StartupCommand
+        command: NESTED {{ index }}{{ inner }}
+
+  # object refs in repeats and use of int indexes
+  - type: ibek.repeat
+    values: [1, 2, 3]
+    entity:
+      type: asyn.AsynIP
+      name: controllerPort{{ index }}
+      port: 192.168.0.55:{{ 2002 + index }}
+
+  - type: ibek.repeat
+    values: [1, 2, 3]
+    entity:
+      type: motorSim.simMotorController
+      port: controllerPort{{ index }}
+      controllerName: controller{{ index }}
+      numAxes: 4
+      P: "IBEK-MO-TST-0{{ index }}:"

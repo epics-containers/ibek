@@ -5,8 +5,6 @@ support module YAML files
 
 from __future__ import annotations
 
-import ast
-import builtins
 from collections.abc import Sequence
 from enum import Enum
 from typing import Any
@@ -66,15 +64,7 @@ class Entity(BaseSettings):
 
         if isinstance(value, str):
             # Jinja expansion always performed on string fields
-            value = UTILS.render(self, value)
-            if typ in ["list", "int", "float", "bool"]:
-                # coerce the rendered parameter to its intended type
-                try:
-                    cast_type = getattr(builtins, typ)
-                    value = cast_type(ast.literal_eval(value))
-                except:
-                    print(f"ERROR: decoding field '{name}', value '{value}' as {typ}")
-                    raise
+            value = UTILS.render(self, value, typ)
 
         if typ == "object":
             # look up the actual object by it's id
@@ -108,17 +98,19 @@ class Entity(BaseSettings):
         ibek.runtime_cmds.generate().
         """
 
-        if self._model.pre_defines:
-            for name, define in self._model.pre_defines.items():
-                self._process_field(name, define.value, define.type)
+        # internal 'ibek.' Entity Types do not have _model
+        if hasattr(self, "_model"):
+            if self._model.pre_defines:
+                for name, define in self._model.pre_defines.items():
+                    self._process_field(name, define.value, define.type)
 
-        if self._model.parameters:
-            for name, parameter in self._model.parameters.items():
-                self._process_field(name, getattr(self, name), parameter.type)
+            if self._model.parameters:
+                for name, parameter in self._model.parameters.items():
+                    self._process_field(name, getattr(self, name), parameter.type)
 
-        if self._model.post_defines:
-            for name, define in self._model.post_defines.items():
-                self._process_field(name, define.value, define.type)
+            if self._model.post_defines:
+                for name, define in self._model.post_defines.items():
+                    self._process_field(name, define.value, define.type)
 
         return self
 
@@ -137,7 +129,9 @@ class Entity(BaseSettings):
         if id_name:
             return getattr(self, id_name)
         else:
-            raise ValueError(f"Entity {self} has no id field")
+            raise ValueError(
+                f"Entity {self.type} has no id field - convert to str failed"
+            )
 
     def __repr__(self):
         return str(self)

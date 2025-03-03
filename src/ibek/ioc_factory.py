@@ -13,7 +13,8 @@ from ruamel.yaml.main import YAML
 
 from ibek.utils import UTILS
 
-from .ioc import IOC, Entity
+from .entity_model import EntityModel
+from .ioc import IOC
 
 
 class IocFactory:
@@ -22,7 +23,7 @@ class IocFactory:
     """
 
     def deserialize_ioc(
-        self, ioc_instance_yaml: Path, entity_models: list[type[Entity]]
+        self, ioc_instance_yaml: Path, entity_models: list[EntityModel]
     ) -> IOC:
         """
         Takes an ioc instance entities file, list of generic ioc yaml files.
@@ -42,7 +43,7 @@ class IocFactory:
             )
 
         # extract the ioc name into UTILS for use in jinja renders
-        name = UTILS.render({}, ioc_instance_dict["ioc_name"])
+        name = UTILS.render({}, ioc_instance_dict["ioc_name"], "str")
         UTILS.set_ioc_name(name)
         ioc_instance_dict["ioc_name"] = name
 
@@ -51,7 +52,7 @@ class IocFactory:
 
         return ioc_instance
 
-    def make_ioc_model(self, entity_models: list[type[Entity]]) -> type[IOC]:
+    def make_ioc_model(self, entity_models: list[EntityModel]) -> type[IOC]:
         """
         Create an IOC derived model, by setting its entities attribute to
         be of type 'list of Entity derived classes'.

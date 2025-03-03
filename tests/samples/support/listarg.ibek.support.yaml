@@ -81,7 +81,7 @@ entity_models:
           friends after the Time Hole episode
         type: list
         value: |-
-          {{ (friends * 3) | sort }}
+          {{ (friends * 3) | sort | list }}
 
     pre_init:
       - value: |2

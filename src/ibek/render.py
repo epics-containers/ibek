@@ -46,7 +46,7 @@ class Render:
             raise NotImplementedError("When.last not yet implemented")
 
         # Render Jinja entries in the text
-        result = UTILS.render(instance, text)  # type: ignore
+        result = UTILS.render(instance, text, "str")  # type: ignore
 
         if result == "":
             return ""
