@@ -66,6 +66,7 @@ def extract_assets(
                 GLOBALS.IOC_FOLDER
             ).parent,  # get contents of IOC folder and its source (parent)
             GLOBALS.EPICS_ROOT.parent / "venv",  # virtualenv is a peer to /epics
+            GLOBALS.AUTOSAVE,
         ]
     else:
         default_assets = []

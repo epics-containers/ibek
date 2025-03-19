@@ -89,7 +89,7 @@ class _Globals:
 
     @property
     def AUTOSAVE(self):
-        """Directory containing runtime generated opis to serve over http."""
+        """Directory softlinks to all autosave req files."""
         return self._EPICS_ROOT / "autosave"
 
     @property
