@@ -205,11 +205,7 @@ def expose_stdio(
 
 
 async def _expose_stdio_async(command: str) -> None:
-    # Check if the socket is already in use
     socket_path: Path = Path("/tmp") / "stdio.sock"
-    if socket_path.exists():
-        sys.stderr.write(f"Socket {socket_path} already exists. Exiting.\n")
-        raise typer.Exit()
 
     # Create the socket and bind it to the path
     server_socket = socket.socket(socket.AF_UNIX)
