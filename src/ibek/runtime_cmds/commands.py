@@ -191,7 +191,7 @@ def expose_stdio(
     command: str = typer.Argument(..., help="Command to run and expose stdio"),
 ):
     """
-    Expose the stdio of a process on socket at unix:///tmp/stdio.sock.
+    Expose the stdio of a process on a socket at unix:///tmp/stdio.sock.
 
     This allows a local process to connect to stdio of the running process.
     Use Ctrl+C to disconnect from the socket.
@@ -216,8 +216,9 @@ async def _expose_stdio_async(command: str):
     server_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
     server_socket.listen(1)
     server_socket.setblocking(False)
+    sys.stdout.write(f"Socket created at {socket_path}.\n")
 
-    # Start the process before accepting socket connections
+    # Start the process and pass the current environment variables
     process = await asyncio.create_subprocess_shell(
         command,
         stdin=asyncio.subprocess.PIPE,
@@ -226,7 +227,18 @@ async def _expose_stdio_async(command: str):
         env={**os.environ},
     )
     sys.stdout.write(f"Process started with PID {process.pid}\n")
-    sys.stdout.write(f"Socket created at {socket_path}.\n")
+
+    def handle_linefeed(char: bytes) -> bytes:
+        """
+        Handle line feed characters in the string.
+
+        When using socat in raw mode, line feeds do not send a carriage
+        return to the terminal. This function converts line feed characters
+        to carriage return + line feed characters for proper display.
+        """
+        if char == b"\n":
+            return b"\r\n"
+        return char
 
     async def forward_stdout_and_socket(process, conn, conn_holder):
         """Forward process stdout to sys.stdout and the socket if connected."""
@@ -237,12 +249,9 @@ async def _expose_stdio_async(command: str):
             sys.stdout.write(char.decode())
             sys.stdout.flush()
             if conn_holder["conn"]:
-                await asyncio.get_event_loop().sock_sendall(conn_holder["conn"], char)
-                if char[0] == 10:  # line feed
-                    # Send a carriage return to the socket
-                    await asyncio.get_event_loop().sock_sendall(
-                        conn_holder["conn"], b"\r"
-                    )
+                await asyncio.get_event_loop().sock_sendall(
+                    conn_holder["conn"], handle_linefeed(char)
+                )
 
     async def forward_stderr_and_socket(process, conn, conn_holder):
         """Forward process stderr to sys.stderr and the socket if connected."""
@@ -253,7 +262,9 @@ async def _expose_stdio_async(command: str):
             sys.stderr.write(char.decode())
             sys.stderr.flush()
             if conn_holder["conn"]:
-                await asyncio.get_event_loop().sock_sendall(conn_holder["conn"], char)
+                await asyncio.get_event_loop().sock_sendall(
+                    conn_holder["conn"], handle_linefeed(char)
+                )
 
     async def write_to_process(conn):
         """Forward data from the socket to the process stdin"""
@@ -272,14 +283,14 @@ async def _expose_stdio_async(command: str):
         """Monitor the process and exit when it terminates."""
         await process.wait()
         sys.stdout.write("Process exited. Cleaning up...\n")
-        sys.exit(0)  # this does execute the finally block
+        sys.exit(0)  # this does execute the finally blocks
 
     try:
         # Start monitoring the process
         monitor_task = asyncio.create_task(monitor_process())
 
         # Connection holder to manage the active connection
-        conn_holder = {"conn": None}
+        conn_holder: dict[str, socket.socket | None] = {"conn": None}
 
         # Start always-forwarding stdout and stderr
         stdout_task = asyncio.create_task(
