@@ -4,6 +4,7 @@ import shutil
 import socket
 import sys
 from pathlib import Path
+from typing import BinaryIO
 
 import typer
 from pvi._format.base import IndexEntry
@@ -203,9 +204,9 @@ def expose_stdio(
     asyncio.run(_expose_stdio_async(command))
 
 
-async def _expose_stdio_async(command: str):
+async def _expose_stdio_async(command: str) -> None:
     # Check if the socket is already in use
-    socket_path = Path("/tmp") / "stdio.sock"
+    socket_path: Path = Path("/tmp") / "stdio.sock"
     if socket_path.exists():
         sys.stderr.write(f"Socket {socket_path} already exists. Exiting.\n")
         raise typer.Exit()
@@ -214,7 +215,6 @@ async def _expose_stdio_async(command: str):
     server_socket = socket.socket(socket.AF_UNIX)
     server_socket.bind(str(socket_path))
     server_socket.listen(1)
-    server_socket.setblocking(False)
     sys.stdout.write(f"Socket created at {socket_path}.\n")
 
     # Start the process and pass the current environment variables
@@ -227,35 +227,28 @@ async def _expose_stdio_async(command: str):
     )
     sys.stdout.write(f"Process started with PID {process.pid}\n")
 
-    def handle_linefeed(char: bytes) -> bytes:
-        """
-        Handle line feed characters in the string.
-
-        When using socat in raw mode, line feeds do not send a carriage
-        return to the terminal. This function converts line feed characters
-        to carriage return + line feed characters for proper display.
-        """
-        if char == b"\n":
-            return b"\r\n"
-        return char
-
-    async def forward_output(conn_holder, read_from, write_to):
+    async def forward_output(
+        conn_holder: dict[str, socket.socket | None],
+        read_from: BinaryIO,
+        write_to: BinaryIO,
+    ) -> None:
         """Forward process stdout to sys.stdout and the socket if connected."""
         while True:
-            char = await read_from.read(1)  # Read one character at a time
+            char: bytes = await read_from.read(1)  # Read one character at a time
             if not char:
                 break
             write_to.write(char.decode())
             write_to.flush()
             if conn_holder["conn"]:
-                await asyncio.get_event_loop().sock_sendall(
-                    conn_holder["conn"], handle_linefeed(char)
-                )
+                # add a carriage return before line feed for proper display
+                if char == b"\n":
+                    char = b"\r\n"
+                await asyncio.get_event_loop().sock_sendall(conn_holder["conn"], char)
 
-    async def write_to_process(conn):
+    async def write_to_process(conn: socket.socket) -> None:
         """Forward data from the socket to the process stdin"""
         while True:
-            char = await asyncio.get_event_loop().sock_recv(
+            char: bytes = await asyncio.get_event_loop().sock_recv(
                 conn, 1
             )  # Read one character
             if not char or char == b"\x03":  # Ctrl+C
@@ -265,7 +258,7 @@ async def _expose_stdio_async(command: str):
             process.stdin.write(char)
             await process.stdin.drain()
 
-    async def monitor_process():
+    async def monitor_process() -> None:
         """Monitor the process and exit when it terminates."""
         await process.wait()
         sys.stdout.write("Process exited. Cleaning up...\n")
