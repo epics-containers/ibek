@@ -198,7 +198,7 @@ def expose_stdio(
 
     The following command will connect to the socket and provide interactive
     access to the process:
-        socat - UNIX-CONNECT:/tmp/stdio.sock
+        socat UNIX-CONNECT:/tmp/stdio.sock -,raw,echo=0
     """
     asyncio.run(_expose_stdio_async(command))
 
@@ -238,6 +238,11 @@ async def _expose_stdio_async(command: str):
             sys.stdout.flush()
             if conn_holder["conn"]:
                 await asyncio.get_event_loop().sock_sendall(conn_holder["conn"], char)
+                if char[0] == 10:  # line feed
+                    # Send a carriage return to the socket
+                    await asyncio.get_event_loop().sock_sendall(
+                        conn_holder["conn"], b"\r"
+                    )
 
     async def forward_stderr_and_socket(process, conn, conn_holder):
         """Forward process stderr to sys.stderr and the socket if connected."""
@@ -251,12 +256,12 @@ async def _expose_stdio_async(command: str):
                 await asyncio.get_event_loop().sock_sendall(conn_holder["conn"], char)
 
     async def write_to_process(conn):
-        """Forward data from the socket to the process stdin, enabling readline-style editing."""
+        """Forward data from the socket to the process stdin"""
         while True:
             char = await asyncio.get_event_loop().sock_recv(
                 conn, 1
             )  # Read one character
-            if not char:
+            if not char or char == b"\x03":  # Ctrl+C
                 break
 
             # Forward regular input to the process
@@ -287,7 +292,7 @@ async def _expose_stdio_async(command: str):
         while True:
             # Accept a connection from a client
             conn, _ = await asyncio.get_event_loop().sock_accept(server_socket)
-            sys.stdout.write("Client connected. Press Ctrl+] to disconnect.\n")
+            sys.stdout.write("Client connected. Press Ctrl+C to disconnect.\n")
 
             # Update the connection holder
             conn_holder["conn"] = conn
