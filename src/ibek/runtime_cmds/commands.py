@@ -249,17 +249,41 @@ async def _expose_stdio_async(command: str):
                 await asyncio.get_event_loop().sock_sendall(conn, char)
 
     async def write_to_process(conn):
-        """Forward data from the socket to the process stdin."""
+        """Forward data from the socket to the process stdin, enabling readline-style editing."""
+        escape_sequence = b""
         while True:
             char = await asyncio.get_event_loop().sock_recv(
                 conn, 1
             )  # Read one character
             if not char:
                 break
+
+            # Handle escape sequences for arrow keys
+            if char == b"\x1b":  # Start of an escape sequence
+                escape_sequence = char
+                continue
+            elif escape_sequence:
+                escape_sequence += char
+                if len(escape_sequence) == 3:  # Full escape sequence (e.g., arrow keys)
+                    process.stdin.write(escape_sequence)
+                    await process.stdin.drain()
+                    escape_sequence = b""
+                continue
+
+            # Forward regular input to the process
             process.stdin.write(char)
             await process.stdin.drain()
 
+    async def monitor_process():
+        """Monitor the process and exit when it terminates."""
+        await process.wait()
+        sys.stdout.write("Process exited. Cleaning up...\n")
+        sys.exit(0)  # this does execute the finally block
+
     try:
+        # Start monitoring the process
+        monitor_task = asyncio.create_task(monitor_process())
+
         while True:
             # Accept a connection from a client
             conn, _ = await asyncio.get_event_loop().sock_accept(server_socket)
@@ -275,15 +299,16 @@ async def _expose_stdio_async(command: str):
             finally:
                 # Clean up the connection
                 conn.close()
-                sys.stdout.write(
-                    "Client disconnected. Waiting for new connections...\n"
-                )
+                sys.stdout.write("Client disconnected.\n")
 
                 # Cancel the forwarding tasks for this connection
                 stdout_task.cancel()
                 stderr_task.cancel()
 
     finally:
+        # Ensure the monitor task is canceled
+        monitor_task.cancel()
+
         # Clean up the socket and subprocess
         server_socket.close()
         socket_path.unlink(missing_ok=True)
