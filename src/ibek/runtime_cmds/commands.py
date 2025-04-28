@@ -1,4 +1,8 @@
+import asyncio
+import os
 import shutil
+import socket
+import sys
 from pathlib import Path
 
 import typer
@@ -180,3 +184,107 @@ def generate_autosave(subst_file: Path = typer.Argument(GLOBALS.RUNTIME_SUBSTITU
     link_req_files()
     asg = AutosaveGenerator(subst_file)
     asg.generate_req_files()
+
+
+@runtime_cli.command()
+def expose_stdio(
+    command: str = typer.Argument(..., help="Command to run and expose stdio"),
+):
+    """
+    Expose the stdio of a process on socket at unix:///tmp/stdio.sock.
+
+    This allows a local process to connect to stdio of the running process.
+    Use Ctrl+C to disconnect from the socket.
+
+    The following command will connect to the socket and provide interactive
+    access to the process:
+        socat - UNIX-CONNECT:/tmp/stdio.sock
+    """
+    asyncio.run(_expose_stdio_async(command))
+
+
+async def _expose_stdio_async(command: str):
+    # Check if the socket is already in use
+    socket_path = Path("/tmp") / "stdio.sock"
+    if socket_path.exists():
+        sys.stderr.write(f"Socket {socket_path} already exists. Exiting.\n")
+        raise typer.Exit()
+
+    # Create the socket and bind it to the path
+    server_socket = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
+    server_socket.bind(str(socket_path))
+    server_socket.listen(1)
+
+    # Start the process before accepting socket connections
+    process = await asyncio.create_subprocess_shell(
+        command,
+        stdin=asyncio.subprocess.PIPE,
+        stdout=asyncio.subprocess.PIPE,
+        stderr=asyncio.subprocess.PIPE,
+        env={**os.environ},
+    )
+    sys.stdout.write(f"Process started with PID {process.pid}\n")
+    sys.stdout.write(f"Socket created at {socket_path}. Waiting for connections...\n")
+
+    async def forward_stdout(conn):
+        """Forward process stdout to sys.stdout and the socket if connected."""
+        while True:
+            char = await process.stdout.read(1)  # Read one character at a time
+            if not char:
+                break
+            sys.stdout.write(char.decode())
+            sys.stdout.flush()
+            if conn:
+                await asyncio.get_event_loop().sock_sendall(conn, char)
+
+    async def forward_stderr(conn):
+        """Forward process stderr to sys.stderr and the socket if connected."""
+        while True:
+            char = await process.stderr.read(1)  # Read one character at a time
+            if not char:
+                break
+            sys.stderr.write(char.decode())
+            sys.stderr.flush()
+            if conn:
+                await asyncio.get_event_loop().sock_sendall(conn, char)
+
+    async def write_to_process(conn):
+        """Forward data from the socket to the process stdin."""
+        while True:
+            char = await asyncio.get_event_loop().sock_recv(
+                conn, 1
+            )  # Read one character
+            if not char:
+                break
+            process.stdin.write(char)
+            await process.stdin.drain()
+
+    try:
+        while True:
+            # Accept a connection from a client
+            conn, _ = await asyncio.get_event_loop().sock_accept(server_socket)
+            sys.stdout.write("Client connected. Press Ctrl+] to disconnect.\n")
+
+            # Start forwarding stdout and stderr for this connection
+            stdout_task = asyncio.create_task(forward_stdout(conn))
+            stderr_task = asyncio.create_task(forward_stderr(conn))
+
+            try:
+                # Handle input from the socket
+                await write_to_process(conn)
+            finally:
+                # Clean up the connection
+                conn.close()
+                sys.stdout.write(
+                    "Client disconnected. Waiting for new connections...\n"
+                )
+
+                # Cancel the forwarding tasks for this connection
+                stdout_task.cancel()
+                stderr_task.cancel()
+
+    finally:
+        # Clean up the socket and subprocess
+        server_socket.close()
+        socket_path.unlink(missing_ok=True)
+        sys.stdout.write("Socket closed.\n")
