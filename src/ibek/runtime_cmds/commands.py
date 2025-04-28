@@ -211,9 +211,8 @@ async def _expose_stdio_async(command: str):
         raise typer.Exit()
 
     # Create the socket and bind it to the path
-    server_socket = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
+    server_socket = socket.socket(socket.AF_UNIX)
     server_socket.bind(str(socket_path))
-    server_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
     server_socket.listen(1)
     server_socket.setblocking(False)
     sys.stdout.write(f"Socket created at {socket_path}.\n")
@@ -240,27 +239,14 @@ async def _expose_stdio_async(command: str):
             return b"\r\n"
         return char
 
-    async def forward_stdout_and_socket(process, conn, conn_holder):
+    async def forward_output(conn_holder, read_from, write_to):
         """Forward process stdout to sys.stdout and the socket if connected."""
         while True:
-            char = await process.stdout.read(1)  # Read one character at a time
+            char = await read_from.read(1)  # Read one character at a time
             if not char:
                 break
-            sys.stdout.write(char.decode())
-            sys.stdout.flush()
-            if conn_holder["conn"]:
-                await asyncio.get_event_loop().sock_sendall(
-                    conn_holder["conn"], handle_linefeed(char)
-                )
-
-    async def forward_stderr_and_socket(process, conn, conn_holder):
-        """Forward process stderr to sys.stderr and the socket if connected."""
-        while True:
-            char = await process.stderr.read(1)  # Read one character at a time
-            if not char:
-                break
-            sys.stderr.write(char.decode())
-            sys.stderr.flush()
+            write_to.write(char.decode())
+            write_to.flush()
             if conn_holder["conn"]:
                 await asyncio.get_event_loop().sock_sendall(
                     conn_holder["conn"], handle_linefeed(char)
@@ -294,10 +280,10 @@ async def _expose_stdio_async(command: str):
 
         # Start always-forwarding stdout and stderr
         stdout_task = asyncio.create_task(
-            forward_stdout_and_socket(process, None, conn_holder)
+            forward_output(conn_holder, process.stdout, sys.stdout)
         )
         stderr_task = asyncio.create_task(
-            forward_stderr_and_socket(process, None, conn_holder)
+            forward_output(conn_holder, process.stderr, sys.stderr)
         )
 
         while True:
