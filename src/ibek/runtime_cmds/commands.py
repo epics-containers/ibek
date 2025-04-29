@@ -203,7 +203,6 @@ def expose_stdio(
 
 
 async def _expose_stdio_async(command: str):
-    # Check if the socket is already in use
     socket_path = Path("/tmp") / "stdio.sock"
     clients: list[asyncio.StreamWriter] = []
 
@@ -218,7 +217,7 @@ async def _expose_stdio_async(command: str):
     sys.stdout.write(f"Process started with PID {process.pid}\n")
 
     async def forward_stdout_and_socket(process):
-        """Forward process stdout to sys.stdout and the socket if connected."""
+        """Forward process stdout/stderr to sys.stdout and connected clients"""
         while True:
             char = await process.stdout.read(1)  # Read one character at a time
             if not char:
@@ -231,7 +230,7 @@ async def _expose_stdio_async(command: str):
                 await writer.drain()
 
     async def write_to_process(reader):
-        """Forward input from the socket to the process stdin"""
+        """Forward input from one client to the process stdin"""
         while True:
             char = await reader.read(1)  # Read one character
             if not char or char == b"\x03":  # Ctrl+C
@@ -264,10 +263,10 @@ async def _expose_stdio_async(command: str):
     try:
         # Start monitoring the process
         monitor_task = asyncio.create_task(monitor_process())
-        # Start forwarding stdout and stderr without a client
+        # Start forwarding stdout and stderr to sys.stdout and connected clients
         stdout_task = asyncio.create_task(forward_stdout_and_socket(process))
 
-        # Create a Unix domain socket server
+        # Create a Unix domain socket server, calling handle_client for each connection
         server = await asyncio.start_unix_server(handle_client, path=str(socket_path))
         sys.stdout.write(f"Socket created at {socket_path}.\n")
 
