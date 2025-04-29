@@ -205,33 +205,19 @@ def expose_stdio(
 async def _expose_stdio_async(command: str):
     # Check if the socket is already in use
     socket_path = Path("/tmp") / "stdio.sock"
-    if socket_path.exists():
-        sys.stderr.write(f"Socket {socket_path} already exists. Exiting.\n")
-        raise typer.Exit()
+    clients: list[asyncio.StreamWriter] = []
 
     # Start the process and pass the current environment variables
     process = await asyncio.create_subprocess_shell(
         command,
         stdin=asyncio.subprocess.PIPE,
         stdout=asyncio.subprocess.PIPE,
-        stderr=asyncio.subprocess.PIPE,
+        stderr=asyncio.subprocess.STDOUT,
         env={**os.environ},
     )
     sys.stdout.write(f"Process started with PID {process.pid}\n")
 
-    def handle_linefeed(char: bytes) -> bytes:
-        """
-        Handle line feed characters in the string.
-
-        When using socat in raw mode, line feeds do not send a carriage
-        return to the terminal. This function converts line feed characters
-        to carriage return + line feed characters for proper display.
-        """
-        if char == b"\n":
-            return b"\r\n"
-        return char
-
-    async def forward_stdout_and_socket(process, writer):
+    async def forward_stdout_and_socket(process):
         """Forward process stdout to sys.stdout and the socket if connected."""
         while True:
             char = await process.stdout.read(1)  # Read one character at a time
@@ -239,24 +225,13 @@ async def _expose_stdio_async(command: str):
                 break
             sys.stdout.write(char.decode())
             sys.stdout.flush()
-            if writer:
-                writer.write(handle_linefeed(char))
-                await writer.drain()
-
-    async def forward_stderr_and_socket(process, writer):
-        """Forward process stderr to sys.stderr and the socket if connected."""
-        while True:
-            char = await process.stderr.read(1)  # Read one character at a time
-            if not char:
-                break
-            sys.stderr.write(char.decode())
-            sys.stderr.flush()
-            if writer:
-                writer.write(handle_linefeed(char))
+            for writer in clients:
+                # insert a carriage return before newlines
+                writer.write(b"\r\n" if char == b"\n" else char)
                 await writer.drain()
 
     async def write_to_process(reader):
-        """Forward data from the socket to the process stdin"""
+        """Forward input from the socket to the process stdin"""
         while True:
             char = await reader.read(1)  # Read one character
             if not char or char == b"\x03":  # Ctrl+C
@@ -270,13 +245,13 @@ async def _expose_stdio_async(command: str):
         """Handle a new client connection."""
         sys.stdout.write("Client connected to the socket.\n")
         try:
+            clients.append(writer)
             await asyncio.gather(
                 write_to_process(reader),
-                forward_stdout_and_socket(process, writer),
-                forward_stderr_and_socket(process, writer),
             )
         finally:
             writer.close()
+            clients.remove(writer)
             await writer.wait_closed()
             sys.stdout.write("Client disconnected from the socket.\n")
 
@@ -289,10 +264,8 @@ async def _expose_stdio_async(command: str):
     try:
         # Start monitoring the process
         monitor_task = asyncio.create_task(monitor_process())
-
-        # Start always-forwarding stdout and stderr without a client
-        stdout_task = asyncio.create_task(forward_stdout_and_socket(process, None))
-        stderr_task = asyncio.create_task(forward_stderr_and_socket(process, None))
+        # Start forwarding stdout and stderr without a client
+        stdout_task = asyncio.create_task(forward_stdout_and_socket(process))
 
         # Create a Unix domain socket server
         server = await asyncio.start_unix_server(handle_client, path=str(socket_path))
@@ -304,7 +277,6 @@ async def _expose_stdio_async(command: str):
     finally:
         # Cancel all tasks
         stdout_task.cancel()
-        stderr_task.cancel()
         monitor_task.cancel()
 
         # Clean up the socket and subprocess
