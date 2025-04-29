@@ -249,8 +249,8 @@ async def _expose_stdio_async(command: str):
                 write_to_process(reader),
             )
         finally:
-            writer.close()
             clients.remove(writer)
+            writer.close()
             await writer.wait_closed()
             sys.stdout.write("Client disconnected from the socket.\n")
 
