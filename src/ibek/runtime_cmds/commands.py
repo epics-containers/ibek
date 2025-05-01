@@ -254,6 +254,18 @@ async def _expose_stdio_async(command: str):
             await writer.wait_closed()
             sys.stdout.write("Client disconnected from the socket.\n")
 
+    async def monitor_stdin():
+        """Forward system stdin to the process stdin."""
+        reader = asyncio.StreamReader()
+        protocol = asyncio.StreamReaderProtocol(reader)
+        await asyncio.get_event_loop().connect_read_pipe(lambda: protocol, sys.stdin)
+
+        while True:
+            char: bytes = await reader.read(1)
+            if not char:
+                break
+            process.stdin.write(char)
+
     async def monitor_process():
         """Monitor the process and exit when it terminates."""
         await process.wait()
@@ -261,10 +273,12 @@ async def _expose_stdio_async(command: str):
         sys.exit(0)  # this does execute the finally blocks
 
     try:
-        # Start monitoring the process
+        # Start monitoring the process for termination
         monitor_task = asyncio.create_task(monitor_process())
         # Start forwarding stdout and stderr to sys.stdout and connected clients
         stdout_task = asyncio.create_task(forward_stdout_and_socket(process))
+        # Start monitoring system stdin and forward it to the process
+        stdin_task = asyncio.create_task(monitor_stdin())
 
         # Create a Unix domain socket server, calling handle_client for each connection
         server = await asyncio.start_unix_server(handle_client, path=str(socket_path))
@@ -276,6 +290,7 @@ async def _expose_stdio_async(command: str):
     finally:
         # Cancel all tasks
         stdout_task.cancel()
+        stdin_task.cancel()
         monitor_task.cancel()
 
         # Clean up the socket and subprocess
