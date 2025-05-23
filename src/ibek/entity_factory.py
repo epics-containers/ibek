@@ -189,8 +189,9 @@ class EntityFactory:
         """
         resolved_entities: list[Entity] = []
 
-        for value in repeat_entity.values:
+        for index, value in enumerate(repeat_entity.values):
             context[repeat_entity.variable] = value
+            context[f"{repeat_entity.variable}_num"] = index
 
             # create the new repeated entity using a dict of arguments
             new_entity = repeat_entity.entity.copy()
