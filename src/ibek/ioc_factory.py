@@ -57,7 +57,7 @@ class IocFactory:
     def fixup_enums(self, ioc_instance: IOC) -> IOC:
         """
         Fixup the enums in the IOC instance, so that they are the value of
-        thier original Enum, rather than the key.
+        their original Enum, rather than the key.
 
         *.ibek.support.yaml files may specify Enum parameters like this:
         ```
@@ -70,7 +70,7 @@ class IocFactory:
                 two: 2
               default: "1"
         ```
-        This means that ioc.yaml would speficy stop bits using the strings
+        This means that ioc.yaml would specify stop bits using the strings
         "one" and "two", but when the startup script or DB renders the value
         it will use the Enum value, which is 1 and 2 respectively.
 
@@ -80,10 +80,13 @@ class IocFactory:
 
         To make this work we swap the value and key in all enums before creating
         the model (see enum_swapped in EntityFactory._make_entity_type). Pydantic
-        will then serialize/deserialize using the value of the Enum ("one" or "two").
+        will then serialize/deserialize using the value of the swapped Enum
+        i.e. "one" or "two".
 
         After deserializing the IOC instance this function swaps back to the
-        value so that it will be used in rendering of parameter.
+        original value so that it will be used in rendering of parameter. Enums
+        can also be specified with no value, in which case the key is used
+        in ioc.yaml and in rendering.
         """
         for entity in ioc_instance.entities:
             for field_name, field_value in entity.model_dump().items():
