@@ -42,6 +42,16 @@ def generate(
     ),
     pvi: bool = typer.Option(True, help="generate pvi PVs and opi files"),
 ):
+    do_generate(instance, definitions, output_folder, pvi)
+
+
+# generate and do_generate allow testing by directly calling do_generate
+def do_generate(
+    instance: Path,
+    definitions: list[Path],
+    output_folder: Path,
+    pvi: bool = True,
+):
     """
     Build a startup script for an IOC instance
     """
@@ -60,7 +70,7 @@ def generate(
     shutil.rmtree(output_folder, ignore_errors=True)
     output_folder.mkdir(exist_ok=True)
 
-    pvi_databases = []
+    pvi_databases: list = []
     if pvi:
         shutil.rmtree(GLOBALS.OPI_OUTPUT, ignore_errors=True)
         GLOBALS.OPI_OUTPUT.mkdir(exist_ok=True)

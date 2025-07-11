@@ -9,11 +9,14 @@ import sys
 from pathlib import Path
 
 import pytest
+from typer.testing import CliRunner
 
 import ibek.utils as utils
 from ibek import __version__
-from ibek.runtime_cmds.commands import generate
+from ibek.runtime_cmds.commands import do_generate
 from tests.conftest import run_cli
+
+runner = CliRunner()
 
 
 def test_cli_version():
@@ -154,7 +157,7 @@ def generic_generate(
     ]
     expected_outputs = samples / "outputs" / ioc_yaml_name
 
-    generate(ioc_yaml, support_yamls)
+    do_generate(ioc_yaml, support_yamls, epics_root / "runtime", pvi=True)
 
     outputs = list(expected_outputs.glob("*"))
     assert len(outputs) > 0, "No expected output files found"
