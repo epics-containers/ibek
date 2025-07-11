@@ -6,7 +6,7 @@ support module yaml files.
 import re
 from collections.abc import Mapping, Sequence
 from dataclasses import dataclass
-from typing import Any, Optional
+from typing import Any
 
 from ibek.entity_model import Database
 from ibek.ioc import Entity
@@ -134,7 +134,7 @@ class RenderDb:
                     row[i] = arg.ljust(template.columns[i])
 
     def render_database(
-        self, extra_databases: Optional[list[tuple[Database, Entity]]] = None
+        self, extra_databases: list[tuple[Database, Entity]] | None = None
     ) -> dict[str, list[str]]:
         """Render a database substitution file.
 

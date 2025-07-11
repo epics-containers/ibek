@@ -6,7 +6,7 @@ from __future__ import annotations
 
 from collections.abc import Mapping, Sequence
 from enum import Enum
-from typing import Annotated, Any, Literal, Optional, Union
+from typing import Annotated, Any, Literal, Union
 
 from pydantic import Field, PydanticUndefinedAnnotation
 
@@ -20,7 +20,7 @@ def default(T: type):
     defines a default type which may be
     """
     return Field(
-        Union[Optional[T], PydanticUndefinedAnnotation],
+        Union[T | None, PydanticUndefinedAnnotation],
         description="If given, instance doesn't supply argument, what value should be used",
     )
 
@@ -44,7 +44,7 @@ class Database(BaseSettings):
         description="Set to False to disable loading this database", default="True"
     )
 
-    args: Mapping[str, Optional[str]] = Field(
+    args: Mapping[str, str | None] = Field(
         description=(
             "Dictionary of args and values to pass through to database. "
             "A value of None is equivalent to ARG: '{{ ARG }}'. "
@@ -160,9 +160,7 @@ class EntityModel(BaseSettings):
     env_vars: Sequence[EnvironmentVariable] = Field(
         description="Environment variables to set in the boot script", default=()
     )
-    pvi: Optional[EntityPVI] = Field(
-        description="PVI definition for Entity", default=None
-    )
+    pvi: EntityPVI | None = Field(description="PVI definition for Entity", default=None)
 
     # list of additional entities to instantiate for each instance of this definition
     sub_entities: Sequence[SubEntity] = Field(

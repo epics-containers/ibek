@@ -3,7 +3,7 @@ Functions for rendering lines in the boot script using Jinja2
 """
 
 from collections.abc import Callable, Sequence
-from typing import Optional, Union
+from typing import Union
 
 from .entity_model import Comment, Script, Text, When
 from .ioc import Entity
@@ -53,7 +53,7 @@ class Render:
 
         return result + "\n"
 
-    def render_script(self, instance: Entity, script_items: Script) -> Optional[str]:
+    def render_script(self, instance: Entity, script_items: Script) -> str | None:
         script = ""
 
         for item in script_items:
@@ -69,7 +69,7 @@ class Render:
 
         return script
 
-    def render_pre_ioc_init(self, instance: Entity) -> Optional[str]:
+    def render_pre_ioc_init(self, instance: Entity) -> str | None:
         """
         render the startup script by combining the jinja template from
         an entity with the arguments from an Entity
@@ -77,7 +77,7 @@ class Render:
         pre_init = instance._model.pre_init
         return self.render_script(instance, pre_init)
 
-    def render_post_ioc_init(self, instance: Entity) -> Optional[str]:
+    def render_post_ioc_init(self, instance: Entity) -> str | None:
         """
         render the post-iocInit entries by combining the jinja template
         from an entity with the arguments from an Entity
@@ -85,7 +85,7 @@ class Render:
         post_init = instance._model.post_init
         return self.render_script(instance, post_init)
 
-    def render_environment_variables(self, instance: Entity) -> Optional[str]:
+    def render_environment_variables(self, instance: Entity) -> str | None:
         """
         render the environment variable elements by combining the jinja template
         from an entity with the arguments from an Entity

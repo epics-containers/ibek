@@ -4,7 +4,6 @@ import subprocess
 from enum import Enum
 from pathlib import Path
 from shutil import rmtree
-from typing import Optional
 
 import typer
 
@@ -173,13 +172,13 @@ def git_clone(
 def register(
     name: str = typer.Argument(..., help="the name of the support module"),
     path: Annotated[
-        Optional[Path],
+        Path | None,
         typer.Option(
             help="path to support module",
             autocompletion=lambda: [],  # Forces path autocompletion
         ),
     ] = None,
-    macro: Optional[str] = typer.Option(None, help="Macro name for the module"),
+    macro: str | None = typer.Option(None, help="Macro name for the module"),
 ):
     """
     prepare the configure RELEASE files to build a support module
@@ -328,7 +327,7 @@ def generate_links(
 @support_cli.command()
 def generate_schema(
     output: Annotated[
-        Optional[Path],
+        Path | None,
         typer.Option(
             help="The filename to write the schema to",
             autocompletion=lambda: [],  # Forces path autocompletion
