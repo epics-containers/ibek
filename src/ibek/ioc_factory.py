@@ -58,6 +58,32 @@ class IocFactory:
         """
         Fixup the enums in the IOC instance, so that they are the value of
         thier original Enum, rather than the key.
+
+        *.ibek.support.yaml files may specify Enum parameters like this:
+        ```
+            stop:
+              type: enum
+              description: |-
+              Stop Bits
+              values:
+                one: 1
+                two: 2
+              default: "1"
+        ```
+        This means that ioc.yaml would speficy stop bits using the strings
+        "one" and "two", but when the startup script or DB renders the value
+        it will use the Enum value, which is 1 and 2 respectively.
+
+        To do this requires the use of "use_enum_values=True" in the Pydantic
+        model config so that only a string need be specified instead of a
+        serialized Enum.
+
+        To make this work we swap the value and key in all enums before creating
+        the model (see enum_swapped in EntityFactory._make_entity_type). Pydantic
+        will then serialize/deserialize using the value of the Enum ("one" or "two").
+
+        After deserializing the IOC instance this function swaps back to the
+        value so that it will be used in rendering of parameter.
         """
         for entity in ioc_instance.entities:
             for field_name, field_value in entity.model_dump().items():
