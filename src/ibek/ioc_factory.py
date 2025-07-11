@@ -54,7 +54,7 @@ class IocFactory:
 
         return ioc_instance
 
-    def fixup_enums(self, ioc_instance: IOC) -> IOC:
+    def fixup_enums(self, ioc_instance: IOC):
         """
         Fixup the enums in the IOC instance, so that they are the value of
         their original Enum, rather than the key.
@@ -84,7 +84,7 @@ class IocFactory:
         i.e. "one" or "two".
 
         After deserializing the IOC instance this function swaps back to the
-        original value so that it will be used in rendering of parameter. Enums
+        original value so that it will be used in rendering of parameters. Enums
         can also be specified with no value, in which case the key is used
         in ioc.yaml and in rendering.
         """
