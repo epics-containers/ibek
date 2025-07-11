@@ -73,13 +73,14 @@ entity_models:
           N:
         default: N
 
+      # this is a fake enum to test the fixup_enums method
       stop:
         type: enum
         description: |-
           Stop Bits
         values:
-          "1":
-          "2":
+          one: 1
+          two: 2
         default: "1"
 
       disconnectOnReadTimeout:

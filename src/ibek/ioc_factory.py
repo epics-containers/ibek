@@ -11,6 +11,7 @@ from typing import Annotated, Union
 from pydantic import Field
 from ruamel.yaml.main import YAML
 
+from ibek.parameters import EnumParam
 from ibek.utils import UTILS
 
 from .entity_model import EntityModel
@@ -49,8 +50,26 @@ class IocFactory:
 
         # Create an IOC instance from the instance dict and the model
         ioc_instance = ioc_model(**ioc_instance_dict)
+        self.fixup_enums(ioc_instance)
 
         return ioc_instance
+
+    def fixup_enums(self, ioc_instance: IOC) -> IOC:
+        """
+        Fixup the enums in the IOC instance, so that they are the value of
+        thier original Enum, rather than the key.
+        """
+        for entity in ioc_instance.entities:
+            for field_name, field_value in entity.model_dump().items():
+                # RepeatEntities are dumb dictionaries with no _model, skip them
+                if hasattr(entity, "_model"):
+                    # check to see if field is an Enum value in the EntityModel
+                    parameter = entity._model.parameters.get(field_name)
+                    if isinstance(parameter, EnumParam):
+                        # if so, set the value to the Enum value, instead of its key
+                        enum_value = parameter.values.get(field_value)
+                        if enum_value is not None:
+                            setattr(entity, field_name, enum_value)
 
     def make_ioc_model(self, entity_models: list[EntityModel]) -> type[IOC]:
         """
