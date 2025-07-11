@@ -8,6 +8,7 @@ import pytest
 from ruamel.yaml import YAML
 
 from ibek.ioc_factory import IocFactory
+from ibek.runtime_cmds.commands import do_generate
 from ibek.support import Support
 from ibek.utils import UTILS
 from tests.conftest import run_cli
@@ -23,6 +24,13 @@ def test_counter_overuse(tmp_epics_root: Path, samples: Path):
     definition_file1 = samples / "support" / "utils.ibek.support.yaml"
 
     with pytest.raises(ValueError) as ctx:
+        do_generate(
+            entity_file,
+            [definition_file1],
+            output_folder=tmp_epics_root / "runtime",
+            pvi=False,
+        )
+
         run_cli("runtime", "generate", entity_file, definition_file1)
 
     assert "Counter InterruptVector exceeded maximum value of 194" in str(ctx.value)
@@ -53,7 +61,12 @@ def test_bad_db(tmp_epics_root: Path, samples: Path):
     definition_file1 = samples / "support" / "bad_db.ibek.support.yaml"
 
     with pytest.raises(ValueError) as ctx:
-        run_cli("runtime", "generate", entity_file, definition_file1)
+        do_generate(
+            entity_file,
+            [definition_file1],
+            output_folder=tmp_epics_root / "runtime",
+            pvi=False,
+        )
     assert "'non-existant' in database template 'test.db' not found" in str(ctx.value)
 
 
