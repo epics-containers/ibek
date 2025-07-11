@@ -15,7 +15,7 @@ asynSetOption(9600, 0, N, Y)
 asynOctetSetInputEos("\n")
 asynOctetSetOutputEos("\n")
 # Setting up Asyn Port controllerTwoPort on 192.168.0.55:2002:
-AsynIPConfigure(controllerTwoPort, 192.168.0.55:2002, 1, none, 8)
+AsynIPConfigure(controllerTwoPort, 192.168.0.55:2002, 2, none, 8)
 asynSetOption(9600, 0, N, Y)
 asynOctetSetInputEos("\n")
 asynOctetSetOutputEos("\n")

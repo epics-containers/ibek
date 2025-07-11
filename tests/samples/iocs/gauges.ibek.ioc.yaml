@@ -7,10 +7,12 @@ entities:
   - type: asyn.AsynIP
     name: controllerOnePort
     port: 192.168.0.55:2002
+    stop: one # test the fixup_enums method
 
   - type: asyn.AsynIP
     name: controllerTwoPort
     port: 192.168.0.55:2002
+    stop: two # test the fixup_enums method
 
   - type: gauges.Mks937bGauge
     port: controllerOnePort

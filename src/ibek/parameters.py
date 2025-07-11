@@ -5,7 +5,7 @@ Classes to specify arguments to Entity Models
 from __future__ import annotations
 
 from enum import Enum
-from typing import Annotated, Any, Literal, Optional
+from typing import Annotated, Any, Literal
 
 from pydantic import Field
 
@@ -58,28 +58,28 @@ class FloatParam(Param):
     """An argument with a float value"""
 
     type: Literal["float"] = "float"
-    default: Optional[float | JinjaString] = None
+    default: float | JinjaString | None = None
 
 
 class StrParam(Param):
     """An argument with a str value"""
 
     type: Literal["str"] = "str"
-    default: Optional[str] = None
+    default: str | None = None
 
 
 class IntParam(Param):
     """An argument with an int value"""
 
     type: Literal["int"] = "int"
-    default: Optional[int | JinjaString] = None
+    default: int | JinjaString | None = None
 
 
 class BoolParam(Param):
     """An argument with an bool value"""
 
     type: Literal["bool"] = "bool"
-    default: Optional[bool | JinjaString] = None
+    default: bool | JinjaString | None = None
 
 
 class ObjectParam(Param):
@@ -88,21 +88,21 @@ class ObjectParam(Param):
     type: Literal["object"] = "object"
     # represented by an id string in YAML but converted to an Entity object
     # during validation
-    default: Optional[str | object] = None
+    default: str | object | None = None
 
 
 class IdParam(Param):
     """Explicit ID argument that an object can refer to"""
 
     type: Literal["id"] = "id"
-    default: Optional[str] = None
+    default: str | None = None
 
 
 class EnumParam(Param):
     """An argument with an enum value"""
 
     type: Literal["enum"] = "enum"
-    default: Optional[Any] = None
+    default: Any | None = None
 
     values: dict[Any, Any] = Field(
         description="provides a list of values to make this argument an Enum",
@@ -114,7 +114,7 @@ class DictParam(Param):
 
     type: Literal["dict"] = "dict"
     # represented yaml map or jinja ' | dict'
-    default: Optional[dict | JinjaString] = None
+    default: dict | JinjaString | None = None
 
 
 class ListParam(Param):
@@ -122,4 +122,4 @@ class ListParam(Param):
 
     type: Literal["list"] = "list"
     # represented yaml map or jinja ' | list'
-    default: Optional[list | JinjaString] = None
+    default: list | JinjaString | None = None

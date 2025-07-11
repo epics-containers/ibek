@@ -1,7 +1,7 @@
 import json
 import logging
 from pathlib import Path
-from typing import Annotated, Optional
+from typing import Annotated
 
 import typer
 
@@ -50,7 +50,7 @@ def generate_schema(
         autocompletion=lambda: [],  # Forces path autocompletion
     ),
     output: Annotated[
-        Optional[Path],
+        Path | None,
         typer.Option(
             help="The file path to the schema file to be written",
             autocompletion=lambda: [],  # Forces path autocompletion
