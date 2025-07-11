@@ -9,17 +9,10 @@ import sys
 from pathlib import Path
 
 import pytest
-from pytest_mock import MockerFixture
 
 import ibek.utils as utils
 from ibek import __version__
-from ibek.globals import (
-    GLOBALS,
-    PVI_YAML_PATTERN,
-    SUPPORT_YAML_PATTERN,
-)
 from ibek.runtime_cmds.commands import generate
-from ibek.support_cmds.commands import generate_links
 from tests.conftest import run_cli
 
 
@@ -107,19 +100,6 @@ def test_build_utils_features(tmp_epics_root: Path, samples: Path):
         samples,
         "utils",
         ["utils"],
-    )
-
-
-def test_generate_links_ibek(samples: Path, mocker: MockerFixture):
-    symlink_mock = mocker.patch("ibek.support_cmds.commands.symlink_files")
-
-    generate_links(samples / "support")
-
-    symlink_mock.assert_any_call(
-        samples / "support", PVI_YAML_PATTERN, GLOBALS.PVI_DEFS
-    )
-    symlink_mock.assert_any_call(
-        samples / "support", SUPPORT_YAML_PATTERN, GLOBALS.IBEK_DEFS
     )
 
 

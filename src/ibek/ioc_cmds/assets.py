@@ -40,12 +40,13 @@ def extract_assets(
     extras: list[Path],
     defaults: bool,
     dry_run: bool = False,
+    static_build: bool = False,
 ):
     """
     extract and copy runtime assets from a completed developer stage container
     """
 
-    if GLOBALS.STATIC_BUILD:
+    if static_build:
         # static builds only need database and .proto files from support modules
         asset_matches = "db|*/protocol|*/Db"
     else:
