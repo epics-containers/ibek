@@ -6,7 +6,6 @@ support module YAML files
 from __future__ import annotations
 
 from collections.abc import Sequence
-from enum import Enum
 from typing import Any
 
 from pydantic import (
@@ -34,15 +33,6 @@ def clear_entity_model_ids():
     """Resets the global id_to_entity dict"""
 
     id_to_entity.clear()
-
-
-class EnumVal(Enum):
-    """
-    An enum that is printed as its name only
-    """
-
-    def __str__(self):
-        return self.name
 
 
 class Entity(BaseSettings):
