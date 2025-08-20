@@ -6,6 +6,7 @@ from __future__ import annotations
 
 import builtins
 from collections.abc import Sequence
+from enum import Enum
 from pathlib import Path
 from typing import Annotated, Any, Literal
 
@@ -17,7 +18,7 @@ from ibek.globals import JINJA
 from ibek.ibek_builtin.repeat import REPEAT_TYPE, RepeatEntity
 from ibek.sub_entity import SubEntity
 
-from .ioc import Entity, EnumVal, clear_entity_model_ids
+from .ioc import Entity, clear_entity_model_ids
 from .parameters import EnumParam, IdParam, ObjectParam
 from .support import EntityModel, Support
 from .utils import UTILS
@@ -130,13 +131,8 @@ class EntityFactory:
             elif isinstance(param, EnumParam):
                 # Pydantic uses the values of the Enum as the options in the schema.
                 # Here we arrange for the keys to be in the schema (what a user supplies)
-                # but the values to be what is rendered when jinja refers to the enum
-                enum_swapped = {}
-                for k, v in param.values.items():
-                    enum_swapped[str(v) if v else str(k)] = k
-                # TODO review enums especially with respect to Pydantic 2.7.1
-                val_enum = EnumVal(name, enum_swapped)  # type: ignore
-                type = val_enum
+                # but the values will be added in after by IocFactory.fixup_enums()
+                type = Enum(name, {str(k): k for k in param.values})  # type: ignore
 
             else:
                 # arg.type is str, int, float, etc.
