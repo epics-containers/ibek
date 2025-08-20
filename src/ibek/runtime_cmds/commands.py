@@ -34,6 +34,23 @@ def generate(
         help="The filepath to a support module yaml file",
         autocompletion=lambda: [],  # Forces path autocompletion
     ),
+    output_folder: Path = typer.Option(
+        GLOBALS.RUNTIME_OUTPUT,
+        "--output",
+        "-o",
+        help="The folder to write the generated runtime files to",
+    ),
+    pvi: bool = typer.Option(True, help="generate pvi PVs and opi files"),
+):
+    do_generate(instance, definitions, output_folder, pvi)
+
+
+# generate and do_generate allow testing by directly calling do_generate
+def do_generate(
+    instance: Path,
+    definitions: list[Path],
+    output_folder: Path,
+    pvi: bool = True,
 ):
     """
     Build a startup script for an IOC instance
@@ -50,22 +67,25 @@ def generate(
     ioc_instance.entities = all_entities
 
     # Clear out generated files so developers know if something stops being generated
-    shutil.rmtree(GLOBALS.RUNTIME_OUTPUT, ignore_errors=True)
-    GLOBALS.RUNTIME_OUTPUT.mkdir(exist_ok=True)
-    shutil.rmtree(GLOBALS.OPI_OUTPUT, ignore_errors=True)
-    GLOBALS.OPI_OUTPUT.mkdir(exist_ok=True)
+    shutil.rmtree(output_folder, ignore_errors=True)
+    output_folder.mkdir(exist_ok=True)
 
-    pvi_index_entries, pvi_databases = generate_pvi(ioc_instance)
-    generate_index(ioc_instance.ioc_name, pvi_index_entries)
+    pvi_databases: list = []
+    if pvi:
+        shutil.rmtree(GLOBALS.OPI_OUTPUT, ignore_errors=True)
+        GLOBALS.OPI_OUTPUT.mkdir(exist_ok=True)
+
+        pvi_index_entries, pvi_databases = generate_pvi(ioc_instance)
+        generate_index(ioc_instance.ioc_name, pvi_index_entries)
 
     script_txt = create_boot_script(ioc_instance.entities)
-    script_output = GLOBALS.RUNTIME_OUTPUT / "st.cmd"
+    script_output = output_folder / "st.cmd"
     script_output.parent.mkdir(parents=True, exist_ok=True)
     with script_output.open("w") as stream:
         stream.write(script_txt)
 
     db_txt = create_db_script(ioc_instance.entities, pvi_databases)
-    db_output = GLOBALS.RUNTIME_OUTPUT / "ioc.subst"
+    db_output = output_folder / "ioc.subst"
     with db_output.open("w") as stream:
         stream.write(db_txt)
 

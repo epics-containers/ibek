@@ -8,8 +8,6 @@ from pathlib import Path
 from pydantic import BaseModel, ConfigDict
 from typer.core import TyperGroup
 
-DEFAULT_ARCH = "linux-x86_64"
-
 
 class _Globals:
     """
@@ -24,8 +22,6 @@ class _Globals:
 
         # Can be overridden by defining an environment variable "EPICS_ROOT"
         self._EPICS_ROOT = Path(os.getenv("EPICS_ROOT", "/epics/"))
-
-        self._DEFAULT_ARCH = "linux-x86_64"
 
     @property
     def EPICS_ROOT(self):
@@ -51,26 +47,6 @@ class _Globals:
     def RUNTIME_SUBSTITUTION(self):
         """Directory containing runtime generated assets for IOC boot."""
         return self.RUNTIME_OUTPUT / "ioc.subst"
-
-    @property
-    def EPICS_TARGET_ARCH(self):
-        """The target architecture for the current container."""
-        return os.getenv("EPICS_TARGET_ARCH", self._DEFAULT_ARCH)
-
-    @property
-    def EPICS_HOST_ARCH(self):
-        """The host architecture for the current container."""
-        return os.getenv("EPICS_HOST_ARCH", self._DEFAULT_ARCH)
-
-    @property
-    def NATIVE(self):
-        """True if the target architecture is the same as the host architecture."""
-        return self.EPICS_TARGET_ARCH == self.EPICS_HOST_ARCH
-
-    @property
-    def STATIC_BUILD(self):
-        """True if the target architecture is not the default architecture."""
-        return os.getenv("STATIC_BUILD", self.EPICS_TARGET_ARCH != self._DEFAULT_ARCH)
 
     @property
     def IBEK_DEFS(self):
@@ -108,31 +84,6 @@ class _Globals:
         return "config"
 
     @property
-    def IOC_DIR_NAME(self):
-        """folder of the IOC source"""
-        return "ioc"
-
-    @property
-    def RELEASE_SH(self):
-        """a bash script to export the macros defined in RELEASE as environment vars"""
-        return self.SUPPORT / "configure" / "RELEASE.shell"
-
-    @property
-    def MODULES(self):
-        """global MODULES file used to determine order of build"""
-        return self.SUPPORT / "configure" / "MODULES"
-
-    @property
-    def IOC_DBDS(self):
-        """ibek-support list of declared dbds"""
-        return self.SUPPORT / "configure" / "dbd_list"
-
-    @property
-    def IOC_LIBS(self):
-        """ibek-support list of declared libs"""
-        return self.SUPPORT / "configure" / "lib_list"
-
-    @property
     def RUNTIME_DEBS(self):
         """ibek-support list of declared deb packages to install in runtime stage"""
         return self.SUPPORT / "configure" / "runtime_debs"
@@ -147,7 +98,6 @@ class _Globals:
 TEMPLATES = Path(__file__).parent / "templates"
 
 # Path suffixes for ibek-support
-IBEK_GLOBALS = Path("_global")
 SUPPORT_YAML_PATTERN = "*ibek.support.yaml"
 PVI_YAML_PATTERN = "*pvi.device.yaml"
 AUTOSAVE_PATTERN = "*.req"
