@@ -91,6 +91,7 @@ def generate_schema(
         output.write_text(schema)
 
 
+# TODO I believe this could be replaced by an ansible role too
 @ioc_cli.command()
 def extract_runtime_assets(
     destination: Path = typer.Argument(
