@@ -42,25 +42,34 @@ def generate(
     ),
     pvi: bool = typer.Option(True, help="generate pvi PVs and opi files"),
 ):
-    do_generate(instance, definitions, output_folder, pvi)
+    do_generate([instance], definitions, output_folder, pvi)
 
 
-# generate and do_generate allow testing by directly calling do_generate
 def do_generate(
-    instance: Path,
+    instance_yamls: list[Path],
     definitions: list[Path],
     output_folder: Path,
     pvi: bool = True,
 ):
     """
     Build a startup script for an IOC instance
+
+    Args:
+        instance_yamls: List of filepaths to IOC instance entity files,
+                        the first of which provides the IOC name
+        definitions: List of filepaths to support module entity model definition files
+        output_folder: Folder to write generated runtime files to
+        pvi: Whether to generate pvi files and databases
     """
     # the file name under of the instance definition provides the IOC name
-    UTILS.set_file_name(instance)
+    UTILS.set_file_name(instance_yamls[0])
 
     entity_factory = EntityFactory()
     entity_models = entity_factory.make_entity_models(definitions)
-    ioc_instance = IocFactory().deserialize_ioc(instance, entity_models)
+    ioc_instance = IocFactory().deserialize_ioc(instance_yamls[0], entity_models)
+    if len(instance_yamls) >1:
+        for yaml in instance_yamls[1:]:
+            instance = IocFactory().deserialize_ioc(yaml, entity_models)
 
     # post processing to insert SubEntity instances
     all_entities = entity_factory.resolve_sub_entities(ioc_instance.entities, {})

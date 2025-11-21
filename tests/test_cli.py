@@ -157,7 +157,7 @@ def generic_generate(
     ]
     expected_outputs = samples / "outputs" / ioc_yaml_name
 
-    do_generate(ioc_yaml, support_yamls, epics_root / "runtime", pvi=True)
+    do_generate([ioc_yaml], support_yamls, epics_root / "runtime", pvi=True)
 
     outputs = list(expected_outputs.glob("*"))
     assert len(outputs) > 0, "No expected output files found"
