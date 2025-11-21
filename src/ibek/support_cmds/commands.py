@@ -86,4 +86,4 @@ def generate_schema(
     if output is None:
         typer.echo(Support.get_schema())
     else:
-        output.write_text(Support.get_schema())
+        output.write_text(Support.get_schema() + "\n")

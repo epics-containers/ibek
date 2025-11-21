@@ -12,7 +12,6 @@ dbLoadRecords /epics/runtime/ioc.db
 iocInit
 
 
-
 dbpf("SPARC:TML:MOT:MSGRS","START")
 dbl
 

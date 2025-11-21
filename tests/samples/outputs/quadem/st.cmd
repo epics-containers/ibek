@@ -60,6 +60,5 @@ NDStdArraysConfigure("XBPM1.ARRAYS.PosY", 2, 0, "XBPM1.DRV", 0, 0, 0, 0, 0, 1)
 dbLoadRecords /epics/runtime/ioc.db
 iocInit
 
-
 # Increase precision of sample time for TetrAMM
 dbpf("BL03I-EA-XBPM-01:DRV:SampleTime_RBV.PREC", "5")

@@ -20,7 +20,6 @@ motorSimCreateController(controllerOne, 4)
 dbLoadRecords /epics/runtime/ioc.db
 iocInit
 
-
 # motorSimCreateAxis(controller_asyn_port_name, axis, axis_description)
 motorSimConfigAxis(controllerOne, 0, 20000, -20000, 500, 500)
 # motorSimCreateAxis(controller_asyn_port_name, axis, axis_description)

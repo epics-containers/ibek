@@ -88,7 +88,7 @@ def generate_schema(
     if output is None:
         typer.echo(schema)
     else:
-        output.write_text(schema)
+        output.write_text(schema + "\n")
 
 
 # TODO I believe this could be replaced by an ansible role too
