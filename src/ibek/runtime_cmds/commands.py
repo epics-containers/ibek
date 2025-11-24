@@ -23,6 +23,76 @@ runtime_cli = typer.Typer(cls=NaturalOrderGroup)
 
 
 @runtime_cli.command()
+def generate2(
+    config_folder: Path = typer.Argument(
+        None,
+        help="The IOC instance folder containing entity yaml files",
+        exists=True,
+        dir_okay=True,
+        file_okay=False,
+        autocompletion=lambda: [],
+    ),
+    instance_files: list[Path] = typer.Option(
+        [],
+        "--instance",
+        "-i",
+        help="Additional IOC instance entity yaml files",
+        exists=True,
+        dir_okay=False,
+        file_okay=True,
+        autocompletion=lambda: [],  # Forces path autocompletion
+    ),
+    definitions: list[Path] = typer.Option(
+        [],
+        help="The filepath to a support module yaml file",
+        exists=True,
+        dir_okay=False,
+        file_okay=True,
+        autocompletion=lambda: [],  # Forces path autocompletion
+    ),
+    output_folder: Path = typer.Option(
+        GLOBALS.RUNTIME_OUTPUT,
+        "--output",
+        "-o",
+        help="The folder to write the generated runtime files to",
+    ),
+    pvi: bool = typer.Option(True, help="generate pvi PVs and opi files"),
+):
+    """
+    An updated version of generate that supports multiple instance files.
+    This allows a main ioc.yaml with entities from the generic IOC image and
+    additional runtime.yaml with entities from the services repository.
+    """
+
+    if not instance_files and not config_folder:
+        typer.echo(
+            "Error: Either instance folder or instance files must be provided.",
+            err=True,
+        )
+        raise typer.Exit(code=1)
+
+    if config_folder is not None:
+        # Gather all yaml files in the instance folder
+        for yaml_file in "ioc.yaml", "runtime.yaml":
+            p = config_folder / yaml_file
+            if (p).exists():
+                instance_files.append(p)
+
+    if len(instance_files) == 0:
+        typer.echo("Error: No instance yaml files found.", err=True)
+        raise typer.Exit(code=1)
+
+    if len(definitions) == 0:
+        # get definitions from the default locations
+        definitions += Path(GLOBALS.IBEK_DEFS).glob("**/*ibek.support.yaml")
+        definitions += config_folder.glob(
+            "**/*.ibek.support.yaml", recurse_symlinks=True
+        )
+
+    do_generate(instance_files, definitions, output_folder, pvi)
+
+
+@runtime_cli.command()
 def generate(
     instance: Path = typer.Argument(
         ...,
@@ -42,25 +112,35 @@ def generate(
     ),
     pvi: bool = typer.Option(True, help="generate pvi PVs and opi files"),
 ):
-    do_generate(instance, definitions, output_folder, pvi)
+    do_generate([instance], definitions, output_folder, pvi)
 
 
-# generate and do_generate allow testing by directly calling do_generate
 def do_generate(
-    instance: Path,
+    instance_yamls: list[Path],
     definitions: list[Path],
     output_folder: Path,
     pvi: bool = True,
 ):
     """
     Build a startup script for an IOC instance
+
+    Args:
+        instance_yamls: List of filepaths to IOC instance entity files,
+                        the first of which provides the IOC name
+        definitions: List of filepaths to support module entity model definition files
+        output_folder: Folder to write generated runtime files to
+        pvi: Whether to generate pvi files and databases
     """
     # the file name under of the instance definition provides the IOC name
-    UTILS.set_file_name(instance)
+    UTILS.set_file_name(instance_yamls[0])
 
     entity_factory = EntityFactory()
     entity_models = entity_factory.make_entity_models(definitions)
-    ioc_instance = IocFactory().deserialize_ioc(instance, entity_models)
+    ioc_instance = IocFactory().deserialize_ioc(instance_yamls[0], entity_models)
+    if len(instance_yamls) > 1:
+        for yaml in instance_yamls[1:]:
+            instance = IocFactory().deserialize_ioc(yaml, entity_models)
+            ioc_instance.entities.extend(instance.entities)
 
     # post processing to insert SubEntity instances
     all_entities = entity_factory.resolve_sub_entities(ioc_instance.entities, {})

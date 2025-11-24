@@ -12,13 +12,13 @@ class Entity(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
     @model_validator(mode="after")  # type: ignore
-    def add_ibek_attributes(cls, entity: Entity):
+    def add_ibek_attributes(self, entity: Entity):
         id_to_entity[entity.name] = entity
 
         return entity
 
     @field_validator("ref", mode="after")
-    def lookup_instance(cls, id):
+    def lookup_instance(self, id):
         try:
             return id_to_entity[id]
         except KeyError as e:

@@ -39,7 +39,7 @@
       <y>0</y>
       <width>150</width>
       <height>20</height>
-      <tooltip>$(text)</tooltip>
+      <tooltip>No description provided</tooltip>
     </widget>
     <widget type="textentry" version="3.0.0">
       <name>TextEntry</name>
@@ -78,7 +78,7 @@
       <y>0</y>
       <width>150</width>
       <height>20</height>
-      <tooltip>$(text)</tooltip>
+      <tooltip>No description provided</tooltip>
     </widget>
     <widget type="textentry" version="3.0.0">
       <name>TextEntry</name>
@@ -109,7 +109,7 @@
       <y>25</y>
       <width>150</width>
       <height>20</height>
-      <tooltip>$(text)</tooltip>
+      <tooltip>No description provided</tooltip>
     </widget>
     <widget type="textentry" version="3.0.0">
       <name>TextEntry</name>
@@ -140,7 +140,7 @@
       <y>50</y>
       <width>150</width>
       <height>20</height>
-      <tooltip>$(text)</tooltip>
+      <tooltip>No description provided</tooltip>
     </widget>
     <widget type="textupdate" version="2.0.0">
       <name>TextUpdate</name>
@@ -162,7 +162,7 @@
       <y>75</y>
       <width>150</width>
       <height>20</height>
-      <tooltip>$(text)</tooltip>
+      <tooltip>No description provided</tooltip>
     </widget>
     <widget type="textupdate" version="2.0.0">
       <name>TextUpdate</name>
@@ -184,7 +184,7 @@
       <y>100</y>
       <width>150</width>
       <height>20</height>
-      <tooltip>$(text)</tooltip>
+      <tooltip>No description provided</tooltip>
     </widget>
     <widget type="textupdate" version="2.0.0">
       <name>TextUpdate</name>
@@ -206,7 +206,7 @@
       <y>125</y>
       <width>150</width>
       <height>20</height>
-      <tooltip>$(text)</tooltip>
+      <tooltip>No description provided</tooltip>
     </widget>
     <widget type="combo" version="2.0.0">
       <name>ComboBox</name>
@@ -236,7 +236,7 @@
       <y>150</y>
       <width>150</width>
       <height>20</height>
-      <tooltip>$(text)</tooltip>
+      <tooltip>No description provided</tooltip>
     </widget>
     <widget type="combo" version="2.0.0">
       <name>ComboBox</name>
@@ -274,7 +274,7 @@
       <y>0</y>
       <width>150</width>
       <height>20</height>
-      <tooltip>$(text)</tooltip>
+      <tooltip>No description provided</tooltip>
     </widget>
     <widget type="textupdate" version="2.0.0">
       <name>TextUpdate</name>
@@ -296,7 +296,7 @@
       <y>25</y>
       <width>150</width>
       <height>20</height>
-      <tooltip>$(text)</tooltip>
+      <tooltip>No description provided</tooltip>
     </widget>
     <widget type="textupdate" version="2.0.0">
       <name>TextUpdate</name>
@@ -318,7 +318,7 @@
       <y>50</y>
       <width>150</width>
       <height>20</height>
-      <tooltip>$(text)</tooltip>
+      <tooltip>No description provided</tooltip>
     </widget>
     <widget type="textupdate" version="2.0.0">
       <name>TextUpdate</name>
@@ -340,7 +340,7 @@
       <y>75</y>
       <width>150</width>
       <height>20</height>
-      <tooltip>$(text)</tooltip>
+      <tooltip>No description provided</tooltip>
     </widget>
     <widget type="textupdate" version="2.0.0">
       <name>TextUpdate</name>
@@ -362,7 +362,7 @@
       <y>100</y>
       <width>150</width>
       <height>20</height>
-      <tooltip>$(text)</tooltip>
+      <tooltip>No description provided</tooltip>
     </widget>
     <widget type="textupdate" version="2.0.0">
       <name>TextUpdate</name>
@@ -384,7 +384,7 @@
       <y>125</y>
       <width>150</width>
       <height>20</height>
-      <tooltip>$(text)</tooltip>
+      <tooltip>No description provided</tooltip>
     </widget>
     <widget type="textentry" version="3.0.0">
       <name>TextEntry</name>
@@ -415,7 +415,7 @@
       <y>150</y>
       <width>150</width>
       <height>20</height>
-      <tooltip>$(text)</tooltip>
+      <tooltip>No description provided</tooltip>
     </widget>
     <widget type="textentry" version="3.0.0">
       <name>TextEntry</name>
@@ -446,7 +446,7 @@
       <y>175</y>
       <width>150</width>
       <height>20</height>
-      <tooltip>$(text)</tooltip>
+      <tooltip>No description provided</tooltip>
     </widget>
     <widget type="textentry" version="3.0.0">
       <name>TextEntry</name>
@@ -477,7 +477,7 @@
       <y>200</y>
       <width>150</width>
       <height>20</height>
-      <tooltip>$(text)</tooltip>
+      <tooltip>No description provided</tooltip>
     </widget>
     <widget type="textentry" version="3.0.0">
       <name>TextEntry</name>
@@ -516,7 +516,7 @@
       <y>0</y>
       <width>150</width>
       <height>20</height>
-      <tooltip>$(text)</tooltip>
+      <tooltip>No description provided</tooltip>
     </widget>
     <widget type="textentry" version="3.0.0">
       <name>TextEntry</name>
@@ -555,14 +555,15 @@
       <y>0</y>
       <width>150</width>
       <height>20</height>
-      <tooltip>$(text)</tooltip>
+      <tooltip>No description provided</tooltip>
     </widget>
-    <widget type="choice" version="2.0.0">
+    <widget type="slide_button" version="2.0.0">
       <name>ToggleButton</name>
       <pv_name>$(P)$(R)ComputeStatistics</pv_name>
-      <x>155</x>
+      <label/>
+      <x>195</x>
       <y>0</y>
-      <width>100</width>
+      <width>20</width>
       <height>20</height>
     </widget>
     <widget type="led" version="2.0.0">
@@ -580,14 +581,15 @@
       <y>25</y>
       <width>150</width>
       <height>20</height>
-      <tooltip>$(text)</tooltip>
+      <tooltip>No description provided</tooltip>
     </widget>
-    <widget type="choice" version="2.0.0">
+    <widget type="slide_button" version="2.0.0">
       <name>ToggleButton</name>
       <pv_name>$(P)$(R)ComputeProfiles</pv_name>
-      <x>155</x>
+      <label/>
+      <x>195</x>
       <y>25</y>
-      <width>100</width>
+      <width>20</width>
       <height>20</height>
     </widget>
     <widget type="led" version="2.0.0">
@@ -605,7 +607,7 @@
       <y>50</y>
       <width>150</width>
       <height>20</height>
-      <tooltip>$(text)</tooltip>
+      <tooltip>No description provided</tooltip>
     </widget>
     <widget type="textupdate" version="2.0.0">
       <name>TextUpdate</name>
@@ -627,7 +629,7 @@
       <y>75</y>
       <width>150</width>
       <height>20</height>
-      <tooltip>$(text)</tooltip>
+      <tooltip>No description provided</tooltip>
     </widget>
     <widget type="textupdate" version="2.0.0">
       <name>TextUpdate</name>
@@ -649,7 +651,7 @@
       <y>100</y>
       <width>150</width>
       <height>20</height>
-      <tooltip>$(text)</tooltip>
+      <tooltip>No description provided</tooltip>
     </widget>
     <widget type="textupdate" version="2.0.0">
       <name>TextUpdate</name>
@@ -671,7 +673,7 @@
       <y>125</y>
       <width>150</width>
       <height>20</height>
-      <tooltip>$(text)</tooltip>
+      <tooltip>No description provided</tooltip>
     </widget>
     <widget type="textupdate" version="2.0.0">
       <name>TextUpdate</name>
@@ -693,7 +695,7 @@
       <y>150</y>
       <width>150</width>
       <height>20</height>
-      <tooltip>$(text)</tooltip>
+      <tooltip>No description provided</tooltip>
     </widget>
     <widget type="textupdate" version="2.0.0">
       <name>TextUpdate</name>
@@ -715,7 +717,7 @@
       <y>175</y>
       <width>150</width>
       <height>20</height>
-      <tooltip>$(text)</tooltip>
+      <tooltip>No description provided</tooltip>
     </widget>
     <widget type="textupdate" version="2.0.0">
       <name>TextUpdate</name>
@@ -737,7 +739,7 @@
       <y>200</y>
       <width>150</width>
       <height>20</height>
-      <tooltip>$(text)</tooltip>
+      <tooltip>No description provided</tooltip>
     </widget>
     <widget type="textupdate" version="2.0.0">
       <name>TextUpdate</name>
@@ -759,7 +761,7 @@
       <y>225</y>
       <width>150</width>
       <height>20</height>
-      <tooltip>$(text)</tooltip>
+      <tooltip>No description provided</tooltip>
     </widget>
     <widget type="textupdate" version="2.0.0">
       <name>TextUpdate</name>
@@ -781,7 +783,7 @@
       <y>250</y>
       <width>150</width>
       <height>20</height>
-      <tooltip>$(text)</tooltip>
+      <tooltip>No description provided</tooltip>
     </widget>
     <widget type="textupdate" version="2.0.0">
       <name>TextUpdate</name>
@@ -803,7 +805,7 @@
       <y>275</y>
       <width>150</width>
       <height>20</height>
-      <tooltip>$(text)</tooltip>
+      <tooltip>No description provided</tooltip>
     </widget>
     <widget type="textupdate" version="2.0.0">
       <name>TextUpdate</name>
@@ -825,7 +827,7 @@
       <y>300</y>
       <width>150</width>
       <height>20</height>
-      <tooltip>$(text)</tooltip>
+      <tooltip>No description provided</tooltip>
     </widget>
     <widget type="textentry" version="3.0.0">
       <name>TextEntry</name>
@@ -856,7 +858,7 @@
       <y>325</y>
       <width>150</width>
       <height>20</height>
-      <tooltip>$(text)</tooltip>
+      <tooltip>No description provided</tooltip>
     </widget>
     <widget type="textentry" version="3.0.0">
       <name>TextEntry</name>
@@ -887,7 +889,7 @@
       <y>350</y>
       <width>150</width>
       <height>20</height>
-      <tooltip>$(text)</tooltip>
+      <tooltip>No description provided</tooltip>
     </widget>
     <widget type="textupdate" version="2.0.0">
       <name>TextUpdate</name>
@@ -909,7 +911,7 @@
       <y>375</y>
       <width>150</width>
       <height>20</height>
-      <tooltip>$(text)</tooltip>
+      <tooltip>No description provided</tooltip>
     </widget>
     <widget type="textupdate" version="2.0.0">
       <name>TextUpdate</name>
@@ -931,7 +933,7 @@
       <y>400</y>
       <width>150</width>
       <height>20</height>
-      <tooltip>$(text)</tooltip>
+      <tooltip>No description provided</tooltip>
     </widget>
     <widget type="textupdate" version="2.0.0">
       <name>TextUpdate</name>
@@ -953,7 +955,7 @@
       <y>425</y>
       <width>150</width>
       <height>20</height>
-      <tooltip>$(text)</tooltip>
+      <tooltip>No description provided</tooltip>
     </widget>
     <widget type="textupdate" version="2.0.0">
       <name>TextUpdate</name>
@@ -975,7 +977,7 @@
       <y>450</y>
       <width>150</width>
       <height>20</height>
-      <tooltip>$(text)</tooltip>
+      <tooltip>No description provided</tooltip>
     </widget>
     <widget type="textupdate" version="2.0.0">
       <name>TextUpdate</name>
@@ -997,7 +999,7 @@
       <y>475</y>
       <width>150</width>
       <height>20</height>
-      <tooltip>$(text)</tooltip>
+      <tooltip>No description provided</tooltip>
     </widget>
     <widget type="textentry" version="3.0.0">
       <name>TextEntry</name>
@@ -1028,7 +1030,7 @@
       <y>500</y>
       <width>150</width>
       <height>20</height>
-      <tooltip>$(text)</tooltip>
+      <tooltip>No description provided</tooltip>
     </widget>
     <widget type="textentry" version="3.0.0">
       <name>TextEntry</name>
@@ -1059,14 +1061,15 @@
       <y>525</y>
       <width>150</width>
       <height>20</height>
-      <tooltip>$(text)</tooltip>
+      <tooltip>No description provided</tooltip>
     </widget>
-    <widget type="choice" version="2.0.0">
+    <widget type="slide_button" version="2.0.0">
       <name>ToggleButton</name>
       <pv_name>$(P)$(R)ComputeHistogram</pv_name>
-      <x>155</x>
+      <label/>
+      <x>195</x>
       <y>525</y>
-      <width>100</width>
+      <width>20</width>
       <height>20</height>
     </widget>
     <widget type="led" version="2.0.0">
@@ -1084,7 +1087,7 @@
       <y>550</y>
       <width>150</width>
       <height>20</height>
-      <tooltip>$(text)</tooltip>
+      <tooltip>No description provided</tooltip>
     </widget>
     <widget type="textentry" version="3.0.0">
       <name>TextEntry</name>
@@ -1115,14 +1118,15 @@
       <y>575</y>
       <width>150</width>
       <height>20</height>
-      <tooltip>$(text)</tooltip>
+      <tooltip>No description provided</tooltip>
     </widget>
-    <widget type="choice" version="2.0.0">
+    <widget type="slide_button" version="2.0.0">
       <name>ToggleButton</name>
       <pv_name>$(P)$(R)ComputeCentroid</pv_name>
-      <x>155</x>
+      <label/>
+      <x>195</x>
       <y>575</y>
-      <width>100</width>
+      <width>20</width>
       <height>20</height>
     </widget>
     <widget type="led" version="2.0.0">
@@ -1140,7 +1144,7 @@
       <y>600</y>
       <width>150</width>
       <height>20</height>
-      <tooltip>$(text)</tooltip>
+      <tooltip>No description provided</tooltip>
     </widget>
     <widget type="textentry" version="3.0.0">
       <name>TextEntry</name>
@@ -1171,7 +1175,7 @@
       <y>625</y>
       <width>150</width>
       <height>20</height>
-      <tooltip>$(text)</tooltip>
+      <tooltip>No description provided</tooltip>
     </widget>
     <widget type="textentry" version="3.0.0">
       <name>TextEntry</name>
@@ -1202,7 +1206,7 @@
       <y>650</y>
       <width>150</width>
       <height>20</height>
-      <tooltip>$(text)</tooltip>
+      <tooltip>No description provided</tooltip>
     </widget>
     <widget type="textentry" version="3.0.0">
       <name>TextEntry</name>
@@ -1233,7 +1237,7 @@
       <y>675</y>
       <width>150</width>
       <height>20</height>
-      <tooltip>$(text)</tooltip>
+      <tooltip>No description provided</tooltip>
     </widget>
     <widget type="textentry" version="3.0.0">
       <name>TextEntry</name>
@@ -1264,7 +1268,7 @@
       <y>700</y>
       <width>150</width>
       <height>20</height>
-      <tooltip>$(text)</tooltip>
+      <tooltip>No description provided</tooltip>
     </widget>
     <widget type="textentry" version="3.0.0">
       <name>TextEntry</name>
@@ -1295,7 +1299,7 @@
       <y>725</y>
       <width>150</width>
       <height>20</height>
-      <tooltip>$(text)</tooltip>
+      <tooltip>No description provided</tooltip>
     </widget>
     <widget type="textentry" version="3.0.0">
       <name>TextEntry</name>
@@ -1326,7 +1330,7 @@
       <y>750</y>
       <width>150</width>
       <height>20</height>
-      <tooltip>$(text)</tooltip>
+      <tooltip>No description provided</tooltip>
     </widget>
     <widget type="textupdate" version="2.0.0">
       <name>TextUpdate</name>
@@ -1348,7 +1352,7 @@
       <y>775</y>
       <width>150</width>
       <height>20</height>
-      <tooltip>$(text)</tooltip>
+      <tooltip>No description provided</tooltip>
     </widget>
     <widget type="textupdate" version="2.0.0">
       <name>TextUpdate</name>
@@ -1370,7 +1374,7 @@
       <y>800</y>
       <width>150</width>
       <height>20</height>
-      <tooltip>$(text)</tooltip>
+      <tooltip>No description provided</tooltip>
     </widget>
     <widget type="textentry" version="3.0.0">
       <name>TextEntry</name>
@@ -1401,7 +1405,7 @@
       <y>825</y>
       <width>150</width>
       <height>20</height>
-      <tooltip>$(text)</tooltip>
+      <tooltip>No description provided</tooltip>
     </widget>
     <widget type="textentry" version="3.0.0">
       <name>TextEntry</name>
@@ -1432,7 +1436,7 @@
       <y>850</y>
       <width>150</width>
       <height>20</height>
-      <tooltip>$(text)</tooltip>
+      <tooltip>No description provided</tooltip>
     </widget>
     <widget type="textupdate" version="2.0.0">
       <name>TextUpdate</name>
@@ -1454,7 +1458,7 @@
       <y>875</y>
       <width>150</width>
       <height>20</height>
-      <tooltip>$(text)</tooltip>
+      <tooltip>No description provided</tooltip>
     </widget>
     <widget type="textupdate" version="2.0.0">
       <name>TextUpdate</name>
@@ -1476,7 +1480,7 @@
       <y>0</y>
       <width>150</width>
       <height>20</height>
-      <tooltip>$(text)</tooltip>
+      <tooltip>No description provided</tooltip>
     </widget>
     <widget type="textupdate" version="2.0.0">
       <name>TextUpdate</name>
@@ -1498,7 +1502,7 @@
       <y>25</y>
       <width>150</width>
       <height>20</height>
-      <tooltip>$(text)</tooltip>
+      <tooltip>No description provided</tooltip>
     </widget>
     <widget type="textupdate" version="2.0.0">
       <name>TextUpdate</name>
@@ -1520,7 +1524,7 @@
       <y>50</y>
       <width>150</width>
       <height>20</height>
-      <tooltip>$(text)</tooltip>
+      <tooltip>No description provided</tooltip>
     </widget>
     <widget type="textupdate" version="2.0.0">
       <name>TextUpdate</name>
@@ -1542,7 +1546,7 @@
       <y>75</y>
       <width>150</width>
       <height>20</height>
-      <tooltip>$(text)</tooltip>
+      <tooltip>No description provided</tooltip>
     </widget>
     <widget type="textupdate" version="2.0.0">
       <name>TextUpdate</name>
@@ -1564,7 +1568,7 @@
       <y>100</y>
       <width>150</width>
       <height>20</height>
-      <tooltip>$(text)</tooltip>
+      <tooltip>No description provided</tooltip>
     </widget>
     <widget type="textupdate" version="2.0.0">
       <name>TextUpdate</name>
@@ -1586,7 +1590,7 @@
       <y>125</y>
       <width>150</width>
       <height>20</height>
-      <tooltip>$(text)</tooltip>
+      <tooltip>No description provided</tooltip>
     </widget>
     <widget type="textupdate" version="2.0.0">
       <name>TextUpdate</name>
@@ -1608,7 +1612,7 @@
       <y>150</y>
       <width>150</width>
       <height>20</height>
-      <tooltip>$(text)</tooltip>
+      <tooltip>No description provided</tooltip>
     </widget>
     <widget type="textupdate" version="2.0.0">
       <name>TextUpdate</name>
@@ -1630,7 +1634,7 @@
       <y>175</y>
       <width>150</width>
       <height>20</height>
-      <tooltip>$(text)</tooltip>
+      <tooltip>No description provided</tooltip>
     </widget>
     <widget type="textupdate" version="2.0.0">
       <name>TextUpdate</name>
@@ -1652,7 +1656,7 @@
       <y>200</y>
       <width>150</width>
       <height>20</height>
-      <tooltip>$(text)</tooltip>
+      <tooltip>No description provided</tooltip>
     </widget>
     <widget type="textupdate" version="2.0.0">
       <name>TextUpdate</name>
@@ -1674,7 +1678,7 @@
       <y>225</y>
       <width>150</width>
       <height>20</height>
-      <tooltip>$(text)</tooltip>
+      <tooltip>No description provided</tooltip>
     </widget>
     <widget type="textupdate" version="2.0.0">
       <name>TextUpdate</name>
@@ -1696,7 +1700,7 @@
       <y>250</y>
       <width>150</width>
       <height>20</height>
-      <tooltip>$(text)</tooltip>
+      <tooltip>No description provided</tooltip>
     </widget>
     <widget type="textupdate" version="2.0.0">
       <name>TextUpdate</name>
@@ -1718,7 +1722,7 @@
       <y>275</y>
       <width>150</width>
       <height>20</height>
-      <tooltip>$(text)</tooltip>
+      <tooltip>No description provided</tooltip>
     </widget>
     <widget type="textentry" version="3.0.0">
       <name>TextEntry</name>
@@ -1749,7 +1753,7 @@
       <y>300</y>
       <width>150</width>
       <height>20</height>
-      <tooltip>$(text)</tooltip>
+      <tooltip>No description provided</tooltip>
     </widget>
     <widget type="textentry" version="3.0.0">
       <name>TextEntry</name>
@@ -1780,7 +1784,7 @@
       <y>325</y>
       <width>150</width>
       <height>20</height>
-      <tooltip>$(text)</tooltip>
+      <tooltip>No description provided</tooltip>
     </widget>
     <widget type="textentry" version="3.0.0">
       <name>TextEntry</name>
@@ -1811,7 +1815,7 @@
       <y>350</y>
       <width>150</width>
       <height>20</height>
-      <tooltip>$(text)</tooltip>
+      <tooltip>No description provided</tooltip>
     </widget>
     <widget type="textentry" version="3.0.0">
       <name>TextEntry</name>
@@ -1842,7 +1846,7 @@
       <y>375</y>
       <width>150</width>
       <height>20</height>
-      <tooltip>$(text)</tooltip>
+      <tooltip>No description provided</tooltip>
     </widget>
     <widget type="textentry" version="3.0.0">
       <name>TextEntry</name>
@@ -1873,7 +1877,7 @@
       <y>400</y>
       <width>150</width>
       <height>20</height>
-      <tooltip>$(text)</tooltip>
+      <tooltip>No description provided</tooltip>
     </widget>
     <widget type="textentry" version="3.0.0">
       <name>TextEntry</name>
@@ -1904,7 +1908,7 @@
       <y>425</y>
       <width>150</width>
       <height>20</height>
-      <tooltip>$(text)</tooltip>
+      <tooltip>No description provided</tooltip>
     </widget>
     <widget type="textentry" version="3.0.0">
       <name>TextEntry</name>
@@ -1935,7 +1939,7 @@
       <y>450</y>
       <width>150</width>
       <height>20</height>
-      <tooltip>$(text)</tooltip>
+      <tooltip>No description provided</tooltip>
     </widget>
     <widget type="textentry" version="3.0.0">
       <name>TextEntry</name>
@@ -1966,7 +1970,7 @@
       <y>475</y>
       <width>150</width>
       <height>20</height>
-      <tooltip>$(text)</tooltip>
+      <tooltip>No description provided</tooltip>
     </widget>
     <widget type="textentry" version="3.0.0">
       <name>TextEntry</name>
@@ -1997,7 +2001,7 @@
       <y>500</y>
       <width>150</width>
       <height>20</height>
-      <tooltip>$(text)</tooltip>
+      <tooltip>No description provided</tooltip>
     </widget>
     <widget type="textentry" version="3.0.0">
       <name>TextEntry</name>
@@ -2036,7 +2040,7 @@
       <y>0</y>
       <width>150</width>
       <height>20</height>
-      <tooltip>$(text)</tooltip>
+      <tooltip>No description provided</tooltip>
     </widget>
     <widget type="textupdate" version="2.0.0">
       <name>TextUpdate</name>
@@ -2058,7 +2062,7 @@
       <y>25</y>
       <width>150</width>
       <height>20</height>
-      <tooltip>$(text)</tooltip>
+      <tooltip>No description provided</tooltip>
     </widget>
     <widget type="textentry" version="3.0.0">
       <name>TextEntry</name>
@@ -2097,7 +2101,7 @@
       <y>0</y>
       <width>150</width>
       <height>20</height>
-      <tooltip>$(text)</tooltip>
+      <tooltip>No description provided</tooltip>
     </widget>
     <widget type="textupdate" version="2.0.0">
       <name>TextUpdate</name>
@@ -2119,7 +2123,7 @@
       <y>25</y>
       <width>150</width>
       <height>20</height>
-      <tooltip>$(text)</tooltip>
+      <tooltip>No description provided</tooltip>
     </widget>
     <widget type="textentry" version="3.0.0">
       <name>TextEntry</name>
@@ -2150,7 +2154,7 @@
       <y>50</y>
       <width>150</width>
       <height>20</height>
-      <tooltip>$(text)</tooltip>
+      <tooltip>No description provided</tooltip>
     </widget>
     <widget type="textentry" version="3.0.0">
       <name>TextEntry</name>
@@ -2181,14 +2185,15 @@
       <y>75</y>
       <width>150</width>
       <height>20</height>
-      <tooltip>$(text)</tooltip>
+      <tooltip>No description provided</tooltip>
     </widget>
-    <widget type="choice" version="2.0.0">
+    <widget type="slide_button" version="2.0.0">
       <name>ToggleButton</name>
       <pv_name>$(P)$(R)EnableCallbacks</pv_name>
-      <x>155</x>
+      <label/>
+      <x>195</x>
       <y>75</y>
-      <width>100</width>
+      <width>20</width>
       <height>20</height>
     </widget>
     <widget type="led" version="2.0.0">
@@ -2206,7 +2211,7 @@
       <y>100</y>
       <width>150</width>
       <height>20</height>
-      <tooltip>$(text)</tooltip>
+      <tooltip>No description provided</tooltip>
     </widget>
     <widget type="textentry" version="3.0.0">
       <name>TextEntry</name>
@@ -2237,7 +2242,7 @@
       <y>125</y>
       <width>150</width>
       <height>20</height>
-      <tooltip>$(text)</tooltip>
+      <tooltip>No description provided</tooltip>
     </widget>
     <widget type="textupdate" version="2.0.0">
       <name>TextUpdate</name>
@@ -2259,7 +2264,7 @@
       <y>150</y>
       <width>150</width>
       <height>20</height>
-      <tooltip>$(text)</tooltip>
+      <tooltip>No description provided</tooltip>
     </widget>
     <widget type="textentry" version="3.0.0">
       <name>TextEntry</name>
@@ -2290,7 +2295,7 @@
       <y>175</y>
       <width>150</width>
       <height>20</height>
-      <tooltip>$(text)</tooltip>
+      <tooltip>No description provided</tooltip>
     </widget>
     <widget type="textupdate" version="2.0.0">
       <name>TextUpdate</name>
@@ -2312,7 +2317,7 @@
       <y>200</y>
       <width>150</width>
       <height>20</height>
-      <tooltip>$(text)</tooltip>
+      <tooltip>No description provided</tooltip>
     </widget>
     <widget type="textentry" version="3.0.0">
       <name>TextEntry</name>
@@ -2343,14 +2348,15 @@
       <y>225</y>
       <width>150</width>
       <height>20</height>
-      <tooltip>$(text)</tooltip>
+      <tooltip>No description provided</tooltip>
     </widget>
-    <widget type="choice" version="2.0.0">
+    <widget type="slide_button" version="2.0.0">
       <name>ToggleButton</name>
       <pv_name>$(P)$(R)ProcessPlugin</pv_name>
-      <x>155</x>
+      <label/>
+      <x>247</x>
       <y>225</y>
-      <width>205</width>
+      <width>20</width>
       <height>20</height>
     </widget>
   </widget>
@@ -2368,7 +2374,7 @@
       <y>0</y>
       <width>150</width>
       <height>20</height>
-      <tooltip>$(text)</tooltip>
+      <tooltip>No description provided</tooltip>
     </widget>
     <widget type="textentry" version="3.0.0">
       <name>TextEntry</name>
@@ -2399,7 +2405,7 @@
       <y>25</y>
       <width>150</width>
       <height>20</height>
-      <tooltip>$(text)</tooltip>
+      <tooltip>No description provided</tooltip>
     </widget>
     <widget type="textentry" version="3.0.0">
       <name>TextEntry</name>
@@ -2430,14 +2436,15 @@
       <y>50</y>
       <width>150</width>
       <height>20</height>
-      <tooltip>$(text)</tooltip>
+      <tooltip>No description provided</tooltip>
     </widget>
-    <widget type="choice" version="2.0.0">
+    <widget type="slide_button" version="2.0.0">
       <name>ToggleButton</name>
       <pv_name>$(P)$(R)BlockingCallbacks</pv_name>
-      <x>155</x>
+      <label/>
+      <x>195</x>
       <y>50</y>
-      <width>100</width>
+      <width>20</width>
       <height>20</height>
     </widget>
     <widget type="led" version="2.0.0">
@@ -2455,7 +2462,7 @@
       <y>75</y>
       <width>150</width>
       <height>20</height>
-      <tooltip>$(text)</tooltip>
+      <tooltip>No description provided</tooltip>
     </widget>
     <widget type="textentry" version="3.0.0">
       <name>TextEntry</name>
@@ -2486,7 +2493,7 @@
       <y>100</y>
       <width>150</width>
       <height>20</height>
-      <tooltip>$(text)</tooltip>
+      <tooltip>No description provided</tooltip>
     </widget>
     <widget type="textupdate" version="2.0.0">
       <name>TextUpdate</name>
@@ -2508,7 +2515,7 @@
       <y>125</y>
       <width>150</width>
       <height>20</height>
-      <tooltip>$(text)</tooltip>
+      <tooltip>No description provided</tooltip>
     </widget>
     <widget type="combo" version="2.0.0">
       <name>ComboBox</name>
@@ -2538,7 +2545,7 @@
       <y>150</y>
       <width>150</width>
       <height>20</height>
-      <tooltip>$(text)</tooltip>
+      <tooltip>No description provided</tooltip>
     </widget>
     <widget type="textentry" version="3.0.0">
       <name>TextEntry</name>
@@ -2569,7 +2576,7 @@
       <y>175</y>
       <width>150</width>
       <height>20</height>
-      <tooltip>$(text)</tooltip>
+      <tooltip>No description provided</tooltip>
     </widget>
     <widget type="textupdate" version="2.0.0">
       <name>TextUpdate</name>
@@ -2591,7 +2598,7 @@
       <y>200</y>
       <width>150</width>
       <height>20</height>
-      <tooltip>$(text)</tooltip>
+      <tooltip>No description provided</tooltip>
     </widget>
     <widget type="textentry" version="3.0.0">
       <name>TextEntry</name>
@@ -2622,7 +2629,7 @@
       <y>225</y>
       <width>150</width>
       <height>20</height>
-      <tooltip>$(text)</tooltip>
+      <tooltip>No description provided</tooltip>
     </widget>
     <widget type="textentry" version="3.0.0">
       <name>TextEntry</name>
@@ -2661,7 +2668,7 @@
       <y>0</y>
       <width>150</width>
       <height>20</height>
-      <tooltip>$(text)</tooltip>
+      <tooltip>No description provided</tooltip>
     </widget>
     <widget type="textupdate" version="2.0.0">
       <name>TextUpdate</name>
@@ -2683,7 +2690,7 @@
       <y>25</y>
       <width>150</width>
       <height>20</height>
-      <tooltip>$(text)</tooltip>
+      <tooltip>No description provided</tooltip>
     </widget>
     <widget type="textupdate" version="2.0.0">
       <name>TextUpdate</name>
@@ -2705,7 +2712,7 @@
       <y>50</y>
       <width>150</width>
       <height>20</height>
-      <tooltip>$(text)</tooltip>
+      <tooltip>No description provided</tooltip>
     </widget>
     <widget type="textupdate" version="2.0.0">
       <name>TextUpdate</name>
@@ -2727,7 +2734,7 @@
       <y>75</y>
       <width>150</width>
       <height>20</height>
-      <tooltip>$(text)</tooltip>
+      <tooltip>No description provided</tooltip>
     </widget>
     <widget type="textupdate" version="2.0.0">
       <name>TextUpdate</name>
@@ -2749,7 +2756,7 @@
       <y>100</y>
       <width>150</width>
       <height>20</height>
-      <tooltip>$(text)</tooltip>
+      <tooltip>No description provided</tooltip>
     </widget>
     <widget type="textupdate" version="2.0.0">
       <name>TextUpdate</name>
@@ -2771,7 +2778,7 @@
       <y>125</y>
       <width>150</width>
       <height>20</height>
-      <tooltip>$(text)</tooltip>
+      <tooltip>No description provided</tooltip>
     </widget>
     <widget type="textupdate" version="2.0.0">
       <name>TextUpdate</name>
@@ -2793,7 +2800,7 @@
       <y>150</y>
       <width>150</width>
       <height>20</height>
-      <tooltip>$(text)</tooltip>
+      <tooltip>No description provided</tooltip>
     </widget>
     <widget type="textupdate" version="2.0.0">
       <name>TextUpdate</name>
@@ -2815,7 +2822,7 @@
       <y>175</y>
       <width>150</width>
       <height>20</height>
-      <tooltip>$(text)</tooltip>
+      <tooltip>No description provided</tooltip>
     </widget>
     <widget type="textupdate" version="2.0.0">
       <name>TextUpdate</name>
@@ -2845,7 +2852,7 @@
       <y>0</y>
       <width>150</width>
       <height>20</height>
-      <tooltip>$(text)</tooltip>
+      <tooltip>No description provided</tooltip>
     </widget>
     <widget type="textupdate" version="2.0.0">
       <name>TextUpdate</name>
@@ -2867,14 +2874,15 @@
       <y>25</y>
       <width>150</width>
       <height>20</height>
-      <tooltip>$(text)</tooltip>
+      <tooltip>No description provided</tooltip>
     </widget>
-    <widget type="choice" version="2.0.0">
+    <widget type="slide_button" version="2.0.0">
       <name>ToggleButton</name>
       <pv_name>$(P)$(R)WaitForPlugins</pv_name>
-      <x>155</x>
+      <label/>
+      <x>247</x>
       <y>25</y>
-      <width>205</width>
+      <width>20</width>
       <height>20</height>
     </widget>
     <widget type="label" version="2.0.0">
@@ -2884,14 +2892,15 @@
       <y>50</y>
       <width>150</width>
       <height>20</height>
-      <tooltip>$(text)</tooltip>
+      <tooltip>No description provided</tooltip>
     </widget>
-    <widget type="choice" version="2.0.0">
+    <widget type="slide_button" version="2.0.0">
       <name>ToggleButton</name>
       <pv_name>$(P)$(R)Acquire</pv_name>
-      <x>155</x>
+      <label/>
+      <x>195</x>
       <y>50</y>
-      <width>100</width>
+      <width>20</width>
       <height>20</height>
     </widget>
     <widget type="led" version="2.0.0">
@@ -2909,7 +2918,7 @@
       <y>75</y>
       <width>150</width>
       <height>20</height>
-      <tooltip>$(text)</tooltip>
+      <tooltip>No description provided</tooltip>
     </widget>
     <widget type="textentry" version="3.0.0">
       <name>TextEntry</name>
@@ -2940,14 +2949,15 @@
       <y>100</y>
       <width>150</width>
       <height>20</height>
-      <tooltip>$(text)</tooltip>
+      <tooltip>No description provided</tooltip>
     </widget>
-    <widget type="choice" version="2.0.0">
+    <widget type="slide_button" version="2.0.0">
       <name>ToggleButton</name>
       <pv_name>$(P)$(R)ArrayCallbacks</pv_name>
-      <x>155</x>
+      <label/>
+      <x>195</x>
       <y>100</y>
-      <width>100</width>
+      <width>20</width>
       <height>20</height>
     </widget>
     <widget type="led" version="2.0.0">
@@ -2973,7 +2983,7 @@
       <y>0</y>
       <width>150</width>
       <height>20</height>
-      <tooltip>$(text)</tooltip>
+      <tooltip>No description provided</tooltip>
     </widget>
     <widget type="textentry" version="3.0.0">
       <name>TextEntry</name>
@@ -2992,7 +3002,7 @@
       <y>25</y>
       <width>150</width>
       <height>20</height>
-      <tooltip>$(text)</tooltip>
+      <tooltip>No description provided</tooltip>
     </widget>
     <widget type="textentry" version="3.0.0">
       <name>TextEntry</name>
@@ -3011,7 +3021,7 @@
       <y>50</y>
       <width>150</width>
       <height>20</height>
-      <tooltip>$(text)</tooltip>
+      <tooltip>No description provided</tooltip>
     </widget>
     <widget type="textupdate" version="2.0.0">
       <name>TextUpdate</name>
@@ -3041,14 +3051,15 @@
       <y>0</y>
       <width>150</width>
       <height>20</height>
-      <tooltip>$(text)</tooltip>
+      <tooltip>No description provided</tooltip>
     </widget>
-    <widget type="choice" version="2.0.0">
+    <widget type="slide_button" version="2.0.0">
       <name>ToggleButton</name>
       <pv_name>$(P)$(R)EmptyFreeList</pv_name>
-      <x>155</x>
+      <label/>
+      <x>247</x>
       <y>0</y>
-      <width>205</width>
+      <width>20</width>
       <height>20</height>
     </widget>
     <widget type="label" version="2.0.0">
@@ -3058,7 +3069,7 @@
       <y>25</y>
       <width>150</width>
       <height>20</height>
-      <tooltip>$(text)</tooltip>
+      <tooltip>No description provided</tooltip>
     </widget>
     <widget type="led" version="2.0.0">
       <name>LED</name>
@@ -3075,7 +3086,7 @@
       <y>50</y>
       <width>150</width>
       <height>20</height>
-      <tooltip>$(text)</tooltip>
+      <tooltip>No description provided</tooltip>
     </widget>
     <widget type="textupdate" version="2.0.0">
       <name>TextUpdate</name>
@@ -3097,7 +3108,7 @@
       <y>75</y>
       <width>150</width>
       <height>20</height>
-      <tooltip>$(text)</tooltip>
+      <tooltip>No description provided</tooltip>
     </widget>
     <widget type="textupdate" version="2.0.0">
       <name>TextUpdate</name>
@@ -3119,7 +3130,7 @@
       <y>100</y>
       <width>150</width>
       <height>20</height>
-      <tooltip>$(text)</tooltip>
+      <tooltip>No description provided</tooltip>
     </widget>
     <widget type="textupdate" version="2.0.0">
       <name>TextUpdate</name>
@@ -3141,7 +3152,7 @@
       <y>125</y>
       <width>150</width>
       <height>20</height>
-      <tooltip>$(text)</tooltip>
+      <tooltip>No description provided</tooltip>
     </widget>
     <widget type="textupdate" version="2.0.0">
       <name>TextUpdate</name>
@@ -3163,7 +3174,7 @@
       <y>150</y>
       <width>150</width>
       <height>20</height>
-      <tooltip>$(text)</tooltip>
+      <tooltip>No description provided</tooltip>
     </widget>
     <widget type="textupdate" version="2.0.0">
       <name>TextUpdate</name>
@@ -3185,7 +3196,7 @@
       <y>175</y>
       <width>150</width>
       <height>20</height>
-      <tooltip>$(text)</tooltip>
+      <tooltip>No description provided</tooltip>
     </widget>
     <widget type="textupdate" version="2.0.0">
       <name>TextUpdate</name>
@@ -3207,7 +3218,7 @@
       <y>200</y>
       <width>150</width>
       <height>20</height>
-      <tooltip>$(text)</tooltip>
+      <tooltip>No description provided</tooltip>
     </widget>
     <widget type="textupdate" version="2.0.0">
       <name>TextUpdate</name>
@@ -3229,7 +3240,7 @@
       <y>225</y>
       <width>150</width>
       <height>20</height>
-      <tooltip>$(text)</tooltip>
+      <tooltip>No description provided</tooltip>
     </widget>
     <widget type="textupdate" version="2.0.0">
       <name>TextUpdate</name>
@@ -3251,7 +3262,7 @@
       <y>250</y>
       <width>150</width>
       <height>20</height>
-      <tooltip>$(text)</tooltip>
+      <tooltip>No description provided</tooltip>
     </widget>
     <widget type="textupdate" version="2.0.0">
       <name>TextUpdate</name>
@@ -3273,7 +3284,7 @@
       <y>275</y>
       <width>150</width>
       <height>20</height>
-      <tooltip>$(text)</tooltip>
+      <tooltip>No description provided</tooltip>
     </widget>
     <widget type="textupdate" version="2.0.0">
       <name>TextUpdate</name>
@@ -3295,7 +3306,7 @@
       <y>300</y>
       <width>150</width>
       <height>20</height>
-      <tooltip>$(text)</tooltip>
+      <tooltip>No description provided</tooltip>
     </widget>
     <widget type="textupdate" version="2.0.0">
       <name>TextUpdate</name>
@@ -3317,7 +3328,7 @@
       <y>325</y>
       <width>150</width>
       <height>20</height>
-      <tooltip>$(text)</tooltip>
+      <tooltip>No description provided</tooltip>
     </widget>
     <widget type="textupdate" version="2.0.0">
       <name>TextUpdate</name>
@@ -3339,7 +3350,7 @@
       <y>350</y>
       <width>150</width>
       <height>20</height>
-      <tooltip>$(text)</tooltip>
+      <tooltip>No description provided</tooltip>
     </widget>
     <widget type="textentry" version="3.0.0">
       <name>TextEntry</name>
@@ -3370,7 +3381,7 @@
       <y>375</y>
       <width>150</width>
       <height>20</height>
-      <tooltip>$(text)</tooltip>
+      <tooltip>No description provided</tooltip>
     </widget>
     <widget type="textentry" version="3.0.0">
       <name>TextEntry</name>

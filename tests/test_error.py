@@ -25,7 +25,7 @@ def test_counter_overuse(tmp_epics_root: Path, samples: Path):
 
     with pytest.raises(ValueError) as ctx:
         do_generate(
-            entity_file,
+            [entity_file],
             [definition_file1],
             output_folder=tmp_epics_root / "runtime",
             pvi=False,
@@ -62,7 +62,7 @@ def test_bad_db(tmp_epics_root: Path, samples: Path):
 
     with pytest.raises(ValueError) as ctx:
         do_generate(
-            entity_file,
+            [entity_file],
             [definition_file1],
             output_folder=tmp_epics_root / "runtime",
             pvi=False,

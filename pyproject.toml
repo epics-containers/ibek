@@ -7,9 +7,8 @@ name = "ibek"
 classifiers = [
     "Development Status :: 3 - Alpha",
     "License :: OSI Approved :: Apache Software License",
-    "Programming Language :: Python :: 3.10",
-    "Programming Language :: Python :: 3.11",
-    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
 ]
 description = "IOC builder for EPICS and Kubernetes"
 dependencies = [
@@ -25,7 +24,7 @@ dependencies = [
 dynamic = ["version"]
 license.file = "LICENSE"
 readme = "README.md"
-requires-python = ">=3.10"
+requires-python = ">=3.13"
 
 [project.optional-dependencies]
 dev = [
@@ -75,6 +74,7 @@ filterwarnings = "error"
 testpaths = "docs src tests"
 
 [tool.coverage.run]
+patch = ["subprocess"]
 data_file = "/tmp/ibek.coverage"
 
 [tool.coverage.paths]
@@ -113,6 +113,8 @@ lint.ignore = [
     "E501",   # Line too long, should be fixed by black.
     "SLF001", # Private member accessed: `_model`
     "UP007",
+    "N802",   # Function name should be lowercase
+    "N803",   # Argument name should be lowercase
 ]
 line-length = 88
 lint.select = [
@@ -120,6 +122,7 @@ lint.select = [
     "C4",  # flake8-comprehensions - https://docs.astral.sh/ruff/rules/#flake8-comprehensions-c4
     "E",   # pycodestyle errors - https://docs.astral.sh/ruff/rules/#error-e
     "F",   # pyflakes rules - https://docs.astral.sh/ruff/rules/#pyflakes-f
+    "N",   # pep8-naming - https://docs.astral.sh/ruff/rules/#pep8-naming-n
     "W",   # pycodestyle warnings - https://docs.astral.sh/ruff/rules/#warning-w
     "I",   # isort - https://docs.astral.sh/ruff/rules/#isort-i
     "UP",  # pyupgrade - https://docs.astral.sh/ruff/rules/#pyupgrade-up
