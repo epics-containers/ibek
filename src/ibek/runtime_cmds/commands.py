@@ -24,7 +24,7 @@ runtime_cli = typer.Typer(cls=NaturalOrderGroup)
 
 @runtime_cli.command()
 def generate2(
-    instance_folder: Path = typer.Argument(
+    config_folder: Path = typer.Argument(
         None,
         help="The IOC instance folder containing entity yaml files",
         exists=True,
@@ -64,17 +64,17 @@ def generate2(
     additional runtime.yaml with entities from the services repository.
     """
 
-    if not instance_files and not instance_folder:
+    if not instance_files and not config_folder:
         typer.echo(
             "Error: Either instance folder or instance files must be provided.",
             err=True,
         )
         raise typer.Exit(code=1)
 
-    if instance_folder is not None:
+    if config_folder is not None:
         # Gather all yaml files in the instance folder
         for yaml_file in "ioc.yaml", "runtime.yaml":
-            p = instance_folder / GLOBALS.CONFIG_DIR_NAME / yaml_file
+            p = config_folder / yaml_file
             if (p).exists():
                 instance_files.append(p)
 
@@ -85,7 +85,7 @@ def generate2(
     if len(definitions) == 0:
         # get definitions from the default locations
         definitions += Path(GLOBALS.IBEK_DEFS).glob("**/*ibek.support.yaml")
-        definitions += instance_folder.glob(
+        definitions += config_folder.glob(
             "**/*.ibek.support.yaml", recurse_symlinks=True
         )
 
