@@ -39,7 +39,7 @@ import typer
 from ruamel.yaml import YAML, CommentedMap
 
 
-class ConvertedAlready(Exception):
+class ConvertedAlreadyError(Exception):
     pass
 
 
@@ -104,7 +104,7 @@ def process_file(file: Path):
             report("not a supported yaml file !!")
             return
 
-    except ConvertedAlready:
+    except ConvertedAlreadyError:
         report("already converted")
     else:
         with open(file, "w") as f:
@@ -150,11 +150,11 @@ def convert_definition(data: dict) -> dict | None:
         if "args" in data:
             new_data["parameters"] = list_to_dict(data["args"])
         else:
-            raise ConvertedAlready  # probably! (or its not a support yaml file)
+            raise ConvertedAlreadyError  # probably! (or its not a support yaml file)
         if "values" in data:
             check_converted(data["values"])
             new_data["post_defines"] = list_to_dict(data["values"])
-    except ConvertedAlready:
+    except ConvertedAlreadyError:
         raise
     except Exception:
         print(f"Failed to convert {data}")
@@ -180,7 +180,7 @@ def convert_definition(data: dict) -> dict | None:
 
 def check_converted(item: dict | list):
     if isinstance(item, dict):
-        raise ConvertedAlready
+        raise ConvertedAlreadyError
 
 
 def copy_verbatim(source: dict, dest: dict, keys: list[str]):

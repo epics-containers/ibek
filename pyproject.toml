@@ -113,6 +113,8 @@ lint.ignore = [
     "E501",   # Line too long, should be fixed by black.
     "SLF001", # Private member accessed: `_model`
     "UP007",
+    "N802",   # Function name should be lowercase
+    "N803",   # Argument name should be lowercase
 ]
 line-length = 88
 lint.select = [
