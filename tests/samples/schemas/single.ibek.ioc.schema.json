@@ -15,9 +15,6 @@
         "type": {
           "const": "ibek.repeat",
           "default": "ibek.repeat",
-          "enum": [
-            "ibek.repeat"
-          ],
           "title": "Type",
           "type": "string"
         },
@@ -47,6 +44,7 @@
           "type": "string"
         },
         "entity": {
+          "additionalProperties": true,
           "description": "The entity model to repeat",
           "title": "Entity",
           "type": "object"
@@ -65,9 +63,6 @@
         "type": {
           "const": "motorSim.simMotorAxis",
           "description": "Creates a simulation motor axis",
-          "enum": [
-            "motorSim.simMotorAxis"
-          ],
           "title": "Type",
           "type": "string"
         },
@@ -162,11 +157,7 @@
           "type": "string"
         },
         "DIR": {
-          "allOf": [
-            {
-              "$ref": "#/$defs/DIR"
-            }
-          ],
+          "$ref": "#/$defs/DIR",
           "default": 0,
           "description": "The direction of the axis"
         },
@@ -240,9 +231,6 @@
         "type": {
           "const": "motorSim.simMotorController",
           "description": "Creates a simulation motion controller",
-          "enum": [
-            "motorSim.simMotorController"
-          ],
           "title": "Type",
           "type": "string"
         },

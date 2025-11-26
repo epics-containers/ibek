@@ -7,9 +7,6 @@
         "type": {
           "const": "ibek.repeat",
           "default": "ibek.repeat",
-          "enum": [
-            "ibek.repeat"
-          ],
           "title": "Type",
           "type": "string"
         },
@@ -39,6 +36,7 @@
           "type": "string"
         },
         "entity": {
+          "additionalProperties": true,
           "description": "The entity model to repeat",
           "title": "Entity",
           "type": "object"
@@ -57,9 +55,6 @@
         "type": {
           "const": "listtest.lister",
           "description": "The protagonist from Red Dwarf",
-          "enum": [
-            "listtest.lister"
-          ],
           "title": "Type",
           "type": "string"
         },

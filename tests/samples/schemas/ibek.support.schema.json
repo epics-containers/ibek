@@ -7,9 +7,6 @@
         "type": {
           "const": "bool",
           "default": "bool",
-          "enum": [
-            "bool"
-          ],
           "title": "Type",
           "type": "string"
         },
@@ -49,18 +46,11 @@
         "type": {
           "const": "comment",
           "default": "comment",
-          "enum": [
-            "comment"
-          ],
           "title": "Type",
           "type": "string"
         },
         "when": {
-          "allOf": [
-            {
-              "$ref": "#/$defs/When"
-            }
-          ],
+          "$ref": "#/$defs/When",
           "default": "every",
           "description": "One of first / every / last"
         },
@@ -90,19 +80,26 @@
           "type": "string"
         },
         "args": {
-          "additionalProperties": {
-            "anyOf": [
-              {
-                "type": "string"
+          "anyOf": [
+            {
+              "additionalProperties": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
               },
-              {
-                "type": "null"
-              }
-            ]
-          },
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
           "description": "Dictionary of args and values to pass through to database. A value of None is equivalent to ARG: '{{ ARG }}'. See `UTILS.render_map` for more details.",
-          "title": "Args",
-          "type": "object"
+          "title": "Args"
         }
       },
       "required": [
@@ -164,9 +161,6 @@
         "type": {
           "const": "dict",
           "default": "dict",
-          "enum": [
-            "dict"
-          ],
           "title": "Type",
           "type": "string"
         },
@@ -178,6 +172,7 @@
         "default": {
           "anyOf": [
             {
+              "additionalProperties": true,
               "type": "object"
             },
             {
@@ -217,7 +212,7 @@
           "additionalProperties": {
             "$ref": "#/$defs/Define"
           },
-          "default": [],
+          "default": {},
           "description": "Calculated values to use as additional arguments With Jinja evaluation before all Args",
           "title": "Pre Defines",
           "type": "object"
@@ -269,7 +264,7 @@
               }
             ]
           },
-          "default": [],
+          "default": {},
           "description": "The arguments IOC instance should supply",
           "title": "Parameters",
           "type": "object"
@@ -278,7 +273,7 @@
           "additionalProperties": {
             "$ref": "#/$defs/Define"
           },
-          "default": [],
+          "default": {},
           "description": "Calculated values to use as additional arguments With Jinja evaluation after all Args",
           "title": "Post Defines",
           "type": "object"
@@ -385,20 +380,27 @@
           "type": "boolean"
         },
         "ui_macros": {
-          "additionalProperties": {
-            "anyOf": [
-              {
-                "type": "string"
+          "anyOf": [
+            {
+              "additionalProperties": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
               },
-              {
-                "type": "null"
-              }
-            ]
-          },
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
           "default": null,
           "description": "Macros to launch the UI on the IOC index. These must be args of the Entity this is attached to.",
-          "title": "Ui Macros",
-          "type": "object"
+          "title": "Ui Macros"
         },
         "pv": {
           "default": false,
@@ -426,9 +428,6 @@
         "type": {
           "const": "enum",
           "default": "enum",
-          "enum": [
-            "enum"
-          ],
           "title": "Type",
           "type": "string"
         },
@@ -448,6 +447,7 @@
           "title": "Default"
         },
         "values": {
+          "additionalProperties": true,
           "description": "provides a list of values to make this argument an Enum",
           "title": "Values",
           "type": "object"
@@ -489,9 +489,6 @@
         "type": {
           "const": "float",
           "default": "float",
-          "enum": [
-            "float"
-          ],
           "title": "Type",
           "type": "string"
         },
@@ -531,9 +528,6 @@
         "type": {
           "const": "id",
           "default": "id",
-          "enum": [
-            "id"
-          ],
           "title": "Type",
           "type": "string"
         },
@@ -568,9 +562,6 @@
         "type": {
           "const": "int",
           "default": "int",
-          "enum": [
-            "int"
-          ],
           "title": "Type",
           "type": "string"
         },
@@ -610,9 +601,6 @@
         "type": {
           "const": "list",
           "default": "list",
-          "enum": [
-            "list"
-          ],
           "title": "Type",
           "type": "string"
         },
@@ -653,9 +641,6 @@
         "type": {
           "const": "object",
           "default": "object",
-          "enum": [
-            "object"
-          ],
           "title": "Type",
           "type": "string"
         },
@@ -691,9 +676,6 @@
         "type": {
           "const": "str",
           "default": "str",
-          "enum": [
-            "str"
-          ],
           "title": "Type",
           "type": "string"
         },
@@ -750,9 +732,6 @@
         "type": {
           "const": "text",
           "default": "text",
-          "enum": [
-            "text"
-          ],
           "title": "Type",
           "type": "string"
         },

@@ -7,9 +7,6 @@
         "type": {
           "const": "ibek.repeat",
           "default": "ibek.repeat",
-          "enum": [
-            "ibek.repeat"
-          ],
           "title": "Type",
           "type": "string"
         },
@@ -39,6 +36,7 @@
           "type": "string"
         },
         "entity": {
+          "additionalProperties": true,
           "description": "The entity model to repeat",
           "title": "Entity",
           "type": "object"
@@ -65,9 +63,6 @@
         "type": {
           "const": "motorTML.CreateController",
           "description": "Creates a Technosoft motion controller connected to a serial line",
-          "enum": [
-            "motorTML.CreateController"
-          ],
           "title": "Type",
           "type": "string"
         },
@@ -130,9 +125,6 @@
         "type": {
           "const": "motorTML.motorAxis",
           "description": "Creates a motor axis",
-          "enum": [
-            "motorTML.motorAxis"
-          ],
           "title": "Type",
           "type": "string"
         },
@@ -196,11 +188,7 @@
           "type": "string"
         },
         "homing": {
-          "allOf": [
-            {
-              "$ref": "#/$defs/homing"
-            }
-          ],
+          "$ref": "#/$defs/homing",
           "default": "LSN",
           "description": "Homing direction"
         },

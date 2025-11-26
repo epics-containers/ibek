@@ -44,7 +44,7 @@ class Database(BaseSettings):
         description="Set to False to disable loading this database", default="True"
     )
 
-    args: Mapping[str, str | None] = Field(
+    args: Mapping[str, str | None] | None = Field(
         description=(
             "Dictionary of args and values to pass through to database. "
             "A value of None is equivalent to ARG: '{{ ARG }}'. "
@@ -69,7 +69,7 @@ class Comment(BaseSettings):
     """
 
     type: Literal["comment"] = "comment"
-    when: When = Field(description="One of first / every / last", default="every")
+    when: When = Field(description="One of first / every / last", default=When.every)
     value: str = Field(
         description="A comment to add into the startup script", default=""
     )
@@ -98,7 +98,7 @@ class EntityPVI(BaseSettings):
         True,
         description="Whether to add the UI to the IOC index.",
     )
-    ui_macros: dict[str, str | None] = Field(
+    ui_macros: dict[str, str | None] | None = Field(
         None,
         description=(
             "Macros to launch the UI on the IOC index. "
@@ -135,17 +135,17 @@ class EntityModel(BaseSettings):
     pre_defines: dict[str, Define] = Field(
         description="Calculated values to use as additional arguments "
         "With Jinja evaluation before all Args",
-        default=(),
+        default={},
     )
     # declare Arg as Union of its subclasses for Pydantic to be able to deserialize
     parameters: dict[str, discriminated] = Field(  # type: ignore
         description="The arguments IOC instance should supply",
-        default=(),
+        default={},
     )
     post_defines: dict[str, Define] = Field(
         description="Calculated values to use as additional arguments "
         "With Jinja evaluation after all Args",
-        default=(),
+        default={},
     )
     pre_init: Script = Field(
         description="Startup script snippets to add before iocInit()", default=()

@@ -7,9 +7,6 @@
         "type": {
           "const": "ibek.repeat",
           "default": "ibek.repeat",
-          "enum": [
-            "ibek.repeat"
-          ],
           "title": "Type",
           "type": "string"
         },
@@ -39,6 +36,7 @@
           "type": "string"
         },
         "entity": {
+          "additionalProperties": true,
           "description": "The entity model to repeat",
           "title": "Entity",
           "type": "object"
@@ -57,9 +55,6 @@
         "type": {
           "const": "asyn.AsynIP",
           "description": "Asyn IP Port",
-          "enum": [
-            "asyn.AsynIP"
-          ],
           "title": "Type",
           "type": "string"
         },
@@ -156,47 +151,27 @@
           "title": "Baud"
         },
         "parity": {
-          "allOf": [
-            {
-              "$ref": "#/$defs/parity"
-            }
-          ],
+          "$ref": "#/$defs/parity",
           "default": "none",
           "description": "Parity"
         },
         "crtscts": {
-          "allOf": [
-            {
-              "$ref": "#/$defs/crtscts"
-            }
-          ],
+          "$ref": "#/$defs/crtscts",
           "default": "N",
           "description": "Set hardware flow control on"
         },
         "stop": {
-          "allOf": [
-            {
-              "$ref": "#/$defs/stop"
-            }
-          ],
+          "$ref": "#/$defs/stop",
           "default": "1",
           "description": "Stop Bits"
         },
         "disconnectOnReadTimeout": {
-          "allOf": [
-            {
-              "$ref": "#/$defs/disconnectOnReadTimeout"
-            }
-          ],
+          "$ref": "#/$defs/disconnectOnReadTimeout",
           "default": "Y",
           "description": "Disconnect when a read times out"
         },
         "bits": {
-          "allOf": [
-            {
-              "$ref": "#/$defs/bits"
-            }
-          ],
+          "$ref": "#/$defs/bits",
           "default": "8",
           "description": "Bits"
         }
@@ -241,9 +216,6 @@
         "type": {
           "const": "dlsPLC.NX102_vacValveDebounce",
           "description": "Template database for a vacuum valve without debounce or raw air records",
-          "enum": [
-            "dlsPLC.NX102_vacValveDebounce"
-          ],
           "title": "Type",
           "type": "string"
         },

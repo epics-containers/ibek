@@ -143,7 +143,9 @@ class Utils:
 
         return result
 
-    def render_map(self, context: Any, map: Mapping[str, str | None]) -> dict[str, str]:
+    def render_map(
+        self, context: Any, map: Mapping[str, str | None] | None
+    ) -> dict[str, str]:
         """
         Render a map of jinja templates with values from the given context.
 
@@ -155,6 +157,7 @@ class Utils:
             map: Map of macro to jinja template to render
 
         """
+        assert map is not None
         return {
             key: self.render(
                 context,

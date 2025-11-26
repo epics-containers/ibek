@@ -6,9 +6,6 @@
         "type": {
           "const": "ADCore.NDAttrPlot",
           "description": "TODO:ADD DESCRIPTION",
-          "enum": [
-            "ADCore.NDAttrPlot"
-          ],
           "title": "Type",
           "type": "string"
         },
@@ -102,11 +99,7 @@
           "title": "Enabled"
         },
         "SCANRATE": {
-          "allOf": [
-            {
-              "$ref": "#/$defs/SCANRATE"
-            }
-          ],
+          "$ref": "#/$defs/SCANRATE",
           "default": "I/O Intr",
           "description": "Specified scan rate for cpu intensive PVs"
         },
@@ -199,9 +192,6 @@
         "type": {
           "const": "ADCore.NDAttribute",
           "description": "This plugin displays NDArray attributes",
-          "enum": [
-            "ADCore.NDAttribute"
-          ],
           "title": "Type",
           "type": "string"
         },
@@ -295,11 +285,7 @@
           "title": "Enabled"
         },
         "SCANRATE": {
-          "allOf": [
-            {
-              "$ref": "#/$defs/SCANRATE"
-            }
-          ],
+          "$ref": "#/$defs/SCANRATE",
           "default": "I/O Intr",
           "description": "Specified scan rate for cpu intensive PVs"
         },
@@ -390,9 +376,6 @@
         "type": {
           "const": "ADCore.NDAttributes",
           "description": "Add an attribute to the NDAttributes file for a particular ADDriver or\n    NDPlugin, and associate it with the NDAttributes file",
-          "enum": [
-            "ADCore.NDAttributes"
-          ],
           "title": "Type",
           "type": "string"
         },
@@ -422,20 +405,12 @@
           "type": "string"
         },
         "dbrtype": {
-          "allOf": [
-            {
-              "$ref": "#/$defs/dbrtype"
-            }
-          ],
+          "$ref": "#/$defs/dbrtype",
           "default": "DBR_NATIVE",
           "description": "DBR type (only used if type=EPICS_PV)"
         },
         "datatype": {
-          "allOf": [
-            {
-              "$ref": "#/$defs/datatype"
-            }
-          ],
+          "$ref": "#/$defs/datatype",
           "default": "INT",
           "description": "Data type (only used if type=PARAM)"
         },
@@ -478,9 +453,6 @@
         "type": {
           "const": "ADCore.NDCircularBuff",
           "description": "This plugin provides a pre and post external trigger frame capture buffer",
-          "enum": [
-            "ADCore.NDCircularBuff"
-          ],
           "title": "Type",
           "type": "string"
         },
@@ -574,11 +546,7 @@
           "title": "Enabled"
         },
         "SCANRATE": {
-          "allOf": [
-            {
-              "$ref": "#/$defs/SCANRATE"
-            }
-          ],
+          "$ref": "#/$defs/SCANRATE",
           "default": "I/O Intr",
           "description": "Specified scan rate for cpu intensive PVs"
         },
@@ -679,9 +647,6 @@
         "type": {
           "const": "ADCore.NDCodec",
           "description": "This plugin can compress or decompress NDArrays",
-          "enum": [
-            "ADCore.NDCodec"
-          ],
           "title": "Type",
           "type": "string"
         },
@@ -775,11 +740,7 @@
           "title": "Enabled"
         },
         "SCANRATE": {
-          "allOf": [
-            {
-              "$ref": "#/$defs/SCANRATE"
-            }
-          ],
+          "$ref": "#/$defs/SCANRATE",
           "default": "I/O Intr",
           "description": "Specified scan rate for cpu intensive PVs"
         },
@@ -848,9 +809,6 @@
         "type": {
           "const": "ADCore.NDColorConvert",
           "description": "This plugin converts arrays from one colour type to another, e.g. Bayer -> RGB1",
-          "enum": [
-            "ADCore.NDColorConvert"
-          ],
           "title": "Type",
           "type": "string"
         },
@@ -944,11 +902,7 @@
           "title": "Enabled"
         },
         "SCANRATE": {
-          "allOf": [
-            {
-              "$ref": "#/$defs/SCANRATE"
-            }
-          ],
+          "$ref": "#/$defs/SCANRATE",
           "default": "I/O Intr",
           "description": "Specified scan rate for cpu intensive PVs"
         },
@@ -1017,9 +971,6 @@
         "type": {
           "const": "ADCore.NDFFT",
           "description": "This plugin is used to calculate the FFT of a time series",
-          "enum": [
-            "ADCore.NDFFT"
-          ],
           "title": "Type",
           "type": "string"
         },
@@ -1118,11 +1069,7 @@
           "title": "Enabled"
         },
         "SCANRATE": {
-          "allOf": [
-            {
-              "$ref": "#/$defs/SCANRATE"
-            }
-          ],
+          "$ref": "#/$defs/SCANRATE",
           "default": "I/O Intr",
           "description": "Specified scan rate for cpu intensive PVs"
         },
@@ -1256,9 +1203,6 @@
         "type": {
           "const": "ADCore.NDFileHDF5",
           "description": "This plugin can compress NDArrays to HDF5 and write them to file",
-          "enum": [
-            "ADCore.NDFileHDF5"
-          ],
           "title": "Type",
           "type": "string"
         },
@@ -1352,11 +1296,7 @@
           "title": "Enabled"
         },
         "SCANRATE": {
-          "allOf": [
-            {
-              "$ref": "#/$defs/SCANRATE"
-            }
-          ],
+          "$ref": "#/$defs/SCANRATE",
           "default": "I/O Intr",
           "description": "Specified scan rate for cpu intensive PVs"
         },
@@ -1425,9 +1365,6 @@
         "type": {
           "const": "ADCore.NDFileJPEG",
           "description": "This plugin can compress NDArrays to JPEG and write them to file",
-          "enum": [
-            "ADCore.NDFileJPEG"
-          ],
           "title": "Type",
           "type": "string"
         },
@@ -1521,11 +1458,7 @@
           "title": "Enabled"
         },
         "SCANRATE": {
-          "allOf": [
-            {
-              "$ref": "#/$defs/SCANRATE"
-            }
-          ],
+          "$ref": "#/$defs/SCANRATE",
           "default": "I/O Intr",
           "description": "Specified scan rate for cpu intensive PVs"
         },
@@ -1578,9 +1511,6 @@
         "type": {
           "const": "ADCore.NDFileMagick",
           "description": "This plugin can compress NDArrays to a range of formats supported by\n    graphics magick and write them to file",
-          "enum": [
-            "ADCore.NDFileMagick"
-          ],
           "title": "Type",
           "type": "string"
         },
@@ -1674,11 +1604,7 @@
           "title": "Enabled"
         },
         "SCANRATE": {
-          "allOf": [
-            {
-              "$ref": "#/$defs/SCANRATE"
-            }
-          ],
+          "$ref": "#/$defs/SCANRATE",
           "default": "I/O Intr",
           "description": "Specified scan rate for cpu intensive PVs"
         },
@@ -1731,9 +1657,6 @@
         "type": {
           "const": "ADCore.NDFileNetCDF",
           "description": "This plugin can compress NDArrays to NetCDF and write them to file",
-          "enum": [
-            "ADCore.NDFileNetCDF"
-          ],
           "title": "Type",
           "type": "string"
         },
@@ -1827,11 +1750,7 @@
           "title": "Enabled"
         },
         "SCANRATE": {
-          "allOf": [
-            {
-              "$ref": "#/$defs/SCANRATE"
-            }
-          ],
+          "$ref": "#/$defs/SCANRATE",
           "default": "I/O Intr",
           "description": "Specified scan rate for cpu intensive PVs"
         },
@@ -1884,9 +1803,6 @@
         "type": {
           "const": "ADCore.NDFileNexus",
           "description": "This plugin can compress NDArrays to Nexus and write them to file",
-          "enum": [
-            "ADCore.NDFileNexus"
-          ],
           "title": "Type",
           "type": "string"
         },
@@ -1980,11 +1896,7 @@
           "title": "Enabled"
         },
         "SCANRATE": {
-          "allOf": [
-            {
-              "$ref": "#/$defs/SCANRATE"
-            }
-          ],
+          "$ref": "#/$defs/SCANRATE",
           "default": "I/O Intr",
           "description": "Specified scan rate for cpu intensive PVs"
         },
@@ -2037,9 +1949,6 @@
         "type": {
           "const": "ADCore.NDFileNull",
           "description": "Null file plugin for deleting driver files",
-          "enum": [
-            "ADCore.NDFileNull"
-          ],
           "title": "Type",
           "type": "string"
         },
@@ -2101,11 +2010,7 @@
           "title": "Addr"
         },
         "SCANRATE": {
-          "allOf": [
-            {
-              "$ref": "#/$defs/SCANRATE"
-            }
-          ],
+          "$ref": "#/$defs/SCANRATE",
           "default": "I/O Intr",
           "description": "Specified scan rate for cpu intensive PVs"
         },
@@ -2190,9 +2095,6 @@
         "type": {
           "const": "ADCore.NDFileTIFF",
           "description": "This plugin can compress NDArrays to TIFF and write them to file",
-          "enum": [
-            "ADCore.NDFileTIFF"
-          ],
           "title": "Type",
           "type": "string"
         },
@@ -2286,11 +2188,7 @@
           "title": "Enabled"
         },
         "SCANRATE": {
-          "allOf": [
-            {
-              "$ref": "#/$defs/SCANRATE"
-            }
-          ],
+          "$ref": "#/$defs/SCANRATE",
           "default": "I/O Intr",
           "description": "Specified scan rate for cpu intensive PVs"
         },
@@ -2343,9 +2241,6 @@
         "type": {
           "const": "ADCore.NDGather",
           "description": "This plugin is used to gather NDArrays from multiple upstream plugins and merge them into a single stream",
-          "enum": [
-            "ADCore.NDGather"
-          ],
           "title": "Type",
           "type": "string"
         },
@@ -2430,11 +2325,7 @@
           "title": "Enabled"
         },
         "SCANRATE": {
-          "allOf": [
-            {
-              "$ref": "#/$defs/SCANRATE"
-            }
-          ],
+          "$ref": "#/$defs/SCANRATE",
           "default": "I/O Intr",
           "description": "Specified scan rate for cpu intensive PVs"
         },
@@ -2513,9 +2404,6 @@
         "type": {
           "const": "ADCore.NDGather8",
           "description": "This plugin is used to gather NDArrays from multiple upstream plugins and merge them into a single stream",
-          "enum": [
-            "ADCore.NDGather8"
-          ],
           "title": "Type",
           "type": "string"
         },
@@ -2600,11 +2488,7 @@
           "title": "Enabled"
         },
         "SCANRATE": {
-          "allOf": [
-            {
-              "$ref": "#/$defs/SCANRATE"
-            }
-          ],
+          "$ref": "#/$defs/SCANRATE",
           "default": "I/O Intr",
           "description": "Specified scan rate for cpu intensive PVs"
         },
@@ -2679,9 +2563,6 @@
         "type": {
           "const": "ADCore.NDOverlay",
           "description": "This plugin writes overlays on the array, like cursors and boxes",
-          "enum": [
-            "ADCore.NDOverlay"
-          ],
           "title": "Type",
           "type": "string"
         },
@@ -2775,11 +2656,7 @@
           "title": "Enabled"
         },
         "SCANRATE": {
-          "allOf": [
-            {
-              "$ref": "#/$defs/SCANRATE"
-            }
-          ],
+          "$ref": "#/$defs/SCANRATE",
           "default": "I/O Intr",
           "description": "Specified scan rate for cpu intensive PVs"
         },
@@ -2914,9 +2791,6 @@
         "type": {
           "const": "ADCore.NDPosPlugin",
           "description": "This plugin attaches position information to NDArrays",
-          "enum": [
-            "ADCore.NDPosPlugin"
-          ],
           "title": "Type",
           "type": "string"
         },
@@ -3010,11 +2884,7 @@
           "title": "Enabled"
         },
         "SCANRATE": {
-          "allOf": [
-            {
-              "$ref": "#/$defs/SCANRATE"
-            }
-          ],
+          "$ref": "#/$defs/SCANRATE",
           "default": "I/O Intr",
           "description": "Specified scan rate for cpu intensive PVs"
         },
@@ -3099,9 +2969,6 @@
         "type": {
           "const": "ADCore.NDProcess",
           "description": "This plugin does image processing like flat field correction, background\n    subtraction, and recursive filtering",
-          "enum": [
-            "ADCore.NDProcess"
-          ],
           "title": "Type",
           "type": "string"
         },
@@ -3195,11 +3062,7 @@
           "title": "Enabled"
         },
         "SCANRATE": {
-          "allOf": [
-            {
-              "$ref": "#/$defs/SCANRATE"
-            }
-          ],
+          "$ref": "#/$defs/SCANRATE",
           "default": "I/O Intr",
           "description": "Specified scan rate for cpu intensive PVs"
         },
@@ -3252,9 +3115,6 @@
         "type": {
           "const": "ADCore.NDPvaPlugin",
           "description": "This plugin makes NDArrays available through PVAccess",
-          "enum": [
-            "ADCore.NDPvaPlugin"
-          ],
           "title": "Type",
           "type": "string"
         },
@@ -3353,11 +3213,7 @@
           "title": "Enabled"
         },
         "SCANRATE": {
-          "allOf": [
-            {
-              "$ref": "#/$defs/SCANRATE"
-            }
-          ],
+          "$ref": "#/$defs/SCANRATE",
           "default": "I/O Intr",
           "description": "Specified scan rate for cpu intensive PVs"
         },
@@ -3443,9 +3299,6 @@
         "type": {
           "const": "ADCore.NDROI",
           "description": "This plugin selects a region of interest and optionally scales it to\n    fit in a particular data type",
-          "enum": [
-            "ADCore.NDROI"
-          ],
           "title": "Type",
           "type": "string"
         },
@@ -3539,11 +3392,7 @@
           "title": "Enabled"
         },
         "SCANRATE": {
-          "allOf": [
-            {
-              "$ref": "#/$defs/SCANRATE"
-            }
-          ],
+          "$ref": "#/$defs/SCANRATE",
           "default": "I/O Intr",
           "description": "Specified scan rate for cpu intensive PVs"
         },
@@ -3612,9 +3461,6 @@
         "type": {
           "const": "ADCore.NDROIStat",
           "description": "This plugin calculates statistics of ROIs",
-          "enum": [
-            "ADCore.NDROIStat"
-          ],
           "title": "Type",
           "type": "string"
         },
@@ -3708,11 +3554,7 @@
           "title": "Enabled"
         },
         "SCANRATE": {
-          "allOf": [
-            {
-              "$ref": "#/$defs/SCANRATE"
-            }
-          ],
+          "$ref": "#/$defs/SCANRATE",
           "default": "I/O Intr",
           "description": "Specified scan rate for cpu intensive PVs"
         },
@@ -3813,9 +3655,6 @@
         "type": {
           "const": "ADCore.NDScatter",
           "description": "This plugin is used to distribute processing of NDArrays to multiple downstream plugins",
-          "enum": [
-            "ADCore.NDScatter"
-          ],
           "title": "Type",
           "type": "string"
         },
@@ -3909,11 +3748,7 @@
           "title": "Enabled"
         },
         "SCANRATE": {
-          "allOf": [
-            {
-              "$ref": "#/$defs/SCANRATE"
-            }
-          ],
+          "$ref": "#/$defs/SCANRATE",
           "default": "I/O Intr",
           "description": "Specified scan rate for cpu intensive PVs"
         },
@@ -3982,9 +3817,6 @@
         "type": {
           "const": "ADCore.NDStats",
           "description": "This plugin calculates statistics like X and Y profile, centroid, and plots a histogram of binned pixels",
-          "enum": [
-            "ADCore.NDStats"
-          ],
           "title": "Type",
           "type": "string"
         },
@@ -4187,11 +4019,7 @@
           "title": "Max Threads"
         },
         "SCANRATE": {
-          "allOf": [
-            {
-              "$ref": "#/$defs/SCANRATE"
-            }
-          ],
+          "$ref": "#/$defs/SCANRATE",
           "default": "I/O Intr",
           "description": "Specified scan rate for cpu intensive PVs"
         },
@@ -4221,9 +4049,6 @@
         "type": {
           "const": "ADCore.NDStdArrays",
           "description": "This plugin provides a waveform record that can display the NDArrays\n    produced by its NDARRAY_PORT",
-          "enum": [
-            "ADCore.NDStdArrays"
-          ],
           "title": "Type",
           "type": "string"
         },
@@ -4258,11 +4083,7 @@
           "type": "string"
         },
         "FTVL": {
-          "allOf": [
-            {
-              "$ref": "#/$defs/FTVL"
-            }
-          ],
+          "$ref": "#/$defs/FTVL",
           "description": "Field Type of Value"
         },
         "NELEMENTS": {
@@ -4345,11 +4166,7 @@
           "title": "Enabled"
         },
         "SCANRATE": {
-          "allOf": [
-            {
-              "$ref": "#/$defs/SCANRATE"
-            }
-          ],
+          "$ref": "#/$defs/SCANRATE",
           "default": "I/O Intr",
           "description": "Specified scan rate for cpu intensive PVs"
         },
@@ -4421,9 +4238,6 @@
         "type": {
           "const": "ADCore.NDTimeSeries",
           "description": "This plugin creates time series arrays from callback data",
-          "enum": [
-            "ADCore.NDTimeSeries"
-          ],
           "title": "Type",
           "type": "string"
         },
@@ -4522,11 +4336,7 @@
           "title": "Enabled"
         },
         "SCANRATE": {
-          "allOf": [
-            {
-              "$ref": "#/$defs/SCANRATE"
-            }
-          ],
+          "$ref": "#/$defs/SCANRATE",
           "default": "I/O Intr",
           "description": "Specified scan rate for cpu intensive PVs"
         },
@@ -4650,9 +4460,6 @@
         "type": {
           "const": "ADCore.NDTransform",
           "description": "This plugin selects a region of interest and optionally scales it to fit in a particular data type",
-          "enum": [
-            "ADCore.NDTransform"
-          ],
           "title": "Type",
           "type": "string"
         },
@@ -4746,11 +4553,7 @@
           "title": "Enabled"
         },
         "SCANRATE": {
-          "allOf": [
-            {
-              "$ref": "#/$defs/SCANRATE"
-            }
-          ],
+          "$ref": "#/$defs/SCANRATE",
           "default": "I/O Intr",
           "description": "Specified scan rate for cpu intensive PVs"
         },
@@ -4819,9 +4622,6 @@
         "type": {
           "const": "ADCore._NDCircularBuff",
           "description": "TODO:ADD DESCRIPTION",
-          "enum": [
-            "ADCore._NDCircularBuff"
-          ],
           "title": "Type",
           "type": "string"
         },
@@ -4916,11 +4716,7 @@
           "title": "Enabled"
         },
         "SCANRATE": {
-          "allOf": [
-            {
-              "$ref": "#/$defs/SCANRATE"
-            }
-          ],
+          "$ref": "#/$defs/SCANRATE",
           "default": "I/O Intr",
           "description": "Specified scan rate for cpu intensive PVs"
         },
@@ -4990,9 +4786,6 @@
         "type": {
           "const": "ibek.repeat",
           "default": "ibek.repeat",
-          "enum": [
-            "ibek.repeat"
-          ],
           "title": "Type",
           "type": "string"
         },
@@ -5022,6 +4815,7 @@
           "type": "string"
         },
         "entity": {
+          "additionalProperties": true,
           "description": "The entity model to repeat",
           "title": "Entity",
           "type": "object"
@@ -5079,9 +4873,6 @@
         "type": {
           "const": "quadEM.Plugins",
           "description": "Instantiates\n  12 NDStats plugins for Current, Sum, Diff and Pos Channels\n  12 NDTimeSeries plugins\n  12 NDArray plugins",
-          "enum": [
-            "quadEM.Plugins"
-          ],
           "title": "Type",
           "type": "string"
         },
@@ -5179,9 +4970,6 @@
         "type": {
           "const": "quadEM.TetrAMM",
           "description": "TODO:ADD DESCRIPTION",
-          "enum": [
-            "quadEM.TetrAMM"
-          ],
           "title": "Type",
           "type": "string"
         },
