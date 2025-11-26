@@ -80,19 +80,26 @@
           "type": "string"
         },
         "args": {
-          "additionalProperties": {
-            "anyOf": [
-              {
-                "type": "string"
+          "anyOf": [
+            {
+              "additionalProperties": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
               },
-              {
-                "type": "null"
-              }
-            ]
-          },
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
           "description": "Dictionary of args and values to pass through to database. A value of None is equivalent to ARG: '{{ ARG }}'. See `UTILS.render_map` for more details.",
-          "title": "Args",
-          "type": "object"
+          "title": "Args"
         }
       },
       "required": [
@@ -205,7 +212,7 @@
           "additionalProperties": {
             "$ref": "#/$defs/Define"
           },
-          "default": [],
+          "default": {},
           "description": "Calculated values to use as additional arguments With Jinja evaluation before all Args",
           "title": "Pre Defines",
           "type": "object"
@@ -257,7 +264,7 @@
               }
             ]
           },
-          "default": [],
+          "default": {},
           "description": "The arguments IOC instance should supply",
           "title": "Parameters",
           "type": "object"
@@ -266,7 +273,7 @@
           "additionalProperties": {
             "$ref": "#/$defs/Define"
           },
-          "default": [],
+          "default": {},
           "description": "Calculated values to use as additional arguments With Jinja evaluation after all Args",
           "title": "Post Defines",
           "type": "object"
@@ -373,20 +380,27 @@
           "type": "boolean"
         },
         "ui_macros": {
-          "additionalProperties": {
-            "anyOf": [
-              {
-                "type": "string"
+          "anyOf": [
+            {
+              "additionalProperties": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
               },
-              {
-                "type": "null"
-              }
-            ]
-          },
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
           "default": null,
           "description": "Macros to launch the UI on the IOC index. These must be args of the Entity this is attached to.",
-          "title": "Ui Macros",
-          "type": "object"
+          "title": "Ui Macros"
         },
         "pv": {
           "default": false,

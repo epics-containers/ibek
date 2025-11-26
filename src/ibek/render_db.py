@@ -80,6 +80,7 @@ class RenderDb:
             # take each database parameter and expand it into the set of
             # entity parameters that it matches using regex
             expanded_database_entries: dict[str, str | None] = {}
+            assert database.args is not None
             for arg, value in database.args.items():
                 if "*" in arg or "?" in arg:
                     # this is a regex - match the parameters to the regex
