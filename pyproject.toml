@@ -12,7 +12,8 @@ classifiers = [
 ]
 description = "IOC builder for EPICS and Kubernetes"
 dependencies = [
-    "pydantic",
+    # need to fix deprectation warnings before upgrading to pydantic v3
+    "pydantic<3.0.0",
     "typer",
     "ruamel.yaml",
     "jinja2",
@@ -68,7 +69,10 @@ addopts = """
     --tb=native -vv --doctest-modules --doctest-glob="*.rst"
     """
 # https://iscinumpy.gitlab.io/post/bound-version-constraints/#watch-for-warnings
-filterwarnings = "error"
+filterwarnings = [
+    "error",
+    "ignore::pydantic.warnings.PydanticDeprecatedSince211",
+]
 # Doctest python code in docs, python code in src docstrings, test functions in tests
 testpaths = "docs src tests"
 

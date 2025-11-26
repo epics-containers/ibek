@@ -7,9 +7,6 @@
         "type": {
           "const": "bool",
           "default": "bool",
-          "enum": [
-            "bool"
-          ],
           "title": "Type",
           "type": "string"
         },
@@ -49,18 +46,11 @@
         "type": {
           "const": "comment",
           "default": "comment",
-          "enum": [
-            "comment"
-          ],
           "title": "Type",
           "type": "string"
         },
         "when": {
-          "allOf": [
-            {
-              "$ref": "#/$defs/When"
-            }
-          ],
+          "$ref": "#/$defs/When",
           "default": "every",
           "description": "One of first / every / last"
         },
@@ -164,9 +154,6 @@
         "type": {
           "const": "dict",
           "default": "dict",
-          "enum": [
-            "dict"
-          ],
           "title": "Type",
           "type": "string"
         },
@@ -178,6 +165,7 @@
         "default": {
           "anyOf": [
             {
+              "additionalProperties": true,
               "type": "object"
             },
             {
@@ -426,9 +414,6 @@
         "type": {
           "const": "enum",
           "default": "enum",
-          "enum": [
-            "enum"
-          ],
           "title": "Type",
           "type": "string"
         },
@@ -448,6 +433,7 @@
           "title": "Default"
         },
         "values": {
+          "additionalProperties": true,
           "description": "provides a list of values to make this argument an Enum",
           "title": "Values",
           "type": "object"
@@ -489,9 +475,6 @@
         "type": {
           "const": "float",
           "default": "float",
-          "enum": [
-            "float"
-          ],
           "title": "Type",
           "type": "string"
         },
@@ -531,9 +514,6 @@
         "type": {
           "const": "id",
           "default": "id",
-          "enum": [
-            "id"
-          ],
           "title": "Type",
           "type": "string"
         },
@@ -568,9 +548,6 @@
         "type": {
           "const": "int",
           "default": "int",
-          "enum": [
-            "int"
-          ],
           "title": "Type",
           "type": "string"
         },
@@ -610,9 +587,6 @@
         "type": {
           "const": "list",
           "default": "list",
-          "enum": [
-            "list"
-          ],
           "title": "Type",
           "type": "string"
         },
@@ -653,9 +627,6 @@
         "type": {
           "const": "object",
           "default": "object",
-          "enum": [
-            "object"
-          ],
           "title": "Type",
           "type": "string"
         },
@@ -691,9 +662,6 @@
         "type": {
           "const": "str",
           "default": "str",
-          "enum": [
-            "str"
-          ],
           "title": "Type",
           "type": "string"
         },
@@ -750,9 +718,6 @@
         "type": {
           "const": "text",
           "default": "text",
-          "enum": [
-            "text"
-          ],
           "title": "Type",
           "type": "string"
         },

@@ -7,9 +7,6 @@
         "type": {
           "const": "ibek.repeat",
           "default": "ibek.repeat",
-          "enum": [
-            "ibek.repeat"
-          ],
           "title": "Type",
           "type": "string"
         },
@@ -39,6 +36,7 @@
           "type": "string"
         },
         "entity": {
+          "additionalProperties": true,
           "description": "The entity model to repeat",
           "title": "Entity",
           "type": "object"
@@ -76,9 +74,6 @@
         "type": {
           "const": "epics.EpicsCaMaxArrayBytes",
           "description": "Set the maximum size in bytes for sending arrays over channel access",
-          "enum": [
-            "epics.EpicsCaMaxArrayBytes"
-          ],
           "title": "Type",
           "type": "string"
         },
@@ -117,9 +112,6 @@
         "type": {
           "const": "epics.EpicsEnvSet",
           "description": "Set an environment variable in the ioc Shell",
-          "enum": [
-            "epics.EpicsEnvSet"
-          ],
           "title": "Type",
           "type": "string"
         },
@@ -154,9 +146,6 @@
         "type": {
           "const": "epics.EpicsTsMinWest",
           "description": "Set the relative time zone minutes West relative to GMT (+/-720)",
-          "enum": [
-            "epics.EpicsTsMinWest"
-          ],
           "title": "Type",
           "type": "string"
         },
@@ -195,9 +184,6 @@
         "type": {
           "const": "epics.InterruptVectorVME",
           "description": "Reserve a VME interrupt vector",
-          "enum": [
-            "epics.InterruptVectorVME"
-          ],
           "title": "Type",
           "type": "string"
         },
@@ -242,9 +228,6 @@
         "type": {
           "const": "epics.PostStartupCommand",
           "description": "Adds an arbitrary command in the startup script after iocInit",
-          "enum": [
-            "epics.PostStartupCommand"
-          ],
           "title": "Type",
           "type": "string"
         },
@@ -273,9 +256,6 @@
         "type": {
           "const": "epics.StartupCommand",
           "description": "Adds an arbitrary command in the startup script before iocInit",
-          "enum": [
-            "epics.StartupCommand"
-          ],
           "title": "Type",
           "type": "string"
         },
@@ -304,9 +284,6 @@
         "type": {
           "const": "epics.dbpf",
           "description": "Set a PV value after iocInit",
-          "enum": [
-            "epics.dbpf"
-          ],
           "title": "Type",
           "type": "string"
         },
@@ -360,9 +337,6 @@
         "type": {
           "const": "ipac.Hy8001",
           "description": "Configure a Hytec 8001 IO card",
-          "enum": [
-            "ipac.Hy8001"
-          ],
           "title": "Type",
           "type": "string"
         },
@@ -392,11 +366,7 @@
           "title": "Interrupt Vector"
         },
         "direction": {
-          "allOf": [
-            {
-              "$ref": "#/$defs/ibek__entity_factory__direction__1"
-            }
-          ],
+          "$ref": "#/$defs/ibek__entity_factory__direction__1",
           "description": "Direction of digital IO"
         },
         "cardid": {
@@ -527,9 +497,6 @@
         "type": {
           "const": "ipac.Hy8002",
           "description": "Configure a Hytec 8002 Carrier card",
-          "enum": [
-            "ipac.Hy8002"
-          ],
           "title": "Type",
           "type": "string"
         },
@@ -596,9 +563,6 @@
         "type": {
           "const": "ipac.Hy8005",
           "description": "Configure a Hytec 8005 IO card",
-          "enum": [
-            "ipac.Hy8005"
-          ],
           "title": "Type",
           "type": "string"
         },
@@ -685,9 +649,6 @@
         "type": {
           "const": "ipac.Hy8005_Channel",
           "description": "TODO:ADD DESCRIPTION",
-          "enum": [
-            "ipac.Hy8005_Channel"
-          ],
           "title": "Type",
           "type": "string"
         },
@@ -702,11 +663,7 @@
           "title": "Parent"
         },
         "ipslot": {
-          "allOf": [
-            {
-              "$ref": "#/$defs/ipslot"
-            }
-          ],
+          "$ref": "#/$defs/ipslot",
           "description": "IP slot"
         },
         "cardnum": {
@@ -725,46 +682,26 @@
           "title": "Cardnum"
         },
         "debrate": {
-          "allOf": [
-            {
-              "$ref": "#/$defs/debrate"
-            }
-          ],
+          "$ref": "#/$defs/debrate",
           "description": "debrate"
         },
         "pwidth": {
-          "allOf": [
-            {
-              "$ref": "#/$defs/pwidth"
-            }
-          ],
+          "$ref": "#/$defs/pwidth",
           "default": 0,
           "description": "pwidth"
         },
         "scanrate": {
-          "allOf": [
-            {
-              "$ref": "#/$defs/scanrate"
-            }
-          ],
+          "$ref": "#/$defs/scanrate",
           "default": 0,
           "description": "scanrate"
         },
         "direction": {
-          "allOf": [
-            {
-              "$ref": "#/$defs/ibek__entity_factory__direction__2"
-            }
-          ],
+          "$ref": "#/$defs/ibek__entity_factory__direction__2",
           "default": 0,
           "description": "direction"
         },
         "clock": {
-          "allOf": [
-            {
-              "$ref": "#/$defs/clock"
-            }
-          ],
+          "$ref": "#/$defs/clock",
           "default": 0,
           "description": "clock"
         },

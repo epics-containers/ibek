@@ -7,9 +7,6 @@
         "type": {
           "const": "ibek.repeat",
           "default": "ibek.repeat",
-          "enum": [
-            "ibek.repeat"
-          ],
           "title": "Type",
           "type": "string"
         },
@@ -39,6 +36,7 @@
           "type": "string"
         },
         "entity": {
+          "additionalProperties": true,
           "description": "The entity model to repeat",
           "title": "Entity",
           "type": "object"
@@ -57,9 +55,6 @@
         "type": {
           "const": "dlsPLC.dummy",
           "description": "dummy record",
-          "enum": [
-            "dlsPLC.dummy"
-          ],
           "title": "Type",
           "type": "string"
         },
@@ -88,9 +83,6 @@
         "type": {
           "const": "dlsPLC.fastVacuumChannel",
           "description": "Adds a fast vacuum channel to the fast vacuum master",
-          "enum": [
-            "dlsPLC.fastVacuumChannel"
-          ],
           "title": "Type",
           "type": "string"
         },
@@ -115,19 +107,11 @@
           "type": "string"
         },
         "id": {
-          "allOf": [
-            {
-              "$ref": "#/$defs/id"
-            }
-          ],
+          "$ref": "#/$defs/id",
           "description": "FV PLC gauge number"
         },
         "em": {
-          "allOf": [
-            {
-              "$ref": "#/$defs/em"
-            }
-          ],
+          "$ref": "#/$defs/em",
           "default": 0,
           "description": "EM block to use"
         },
@@ -164,9 +148,6 @@
         "type": {
           "const": "dlsPLC.fastVacuumMaster",
           "description": "master records for fast vacuum",
-          "enum": [
-            "dlsPLC.fastVacuumMaster"
-          ],
           "title": "Type",
           "type": "string"
         },

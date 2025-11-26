@@ -15,9 +15,6 @@
         "type": {
           "const": "ibek.repeat",
           "default": "ibek.repeat",
-          "enum": [
-            "ibek.repeat"
-          ],
           "title": "Type",
           "type": "string"
         },
@@ -47,6 +44,7 @@
           "type": "string"
         },
         "entity": {
+          "additionalProperties": true,
           "description": "The entity model to repeat",
           "title": "Entity",
           "type": "object"
@@ -65,9 +63,6 @@
         "type": {
           "const": "asyn.AsynIP",
           "description": "Asyn IP Port",
-          "enum": [
-            "asyn.AsynIP"
-          ],
           "title": "Type",
           "type": "string"
         },
@@ -164,47 +159,27 @@
           "title": "Baud"
         },
         "parity": {
-          "allOf": [
-            {
-              "$ref": "#/$defs/parity"
-            }
-          ],
+          "$ref": "#/$defs/parity",
           "default": "none",
           "description": "Parity"
         },
         "crtscts": {
-          "allOf": [
-            {
-              "$ref": "#/$defs/crtscts"
-            }
-          ],
+          "$ref": "#/$defs/crtscts",
           "default": "N",
           "description": "Set hardware flow control on"
         },
         "stop": {
-          "allOf": [
-            {
-              "$ref": "#/$defs/stop"
-            }
-          ],
+          "$ref": "#/$defs/stop",
           "default": "1",
           "description": "Stop Bits"
         },
         "disconnectOnReadTimeout": {
-          "allOf": [
-            {
-              "$ref": "#/$defs/disconnectOnReadTimeout"
-            }
-          ],
+          "$ref": "#/$defs/disconnectOnReadTimeout",
           "default": "Y",
           "description": "Disconnect when a read times out"
         },
         "bits": {
-          "allOf": [
-            {
-              "$ref": "#/$defs/bits"
-            }
-          ],
+          "$ref": "#/$defs/bits",
           "default": "8",
           "description": "Bits"
         }
@@ -249,9 +224,6 @@
         "type": {
           "const": "motorSim.simMotorAxis",
           "description": "Creates a simulation motor axis",
-          "enum": [
-            "motorSim.simMotorAxis"
-          ],
           "title": "Type",
           "type": "string"
         },
@@ -346,11 +318,7 @@
           "type": "string"
         },
         "DIR": {
-          "allOf": [
-            {
-              "$ref": "#/$defs/DIR"
-            }
-          ],
+          "$ref": "#/$defs/DIR",
           "default": 0,
           "description": "The direction of the axis"
         },
@@ -424,9 +392,6 @@
         "type": {
           "const": "motorSim.simMotorController",
           "description": "Creates a simulation motion controller",
-          "enum": [
-            "motorSim.simMotorController"
-          ],
           "title": "Type",
           "type": "string"
         },
