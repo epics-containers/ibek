@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Modules, Definitions and Entities &#8212; ibek 3.3.0b4.dev2+g053e510b2 documentation</title>
+    <title>Modules, Definitions and Entities &#8212; ibek 3.3.1.dev4+gd0602fba1 documentation</title>
   
   
   
@@ -41,7 +41,7 @@
   <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
 <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
-    <script src="../_static/documentation_options.js?v=1c9530af"></script>
+    <script src="../_static/documentation_options.js?v=2b9c4303"></script>
     <script src="../_static/doctools.js?v=9bcbadda"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -937,9 +937,6 @@ the container or during container development.</p>
         <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="p">{</span>
           <span class="s2">&quot;const&quot;</span><span class="p">:</span> <span class="s2">&quot;bool&quot;</span><span class="p">,</span>
           <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="s2">&quot;bool&quot;</span><span class="p">,</span>
-          <span class="s2">&quot;enum&quot;</span><span class="p">:</span> <span class="p">[</span>
-            <span class="s2">&quot;bool&quot;</span>
-          <span class="p">],</span>
           <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Type&quot;</span><span class="p">,</span>
           <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
         <span class="p">},</span>
@@ -979,18 +976,11 @@ the container or during container development.</p>
         <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="p">{</span>
           <span class="s2">&quot;const&quot;</span><span class="p">:</span> <span class="s2">&quot;comment&quot;</span><span class="p">,</span>
           <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="s2">&quot;comment&quot;</span><span class="p">,</span>
-          <span class="s2">&quot;enum&quot;</span><span class="p">:</span> <span class="p">[</span>
-            <span class="s2">&quot;comment&quot;</span>
-          <span class="p">],</span>
           <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Type&quot;</span><span class="p">,</span>
           <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
         <span class="p">},</span>
         <span class="s2">&quot;when&quot;</span><span class="p">:</span> <span class="p">{</span>
-          <span class="s2">&quot;allOf&quot;</span><span class="p">:</span> <span class="p">[</span>
-            <span class="p">{</span>
-              <span class="s2">&quot;$ref&quot;</span><span class="p">:</span> <span class="s2">&quot;#/$defs/When&quot;</span>
-            <span class="p">}</span>
-          <span class="p">],</span>
+          <span class="s2">&quot;$ref&quot;</span><span class="p">:</span> <span class="s2">&quot;#/$defs/When&quot;</span><span class="p">,</span>
           <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="s2">&quot;every&quot;</span><span class="p">,</span>
           <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;One of first / every / last&quot;</span>
         <span class="p">},</span>
@@ -1020,19 +1010,26 @@ the container or during container development.</p>
           <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
         <span class="p">},</span>
         <span class="s2">&quot;args&quot;</span><span class="p">:</span> <span class="p">{</span>
-          <span class="s2">&quot;additionalProperties&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s2">&quot;anyOf&quot;</span><span class="p">:</span> <span class="p">[</span>
-              <span class="p">{</span>
-                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
+          <span class="s2">&quot;anyOf&quot;</span><span class="p">:</span> <span class="p">[</span>
+            <span class="p">{</span>
+              <span class="s2">&quot;additionalProperties&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;anyOf&quot;</span><span class="p">:</span> <span class="p">[</span>
+                  <span class="p">{</span>
+                    <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
+                  <span class="p">},</span>
+                  <span class="p">{</span>
+                    <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;null&quot;</span>
+                  <span class="p">}</span>
+                <span class="p">]</span>
               <span class="p">},</span>
-              <span class="p">{</span>
-                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;null&quot;</span>
-              <span class="p">}</span>
-            <span class="p">]</span>
-          <span class="p">},</span>
+              <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span>
+            <span class="p">},</span>
+            <span class="p">{</span>
+              <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;null&quot;</span>
+            <span class="p">}</span>
+          <span class="p">],</span>
           <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Dictionary of args and values to pass through to database. A value of None is equivalent to ARG: &#39;{{ ARG }}&#39;. See `UTILS.render_map` for more details.&quot;</span><span class="p">,</span>
-          <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Args&quot;</span><span class="p">,</span>
-          <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span>
+          <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Args&quot;</span>
         <span class="p">}</span>
       <span class="p">},</span>
       <span class="s2">&quot;required&quot;</span><span class="p">:</span> <span class="p">[</span>
@@ -1094,9 +1091,6 @@ the container or during container development.</p>
         <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="p">{</span>
           <span class="s2">&quot;const&quot;</span><span class="p">:</span> <span class="s2">&quot;dict&quot;</span><span class="p">,</span>
           <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="s2">&quot;dict&quot;</span><span class="p">,</span>
-          <span class="s2">&quot;enum&quot;</span><span class="p">:</span> <span class="p">[</span>
-            <span class="s2">&quot;dict&quot;</span>
-          <span class="p">],</span>
           <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Type&quot;</span><span class="p">,</span>
           <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
         <span class="p">},</span>
@@ -1108,6 +1102,7 @@ the container or during container development.</p>
         <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="p">{</span>
           <span class="s2">&quot;anyOf&quot;</span><span class="p">:</span> <span class="p">[</span>
             <span class="p">{</span>
+              <span class="s2">&quot;additionalProperties&quot;</span><span class="p">:</span> <span class="n">true</span><span class="p">,</span>
               <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span>
             <span class="p">},</span>
             <span class="p">{</span>
@@ -1147,7 +1142,7 @@ the container or during container development.</p>
           <span class="s2">&quot;additionalProperties&quot;</span><span class="p">:</span> <span class="p">{</span>
             <span class="s2">&quot;$ref&quot;</span><span class="p">:</span> <span class="s2">&quot;#/$defs/Define&quot;</span>
           <span class="p">},</span>
-          <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="p">[],</span>
+          <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="p">{},</span>
           <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Calculated values to use as additional arguments With Jinja evaluation before all Args&quot;</span><span class="p">,</span>
           <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Pre Defines&quot;</span><span class="p">,</span>
           <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span>
@@ -1199,7 +1194,7 @@ the container or during container development.</p>
               <span class="p">}</span>
             <span class="p">]</span>
           <span class="p">},</span>
-          <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="p">[],</span>
+          <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="p">{},</span>
           <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;The arguments IOC instance should supply&quot;</span><span class="p">,</span>
           <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Parameters&quot;</span><span class="p">,</span>
           <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span>
@@ -1208,7 +1203,7 @@ the container or during container development.</p>
           <span class="s2">&quot;additionalProperties&quot;</span><span class="p">:</span> <span class="p">{</span>
             <span class="s2">&quot;$ref&quot;</span><span class="p">:</span> <span class="s2">&quot;#/$defs/Define&quot;</span>
           <span class="p">},</span>
-          <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="p">[],</span>
+          <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="p">{},</span>
           <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Calculated values to use as additional arguments With Jinja evaluation after all Args&quot;</span><span class="p">,</span>
           <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Post Defines&quot;</span><span class="p">,</span>
           <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span>
@@ -1315,20 +1310,27 @@ the container or during container development.</p>
           <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;boolean&quot;</span>
         <span class="p">},</span>
         <span class="s2">&quot;ui_macros&quot;</span><span class="p">:</span> <span class="p">{</span>
-          <span class="s2">&quot;additionalProperties&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s2">&quot;anyOf&quot;</span><span class="p">:</span> <span class="p">[</span>
-              <span class="p">{</span>
-                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
+          <span class="s2">&quot;anyOf&quot;</span><span class="p">:</span> <span class="p">[</span>
+            <span class="p">{</span>
+              <span class="s2">&quot;additionalProperties&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;anyOf&quot;</span><span class="p">:</span> <span class="p">[</span>
+                  <span class="p">{</span>
+                    <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
+                  <span class="p">},</span>
+                  <span class="p">{</span>
+                    <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;null&quot;</span>
+                  <span class="p">}</span>
+                <span class="p">]</span>
               <span class="p">},</span>
-              <span class="p">{</span>
-                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;null&quot;</span>
-              <span class="p">}</span>
-            <span class="p">]</span>
-          <span class="p">},</span>
+              <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span>
+            <span class="p">},</span>
+            <span class="p">{</span>
+              <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;null&quot;</span>
+            <span class="p">}</span>
+          <span class="p">],</span>
           <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="n">null</span><span class="p">,</span>
           <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Macros to launch the UI on the IOC index. These must be args of the Entity this is attached to.&quot;</span><span class="p">,</span>
-          <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Ui Macros&quot;</span><span class="p">,</span>
-          <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span>
+          <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Ui Macros&quot;</span>
         <span class="p">},</span>
         <span class="s2">&quot;pv&quot;</span><span class="p">:</span> <span class="p">{</span>
           <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="n">false</span><span class="p">,</span>
@@ -1356,9 +1358,6 @@ the container or during container development.</p>
         <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="p">{</span>
           <span class="s2">&quot;const&quot;</span><span class="p">:</span> <span class="s2">&quot;enum&quot;</span><span class="p">,</span>
           <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="s2">&quot;enum&quot;</span><span class="p">,</span>
-          <span class="s2">&quot;enum&quot;</span><span class="p">:</span> <span class="p">[</span>
-            <span class="s2">&quot;enum&quot;</span>
-          <span class="p">],</span>
           <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Type&quot;</span><span class="p">,</span>
           <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
         <span class="p">},</span>
@@ -1378,6 +1377,7 @@ the container or during container development.</p>
           <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Default&quot;</span>
         <span class="p">},</span>
         <span class="s2">&quot;values&quot;</span><span class="p">:</span> <span class="p">{</span>
+          <span class="s2">&quot;additionalProperties&quot;</span><span class="p">:</span> <span class="n">true</span><span class="p">,</span>
           <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;provides a list of values to make this argument an Enum&quot;</span><span class="p">,</span>
           <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Values&quot;</span><span class="p">,</span>
           <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span>
@@ -1419,9 +1419,6 @@ the container or during container development.</p>
         <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="p">{</span>
           <span class="s2">&quot;const&quot;</span><span class="p">:</span> <span class="s2">&quot;float&quot;</span><span class="p">,</span>
           <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="s2">&quot;float&quot;</span><span class="p">,</span>
-          <span class="s2">&quot;enum&quot;</span><span class="p">:</span> <span class="p">[</span>
-            <span class="s2">&quot;float&quot;</span>
-          <span class="p">],</span>
           <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Type&quot;</span><span class="p">,</span>
           <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
         <span class="p">},</span>
@@ -1461,9 +1458,6 @@ the container or during container development.</p>
         <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="p">{</span>
           <span class="s2">&quot;const&quot;</span><span class="p">:</span> <span class="s2">&quot;id&quot;</span><span class="p">,</span>
           <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="s2">&quot;id&quot;</span><span class="p">,</span>
-          <span class="s2">&quot;enum&quot;</span><span class="p">:</span> <span class="p">[</span>
-            <span class="s2">&quot;id&quot;</span>
-          <span class="p">],</span>
           <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Type&quot;</span><span class="p">,</span>
           <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
         <span class="p">},</span>
@@ -1498,9 +1492,6 @@ the container or during container development.</p>
         <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="p">{</span>
           <span class="s2">&quot;const&quot;</span><span class="p">:</span> <span class="s2">&quot;int&quot;</span><span class="p">,</span>
           <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="s2">&quot;int&quot;</span><span class="p">,</span>
-          <span class="s2">&quot;enum&quot;</span><span class="p">:</span> <span class="p">[</span>
-            <span class="s2">&quot;int&quot;</span>
-          <span class="p">],</span>
           <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Type&quot;</span><span class="p">,</span>
           <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
         <span class="p">},</span>
@@ -1540,9 +1531,6 @@ the container or during container development.</p>
         <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="p">{</span>
           <span class="s2">&quot;const&quot;</span><span class="p">:</span> <span class="s2">&quot;list&quot;</span><span class="p">,</span>
           <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="s2">&quot;list&quot;</span><span class="p">,</span>
-          <span class="s2">&quot;enum&quot;</span><span class="p">:</span> <span class="p">[</span>
-            <span class="s2">&quot;list&quot;</span>
-          <span class="p">],</span>
           <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Type&quot;</span><span class="p">,</span>
           <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
         <span class="p">},</span>
@@ -1583,9 +1571,6 @@ the container or during container development.</p>
         <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="p">{</span>
           <span class="s2">&quot;const&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span>
           <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span>
-          <span class="s2">&quot;enum&quot;</span><span class="p">:</span> <span class="p">[</span>
-            <span class="s2">&quot;object&quot;</span>
-          <span class="p">],</span>
           <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Type&quot;</span><span class="p">,</span>
           <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
         <span class="p">},</span>
@@ -1621,9 +1606,6 @@ the container or during container development.</p>
         <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="p">{</span>
           <span class="s2">&quot;const&quot;</span><span class="p">:</span> <span class="s2">&quot;str&quot;</span><span class="p">,</span>
           <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="s2">&quot;str&quot;</span><span class="p">,</span>
-          <span class="s2">&quot;enum&quot;</span><span class="p">:</span> <span class="p">[</span>
-            <span class="s2">&quot;str&quot;</span>
-          <span class="p">],</span>
           <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Type&quot;</span><span class="p">,</span>
           <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
         <span class="p">},</span>
@@ -1680,9 +1662,6 @@ the container or during container development.</p>
         <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="p">{</span>
           <span class="s2">&quot;const&quot;</span><span class="p">:</span> <span class="s2">&quot;text&quot;</span><span class="p">,</span>
           <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="s2">&quot;text&quot;</span><span class="p">,</span>
-          <span class="s2">&quot;enum&quot;</span><span class="p">:</span> <span class="p">[</span>
-            <span class="s2">&quot;text&quot;</span>
-          <span class="p">],</span>
           <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Type&quot;</span><span class="p">,</span>
           <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
         <span class="p">},</span>
@@ -1764,9 +1743,6 @@ the container or during container development.</p>
         <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="p">{</span>
           <span class="s2">&quot;const&quot;</span><span class="p">:</span> <span class="s2">&quot;ibek.repeat&quot;</span><span class="p">,</span>
           <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="s2">&quot;ibek.repeat&quot;</span><span class="p">,</span>
-          <span class="s2">&quot;enum&quot;</span><span class="p">:</span> <span class="p">[</span>
-            <span class="s2">&quot;ibek.repeat&quot;</span>
-          <span class="p">],</span>
           <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Type&quot;</span><span class="p">,</span>
           <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
         <span class="p">},</span>
@@ -1796,6 +1772,7 @@ the container or during container development.</p>
           <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
         <span class="p">},</span>
         <span class="s2">&quot;entity&quot;</span><span class="p">:</span> <span class="p">{</span>
+          <span class="s2">&quot;additionalProperties&quot;</span><span class="p">:</span> <span class="n">true</span><span class="p">,</span>
           <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;The entity model to repeat&quot;</span><span class="p">,</span>
           <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Entity&quot;</span><span class="p">,</span>
           <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span>
@@ -1814,9 +1791,6 @@ the container or during container development.</p>
         <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="p">{</span>
           <span class="s2">&quot;const&quot;</span><span class="p">:</span> <span class="s2">&quot;motorSim.simMotorAxis&quot;</span><span class="p">,</span>
           <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Creates a simulation motor axis&quot;</span><span class="p">,</span>
-          <span class="s2">&quot;enum&quot;</span><span class="p">:</span> <span class="p">[</span>
-            <span class="s2">&quot;motorSim.simMotorAxis&quot;</span>
-          <span class="p">],</span>
           <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Type&quot;</span><span class="p">,</span>
           <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
         <span class="p">},</span>
@@ -1911,11 +1885,7 @@ the container or during container development.</p>
           <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
         <span class="p">},</span>
         <span class="s2">&quot;DIR&quot;</span><span class="p">:</span> <span class="p">{</span>
-          <span class="s2">&quot;allOf&quot;</span><span class="p">:</span> <span class="p">[</span>
-            <span class="p">{</span>
-              <span class="s2">&quot;$ref&quot;</span><span class="p">:</span> <span class="s2">&quot;#/$defs/DIR&quot;</span>
-            <span class="p">}</span>
-          <span class="p">],</span>
+          <span class="s2">&quot;$ref&quot;</span><span class="p">:</span> <span class="s2">&quot;#/$defs/DIR&quot;</span><span class="p">,</span>
           <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
           <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;The direction of the axis&quot;</span>
         <span class="p">},</span>
@@ -1989,9 +1959,6 @@ the container or during container development.</p>
         <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="p">{</span>
           <span class="s2">&quot;const&quot;</span><span class="p">:</span> <span class="s2">&quot;motorSim.simMotorController&quot;</span><span class="p">,</span>
           <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Creates a simulation motion controller&quot;</span><span class="p">,</span>
-          <span class="s2">&quot;enum&quot;</span><span class="p">:</span> <span class="p">[</span>
-            <span class="s2">&quot;motorSim.simMotorController&quot;</span>
-          <span class="p">],</span>
           <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Type&quot;</span><span class="p">,</span>
           <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
         <span class="p">},</span>
