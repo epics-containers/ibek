@@ -8,6 +8,7 @@
     "remoteEnv": {
         // Allow X11 apps to run inside the container
         "DISPLAY": "${localEnv:DISPLAY}",
+        "IOC_NAME": "TEST_IOC",
         // Put things that allow it in the persistent cache
         "PRE_COMMIT_HOME": "/cache/pre-commit",
         "UV_CACHE_DIR": "/cache/uv",
