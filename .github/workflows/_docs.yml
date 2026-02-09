@@ -1,7 +1,6 @@
 on:
   workflow_call:
 
-
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -24,7 +23,9 @@ jobs:
         uses: astral-sh/setup-uv@v7
 
       - name: Build docs
-        run: uv run --locked tox -e docs
+        # Huy: temporarily trying without --locked tox
+        #run: uv run --locked tox -e docs
+        run: uv run -e docs
 
       - name: Remove environment.pickle
         run: rm build/html/.doctrees/environment.pickle
