@@ -1,7 +1,7 @@
 import os
 import re
 import subprocess
-from enum import Enum
+from enum import StrEnum
 from pathlib import Path
 from typing import Annotated
 
@@ -14,7 +14,7 @@ from ibek.globals import (
 from ibek.support import Support
 
 
-class AptWhen(str, Enum):
+class AptWhen(StrEnum):
     dev = "dev"
     run = "run"
     both = "both"
