@@ -30,9 +30,7 @@ jobs:
         uses: astral-sh/setup-uv@v7
 
       - name: Run tests
-        # Huy: temporarily trying without locked tox
-        # run: uv run --locked tox -e tests
-        run: uv run tox -e tests
+        run: uv run --locked tox -e tests
 
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v5
