@@ -18,6 +18,6 @@ jobs:
         uses: astral-sh/setup-uv@v7
 
       - name: Run tox
-        # Huy: temporarily trying without --locked tox
+        # Huy: temporarily trying without locked tox
         # run: uv run --locked tox -e ${{ inputs.tox }}
-        run: uv run -e ${{ inputs.tox }}
+        run: uv run tox -e ${{ inputs.tox }}

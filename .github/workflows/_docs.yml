@@ -23,9 +23,9 @@ jobs:
         uses: astral-sh/setup-uv@v7
 
       - name: Build docs
-        # Huy: temporarily trying without --locked tox
+        # Huy: temporarily trying without locked tox
         #run: uv run --locked tox -e docs
-        run: uv run -e docs
+        run: uv run tox -e docs
 
       - name: Remove environment.pickle
         run: rm build/html/.doctrees/environment.pickle
