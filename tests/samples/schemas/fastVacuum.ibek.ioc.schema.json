@@ -49,6 +49,58 @@
       "title": "RepeatEntity",
       "type": "object"
     },
+    "Wait4IPEntity": {
+      "additionalProperties": false,
+      "description": "A definition of Wait4IPEntity for the type checker.\n\nThis is not really used - instead the dynamic class is created\nby the make_entity_model function is used.",
+      "properties": {
+        "type": {
+          "const": "ibek.check_ip",
+          "default": "ibek.check_ip",
+          "title": "Type",
+          "type": "string"
+        },
+        "entity_enabled": {
+          "default": true,
+          "description": "enable or disable this entity instance",
+          "title": "Entity Enabled",
+          "type": "boolean"
+        },
+        "address": {
+          "description": "The IP address to ping.",
+          "title": "Address",
+          "type": "string"
+        },
+        "delay": {
+          "default": 1,
+          "description": "The number of seconds to wait between successive ping requests.",
+          "title": "Delay",
+          "type": "integer"
+        },
+        "device": {
+          "default": "DEVICE",
+          "description": "The device name to use in the database record.",
+          "title": "Device",
+          "type": "string"
+        },
+        "repeats": {
+          "default": 2,
+          "description": "The number of successful ping responses to wait for before considering the communication established.",
+          "title": "Repeats",
+          "type": "integer"
+        },
+        "timeout": {
+          "default": 10000,
+          "description": "The number of seconds to wait for a response before considering the ping attempt a failure and exiting the IOC startup process; this will trigger a restart of the IOC pod by Kubernetes.\nA value of 0 means to wait indefinitely until communication is established.",
+          "title": "Timeout",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "address"
+      ],
+      "title": "Wait4IPEntity",
+      "type": "object"
+    },
     "dlsPLC_dummy": {
       "additionalProperties": false,
       "properties": {
@@ -239,6 +291,7 @@
             "dlsPLC.dummy": "#/$defs/dlsPLC_dummy",
             "dlsPLC.fastVacuumChannel": "#/$defs/dlsPLC_fastVacuumChannel",
             "dlsPLC.fastVacuumMaster": "#/$defs/dlsPLC_fastVacuumMaster",
+            "ibek.check_ip": "#/$defs/Wait4IPEntity",
             "ibek.repeat": "#/$defs/RepeatEntity"
           },
           "propertyName": "type"
@@ -255,6 +308,9 @@
           },
           {
             "$ref": "#/$defs/RepeatEntity"
+          },
+          {
+            "$ref": "#/$defs/Wait4IPEntity"
           }
         ]
       },

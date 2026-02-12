@@ -137,7 +137,6 @@ EPICS_ROOT=`pwd`/epics ibek runtime generate iocs/listarg.ibek.ioc.yaml support/
 mv `pwd`/epics/{runtime,opi}/* `pwd`/outputs/listarg
 
 
-
 ############################################################################
 # fast vacuum (dlsPLC) example
 ############################################################################
@@ -150,7 +149,6 @@ EPICS_ROOT=`pwd`/epics ibek runtime generate iocs/fastVacuum.ibek.ioc.yaml suppo
 mv `pwd`/epics/{runtime,opi}/* `pwd`/outputs/fastVacuum
 
 
-
 ############################################################################
 # vacValveDebounce (dlsPLC) example
 ############################################################################
@@ -161,3 +159,12 @@ ibek ioc generate-schema --no-ibek-defs support/dlsPLC.ibek.support.yaml support
 echo making fastVacuum ioc
 EPICS_ROOT=`pwd`/epics ibek runtime generate iocs/dlsPLC.ibek.ioc.yaml support/dlsPLC.ibek.support.yaml support/asyn.ibek.support.yaml
 mv `pwd`/epics/{runtime,opi}/* `pwd`/outputs/dlsPLC
+
+
+############################################################################
+# wait example
+############################################################################
+
+echo making wait ioc
+EPICS_ROOT=`pwd`/epics ibek runtime generate iocs/wait.ibek.ioc.yaml support/epics.ibek.support.yaml support/asyn.ibek.support.yaml support/motorSim.ibek.support.yaml
+mv `pwd`/epics/{runtime,opi}/* `pwd`/outputs/wait

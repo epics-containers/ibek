@@ -127,6 +127,21 @@ class Entity(BaseSettings):
         return str(self)
 
 
+class BuiltInEntity(Entity):
+    """
+    A baseclass for built in entities. This is used to distinguish between
+    built in entities and user defined entities when generating the schema.
+    """
+
+    def _process_entity(self):
+        """A method to perform any processing required for this built-in entity.
+        This is called during the IOC instance script generation ('do_generate()' method ).
+        The default implementation does nothing, but some built-in entities can override this
+        to perform any processing required to generate files or other outputs for the entity.
+        """
+        pass
+
+
 class IOC(BaseSettings):
     """
     Used to load an IOC instance entities yaml file into a Pydantic Model.

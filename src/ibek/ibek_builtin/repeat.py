@@ -21,7 +21,7 @@ from typing import Literal
 from pydantic import Field
 
 from ibek.entity_model import EntityModel
-from ibek.ioc import Entity
+from ibek.ioc import BuiltInEntity
 from ibek.parameters import Param
 
 REPEAT_TYPE = "ibek.repeat"
@@ -33,7 +33,7 @@ class EntityModelParam(EntityModel, Param):
     pass
 
 
-class RepeatEntity(Entity):
+class RepeatEntity(BuiltInEntity):
     """
     A definition of RepeatEntity for the type checker
 
