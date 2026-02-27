@@ -38,6 +38,9 @@ class DoWaitEntity(BuiltInEntity):
         default=10000,
     )
 
+    def _process_entity(self, output: Path = GLOBALS.RUNTIME_OUTPUT):
+        pass
+
 
 class Wait4USBEntity(DoWaitEntity):
     """
@@ -47,19 +50,19 @@ class Wait4USBEntity(DoWaitEntity):
     by the make_entity_models function is used.
     """
 
-    type: Literal["ibek.wait_usb"] = "ibek.wait_usb"
+    type: Literal["ibek.wait_usb"] = "ibek.wait_usb"  # type: ignore[assignment]
     id: str = Field(
         description="The ID of the USB device to wait for."
         "This should be in the format 'vendor_id:product_id', where vendor_id and product_id are the hexadecimal IDs of the USB device."
         "For example, '1234:5678'.",
     )
 
-    def _process_entity(self):
+    def _process_entity(self, output: Path = GLOBALS.RUNTIME_OUTPUT):
         """
         Not implemented yet - this will likely involve writing the USB device ID to a file in the runtime directory,
         for external tooling to parse and use to detect when the device is present.
         """
-        return super()._process_entity()
+        return super()._process_entity(output)
 
 
 class Wait4IPEntity(DoWaitEntity):
@@ -70,7 +73,7 @@ class Wait4IPEntity(DoWaitEntity):
     by the make_entity_models function is used.
     """
 
-    type: Literal["ibek.wait_ip"] = "ibek.wait_ip"
+    type: Literal["ibek.wait_ip"] = "ibek.wait_ip"  # type: ignore[assignment]
     address: str = Field(
         description="The IP address to ping.",
     )
