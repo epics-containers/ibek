@@ -1,28 +1,76 @@
 """
-A built in entity model instance for adding an IP address to consider before continuing.
-(typically used to wait for motion controller and for autosave mounts on VxWorks)
-
+A built in entity model instance for adding a device to be considered as part of the IOC startup process.
+This allows the IOC startup process to pause until communication with the specified devices is established,
+which can help prevent issues with devices not being ready when the IOC starts.
+(e.g used to detect motion controller on the network or mounted usb devices)
 """
 
+from pathlib import Path
 from typing import Literal
 
 from pydantic import Field
+from ruamel.yaml import YAML
 
 from ibek.globals import GLOBALS
 from ibek.ioc import BuiltInEntity
 
-WAIT4IP_TYPE = "ibek.check_ip"
+WAIT4IP_TYPE = "ibek.wait_ip"
+WAIT4USB_TYPE = "ibek.wait_usb"
 
 
-class Wait4IPEntity(BuiltInEntity):
+class DoWaitEntity(BuiltInEntity):
+    """
+    A definition of DoWaitEntity for the type checker.
+
+    This is not really used - instead the dynamic class created
+    by the make_entity_models function is used.
+    """
+
+    type: Literal["ibek.do_wait"] = "ibek.do_wait"
+    device: str = Field(
+        description="The device name to use in the database record.",
+        default="DEVICE",
+    )
+    timeout: int = Field(
+        description="The number of seconds to wait for a response before considering the communication attempt a failure "
+        "and exiting the IOC startup process; this will trigger a restart of the IOC pod by Kubernetes.\n"
+        "A value of 0 means to wait indefinitely until communication is established.",
+        default=10000,
+    )
+
+
+class Wait4USBEntity(DoWaitEntity):
+    """
+    A definition of Wait4USBEntity for the type checker.
+
+    This is not really used - instead the dynamic class created
+    by the make_entity_models function is used.
+    """
+
+    type: Literal["ibek.wait_usb"] = "ibek.wait_usb"
+    id: str = Field(
+        description="The ID of the USB device to wait for."
+        "This should be in the format 'vendor_id:product_id', where vendor_id and product_id are the hexadecimal IDs of the USB device."
+        "For example, '1234:5678'.",
+    )
+
+    def _process_entity(self):
+        """
+        Not implemented yet - this will likely involve writing the USB device ID to a file in the runtime directory,
+        for external tooling to parse and use to detect when the device is present.
+        """
+        return super()._process_entity()
+
+
+class Wait4IPEntity(DoWaitEntity):
     """
     A definition of Wait4IPEntity for the type checker.
 
     This is not really used - instead the dynamic class is created
-    by the make_entity_model function is used.
+    by the make_entity_models function is used.
     """
 
-    type: Literal["ibek.check_ip"] = "ibek.check_ip"
+    type: Literal["ibek.wait_ip"] = "ibek.wait_ip"
     address: str = Field(
         description="The IP address to ping.",
     )
@@ -30,57 +78,58 @@ class Wait4IPEntity(BuiltInEntity):
         description="The number of seconds to wait between successive ping requests.",
         default=1,
     )
-    device: str = Field(
-        description="The device name to use in the database record.",
-        default="DEVICE",
-    )
     repeats: int = Field(
         description="The number of successful ping responses to wait for before considering the communication established.",
-        default=2,
-    )
-    timeout: int = Field(
-        description="The number of seconds to wait for a response before considering the ping attempt a failure "
-        "and exiting the IOC startup process; this will trigger a restart of the IOC pod by Kubernetes.\n"
-        "A value of 0 means to wait indefinitely until communication is established.",
-        default=10000,
+        default=3,
     )
 
-    def _process_entity(self):
+    def _process_entity(self, output: Path = GLOBALS.RUNTIME_OUTPUT):
         """
-        If it doesn't exist already, create a shell script to wait for communication with given IP addresses.
-        Add a command to this script to ping the IP address of the entity.
+        Write the entity parameters into a YAML list file under the runtime directory.
+        The file is created if it doesn't already exist and any previous entries are preserved.
+        This makes it easy for external tooling to parse the list of addresses that need waiting for.
         """
-        cmd = ""
-        # Define the runtime directory to store the wait file, and create it if it doesn't exist
-        runtime_dir = GLOBALS.RUNTIME_OUTPUT
-        runtime_dir.mkdir(parents=True, exist_ok=True)
+        # Make sure the runtime directory exists
+        output.mkdir(parents=True, exist_ok=True)
 
         # Remove the port number if it is included in the address, since ping commands expect just the IP address
         if ":" in self.address:
             self.address = self.address.split(":")[0]
 
-        # Create the wait file path and initialize it with a header if it doesn't exist
-        wait_file = runtime_dir / "wait_for_ip.cmd"
-        if not wait_file.exists():
-            cmd += "#!/bin/sh\n\n"
-            cmd += "# This file is generated by Wait4IPEntity instances to wait for communication with specified IP addresses before continuing.\n"
-            cmd += "# It is expected to be used in the startup script of the system to ensure necessary communication is established before proceeding.\n"
-            cmd += "# The file is generated with append mode, so multiple Wait4IPEntity instances can add to the same file without overwriting each other.\n\n"
-            cmd += "trap exit SIGTERM\n"
-        wait_file.parent.mkdir(parents=True, exist_ok=True)
+        # Create the YAML file path and initialize it with a header if it doesn't exist
+        yaml_path = output / "wait_list.yaml"
+        yaml_path.parent.mkdir(parents=True, exist_ok=True)
 
-        # Create the ping command for the entity, which will be added to the wait file
-        warning = f"WARNING: Communication with {self.device} at {self.address} could not be established."
-        cmd += f"\n# Wait command for communication with {self.device}:\n"
-        if self.timeout > 0:
-            cmd += f"timeout {self.timeout} sh -c 'until ping -c{self.repeats} -i{self.delay} {self.address} >/dev/null 2>&1; do : echo {warning}; done'"
+        yaml = YAML()
+        header_comment = (
+            "#######################################################################################\n"
+            "# List of hardware to wait for communication with before proceeding with the IOC start.\n"
+            "# This file is generated by Wait4IPEntity._process_entity_no_file.\n"
+            "#######################################################################################\n\n"
+        )
+
+        if yaml_path.exists():
+            header_needed = False
+            # Load existing data from the YAML file, or initialize an empty list if the file is empty
+            data = yaml.load(yaml_path) or []
         else:
-            cmd += f"sh -c 'until ping -c{self.repeats} -i{self.delay} {self.address} >/dev/null 2>&1; do : echo {warning}; done'"
+            header_needed = True
+            data = []
 
-        # Allow multiple Wait4IP entities to add to the same runtime file without adding duplicates.
-        # The file is expected to be small, so additional reads should be efficient enough.
-        # (class variable to track processed addresses could also be used, but discarded because of
-        # ModelPrivateAttr management complexity and less robust to process multiple instances)
-        with wait_file.open("a+") as stream:
-            if self.address not in stream.read():
-                stream.write(f"{cmd}\n")
+        # Define the entry for this entity and append it to the data list
+        entry = {
+            "type": self.type,
+            "device": self.device,
+            "address": self.address,
+            "delay": self.delay,
+            "repeats": self.repeats,
+            "timeout": self.timeout,
+        }
+        data.append(entry)
+
+        # Write the updated data back to the YAML file, preserving any existing entries and adding a header if the file was newly created
+        with yaml_path.open("w") as stream:
+            if header_needed:
+                stream.write(header_comment)
+            yaml.dump(data, stream)
+            stream.write("\n")  # newline at eof for better readability

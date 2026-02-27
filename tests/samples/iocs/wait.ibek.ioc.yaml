@@ -6,10 +6,10 @@ description: Example simulated IOC for testing ibek Wait4IPEntity
 # Simulated motion controller instance required, otherwise test will fail because of
 # missing 'simple.pvi.template' file (enforced by cli function 'generic_generate')
 entities:
-  - type: ibek.check_ip
+  - type: ibek.wait_ip
     device: asynController1
     address: 192.168.0.55
-    timeout: 60
+    timeout: 10
 
   - type: asyn.AsynIP
     name: controllerPort
@@ -31,13 +31,14 @@ entities:
   - type: ibek.repeat
     values: [0, 1, 2, 3]
     entity:
-      type: ibek.check_ip
+      type: ibek.wait_ip
       device: controller{{ index }}
       address: 192.168.0.{{ 65 + index }}
       delay: "{{ 1 * (index + 1) }}"
       repeats: "{{ 2 * (index + 1) }}"
+      timeout: 5
 
-  - type: ibek.check_ip
+  - type: ibek.wait_ip
     device: asynController2
     address: 192.168.0.56
     timeout: 0

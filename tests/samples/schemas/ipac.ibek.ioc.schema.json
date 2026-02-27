@@ -51,11 +51,11 @@
     },
     "Wait4IPEntity": {
       "additionalProperties": false,
-      "description": "A definition of Wait4IPEntity for the type checker.\n\nThis is not really used - instead the dynamic class is created\nby the make_entity_model function is used.",
+      "description": "A definition of Wait4IPEntity for the type checker.\n\nThis is not really used - instead the dynamic class is created\nby the make_entity_models function is used.",
       "properties": {
         "type": {
-          "const": "ibek.check_ip",
-          "default": "ibek.check_ip",
+          "const": "ibek.wait_ip",
+          "default": "ibek.wait_ip",
           "title": "Type",
           "type": "string"
         },
@@ -64,6 +64,18 @@
           "description": "enable or disable this entity instance",
           "title": "Entity Enabled",
           "type": "boolean"
+        },
+        "device": {
+          "default": "DEVICE",
+          "description": "The device name to use in the database record.",
+          "title": "Device",
+          "type": "string"
+        },
+        "timeout": {
+          "default": 10000,
+          "description": "The number of seconds to wait for a response before considering the communication attempt a failure and exiting the IOC startup process; this will trigger a restart of the IOC pod by Kubernetes.\nA value of 0 means to wait indefinitely until communication is established.",
+          "title": "Timeout",
+          "type": "integer"
         },
         "address": {
           "description": "The IP address to ping.",
@@ -76,22 +88,10 @@
           "title": "Delay",
           "type": "integer"
         },
-        "device": {
-          "default": "DEVICE",
-          "description": "The device name to use in the database record.",
-          "title": "Device",
-          "type": "string"
-        },
         "repeats": {
-          "default": 2,
+          "default": 3,
           "description": "The number of successful ping responses to wait for before considering the communication established.",
           "title": "Repeats",
-          "type": "integer"
-        },
-        "timeout": {
-          "default": 10000,
-          "description": "The number of seconds to wait for a response before considering the ping attempt a failure and exiting the IOC startup process; this will trigger a restart of the IOC pod by Kubernetes.\nA value of 0 means to wait indefinitely until communication is established.",
-          "title": "Timeout",
           "type": "integer"
         }
       },
@@ -99,6 +99,46 @@
         "address"
       ],
       "title": "Wait4IPEntity",
+      "type": "object"
+    },
+    "Wait4USBEntity": {
+      "additionalProperties": false,
+      "description": "A definition of Wait4USBEntity for the type checker.\n\nThis is not really used - instead the dynamic class created\nby the make_entity_models function is used.",
+      "properties": {
+        "type": {
+          "const": "ibek.wait_usb",
+          "default": "ibek.wait_usb",
+          "title": "Type",
+          "type": "string"
+        },
+        "entity_enabled": {
+          "default": true,
+          "description": "enable or disable this entity instance",
+          "title": "Entity Enabled",
+          "type": "boolean"
+        },
+        "device": {
+          "default": "DEVICE",
+          "description": "The device name to use in the database record.",
+          "title": "Device",
+          "type": "string"
+        },
+        "timeout": {
+          "default": 10000,
+          "description": "The number of seconds to wait for a response before considering the communication attempt a failure and exiting the IOC startup process; this will trigger a restart of the IOC pod by Kubernetes.\nA value of 0 means to wait indefinitely until communication is established.",
+          "title": "Timeout",
+          "type": "integer"
+        },
+        "id": {
+          "description": "The ID of the USB device to wait for.This should be in the format 'vendor_id:product_id', where vendor_id and product_id are the hexadecimal IDs of the USB device.For example, '1234:5678'.",
+          "title": "Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id"
+      ],
+      "title": "Wait4USBEntity",
       "type": "object"
     },
     "clock": {
@@ -861,8 +901,9 @@
             "epics.PostStartupCommand": "#/$defs/epics_PostStartupCommand",
             "epics.StartupCommand": "#/$defs/epics_StartupCommand",
             "epics.dbpf": "#/$defs/epics_dbpf",
-            "ibek.check_ip": "#/$defs/Wait4IPEntity",
             "ibek.repeat": "#/$defs/RepeatEntity",
+            "ibek.wait_ip": "#/$defs/Wait4IPEntity",
+            "ibek.wait_usb": "#/$defs/Wait4USBEntity",
             "ipac.Hy8001": "#/$defs/ipac_Hy8001",
             "ipac.Hy8002": "#/$defs/ipac_Hy8002",
             "ipac.Hy8005": "#/$defs/ipac_Hy8005",
@@ -909,6 +950,9 @@
           },
           {
             "$ref": "#/$defs/Wait4IPEntity"
+          },
+          {
+            "$ref": "#/$defs/Wait4USBEntity"
           }
         ]
       },
