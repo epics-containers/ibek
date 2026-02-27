@@ -33,12 +33,10 @@ entities:
     entity:
       type: ibek.wait_ip
       device: controller{{ index }}
-      address: 192.168.0.{{ 65 + index }}
-      delay: "{{ 1 * (index + 1) }}"
-      repeats: "{{ 2 * (index + 1) }}"
+      address: 192.168.0.{{ 65 + index }}:55000
       timeout: 5
 
   - type: ibek.wait_ip
     device: asynController2
-    address: 192.168.0.56
+    address: 192.168.0.56:7001
     timeout: 0

@@ -86,21 +86,9 @@
           "type": "integer"
         },
         "address": {
-          "description": "The IP address to ping.",
+          "description": "The IP address and port to check communication with.",
           "title": "Address",
           "type": "string"
-        },
-        "delay": {
-          "default": 1,
-          "description": "The number of seconds to wait between successive ping requests.",
-          "title": "Delay",
-          "type": "integer"
-        },
-        "repeats": {
-          "default": 3,
-          "description": "The number of successful ping responses to wait for before considering the communication established.",
-          "title": "Repeats",
-          "type": "integer"
         }
       },
       "required": [
