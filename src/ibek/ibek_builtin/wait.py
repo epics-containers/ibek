@@ -5,6 +5,7 @@ which can help prevent issues with devices not being ready when the IOC starts.
 (e.g used to detect motion controller on the network or mounted usb devices)
 """
 
+import io
 from pathlib import Path
 from typing import Literal
 
@@ -26,7 +27,7 @@ class DoWaitEntity(BuiltInEntity):
     by the make_entity_models function is used.
     """
 
-    type: Literal["ibek.do_wait"] = "ibek.do_wait"
+    type: str = "ibek.do_wait"
     device: str = Field(
         description="The device name to use in the database record.",
         default="DEVICE",
@@ -92,6 +93,13 @@ class Wait4IPEntity(DoWaitEntity):
         yaml_path.parent.mkdir(parents=True, exist_ok=True)
 
         yaml = YAML()
+        yaml.explicit_end = False
+        yaml.default_flow_style = False
+        # Configure the representer to add blank lines between list items for readability
+        yaml.map_indent = 2
+        yaml.sequence_indent = 2
+        yaml.sequence_dash_offset = 0
+
         header_comment = (
             "#######################################################################################\n"
             "# List of hardware to wait for communication with before proceeding with the IOC start.\n"
@@ -117,8 +125,29 @@ class Wait4IPEntity(DoWaitEntity):
         data.append(entry)
 
         # Write the updated data back to the YAML file, preserving any existing entries and adding a header if the file was newly created
+        # Use StringIO to capture YAML output and add blank lines between entries
+        yaml_buffer = io.StringIO()
+        yaml.dump(data, yaml_buffer)
+        yaml_content = yaml_buffer.getvalue()
+
+        # Add blank lines between list entries for readability
+        # Split by lines and identify where each list entry ends
+        yaml_lines = yaml_content.split("\n")
+        formatted_lines = []
+        for i, line in enumerate(yaml_lines):
+            formatted_lines.append(line)
+            # Add blank line between list entries:
+            # A new entry starts with "- " and we want to add blank line before it (but after previous entry)
+            if i + 1 < len(yaml_lines) and yaml_lines[i + 1].startswith("- "):
+                # Don't add blank line if current line is already empty
+                if line.strip() != "":
+                    formatted_lines.append("")  # Add blank line between entries
+
+        yaml_content = "\n".join(formatted_lines)
+
         with yaml_path.open("w") as stream:
             if header_needed:
                 stream.write(header_comment)
-            yaml.dump(data, stream)
-            stream.write("\n")  # newline at eof for better readability
+            # Write YAML content, stripping any trailing newlines and adding exactly one
+            stream.write(yaml_content.rstrip("\n"))
+            stream.write("\n")
