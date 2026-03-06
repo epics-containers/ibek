@@ -1,6 +1,7 @@
 import json
 import logging
 import socket
+import time
 from pathlib import Path
 from typing import Annotated
 
@@ -20,6 +21,9 @@ from .assets import extract_assets
 
 log = logging.getLogger(__name__)
 ioc_cli = typer.Typer(cls=NaturalOrderGroup)
+
+DOWAIT_DONE_FILE = Path("/tmp") / "doWait_completed.txt"
+"""Used by other processes to check if the `do_wait` command has completed successfully and proceed accordingly."""
 
 
 @ioc_cli.command()
@@ -121,6 +125,32 @@ def extract_runtime_assets(
     extract_assets(destination, source, extras, defaults, dry_run)
 
 
+def try_connect(device: str, ip: str, port: int, timeout: float | None) -> None:
+    """
+    Attempt to connect to the given IP address and port using a socket with a timeout.
+    If the connection is successful, the socket is closed and the function returns.
+    If the connection times out, a TimeoutError is raised.
+    If any other OSError occurs during the connection attempt, it is logged and the program exits with an error.
+
+    :param device: The name of the device being connected to (used for logging).
+    :param ip: The IP address to connect to.
+    :param port: The port number to connect to.
+    :param timeout: The timeout duration in seconds for the connection attempt. If None, wait indefinitely until a connection can be made.
+
+    :raises TimeoutError: If the connection attempt times out.
+    :raises typer.Exit: If any other error occurs during the connection attempt.
+    """
+    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as client:
+        client.settimeout(timeout)
+        try:
+            client.connect((ip, port))
+        except TimeoutError:
+            raise
+        except OSError as e:
+            log.error(f"Error connecting to {device} at {ip}:{port}: {e}")
+            raise typer.Exit(1) from e
+
+
 @ioc_cli.command()
 def do_wait(
     source: Path = typer.Option(
@@ -137,44 +167,61 @@ def do_wait(
         yaml = YAML()
         wait_list = yaml.load(source) or []
 
+        # Ensure the done file is removed before starting the wait commands (i.e. reset the state)
+        if DOWAIT_DONE_FILE.exists():
+            DOWAIT_DONE_FILE.unlink()
+
         for entry in wait_list:
             if entry["type"] == "ibek.wait_ip":
-                # Check that the port number is included in the address.
-                if ":" not in entry["address"]:
+                # Parse address into ip and port, defaulting port to 1025 if not specified.
+                if ":" in entry["address"]:
+                    ip, port = entry["address"].split(":")
+                else:
                     log.warning(
                         f"Address '{entry['address']}' does not include a port number. "
                         f"It should be in the format 'ip:port'. Using port 1025 as default."
                     )
+                    ip, port = entry["address"], "1025"
+
+                timeout = entry["timeout"] if entry["timeout"] > 0 else None
 
                 # Attempt to connect to the IP address and port using a socket with a timeout.
-                try:
+                # However, the system network stack may also return a connection timeout error of its own
+                # regardless of any Python socket timeout setting; thus custom handling of the timeout is necessary.
+                # (see 'Notes on socket timeouts' at https://docs.python.org/3/library/socket.html)
+
+                # If the timeout is set to None, wait indefinitely until a connection can be made.
+                if timeout is None:
                     log.info(
-                        f"Waiting for {entry['device']} at {entry['address']} to respond..."
+                        f"Waiting indefinitely for {entry['device']} at {entry['address']} to respond..."
                     )
-                    client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-                    client.settimeout(
-                        entry["timeout"] if entry["timeout"] > 0 else None
-                    )
-                    ip, port = (
-                        entry["address"].split(":")
-                        if ":" in entry["address"]
-                        else (entry["address"], "1025")
-                    )
-                    client.connect((ip, int(port)))
-                    client.close()
+                    while True:
+                        try:
+                            try_connect(entry["device"], ip, int(port), None)
+                            break
+                        except TimeoutError:
+                            pass
+
+                # If the timeout is set to a positive number, wait up to that many seconds for a connection to be made
+                # before giving up and exiting with an error.
+                else:
                     log.info(
-                        f"Successfully connected to {entry['device']} at {entry['address']}."
+                        f"Waiting up to {timeout} seconds for {entry['device']} at {entry['address']} to respond..."
                     )
-                except TimeoutError:
-                    log.error(
-                        f"Connection to {entry['device']} at {entry['address']} timed out after {entry['timeout']} seconds"
-                    )
-                    exit(1)
-                except OSError as e:
-                    log.error(
-                        f"Error connecting to {entry['device']} at {entry['address']}: {e}"
-                    )
-                    exit(1)
+                    end_time = time.time() + timeout
+                    while time.time() < end_time:
+                        try:
+                            try_connect(
+                                entry["device"], ip, int(port), end_time - time.time()
+                            )
+                            break
+                        except TimeoutError:
+                            pass
+                    else:
+                        log.error(
+                            f"Connection to {entry['device']} at {entry['address']} timed out after {timeout} seconds"
+                        )
+                        raise typer.Exit(1)
 
             else:
                 # In the future, support for other types of wait commands could be added by defining additional entity models.
@@ -182,3 +229,10 @@ def do_wait(
                 # by checking for the device ID in the output of a command like `lsusb`
                 # or by monitoring the `/dev` directory for the appearance of a device file corresponding to the USB device.
                 log.warning(f"Wait entry type not supported yet: {entry['type']}")
+
+        # If we successfully get through the wait list without any connection timeouts or errors,
+        # create the done file to signal to other processesthat waiting is complete.
+        DOWAIT_DONE_FILE.touch()
+
+    else:
+        log.info(f"No wait list file found at {source}, skipping wait commands.")
