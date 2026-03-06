@@ -215,7 +215,11 @@ def generate_pvi(ioc: IOC) -> tuple[list[IndexEntry], list[tuple[Database, Entit
         device_bob = GLOBALS.OPI_OUTPUT / f"{device_name}.pvi.bob"
 
         # Skip deserializing yaml if not needed
-        if entity_pvi.pv or device_name not in formatted_pvi_devices:
+        if (
+            entity_pvi.pv
+            or device_name not in formatted_pvi_devices
+            or entity_pvi.ui_index
+        ):
             device = Device.deserialize(pvi_yaml)
             device.deserialize_parents([GLOBALS.PVI_DEFS])
 
@@ -238,15 +242,15 @@ def generate_pvi(ioc: IOC) -> tuple[list[IndexEntry], list[tuple[Database, Entit
                 # Don't format further instance of this device
                 formatted_pvi_devices.append(device_name)
 
-        if entity_pvi.ui_index:
-            macros = UTILS.render_map(dict(entity), entity_pvi.ui_macros)
-            index_entries.append(
-                IndexEntry(
-                    label=f"{device.label}",
-                    ui=device_bob.name,
-                    macros=macros,
+            if entity_pvi.ui_index:
+                macros = UTILS.render_map(dict(entity), entity_pvi.ui_macros)
+                index_entries.append(
+                    IndexEntry(
+                        label=f"{device.label}",
+                        ui=device_bob.name,
+                        macros=macros,
+                    )
                 )
-            )
 
     return index_entries, databases
 
