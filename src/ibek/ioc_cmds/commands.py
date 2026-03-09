@@ -192,6 +192,9 @@ def do_wait(
 
                 # If the timeout is set to None, wait indefinitely until a connection can be made.
                 if timeout is None:
+                    typer.echo(
+                        f"Waiting indefinitely for {entry['device']} at {entry['address']} to respond..."
+                    )
                     log.info(
                         f"Waiting indefinitely for {entry['device']} at {entry['address']} to respond..."
                     )
@@ -205,6 +208,9 @@ def do_wait(
                 # If the timeout is set to a positive number, wait up to that many seconds for a connection to be made
                 # before giving up and exiting with an error.
                 else:
+                    typer.echo(
+                        f"Waiting up to {timeout} seconds for {entry['device']} at {entry['address']} to respond..."
+                    )
                     log.info(
                         f"Waiting up to {timeout} seconds for {entry['device']} at {entry['address']} to respond..."
                     )
@@ -233,6 +239,9 @@ def do_wait(
         # If we successfully get through the wait list without any connection timeouts or errors,
         # create the done file to signal to other processesthat waiting is complete.
         DOWAIT_DONE_FILE.touch()
+        typer.echo(
+            "All wait commands completed successfully. Temp file created to signal completion."
+        )
 
     else:
         log.info(f"No wait list file found at {source}, skipping wait commands.")
