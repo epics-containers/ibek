@@ -4867,7 +4867,7 @@
           "type": "string"
         },
         "timeout": {
-          "default": 10000,
+          "default": 0,
           "description": "The number of seconds to wait for a response before considering the communication attempt a failure and exiting the IOC startup process; this will trigger a restart of the IOC pod by Kubernetes.\nA value of 0 means to wait indefinitely until communication is established.",
           "title": "Timeout",
           "type": "integer"
@@ -4907,7 +4907,7 @@
           "type": "string"
         },
         "timeout": {
-          "default": 10000,
+          "default": 0,
           "description": "The number of seconds to wait for a response before considering the communication attempt a failure and exiting the IOC startup process; this will trigger a restart of the IOC pod by Kubernetes.\nA value of 0 means to wait indefinitely until communication is established.",
           "title": "Timeout",
           "type": "integer"
