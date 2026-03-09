@@ -36,7 +36,7 @@ class DoWaitEntity(BuiltInEntity):
         description="The number of seconds to wait for a response before considering the communication attempt a failure "
         "and exiting the IOC startup process; this will trigger a restart of the IOC pod by Kubernetes.\n"
         "A value of 0 means to wait indefinitely until communication is established.",
-        default=10000,
+        default=0,
     )
 
     def _process_entity(self, output: Path = GLOBALS.RUNTIME_OUTPUT):
