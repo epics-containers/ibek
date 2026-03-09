@@ -195,9 +195,6 @@ def do_wait(
                     typer.echo(
                         f"Waiting indefinitely for {entry['device']} at {entry['address']} to respond..."
                     )
-                    log.info(
-                        f"Waiting indefinitely for {entry['device']} at {entry['address']} to respond..."
-                    )
                     while True:
                         try:
                             try_connect(entry["device"], ip, int(port), None)
@@ -211,9 +208,6 @@ def do_wait(
                     typer.echo(
                         f"Waiting up to {timeout} seconds for {entry['device']} at {entry['address']} to respond..."
                     )
-                    log.info(
-                        f"Waiting up to {timeout} seconds for {entry['device']} at {entry['address']} to respond..."
-                    )
                     end_time = time.time() + timeout
                     while time.time() < end_time:
                         try:
@@ -224,8 +218,9 @@ def do_wait(
                         except TimeoutError:
                             pass
                     else:
-                        log.error(
-                            f"Connection to {entry['device']} at {entry['address']} timed out after {timeout} seconds"
+                        typer.echo(
+                            f"Connection to {entry['device']} at {entry['address']} timed out after {timeout} seconds",
+                            err=True,
                         )
                         raise typer.Exit(1)
 
@@ -234,14 +229,14 @@ def do_wait(
                 # For example, waiting for a USB device to be present could be implemented
                 # by checking for the device ID in the output of a command like `lsusb`
                 # or by monitoring the `/dev` directory for the appearance of a device file corresponding to the USB device.
-                log.warning(f"Wait entry type not supported yet: {entry['type']}")
+                typer.echo(
+                    f"Wait entry type not supported yet: {entry['type']}", err=True
+                )
 
         # If we successfully get through the wait list without any connection timeouts or errors,
         # create the done file to signal to other processesthat waiting is complete.
         DOWAIT_DONE_FILE.touch()
-        typer.echo(
-            "All wait commands completed successfully. Temp file created to signal completion."
-        )
+        typer.echo("All 'wait' commands completed successfully.")
 
     else:
-        log.info(f"No wait list file found at {source}, skipping wait commands.")
+        typer.echo(f"No wait list file found at {source}, skipping wait commands.")
