@@ -163,13 +163,13 @@ def do_wait(
     Read the YAML list file which includes the devices to wait for and execute the appropriate wait command for each device type.
     Currently only supports request to wait for successful connection to a remote socket.
     """
+    # Ensure the done file is removed before starting the wait command (i.e. reset the state)
+    if DOWAIT_DONE_FILE.exists():
+        DOWAIT_DONE_FILE.unlink()
+
     if source.exists():
         yaml = YAML()
         wait_list = yaml.load(source) or []
-
-        # Ensure the done file is removed before starting the wait commands (i.e. reset the state)
-        if DOWAIT_DONE_FILE.exists():
-            DOWAIT_DONE_FILE.unlink()
 
         for entry in wait_list:
             if entry["type"] == "ibek.wait_ip":
@@ -233,10 +233,12 @@ def do_wait(
                     f"Wait entry type not supported yet: {entry['type']}", err=True
                 )
 
-        # If we successfully get through the wait list without any connection timeouts or errors,
-        # create the done file to signal to other processesthat waiting is complete.
-        DOWAIT_DONE_FILE.touch()
+        # Successfully got through the wait list without any connection timeouts or errors
         typer.echo("All 'wait' commands completed successfully.")
 
     else:
         typer.echo(f"No wait list file found at {source}, skipping wait commands.")
+
+    # Create the done file to signal to other processes that the wait command is complete.
+    # This is valid whether or not there was a wait list to process.
+    DOWAIT_DONE_FILE.touch()
