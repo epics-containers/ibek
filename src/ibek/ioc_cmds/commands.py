@@ -182,6 +182,7 @@ def do_wait(
     """
     Read the YAML list file which includes the devices to wait for and execute the appropriate wait command for each device type.
     Currently only supports request to wait for successful connection to a remote socket.
+    For now, unknown entry types (i.e. not "ibek.wait_ip") are treated as a non-fatal warning.
     """
     # Ensure the done file is removed before starting the wait command (i.e. reset the state)
     if DOWAIT_DONE_FILE.exists():
