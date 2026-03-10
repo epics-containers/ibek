@@ -120,7 +120,7 @@ mv `pwd`/epics/{runtime,opi}/* `pwd`/outputs/gauges
 echo making an ioc schema using technosoft support yaml
 ibek ioc generate-schema --no-ibek-defs support/technosoft.ibek.support.yaml --output schemas/technosoft.ibek.ioc.schema.json
 
-echo making techosoft ioc
+echo making ioc based on technosoft support yaml
 EPICS_ROOT=`pwd`/epics ibek runtime generate iocs/technosoft.ibek.ioc.yaml support/technosoft.ibek.support.yaml
 mv `pwd`/epics/{runtime,opi}/* `pwd`/outputs/technosoft
 
@@ -132,10 +132,9 @@ mv `pwd`/epics/{runtime,opi}/* `pwd`/outputs/technosoft
 echo making an ioc schema using listarg support yaml
 ibek ioc generate-schema --no-ibek-defs support/listarg.ibek.support.yaml --output schemas/listarg.ibek.schema.json
 
-echo making listarg ioc
+echo making ioc based on listarg support yaml
 EPICS_ROOT=`pwd`/epics ibek runtime generate iocs/listarg.ibek.ioc.yaml support/listarg.ibek.support.yaml
 mv `pwd`/epics/{runtime,opi}/* `pwd`/outputs/listarg
-
 
 
 ############################################################################
@@ -145,10 +144,9 @@ mv `pwd`/epics/{runtime,opi}/* `pwd`/outputs/listarg
 echo making an ioc schema using fastVacuum support yaml
 ibek ioc generate-schema --no-ibek-defs support/fastVacuum.ibek.support.yaml --output schemas/fastVacuum.ibek.ioc.schema.json
 
-echo making fastVacuum ioc
+echo making ioc based on fastVacuum support yaml
 EPICS_ROOT=`pwd`/epics ibek runtime generate iocs/fastVacuum.ibek.ioc.yaml support/fastVacuum.ibek.support.yaml
 mv `pwd`/epics/{runtime,opi}/* `pwd`/outputs/fastVacuum
-
 
 
 ############################################################################
@@ -158,6 +156,15 @@ mv `pwd`/epics/{runtime,opi}/* `pwd`/outputs/fastVacuum
 echo making an ioc schema using dlsPLC support yaml
 ibek ioc generate-schema --no-ibek-defs support/dlsPLC.ibek.support.yaml support/asyn.ibek.support.yaml --output schemas/dlsPLC.ibek.ioc.schema.json
 
-echo making fastVacuum ioc
+echo making ioc based on dlsPLC support yaml
 EPICS_ROOT=`pwd`/epics ibek runtime generate iocs/dlsPLC.ibek.ioc.yaml support/dlsPLC.ibek.support.yaml support/asyn.ibek.support.yaml
 mv `pwd`/epics/{runtime,opi}/* `pwd`/outputs/dlsPLC
+
+
+############################################################################
+# doWait example
+############################################################################
+
+echo making ioc which includes the ibek built-in doWait functionality 
+EPICS_ROOT=`pwd`/epics ibek runtime generate iocs/wait.ibek.ioc.yaml support/epics.ibek.support.yaml support/asyn.ibek.support.yaml support/motorSim.ibek.support.yaml
+mv `pwd`/epics/{runtime,opi}/* `pwd`/outputs/wait

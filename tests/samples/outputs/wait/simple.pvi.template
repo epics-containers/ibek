@@ -1,0 +1,15 @@
+
+### PV Interface for Simple Device ###
+
+record("*", "$(P)Simple") {
+    info(Q:group, {
+        "$(P)PVI": {
+            "pvi.SimplePV.r": {
+                "+channel": "NAME",
+                "+type": "plain",
+            }
+        }
+    })
+}
+
+### End of PV Interface for Simple Device ###

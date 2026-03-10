@@ -1,9 +1,11 @@
 import json
 import logging
+import subprocess
 from pathlib import Path
 from typing import Annotated
 
 import typer
+from ruamel.yaml import YAML
 
 from ibek.entity_factory import EntityFactory
 from ibek.globals import (
@@ -117,3 +119,63 @@ def extract_runtime_assets(
     """
     extras = extras or []
     extract_assets(destination, source, extras, defaults, dry_run)
+
+
+@ioc_cli.command()
+def do_wait(
+    source: Path = typer.Option(
+        GLOBALS.RUNTIME_OUTPUT / "wait_list.yaml",
+        help="The YAML file containing the list of wait commands to execute",
+        autocompletion=lambda: [],  # Forces path autocompletion
+    ),
+):
+    """
+    Read the YAML list file which includes the devices to wait for and execute the appropriate wait command for each device type.
+    Currently only supports waiting for IP addresses to respond to ping requests.
+    """
+    if source.exists():
+        yaml = YAML()
+        wait_list = yaml.load(source) or []
+
+        for entry in wait_list:
+            if entry["type"] == "ibek.wait_ip":
+                # Implement a ping command in a subprocess for each IP entry in the list
+                # The output is captured and any errors or timeouts are logged appropriately.
+                subprocess_warning = (
+                    f"Waiting for {entry['device']} at {entry['address']} to respond..."
+                )
+                result = subprocess.CompletedProcess(
+                    args="", returncode=0, stdout="", stderr=""
+                )
+                try:
+                    result = subprocess.run(
+                        'sh -c "until ping -c{repeats} -i{delay} {address} >/dev/null 2>&1; do : echo {warning}; done"'.format(
+                            repeats=entry["repeats"],
+                            delay=entry["delay"],
+                            address=entry["address"],
+                            warning=subprocess_warning,
+                        ),
+                        shell=True,
+                        check=True,
+                        capture_output=True,
+                        text=True,
+                        timeout=entry["timeout"] if entry["timeout"] > 0 else None,
+                    )
+                    log.info(f"Command {result.args} completed successfully.")
+                except subprocess.CalledProcessError as e:
+                    log.error(
+                        f"Ping command to {entry['device']} at {entry['address']} failed with error: {e.stderr}"
+                    )
+                    exit(1)
+                except subprocess.TimeoutExpired:
+                    log.error(
+                        f"Ping command to {entry['device']} at {entry['address']} timed out after {entry['timeout']} seconds"
+                    )
+                    exit(1)
+
+            else:
+                # In the future, support for other types of wait commands could be added by defining additional entity models.
+                # For example, waiting for a USB device to be present could be implemented
+                # by checking for the device ID in the output of a command like `lsusb`
+                # or by monitoring the `/dev` directory for the appearance of a device file corresponding to the USB device.
+                log.warning(f"Wait entry type not supported yet: {entry['type']}")

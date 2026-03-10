@@ -11,7 +11,8 @@ from ibek.entity_factory import EntityFactory
 from ibek.entity_model import Database
 from ibek.gen_scripts import create_boot_script, create_db_script
 from ibek.globals import GLOBALS, NaturalOrderGroup
-from ibek.ioc import IOC, Entity
+from ibek.ibek_builtin.wait import DoWaitEntity
+from ibek.ioc import IOC, BuiltInEntity, Entity
 from ibek.ioc_factory import IocFactory
 from ibek.runtime_cmds.autosave import AutosaveGenerator, link_req_files
 from ibek.utils import UTILS
@@ -141,12 +142,29 @@ def do_generate(
 
     # post processing to insert SubEntity instances
     all_entities = entity_factory.resolve_sub_entities(ioc_instance.entities, {})
-    ioc_instance.entities = all_entities
 
     # Clear out generated files so developers know if something stops being generated
     shutil.rmtree(output_folder, ignore_errors=True)
     output_folder.mkdir(exist_ok=True)
 
+    # Separate built in entities and filter out any non-entity objects
+    # that may be present in the list after processing (e.g. from SubEntity resolution)
+    builtin_entities: list[BuiltInEntity] = []
+    discrete_entities: list[Entity] = []
+    for entity in all_entities:
+        if isinstance(entity, BuiltInEntity):
+            builtin_entities.append(entity)
+        if not hasattr(entity, "_model"):
+            continue
+        discrete_entities.append(entity)
+    ioc_instance.entities = discrete_entities
+
+    for entity in builtin_entities:
+        # Generate the wait for hardware file for the IOC instance.
+        if isinstance(entity, DoWaitEntity):
+            entity._process_entity(output_folder)
+
+    # Generate pvi files and collect database information for entities with pvi definitions.
     pvi_databases: list = []
     if pvi:
         shutil.rmtree(GLOBALS.OPI_OUTPUT, ignore_errors=True)
@@ -155,12 +173,14 @@ def do_generate(
         pvi_index_entries, pvi_databases = generate_pvi(ioc_instance)
         generate_index(ioc_instance.ioc_name, pvi_index_entries)
 
+    # Generate the boot script for the IOC instance.
     script_txt = create_boot_script(ioc_instance.entities)
     script_output = output_folder / "st.cmd"
     script_output.parent.mkdir(parents=True, exist_ok=True)
     with script_output.open("w") as stream:
         stream.write(script_txt)
 
+    # Generate the database substitution file, including any generated pvi databases.
     db_txt = create_db_script(ioc_instance.entities, pvi_databases)
     db_output = output_folder / "ioc.subst"
     with db_output.open("w") as stream:
