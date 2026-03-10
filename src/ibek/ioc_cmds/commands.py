@@ -1,3 +1,4 @@
+import errno
 import json
 import logging
 import socket
@@ -125,20 +126,33 @@ def extract_runtime_assets(
     extract_assets(destination, source, extras, defaults, dry_run)
 
 
+# Transient errno values that mean the remote end is not up yet but may become
+# available.  These are re-raised as TimeoutError so the do_wait retry loops
+# continue rather than exiting immediately.
+_RETRYABLE_ERRNOS = {
+    errno.ECONNREFUSED,  # port not open yet – most common when device hasn't started listening on the port yet
+    errno.ENETUNREACH,  # network path not ready yet
+    errno.EHOSTUNREACH,  # host not reachable yet (ARP / routing not settled)
+    errno.ECONNRESET,  # connection reset during handshake
+    errno.ENETDOWN,  # network interface not yet up
+}
+
+
 def try_connect(device: str, ip: str, port: int, timeout: float | None) -> None:
     """
     Attempt to connect to the given IP address and port using a socket with a timeout.
     If the connection is successful, the socket is closed and the function returns.
-    If the connection times out, a TimeoutError is raised.
-    If any other OSError occurs during the connection attempt, it is logged and the program exits with an error.
 
     :param device: The name of the device being connected to (used for logging).
     :param ip: The IP address to connect to.
     :param port: The port number to connect to.
     :param timeout: The timeout duration in seconds for the connection attempt. If None, wait indefinitely until a connection can be made.
 
-    :raises TimeoutError: If the connection attempt times out.
-    :raises typer.Exit: If any other error occurs during the connection attempt.
+    :raises TimeoutError: If the connection attempt times out *or* if a transient
+        network error occurs (e.g. ECONNREFUSED, ENETUNREACH, EHOSTUNREACH)
+        so that the caller's retry loop can keep waiting rather than giving up.
+    :raises typer.Exit: If a non-retryable error occurs (e.g. invalid address
+        family, bad file descriptor, permission denied).
     """
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as client:
         client.settimeout(timeout)
@@ -147,6 +161,12 @@ def try_connect(device: str, ip: str, port: int, timeout: float | None) -> None:
         except TimeoutError:
             raise
         except OSError as e:
+            if e.errno in _RETRYABLE_ERRNOS:
+                log.debug(
+                    f"Transient error connecting to {device} at {ip}:{port} "
+                    f"(errno {e.errno}: {e.strerror}); will retry"
+                )
+                raise TimeoutError(str(e)) from e
             log.error(f"Error connecting to {device} at {ip}:{port}: {e}")
             raise typer.Exit(1) from e
 
