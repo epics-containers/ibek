@@ -175,7 +175,7 @@ def do_wait(
             if entry["type"] == "ibek.wait_ip":
                 # Parse address into ip and port, defaulting port to 1025 if not specified.
                 if ":" in entry["address"]:
-                    ip, port = entry["address"].split(":")
+                    ip, port = entry["address"].rsplit(":", 1)
                 else:
                     log.warning(
                         f"Address '{entry['address']}' does not include a port number. "
