@@ -53,8 +53,8 @@ class Wait4USBEntity(DoWaitEntity):
 
     type: Literal["ibek.wait_usb"] = "ibek.wait_usb"  # type: ignore[assignment]
     id: str = Field(
-        description="The ID of the USB device to wait for."
-        "This should be in the format 'vendor_id:product_id', where vendor_id and product_id are the hexadecimal IDs of the USB device."
+        description="The ID of the USB device to wait for. "
+        "This should be in the format 'vendor_id:product_id', where vendor_id and product_id are the hexadecimal IDs of the USB device. "
         "For example, '1234:5678'.",
     )
 
