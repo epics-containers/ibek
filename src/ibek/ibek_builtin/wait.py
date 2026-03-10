@@ -75,15 +75,7 @@ class Wait4IPEntity(DoWaitEntity):
 
     type: Literal["ibek.wait_ip"] = "ibek.wait_ip"  # type: ignore[assignment]
     address: str = Field(
-        description="The IP address to ping.",
-    )
-    delay: int = Field(
-        description="The number of seconds to wait between successive ping requests.",
-        default=1,
-    )
-    repeats: int = Field(
-        description="The number of successful ping responses to wait for before considering the communication established.",
-        default=3,
+        description="The IP address and port to check communication with.",
     )
 
     def _process_entity(self, output: Path = GLOBALS.RUNTIME_OUTPUT):
@@ -94,10 +86,6 @@ class Wait4IPEntity(DoWaitEntity):
         """
         # Make sure the runtime directory exists
         output.mkdir(parents=True, exist_ok=True)
-
-        # Remove the port number if it is included in the address, since ping commands expect just the IP address
-        if ":" in self.address:
-            self.address = self.address.split(":")[0]
 
         # Create the YAML file path and initialize it with a header if it doesn't exist
         yaml_path = output / "wait_list.yaml"
@@ -124,8 +112,6 @@ class Wait4IPEntity(DoWaitEntity):
             "type": self.type,
             "device": self.device,
             "address": self.address,
-            "delay": self.delay,
-            "repeats": self.repeats,
             "timeout": self.timeout,
         }
         data.append(entry)

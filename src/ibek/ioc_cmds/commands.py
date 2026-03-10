@@ -1,6 +1,6 @@
 import json
 import logging
-import subprocess
+import socket
 from pathlib import Path
 from typing import Annotated
 
@@ -131,7 +131,7 @@ def do_wait(
 ):
     """
     Read the YAML list file which includes the devices to wait for and execute the appropriate wait command for each device type.
-    Currently only supports waiting for IP addresses to respond to ping requests.
+    Currently only supports request to wait for successful connection to a remote socket.
     """
     if source.exists():
         yaml = YAML()
@@ -139,37 +139,40 @@ def do_wait(
 
         for entry in wait_list:
             if entry["type"] == "ibek.wait_ip":
-                # Implement a ping command in a subprocess for each IP entry in the list
-                # The output is captured and any errors or timeouts are logged appropriately.
-                subprocess_warning = (
-                    f"Waiting for {entry['device']} at {entry['address']} to respond..."
-                )
-                result = subprocess.CompletedProcess(
-                    args="", returncode=0, stdout="", stderr=""
-                )
-                try:
-                    result = subprocess.run(
-                        'sh -c "until ping -c{repeats} -i{delay} {address} >/dev/null 2>&1; do : echo {warning}; done"'.format(
-                            repeats=entry["repeats"],
-                            delay=entry["delay"],
-                            address=entry["address"],
-                            warning=subprocess_warning,
-                        ),
-                        shell=True,
-                        check=True,
-                        capture_output=True,
-                        text=True,
-                        timeout=entry["timeout"] if entry["timeout"] > 0 else None,
+                # Check that the port number is included in the address.
+                if ":" not in entry["address"]:
+                    log.warning(
+                        f"Address '{entry['address']}' does not include a port number. "
+                        f"It should be in the format 'ip:port'. Using port 1025 as default."
                     )
-                    log.info(f"Command {result.args} completed successfully.")
-                except subprocess.CalledProcessError as e:
+
+                # Attempt to connect to the IP address and port using a socket with a timeout.
+                try:
+                    log.info(
+                        f"Waiting for {entry['device']} at {entry['address']} to respond..."
+                    )
+                    client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+                    client.settimeout(
+                        entry["timeout"] if entry["timeout"] > 0 else None
+                    )
+                    ip, port = (
+                        entry["address"].split(":")
+                        if ":" in entry["address"]
+                        else (entry["address"], "1025")
+                    )
+                    client.connect((ip, int(port)))
+                    client.close()
+                    log.info(
+                        f"Successfully connected to {entry['device']} at {entry['address']}."
+                    )
+                except TimeoutError:
                     log.error(
-                        f"Ping command to {entry['device']} at {entry['address']} failed with error: {e.stderr}"
+                        f"Connection to {entry['device']} at {entry['address']} timed out after {entry['timeout']} seconds"
                     )
                     exit(1)
-                except subprocess.TimeoutExpired:
+                except OSError as e:
                     log.error(
-                        f"Ping command to {entry['device']} at {entry['address']} timed out after {entry['timeout']} seconds"
+                        f"Error connecting to {entry['device']} at {entry['address']}: {e}"
                     )
                     exit(1)
 
