@@ -1,0 +1,42 @@
+# yaml-language-server: $schema=../schemas/motorSim.ibek.ioc.schema.json
+
+ioc_name: "{{ ioc_yaml_file_name }}"
+description: Example simulated IOC for testing ibek Wait4IPEntity
+
+# Simulated motion controller instance required, otherwise test will fail because of
+# missing 'simple.pvi.template' file (enforced by cli function 'generic_generate')
+entities:
+  - type: ibek.wait_ip
+    device: asynController1
+    address: 192.168.0.55
+    timeout: 10
+
+  - type: asyn.AsynIP
+    name: controllerPort
+    port: 192.168.0.55:2002
+
+  - type: motorSim.simMotorController
+    port: controllerPort
+    controllerName: motorController
+    numAxes: 1
+    P: "IBEK-MO-TST-01:"
+
+  - type: motorSim.simMotorAxis
+    controller: motorController
+    M: M{{ADDR}}
+    ADDR: 0
+    DESC: Motor {{ADDR}} for ioc {{ioc_name}}
+    home: 500
+
+  - type: ibek.repeat
+    values: [0, 1, 2, 3]
+    entity:
+      type: ibek.wait_ip
+      device: controller{{ index }}
+      address: 192.168.0.{{ 65 + index }}:55000
+      timeout: 5
+
+  - type: ibek.wait_ip
+    device: asynController2
+    address: 192.168.0.56:7001
+    timeout: 0

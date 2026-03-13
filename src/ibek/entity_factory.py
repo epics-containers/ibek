@@ -16,6 +16,12 @@ from ruamel.yaml.main import YAML
 
 from ibek.globals import JINJA
 from ibek.ibek_builtin.repeat import REPEAT_TYPE, RepeatEntity
+from ibek.ibek_builtin.wait import (
+    WAIT4IP_TYPE,
+    WAIT4USB_TYPE,
+    Wait4IPEntity,
+    Wait4USBEntity,
+)
 from ibek.sub_entity import SubEntity
 
 from .ioc import Entity, clear_entity_model_ids
@@ -74,6 +80,8 @@ class EntityFactory:
 
             # also add builtin entity types "ibek.*"
             self._entity_models[REPEAT_TYPE] = RepeatEntity  # type: ignore
+            self._entity_models[WAIT4IP_TYPE] = Wait4IPEntity  # type: ignore
+            self._entity_models[WAIT4USB_TYPE] = Wait4USBEntity  # type: ignore
         except Exception:
             print(f"VALIDATION ERROR READING {entity_model}")
             raise
@@ -244,11 +252,13 @@ class EntityFactory:
             else:
                 # add the current parent entity to the resolved list
                 resolved_entities.append(parent_entity)
-                # add in SubEntities if any
-                for sub_entity in parent_entity._model.sub_entities:
-                    # recursively scan the SubEntity for more SubEntities
-                    resolved_entities.extend(
-                        self.resolve_sub_entities([sub_entity], context)
-                    )
+                # only entities that have a model may have subentities
+                if hasattr(parent_entity, "_model"):
+                    # add in SubEntities if any
+                    for sub_entity in parent_entity._model.sub_entities:
+                        # recursively scan the SubEntity for more SubEntities
+                        resolved_entities.extend(
+                            self.resolve_sub_entities([sub_entity], context)
+                        )
 
         return resolved_entities
