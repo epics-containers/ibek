@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Modules, Definitions and Entities &#8212; ibek 3.3.3.dev2+gee1416302 documentation</title>
+    <title>Modules, Definitions and Entities &#8212; ibek 3.3.4.dev9+g8d217e6c7 documentation</title>
   
   
   
@@ -41,7 +41,7 @@
   <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
 <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
-    <script src="../_static/documentation_options.js?v=ac90e9db"></script>
+    <script src="../_static/documentation_options.js?v=7951e8c0"></script>
     <script src="../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -1785,6 +1785,86 @@ the container or during container development.</p>
       <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;RepeatEntity&quot;</span><span class="p">,</span>
       <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span>
     <span class="p">},</span>
+    <span class="s2">&quot;Wait4IPEntity&quot;</span><span class="p">:</span> <span class="p">{</span>
+      <span class="s2">&quot;additionalProperties&quot;</span><span class="p">:</span> <span class="n">false</span><span class="p">,</span>
+      <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;A definition of Wait4IPEntity for the type checker.</span><span class="se">\n\n</span><span class="s2">This is not really used - instead the dynamic class is created</span><span class="se">\n</span><span class="s2">by the make_entity_models function is used.&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="p">{</span>
+          <span class="s2">&quot;const&quot;</span><span class="p">:</span> <span class="s2">&quot;ibek.wait_ip&quot;</span><span class="p">,</span>
+          <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="s2">&quot;ibek.wait_ip&quot;</span><span class="p">,</span>
+          <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Type&quot;</span><span class="p">,</span>
+          <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;entity_enabled&quot;</span><span class="p">:</span> <span class="p">{</span>
+          <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="n">true</span><span class="p">,</span>
+          <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;enable or disable this entity instance&quot;</span><span class="p">,</span>
+          <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Entity Enabled&quot;</span><span class="p">,</span>
+          <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;boolean&quot;</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;device&quot;</span><span class="p">:</span> <span class="p">{</span>
+          <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="s2">&quot;DEVICE&quot;</span><span class="p">,</span>
+          <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;The device name to use in the database record.&quot;</span><span class="p">,</span>
+          <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Device&quot;</span><span class="p">,</span>
+          <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;timeout&quot;</span><span class="p">:</span> <span class="p">{</span>
+          <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+          <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;The number of seconds to wait for a response before considering the communication attempt a failure and exiting the IOC startup process; this will trigger a restart of the IOC pod by Kubernetes.</span><span class="se">\n</span><span class="s2">A value of 0 means to wait indefinitely until communication is established.&quot;</span><span class="p">,</span>
+          <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Timeout&quot;</span><span class="p">,</span>
+          <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;integer&quot;</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;address&quot;</span><span class="p">:</span> <span class="p">{</span>
+          <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;The IP address and port to check communication with.&quot;</span><span class="p">,</span>
+          <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Address&quot;</span><span class="p">,</span>
+          <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
+        <span class="p">}</span>
+      <span class="p">},</span>
+      <span class="s2">&quot;required&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="s2">&quot;address&quot;</span>
+      <span class="p">],</span>
+      <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Wait4IPEntity&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span>
+    <span class="p">},</span>
+    <span class="s2">&quot;Wait4USBEntity&quot;</span><span class="p">:</span> <span class="p">{</span>
+      <span class="s2">&quot;additionalProperties&quot;</span><span class="p">:</span> <span class="n">false</span><span class="p">,</span>
+      <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;A definition of Wait4USBEntity for the type checker.</span><span class="se">\n\n</span><span class="s2">This is not really used - instead the dynamic class created</span><span class="se">\n</span><span class="s2">by the make_entity_models function is used.&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="p">{</span>
+          <span class="s2">&quot;const&quot;</span><span class="p">:</span> <span class="s2">&quot;ibek.wait_usb&quot;</span><span class="p">,</span>
+          <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="s2">&quot;ibek.wait_usb&quot;</span><span class="p">,</span>
+          <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Type&quot;</span><span class="p">,</span>
+          <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;entity_enabled&quot;</span><span class="p">:</span> <span class="p">{</span>
+          <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="n">true</span><span class="p">,</span>
+          <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;enable or disable this entity instance&quot;</span><span class="p">,</span>
+          <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Entity Enabled&quot;</span><span class="p">,</span>
+          <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;boolean&quot;</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;device&quot;</span><span class="p">:</span> <span class="p">{</span>
+          <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="s2">&quot;DEVICE&quot;</span><span class="p">,</span>
+          <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;The device name to use in the database record.&quot;</span><span class="p">,</span>
+          <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Device&quot;</span><span class="p">,</span>
+          <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;timeout&quot;</span><span class="p">:</span> <span class="p">{</span>
+          <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+          <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;The number of seconds to wait for a response before considering the communication attempt a failure and exiting the IOC startup process; this will trigger a restart of the IOC pod by Kubernetes.</span><span class="se">\n</span><span class="s2">A value of 0 means to wait indefinitely until communication is established.&quot;</span><span class="p">,</span>
+          <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Timeout&quot;</span><span class="p">,</span>
+          <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;integer&quot;</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="p">{</span>
+          <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;The ID of the USB device to wait for. This should be in the format &#39;vendor_id:product_id&#39;, where vendor_id and product_id are the hexadecimal IDs of the USB device. For example, &#39;1234:5678&#39;.&quot;</span><span class="p">,</span>
+          <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Id&quot;</span><span class="p">,</span>
+          <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
+        <span class="p">}</span>
+      <span class="p">},</span>
+      <span class="s2">&quot;required&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="s2">&quot;id&quot;</span>
+      <span class="p">],</span>
+      <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;Wait4USBEntity&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span>
+    <span class="p">},</span>
     <span class="s2">&quot;motorSim_simMotorAxis&quot;</span><span class="p">:</span> <span class="p">{</span>
       <span class="s2">&quot;additionalProperties&quot;</span><span class="p">:</span> <span class="n">false</span><span class="p">,</span>
       <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span>
@@ -2033,6 +2113,8 @@ the container or during container development.</p>
         <span class="s2">&quot;discriminator&quot;</span><span class="p">:</span> <span class="p">{</span>
           <span class="s2">&quot;mapping&quot;</span><span class="p">:</span> <span class="p">{</span>
             <span class="s2">&quot;ibek.repeat&quot;</span><span class="p">:</span> <span class="s2">&quot;#/$defs/RepeatEntity&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;ibek.wait_ip&quot;</span><span class="p">:</span> <span class="s2">&quot;#/$defs/Wait4IPEntity&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;ibek.wait_usb&quot;</span><span class="p">:</span> <span class="s2">&quot;#/$defs/Wait4USBEntity&quot;</span><span class="p">,</span>
             <span class="s2">&quot;motorSim.simMotorAxis&quot;</span><span class="p">:</span> <span class="s2">&quot;#/$defs/motorSim_simMotorAxis&quot;</span><span class="p">,</span>
             <span class="s2">&quot;motorSim.simMotorController&quot;</span><span class="p">:</span> <span class="s2">&quot;#/$defs/motorSim_simMotorController&quot;</span>
           <span class="p">},</span>
@@ -2047,6 +2129,12 @@ the container or during container development.</p>
           <span class="p">},</span>
           <span class="p">{</span>
             <span class="s2">&quot;$ref&quot;</span><span class="p">:</span> <span class="s2">&quot;#/$defs/RepeatEntity&quot;</span>
+          <span class="p">},</span>
+          <span class="p">{</span>
+            <span class="s2">&quot;$ref&quot;</span><span class="p">:</span> <span class="s2">&quot;#/$defs/Wait4IPEntity&quot;</span>
+          <span class="p">},</span>
+          <span class="p">{</span>
+            <span class="s2">&quot;$ref&quot;</span><span class="p">:</span> <span class="s2">&quot;#/$defs/Wait4USBEntity&quot;</span>
           <span class="p">}</span>
         <span class="p">]</span>
       <span class="p">},</span>
