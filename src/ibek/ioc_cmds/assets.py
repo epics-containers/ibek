@@ -105,7 +105,7 @@ def extract_assets(
         binaries.extend(source.glob(f"*/*/{find}"))
         binaries.extend(source.glob(f"*/{find}"))
 
-    modules = [binary.parent for binary in binaries]
+    modules = list(dict.fromkeys(binary.parent for binary in binaries))
 
     destination.mkdir(exist_ok=True, parents=True)
     for module in modules:
