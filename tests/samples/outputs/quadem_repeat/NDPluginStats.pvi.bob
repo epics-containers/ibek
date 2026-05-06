@@ -2,7 +2,7 @@
   <name>NDPluginStats</name>
   <x>0</x>
   <y use_class="true">0</y>
-  <width>1974</width>
+  <width>2224</width>
   <height>966</height>
   <grid_step_x>4</grid_step_x>
   <grid_step_y>4</grid_step_y>
@@ -12,7 +12,7 @@
     <text>NDPluginStats</text>
     <x use_class="true">0</x>
     <y use_class="true">0</y>
-    <width>1974</width>
+    <width>2224</width>
     <height>25</height>
     <font use_class="true">
       <font name="Header 1" family="Liberation Sans" style="BOLD" size="22.0">
@@ -29,7 +29,7 @@
     <name>AD Plugins</name>
     <x>5</x>
     <y>30</y>
-    <width>396</width>
+    <width>446</width>
     <height>56</height>
     <transparent>true</transparent>
     <widget type="label" version="2.0.0">
@@ -37,14 +37,14 @@
       <text>Net</text>
       <x>0</x>
       <y>0</y>
-      <width>150</width>
+      <width>200</width>
       <height>20</height>
-      <tooltip>No description provided</tooltip>
+      <tooltip>Net - No description provided</tooltip>
     </widget>
     <widget type="textentry" version="3.0.0">
       <name>TextEntry</name>
       <pv_name>$(P)$(R)Net</pv_name>
-      <x>155</x>
+      <x>205</x>
       <y>0</y>
       <width>100</width>
       <height>20</height>
@@ -53,7 +53,7 @@
     <widget type="textupdate" version="2.0.0">
       <name>TextUpdate</name>
       <pv_name>$(P)$(R)Net_RBV</pv_name>
-      <x>260</x>
+      <x>310</x>
       <y>0</y>
       <width>100</width>
       <height>20</height>
@@ -68,7 +68,7 @@
     <name>AD Readout</name>
     <x>5</x>
     <y>91</y>
-    <width>396</width>
+    <width>446</width>
     <height>206</height>
     <transparent>true</transparent>
     <widget type="label" version="2.0.0">
@@ -76,14 +76,14 @@
       <text>Min Y</text>
       <x>0</x>
       <y>0</y>
-      <width>150</width>
+      <width>200</width>
       <height>20</height>
-      <tooltip>No description provided</tooltip>
+      <tooltip>Min Y - No description provided</tooltip>
     </widget>
     <widget type="textentry" version="3.0.0">
       <name>TextEntry</name>
       <pv_name>$(P)$(R)MinY</pv_name>
-      <x>155</x>
+      <x>205</x>
       <y>0</y>
       <width>100</width>
       <height>20</height>
@@ -92,7 +92,7 @@
     <widget type="textupdate" version="2.0.0">
       <name>TextUpdate</name>
       <pv_name>$(P)$(R)MinY_RBV</pv_name>
-      <x>260</x>
+      <x>310</x>
       <y>0</y>
       <width>100</width>
       <height>20</height>
@@ -107,14 +107,14 @@
       <text>Min X</text>
       <x>0</x>
       <y>25</y>
-      <width>150</width>
+      <width>200</width>
       <height>20</height>
-      <tooltip>No description provided</tooltip>
+      <tooltip>Min X - No description provided</tooltip>
     </widget>
     <widget type="textentry" version="3.0.0">
       <name>TextEntry</name>
       <pv_name>$(P)$(R)MinX</pv_name>
-      <x>155</x>
+      <x>205</x>
       <y>25</y>
       <width>100</width>
       <height>20</height>
@@ -123,7 +123,7 @@
     <widget type="textupdate" version="2.0.0">
       <name>TextUpdate</name>
       <pv_name>$(P)$(R)MinX_RBV</pv_name>
-      <x>260</x>
+      <x>310</x>
       <y>25</y>
       <width>100</width>
       <height>20</height>
@@ -138,14 +138,14 @@
       <text>Array Size X</text>
       <x>0</x>
       <y>50</y>
-      <width>150</width>
+      <width>200</width>
       <height>20</height>
-      <tooltip>No description provided</tooltip>
+      <tooltip>Array Size X - No description provided</tooltip>
     </widget>
     <widget type="textupdate" version="2.0.0">
       <name>TextUpdate</name>
       <pv_name>$(P)$(R)ArraySizeX_RBV</pv_name>
-      <x>155</x>
+      <x>205</x>
       <y>50</y>
       <width>205</width>
       <height>20</height>
@@ -160,14 +160,14 @@
       <text>Array Size Y</text>
       <x>0</x>
       <y>75</y>
-      <width>150</width>
+      <width>200</width>
       <height>20</height>
-      <tooltip>No description provided</tooltip>
+      <tooltip>Array Size Y - No description provided</tooltip>
     </widget>
     <widget type="textupdate" version="2.0.0">
       <name>TextUpdate</name>
       <pv_name>$(P)$(R)ArraySizeY_RBV</pv_name>
-      <x>155</x>
+      <x>205</x>
       <y>75</y>
       <width>205</width>
       <height>20</height>
@@ -182,14 +182,14 @@
       <text>Array Size</text>
       <x>0</x>
       <y>100</y>
-      <width>150</width>
+      <width>200</width>
       <height>20</height>
-      <tooltip>No description provided</tooltip>
+      <tooltip>Array Size - No description provided</tooltip>
     </widget>
     <widget type="textupdate" version="2.0.0">
       <name>TextUpdate</name>
       <pv_name>$(P)$(R)ArraySize_RBV</pv_name>
-      <x>155</x>
+      <x>205</x>
       <y>100</y>
       <width>205</width>
       <height>20</height>
@@ -204,14 +204,14 @@
       <text>Data Type</text>
       <x>0</x>
       <y>125</y>
-      <width>150</width>
+      <width>200</width>
       <height>20</height>
-      <tooltip>No description provided</tooltip>
+      <tooltip>Data Type - No description provided</tooltip>
     </widget>
     <widget type="combo" version="2.0.0">
       <name>ComboBox</name>
       <pv_name>$(P)$(R)DataType</pv_name>
-      <x>155</x>
+      <x>205</x>
       <y>125</y>
       <width>100</width>
       <height>20</height>
@@ -219,7 +219,7 @@
     <widget type="textupdate" version="2.0.0">
       <name>TextUpdate</name>
       <pv_name>$(P)$(R)DataType_RBV</pv_name>
-      <x>260</x>
+      <x>310</x>
       <y>125</y>
       <width>100</width>
       <height>20</height>
@@ -234,14 +234,14 @@
       <text>Color Mode</text>
       <x>0</x>
       <y>150</y>
-      <width>150</width>
+      <width>200</width>
       <height>20</height>
-      <tooltip>No description provided</tooltip>
+      <tooltip>Color Mode - No description provided</tooltip>
     </widget>
     <widget type="combo" version="2.0.0">
       <name>ComboBox</name>
       <pv_name>$(P)$(R)ColorMode</pv_name>
-      <x>155</x>
+      <x>205</x>
       <y>150</y>
       <width>100</width>
       <height>20</height>
@@ -249,7 +249,7 @@
     <widget type="textupdate" version="2.0.0">
       <name>TextUpdate</name>
       <pv_name>$(P)$(R)ColorMode_RBV</pv_name>
-      <x>260</x>
+      <x>310</x>
       <y>150</y>
       <width>100</width>
       <height>20</height>
@@ -264,7 +264,7 @@
     <name>ND Plugin Time Series N</name>
     <x>5</x>
     <y>302</y>
-    <width>396</width>
+    <width>446</width>
     <height>256</height>
     <transparent>true</transparent>
     <widget type="label" version="2.0.0">
@@ -272,14 +272,14 @@
       <text>TS Min Value</text>
       <x>0</x>
       <y>0</y>
-      <width>150</width>
+      <width>200</width>
       <height>20</height>
-      <tooltip>No description provided</tooltip>
+      <tooltip>TS Min Value - No description provided</tooltip>
     </widget>
     <widget type="textupdate" version="2.0.0">
       <name>TextUpdate</name>
       <pv_name>$(P)$(R)TSMinValue</pv_name>
-      <x>155</x>
+      <x>205</x>
       <y>0</y>
       <width>205</width>
       <height>20</height>
@@ -294,14 +294,14 @@
       <text>TS Max Value</text>
       <x>0</x>
       <y>25</y>
-      <width>150</width>
+      <width>200</width>
       <height>20</height>
-      <tooltip>No description provided</tooltip>
+      <tooltip>TS Max Value - No description provided</tooltip>
     </widget>
     <widget type="textupdate" version="2.0.0">
       <name>TextUpdate</name>
       <pv_name>$(P)$(R)TSMaxValue</pv_name>
-      <x>155</x>
+      <x>205</x>
       <y>25</y>
       <width>205</width>
       <height>20</height>
@@ -316,14 +316,14 @@
       <text>TS Mean Value</text>
       <x>0</x>
       <y>50</y>
-      <width>150</width>
+      <width>200</width>
       <height>20</height>
-      <tooltip>No description provided</tooltip>
+      <tooltip>TS Mean Value - No description provided</tooltip>
     </widget>
     <widget type="textupdate" version="2.0.0">
       <name>TextUpdate</name>
       <pv_name>$(P)$(R)TSMeanValue</pv_name>
-      <x>155</x>
+      <x>205</x>
       <y>50</y>
       <width>205</width>
       <height>20</height>
@@ -338,14 +338,14 @@
       <text>TS Total</text>
       <x>0</x>
       <y>75</y>
-      <width>150</width>
+      <width>200</width>
       <height>20</height>
-      <tooltip>No description provided</tooltip>
+      <tooltip>TS Total - No description provided</tooltip>
     </widget>
     <widget type="textupdate" version="2.0.0">
       <name>TextUpdate</name>
       <pv_name>$(P)$(R)TSTotal</pv_name>
-      <x>155</x>
+      <x>205</x>
       <y>75</y>
       <width>205</width>
       <height>20</height>
@@ -360,14 +360,14 @@
       <text>TS Net</text>
       <x>0</x>
       <y>100</y>
-      <width>150</width>
+      <width>200</width>
       <height>20</height>
-      <tooltip>No description provided</tooltip>
+      <tooltip>TS Net - No description provided</tooltip>
     </widget>
     <widget type="textupdate" version="2.0.0">
       <name>TextUpdate</name>
       <pv_name>$(P)$(R)TSNet</pv_name>
-      <x>155</x>
+      <x>205</x>
       <y>100</y>
       <width>205</width>
       <height>20</height>
@@ -382,14 +382,14 @@
       <text>Min Value</text>
       <x>0</x>
       <y>125</y>
-      <width>150</width>
+      <width>200</width>
       <height>20</height>
-      <tooltip>No description provided</tooltip>
+      <tooltip>Min Value - No description provided</tooltip>
     </widget>
     <widget type="textentry" version="3.0.0">
       <name>TextEntry</name>
       <pv_name>$(P)$(R)MinValue</pv_name>
-      <x>155</x>
+      <x>205</x>
       <y>125</y>
       <width>100</width>
       <height>20</height>
@@ -398,7 +398,7 @@
     <widget type="textupdate" version="2.0.0">
       <name>TextUpdate</name>
       <pv_name>$(P)$(R)MinValue_RBV</pv_name>
-      <x>260</x>
+      <x>310</x>
       <y>125</y>
       <width>100</width>
       <height>20</height>
@@ -413,14 +413,14 @@
       <text>Max Value</text>
       <x>0</x>
       <y>150</y>
-      <width>150</width>
+      <width>200</width>
       <height>20</height>
-      <tooltip>No description provided</tooltip>
+      <tooltip>Max Value - No description provided</tooltip>
     </widget>
     <widget type="textentry" version="3.0.0">
       <name>TextEntry</name>
       <pv_name>$(P)$(R)MaxValue</pv_name>
-      <x>155</x>
+      <x>205</x>
       <y>150</y>
       <width>100</width>
       <height>20</height>
@@ -429,7 +429,7 @@
     <widget type="textupdate" version="2.0.0">
       <name>TextUpdate</name>
       <pv_name>$(P)$(R)MaxValue_RBV</pv_name>
-      <x>260</x>
+      <x>310</x>
       <y>150</y>
       <width>100</width>
       <height>20</height>
@@ -444,14 +444,14 @@
       <text>Mean Value</text>
       <x>0</x>
       <y>175</y>
-      <width>150</width>
+      <width>200</width>
       <height>20</height>
-      <tooltip>No description provided</tooltip>
+      <tooltip>Mean Value - No description provided</tooltip>
     </widget>
     <widget type="textentry" version="3.0.0">
       <name>TextEntry</name>
       <pv_name>$(P)$(R)MeanValue</pv_name>
-      <x>155</x>
+      <x>205</x>
       <y>175</y>
       <width>100</width>
       <height>20</height>
@@ -460,7 +460,7 @@
     <widget type="textupdate" version="2.0.0">
       <name>TextUpdate</name>
       <pv_name>$(P)$(R)MeanValue_RBV</pv_name>
-      <x>260</x>
+      <x>310</x>
       <y>175</y>
       <width>100</width>
       <height>20</height>
@@ -475,14 +475,14 @@
       <text>Total</text>
       <x>0</x>
       <y>200</y>
-      <width>150</width>
+      <width>200</width>
       <height>20</height>
-      <tooltip>No description provided</tooltip>
+      <tooltip>Total - No description provided</tooltip>
     </widget>
     <widget type="textentry" version="3.0.0">
       <name>TextEntry</name>
       <pv_name>$(P)$(R)Total</pv_name>
-      <x>155</x>
+      <x>205</x>
       <y>200</y>
       <width>100</width>
       <height>20</height>
@@ -491,7 +491,7 @@
     <widget type="textupdate" version="2.0.0">
       <name>TextUpdate</name>
       <pv_name>$(P)$(R)Total_RBV</pv_name>
-      <x>260</x>
+      <x>310</x>
       <y>200</y>
       <width>100</width>
       <height>20</height>
@@ -506,7 +506,7 @@
     <name>NDROI Stat 8</name>
     <x>5</x>
     <y>563</y>
-    <width>396</width>
+    <width>446</width>
     <height>56</height>
     <transparent>true</transparent>
     <widget type="label" version="2.0.0">
@@ -514,14 +514,14 @@
       <text>Bgd Width</text>
       <x>0</x>
       <y>0</y>
-      <width>150</width>
+      <width>200</width>
       <height>20</height>
-      <tooltip>No description provided</tooltip>
+      <tooltip>Bgd Width - No description provided</tooltip>
     </widget>
     <widget type="textentry" version="3.0.0">
       <name>TextEntry</name>
       <pv_name>$(P)$(R)BgdWidth</pv_name>
-      <x>155</x>
+      <x>205</x>
       <y>0</y>
       <width>100</width>
       <height>20</height>
@@ -530,7 +530,7 @@
     <widget type="textupdate" version="2.0.0">
       <name>TextUpdate</name>
       <pv_name>$(P)$(R)BgdWidth_RBV</pv_name>
-      <x>260</x>
+      <x>310</x>
       <y>0</y>
       <width>100</width>
       <height>20</height>
@@ -543,9 +543,9 @@
   </widget>
   <widget type="group" version="2.0.0">
     <name>ND Stats</name>
-    <x>406</x>
+    <x>456</x>
     <y>30</y>
-    <width>761</width>
+    <width>861</width>
     <height>931</height>
     <transparent>true</transparent>
     <widget type="label" version="2.0.0">
@@ -553,15 +553,15 @@
       <text>Compute Statistics</text>
       <x>0</x>
       <y>0</y>
-      <width>150</width>
+      <width>200</width>
       <height>20</height>
-      <tooltip>No description provided</tooltip>
+      <tooltip>Compute Statistics - No description provided</tooltip>
     </widget>
     <widget type="slide_button" version="2.0.0">
       <name>ToggleButton</name>
       <pv_name>$(P)$(R)ComputeStatistics</pv_name>
       <label/>
-      <x>195</x>
+      <x>245</x>
       <y>0</y>
       <width>20</width>
       <height>20</height>
@@ -569,7 +569,7 @@
     <widget type="led" version="2.0.0">
       <name>LED</name>
       <pv_name>$(P)$(R)ComputeStatistics_RBV</pv_name>
-      <x>300</x>
+      <x>350</x>
       <y>0</y>
       <width>20</width>
       <height>20</height>
@@ -579,15 +579,15 @@
       <text>Compute Profiles</text>
       <x>0</x>
       <y>25</y>
-      <width>150</width>
+      <width>200</width>
       <height>20</height>
-      <tooltip>No description provided</tooltip>
+      <tooltip>Compute Profiles - No description provided</tooltip>
     </widget>
     <widget type="slide_button" version="2.0.0">
       <name>ToggleButton</name>
       <pv_name>$(P)$(R)ComputeProfiles</pv_name>
       <label/>
-      <x>195</x>
+      <x>245</x>
       <y>25</y>
       <width>20</width>
       <height>20</height>
@@ -595,7 +595,7 @@
     <widget type="led" version="2.0.0">
       <name>LED</name>
       <pv_name>$(P)$(R)ComputeProfiles_RBV</pv_name>
-      <x>300</x>
+      <x>350</x>
       <y>25</y>
       <width>20</width>
       <height>20</height>
@@ -605,14 +605,14 @@
       <text>Profile Size X</text>
       <x>0</x>
       <y>50</y>
-      <width>150</width>
+      <width>200</width>
       <height>20</height>
-      <tooltip>No description provided</tooltip>
+      <tooltip>Profile Size X - No description provided</tooltip>
     </widget>
     <widget type="textupdate" version="2.0.0">
       <name>TextUpdate</name>
       <pv_name>$(P)$(R)ProfileSizeX_RBV</pv_name>
-      <x>155</x>
+      <x>205</x>
       <y>50</y>
       <width>205</width>
       <height>20</height>
@@ -627,14 +627,14 @@
       <text>Profile Size Y</text>
       <x>0</x>
       <y>75</y>
-      <width>150</width>
+      <width>200</width>
       <height>20</height>
-      <tooltip>No description provided</tooltip>
+      <tooltip>Profile Size Y - No description provided</tooltip>
     </widget>
     <widget type="textupdate" version="2.0.0">
       <name>TextUpdate</name>
       <pv_name>$(P)$(R)ProfileSizeY_RBV</pv_name>
-      <x>155</x>
+      <x>205</x>
       <y>75</y>
       <width>205</width>
       <height>20</height>
@@ -649,14 +649,14 @@
       <text>Profile Average X</text>
       <x>0</x>
       <y>100</y>
-      <width>150</width>
+      <width>200</width>
       <height>20</height>
-      <tooltip>No description provided</tooltip>
+      <tooltip>Profile Average X - No description provided</tooltip>
     </widget>
     <widget type="textupdate" version="2.0.0">
       <name>TextUpdate</name>
       <pv_name>$(P)$(R)ProfileAverageX_RBV</pv_name>
-      <x>155</x>
+      <x>205</x>
       <y>100</y>
       <width>205</width>
       <height>20</height>
@@ -671,14 +671,14 @@
       <text>Profile Average Y</text>
       <x>0</x>
       <y>125</y>
-      <width>150</width>
+      <width>200</width>
       <height>20</height>
-      <tooltip>No description provided</tooltip>
+      <tooltip>Profile Average Y - No description provided</tooltip>
     </widget>
     <widget type="textupdate" version="2.0.0">
       <name>TextUpdate</name>
       <pv_name>$(P)$(R)ProfileAverageY_RBV</pv_name>
-      <x>155</x>
+      <x>205</x>
       <y>125</y>
       <width>205</width>
       <height>20</height>
@@ -693,14 +693,14 @@
       <text>Profile Threshold X</text>
       <x>0</x>
       <y>150</y>
-      <width>150</width>
+      <width>200</width>
       <height>20</height>
-      <tooltip>No description provided</tooltip>
+      <tooltip>Profile Threshold X - No description provided</tooltip>
     </widget>
     <widget type="textupdate" version="2.0.0">
       <name>TextUpdate</name>
       <pv_name>$(P)$(R)ProfileThresholdX_RBV</pv_name>
-      <x>155</x>
+      <x>205</x>
       <y>150</y>
       <width>205</width>
       <height>20</height>
@@ -715,14 +715,14 @@
       <text>Profile Threshold Y</text>
       <x>0</x>
       <y>175</y>
-      <width>150</width>
+      <width>200</width>
       <height>20</height>
-      <tooltip>No description provided</tooltip>
+      <tooltip>Profile Threshold Y - No description provided</tooltip>
     </widget>
     <widget type="textupdate" version="2.0.0">
       <name>TextUpdate</name>
       <pv_name>$(P)$(R)ProfileThresholdY_RBV</pv_name>
-      <x>155</x>
+      <x>205</x>
       <y>175</y>
       <width>205</width>
       <height>20</height>
@@ -737,14 +737,14 @@
       <text>Profile Centroid X</text>
       <x>0</x>
       <y>200</y>
-      <width>150</width>
+      <width>200</width>
       <height>20</height>
-      <tooltip>No description provided</tooltip>
+      <tooltip>Profile Centroid X - No description provided</tooltip>
     </widget>
     <widget type="textupdate" version="2.0.0">
       <name>TextUpdate</name>
       <pv_name>$(P)$(R)ProfileCentroidX_RBV</pv_name>
-      <x>155</x>
+      <x>205</x>
       <y>200</y>
       <width>205</width>
       <height>20</height>
@@ -759,14 +759,14 @@
       <text>Profile Centroid Y</text>
       <x>0</x>
       <y>225</y>
-      <width>150</width>
+      <width>200</width>
       <height>20</height>
-      <tooltip>No description provided</tooltip>
+      <tooltip>Profile Centroid Y - No description provided</tooltip>
     </widget>
     <widget type="textupdate" version="2.0.0">
       <name>TextUpdate</name>
       <pv_name>$(P)$(R)ProfileCentroidY_RBV</pv_name>
-      <x>155</x>
+      <x>205</x>
       <y>225</y>
       <width>205</width>
       <height>20</height>
@@ -781,14 +781,14 @@
       <text>Profile Cursor X</text>
       <x>0</x>
       <y>250</y>
-      <width>150</width>
+      <width>200</width>
       <height>20</height>
-      <tooltip>No description provided</tooltip>
+      <tooltip>Profile Cursor X - No description provided</tooltip>
     </widget>
     <widget type="textupdate" version="2.0.0">
       <name>TextUpdate</name>
       <pv_name>$(P)$(R)ProfileCursorX_RBV</pv_name>
-      <x>155</x>
+      <x>205</x>
       <y>250</y>
       <width>205</width>
       <height>20</height>
@@ -803,14 +803,14 @@
       <text>Profile Cursor Y</text>
       <x>0</x>
       <y>275</y>
-      <width>150</width>
+      <width>200</width>
       <height>20</height>
-      <tooltip>No description provided</tooltip>
+      <tooltip>Profile Cursor Y - No description provided</tooltip>
     </widget>
     <widget type="textupdate" version="2.0.0">
       <name>TextUpdate</name>
       <pv_name>$(P)$(R)ProfileCursorY_RBV</pv_name>
-      <x>155</x>
+      <x>205</x>
       <y>275</y>
       <width>205</width>
       <height>20</height>
@@ -825,14 +825,14 @@
       <text>Cursor X</text>
       <x>0</x>
       <y>300</y>
-      <width>150</width>
+      <width>200</width>
       <height>20</height>
-      <tooltip>No description provided</tooltip>
+      <tooltip>Cursor X - No description provided</tooltip>
     </widget>
     <widget type="textentry" version="3.0.0">
       <name>TextEntry</name>
       <pv_name>$(P)$(R)CursorX</pv_name>
-      <x>155</x>
+      <x>205</x>
       <y>300</y>
       <width>100</width>
       <height>20</height>
@@ -841,7 +841,7 @@
     <widget type="textupdate" version="2.0.0">
       <name>TextUpdate</name>
       <pv_name>$(P)$(R)CursorX_RBV</pv_name>
-      <x>260</x>
+      <x>310</x>
       <y>300</y>
       <width>100</width>
       <height>20</height>
@@ -856,14 +856,14 @@
       <text>Cursor Y</text>
       <x>0</x>
       <y>325</y>
-      <width>150</width>
+      <width>200</width>
       <height>20</height>
-      <tooltip>No description provided</tooltip>
+      <tooltip>Cursor Y - No description provided</tooltip>
     </widget>
     <widget type="textentry" version="3.0.0">
       <name>TextEntry</name>
       <pv_name>$(P)$(R)CursorY</pv_name>
-      <x>155</x>
+      <x>205</x>
       <y>325</y>
       <width>100</width>
       <height>20</height>
@@ -872,7 +872,7 @@
     <widget type="textupdate" version="2.0.0">
       <name>TextUpdate</name>
       <pv_name>$(P)$(R)CursorY_RBV</pv_name>
-      <x>260</x>
+      <x>310</x>
       <y>325</y>
       <width>100</width>
       <height>20</height>
@@ -887,14 +887,14 @@
       <text>TS Min X</text>
       <x>0</x>
       <y>350</y>
-      <width>150</width>
+      <width>200</width>
       <height>20</height>
-      <tooltip>No description provided</tooltip>
+      <tooltip>TS Min X - No description provided</tooltip>
     </widget>
     <widget type="textupdate" version="2.0.0">
       <name>TextUpdate</name>
       <pv_name>$(P)$(R)TSMinX</pv_name>
-      <x>155</x>
+      <x>205</x>
       <y>350</y>
       <width>205</width>
       <height>20</height>
@@ -909,14 +909,14 @@
       <text>TS Min Y</text>
       <x>0</x>
       <y>375</y>
-      <width>150</width>
+      <width>200</width>
       <height>20</height>
-      <tooltip>No description provided</tooltip>
+      <tooltip>TS Min Y - No description provided</tooltip>
     </widget>
     <widget type="textupdate" version="2.0.0">
       <name>TextUpdate</name>
       <pv_name>$(P)$(R)TSMinY</pv_name>
-      <x>155</x>
+      <x>205</x>
       <y>375</y>
       <width>205</width>
       <height>20</height>
@@ -931,14 +931,14 @@
       <text>TS Max X</text>
       <x>0</x>
       <y>400</y>
-      <width>150</width>
+      <width>200</width>
       <height>20</height>
-      <tooltip>No description provided</tooltip>
+      <tooltip>TS Max X - No description provided</tooltip>
     </widget>
     <widget type="textupdate" version="2.0.0">
       <name>TextUpdate</name>
       <pv_name>$(P)$(R)TSMaxX</pv_name>
-      <x>155</x>
+      <x>205</x>
       <y>400</y>
       <width>205</width>
       <height>20</height>
@@ -953,14 +953,14 @@
       <text>TS Max Y</text>
       <x>0</x>
       <y>425</y>
-      <width>150</width>
+      <width>200</width>
       <height>20</height>
-      <tooltip>No description provided</tooltip>
+      <tooltip>TS Max Y - No description provided</tooltip>
     </widget>
     <widget type="textupdate" version="2.0.0">
       <name>TextUpdate</name>
       <pv_name>$(P)$(R)TSMaxY</pv_name>
-      <x>155</x>
+      <x>205</x>
       <y>425</y>
       <width>205</width>
       <height>20</height>
@@ -975,14 +975,14 @@
       <text>TS Timestamp</text>
       <x>0</x>
       <y>450</y>
-      <width>150</width>
+      <width>200</width>
       <height>20</height>
-      <tooltip>No description provided</tooltip>
+      <tooltip>TS Timestamp - No description provided</tooltip>
     </widget>
     <widget type="textupdate" version="2.0.0">
       <name>TextUpdate</name>
       <pv_name>$(P)$(R)TSTimestamp</pv_name>
-      <x>155</x>
+      <x>205</x>
       <y>450</y>
       <width>205</width>
       <height>20</height>
@@ -997,14 +997,14 @@
       <text>Max X</text>
       <x>0</x>
       <y>475</y>
-      <width>150</width>
+      <width>200</width>
       <height>20</height>
-      <tooltip>No description provided</tooltip>
+      <tooltip>Max X - No description provided</tooltip>
     </widget>
     <widget type="textentry" version="3.0.0">
       <name>TextEntry</name>
       <pv_name>$(P)$(R)MaxX</pv_name>
-      <x>155</x>
+      <x>205</x>
       <y>475</y>
       <width>100</width>
       <height>20</height>
@@ -1013,7 +1013,7 @@
     <widget type="textupdate" version="2.0.0">
       <name>TextUpdate</name>
       <pv_name>$(P)$(R)MaxX_RBV</pv_name>
-      <x>260</x>
+      <x>310</x>
       <y>475</y>
       <width>100</width>
       <height>20</height>
@@ -1028,14 +1028,14 @@
       <text>Max Y</text>
       <x>0</x>
       <y>500</y>
-      <width>150</width>
+      <width>200</width>
       <height>20</height>
-      <tooltip>No description provided</tooltip>
+      <tooltip>Max Y - No description provided</tooltip>
     </widget>
     <widget type="textentry" version="3.0.0">
       <name>TextEntry</name>
       <pv_name>$(P)$(R)MaxY</pv_name>
-      <x>155</x>
+      <x>205</x>
       <y>500</y>
       <width>100</width>
       <height>20</height>
@@ -1044,7 +1044,7 @@
     <widget type="textupdate" version="2.0.0">
       <name>TextUpdate</name>
       <pv_name>$(P)$(R)MaxY_RBV</pv_name>
-      <x>260</x>
+      <x>310</x>
       <y>500</y>
       <width>100</width>
       <height>20</height>
@@ -1059,15 +1059,15 @@
       <text>Compute Histogram</text>
       <x>0</x>
       <y>525</y>
-      <width>150</width>
+      <width>200</width>
       <height>20</height>
-      <tooltip>No description provided</tooltip>
+      <tooltip>Compute Histogram - No description provided</tooltip>
     </widget>
     <widget type="slide_button" version="2.0.0">
       <name>ToggleButton</name>
       <pv_name>$(P)$(R)ComputeHistogram</pv_name>
       <label/>
-      <x>195</x>
+      <x>245</x>
       <y>525</y>
       <width>20</width>
       <height>20</height>
@@ -1075,7 +1075,7 @@
     <widget type="led" version="2.0.0">
       <name>LED</name>
       <pv_name>$(P)$(R)ComputeHistogram_RBV</pv_name>
-      <x>300</x>
+      <x>350</x>
       <y>525</y>
       <width>20</width>
       <height>20</height>
@@ -1085,14 +1085,14 @@
       <text>Hist Size</text>
       <x>0</x>
       <y>550</y>
-      <width>150</width>
+      <width>200</width>
       <height>20</height>
-      <tooltip>No description provided</tooltip>
+      <tooltip>Hist Size - No description provided</tooltip>
     </widget>
     <widget type="textentry" version="3.0.0">
       <name>TextEntry</name>
       <pv_name>$(P)$(R)HistSize</pv_name>
-      <x>155</x>
+      <x>205</x>
       <y>550</y>
       <width>100</width>
       <height>20</height>
@@ -1101,7 +1101,7 @@
     <widget type="textupdate" version="2.0.0">
       <name>TextUpdate</name>
       <pv_name>$(P)$(R)HistSize_RBV</pv_name>
-      <x>260</x>
+      <x>310</x>
       <y>550</y>
       <width>100</width>
       <height>20</height>
@@ -1116,15 +1116,15 @@
       <text>Compute Centroid</text>
       <x>0</x>
       <y>575</y>
-      <width>150</width>
+      <width>200</width>
       <height>20</height>
-      <tooltip>No description provided</tooltip>
+      <tooltip>Compute Centroid - No description provided</tooltip>
     </widget>
     <widget type="slide_button" version="2.0.0">
       <name>ToggleButton</name>
       <pv_name>$(P)$(R)ComputeCentroid</pv_name>
       <label/>
-      <x>195</x>
+      <x>245</x>
       <y>575</y>
       <width>20</width>
       <height>20</height>
@@ -1132,7 +1132,7 @@
     <widget type="led" version="2.0.0">
       <name>LED</name>
       <pv_name>$(P)$(R)ComputeCentroid_RBV</pv_name>
-      <x>300</x>
+      <x>350</x>
       <y>575</y>
       <width>20</width>
       <height>20</height>
@@ -1142,14 +1142,14 @@
       <text>Hist Min</text>
       <x>0</x>
       <y>600</y>
-      <width>150</width>
+      <width>200</width>
       <height>20</height>
-      <tooltip>No description provided</tooltip>
+      <tooltip>Hist Min - No description provided</tooltip>
     </widget>
     <widget type="textentry" version="3.0.0">
       <name>TextEntry</name>
       <pv_name>$(P)$(R)HistMin</pv_name>
-      <x>155</x>
+      <x>205</x>
       <y>600</y>
       <width>100</width>
       <height>20</height>
@@ -1158,7 +1158,7 @@
     <widget type="textupdate" version="2.0.0">
       <name>TextUpdate</name>
       <pv_name>$(P)$(R)HistMin_RBV</pv_name>
-      <x>260</x>
+      <x>310</x>
       <y>600</y>
       <width>100</width>
       <height>20</height>
@@ -1173,14 +1173,14 @@
       <text>Centroid Threshold</text>
       <x>0</x>
       <y>625</y>
-      <width>150</width>
+      <width>200</width>
       <height>20</height>
-      <tooltip>No description provided</tooltip>
+      <tooltip>Centroid Threshold - No description provided</tooltip>
     </widget>
     <widget type="textentry" version="3.0.0">
       <name>TextEntry</name>
       <pv_name>$(P)$(R)CentroidThreshold</pv_name>
-      <x>155</x>
+      <x>205</x>
       <y>625</y>
       <width>100</width>
       <height>20</height>
@@ -1189,7 +1189,7 @@
     <widget type="textupdate" version="2.0.0">
       <name>TextUpdate</name>
       <pv_name>$(P)$(R)CentroidThreshold_RBV</pv_name>
-      <x>260</x>
+      <x>310</x>
       <y>625</y>
       <width>100</width>
       <height>20</height>
@@ -1204,14 +1204,14 @@
       <text>Hist Max</text>
       <x>0</x>
       <y>650</y>
-      <width>150</width>
+      <width>200</width>
       <height>20</height>
-      <tooltip>No description provided</tooltip>
+      <tooltip>Hist Max - No description provided</tooltip>
     </widget>
     <widget type="textentry" version="3.0.0">
       <name>TextEntry</name>
       <pv_name>$(P)$(R)HistMax</pv_name>
-      <x>155</x>
+      <x>205</x>
       <y>650</y>
       <width>100</width>
       <height>20</height>
@@ -1220,7 +1220,7 @@
     <widget type="textupdate" version="2.0.0">
       <name>TextUpdate</name>
       <pv_name>$(P)$(R)HistMax_RBV</pv_name>
-      <x>260</x>
+      <x>310</x>
       <y>650</y>
       <width>100</width>
       <height>20</height>
@@ -1235,14 +1235,14 @@
       <text>Hist Below</text>
       <x>0</x>
       <y>675</y>
-      <width>150</width>
+      <width>200</width>
       <height>20</height>
-      <tooltip>No description provided</tooltip>
+      <tooltip>Hist Below - No description provided</tooltip>
     </widget>
     <widget type="textentry" version="3.0.0">
       <name>TextEntry</name>
       <pv_name>$(P)$(R)HistBelow</pv_name>
-      <x>155</x>
+      <x>205</x>
       <y>675</y>
       <width>100</width>
       <height>20</height>
@@ -1251,7 +1251,7 @@
     <widget type="textupdate" version="2.0.0">
       <name>TextUpdate</name>
       <pv_name>$(P)$(R)HistBelow_RBV</pv_name>
-      <x>260</x>
+      <x>310</x>
       <y>675</y>
       <width>100</width>
       <height>20</height>
@@ -1266,14 +1266,14 @@
       <text>Hist Above</text>
       <x>0</x>
       <y>700</y>
-      <width>150</width>
+      <width>200</width>
       <height>20</height>
-      <tooltip>No description provided</tooltip>
+      <tooltip>Hist Above - No description provided</tooltip>
     </widget>
     <widget type="textentry" version="3.0.0">
       <name>TextEntry</name>
       <pv_name>$(P)$(R)HistAbove</pv_name>
-      <x>155</x>
+      <x>205</x>
       <y>700</y>
       <width>100</width>
       <height>20</height>
@@ -1282,7 +1282,7 @@
     <widget type="textupdate" version="2.0.0">
       <name>TextUpdate</name>
       <pv_name>$(P)$(R)HistAbove_RBV</pv_name>
-      <x>260</x>
+      <x>310</x>
       <y>700</y>
       <width>100</width>
       <height>20</height>
@@ -1297,14 +1297,14 @@
       <text>Hist Entropy</text>
       <x>0</x>
       <y>725</y>
-      <width>150</width>
+      <width>200</width>
       <height>20</height>
-      <tooltip>No description provided</tooltip>
+      <tooltip>Hist Entropy - No description provided</tooltip>
     </widget>
     <widget type="textentry" version="3.0.0">
       <name>TextEntry</name>
       <pv_name>$(P)$(R)HistEntropy</pv_name>
-      <x>155</x>
+      <x>205</x>
       <y>725</y>
       <width>100</width>
       <height>20</height>
@@ -1313,7 +1313,7 @@
     <widget type="textupdate" version="2.0.0">
       <name>TextUpdate</name>
       <pv_name>$(P)$(R)HistEntropy_RBV</pv_name>
-      <x>260</x>
+      <x>310</x>
       <y>725</y>
       <width>100</width>
       <height>20</height>
@@ -1328,14 +1328,14 @@
       <text>Histogram</text>
       <x>0</x>
       <y>750</y>
-      <width>150</width>
+      <width>200</width>
       <height>20</height>
-      <tooltip>No description provided</tooltip>
+      <tooltip>Histogram - No description provided</tooltip>
     </widget>
     <widget type="textupdate" version="2.0.0">
       <name>TextUpdate</name>
       <pv_name>$(P)$(R)Histogram_RBV</pv_name>
-      <x>155</x>
+      <x>205</x>
       <y>750</y>
       <width>205</width>
       <height>20</height>
@@ -1350,14 +1350,14 @@
       <text>Histogram X</text>
       <x>0</x>
       <y>775</y>
-      <width>150</width>
+      <width>200</width>
       <height>20</height>
-      <tooltip>No description provided</tooltip>
+      <tooltip>Histogram X - No description provided</tooltip>
     </widget>
     <widget type="textupdate" version="2.0.0">
       <name>TextUpdate</name>
       <pv_name>$(P)$(R)HistogramX_RBV</pv_name>
-      <x>155</x>
+      <x>205</x>
       <y>775</y>
       <width>205</width>
       <height>20</height>
@@ -1372,14 +1372,14 @@
       <text>Eccentricity</text>
       <x>0</x>
       <y>800</y>
-      <width>150</width>
+      <width>200</width>
       <height>20</height>
-      <tooltip>No description provided</tooltip>
+      <tooltip>Eccentricity - No description provided</tooltip>
     </widget>
     <widget type="textentry" version="3.0.0">
       <name>TextEntry</name>
       <pv_name>$(P)$(R)Eccentricity</pv_name>
-      <x>155</x>
+      <x>205</x>
       <y>800</y>
       <width>100</width>
       <height>20</height>
@@ -1388,7 +1388,7 @@
     <widget type="textupdate" version="2.0.0">
       <name>TextUpdate</name>
       <pv_name>$(P)$(R)Eccentricity_RBV</pv_name>
-      <x>260</x>
+      <x>310</x>
       <y>800</y>
       <width>100</width>
       <height>20</height>
@@ -1403,14 +1403,14 @@
       <text>Orientation</text>
       <x>0</x>
       <y>825</y>
-      <width>150</width>
+      <width>200</width>
       <height>20</height>
-      <tooltip>No description provided</tooltip>
+      <tooltip>Orientation - No description provided</tooltip>
     </widget>
     <widget type="textentry" version="3.0.0">
       <name>TextEntry</name>
       <pv_name>$(P)$(R)Orientation</pv_name>
-      <x>155</x>
+      <x>205</x>
       <y>825</y>
       <width>100</width>
       <height>20</height>
@@ -1419,7 +1419,7 @@
     <widget type="textupdate" version="2.0.0">
       <name>TextUpdate</name>
       <pv_name>$(P)$(R)Orientation_RBV</pv_name>
-      <x>260</x>
+      <x>310</x>
       <y>825</y>
       <width>100</width>
       <height>20</height>
@@ -1434,14 +1434,14 @@
       <text>TS Sigma</text>
       <x>0</x>
       <y>850</y>
-      <width>150</width>
+      <width>200</width>
       <height>20</height>
-      <tooltip>No description provided</tooltip>
+      <tooltip>TS Sigma - No description provided</tooltip>
     </widget>
     <widget type="textupdate" version="2.0.0">
       <name>TextUpdate</name>
       <pv_name>$(P)$(R)TSSigma</pv_name>
-      <x>155</x>
+      <x>205</x>
       <y>850</y>
       <width>205</width>
       <height>20</height>
@@ -1456,14 +1456,14 @@
       <text>TS Centroid Total</text>
       <x>0</x>
       <y>875</y>
-      <width>150</width>
+      <width>200</width>
       <height>20</height>
-      <tooltip>No description provided</tooltip>
+      <tooltip>TS Centroid Total - No description provided</tooltip>
     </widget>
     <widget type="textupdate" version="2.0.0">
       <name>TextUpdate</name>
       <pv_name>$(P)$(R)TSCentroidTotal</pv_name>
-      <x>155</x>
+      <x>205</x>
       <y>875</y>
       <width>205</width>
       <height>20</height>
@@ -1476,16 +1476,16 @@
     <widget type="label" version="2.0.0">
       <name>Label</name>
       <text>TS Centroid X</text>
-      <x>365</x>
+      <x>415</x>
       <y>0</y>
-      <width>150</width>
+      <width>200</width>
       <height>20</height>
-      <tooltip>No description provided</tooltip>
+      <tooltip>TS Centroid X - No description provided</tooltip>
     </widget>
     <widget type="textupdate" version="2.0.0">
       <name>TextUpdate</name>
       <pv_name>$(P)$(R)TSCentroidX</pv_name>
-      <x>520</x>
+      <x>620</x>
       <y>0</y>
       <width>205</width>
       <height>20</height>
@@ -1498,16 +1498,16 @@
     <widget type="label" version="2.0.0">
       <name>Label</name>
       <text>TS Centroid Y</text>
-      <x>365</x>
+      <x>415</x>
       <y>25</y>
-      <width>150</width>
+      <width>200</width>
       <height>20</height>
-      <tooltip>No description provided</tooltip>
+      <tooltip>TS Centroid Y - No description provided</tooltip>
     </widget>
     <widget type="textupdate" version="2.0.0">
       <name>TextUpdate</name>
       <pv_name>$(P)$(R)TSCentroidY</pv_name>
-      <x>520</x>
+      <x>620</x>
       <y>25</y>
       <width>205</width>
       <height>20</height>
@@ -1520,16 +1520,16 @@
     <widget type="label" version="2.0.0">
       <name>Label</name>
       <text>TS Sigma X</text>
-      <x>365</x>
+      <x>415</x>
       <y>50</y>
-      <width>150</width>
+      <width>200</width>
       <height>20</height>
-      <tooltip>No description provided</tooltip>
+      <tooltip>TS Sigma X - No description provided</tooltip>
     </widget>
     <widget type="textupdate" version="2.0.0">
       <name>TextUpdate</name>
       <pv_name>$(P)$(R)TSSigmaX</pv_name>
-      <x>520</x>
+      <x>620</x>
       <y>50</y>
       <width>205</width>
       <height>20</height>
@@ -1542,16 +1542,16 @@
     <widget type="label" version="2.0.0">
       <name>Label</name>
       <text>TS Sigma Y</text>
-      <x>365</x>
+      <x>415</x>
       <y>75</y>
-      <width>150</width>
+      <width>200</width>
       <height>20</height>
-      <tooltip>No description provided</tooltip>
+      <tooltip>TS Sigma Y - No description provided</tooltip>
     </widget>
     <widget type="textupdate" version="2.0.0">
       <name>TextUpdate</name>
       <pv_name>$(P)$(R)TSSigmaY</pv_name>
-      <x>520</x>
+      <x>620</x>
       <y>75</y>
       <width>205</width>
       <height>20</height>
@@ -1564,16 +1564,16 @@
     <widget type="label" version="2.0.0">
       <name>Label</name>
       <text>TS Sigma XY</text>
-      <x>365</x>
+      <x>415</x>
       <y>100</y>
-      <width>150</width>
+      <width>200</width>
       <height>20</height>
-      <tooltip>No description provided</tooltip>
+      <tooltip>TS Sigma XY - No description provided</tooltip>
     </widget>
     <widget type="textupdate" version="2.0.0">
       <name>TextUpdate</name>
       <pv_name>$(P)$(R)TSSigmaXY</pv_name>
-      <x>520</x>
+      <x>620</x>
       <y>100</y>
       <width>205</width>
       <height>20</height>
@@ -1586,16 +1586,16 @@
     <widget type="label" version="2.0.0">
       <name>Label</name>
       <text>TS Skew X</text>
-      <x>365</x>
+      <x>415</x>
       <y>125</y>
-      <width>150</width>
+      <width>200</width>
       <height>20</height>
-      <tooltip>No description provided</tooltip>
+      <tooltip>TS Skew X - No description provided</tooltip>
     </widget>
     <widget type="textupdate" version="2.0.0">
       <name>TextUpdate</name>
       <pv_name>$(P)$(R)TSSkewX</pv_name>
-      <x>520</x>
+      <x>620</x>
       <y>125</y>
       <width>205</width>
       <height>20</height>
@@ -1608,16 +1608,16 @@
     <widget type="label" version="2.0.0">
       <name>Label</name>
       <text>TS Skew Y</text>
-      <x>365</x>
+      <x>415</x>
       <y>150</y>
-      <width>150</width>
+      <width>200</width>
       <height>20</height>
-      <tooltip>No description provided</tooltip>
+      <tooltip>TS Skew Y - No description provided</tooltip>
     </widget>
     <widget type="textupdate" version="2.0.0">
       <name>TextUpdate</name>
       <pv_name>$(P)$(R)TSSkewY</pv_name>
-      <x>520</x>
+      <x>620</x>
       <y>150</y>
       <width>205</width>
       <height>20</height>
@@ -1630,16 +1630,16 @@
     <widget type="label" version="2.0.0">
       <name>Label</name>
       <text>TS Kurtosis X</text>
-      <x>365</x>
+      <x>415</x>
       <y>175</y>
-      <width>150</width>
+      <width>200</width>
       <height>20</height>
-      <tooltip>No description provided</tooltip>
+      <tooltip>TS Kurtosis X - No description provided</tooltip>
     </widget>
     <widget type="textupdate" version="2.0.0">
       <name>TextUpdate</name>
       <pv_name>$(P)$(R)TSKurtosisX</pv_name>
-      <x>520</x>
+      <x>620</x>
       <y>175</y>
       <width>205</width>
       <height>20</height>
@@ -1652,16 +1652,16 @@
     <widget type="label" version="2.0.0">
       <name>Label</name>
       <text>TS Kurtosis Y</text>
-      <x>365</x>
+      <x>415</x>
       <y>200</y>
-      <width>150</width>
+      <width>200</width>
       <height>20</height>
-      <tooltip>No description provided</tooltip>
+      <tooltip>TS Kurtosis Y - No description provided</tooltip>
     </widget>
     <widget type="textupdate" version="2.0.0">
       <name>TextUpdate</name>
       <pv_name>$(P)$(R)TSKurtosisY</pv_name>
-      <x>520</x>
+      <x>620</x>
       <y>200</y>
       <width>205</width>
       <height>20</height>
@@ -1674,16 +1674,16 @@
     <widget type="label" version="2.0.0">
       <name>Label</name>
       <text>TS Eccentricity</text>
-      <x>365</x>
+      <x>415</x>
       <y>225</y>
-      <width>150</width>
+      <width>200</width>
       <height>20</height>
-      <tooltip>No description provided</tooltip>
+      <tooltip>TS Eccentricity - No description provided</tooltip>
     </widget>
     <widget type="textupdate" version="2.0.0">
       <name>TextUpdate</name>
       <pv_name>$(P)$(R)TSEccentricity</pv_name>
-      <x>520</x>
+      <x>620</x>
       <y>225</y>
       <width>205</width>
       <height>20</height>
@@ -1696,16 +1696,16 @@
     <widget type="label" version="2.0.0">
       <name>Label</name>
       <text>TS Orientation</text>
-      <x>365</x>
+      <x>415</x>
       <y>250</y>
-      <width>150</width>
+      <width>200</width>
       <height>20</height>
-      <tooltip>No description provided</tooltip>
+      <tooltip>TS Orientation - No description provided</tooltip>
     </widget>
     <widget type="textupdate" version="2.0.0">
       <name>TextUpdate</name>
       <pv_name>$(P)$(R)TSOrientation</pv_name>
-      <x>520</x>
+      <x>620</x>
       <y>250</y>
       <width>205</width>
       <height>20</height>
@@ -1718,16 +1718,16 @@
     <widget type="label" version="2.0.0">
       <name>Label</name>
       <text>Centroid Total</text>
-      <x>365</x>
+      <x>415</x>
       <y>275</y>
-      <width>150</width>
+      <width>200</width>
       <height>20</height>
-      <tooltip>No description provided</tooltip>
+      <tooltip>Centroid Total - No description provided</tooltip>
     </widget>
     <widget type="textentry" version="3.0.0">
       <name>TextEntry</name>
       <pv_name>$(P)$(R)CentroidTotal</pv_name>
-      <x>520</x>
+      <x>620</x>
       <y>275</y>
       <width>100</width>
       <height>20</height>
@@ -1736,7 +1736,7 @@
     <widget type="textupdate" version="2.0.0">
       <name>TextUpdate</name>
       <pv_name>$(P)$(R)CentroidTotal_RBV</pv_name>
-      <x>625</x>
+      <x>725</x>
       <y>275</y>
       <width>100</width>
       <height>20</height>
@@ -1749,16 +1749,16 @@
     <widget type="label" version="2.0.0">
       <name>Label</name>
       <text>Centroid X</text>
-      <x>365</x>
+      <x>415</x>
       <y>300</y>
-      <width>150</width>
+      <width>200</width>
       <height>20</height>
-      <tooltip>No description provided</tooltip>
+      <tooltip>Centroid X - No description provided</tooltip>
     </widget>
     <widget type="textentry" version="3.0.0">
       <name>TextEntry</name>
       <pv_name>$(P)$(R)CentroidX</pv_name>
-      <x>520</x>
+      <x>620</x>
       <y>300</y>
       <width>100</width>
       <height>20</height>
@@ -1767,7 +1767,7 @@
     <widget type="textupdate" version="2.0.0">
       <name>TextUpdate</name>
       <pv_name>$(P)$(R)CentroidX_RBV</pv_name>
-      <x>625</x>
+      <x>725</x>
       <y>300</y>
       <width>100</width>
       <height>20</height>
@@ -1780,16 +1780,16 @@
     <widget type="label" version="2.0.0">
       <name>Label</name>
       <text>Centroid Y</text>
-      <x>365</x>
+      <x>415</x>
       <y>325</y>
-      <width>150</width>
+      <width>200</width>
       <height>20</height>
-      <tooltip>No description provided</tooltip>
+      <tooltip>Centroid Y - No description provided</tooltip>
     </widget>
     <widget type="textentry" version="3.0.0">
       <name>TextEntry</name>
       <pv_name>$(P)$(R)CentroidY</pv_name>
-      <x>520</x>
+      <x>620</x>
       <y>325</y>
       <width>100</width>
       <height>20</height>
@@ -1798,7 +1798,7 @@
     <widget type="textupdate" version="2.0.0">
       <name>TextUpdate</name>
       <pv_name>$(P)$(R)CentroidY_RBV</pv_name>
-      <x>625</x>
+      <x>725</x>
       <y>325</y>
       <width>100</width>
       <height>20</height>
@@ -1811,16 +1811,16 @@
     <widget type="label" version="2.0.0">
       <name>Label</name>
       <text>Sigma X</text>
-      <x>365</x>
+      <x>415</x>
       <y>350</y>
-      <width>150</width>
+      <width>200</width>
       <height>20</height>
-      <tooltip>No description provided</tooltip>
+      <tooltip>Sigma X - No description provided</tooltip>
     </widget>
     <widget type="textentry" version="3.0.0">
       <name>TextEntry</name>
       <pv_name>$(P)$(R)SigmaX</pv_name>
-      <x>520</x>
+      <x>620</x>
       <y>350</y>
       <width>100</width>
       <height>20</height>
@@ -1829,7 +1829,7 @@
     <widget type="textupdate" version="2.0.0">
       <name>TextUpdate</name>
       <pv_name>$(P)$(R)SigmaX_RBV</pv_name>
-      <x>625</x>
+      <x>725</x>
       <y>350</y>
       <width>100</width>
       <height>20</height>
@@ -1842,16 +1842,16 @@
     <widget type="label" version="2.0.0">
       <name>Label</name>
       <text>Sigma Y</text>
-      <x>365</x>
+      <x>415</x>
       <y>375</y>
-      <width>150</width>
+      <width>200</width>
       <height>20</height>
-      <tooltip>No description provided</tooltip>
+      <tooltip>Sigma Y - No description provided</tooltip>
     </widget>
     <widget type="textentry" version="3.0.0">
       <name>TextEntry</name>
       <pv_name>$(P)$(R)SigmaY</pv_name>
-      <x>520</x>
+      <x>620</x>
       <y>375</y>
       <width>100</width>
       <height>20</height>
@@ -1860,7 +1860,7 @@
     <widget type="textupdate" version="2.0.0">
       <name>TextUpdate</name>
       <pv_name>$(P)$(R)SigmaY_RBV</pv_name>
-      <x>625</x>
+      <x>725</x>
       <y>375</y>
       <width>100</width>
       <height>20</height>
@@ -1873,16 +1873,16 @@
     <widget type="label" version="2.0.0">
       <name>Label</name>
       <text>Sigma XY</text>
-      <x>365</x>
+      <x>415</x>
       <y>400</y>
-      <width>150</width>
+      <width>200</width>
       <height>20</height>
-      <tooltip>No description provided</tooltip>
+      <tooltip>Sigma XY - No description provided</tooltip>
     </widget>
     <widget type="textentry" version="3.0.0">
       <name>TextEntry</name>
       <pv_name>$(P)$(R)SigmaXY</pv_name>
-      <x>520</x>
+      <x>620</x>
       <y>400</y>
       <width>100</width>
       <height>20</height>
@@ -1891,7 +1891,7 @@
     <widget type="textupdate" version="2.0.0">
       <name>TextUpdate</name>
       <pv_name>$(P)$(R)SigmaXY_RBV</pv_name>
-      <x>625</x>
+      <x>725</x>
       <y>400</y>
       <width>100</width>
       <height>20</height>
@@ -1904,16 +1904,16 @@
     <widget type="label" version="2.0.0">
       <name>Label</name>
       <text>Skew X</text>
-      <x>365</x>
+      <x>415</x>
       <y>425</y>
-      <width>150</width>
+      <width>200</width>
       <height>20</height>
-      <tooltip>No description provided</tooltip>
+      <tooltip>Skew X - No description provided</tooltip>
     </widget>
     <widget type="textentry" version="3.0.0">
       <name>TextEntry</name>
       <pv_name>$(P)$(R)SkewX</pv_name>
-      <x>520</x>
+      <x>620</x>
       <y>425</y>
       <width>100</width>
       <height>20</height>
@@ -1922,7 +1922,7 @@
     <widget type="textupdate" version="2.0.0">
       <name>TextUpdate</name>
       <pv_name>$(P)$(R)SkewX_RBV</pv_name>
-      <x>625</x>
+      <x>725</x>
       <y>425</y>
       <width>100</width>
       <height>20</height>
@@ -1935,16 +1935,16 @@
     <widget type="label" version="2.0.0">
       <name>Label</name>
       <text>Skew Y</text>
-      <x>365</x>
+      <x>415</x>
       <y>450</y>
-      <width>150</width>
+      <width>200</width>
       <height>20</height>
-      <tooltip>No description provided</tooltip>
+      <tooltip>Skew Y - No description provided</tooltip>
     </widget>
     <widget type="textentry" version="3.0.0">
       <name>TextEntry</name>
       <pv_name>$(P)$(R)SkewY</pv_name>
-      <x>520</x>
+      <x>620</x>
       <y>450</y>
       <width>100</width>
       <height>20</height>
@@ -1953,7 +1953,7 @@
     <widget type="textupdate" version="2.0.0">
       <name>TextUpdate</name>
       <pv_name>$(P)$(R)SkewY_RBV</pv_name>
-      <x>625</x>
+      <x>725</x>
       <y>450</y>
       <width>100</width>
       <height>20</height>
@@ -1966,16 +1966,16 @@
     <widget type="label" version="2.0.0">
       <name>Label</name>
       <text>Kurtosis X</text>
-      <x>365</x>
+      <x>415</x>
       <y>475</y>
-      <width>150</width>
+      <width>200</width>
       <height>20</height>
-      <tooltip>No description provided</tooltip>
+      <tooltip>Kurtosis X - No description provided</tooltip>
     </widget>
     <widget type="textentry" version="3.0.0">
       <name>TextEntry</name>
       <pv_name>$(P)$(R)KurtosisX</pv_name>
-      <x>520</x>
+      <x>620</x>
       <y>475</y>
       <width>100</width>
       <height>20</height>
@@ -1984,7 +1984,7 @@
     <widget type="textupdate" version="2.0.0">
       <name>TextUpdate</name>
       <pv_name>$(P)$(R)KurtosisX_RBV</pv_name>
-      <x>625</x>
+      <x>725</x>
       <y>475</y>
       <width>100</width>
       <height>20</height>
@@ -1997,16 +1997,16 @@
     <widget type="label" version="2.0.0">
       <name>Label</name>
       <text>Kurtosis Y</text>
-      <x>365</x>
+      <x>415</x>
       <y>500</y>
-      <width>150</width>
+      <width>200</width>
       <height>20</height>
-      <tooltip>No description provided</tooltip>
+      <tooltip>Kurtosis Y - No description provided</tooltip>
     </widget>
     <widget type="textentry" version="3.0.0">
       <name>TextEntry</name>
       <pv_name>$(P)$(R)KurtosisY</pv_name>
-      <x>520</x>
+      <x>620</x>
       <y>500</y>
       <width>100</width>
       <height>20</height>
@@ -2015,7 +2015,7 @@
     <widget type="textupdate" version="2.0.0">
       <name>TextUpdate</name>
       <pv_name>$(P)$(R)KurtosisY_RBV</pv_name>
-      <x>625</x>
+      <x>725</x>
       <y>500</y>
       <width>100</width>
       <height>20</height>
@@ -2028,9 +2028,9 @@
   </widget>
   <widget type="group" version="2.0.0">
     <name>NDPluginStats Ungrouped</name>
-    <x>1172</x>
+    <x>1322</x>
     <y>30</y>
-    <width>396</width>
+    <width>446</width>
     <height>81</height>
     <transparent>true</transparent>
     <widget type="label" version="2.0.0">
@@ -2038,14 +2038,14 @@
       <text>Cursor Val</text>
       <x>0</x>
       <y>0</y>
-      <width>150</width>
+      <width>200</width>
       <height>20</height>
-      <tooltip>No description provided</tooltip>
+      <tooltip>Cursor Val - No description provided</tooltip>
     </widget>
     <widget type="textupdate" version="2.0.0">
       <name>TextUpdate</name>
       <pv_name>$(P)$(R)CursorVal</pv_name>
-      <x>155</x>
+      <x>205</x>
       <y>0</y>
       <width>205</width>
       <height>20</height>
@@ -2060,14 +2060,14 @@
       <text>Sigma Value</text>
       <x>0</x>
       <y>25</y>
-      <width>150</width>
+      <width>200</width>
       <height>20</height>
-      <tooltip>No description provided</tooltip>
+      <tooltip>Sigma Value - No description provided</tooltip>
     </widget>
     <widget type="textentry" version="3.0.0">
       <name>TextEntry</name>
       <pv_name>$(P)$(R)SigmaValue</pv_name>
-      <x>155</x>
+      <x>205</x>
       <y>25</y>
       <width>100</width>
       <height>20</height>
@@ -2076,7 +2076,7 @@
     <widget type="textupdate" version="2.0.0">
       <name>TextUpdate</name>
       <pv_name>$(P)$(R)Sigma_RBV</pv_name>
-      <x>260</x>
+      <x>310</x>
       <y>25</y>
       <width>100</width>
       <height>20</height>
@@ -2089,9 +2089,9 @@
   </widget>
   <widget type="group" version="2.0.0">
     <name>ND Plugin Base</name>
-    <x>1172</x>
+    <x>1322</x>
     <y>116</y>
-    <width>396</width>
+    <width>446</width>
     <height>281</height>
     <transparent>true</transparent>
     <widget type="label" version="2.0.0">
@@ -2099,14 +2099,14 @@
       <text>Plugin Type</text>
       <x>0</x>
       <y>0</y>
-      <width>150</width>
+      <width>200</width>
       <height>20</height>
-      <tooltip>No description provided</tooltip>
+      <tooltip>Plugin Type - No description provided</tooltip>
     </widget>
     <widget type="textupdate" version="2.0.0">
       <name>TextUpdate</name>
       <pv_name>$(P)$(R)PluginType_RBV</pv_name>
-      <x>155</x>
+      <x>205</x>
       <y>0</y>
       <width>205</width>
       <height>20</height>
@@ -2121,14 +2121,14 @@
       <text>ND Array Port</text>
       <x>0</x>
       <y>25</y>
-      <width>150</width>
+      <width>200</width>
       <height>20</height>
-      <tooltip>No description provided</tooltip>
+      <tooltip>ND Array Port - No description provided</tooltip>
     </widget>
     <widget type="textentry" version="3.0.0">
       <name>TextEntry</name>
       <pv_name>$(P)$(R)NDArrayPort</pv_name>
-      <x>155</x>
+      <x>205</x>
       <y>25</y>
       <width>100</width>
       <height>20</height>
@@ -2137,7 +2137,7 @@
     <widget type="textupdate" version="2.0.0">
       <name>TextUpdate</name>
       <pv_name>$(P)$(R)NDArrayPort_RBV</pv_name>
-      <x>260</x>
+      <x>310</x>
       <y>25</y>
       <width>100</width>
       <height>20</height>
@@ -2152,14 +2152,14 @@
       <text>ND Array Address</text>
       <x>0</x>
       <y>50</y>
-      <width>150</width>
+      <width>200</width>
       <height>20</height>
-      <tooltip>No description provided</tooltip>
+      <tooltip>ND Array Address - No description provided</tooltip>
     </widget>
     <widget type="textentry" version="3.0.0">
       <name>TextEntry</name>
       <pv_name>$(P)$(R)NDArrayAddress</pv_name>
-      <x>155</x>
+      <x>205</x>
       <y>50</y>
       <width>100</width>
       <height>20</height>
@@ -2168,7 +2168,7 @@
     <widget type="textupdate" version="2.0.0">
       <name>TextUpdate</name>
       <pv_name>$(P)$(R)NDArrayAddress_RBV</pv_name>
-      <x>260</x>
+      <x>310</x>
       <y>50</y>
       <width>100</width>
       <height>20</height>
@@ -2183,15 +2183,15 @@
       <text>Enable Callbacks</text>
       <x>0</x>
       <y>75</y>
-      <width>150</width>
+      <width>200</width>
       <height>20</height>
-      <tooltip>No description provided</tooltip>
+      <tooltip>Enable Callbacks - No description provided</tooltip>
     </widget>
     <widget type="slide_button" version="2.0.0">
       <name>ToggleButton</name>
       <pv_name>$(P)$(R)EnableCallbacks</pv_name>
       <label/>
-      <x>195</x>
+      <x>245</x>
       <y>75</y>
       <width>20</width>
       <height>20</height>
@@ -2199,7 +2199,7 @@
     <widget type="led" version="2.0.0">
       <name>LED</name>
       <pv_name>$(P)$(R)EnableCallbacks_RBV</pv_name>
-      <x>300</x>
+      <x>350</x>
       <y>75</y>
       <width>20</width>
       <height>20</height>
@@ -2209,14 +2209,14 @@
       <text>Min Callback Time</text>
       <x>0</x>
       <y>100</y>
-      <width>150</width>
+      <width>200</width>
       <height>20</height>
-      <tooltip>No description provided</tooltip>
+      <tooltip>Min Callback Time - No description provided</tooltip>
     </widget>
     <widget type="textentry" version="3.0.0">
       <name>TextEntry</name>
       <pv_name>$(P)$(R)MinCallbackTime</pv_name>
-      <x>155</x>
+      <x>205</x>
       <y>100</y>
       <width>100</width>
       <height>20</height>
@@ -2225,7 +2225,7 @@
     <widget type="textupdate" version="2.0.0">
       <name>TextUpdate</name>
       <pv_name>$(P)$(R)MinCallbackTime_RBV</pv_name>
-      <x>260</x>
+      <x>310</x>
       <y>100</y>
       <width>100</width>
       <height>20</height>
@@ -2240,14 +2240,14 @@
       <text>Queue Free</text>
       <x>0</x>
       <y>125</y>
-      <width>150</width>
+      <width>200</width>
       <height>20</height>
-      <tooltip>No description provided</tooltip>
+      <tooltip>Queue Free - No description provided</tooltip>
     </widget>
     <widget type="textupdate" version="2.0.0">
       <name>TextUpdate</name>
       <pv_name>$(P)$(R)QueueFree</pv_name>
-      <x>155</x>
+      <x>205</x>
       <y>125</y>
       <width>205</width>
       <height>20</height>
@@ -2262,14 +2262,14 @@
       <text>Queue Size</text>
       <x>0</x>
       <y>150</y>
-      <width>150</width>
+      <width>200</width>
       <height>20</height>
-      <tooltip>No description provided</tooltip>
+      <tooltip>Queue Size - No description provided</tooltip>
     </widget>
     <widget type="textentry" version="3.0.0">
       <name>TextEntry</name>
       <pv_name>$(P)$(R)QueueSize</pv_name>
-      <x>155</x>
+      <x>205</x>
       <y>150</y>
       <width>100</width>
       <height>20</height>
@@ -2278,7 +2278,7 @@
     <widget type="textupdate" version="2.0.0">
       <name>TextUpdate</name>
       <pv_name>$(P)$(R)QueueSize_RBV</pv_name>
-      <x>260</x>
+      <x>310</x>
       <y>150</y>
       <width>100</width>
       <height>20</height>
@@ -2293,14 +2293,14 @@
       <text>Execution Time</text>
       <x>0</x>
       <y>175</y>
-      <width>150</width>
+      <width>200</width>
       <height>20</height>
-      <tooltip>No description provided</tooltip>
+      <tooltip>Execution Time - No description provided</tooltip>
     </widget>
     <widget type="textupdate" version="2.0.0">
       <name>TextUpdate</name>
       <pv_name>$(P)$(R)ExecutionTime_RBV</pv_name>
-      <x>155</x>
+      <x>205</x>
       <y>175</y>
       <width>205</width>
       <height>20</height>
@@ -2315,14 +2315,14 @@
       <text>Dropped Arrays</text>
       <x>0</x>
       <y>200</y>
-      <width>150</width>
+      <width>200</width>
       <height>20</height>
-      <tooltip>No description provided</tooltip>
+      <tooltip>Dropped Arrays - No description provided</tooltip>
     </widget>
     <widget type="textentry" version="3.0.0">
       <name>TextEntry</name>
       <pv_name>$(P)$(R)DroppedArrays</pv_name>
-      <x>155</x>
+      <x>205</x>
       <y>200</y>
       <width>100</width>
       <height>20</height>
@@ -2331,7 +2331,7 @@
     <widget type="textupdate" version="2.0.0">
       <name>TextUpdate</name>
       <pv_name>$(P)$(R)DroppedArrays_RBV</pv_name>
-      <x>260</x>
+      <x>310</x>
       <y>200</y>
       <width>100</width>
       <height>20</height>
@@ -2346,15 +2346,15 @@
       <text>Process Plugin</text>
       <x>0</x>
       <y>225</y>
-      <width>150</width>
+      <width>200</width>
       <height>20</height>
-      <tooltip>No description provided</tooltip>
+      <tooltip>Process Plugin - No description provided</tooltip>
     </widget>
     <widget type="slide_button" version="2.0.0">
       <name>ToggleButton</name>
       <pv_name>$(P)$(R)ProcessPlugin</pv_name>
       <label/>
-      <x>247</x>
+      <x>297</x>
       <y>225</y>
       <width>20</width>
       <height>20</height>
@@ -2362,9 +2362,9 @@
   </widget>
   <widget type="group" version="2.0.0">
     <name>ND Plugin Base Full</name>
-    <x>1172</x>
+    <x>1322</x>
     <y>402</y>
-    <width>396</width>
+    <width>446</width>
     <height>281</height>
     <transparent>true</transparent>
     <widget type="label" version="2.0.0">
@@ -2372,14 +2372,14 @@
       <text>Dropped Output Arrays</text>
       <x>0</x>
       <y>0</y>
-      <width>150</width>
+      <width>200</width>
       <height>20</height>
-      <tooltip>No description provided</tooltip>
+      <tooltip>Dropped Output Arrays - No description provided</tooltip>
     </widget>
     <widget type="textentry" version="3.0.0">
       <name>TextEntry</name>
       <pv_name>$(P)$(R)DroppedOutputArrays</pv_name>
-      <x>155</x>
+      <x>205</x>
       <y>0</y>
       <width>100</width>
       <height>20</height>
@@ -2388,7 +2388,7 @@
     <widget type="textupdate" version="2.0.0">
       <name>TextUpdate</name>
       <pv_name>$(P)$(R)DroppedOutputArrays_RBV</pv_name>
-      <x>260</x>
+      <x>310</x>
       <y>0</y>
       <width>100</width>
       <height>20</height>
@@ -2403,14 +2403,14 @@
       <text>Max Byte Rate</text>
       <x>0</x>
       <y>25</y>
-      <width>150</width>
+      <width>200</width>
       <height>20</height>
-      <tooltip>No description provided</tooltip>
+      <tooltip>Max Byte Rate - No description provided</tooltip>
     </widget>
     <widget type="textentry" version="3.0.0">
       <name>TextEntry</name>
       <pv_name>$(P)$(R)MaxByteRate</pv_name>
-      <x>155</x>
+      <x>205</x>
       <y>25</y>
       <width>100</width>
       <height>20</height>
@@ -2419,7 +2419,7 @@
     <widget type="textupdate" version="2.0.0">
       <name>TextUpdate</name>
       <pv_name>$(P)$(R)MaxByteRate_RBV</pv_name>
-      <x>260</x>
+      <x>310</x>
       <y>25</y>
       <width>100</width>
       <height>20</height>
@@ -2434,15 +2434,15 @@
       <text>Blocking Callbacks</text>
       <x>0</x>
       <y>50</y>
-      <width>150</width>
+      <width>200</width>
       <height>20</height>
-      <tooltip>No description provided</tooltip>
+      <tooltip>Blocking Callbacks - No description provided</tooltip>
     </widget>
     <widget type="slide_button" version="2.0.0">
       <name>ToggleButton</name>
       <pv_name>$(P)$(R)BlockingCallbacks</pv_name>
       <label/>
-      <x>195</x>
+      <x>245</x>
       <y>50</y>
       <width>20</width>
       <height>20</height>
@@ -2450,7 +2450,7 @@
     <widget type="led" version="2.0.0">
       <name>LED</name>
       <pv_name>$(P)$(R)BlockingCallbacks_RBV</pv_name>
-      <x>300</x>
+      <x>350</x>
       <y>50</y>
       <width>20</width>
       <height>20</height>
@@ -2460,14 +2460,14 @@
       <text>Num Threads</text>
       <x>0</x>
       <y>75</y>
-      <width>150</width>
+      <width>200</width>
       <height>20</height>
-      <tooltip>No description provided</tooltip>
+      <tooltip>Num Threads - No description provided</tooltip>
     </widget>
     <widget type="textentry" version="3.0.0">
       <name>TextEntry</name>
       <pv_name>$(P)$(R)NumThreads</pv_name>
-      <x>155</x>
+      <x>205</x>
       <y>75</y>
       <width>100</width>
       <height>20</height>
@@ -2476,7 +2476,7 @@
     <widget type="textupdate" version="2.0.0">
       <name>TextUpdate</name>
       <pv_name>$(P)$(R)NumThreads_RBV</pv_name>
-      <x>260</x>
+      <x>310</x>
       <y>75</y>
       <width>100</width>
       <height>20</height>
@@ -2491,14 +2491,14 @@
       <text>Max Threads</text>
       <x>0</x>
       <y>100</y>
-      <width>150</width>
+      <width>200</width>
       <height>20</height>
-      <tooltip>No description provided</tooltip>
+      <tooltip>Max Threads - No description provided</tooltip>
     </widget>
     <widget type="textupdate" version="2.0.0">
       <name>TextUpdate</name>
       <pv_name>$(P)$(R)MaxThreads_RBV</pv_name>
-      <x>155</x>
+      <x>205</x>
       <y>100</y>
       <width>205</width>
       <height>20</height>
@@ -2513,14 +2513,14 @@
       <text>Sort Mode</text>
       <x>0</x>
       <y>125</y>
-      <width>150</width>
+      <width>200</width>
       <height>20</height>
-      <tooltip>No description provided</tooltip>
+      <tooltip>Sort Mode - No description provided</tooltip>
     </widget>
     <widget type="combo" version="2.0.0">
       <name>ComboBox</name>
       <pv_name>$(P)$(R)SortMode</pv_name>
-      <x>155</x>
+      <x>205</x>
       <y>125</y>
       <width>100</width>
       <height>20</height>
@@ -2528,7 +2528,7 @@
     <widget type="textupdate" version="2.0.0">
       <name>TextUpdate</name>
       <pv_name>$(P)$(R)SortMode_RBV</pv_name>
-      <x>260</x>
+      <x>310</x>
       <y>125</y>
       <width>100</width>
       <height>20</height>
@@ -2543,14 +2543,14 @@
       <text>Sort Time</text>
       <x>0</x>
       <y>150</y>
-      <width>150</width>
+      <width>200</width>
       <height>20</height>
-      <tooltip>No description provided</tooltip>
+      <tooltip>Sort Time - No description provided</tooltip>
     </widget>
     <widget type="textentry" version="3.0.0">
       <name>TextEntry</name>
       <pv_name>$(P)$(R)SortTime</pv_name>
-      <x>155</x>
+      <x>205</x>
       <y>150</y>
       <width>100</width>
       <height>20</height>
@@ -2559,7 +2559,7 @@
     <widget type="textupdate" version="2.0.0">
       <name>TextUpdate</name>
       <pv_name>$(P)$(R)SortTime_RBV</pv_name>
-      <x>260</x>
+      <x>310</x>
       <y>150</y>
       <width>100</width>
       <height>20</height>
@@ -2574,14 +2574,14 @@
       <text>Sort Free</text>
       <x>0</x>
       <y>175</y>
-      <width>150</width>
+      <width>200</width>
       <height>20</height>
-      <tooltip>No description provided</tooltip>
+      <tooltip>Sort Free - No description provided</tooltip>
     </widget>
     <widget type="textupdate" version="2.0.0">
       <name>TextUpdate</name>
       <pv_name>$(P)$(R)SortFree</pv_name>
-      <x>155</x>
+      <x>205</x>
       <y>175</y>
       <width>205</width>
       <height>20</height>
@@ -2596,14 +2596,14 @@
       <text>Sort Size</text>
       <x>0</x>
       <y>200</y>
-      <width>150</width>
+      <width>200</width>
       <height>20</height>
-      <tooltip>No description provided</tooltip>
+      <tooltip>Sort Size - No description provided</tooltip>
     </widget>
     <widget type="textentry" version="3.0.0">
       <name>TextEntry</name>
       <pv_name>$(P)$(R)SortSize</pv_name>
-      <x>155</x>
+      <x>205</x>
       <y>200</y>
       <width>100</width>
       <height>20</height>
@@ -2612,7 +2612,7 @@
     <widget type="textupdate" version="2.0.0">
       <name>TextUpdate</name>
       <pv_name>$(P)$(R)SortSize_RBV</pv_name>
-      <x>260</x>
+      <x>310</x>
       <y>200</y>
       <width>100</width>
       <height>20</height>
@@ -2627,14 +2627,14 @@
       <text>Disordered Arrays</text>
       <x>0</x>
       <y>225</y>
-      <width>150</width>
+      <width>200</width>
       <height>20</height>
-      <tooltip>No description provided</tooltip>
+      <tooltip>Disordered Arrays - No description provided</tooltip>
     </widget>
     <widget type="textentry" version="3.0.0">
       <name>TextEntry</name>
       <pv_name>$(P)$(R)DisorderedArrays</pv_name>
-      <x>155</x>
+      <x>205</x>
       <y>225</y>
       <width>100</width>
       <height>20</height>
@@ -2643,7 +2643,7 @@
     <widget type="textupdate" version="2.0.0">
       <name>TextUpdate</name>
       <pv_name>$(P)$(R)DisorderedArrays_RBV</pv_name>
-      <x>260</x>
+      <x>310</x>
       <y>225</y>
       <width>100</width>
       <height>20</height>
@@ -2656,9 +2656,9 @@
   </widget>
   <widget type="group" version="2.0.0">
     <name>AD Setup</name>
-    <x>1172</x>
+    <x>1322</x>
     <y>688</y>
-    <width>396</width>
+    <width>446</width>
     <height>231</height>
     <transparent>true</transparent>
     <widget type="label" version="2.0.0">
@@ -2666,14 +2666,14 @@
       <text>Port Name</text>
       <x>0</x>
       <y>0</y>
-      <width>150</width>
+      <width>200</width>
       <height>20</height>
-      <tooltip>No description provided</tooltip>
+      <tooltip>Port Name - No description provided</tooltip>
     </widget>
     <widget type="textupdate" version="2.0.0">
       <name>TextUpdate</name>
       <pv_name>$(P)$(R)PortName_RBV</pv_name>
-      <x>155</x>
+      <x>205</x>
       <y>0</y>
       <width>205</width>
       <height>20</height>
@@ -2688,14 +2688,14 @@
       <text>Manufacturer</text>
       <x>0</x>
       <y>25</y>
-      <width>150</width>
+      <width>200</width>
       <height>20</height>
-      <tooltip>No description provided</tooltip>
+      <tooltip>Manufacturer - No description provided</tooltip>
     </widget>
     <widget type="textupdate" version="2.0.0">
       <name>TextUpdate</name>
       <pv_name>$(P)$(R)Manufacturer_RBV</pv_name>
-      <x>155</x>
+      <x>205</x>
       <y>25</y>
       <width>205</width>
       <height>20</height>
@@ -2710,14 +2710,14 @@
       <text>Model</text>
       <x>0</x>
       <y>50</y>
-      <width>150</width>
+      <width>200</width>
       <height>20</height>
-      <tooltip>No description provided</tooltip>
+      <tooltip>Model - No description provided</tooltip>
     </widget>
     <widget type="textupdate" version="2.0.0">
       <name>TextUpdate</name>
       <pv_name>$(P)$(R)Model_RBV</pv_name>
-      <x>155</x>
+      <x>205</x>
       <y>50</y>
       <width>205</width>
       <height>20</height>
@@ -2732,14 +2732,14 @@
       <text>Serial Number</text>
       <x>0</x>
       <y>75</y>
-      <width>150</width>
+      <width>200</width>
       <height>20</height>
-      <tooltip>No description provided</tooltip>
+      <tooltip>Serial Number - No description provided</tooltip>
     </widget>
     <widget type="textupdate" version="2.0.0">
       <name>TextUpdate</name>
       <pv_name>$(P)$(R)SerialNumber_RBV</pv_name>
-      <x>155</x>
+      <x>205</x>
       <y>75</y>
       <width>205</width>
       <height>20</height>
@@ -2754,14 +2754,14 @@
       <text>Firmware Version</text>
       <x>0</x>
       <y>100</y>
-      <width>150</width>
+      <width>200</width>
       <height>20</height>
-      <tooltip>No description provided</tooltip>
+      <tooltip>Firmware Version - No description provided</tooltip>
     </widget>
     <widget type="textupdate" version="2.0.0">
       <name>TextUpdate</name>
       <pv_name>$(P)$(R)FirmwareVersion_RBV</pv_name>
-      <x>155</x>
+      <x>205</x>
       <y>100</y>
       <width>205</width>
       <height>20</height>
@@ -2776,14 +2776,14 @@
       <text>SDK Version</text>
       <x>0</x>
       <y>125</y>
-      <width>150</width>
+      <width>200</width>
       <height>20</height>
-      <tooltip>No description provided</tooltip>
+      <tooltip>SDK Version - No description provided</tooltip>
     </widget>
     <widget type="textupdate" version="2.0.0">
       <name>TextUpdate</name>
       <pv_name>$(P)$(R)SDKVersion_RBV</pv_name>
-      <x>155</x>
+      <x>205</x>
       <y>125</y>
       <width>205</width>
       <height>20</height>
@@ -2798,14 +2798,14 @@
       <text>Driver Version</text>
       <x>0</x>
       <y>150</y>
-      <width>150</width>
+      <width>200</width>
       <height>20</height>
-      <tooltip>No description provided</tooltip>
+      <tooltip>Driver Version - No description provided</tooltip>
     </widget>
     <widget type="textupdate" version="2.0.0">
       <name>TextUpdate</name>
       <pv_name>$(P)$(R)DriverVersion_RBV</pv_name>
-      <x>155</x>
+      <x>205</x>
       <y>150</y>
       <width>205</width>
       <height>20</height>
@@ -2820,14 +2820,14 @@
       <text>AD Core Version</text>
       <x>0</x>
       <y>175</y>
-      <width>150</width>
+      <width>200</width>
       <height>20</height>
-      <tooltip>No description provided</tooltip>
+      <tooltip>AD Core Version - No description provided</tooltip>
     </widget>
     <widget type="textupdate" version="2.0.0">
       <name>TextUpdate</name>
       <pv_name>$(P)$(R)ADCoreVersion_RBV</pv_name>
-      <x>155</x>
+      <x>205</x>
       <y>175</y>
       <width>205</width>
       <height>20</height>
@@ -2840,9 +2840,9 @@
   </widget>
   <widget type="group" version="2.0.0">
     <name>AD Collect</name>
-    <x>1573</x>
+    <x>1773</x>
     <y>30</y>
-    <width>396</width>
+    <width>446</width>
     <height>156</height>
     <transparent>true</transparent>
     <widget type="label" version="2.0.0">
@@ -2850,14 +2850,14 @@
       <text>Num Queued Arrays</text>
       <x>0</x>
       <y>0</y>
-      <width>150</width>
+      <width>200</width>
       <height>20</height>
-      <tooltip>No description provided</tooltip>
+      <tooltip>Num Queued Arrays - No description provided</tooltip>
     </widget>
     <widget type="textupdate" version="2.0.0">
       <name>TextUpdate</name>
       <pv_name>$(P)$(R)NumQueuedArrays</pv_name>
-      <x>155</x>
+      <x>205</x>
       <y>0</y>
       <width>205</width>
       <height>20</height>
@@ -2872,15 +2872,15 @@
       <text>Wait For Plugins</text>
       <x>0</x>
       <y>25</y>
-      <width>150</width>
+      <width>200</width>
       <height>20</height>
-      <tooltip>No description provided</tooltip>
+      <tooltip>Wait For Plugins - No description provided</tooltip>
     </widget>
     <widget type="slide_button" version="2.0.0">
       <name>ToggleButton</name>
       <pv_name>$(P)$(R)WaitForPlugins</pv_name>
       <label/>
-      <x>247</x>
+      <x>297</x>
       <y>25</y>
       <width>20</width>
       <height>20</height>
@@ -2890,15 +2890,15 @@
       <text>Acquire</text>
       <x>0</x>
       <y>50</y>
-      <width>150</width>
+      <width>200</width>
       <height>20</height>
-      <tooltip>No description provided</tooltip>
+      <tooltip>Acquire - No description provided</tooltip>
     </widget>
     <widget type="slide_button" version="2.0.0">
       <name>ToggleButton</name>
       <pv_name>$(P)$(R)Acquire</pv_name>
       <label/>
-      <x>195</x>
+      <x>245</x>
       <y>50</y>
       <width>20</width>
       <height>20</height>
@@ -2906,7 +2906,7 @@
     <widget type="led" version="2.0.0">
       <name>LED</name>
       <pv_name>$(P)$(R)Acquire_RBV</pv_name>
-      <x>300</x>
+      <x>350</x>
       <y>50</y>
       <width>20</width>
       <height>20</height>
@@ -2916,14 +2916,14 @@
       <text>Array Counter</text>
       <x>0</x>
       <y>75</y>
-      <width>150</width>
+      <width>200</width>
       <height>20</height>
-      <tooltip>No description provided</tooltip>
+      <tooltip>Array Counter - No description provided</tooltip>
     </widget>
     <widget type="textentry" version="3.0.0">
       <name>TextEntry</name>
       <pv_name>$(P)$(R)ArrayCounter</pv_name>
-      <x>155</x>
+      <x>205</x>
       <y>75</y>
       <width>100</width>
       <height>20</height>
@@ -2932,7 +2932,7 @@
     <widget type="textupdate" version="2.0.0">
       <name>TextUpdate</name>
       <pv_name>$(P)$(R)ArrayCounter_RBV</pv_name>
-      <x>260</x>
+      <x>310</x>
       <y>75</y>
       <width>100</width>
       <height>20</height>
@@ -2947,15 +2947,15 @@
       <text>Array Callbacks</text>
       <x>0</x>
       <y>100</y>
-      <width>150</width>
+      <width>200</width>
       <height>20</height>
-      <tooltip>No description provided</tooltip>
+      <tooltip>Array Callbacks - No description provided</tooltip>
     </widget>
     <widget type="slide_button" version="2.0.0">
       <name>ToggleButton</name>
       <pv_name>$(P)$(R)ArrayCallbacks</pv_name>
       <label/>
-      <x>195</x>
+      <x>245</x>
       <y>100</y>
       <width>20</width>
       <height>20</height>
@@ -2963,7 +2963,7 @@
     <widget type="led" version="2.0.0">
       <name>LED</name>
       <pv_name>$(P)$(R)ArrayCallbacks_RBV</pv_name>
-      <x>300</x>
+      <x>350</x>
       <y>100</y>
       <width>20</width>
       <height>20</height>
@@ -2971,9 +2971,9 @@
   </widget>
   <widget type="group" version="2.0.0">
     <name>AD Attr File</name>
-    <x>1573</x>
+    <x>1773</x>
     <y>191</y>
-    <width>396</width>
+    <width>446</width>
     <height>106</height>
     <transparent>true</transparent>
     <widget type="label" version="2.0.0">
@@ -2981,14 +2981,14 @@
       <text>ND Attributes File</text>
       <x>0</x>
       <y>0</y>
-      <width>150</width>
+      <width>200</width>
       <height>20</height>
-      <tooltip>No description provided</tooltip>
+      <tooltip>ND Attributes File - No description provided</tooltip>
     </widget>
     <widget type="textentry" version="3.0.0">
       <name>TextEntry</name>
       <pv_name>$(P)$(R)NDAttributesFile</pv_name>
-      <x>155</x>
+      <x>205</x>
       <y>0</y>
       <width>205</width>
       <height>20</height>
@@ -3000,14 +3000,14 @@
       <text>ND Attributes Macros</text>
       <x>0</x>
       <y>25</y>
-      <width>150</width>
+      <width>200</width>
       <height>20</height>
-      <tooltip>No description provided</tooltip>
+      <tooltip>ND Attributes Macros - No description provided</tooltip>
     </widget>
     <widget type="textentry" version="3.0.0">
       <name>TextEntry</name>
       <pv_name>$(P)$(R)NDAttributesMacros</pv_name>
-      <x>155</x>
+      <x>205</x>
       <y>25</y>
       <width>205</width>
       <height>20</height>
@@ -3019,14 +3019,14 @@
       <text>ND Attributes Status</text>
       <x>0</x>
       <y>50</y>
-      <width>150</width>
+      <width>200</width>
       <height>20</height>
-      <tooltip>No description provided</tooltip>
+      <tooltip>ND Attributes Status - No description provided</tooltip>
     </widget>
     <widget type="textupdate" version="2.0.0">
       <name>TextUpdate</name>
       <pv_name>$(P)$(R)NDAttributesStatus</pv_name>
-      <x>155</x>
+      <x>205</x>
       <y>50</y>
       <width>205</width>
       <height>20</height>
@@ -3039,9 +3039,9 @@
   </widget>
   <widget type="group" version="2.0.0">
     <name>asynNDArrayDriver Ungrouped</name>
-    <x>1573</x>
+    <x>1773</x>
     <y>302</y>
-    <width>396</width>
+    <width>446</width>
     <height>431</height>
     <transparent>true</transparent>
     <widget type="label" version="2.0.0">
@@ -3049,15 +3049,15 @@
       <text>Empty Free List</text>
       <x>0</x>
       <y>0</y>
-      <width>150</width>
+      <width>200</width>
       <height>20</height>
-      <tooltip>No description provided</tooltip>
+      <tooltip>Empty Free List - No description provided</tooltip>
     </widget>
     <widget type="slide_button" version="2.0.0">
       <name>ToggleButton</name>
       <pv_name>$(P)$(R)EmptyFreeList</pv_name>
       <label/>
-      <x>247</x>
+      <x>297</x>
       <y>0</y>
       <width>20</width>
       <height>20</height>
@@ -3067,14 +3067,14 @@
       <text>Acquire Busy CB</text>
       <x>0</x>
       <y>25</y>
-      <width>150</width>
+      <width>200</width>
       <height>20</height>
-      <tooltip>No description provided</tooltip>
+      <tooltip>Acquire Busy CB - No description provided</tooltip>
     </widget>
     <widget type="led" version="2.0.0">
       <name>LED</name>
       <pv_name>$(P)$(R)AcquireBusyCB</pv_name>
-      <x>247</x>
+      <x>297</x>
       <y>25</y>
       <width>20</width>
       <height>20</height>
@@ -3084,14 +3084,14 @@
       <text>Bayer Pattern</text>
       <x>0</x>
       <y>50</y>
-      <width>150</width>
+      <width>200</width>
       <height>20</height>
-      <tooltip>No description provided</tooltip>
+      <tooltip>Bayer Pattern - No description provided</tooltip>
     </widget>
     <widget type="textupdate" version="2.0.0">
       <name>TextUpdate</name>
       <pv_name>$(P)$(R)BayerPattern_RBV</pv_name>
-      <x>155</x>
+      <x>205</x>
       <y>50</y>
       <width>205</width>
       <height>20</height>
@@ -3106,14 +3106,14 @@
       <text>Array Size Z</text>
       <x>0</x>
       <y>75</y>
-      <width>150</width>
+      <width>200</width>
       <height>20</height>
-      <tooltip>No description provided</tooltip>
+      <tooltip>Array Size Z - No description provided</tooltip>
     </widget>
     <widget type="textupdate" version="2.0.0">
       <name>TextUpdate</name>
       <pv_name>$(P)$(R)ArraySizeZ_RBV</pv_name>
-      <x>155</x>
+      <x>205</x>
       <y>75</y>
       <width>205</width>
       <height>20</height>
@@ -3128,14 +3128,14 @@
       <text>Codec</text>
       <x>0</x>
       <y>100</y>
-      <width>150</width>
+      <width>200</width>
       <height>20</height>
-      <tooltip>No description provided</tooltip>
+      <tooltip>Codec - No description provided</tooltip>
     </widget>
     <widget type="textupdate" version="2.0.0">
       <name>TextUpdate</name>
       <pv_name>$(P)$(R)Codec_RBV</pv_name>
-      <x>155</x>
+      <x>205</x>
       <y>100</y>
       <width>205</width>
       <height>20</height>
@@ -3150,14 +3150,14 @@
       <text>Compressed Size</text>
       <x>0</x>
       <y>125</y>
-      <width>150</width>
+      <width>200</width>
       <height>20</height>
-      <tooltip>No description provided</tooltip>
+      <tooltip>Compressed Size - No description provided</tooltip>
     </widget>
     <widget type="textupdate" version="2.0.0">
       <name>TextUpdate</name>
       <pv_name>$(P)$(R)CompressedSize_RBV</pv_name>
-      <x>155</x>
+      <x>205</x>
       <y>125</y>
       <width>205</width>
       <height>20</height>
@@ -3172,14 +3172,14 @@
       <text>Unique Id</text>
       <x>0</x>
       <y>150</y>
-      <width>150</width>
+      <width>200</width>
       <height>20</height>
-      <tooltip>No description provided</tooltip>
+      <tooltip>Unique Id - No description provided</tooltip>
     </widget>
     <widget type="textupdate" version="2.0.0">
       <name>TextUpdate</name>
       <pv_name>$(P)$(R)UniqueId_RBV</pv_name>
-      <x>155</x>
+      <x>205</x>
       <y>150</y>
       <width>205</width>
       <height>20</height>
@@ -3194,14 +3194,14 @@
       <text>Time Stamp</text>
       <x>0</x>
       <y>175</y>
-      <width>150</width>
+      <width>200</width>
       <height>20</height>
-      <tooltip>No description provided</tooltip>
+      <tooltip>Time Stamp - No description provided</tooltip>
     </widget>
     <widget type="textupdate" version="2.0.0">
       <name>TextUpdate</name>
       <pv_name>$(P)$(R)TimeStamp_RBV</pv_name>
-      <x>155</x>
+      <x>205</x>
       <y>175</y>
       <width>205</width>
       <height>20</height>
@@ -3216,14 +3216,14 @@
       <text>Epics TS Sec</text>
       <x>0</x>
       <y>200</y>
-      <width>150</width>
+      <width>200</width>
       <height>20</height>
-      <tooltip>No description provided</tooltip>
+      <tooltip>Epics TS Sec - No description provided</tooltip>
     </widget>
     <widget type="textupdate" version="2.0.0">
       <name>TextUpdate</name>
       <pv_name>$(P)$(R)EpicsTSSec_RBV</pv_name>
-      <x>155</x>
+      <x>205</x>
       <y>200</y>
       <width>205</width>
       <height>20</height>
@@ -3238,14 +3238,14 @@
       <text>Epics TS Nsec</text>
       <x>0</x>
       <y>225</y>
-      <width>150</width>
+      <width>200</width>
       <height>20</height>
-      <tooltip>No description provided</tooltip>
+      <tooltip>Epics TS Nsec - No description provided</tooltip>
     </widget>
     <widget type="textupdate" version="2.0.0">
       <name>TextUpdate</name>
       <pv_name>$(P)$(R)EpicsTSNsec_RBV</pv_name>
-      <x>155</x>
+      <x>205</x>
       <y>225</y>
       <width>205</width>
       <height>20</height>
@@ -3260,14 +3260,14 @@
       <text>Pool Max Mem</text>
       <x>0</x>
       <y>250</y>
-      <width>150</width>
+      <width>200</width>
       <height>20</height>
-      <tooltip>No description provided</tooltip>
+      <tooltip>Pool Max Mem - No description provided</tooltip>
     </widget>
     <widget type="textupdate" version="2.0.0">
       <name>TextUpdate</name>
       <pv_name>$(P)$(R)PoolMaxMem</pv_name>
-      <x>155</x>
+      <x>205</x>
       <y>250</y>
       <width>205</width>
       <height>20</height>
@@ -3282,14 +3282,14 @@
       <text>Pool Used Mem</text>
       <x>0</x>
       <y>275</y>
-      <width>150</width>
+      <width>200</width>
       <height>20</height>
-      <tooltip>No description provided</tooltip>
+      <tooltip>Pool Used Mem - No description provided</tooltip>
     </widget>
     <widget type="textupdate" version="2.0.0">
       <name>TextUpdate</name>
       <pv_name>$(P)$(R)PoolUsedMem</pv_name>
-      <x>155</x>
+      <x>205</x>
       <y>275</y>
       <width>205</width>
       <height>20</height>
@@ -3304,14 +3304,14 @@
       <text>Pool Alloc Buffers</text>
       <x>0</x>
       <y>300</y>
-      <width>150</width>
+      <width>200</width>
       <height>20</height>
-      <tooltip>No description provided</tooltip>
+      <tooltip>Pool Alloc Buffers - No description provided</tooltip>
     </widget>
     <widget type="textupdate" version="2.0.0">
       <name>TextUpdate</name>
       <pv_name>$(P)$(R)PoolAllocBuffers</pv_name>
-      <x>155</x>
+      <x>205</x>
       <y>300</y>
       <width>205</width>
       <height>20</height>
@@ -3326,14 +3326,14 @@
       <text>Pool Free Buffers</text>
       <x>0</x>
       <y>325</y>
-      <width>150</width>
+      <width>200</width>
       <height>20</height>
-      <tooltip>No description provided</tooltip>
+      <tooltip>Pool Free Buffers - No description provided</tooltip>
     </widget>
     <widget type="textupdate" version="2.0.0">
       <name>TextUpdate</name>
       <pv_name>$(P)$(R)PoolFreeBuffers</pv_name>
-      <x>155</x>
+      <x>205</x>
       <y>325</y>
       <width>205</width>
       <height>20</height>
@@ -3348,14 +3348,14 @@
       <text>N Dimensions</text>
       <x>0</x>
       <y>350</y>
-      <width>150</width>
+      <width>200</width>
       <height>20</height>
-      <tooltip>No description provided</tooltip>
+      <tooltip>N Dimensions - No description provided</tooltip>
     </widget>
     <widget type="textentry" version="3.0.0">
       <name>TextEntry</name>
       <pv_name>$(P)$(R)NDimensions</pv_name>
-      <x>155</x>
+      <x>205</x>
       <y>350</y>
       <width>100</width>
       <height>20</height>
@@ -3364,7 +3364,7 @@
     <widget type="textupdate" version="2.0.0">
       <name>TextUpdate</name>
       <pv_name>$(P)$(R)NDimensions_RBV</pv_name>
-      <x>260</x>
+      <x>310</x>
       <y>350</y>
       <width>100</width>
       <height>20</height>
@@ -3379,14 +3379,14 @@
       <text>Dimensions</text>
       <x>0</x>
       <y>375</y>
-      <width>150</width>
+      <width>200</width>
       <height>20</height>
-      <tooltip>No description provided</tooltip>
+      <tooltip>Dimensions - No description provided</tooltip>
     </widget>
     <widget type="textentry" version="3.0.0">
       <name>TextEntry</name>
       <pv_name>$(P)$(R)Dimensions</pv_name>
-      <x>155</x>
+      <x>205</x>
       <y>375</y>
       <width>100</width>
       <height>20</height>
@@ -3395,7 +3395,7 @@
     <widget type="textupdate" version="2.0.0">
       <name>TextUpdate</name>
       <pv_name>$(P)$(R)Dimensions_RBV</pv_name>
-      <x>260</x>
+      <x>310</x>
       <y>375</y>
       <width>100</width>
       <height>20</height>

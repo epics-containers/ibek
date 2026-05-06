@@ -4,6 +4,8 @@ System tests for the ibek builtin commands
 
 from pathlib import Path
 
+import pytest
+
 from tests.test_cli import generic_generate
 
 # Note that the tests will fail unless the './generate_samples.sh' script has been run first
@@ -11,9 +13,10 @@ from tests.test_cli import generic_generate
 
 
 def test_wait_example(tmp_epics_root: Path, samples):
-    generic_generate(
-        tmp_epics_root,
-        samples,
-        "wait",
-        ["epics", "asyn", "motorSim"],
-    )
+    with pytest.deprecated_call():
+        generic_generate(
+            tmp_epics_root,
+            samples,
+            "wait",
+            ["epics", "asyn", "motorSim"],
+        )
