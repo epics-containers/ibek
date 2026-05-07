@@ -2,7 +2,7 @@
   <name>Simple Device</name>
   <x>0</x>
   <y use_class="true">0</y>
-  <width>388</width>
+  <width>438</width>
   <height>55</height>
   <grid_step_x>4</grid_step_x>
   <grid_step_y>4</grid_step_y>
@@ -12,7 +12,7 @@
     <text>Simple Device</text>
     <x use_class="true">0</x>
     <y use_class="true">0</y>
-    <width>388</width>
+    <width>438</width>
     <height>25</height>
     <font use_class="true">
       <font name="Header 1" family="Liberation Sans" style="BOLD" size="22.0">
@@ -30,14 +30,14 @@
     <text>Simple PV</text>
     <x>23</x>
     <y>30</y>
-    <width>150</width>
+    <width>200</width>
     <height>20</height>
-    <tooltip>No description provided</tooltip>
+    <tooltip>Simple PV - No description provided</tooltip>
   </widget>
   <widget type="textupdate" version="2.0.0">
     <name>TextUpdate</name>
     <pv_name>$(P)Simple</pv_name>
-    <x>178</x>
+    <x>228</x>
     <y>30</y>
     <width>205</width>
     <height>20</height>

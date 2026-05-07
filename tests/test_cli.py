@@ -85,13 +85,13 @@ def test_build_runtime_motorSim(tmp_epics_root: Path, samples: Path):
     Also verifies database subst file generation for multiple
     entity instantiations.
     """
-
-    generic_generate(
-        tmp_epics_root,
-        samples,
-        "motorSim",
-        ["motorSim", "asyn"],
-    )
+    with pytest.deprecated_call():
+        generic_generate(
+            tmp_epics_root,
+            samples,
+            "motorSim",
+            ["motorSim", "asyn"],
+        )
 
 
 def test_build_utils_features(tmp_epics_root: Path, samples: Path):
@@ -140,12 +140,13 @@ def test_quadem(tmp_epics_root: Path, samples: Path):
     Tests the use of CollectionDefinitions in an IOC instance
     this example uses the tetramm beam position monitor module
     """
-    generic_generate(
-        tmp_epics_root,
-        samples,
-        "quadem",
-        ["ADCore", "quadem"],
-    )
+    with pytest.deprecated_call():
+        generic_generate(
+            tmp_epics_root,
+            samples,
+            "quadem",
+            ["ADCore", "quadem"],
+        )
 
 
 def generic_generate(
