@@ -227,7 +227,7 @@ def generate_pvi(ioc: IOC) -> tuple[list[IndexEntry], list[tuple[Database, Entit
     device_name_map: dict[str, Device] = {}
 
     for entity, parent in _entity_hierarchy(ioc.entities):
-        parent_map[id(entity)] = parent
+        parent_map[id(entity)] = parent  # Map allows us to reach upwards for ancestors
         definition = entity._model
         if not hasattr(definition, "pvi") or definition.pvi is None:
             continue
@@ -267,17 +267,28 @@ def generate_pvi(ioc: IOC) -> tuple[list[IndexEntry], list[tuple[Database, Entit
             )
 
         if parent is not None:
+            # Find the nearest ancestor that has a pvi
             parent_device = _nearest_pvi_device_ancestor(
                 parent, entity_to_device, parent_map
             )
+            macros = UTILS.render_map(dict(entity), entity_pvi.ui_macros or {})
+            # Insert sub devices into the ancestor
             if parent_device is not None:
-                macros = UTILS.render_map(dict(entity), entity_pvi.ui_macros or {})
                 parent_device.children.append(
                     DeviceRef(
                         name=definition.name
                         if not getattr(entity, "_repeat_value", None)
                         else f"{parent_device.label}{entity._repeat_value}",
                         pv=UTILS.render(entity, entity_pvi.pv_prefix or ""),
+                        ui=device_bob.name,
+                        macros=macros,
+                    )
+                )
+            # No ancestor has a pvi, so place in index
+            else:
+                index_entries.append(
+                    IndexEntry(
+                        label=f"{device.label}",
                         ui=device_bob.name,
                         macros=macros,
                     )
