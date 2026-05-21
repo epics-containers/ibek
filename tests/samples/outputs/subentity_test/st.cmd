@@ -4,9 +4,6 @@ cd "/epics/ioc"
 dbLoadDatabase dbd/ioc.dbd
 ioc_registerRecordDeviceDriver pdbbase
 
-Command number 1 for subentity_test
-Command number 2 for subentity_test
-Command number 3 for subentity_test
 
 dbLoadRecords /epics/runtime/ioc.db
 iocInit
