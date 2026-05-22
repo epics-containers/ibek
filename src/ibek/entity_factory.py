@@ -251,7 +251,9 @@ class EntityFactory:
 
             if isinstance(parent_entity, RepeatEntity):
                 # resolve repeats in this parent entity
-                resolved_entities.extend(self._resolve_repeat(parent_entity, context))
+                resolved_repeat_entities = self._resolve_repeat(parent_entity, context)
+                parent_entity._child_entities = resolved_repeat_entities
+                resolved_entities.append(parent_entity)
             else:
                 sub_entities: list[Entity] = []
                 # add the current parent entity to the resolved list

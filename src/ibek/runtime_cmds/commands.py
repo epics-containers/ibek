@@ -141,9 +141,9 @@ def do_generate(
             ioc_instance.entities.extend(instance.entities)
 
     # post processing to insert SubEntity instances
-    # this internally recurses on a list of entities, returning top-most
-    # parent entitites, but we don't need this list at this point.
-    entity_factory.resolve_sub_entities(ioc_instance.entities, {})
+    ioc_instance.entities = entity_factory.resolve_sub_entities(
+        ioc_instance.entities, {}
+    )
 
     # this returns a flattened list of all entities
     all_entities = [e for e, _ in _entity_hierarchy(ioc_instance.entities)]
