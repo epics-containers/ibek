@@ -141,7 +141,12 @@ def do_generate(
             ioc_instance.entities.extend(instance.entities)
 
     # post processing to insert SubEntity instances
-    all_entities = entity_factory.resolve_sub_entities(ioc_instance.entities, {})
+    # this internally recurses on a list of entities, returning top-most
+    # parent entitites, but we don't need this list at this point.
+    entity_factory.resolve_sub_entities(ioc_instance.entities, {})
+
+    # this returns a flattened list of all entities
+    all_entities = [e for e, _ in _entity_hierarchy(ioc_instance.entities)]
 
     # Clear out generated files so developers know if something stops being generated
     shutil.rmtree(output_folder, ignore_errors=True)
@@ -157,7 +162,7 @@ def do_generate(
         if not hasattr(entity, "_model"):
             continue
         discrete_entities.append(entity)
-    ioc_instance.entities = discrete_entities
+    all_entities = discrete_entities
 
     for entity in builtin_entities:
         # Generate the wait for hardware file for the IOC instance.
@@ -174,14 +179,14 @@ def do_generate(
         generate_index(ioc_instance.ioc_name, pvi_index_entries)
 
     # Generate the boot script for the IOC instance.
-    script_txt = create_boot_script(ioc_instance.entities)
+    script_txt = create_boot_script(all_entities)
     script_output = output_folder / "st.cmd"
     script_output.parent.mkdir(parents=True, exist_ok=True)
     with script_output.open("w") as stream:
         stream.write(script_txt)
 
     # Generate the database substitution file, including any generated pvi databases.
-    db_txt = create_db_script(ioc_instance.entities, pvi_databases)
+    db_txt = create_db_script(all_entities, pvi_databases)
     db_output = output_folder / "ioc.subst"
     with db_output.open("w") as stream:
         stream.write(db_txt)
@@ -227,6 +232,9 @@ def generate_pvi(ioc: IOC) -> tuple[list[IndexEntry], list[tuple[Database, Entit
     device_name_map: dict[str, Device] = {}
 
     for entity, parent in _entity_hierarchy(ioc.entities):
+        # filter out any non-entity objects
+        if not hasattr(entity, "_model"):
+            continue
         parent_map[id(entity)] = parent  # Map allows us to reach upwards for ancestors
         definition = entity._model
         if not hasattr(definition, "pvi") or definition.pvi is None:

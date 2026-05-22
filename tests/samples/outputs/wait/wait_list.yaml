@@ -9,26 +9,6 @@
     timeout: 10
 
   - type: ibek.wait_ip
-    device: controller0
-    address: 192.168.0.65:55000
-    timeout: 5
-
-  - type: ibek.wait_ip
-    device: controller1
-    address: 192.168.0.66:55000
-    timeout: 5
-
-  - type: ibek.wait_ip
-    device: controller2
-    address: 192.168.0.67:55000
-    timeout: 5
-
-  - type: ibek.wait_ip
-    device: controller3
-    address: 192.168.0.68:55000
-    timeout: 5
-
-  - type: ibek.wait_ip
     device: asynController2
     address: 192.168.0.56:7001
     timeout: 0
