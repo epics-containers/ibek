@@ -200,7 +200,7 @@ def _entity_hierarchy(entities: list[Entity], parent: Entity | None = None):
 
 
 def _nearest_pvi_device_ancestor(
-    entity: Entity,
+    entity: Entity | None,
     entity_to_device: dict[int, Device],
     parent_map: dict[int, Entity | None],
 ) -> Device | None:
@@ -282,16 +282,16 @@ def generate_pvi(ioc: IOC) -> tuple[list[IndexEntry], list[tuple[Database, Entit
             macros = UTILS.render_map(dict(entity), entity_pvi.ui_macros or {})
             # Insert sub devices into the ancestor
             if parent_device is not None:
-                parent_device.children.append(
+                parent_device.children = list(parent_device.children) + [
                     DeviceRef(
                         name=definition.name
-                        if not getattr(entity, "_repeat_value", None)
+                        if entity._repeat_value is None
                         else f"{parent_device.label}{entity._repeat_value}",
                         pv=UTILS.render(entity, entity_pvi.pv_prefix or ""),
                         ui=device_bob.name,
                         macros=macros,
                     )
-                )
+                ]
             # No ancestor has a pvi, so place in index
             else:
                 index_entries.append(
