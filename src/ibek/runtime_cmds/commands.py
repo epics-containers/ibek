@@ -230,6 +230,7 @@ def generate_pvi(ioc: IOC) -> tuple[list[IndexEntry], list[tuple[Database, Entit
     parent_map: dict[int, Entity | None] = {}
     entity_to_device: dict[int, Device] = {}
     device_name_map: dict[str, Device] = {}
+    dynamic_devices: dict[str, Device] = {}
 
     for entity, parent in _entity_hierarchy(ioc.entities):
         # filter out any non-entity objects
@@ -282,7 +283,11 @@ def generate_pvi(ioc: IOC) -> tuple[list[IndexEntry], list[tuple[Database, Entit
             macros = UTILS.render_map(dict(entity), entity_pvi.ui_macros or {})
             # Insert sub devices into the ancestor
             if parent_device is not None:
-                parent_device.children = list(parent_device.children) + [
+                device_name = f"{parent_device.label}Dynamic"
+                if not dynamic_devices.get(device_name):
+                    dynamic_devices[device_name] = Device(label=device_name)
+                dynamic_device = dynamic_devices[device_name]
+                dynamic_device.children = list(dynamic_device.children) + [
                     DeviceRef(
                         name=definition.name
                         if entity._repeat_value is None
@@ -302,7 +307,11 @@ def generate_pvi(ioc: IOC) -> tuple[list[IndexEntry], list[tuple[Database, Entit
                     )
                 )
 
+    for device_name, device in dynamic_devices.items():
+        device.serialize(GLOBALS.PVI_DEFS / f"{device_name}.pvi.device.yaml")
+
     for device_name, device in device_name_map.items():
+        device.resolve_dynamic_children([GLOBALS.PVI_DEFS])
         device.merge_components(device.children)
         device_bob = GLOBALS.OPI_OUTPUT / f"{device_name}.pvi.bob"
         formatter.format(device, device_bob)
