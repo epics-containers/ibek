@@ -366,7 +366,7 @@ dev = [
 requires-dist = [
     { name = "gitpython" },
     { name = "jinja2" },
-    { name = "pvi" },
+    { name = "pvi", git = "https://github.com/epics-containers/pvi.git?rev=dynamic_ibek_children" },
     { name = "pydantic", specifier = "<3.0.0" },
     { name = "ruamel-yaml" },
     { name = "semantic-version" },
@@ -790,8 +790,8 @@ wheels = [
 
 [[package]]
 name = "pvi"
-version = "0.13.0"
-source = { registry = "https://pypi.org/simple" }
+version = "0.13.1.dev5+gff343db3b"
+source = { git = "https://github.com/epics-containers/pvi.git?rev=dynamic_ibek_children#ff343db3b2b67a51fa78dae138c697023e6ffea9" }
 dependencies = [
     { name = "jinja2" },
     { name = "lxml" },
@@ -799,10 +799,6 @@ dependencies = [
     { name = "pydantic" },
     { name = "ruamel-yaml" },
     { name = "typer" },
-]
-sdist = { url = "https://files.pythonhosted.org/packages/ea/9f/89d77acf1384820493ebd200507cdf66b0cffa74b42bb4afb216342db067/pvi-0.13.0.tar.gz", hash = "sha256:c5664b83d70b29bdca6f76204984289f2b6bf41af6b598481ffa1db4cec90b23", size = 279911, upload-time = "2026-05-06T09:33:49.248Z" }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/97/6f/241bb7d0142c7d651732c7387ac98f32b06351a70a6bdc62d0018f5afd2c/pvi-0.13.0-py3-none-any.whl", hash = "sha256:6316c210bae3eeb947c30d9f7f22fdcc0651fc01769c288123d9b5c6ffe70bd2", size = 57882, upload-time = "2026-05-06T09:33:48.157Z" },
 ]
 
 [[package]]
