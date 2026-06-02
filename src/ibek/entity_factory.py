@@ -192,16 +192,19 @@ class EntityFactory:
         Resolve a repeat Entity into a list of Entity instances
         """
         resolved_entities: list[Entity] = []
-
         for index, value in enumerate(repeat_entity.values):
             context[repeat_entity.variable] = value
             context[f"{repeat_entity.variable}_num"] = index
 
             # create the new repeated entity using a dict of arguments
             new_entity = repeat_entity.entity.copy()
-            resolved_entities.extend(
-                self.resolve_sub_entities([new_entity], context.copy())
-            )
+            repeated_entities = self.resolve_sub_entities([new_entity], context.copy())
+
+            # attach repeat metadata to each resolved entity
+            for entity in repeated_entities:
+                entity._repeat_value = value
+
+            resolved_entities.extend(repeated_entities)
 
         return resolved_entities
 
@@ -250,15 +253,17 @@ class EntityFactory:
                 # resolve repeats in this parent entity
                 resolved_entities.extend(self._resolve_repeat(parent_entity, context))
             else:
+                sub_entities: list[Entity] = []
                 # add the current parent entity to the resolved list
-                resolved_entities.append(parent_entity)
                 # only entities that have a model may have subentities
                 if hasattr(parent_entity, "_model"):
                     # add in SubEntities if any
                     for sub_entity in parent_entity._model.sub_entities:
                         # recursively scan the SubEntity for more SubEntities
-                        resolved_entities.extend(
+                        sub_entities.extend(
                             self.resolve_sub_entities([sub_entity], context)
                         )
+                parent_entity._child_entities = sub_entities
+                resolved_entities.append(parent_entity)
 
         return resolved_entities

@@ -5,7 +5,7 @@ import typer
 from pvi._format.base import IndexEntry
 from pvi._format.dls import DLSFormatter
 from pvi._format.template import format_template
-from pvi.device import Device
+from pvi.device import Device, DeviceRef
 
 from ibek.entity_factory import EntityFactory
 from ibek.entity_model import Database
@@ -141,7 +141,12 @@ def do_generate(
             ioc_instance.entities.extend(instance.entities)
 
     # post processing to insert SubEntity instances
-    all_entities = entity_factory.resolve_sub_entities(ioc_instance.entities, {})
+    ioc_instance.entities = entity_factory.resolve_sub_entities(
+        ioc_instance.entities, {}
+    )
+
+    # this returns a flattened list of all entities
+    all_entities = [e for e, _ in _entity_hierarchy(ioc_instance.entities)]
 
     # Clear out generated files so developers know if something stops being generated
     shutil.rmtree(output_folder, ignore_errors=True)
@@ -157,7 +162,7 @@ def do_generate(
         if not hasattr(entity, "_model"):
             continue
         discrete_entities.append(entity)
-    ioc_instance.entities = discrete_entities
+    all_entities = discrete_entities
 
     for entity in builtin_entities:
         # Generate the wait for hardware file for the IOC instance.
@@ -174,17 +179,37 @@ def do_generate(
         generate_index(ioc_instance.ioc_name, pvi_index_entries)
 
     # Generate the boot script for the IOC instance.
-    script_txt = create_boot_script(ioc_instance.entities)
+    script_txt = create_boot_script(all_entities)
     script_output = output_folder / "st.cmd"
     script_output.parent.mkdir(parents=True, exist_ok=True)
     with script_output.open("w") as stream:
         stream.write(script_txt)
 
     # Generate the database substitution file, including any generated pvi databases.
-    db_txt = create_db_script(ioc_instance.entities, pvi_databases)
+    db_txt = create_db_script(all_entities, pvi_databases)
     db_output = output_folder / "ioc.subst"
     with db_output.open("w") as stream:
         stream.write(db_txt)
+
+
+def _entity_hierarchy(entities: list[Entity], parent: Entity | None = None):
+    for entity in entities:
+        yield entity, parent
+        for child in getattr(entity, "_child_entities", []):
+            yield from _entity_hierarchy([child], entity)
+
+
+def _nearest_pvi_device_ancestor(
+    entity: Entity | None,
+    entity_to_device: dict[int, Device],
+    parent_map: dict[int, Entity | None],
+) -> Device | None:
+    while entity is not None:
+        device = entity_to_device.get(id(entity))
+        if device is not None:
+            return device
+        entity = parent_map.get(id(entity))
+    return None
 
 
 def generate_pvi(ioc: IOC) -> tuple[list[IndexEntry], list[tuple[Database, Entity]]]:
@@ -202,9 +227,16 @@ def generate_pvi(ioc: IOC) -> tuple[list[IndexEntry], list[tuple[Database, Entit
     databases: list[tuple[Database, Entity]] = []
 
     formatter = DLSFormatter()
+    parent_map: dict[int, Entity | None] = {}
+    entity_to_device: dict[int, Device] = {}
+    device_name_map: dict[str, Device] = {}
+    dynamic_devices: dict[str, Device] = {}
 
-    formatted_pvi_devices: list[str] = []
-    for entity in ioc.entities:
+    for entity, parent in _entity_hierarchy(ioc.entities):
+        # filter out any non-entity objects
+        if not hasattr(entity, "_model"):
+            continue
+        parent_map[id(entity)] = parent  # Map allows us to reach upwards for ancestors
         definition = entity._model
         if not hasattr(definition, "pvi") or definition.pvi is None:
             continue
@@ -212,38 +244,61 @@ def generate_pvi(ioc: IOC) -> tuple[list[IndexEntry], list[tuple[Database, Entit
 
         pvi_yaml = GLOBALS.PVI_DEFS / UTILS.render(entity, entity_pvi.yaml_path)
         device_name = pvi_yaml.name.split(".")[0]
-        device_bob = GLOBALS.OPI_OUTPUT / f"{device_name}.pvi.bob"
 
-        # Skip deserializing yaml if not needed
-        if (
-            entity_pvi.pv
-            or device_name not in formatted_pvi_devices
-            or entity_pvi.ui_index
-        ):
+        if device_name not in device_name_map:
             device = Device.deserialize(pvi_yaml)
             device.deserialize_parents([GLOBALS.PVI_DEFS])
+            device_name_map[device_name] = device
+        else:
+            device = device_name_map[device_name]
 
-            if entity_pvi.pv:
-                # Create a template with the V4 structure defining a PVI interface
-                output_template = GLOBALS.RUNTIME_OUTPUT / f"{device_name}.pvi.template"
-                format_template(device, entity_pvi.pv_prefix, output_template)
-
-                # Add to extra databases to be added into substitution file
-                databases.append(
-                    (
-                        Database(file=output_template.name, args=entity_pvi.ui_macros),
-                        entity,
-                    )
+        entity_to_device[id(entity)] = device
+        if entity_pvi.pv:
+            output_template = GLOBALS.RUNTIME_OUTPUT / f"{device_name}.pvi.template"
+            format_template(device, entity_pvi.pv_prefix, output_template)
+            databases.append(
+                (
+                    Database(file=output_template.name, args=entity_pvi.ui_macros),
+                    entity,
                 )
+            )
 
-            if device_name not in formatted_pvi_devices:
-                formatter.format(device, device_bob)
+        device_bob = GLOBALS.OPI_OUTPUT / f"{device_name}.pvi.bob"
 
-                # Don't format further instance of this device
-                formatted_pvi_devices.append(device_name)
+        if parent is None and entity_pvi.ui_index:
+            macros = UTILS.render_map(dict(entity), entity_pvi.ui_macros or {})
+            index_entries.append(
+                IndexEntry(
+                    label=f"{device.label}",
+                    ui=device_bob.name,
+                    macros=macros,
+                )
+            )
 
-            if entity_pvi.ui_index:
-                macros = UTILS.render_map(dict(entity), entity_pvi.ui_macros)
+        if parent is not None:
+            # Find the nearest ancestor that has a pvi
+            parent_device = _nearest_pvi_device_ancestor(
+                parent, entity_to_device, parent_map
+            )
+            macros = UTILS.render_map(dict(entity), entity_pvi.ui_macros or {})
+            # Insert sub devices into the ancestor
+            if parent_device is not None:
+                device_name = f"{parent_device.label}Dynamic"
+                if not dynamic_devices.get(device_name):
+                    dynamic_devices[device_name] = Device(label=device_name)
+                dynamic_device = dynamic_devices[device_name]
+                dynamic_device.children = list(dynamic_device.children) + [
+                    DeviceRef(
+                        name=definition.name
+                        if entity._repeat_value is None
+                        else f"{parent_device.label}{entity._repeat_value}",
+                        pv=UTILS.render(entity, entity_pvi.pv_prefix or ""),
+                        ui=device_bob.name,
+                        macros=macros,
+                    )
+                ]
+            # No ancestor has a pvi, so place in index
+            else:
                 index_entries.append(
                     IndexEntry(
                         label=f"{device.label}",
@@ -251,6 +306,15 @@ def generate_pvi(ioc: IOC) -> tuple[list[IndexEntry], list[tuple[Database, Entit
                         macros=macros,
                     )
                 )
+
+    for device_name, device in dynamic_devices.items():
+        device.serialize(GLOBALS.PVI_DEFS / f"{device_name}.pvi.device.yaml")
+
+    for device_name, device in device_name_map.items():
+        device.resolve_dynamic_children([GLOBALS.PVI_DEFS])
+        device.merge_components(device.children)
+        device_bob = GLOBALS.OPI_OUTPUT / f"{device_name}.pvi.bob"
+        formatter.format(device, device_bob)
 
     return index_entries, databases
 

@@ -19,7 +19,7 @@ dependencies = [
     "jinja2",
     "GitPython",
     "semantic-version",
-    "pvi",
+    "pvi @ git+https://github.com/epics-containers/pvi.git@dynamic_ibek_children",
 ]
 dynamic = ["version"]
 license.file = "LICENSE"

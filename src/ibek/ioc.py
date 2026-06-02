@@ -45,6 +45,9 @@ class Entity(BaseSettings):
         description="enable or disable this entity instance", default=True
     )
     _model: EntityModel
+    # list of sub-entities
+    _child_entities: list[Entity] = []
+    _repeat_value: Any | None = None
 
     def _process_field(self: Entity, name: str, value: Any, typ: str):
         """
