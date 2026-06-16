@@ -229,6 +229,44 @@ def test_pvi_config_override(tmp_epics_root: Path, samples: Path):
     assert "Simple Device" not in bob
 
 
+def test_pvi_config_override_parent(tmp_epics_root: Path, samples: Path):
+    """
+    A pvi device yaml in the IOC instance config folder also overrides a device
+    that is referenced as a *parent* of another device. Here the quadem IOC
+    generates NDPluginStats, whose parent is NDPluginDriver; overriding
+    NDPluginDriver in the config folder changes the generated NDPluginStats bob.
+    """
+    config_dir = GLOBALS.IOC_FOLDER / GLOBALS.CONFIG_DIR_NAME
+    # an override parent device with a single, uniquely named signal
+    (config_dir / "NDPluginDriver.pvi.device.yaml").write_text(
+        "label: NDPluginDriver\n"
+        "parent: asynNDArrayDriver\n"
+        "children:\n"
+        "  - type: SignalR\n"
+        "    name: OverriddenParentSignal\n"
+        "    read_pv: $(P)$(R)OverriddenParentSignal_RBV\n"
+        "    read_widget:\n"
+        "      type: TextRead\n"
+    )
+
+    with pytest.deprecated_call():
+        do_generate(
+            [samples / "iocs" / "quadem.ibek.ioc.yaml"],
+            [
+                samples / "support" / f"{name}.ibek.support.yaml"
+                for name in ["ADCore", "quadem"]
+            ],
+            tmp_epics_root / "runtime",
+            pvi=True,
+        )
+
+    bob = (GLOBALS.OPI_OUTPUT / "NDPluginStats.pvi.bob").read_text()
+    # the overridden parent's signal is present...
+    assert "OverriddenParentSignal" in bob
+    # ...and signals only present in the original PVI_DEFS parent are gone
+    assert "EnableCallbacks" not in bob
+
+
 def test_andreas_motors(tmp_epics_root: Path, samples: Path):
     """
     Motor and axis example
