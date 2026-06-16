@@ -13,7 +13,8 @@ from typer.testing import CliRunner
 
 import ibek.utils as utils
 from ibek import __version__
-from ibek.runtime_cmds.commands import do_generate
+from ibek.globals import GLOBALS
+from ibek.runtime_cmds.commands import do_generate, find_pvi_device
 from tests.conftest import run_cli
 
 runner = CliRunner()
@@ -169,6 +170,63 @@ def generic_generate(
             actual = epics_root / "opi" / output.name
         assert actual.exists(), f"Missing output file {actual}"
         assert output.read_text().strip() == actual.read_text().strip()
+
+
+def test_find_pvi_device(tmp_epics_root: Path):
+    """
+    find_pvi_device resolves against PVI_DEFS, but a file of the same name
+    dropped into the IOC instance config folder overrides it.
+    """
+    config_dir = GLOBALS.IOC_FOLDER / GLOBALS.CONFIG_DIR_NAME
+
+    # with no override the file resolves relative to PVI_DEFS
+    assert find_pvi_device("simple.pvi.device.yaml", config_dir) == (
+        GLOBALS.PVI_DEFS / "simple.pvi.device.yaml"
+    )
+
+    # a relative sub-path with no override is preserved under PVI_DEFS
+    assert find_pvi_device("sub/simple.pvi.device.yaml", config_dir) == (
+        GLOBALS.PVI_DEFS / "sub" / "simple.pvi.device.yaml"
+    )
+
+    # dropping a file of the same name in the config folder overrides it,
+    # matching on file name only
+    override = config_dir / "simple.pvi.device.yaml"
+    override.write_text("label: Overridden Device\n")
+    assert find_pvi_device("simple.pvi.device.yaml", config_dir) == override
+    assert find_pvi_device("sub/simple.pvi.device.yaml", config_dir) == override
+
+
+def test_pvi_config_override(tmp_epics_root: Path, samples: Path):
+    """
+    A pvi device yaml dropped into the IOC instance config folder overrides the
+    one shipped in PVI_DEFS by a support module.
+    """
+    config_dir = GLOBALS.IOC_FOLDER / GLOBALS.CONFIG_DIR_NAME
+    (config_dir / "simple.pvi.device.yaml").write_text(
+        "label: Overridden Device\n"
+        "children:\n"
+        "  - type: SignalR\n"
+        "    name: SimplePV\n"
+        "    read_pv: $(P)Simple\n"
+        "    read_widget:\n"
+        "      type: TextRead\n"
+    )
+
+    with pytest.deprecated_call():
+        do_generate(
+            [samples / "iocs" / "motorSim.ibek.ioc.yaml"],
+            [
+                samples / "support" / f"{name}.ibek.support.yaml"
+                for name in ["motorSim", "asyn"]
+            ],
+            tmp_epics_root / "runtime",
+            pvi=True,
+        )
+
+    bob = (GLOBALS.OPI_OUTPUT / "simple.pvi.bob").read_text()
+    assert "Overridden Device" in bob
+    assert "Simple Device" not in bob
 
 
 def test_andreas_motors(tmp_epics_root: Path, samples: Path):

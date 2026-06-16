@@ -187,8 +187,39 @@ def do_generate(
         stream.write(db_txt)
 
 
+def find_pvi_device(rel_path: str, config_dir: Path) -> Path:
+    """Resolve a pvi device yaml file, allowing instance config overrides.
+
+    The IOC instance config folder can override a support module's pvi device
+    file by dropping in a file of the same name. Overrides are matched on file
+    name only (mirroring the autosave req file override convention), so a file
+    placed directly in the config folder wins over the one in PVI_DEFS.
+
+    Args:
+        rel_path: yaml_path from the entity pvi definition (already rendered),
+            absolute or relative to PVI_DEFS
+        config_dir: the IOC instance config folder to search for overrides
+
+    Returns:
+        Path to the pvi device yaml file to use
+
+    """
+    override = config_dir / Path(rel_path).name
+    if override.is_file():
+        return override
+    # No override: resolve relative to PVI_DEFS (absolute paths pass through),
+    # preserving support for relative sub-paths under PVI_DEFS.
+    return GLOBALS.PVI_DEFS / rel_path
+
+
 def generate_pvi(ioc: IOC) -> tuple[list[IndexEntry], list[tuple[Database, Entity]]]:
     """Generate pvi bob and template files to add to UI index and IOC database.
+
+    pvi device yaml files are normally read from PVI_DEFS, where they are
+    installed by support modules. A file of the same name dropped into the IOC
+    instance config folder overrides the one in PVI_DEFS (including when it is
+    referenced as a parent device file). This mirrors the autosave req file
+    override convention - see generate_autosave.
 
     Args:
         ioc: IOC instance to extract entity pvi definitions from
@@ -203,6 +234,12 @@ def generate_pvi(ioc: IOC) -> tuple[list[IndexEntry], list[tuple[Database, Entit
 
     formatter = DLSFormatter()
 
+    # The IOC instance config folder may supply pvi device yaml files that
+    # override those shipped in PVI_DEFS by support modules. An override matches
+    # on file name and also takes precedence when resolving parent device files.
+    config_dir = GLOBALS.IOC_FOLDER / GLOBALS.CONFIG_DIR_NAME
+    pvi_search_path = [config_dir, GLOBALS.PVI_DEFS]
+
     formatted_pvi_devices: list[str] = []
     for entity in ioc.entities:
         definition = entity._model
@@ -210,7 +247,8 @@ def generate_pvi(ioc: IOC) -> tuple[list[IndexEntry], list[tuple[Database, Entit
             continue
         entity_pvi = definition.pvi
 
-        pvi_yaml = GLOBALS.PVI_DEFS / UTILS.render(entity, entity_pvi.yaml_path)
+        rel_path = UTILS.render(entity, entity_pvi.yaml_path)
+        pvi_yaml = find_pvi_device(rel_path, config_dir)
         device_name = pvi_yaml.name.split(".")[0]
         device_bob = GLOBALS.OPI_OUTPUT / f"{device_name}.pvi.bob"
 
@@ -221,7 +259,7 @@ def generate_pvi(ioc: IOC) -> tuple[list[IndexEntry], list[tuple[Database, Entit
             or entity_pvi.ui_index
         ):
             device = Device.deserialize(pvi_yaml)
-            device.deserialize_parents([GLOBALS.PVI_DEFS])
+            device.deserialize_parents(pvi_search_path)
 
             if entity_pvi.pv:
                 # Create a template with the V4 structure defining a PVI interface
