@@ -18,7 +18,7 @@ jobs:
       # ibek only supports python 3.13, and at present the github runner only
       # has 3.12, so we need to install 3.13 ourselves
       - name: Install python 3.13
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v6
         with:
           python-version: "3.13"
 
