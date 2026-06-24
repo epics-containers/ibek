@@ -69,6 +69,19 @@ class _Globals:
         return self._EPICS_ROOT / "autosave"
 
     @property
+    def RUNTIME_PROTOCOL(self):
+        """Directory of streamDevice protocol files placed for IOC boot.
+
+        This is the directory that STREAM_PROTOCOL_PATH points at by convention.
+        """
+        return self.RUNTIME_OUTPUT / "protocol"
+
+    @property
+    def RUNTIME_DB(self):
+        """Directory of instance db/template files placed for IOC boot."""
+        return self.RUNTIME_OUTPUT / "db"
+
+    @property
     def EPICS_BASE(self):
         """The folder containing the epics base source and binaries"""
         return self._EPICS_ROOT / "epics-base"
@@ -101,6 +114,11 @@ TEMPLATES = Path(__file__).parent / "templates"
 SUPPORT_YAML_PATTERN = "*ibek.support.yaml"
 PVI_YAML_PATTERN = "*pvi.device.yaml"
 AUTOSAVE_PATTERN = "*.req"
+
+# Runtime-support vendoring (ibek pattern) artifacts. These live at the IOC
+# instance root (NOT in config/, which is the K8s ConfigMap, runtime inputs only).
+RUNTIME_LOCK_NAME = "runtime-lock.yaml"
+IOC_SCHEMA_NAME = "ioc.schema.json"
 
 GLOBALS = _Globals()
 

@@ -91,6 +91,24 @@ def generate2(
 
 
 @runtime_cli.command()
+def place_files(
+    config_folder: Path = typer.Argument(
+        ...,
+        help="The IOC instance config folder containing runtime artifacts",
+        exists=True,
+        dir_okay=True,
+        file_okay=False,
+        autocompletion=lambda: [],
+    ),
+):
+    """
+    Place runtime artifacts (proto / db / ...) from an IOC instance config
+    folder into their runtime search-path locations for IOC boot.
+    """
+    place_runtime_files(config_folder)
+
+
+@runtime_cli.command()
 def generate(
     instance: Path = typer.Argument(
         ...,
@@ -111,6 +129,32 @@ def generate(
     pvi: bool = typer.Option(True, help="generate pvi PVs and opi files"),
 ):
     do_generate([instance], definitions, output_folder, pvi)
+
+
+def place_runtime_files(config_dir: Path) -> None:
+    """Place declared runtime artifacts from an IOC instance config folder.
+
+    Copies the runtime input files vendored / dropped into ``config_dir`` into
+    the runtime search-path locations the IOC boot expects, so support patterns
+    (StreamDevice protos, extra db/templates) work with no per-image start.sh
+    fork:
+
+      - ``*.proto`` / ``*.protocol`` -> ``GLOBALS.RUNTIME_PROTOCOL``
+        (the directory ``STREAM_PROTOCOL_PATH`` points at)
+      - ``*.db`` / ``*.template``    -> ``GLOBALS.RUNTIME_DB``
+
+    Files are copied (not symlinked) so the runtime stage is self-contained,
+    matching the behaviour of the start.sh proto-copy this step replaces.
+    """
+    placements = [
+        (("*.proto", "*.protocol"), GLOBALS.RUNTIME_PROTOCOL),
+        (("*.db", "*.template"), GLOBALS.RUNTIME_DB),
+    ]
+    for patterns, target in placements:
+        for pattern in patterns:
+            for src in sorted(config_dir.glob(pattern)):
+                target.mkdir(parents=True, exist_ok=True)
+                shutil.copy2(src, target / src.name)
 
 
 def do_generate(

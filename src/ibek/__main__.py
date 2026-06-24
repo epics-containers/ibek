@@ -5,6 +5,7 @@ from ibek._version import __version__
 from ibek.dev_cmds.commands import dev_cli
 from ibek.globals import NaturalOrderGroup
 from ibek.ioc_cmds.commands import ioc_cli
+from ibek.pattern_cmds.commands import pattern_cli
 from ibek.runtime_cmds.commands import runtime_cli
 from ibek.support_cmds.commands import support_cli
 
@@ -29,6 +30,11 @@ cli.add_typer(
     dev_cli,
     name="dev",
     help="Commands for working inside Generic IOC development containers",
+)
+cli.add_typer(
+    pattern_cli,
+    name="pattern",
+    help="Commands for vendoring runtime-support patterns into a services repo",
 )
 
 yaml = YAML()
