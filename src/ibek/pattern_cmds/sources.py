@@ -96,7 +96,9 @@ def _clone_pattern(uri: str, name: str, version: str | None, dest: Path) -> Path
     cmd = ["git", "clone", "--depth", "1", "--quiet"]
     if version:
         cmd += ["--branch", version]
-    cmd += [uri, str(clone_dir)]
+    # ``--`` terminates option parsing so a uri/path beginning with ``-`` (from
+    # IBEK_PATTERN_LIBRARIES, --source, or a lock label) cannot be read as a flag.
+    cmd += ["--", uri, str(clone_dir)]
     result = subprocess.run(cmd, capture_output=True, text=True)
     if result.returncode != 0:
         raise PatternError(

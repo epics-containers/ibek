@@ -59,6 +59,24 @@ def _vendor_files(
     return files
 
 
+def _prune_orphans(config_dir: Path, orphans: set[str]) -> None:
+    """Delete files the previous lock vendored that the new file-set dropped.
+
+    Removes each orphaned path and any parent directories it leaves empty, so a
+    file renamed/removed upstream (or dropped by a version change) cannot linger
+    under ``config/`` and be placed into the IOC by ``ibek runtime place-files``
+    at boot. Scoped to one pattern's prior ``files`` keys, so it never touches
+    another pattern's or user-authored files.
+    """
+    for rel in sorted(orphans):
+        target = config_dir / rel
+        target.unlink(missing_ok=True)
+        parent = target.parent
+        while parent != config_dir and parent.is_dir() and not any(parent.iterdir()):
+            parent.rmdir()
+            parent = parent.parent
+
+
 def _do_vendor(
     ref: PatternRef,
     instance_dir: Path,
@@ -131,11 +149,13 @@ def update(
         if pattern_name not in lock.patterns:
             raise PatternError(f"pattern {pattern_name!r} not in lock")
         existing = lock.patterns[pattern_name]
+        old_files = set(existing.files)
         new_version = version or existing.version
         ref = PatternRef(name=pattern_name, version=new_version)
         label, resolved_version, files = _do_vendor(
             ref, instance_dir, source_override or existing.source, extra_libraries
         )
+        _prune_orphans(_config_dir(instance_dir), old_files - set(files))
         lock.set_pattern(pattern_name, resolved_version, label, files)
     lock.save()
     generate_instance_schema(instance_dir)
@@ -156,6 +176,7 @@ def restore(
         if pattern_name not in lock.patterns:
             raise PatternError(f"pattern {pattern_name!r} not in lock")
         entry = lock.patterns[pattern_name]
+        old_files = set(entry.files)
         ref = PatternRef(name=pattern_name, version=entry.version)
         with tempfile.TemporaryDirectory() as tmp:
             pattern_dir = fetch_pattern(
@@ -164,7 +185,8 @@ def restore(
                 ref.version,
                 Path(tmp),
             )
-            _vendor_files(pattern_dir, config_dir, entry.source, entry.version)
+            files = _vendor_files(pattern_dir, config_dir, entry.source, entry.version)
+        _prune_orphans(config_dir, old_files - set(files))
     generate_instance_schema(instance_dir)
 
 

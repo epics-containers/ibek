@@ -23,8 +23,9 @@ from ibek.globals import BaseSettings
 # format a pattern currently carries (yaml / proto / template / db / req).
 VENDOR_HEADER_TEMPLATE = "{comment} Vendored from {source}@{version} — DO NOT EDIT"
 
-# Map a file suffix to its line-comment prefix. ``#`` is the default and covers
-# all current pattern file types; extend here when a comment-less format appears.
+# Map a file suffix to its line-comment prefix. ``#`` is the default and is
+# correct for every pattern file type today; add an entry here only for a future
+# format whose line comment is not ``#``.
 COMMENT_PREFIXES: dict[str, str] = {
     ".proto": "#",
     ".protocol": "#",
@@ -43,20 +44,19 @@ DEFAULT_COMMENT_PREFIX = "#"
 DIRTY_MARKER = "DIRTY"
 
 
-def comment_prefix(path: Path) -> str | None:
-    """Return the line-comment prefix for ``path``, or None if comment-less.
+def comment_prefix(path: Path) -> str:
+    """Return the line-comment prefix for ``path``.
 
-    A None result means no header can be injected for this file type; the file
-    is still vendored and hashed, just without a provenance header.
+    ``#`` is correct for every format a pattern currently carries (yaml / proto
+    / template / db / req / cmd) and is the fallback for any other suffix, so a
+    provenance header can always be injected.
     """
     return COMMENT_PREFIXES.get(path.suffix, DEFAULT_COMMENT_PREFIX)
 
 
-def vendored_header(path: Path, source: str, version: str) -> str | None:
+def vendored_header(path: Path, source: str, version: str) -> str:
     """Build the deterministic vendored header line for ``path``."""
     prefix = comment_prefix(path)
-    if prefix is None:
-        return None
     return VENDOR_HEADER_TEMPLATE.format(comment=prefix, source=source, version=version)
 
 
@@ -67,8 +67,6 @@ def stamp_content(rel_path: Path, content: bytes, source: str, version: str) -> 
     (no header upstream) follows unchanged. Returns the exact bytes to write.
     """
     header = vendored_header(rel_path, source, version)
-    if header is None:
-        return content
     return (header + "\n").encode() + content
 
 

@@ -189,6 +189,31 @@ def test_update_moves_version(tmp_path: Path, library: Path):
     assert vendor.check(instance).ok
 
 
+def test_update_prunes_orphaned_files(tmp_path: Path, library: Path):
+    """A file dropped by the new version must leave neither disk nor lock residue."""
+    instance = make_instance(tmp_path)
+    # give the pattern a nested file so we also exercise empty-dir pruning
+    (library / "mydevice" / "db").mkdir()
+    (library / "mydevice" / "db" / "extra.db").write_text('record(ai, "X") {}\n')
+    vendor.add("mydevice@1.0.0", instance, source_override=str(library))
+    nested = instance / "config" / "db" / "extra.db"
+    assert nested.exists()
+
+    # the new version drops the nested db file entirely
+    (library / "mydevice" / "db" / "extra.db").unlink()
+    vendor.update("mydevice", instance, version="2.0.0", source_override=str(library))
+
+    assert not nested.exists()  # orphan removed from disk
+    assert not nested.parent.exists()  # now-empty config/db/ pruned
+    lock = RuntimeLock(instance / RUNTIME_LOCK_NAME)
+    assert "db/extra.db" not in lock.patterns["mydevice"].files  # gone from the lock
+    assert set(lock.patterns["mydevice"].files) == {
+        "mydevice.proto",
+        "mydevice.ibek.support.yaml",
+    }
+    assert vendor.check(instance).ok
+
+
 def test_restore_reverts_local_edit(tmp_path: Path, library: Path):
     instance = make_instance(tmp_path)
     vendor.add("mydevice@1.0.0", instance, source_override=str(library))
