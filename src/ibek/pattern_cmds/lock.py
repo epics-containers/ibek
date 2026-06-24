@@ -122,6 +122,8 @@ class RuntimeLock:
         }
         yaml = YAML()
         yaml.default_flow_style = False
+        # Keep each "<file>: sha256:<hex>" on one line (do not wrap long hashes).
+        yaml.width = 4096
         if not data:
             # An empty lock is removed rather than left as an empty document.
             if self.path.exists():
