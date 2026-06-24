@@ -3,6 +3,9 @@ Tests for the ``ibek pattern`` runtime-support vendoring subsystem.
 """
 
 import json
+import os
+import subprocess
+import sys
 from pathlib import Path
 
 import pytest
@@ -264,6 +267,33 @@ def test_merge_entities_grafts_new_types(samples: Path):
     one_of = merged["properties"]["entities"]["items"]["oneOf"]
     refs = [o["$ref"] for o in one_of]
     assert len(refs) == len(set(refs))
+
+
+def test_merge_entities_byte_stable_across_hashseed(samples: Path):
+    """Merge output must not depend on PYTHONHASHSEED.
+
+    The per-instance ioc.schema.json is committed and CI/pre-commit re-generate
+    it and diff-fail on drift, so the merge must be byte-stable across processes
+    (set/closure iteration order must not leak into the output).
+    """
+    support = sorted((samples / "support").glob("*.ibek.support.yaml"))
+    script = (
+        "import json;"
+        "from pathlib import Path;"
+        "from ibek.pattern_cmds.schema import generate_schema_dict, merge_entities;"
+        f"b=generate_schema_dict([Path(r'{support[0]}')]);"
+        f"m=merge_entities(b,[Path(r'{support[1]}')]);"
+        "print(json.dumps(m, indent=2))"
+    )
+    outputs = []
+    for seed in ("0", "1", "42"):
+        env = {**os.environ, "PYTHONHASHSEED": seed}
+        result = subprocess.run(
+            [sys.executable, "-c", script], capture_output=True, text=True, env=env
+        )
+        assert result.returncode == 0, result.stderr
+        outputs.append(result.stdout)
+    assert outputs[0] == outputs[1] == outputs[2]
 
 
 # --------------------------------------------------------------------------- #

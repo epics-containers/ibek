@@ -174,11 +174,15 @@ def merge_entities(base: dict, support_yamls: list[Path]) -> dict:
             needed.add(ref)
             queue.append(ref)
 
-    for name in needed:
+    # Copy and extend in sorted order so the produced schema is byte-stable
+    # across runs (set/closure iteration order is otherwise non-deterministic,
+    # which would make the CI/pre-commit schema-freshness diff fail spuriously).
+    for name in sorted(needed):
         if name in extra_defs and name not in base_defs:
             base_defs[name] = extra_defs[name]
 
-    for disc, key in new_entities.items():
+    for disc in sorted(new_entities):
+        key = new_entities[disc]
         base_union["oneOf"].append({"$ref": f"#/$defs/{key}"})
         base_mapping[disc] = f"#/$defs/{key}"
 
