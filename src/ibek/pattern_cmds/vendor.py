@@ -152,8 +152,12 @@ def update(
         old_files = set(existing.files)
         new_version = version or existing.version
         ref = PatternRef(name=pattern_name, version=new_version)
+        # ``existing.source`` is the lock *label* (scheme-stripped by
+        # ``source_label``); map it back to a fetchable URI, exactly as restore
+        # does, so a github source clones over https rather than as a local path.
+        source = source_override or _source_uri(existing.source, extra_libraries)
         label, resolved_version, files = _do_vendor(
-            ref, instance_dir, source_override or existing.source, extra_libraries
+            ref, instance_dir, source, extra_libraries
         )
         _prune_orphans(_config_dir(instance_dir), old_files - set(files))
         lock.set_pattern(pattern_name, resolved_version, label, files)
@@ -180,7 +184,7 @@ def restore(
         ref = PatternRef(name=pattern_name, version=entry.version)
         with tempfile.TemporaryDirectory() as tmp:
             pattern_dir = fetch_pattern(
-                _restore_uri(entry.source, extra_libraries),
+                _source_uri(entry.source, extra_libraries),
                 ref.name,
                 ref.version,
                 Path(tmp),
@@ -190,8 +194,13 @@ def restore(
     generate_instance_schema(instance_dir)
 
 
-def _restore_uri(source: str, extra_libraries: dict[str, str] | None) -> str:
-    """Map a recorded lock ``source`` label back to a fetchable URI."""
+def _source_uri(source: str, extra_libraries: dict[str, str] | None) -> str:
+    """Map a recorded lock ``source`` label back to a fetchable URI.
+
+    Used by both update and restore: the lock stores the scheme-stripped label
+    (``source_label``), so a github source must be turned back into an https URL
+    before it is handed to ``git clone``.
+    """
     from .sources import library_registry
 
     for uri in library_registry(extra_libraries).values():

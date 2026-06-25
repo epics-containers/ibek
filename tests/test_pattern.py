@@ -226,6 +226,41 @@ def test_restore_reverts_local_edit(tmp_path: Path, library: Path):
     assert "getX" in proto.read_text()
 
 
+def test_update_reconstructs_scheme_for_github_lock_label(
+    tmp_path: Path, library: Path, mocker
+):
+    """update must resolve the scheme-stripped lock label back to an https URI.
+
+    The lock records ``source`` via ``source_label`` (scheme stripped), so a
+    github source is stored as ``github.com/org/repo``. Re-vendoring with no
+    explicit --source must hand ``git clone`` a real ``https://`` URL, not the
+    bare label (which git would treat as a non-existent local path). Restore
+    already did this; this guards update against regressing the asymmetry.
+    """
+    instance = make_instance(tmp_path)
+    vendor.add("mydevice@1.0.0", instance, source_override=str(library))
+    # rewrite the lock to look as if it had been vendored from github
+    lock = RuntimeLock(instance / RUNTIME_LOCK_NAME)
+    lock.patterns[
+        "mydevice"
+    ].source = "github.com/epics-containers/ibek-runtime-streamdevice"
+    lock.save()
+
+    # capture the URI update hands to the fetcher; serve files from the local lib
+    captured: dict[str, str] = {}
+
+    def fake_fetch(uri: str, name: str, version, dest: Path) -> Path:
+        captured["uri"] = uri
+        return library / name
+
+    mocker.patch.object(vendor, "fetch_pattern", side_effect=fake_fetch)
+
+    vendor.update("mydevice", instance)
+    assert captured["uri"] == (
+        "https://github.com/epics-containers/ibek-runtime-streamdevice"
+    )
+
+
 # --------------------------------------------------------------------------- #
 # qualified-name parsing
 # --------------------------------------------------------------------------- #
