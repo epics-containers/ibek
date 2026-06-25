@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>2. Adopt python-copier-template for project structure &#8212; ibek 4.6.1.dev5+gaf5526748 documentation</title>
+    <title>3. Vendored pattern tag is the authority &#8212; ibek 4.6.1.dev5+gaf5526748 documentation</title>
   
   
   
@@ -47,7 +47,7 @@
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
     <script src="../../_static/copybutton.js?v=30646c52"></script>
     <script src="../../_static/design-tabs.js?v=f930bc37"></script>
-    <script>DOCUMENTATION_OPTIONS.pagename = 'explanations/decisions/0002-switched-to-python-copier-template';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'explanations/decisions/0003-vendored-pattern-tag-is-authority';</script>
     <script>
         DOCUMENTATION_OPTIONS.theme_version = '0.16.1';
         DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://epics-containers.github.io/ibek/switcher.json';
@@ -58,8 +58,8 @@
     <link rel="icon" href="../../_static/dls-logo.svg"/>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="3. Vendored pattern tag is the authority" href="0003-vendored-pattern-tag-is-authority.html" />
-    <link rel="prev" title="1. Record architecture decisions" href="0001-record-architecture-decisions.html" />
+    <link rel="next" title="4. Vendor runtime support over submodule + symlink" href="0004-vendor-runtime-support-over-submodules.html" />
+    <link rel="prev" title="2. Adopt python-copier-template for project structure" href="0002-switched-to-python-copier-template.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="main" />
@@ -399,8 +399,8 @@
   <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
 <li class="toctree-l1 current active has-children"><a class="reference internal" href="../decisions.html">Architectural Decision Records</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="0001-record-architecture-decisions.html">1. Record architecture decisions</a></li>
-<li class="toctree-l2 current active"><a class="current reference internal" href="#">2. Adopt python-copier-template for project structure</a></li>
-<li class="toctree-l2"><a class="reference internal" href="0003-vendored-pattern-tag-is-authority.html">3. Vendored pattern tag is the authority</a></li>
+<li class="toctree-l2"><a class="reference internal" href="0002-switched-to-python-copier-template.html">2. Adopt python-copier-template for project structure</a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">3. Vendored pattern tag is the authority</a></li>
 <li class="toctree-l2"><a class="reference internal" href="0004-vendor-runtime-support-over-submodules.html">4. Vendor runtime support over submodule + symlink</a></li>
 </ul>
 </details></li>
@@ -451,7 +451,7 @@
     
     <li class="breadcrumb-item"><a href="../decisions.html" class="nav-link">Architectural Decision Records</a></li>
     
-    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">2. Adopt python-copier-template for project structure</span></li>
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">3. Vendored pattern tag is the authority</span></li>
   </ul>
 </nav>
 </div>
@@ -468,34 +468,50 @@
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section id="adopt-python-copier-template-for-project-structure">
-<h1>2. Adopt python-copier-template for project structure<a class="headerlink" href="#adopt-python-copier-template-for-project-structure" title="Link to this heading">#</a></h1>
+  <section id="vendored-pattern-tag-is-the-authority">
+<h1>3. Vendored pattern tag is the authority<a class="headerlink" href="#vendored-pattern-tag-is-the-authority" title="Link to this heading">#</a></h1>
 <section id="status">
 <h2>Status<a class="headerlink" href="#status" title="Link to this heading">#</a></h2>
 <p>Accepted</p>
 </section>
 <section id="context">
 <h2>Context<a class="headerlink" href="#context" title="Link to this heading">#</a></h2>
-<p>We should use the following <a class="reference external" href="https://github.com/DiamondLightSource/python-copier-template">python-copier-template</a>.
-The template will ensure consistency in developer
-environments and package management.</p>
+<p><code class="docutils literal notranslate"><span class="pre">ibek</span> <span class="pre">pattern</span></code> vendors a runtime-support pattern from a central library into an
+IOC instance at a pinned version. The files are copied into the instance’s
+<code class="docutils literal notranslate"><span class="pre">config/</span></code> with a <code class="docutils literal notranslate"><span class="pre">#</span> <span class="pre">Vendored</span> <span class="pre">from</span> <span class="pre">&lt;source&gt;&#64;&lt;version&gt;</span> <span class="pre">—</span> <span class="pre">DO</span> <span class="pre">NOT</span> <span class="pre">EDIT</span></code> header, and
+each file’s SHA-256 is recorded in <code class="docutils literal notranslate"><span class="pre">runtime-lock.yaml</span></code> at the instance root.</p>
+<p>This raises the question of where the <em>authority</em> for a pattern’s content lives:
+the upstream library at its tag, or the hashes captured in the lock. The two
+answers lead to materially different behaviour for <code class="docutils literal notranslate"><span class="pre">update</span></code> and <code class="docutils literal notranslate"><span class="pre">restore</span></code>, and
+to whether the lock must defend against upstream content changing under a tag.</p>
 </section>
 <section id="decision">
 <h2>Decision<a class="headerlink" href="#decision" title="Link to this heading">#</a></h2>
-<p>We have switched to using the template.</p>
+<p>The <strong>upstream library at its tag is the source of truth</strong>, and tags are
+treated as <strong>immutable</strong> (a published tag is never moved to a new commit).</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">runtime-lock.yaml</span></code> SHA-256 entries are an <strong>integrity check for local
+drift only</strong> — they let <code class="docutils literal notranslate"><span class="pre">ibek</span> <span class="pre">pattern</span> <span class="pre">check</span></code> detect hand-edits to vendored
+files. They are deliberately <em>not</em> a content store and <em>not</em> a tamper-evident
+pin against the upstream library.</p>
 </section>
 <section id="consequences">
 <h2>Consequences<a class="headerlink" href="#consequences" title="Link to this heading">#</a></h2>
-<p>This module will use a fixed set of tools as developed in <code class="docutils literal notranslate"><span class="pre">python-copier-template</span></code>
-and can pull from this template to update the packaging to the latest techniques.</p>
-<p>As such, the developer environment may have changed, the following could be
-different:</p>
 <ul class="simple">
-<li><p>linting</p></li>
-<li><p>formatting</p></li>
-<li><p>pip venv setup</p></li>
-<li><p>CI/CD</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">restore</span></code> re-clones the pattern at the recorded tag and overwrites the
+vendored files, trusting the fetched bytes. It does not verify them against
+the recorded hashes and keeps the lock unchanged.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">update</span></code> with no <code class="docutils literal notranslate"><span class="pre">--version</span></code> re-vendors the <em>same</em> tag and re-records the
+hashes; <code class="docutils literal notranslate"><span class="pre">update</span> <span class="pre">--version</span> <span class="pre">X</span></code> moves the pin. Because tags are immutable,
+<code class="docutils literal notranslate"><span class="pre">update</span></code> with no <code class="docutils literal notranslate"><span class="pre">--version</span></code> and <code class="docutils literal notranslate"><span class="pre">restore</span></code> produce identical bytes, and
+<code class="docutils literal notranslate"><span class="pre">check</span></code> remains a pure local-drift signal.</p></li>
+<li><p>A yank or retag of an upstream pattern version is accepted behaviour, not a
+case the tooling defends against — re-pin to a new immutable tag instead.</p></li>
+<li><p>We do not add restore-side hash verification or a local content cache. Either
+would only matter if the immutable-tag policy were abandoned; revisit this ADR
+if that ever changes.</p></li>
 </ul>
+<p>See <a class="reference internal" href="0004-vendor-runtime-support-over-submodules.html"><span class="std std-doc">ADR 4</span></a> for the underlying
+decision to vendor runtime support in the first place.</p>
 </section>
 </section>
 
@@ -510,20 +526,20 @@ different:</p>
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="0001-record-architecture-decisions.html"
+       href="0002-switched-to-python-copier-template.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">1. Record architecture decisions</p>
+        <p class="prev-next-title">2. Adopt python-copier-template for project structure</p>
       </div>
     </a>
     <a class="right-next"
-       href="0003-vendored-pattern-tag-is-authority.html"
+       href="0004-vendor-runtime-support-over-submodules.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">3. Vendored pattern tag is the authority</p>
+        <p class="prev-next-title">4. Vendor runtime support over submodule + symlink</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -557,7 +573,7 @@ different:</p>
 
   
   <div class="tocsection editthispage">
-    <a href="https://github.com/epics-containers/ibek/edit/main/docs/explanations/decisions/0002-switched-to-python-copier-template.md">
+    <a href="https://github.com/epics-containers/ibek/edit/main/docs/explanations/decisions/0003-vendored-pattern-tag-is-authority.md">
       <i class="fa-solid fa-pencil"></i>
       
       
@@ -573,7 +589,7 @@ different:</p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
-      <li><a href="../../_sources/explanations/decisions/0002-switched-to-python-copier-template.md.txt"
+      <li><a href="../../_sources/explanations/decisions/0003-vendored-pattern-tag-is-authority.md.txt"
             rel="nofollow">Show Source</a></li>
     </ul>
    </div></div>
