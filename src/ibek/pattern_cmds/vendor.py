@@ -83,7 +83,14 @@ def _do_vendor(
     source_override: str | None,
     extra_libraries: dict[str, str] | None,
 ) -> tuple[str, str, dict[str, str]]:
-    """Fetch + vendor ``ref`` into the instance; return (source_label, version, files)."""
+    """Fetch + vendor ``ref`` into the instance; return (source_label, version, files).
+
+    An explicit ``source_override`` (a user ``--source`` or a recorded lock
+    label) is normalised to a fetchable URI here — the single point every caller
+    (add / update / restore) shares, so none can clone a scheme-stripped label.
+    """
+    if source_override:
+        source_override = _source_uri(source_override, extra_libraries)
     uri, candidates = resolve_source(ref, source_override, extra_libraries)
     config_dir = _config_dir(instance_dir)
     config_dir.mkdir(parents=True, exist_ok=True)
@@ -133,6 +140,42 @@ def add(
     generate_instance_schema(instance_dir)
 
 
+def _locked_names(lock: RuntimeLock, name: str | None, verb: str) -> list[str]:
+    """Resolve a ``--name`` (or all patterns) against the lock, validating each."""
+    if not lock.patterns:
+        raise PatternError(f"no patterns to {verb} in {lock.path.parent}")
+    names = [name] if name else list(lock.patterns)
+    for pattern_name in names:
+        if pattern_name not in lock.patterns:
+            raise PatternError(f"pattern {pattern_name!r} not in lock")
+    return names
+
+
+def _revendor(
+    instance_dir: Path,
+    name: str,
+    version: str | None,
+    source: str,
+    old_files: set[str],
+    extra_libraries: dict[str, str] | None,
+) -> tuple[str, str, dict[str, str]]:
+    """Re-fetch an already-locked pattern and rewrite its files in place.
+
+    The single fetch path shared by update and restore, so they can never
+    diverge on how a recorded ``source`` is resolved. ``source`` (a lock label
+    or an explicit override) is normalised to a fetchable URI inside
+    ``_do_vendor``; files dropped relative to ``old_files`` are pruned. Returns
+    the ``(label, version, files)`` the caller records — restore discards it and
+    leaves the lock untouched, since its rewritten bytes reproduce the pin.
+    """
+    ref = PatternRef(name=name, version=version)
+    label, resolved_version, files = _do_vendor(
+        ref, instance_dir, source, extra_libraries
+    )
+    _prune_orphans(_config_dir(instance_dir), old_files - set(files))
+    return label, resolved_version, files
+
+
 def update(
     name: str | None,
     instance_dir: Path,
@@ -142,24 +185,16 @@ def update(
 ) -> None:
     """Re-vendor one (or all) patterns, optionally moving the pinned version."""
     lock = RuntimeLock(_lock_path(instance_dir))
-    if not lock.patterns:
-        raise PatternError(f"no patterns to update in {instance_dir}")
-    names = [name] if name else list(lock.patterns)
-    for pattern_name in names:
-        if pattern_name not in lock.patterns:
-            raise PatternError(f"pattern {pattern_name!r} not in lock")
+    for pattern_name in _locked_names(lock, name, "update"):
         existing = lock.patterns[pattern_name]
-        old_files = set(existing.files)
-        new_version = version or existing.version
-        ref = PatternRef(name=pattern_name, version=new_version)
-        # ``existing.source`` is the lock *label* (scheme-stripped by
-        # ``source_label``); map it back to a fetchable URI, exactly as restore
-        # does, so a github source clones over https rather than as a local path.
-        source = source_override or _source_uri(existing.source, extra_libraries)
-        label, resolved_version, files = _do_vendor(
-            ref, instance_dir, source, extra_libraries
+        label, resolved_version, files = _revendor(
+            instance_dir,
+            pattern_name,
+            version or existing.version,
+            source_override or existing.source,
+            set(existing.files),
+            extra_libraries,
         )
-        _prune_orphans(_config_dir(instance_dir), old_files - set(files))
         lock.set_pattern(pattern_name, resolved_version, label, files)
     lock.save()
     generate_instance_schema(instance_dir)
@@ -172,34 +207,25 @@ def restore(
 ) -> None:
     """Revert vendored files to the pinned version recorded in the lock."""
     lock = RuntimeLock(_lock_path(instance_dir))
-    if not lock.patterns:
-        raise PatternError(f"no patterns to restore in {instance_dir}")
-    names = [name] if name else list(lock.patterns)
-    config_dir = _config_dir(instance_dir)
-    for pattern_name in names:
-        if pattern_name not in lock.patterns:
-            raise PatternError(f"pattern {pattern_name!r} not in lock")
+    for pattern_name in _locked_names(lock, name, "restore"):
         entry = lock.patterns[pattern_name]
-        old_files = set(entry.files)
-        ref = PatternRef(name=pattern_name, version=entry.version)
-        with tempfile.TemporaryDirectory() as tmp:
-            pattern_dir = fetch_pattern(
-                _source_uri(entry.source, extra_libraries),
-                ref.name,
-                ref.version,
-                Path(tmp),
-            )
-            files = _vendor_files(pattern_dir, config_dir, entry.source, entry.version)
-        _prune_orphans(config_dir, old_files - set(files))
+        _revendor(
+            instance_dir,
+            pattern_name,
+            entry.version,
+            entry.source,
+            set(entry.files),
+            extra_libraries,
+        )
     generate_instance_schema(instance_dir)
 
 
 def _source_uri(source: str, extra_libraries: dict[str, str] | None) -> str:
     """Map a recorded lock ``source`` label back to a fetchable URI.
 
-    Used by both update and restore: the lock stores the scheme-stripped label
-    (``source_label``), so a github source must be turned back into an https URL
-    before it is handed to ``git clone``.
+    The lock stores the scheme-stripped label (``source_label``), so a github
+    source must be turned back into an https URL before it is handed to
+    ``git clone``. Idempotent on a source that is already a full URI or path.
     """
     from .sources import library_registry
 

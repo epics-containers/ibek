@@ -226,16 +226,18 @@ def test_restore_reverts_local_edit(tmp_path: Path, library: Path):
     assert "getX" in proto.read_text()
 
 
-def test_update_reconstructs_scheme_for_github_lock_label(
-    tmp_path: Path, library: Path, mocker
+@pytest.mark.parametrize("operation", [vendor.update, vendor.restore])
+def test_revendor_reconstructs_scheme_for_github_lock_label(
+    tmp_path: Path, library: Path, mocker, operation
 ):
-    """update must resolve the scheme-stripped lock label back to an https URI.
+    """update *and* restore must resolve a scheme-stripped lock label to https.
 
     The lock records ``source`` via ``source_label`` (scheme stripped), so a
     github source is stored as ``github.com/org/repo``. Re-vendoring with no
     explicit --source must hand ``git clone`` a real ``https://`` URL, not the
-    bare label (which git would treat as a non-existent local path). Restore
-    already did this; this guards update against regressing the asymmetry.
+    bare label (which git would treat as a non-existent local path). Both verbs
+    share ``_do_vendor``, so both are exercised here — the original bug was that
+    only restore normalised the label while update cloned it raw.
     """
     instance = make_instance(tmp_path)
     vendor.add("mydevice@1.0.0", instance, source_override=str(library))
@@ -246,7 +248,7 @@ def test_update_reconstructs_scheme_for_github_lock_label(
     ].source = "github.com/epics-containers/ibek-runtime-streamdevice"
     lock.save()
 
-    # capture the URI update hands to the fetcher; serve files from the local lib
+    # capture the URI handed to the fetcher; serve files from the local lib
     captured: dict[str, str] = {}
 
     def fake_fetch(uri: str, name: str, version, dest: Path) -> Path:
@@ -255,7 +257,7 @@ def test_update_reconstructs_scheme_for_github_lock_label(
 
     mocker.patch.object(vendor, "fetch_pattern", side_effect=fake_fetch)
 
-    vendor.update("mydevice", instance)
+    operation("mydevice", instance)
     assert captured["uri"] == (
         "https://github.com/epics-containers/ibek-runtime-streamdevice"
     )
