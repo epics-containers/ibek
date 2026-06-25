@@ -47,6 +47,15 @@ SourceOpt = Annotated[
     ),
 ]
 
+NameOpt = Annotated[
+    str | None,
+    typer.Option(
+        "--name",
+        "-n",
+        help="Restrict to a single pattern by name (default: all in the lock)",
+    ),
+]
+
 
 def _fail(exc: Exception) -> None:
     log.error(str(exc))
@@ -75,11 +84,8 @@ def add(
 
 @pattern_cli.command()
 def update(
-    name: Annotated[
-        str | None,
-        typer.Argument(help="Pattern name to update (default: all in the lock)"),
-    ] = None,
     instance: InstanceArg = Path("."),
+    name: NameOpt = None,
     version: Annotated[
         str | None,
         typer.Option("--version", "-v", help="New pinned version to vendor"),
@@ -120,11 +126,8 @@ def check(
 
 @pattern_cli.command()
 def restore(
-    name: Annotated[
-        str | None,
-        typer.Argument(help="Pattern name to restore (default: all in the lock)"),
-    ] = None,
     instance: InstanceArg = Path("."),
+    name: NameOpt = None,
 ):
     """Revert vendored files to the version pinned in runtime-lock.yaml."""
     try:
