@@ -128,6 +128,7 @@ def generate(
     ),
     pvi: bool = typer.Option(True, help="generate pvi PVs and opi files"),
 ):
+    """LEGACY single-instance generate; superseded by `generate2`."""
     do_generate([instance], definitions, output_folder, pvi)
 
 

@@ -49,6 +49,10 @@ extensions = [
     "sphinx_design",
     # So we can write markdown files
     "myst_parser",
+    # Auto-generate the CLI reference from the Typer app
+    "sphinxcontrib.typer",
+    # Render Mermaid diagrams in the explanations pages
+    "sphinxcontrib.mermaid",
 ]
 
 # So we can use the ::: syntax
