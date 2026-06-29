@@ -22,6 +22,7 @@ from ibek.pattern_cmds.lock import (
     vendored_header,
 )
 from ibek.pattern_cmds.schema import (
+    find_image,
     generate_instance_schema,
     generate_schema_dict,
     merge_entities,
@@ -60,11 +61,22 @@ def library(tmp_path: Path) -> Path:
     return tmp_path / "lib"
 
 
-def make_instance(root: Path, image: str = "REPLACE_WITH_IMAGE_URI") -> Path:
-    """Create a minimal IOC instance folder."""
+def make_instance(
+    root: Path, image: str = "REPLACE_WITH_IMAGE_URI", compose: bool = False
+) -> Path:
+    """Create a minimal IOC instance folder.
+
+    Helm instances pin the image in ``values.yaml``; compose instances pin it in
+    ``compose.yml`` (``compose=True``).
+    """
     instance = root / "bl01t-ea-test-01"
     (instance / "config").mkdir(parents=True)
-    (instance / "values.yaml").write_text(f"ioc-instance:\n  image: {image}\n")
+    if compose:
+        (instance / "compose.yml").write_text(
+            f"services:\n  bl01t-ea-test-01:\n    image: {image}\n"
+        )
+    else:
+        (instance / "values.yaml").write_text(f"ioc-instance:\n  image: {image}\n")
     (instance / "config" / "ioc.yaml").write_text(
         "# yaml-language-server: $schema=/epics/ibek-defs/ioc.schema.json\n"
         "ioc_name: test\nentities: []\n"
@@ -382,6 +394,37 @@ def test_generate_instance_schema_merges_and_rewrites_header(
     mapping = produced["properties"]["entities"]["items"]["discriminator"]["mapping"]
     assert "mydevice.mydevice" in mapping  # vendored entity merged into base
     # ioc.yaml header rewritten to the sibling schema
+    header = (instance / "config" / "ioc.yaml").read_text().splitlines()[0]
+    assert header == f"# yaml-language-server: $schema=../{IOC_SCHEMA_NAME}"
+
+
+def test_find_image_reads_compose_yml(tmp_path: Path):
+    image = "ghcr.io/epics-containers/ioc-adsimdetector-runtime:2.11ec3"
+    instance = make_instance(tmp_path, image=image, compose=True)
+    assert not (instance / "values.yaml").exists()
+    assert find_image(instance) == image
+
+
+def test_generate_instance_schema_compose_merges_and_rewrites_header(
+    tmp_path: Path, library: Path, samples: Path, monkeypatch
+):
+    instance = make_instance(
+        tmp_path,
+        image="ghcr.io/epics-containers/ioc-adsimdetector-runtime:2025.11.1",
+        compose=True,
+    )
+    monkeypatch.setenv("IBEK_SCHEMA_CACHE", str(tmp_path / "cache"))
+    support = sorted((samples / "support").glob("*.ibek.support.yaml"))
+    base = generate_schema_dict([support[0]])
+    monkeypatch.setattr(schema, "_http_get", lambda url: json.dumps(base).encode())
+    vendor.add("mydevice@1.0.0", instance, source_override=str(library))
+
+    assert generate_instance_schema(instance) is True
+    schema_file = instance / IOC_SCHEMA_NAME
+    assert schema_file.exists()
+    produced = json.loads(schema_file.read_text())
+    mapping = produced["properties"]["entities"]["items"]["discriminator"]["mapping"]
+    assert "mydevice.mydevice" in mapping
     header = (instance / "config" / "ioc.yaml").read_text().splitlines()[0]
     assert header == f"# yaml-language-server: $schema=../{IOC_SCHEMA_NAME}"
 
