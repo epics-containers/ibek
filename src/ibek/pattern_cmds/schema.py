@@ -192,12 +192,27 @@ def merge_entities(base: dict, support_yamls: list[Path]) -> dict:
 # --------------------------------------------------------------------------- #
 # instance schema
 # --------------------------------------------------------------------------- #
+# Instance image is pinned in ``values.yaml`` (helm) or ``compose.yml`` (compose).
+IMAGE_SOURCES = ("values.yaml", "compose.yml", "compose.yaml")
+
+
 def find_image(instance_dir: Path) -> str | None:
-    """Find the IOC image ref in an instance's ``values.yaml``."""
-    values = instance_dir / "values.yaml"
-    if not values.exists():
+    """Find the IOC image ref in an instance's ``values.yaml`` or ``compose.yml``.
+
+    Helm instances pin the image in ``values.yaml``; compose instances pin it in
+    ``compose.yml`` / ``compose.yaml``. The first of these that exists is searched.
+    """
+    source = next(
+        (
+            instance_dir / name
+            for name in IMAGE_SOURCES
+            if (instance_dir / name).exists()
+        ),
+        None,
+    )
+    if source is None:
         return None
-    data = YAML(typ="safe").load(values) or {}
+    data = YAML(typ="safe").load(source) or {}
 
     found: list[str] = []
 
@@ -242,7 +257,8 @@ def generate_instance_schema(instance_dir: Path) -> bool:
     if image is None:
         print(
             f"Schema not found for {instance_dir.name}: "
-            "no published image pinned in values.yaml; skipping schema generation"
+            "no published image pinned in values.yaml/compose.yml; "
+            "skipping schema generation"
         )
         return False
     try:
