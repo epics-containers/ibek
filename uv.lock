@@ -24,6 +24,15 @@ wheels = [
 ]
 
 [[package]]
+name = "annotated-doc"
+version = "0.0.4"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/57/ba/046ceea27344560984e26a590f90bc7f4a75b06701f653222458922b558c/annotated_doc-0.0.4.tar.gz", hash = "sha256:fbcda96e87e9c92ad167c2e53839e57503ecfda18804ea28102353485033faa4", size = 7288, upload-time = "2025-11-10T22:07:42.062Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/1e/d3/26bf1008eb3d2daa8ef4cacc7f3bfdc11818d111f7e2d0201bc6e3b49d45/annotated_doc-0.0.4-py3-none-any.whl", hash = "sha256:571ac1dc6991c450b25a9c2d84a3705e2ae7a53467b5d111c24fa8baabbed320", size = 5303, upload-time = "2025-11-10T22:07:40.673Z" },
+]
+
+[[package]]
 name = "annotated-types"
 version = "0.7.0"
 source = { registry = "https://pypi.org/simple" }
@@ -357,6 +366,8 @@ dev = [
     { name = "sphinx-autobuild" },
     { name = "sphinx-copybutton" },
     { name = "sphinx-design" },
+    { name = "sphinxcontrib-mermaid" },
+    { name = "sphinxcontrib-typer" },
     { name = "tox-uv" },
     { name = "types-mock" },
     { name = "types-requests" },
@@ -387,6 +398,8 @@ dev = [
     { name = "sphinx-autobuild" },
     { name = "sphinx-copybutton" },
     { name = "sphinx-design" },
+    { name = "sphinxcontrib-mermaid" },
+    { name = "sphinxcontrib-typer" },
     { name = "tox-uv" },
     { name = "types-mock" },
     { name = "types-requests" },
@@ -1237,6 +1250,20 @@ wheels = [
 ]
 
 [[package]]
+name = "sphinxcontrib-mermaid"
+version = "2.0.2"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "jinja2" },
+    { name = "pyyaml" },
+    { name = "sphinx" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/19/75/3a1cc926da8c563c58ddc124a7b3fe5ccadcae96c96e3a6f8ac3653a210a/sphinxcontrib_mermaid-2.0.2.tar.gz", hash = "sha256:f09576c78ca93fa0e3034fd9c45aaffa7c44ab449de9c43b8b8d262afe52bc66", size = 19265, upload-time = "2026-05-05T13:59:02.959Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/16/8d/93be7e0f7fa915a576859b3bfac7a7baa3303181c44d7db7eefbd3e8a69f/sphinxcontrib_mermaid-2.0.2-py3-none-any.whl", hash = "sha256:d862e514991279fb4816302c5cfe167d2557bf3ce7125ae0cb47dac80a0f46ce", size = 14094, upload-time = "2026-05-05T13:59:01.585Z" },
+]
+
+[[package]]
 name = "sphinxcontrib-qthelp"
 version = "2.0.0"
 source = { registry = "https://pypi.org/simple" }
@@ -1252,6 +1279,19 @@ source = { registry = "https://pypi.org/simple" }
 sdist = { url = "https://files.pythonhosted.org/packages/3b/44/6716b257b0aa6bfd51a1b31665d1c205fb12cb5ad56de752dfa15657de2f/sphinxcontrib_serializinghtml-2.0.0.tar.gz", hash = "sha256:e9d912827f872c029017a53f0ef2180b327c3f7fd23c87229f7a8e8b70031d4d", size = 16080, upload-time = "2024-07-29T01:10:09.332Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/52/a7/d2782e4e3f77c8450f727ba74a8f12756d5ba823d81b941f1b04da9d033a/sphinxcontrib_serializinghtml-2.0.0-py3-none-any.whl", hash = "sha256:6e2cb0eef194e10c27ec0023bfeb25badbbb5868244cf5bc5bdc04e4464bf331", size = 92072, upload-time = "2024-07-29T01:10:08.203Z" },
+]
+
+[[package]]
+name = "sphinxcontrib-typer"
+version = "0.7.2"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "sphinx" },
+    { name = "typer-slim", extra = ["standard"] },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/03/cc/bbcc7e53406cdc8b0d811187d4ea0bd4f44a1edc661ef2837bf77710ee4a/sphinxcontrib_typer-0.7.2.tar.gz", hash = "sha256:1ae59bb3a599d263468a2bf854748a8ed07ebd5c90045f641b99867f157a92b8", size = 377299, upload-time = "2025-12-23T06:19:35.966Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/c4/0d/15a3111b3dda6453efab021c347645b7fe1a9feb73f51b6992ace2a4e350/sphinxcontrib_typer-0.7.2-py3-none-any.whl", hash = "sha256:334f5d84c616b476336c0024f5a67d8f8b0125737892c14337d76773ff4f66ac", size = 14524, upload-time = "2025-12-23T06:19:34.811Z" },
 ]
 
 [[package]]
@@ -1313,6 +1353,25 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/36/bf/8825b5929afd84d0dabd606c67cd57b8388cb3ec385f7ef19c5cc2202069/typer-0.21.1.tar.gz", hash = "sha256:ea835607cd752343b6b2b7ce676893e5a0324082268b48f27aa058bdb7d2145d", size = 110371, upload-time = "2026-01-06T11:21:10.989Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/a0/1d/d9257dd49ff2ca23ea5f132edf1281a0c4f9de8a762b9ae399b670a59235/typer-0.21.1-py3-none-any.whl", hash = "sha256:7985e89081c636b88d172c2ee0cfe33c253160994d47bdfdc302defd7d1f1d01", size = 47381, upload-time = "2026-01-06T11:21:09.824Z" },
+]
+
+[[package]]
+name = "typer-slim"
+version = "0.21.2"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "annotated-doc" },
+    { name = "click" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/a5/ca/0d9d822fd8a4c7e830cba36a2557b070d4b4a9558a0460377a61f8fb315d/typer_slim-0.21.2.tar.gz", hash = "sha256:78f20d793036a62aaf9c3798306142b08261d4b2a941c6e463081239f062a2f9", size = 120497, upload-time = "2026-02-10T19:33:45.836Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/54/03/e09325cfc40a33a82b31ba1a3f1d97e85246736856a45a43b19fcb48b1c2/typer_slim-0.21.2-py3-none-any.whl", hash = "sha256:4705082bb6c66c090f60e47c8be09a93158c139ce0aa98df7c6c47e723395e5f", size = 56790, upload-time = "2026-02-10T19:33:47.221Z" },
+]
+
+[package.optional-dependencies]
+standard = [
+    { name = "rich" },
+    { name = "shellingham" },
 ]
 
 [[package]]

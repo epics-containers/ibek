@@ -7,6 +7,16 @@
 
 IOC builder for EPICS and Kubernetes
 
+ibek is the [epics-containers](https://epics-containers.github.io) IOC builder.
+It declaratively defines EPICS IOC instances for containers and Kubernetes,
+separating a *generic IOC image* (which bundles a set of EPICS support modules)
+from an *IOC instance* (a YAML description of what that image should run). From
+that YAML, ibek generates the IOC startup script (`st.cmd`) and EPICS database
+that the container runs. Recent versions also add `ibek pattern` for vendoring
+runtime-support patterns into a services repo. See the
+[documentation](https://epics-containers.github.io/ibek) for the overview and
+tutorials.
+
 
 Source          | <https://github.com/epics-containers/ibek>
 :---:           | :---:
