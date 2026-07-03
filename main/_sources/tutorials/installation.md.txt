@@ -1,8 +1,17 @@
 # Installation
 
+```{note}
+ibek normally runs *inside* a generic IOC container image, where it is already
+installed and where it has access to the EPICS support modules it needs. The
+direct `pip` install below is mainly for trying out the command line interface
+or for local development of ibek itself. For the bigger picture see the
+[overview](../explanations/overview.md) and the
+[epics-containers](https://epics-containers.github.io) ecosystem.
+```
+
 ## Check your version of python
 
-You will need python 3.11 or later. You can check your version of python by
+You will need python 3.13 or later. You can check your version of python by
 typing into a terminal:
 
 ```
@@ -40,3 +49,6 @@ You can check the version that has been installed by typing:
 ```
 $ ibek --version
 ```
+
+For an end-to-end walkthrough of building an IOC, see
+[Build an IOC](./build-an-ioc.md).

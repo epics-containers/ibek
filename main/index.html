@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>ibek &#8212; ibek 4.6.2.dev2+g4ae56845f documentation</title>
+    <title>ibek &#8212; ibek 4.6.3.dev2+gfa5cf51da documentation</title>
   
   
   
@@ -41,7 +41,7 @@
   <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
 <link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
-    <script src="_static/documentation_options.js?v=91bf97a9"></script>
+    <script src="_static/documentation_options.js?v=46d46448"></script>
     <script src="_static/doctools.js?v=fd6eb6e6"></script>
     <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="_static/clipboard.min.js?v=a7894cd8"></script>
@@ -423,6 +423,15 @@
 <section id="ibek">
 <h1>ibek<a class="headerlink" href="#ibek" title="Link to this heading">#</a></h1>
 <p>IOC builder for EPICS and Kubernetes</p>
+<p>ibek is the <a class="reference external" href="https://epics-containers.github.io">epics-containers</a> IOC builder.
+It declaratively defines EPICS IOC instances for containers and Kubernetes,
+separating a <em>generic IOC image</em> (which bundles a set of EPICS support modules)
+from an <em>IOC instance</em> (a YAML description of what that image should run). From
+that YAML, ibek generates the IOC startup script (<code class="docutils literal notranslate"><span class="pre">st.cmd</span></code>) and EPICS database
+that the container runs. Recent versions also add <code class="docutils literal notranslate"><span class="pre">ibek</span> <span class="pre">pattern</span></code> for vendoring
+runtime-support patterns into a services repo. See the
+<a class="reference external" href="https://epics-containers.github.io/ibek">documentation</a> for the overview and
+tutorials.</p>
 <div class="pst-scrollable-table-container"><table class="table">
 <thead>
 <tr class="row-odd"><th class="head text-center"><p>Source</p></th>
@@ -457,6 +466,7 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="tutorials.html">Tutorials</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="tutorials/installation.html">Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorials/build-an-ioc.html">Build your first IOC instance</a></li>
 </ul>
 </li>
 </ul>
@@ -475,6 +485,7 @@
 <div class="toctree-wrapper compound">
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="how-to.html">How-to Guides</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="how-to/vendor-runtime-patterns.html">Vendor runtime-support patterns into a services repo</a></li>
 <li class="toctree-l2"><a class="reference internal" href="how-to/contribute.html">Contribute to the project</a></li>
 </ul>
 </li>
@@ -494,8 +505,9 @@
 <div class="toctree-wrapper compound">
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="explanations.html">Explanations</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="explanations/overview.html">Overview: what ibek is and its core concepts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="explanations/architecture.html">Architecture and data flow</a></li>
 <li class="toctree-l2"><a class="reference internal" href="explanations/decisions.html">Architectural Decision Records</a></li>
-<li class="toctree-l2"><a class="reference internal" href="explanations/entities.html">Modules, Definitions and Entities</a></li>
 </ul>
 </li>
 </ul>
@@ -514,6 +526,10 @@
 <div class="toctree-wrapper compound">
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="reference.html">Reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="reference/cli.html">CLI reference</a></li>
+<li class="toctree-l2"><a class="reference internal" href="reference/support-yaml.html">Support module YAML reference (<code class="docutils literal notranslate"><span class="pre">*.ibek.support.yaml</span></code>)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="reference/ioc-yaml.html">IOC instance YAML and schemas reference</a></li>
+<li class="toctree-l2"><a class="reference internal" href="reference/jinja-context.html">Jinja template context reference</a></li>
 <li class="toctree-l2"><a class="reference internal" href="_api/ibek.html">API</a></li>
 <li class="toctree-l2"><a class="reference internal" href="genindex.html">Index</a></li>
 <li class="toctree-l2"><a class="reference external" href="https://github.com/epics-containers/ibek/releases">Release Notes</a></li>
