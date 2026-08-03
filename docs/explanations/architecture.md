@@ -180,7 +180,13 @@ rebuilding the generic-IOC image.
 - Each IOC instance keeps **vendored copies** of the support patterns it uses,
   pinned by a lock file named `runtime-lock.yaml` (`RUNTIME_LOCK_NAME` in
   `globals.py`). The lock records exactly which version of each pattern the
-  instance is using.
+  instance is using, and hashes every vendored file under a key **relative to
+  the destination root** (`config/x.proto`, not `x.proto`).
+- **Which files are vendored, and where they land, is declared per pattern** by
+  an optional [`ibek.manifest.yaml`](../reference/pattern-manifest.md) in the
+  library. It is an ordered, first-match-wins allow-list; a pattern with no
+  manifest is vendored through a synthesised "everything into `config/`" default,
+  so there is only one vendoring path.
 - [`ibek pattern schema`](../reference/cli.md) builds a **self-contained**
   instance schema. It fetches the image's *published base entities schema*
   (the release asset `ibek.ioc.schema.json`) and programmatically merges the
@@ -197,7 +203,9 @@ using git submodules and symlinks. The move from submodules to vendored copies,
 and the reasons for it, are recorded in
 [ADR 0004](decisions/0004-vendor-runtime-support-over-submodules.md); the
 related decision that the vendored pattern tag is the source of authority is
-[ADR 0003](decisions/0003-vendored-pattern-tag-is-authority.md).
+[ADR 0003](decisions/0003-vendored-pattern-tag-is-authority.md), and the
+manifest that declares what a pattern vendors is
+[ADR 0005](decisions/0005-pattern-manifest-declares-what-is-vendored.md).
 
 This page stays at the architecture level — the operational steps for
 vendoring, checking and restoring patterns live in the

@@ -132,11 +132,12 @@ vendoring** mechanism, driven by the `ibek pattern` commands.
 A *pattern* is a named, versioned file-set held in a central library — for
 example `ibek-runtime-streamdevice` or `ibek-runtime-support`. Rather than
 sharing those files by reference, each IOC instance **vendors its own copy**:
-`ibek pattern` copies the file-set into the instance's `config/`, stamps each
-file with a `# Vendored from <source>@<version> — DO NOT EDIT` header, and
-records every file's SHA-256 in a `runtime-lock.yaml` at the instance root. The
-committed instance is then self-contained — the lock answers "what is this IOC
-actually running?" without depending on anything outside the instance.
+`ibek pattern` copies the files the pattern's `ibek.manifest.yaml` declares
+(by default, everything, into the instance's `config/`) and records every file's
+SHA-256 in a `runtime-lock.yaml` at the instance root. The copies are
+byte-identical to the library at its tag. The committed instance is then
+self-contained — the lock answers "what is this IOC actually running?" without
+depending on anything outside the instance.
 
 This **replaces an older git-submodule-plus-symlink model**, in which a
 pattern's effective version was tied to the build image and to whatever the
@@ -155,9 +156,10 @@ Two points about the lock are worth fixing in your mind, because they shape how
 To actually vendor, update, check and restore patterns, follow the how-to guide
 {doc}`Vendor runtime-support patterns <../how-to/vendor-runtime-patterns>`. The
 reasoning behind this design is recorded in the architecture decision records
-{doc}`ADR 3 — Vendored pattern tag is the authority <decisions/0003-vendored-pattern-tag-is-authority>`
+{doc}`ADR 3 — Vendored pattern tag is the authority <decisions/0003-vendored-pattern-tag-is-authority>`,
+{doc}`ADR 4 — Vendor runtime support over submodule + symlink <decisions/0004-vendor-runtime-support-over-submodules>`
 and
-{doc}`ADR 4 — Vendor runtime support over submodule + symlink <decisions/0004-vendor-runtime-support-over-submodules>`.
+{doc}`ADR 5 — A pattern declares what is vendored <decisions/0005-pattern-manifest-declares-what-is-vendored>`.
 
 ## Where to go next
 

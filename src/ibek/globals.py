@@ -115,8 +115,9 @@ SUPPORT_YAML_PATTERN = "*ibek.support.yaml"
 PVI_YAML_PATTERN = "*pvi.device.yaml"
 AUTOSAVE_PATTERN = "*.req"
 
-# Runtime-support vendoring (ibek pattern) artifacts. These live at the IOC
-# instance root (NOT in config/, which is the K8s ConfigMap, runtime inputs only).
+# Runtime-support vendoring (ibek pattern) artifacts. These live at the
+# destination root (NOT in config/, which for an IOC instance is the K8s
+# ConfigMap — runtime inputs only, and therefore the usual vendoring target).
 RUNTIME_LOCK_NAME = "runtime-lock.yaml"
 IOC_SCHEMA_NAME = "ioc.schema.json"
 

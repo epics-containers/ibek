@@ -185,7 +185,7 @@ published base schema for the image pinned by the instance — with the entity
 models from the instance's own vendored / local support files. Produce it with:
 
 ```bash
-ibek pattern schema [INSTANCE]
+ibek pattern schema [DEST]
 ```
 
 This writes `ioc.schema.json` at the instance root and rewrites the instance's
