@@ -21,11 +21,22 @@ The two central libraries are **`ibek-runtime-streamdevice`** and
 `[library:]name[@version]`, e.g. `ibek-runtime-streamdevice:lakeshore340@1.0.0`.
 ```
 
+```{warning}
+**Breaking change.** `runtime-lock.yaml` files written before this release are
+invalidated twice over: the lock keys are now relative to the instance root
+(`config/x.proto`, not `x.proto`), and the hashes no longer include the vendored
+header, which has been removed. Recovery is a single
+`ibek pattern update <instance>` — with no `--name`, so that every pattern in the
+lock is re-vendored at its pinned version and the lock is rewritten whole.
+`check` names that command when it sees an old lock.
+```
+
 ## Mental model
 
-- Vendored files are **real copies, not symlinks**. Each carries a header line
-  `# Vendored from <source>@<version> — DO NOT EDIT` and is reproduced
-  byte-for-byte from the upstream library at its tag.
+- Vendored files are **real copies, not symlinks**, and are reproduced
+  **byte-for-byte** from the upstream library at its tag — nothing is injected or
+  rewritten on the way in. `diff -r <instance>/config/ <library>/<pattern>/` on a
+  clean instance is therefore empty.
 - `runtime-lock.yaml` records a per-file **SHA-256** that is a **local-drift
   integrity check only**. It detects hand-edits to vendored files in the
   instance — it is *not* a tamper-evident pin against the upstream library and
@@ -33,6 +44,35 @@ The two central libraries are **`ibek-runtime-streamdevice`** and
 - The **upstream library tag is the source of truth**, and tags are treated as
   immutable. `restore` and `update` (without a new version) both re-fetch the
   same tag and therefore reproduce identical bytes.
+
+```{note}
+Because the files carry no DO-NOT-EDIT marker of their own, `ibek pattern check`
+is the *only* thing standing between a well-meaning edit and a silent divergence.
+Keep the pre-commit hook and `ci_verify.sh` running it without `--allow-dirty`.
+```
+
+## What gets vendored
+
+A pattern folder may carry an **`ibek.manifest.yaml`** declaring which of its
+files are vendored and where they land. This is how a library keeps browsable
+documentation alongside its runtime files without shipping the docs into an IOC:
+
+```yaml
+version: 1
+vendor:
+  - src: '.*\.(template|proto|protocol|db|req|ibek\.support\.yaml)$'
+    dest: config
+```
+
+`src` is a regular expression matched (with `re.fullmatch`) against each file's
+path relative to the pattern folder; `dest` is a folder relative to the instance
+root, joined with that path so nesting is preserved. The list is an ordered,
+first-match-wins **allow-list** — a file matched by no entry is not vendored.
+
+**A pattern with no manifest behaves exactly as before**: every file, into
+`config/`. You do not need to add one unless a pattern contains files that must
+*not* reach the instance. The full format, including validation rules, is in the
+[manifest reference](../reference/pattern-manifest.md).
 
 ## 1. Add a pattern
 
@@ -50,9 +90,10 @@ pins no published image or the published base schema cannot be fetched. The
 pattern is still vendored and the lock still updated.
 ```
 
-The instance argument is the **second** positional and defaults to `.` (the
-current directory), so run the command from inside the IOC instance folder, or
-name it explicitly:
+The destination argument (shown as `DEST` in `--help`, because vendoring is not
+IOC-specific — for a services repo it is always an instance folder) is the
+**second** positional and defaults to `.` (the current directory), so run the
+command from inside the IOC instance folder, or name it explicitly:
 
 ```bash
 ibek pattern add ibek-runtime-streamdevice:lakeshore340@1.0.0 services/bl01t-ea-ts-01
@@ -154,6 +195,7 @@ you have only changed local support definitions, or after a manual lock edit.
 
 | File | Location | Role |
 | --- | --- | --- |
-| Vendored pattern files | `<instance>/config/` | Real copies with the DO-NOT-EDIT header; placed into the IOC at boot. |
-| `runtime-lock.yaml` | `<instance>/` | Per-pattern version + source label + per-file SHA-256 (local-drift check). |
+| Vendored pattern files | `<instance>/config/` | Real copies, byte-identical to the library at its tag; placed into the IOC at boot. |
+| `ibek.manifest.yaml` | `<library>/<pattern>/` | Optional, in the *library*: declares which files are vendored and where. Never vendored itself. |
+| `runtime-lock.yaml` | `<instance>/` | Per-pattern version + source label + per-file SHA-256 (local-drift check), keyed relative to the instance root. |
 | `ioc.schema.json` | `<instance>/` | Self-contained schema merging the base image schema with vendored + local support. |

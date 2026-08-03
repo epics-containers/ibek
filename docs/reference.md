@@ -8,6 +8,7 @@ Technical reference material: the CLI, support/IOC YAML schemas, the Jinja templ
 reference/cli
 reference/support-yaml
 reference/ioc-yaml
+reference/pattern-manifest
 reference/jinja-context
 API <_api/ibek>
 genindex
