@@ -19,7 +19,9 @@ ibek pattern update services/my-ioc --name lakeshore340 --version 1.1.0
 ```
 
 These examples assume the named pattern and tag exist in your library. The
-instance argument defaults to `.`. Without a library qualifier ibek tries
+destination argument (shown as `DEST` in `--help`, because vendoring is not
+IOC-specific) defaults to `.`, so run the command from inside the IOC instance
+folder, or name it explicitly. Without a library qualifier ibek tries
 registered libraries in order. Without a version it uses the remote default
 branch and records `HEAD`; that is not an immutable pin.
 
@@ -33,6 +35,16 @@ Local sources use the current files in `<source>/<pattern>`; the version is
 only a recorded label, not a checkout. `IBEK_PATTERN_LIBRARIES` can configure
 additional named libraries; see {doc}`../reference/paths-and-environment`.
 
+## What gets vendored
+
+A pattern folder may carry an `ibek.manifest.yaml` declaring which of its
+files are vendored and where they land — how a library keeps documentation
+alongside its runtime files without shipping the docs into an IOC. A pattern
+with [no manifest](../reference/pattern-manifest.md#no-manifest) is vendored
+through a default that puts every file into `config/`; most patterns need
+nothing more. The full format, including validation rules, is in the
+[manifest reference](../reference/pattern-manifest.md).
+
 ## Check and restore
 
 ```bash
@@ -40,9 +52,11 @@ ibek pattern check services/my-ioc
 ibek pattern restore services/my-ioc --name lakeshore340
 ```
 
-Vendored copies have a provenance header. Hashes cover those exact bytes and
-detect local changes against the lock; they do not authenticate the upstream
-tag. `restore` overwrites files from the recorded source and version without
+Vendored files are real copies, byte-for-byte identical to the upstream
+library at its tag. `runtime-lock.yaml` records a per-file SHA-256 that
+`check` uses to detect local changes to those files; it is a local-drift
+integrity check only, not a tamper-evident pin against the upstream library.
+`restore` overwrites files from the recorded source and version without
 changing the lock. `update` also refreshes hashes; without `--version` it
 reuses the recorded version. Both remove files dropped by the selected
 pattern. Omit `--name` to process every locked pattern.
@@ -53,6 +67,31 @@ pattern. Omit `--name` to process every locked pattern.
 such as `"DIRTY # testing a protocol change"`; that entry is skipped with a
 warning, even if the file is missing. A missing or empty lock has nothing to
 check and succeeds. Extra untracked files are not checked.
+
+### Unrecognised locks
+
+`ibek` reads and writes exactly one `runtime-lock.yaml` shape: a `version:` /
+`patterns:` root, with keys relative to the instance root (`config/x.proto`,
+not `x.proto`). `check`, `add` and `update` refuse a lock in any other shape,
+printing something like:
+
+```
+error: <instance>/runtime-lock.yaml: lock format not recognised; convert it
+with 'uv run scripts/convert-runtime-lock.py <lock>' ...
+```
+
+Convert the lock in place, from an `ibek` checkout:
+
+```bash
+uv run scripts/convert-runtime-lock.py <instance>/runtime-lock.yaml
+```
+
+This rewrites the lock's own text only — it never touches the vendored files,
+so their recorded hashes still verify. Re-run `check`; from there `add`,
+`update` and `restore` all work on the converted lock exactly as on any other.
+The script is standalone (a `scripts/` entry point carrying its own PEP 723
+dependency), not part of the installed `ibek` package, so it runs against any
+instance's lock without first vendoring anything.
 
 ## Instance schemas
 

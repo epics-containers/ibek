@@ -43,3 +43,27 @@ pin against the upstream library.
 
 See [ADR 4](./0004-vendor-runtime-support-over-submodules.md) for the underlying
 decision to vendor runtime support in the first place.
+
+## Amendment (ibek#361)
+
+The Context above describes the vendored files as carrying a
+`# Vendored from <source>@<version> — DO NOT EDIT` header. **That header has been
+removed.** The decision recorded here — that the upstream tag is the authority
+and the lock is a local-drift check only — is unchanged, and is in fact
+*strengthened* by the removal:
+
+- Vendored files are now **byte-identical** to the library at its tag, so
+  `diff -r <dest>/config/ <library>/<pattern>/` verifies an instance against
+  upstream directly. The header made that impossible: every file differed from
+  its upstream by one line, so "did this come from the tag?" could only be
+  answered through ibek.
+- Provenance moves entirely into `runtime-lock.yaml`, which is adjacent,
+  committed and authoritative — and was already the only thing anything read.
+- Enforcement of *do not edit* moves entirely to `ibek pattern check` via the
+  pre-commit hook and `ci_verify.sh`. That raises the stakes on those hooks being
+  correct: the file no longer says "do not edit" to the person opening it.
+
+Which files are vendored, and where they land, is now declared per pattern by
+`ibek.manifest.yaml` (see
+[ADR 5](./0005-pattern-manifest-declares-what-is-vendored.md)); this does not
+affect where the authority for their *content* lives.

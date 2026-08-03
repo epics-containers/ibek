@@ -44,3 +44,31 @@ base schema.
 - The central libraries become the single upstream source for patterns; see
   [ADR 3](./0003-vendored-pattern-tag-is-authority.md) for how their tags relate
   to the lock.
+
+## Amendment (ibek#361)
+
+The Decision and Consequences above describe a deterministic
+`# Vendored from <source>@<version> — DO NOT EDIT` header prepended to each
+vendored file. **The header is gone.** The decision to vendor rather than
+submodule is unchanged; the mechanism is amended as follows.
+
+- **No header.** Nothing ever read it — it was write-only — and the
+  `#`-for-any-unknown-suffix fallback was a guess that could only corrupt: the
+  build-time libraries carry `.patch`, `.json` and `.cpp`, none of which survive
+  a leading `#` line. Provenance now lives solely in `runtime-lock.yaml`, which
+  is adjacent, committed and authoritative.
+- **Vendored files are real files, not symlinks** — and that is now enforced from
+  both ends: a **symlink anywhere in a pattern folder is refused** at vendor
+  time, not followed, not vendored and not hashed. Previously `rglob` + `is_file`
+  silently dereferenced a good link and silently skipped a broken one, so a
+  symlink to `/etc/passwd` in a library repo would have been vendored.
+- **What is copied, and where, is declared by the pattern** in an
+  `ibek.manifest.yaml`, rather than being hard-coded as "every file into
+  `config/`". A pattern with no manifest behaves exactly as before. See
+  [ADR 5](./0005-pattern-manifest-declares-what-is-vendored.md).
+- **Lock keys are relative to the destination root**, not to `config/`, and the
+  lock gained a `version:` / `patterns:` root wrapper.
+
+Existing locks are invalidated twice over — rebased keys and hashes computed
+without the header. This is deliberate, both changes land in the same release,
+and recovery is `ibek pattern update`.
