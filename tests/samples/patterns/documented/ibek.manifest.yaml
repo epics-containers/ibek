@@ -1,0 +1,4 @@
+version: 1
+vendor:
+  - src: '.*\.(template|proto|protocol|db|req|ibek\.support\.yaml)$'
+    dest: config

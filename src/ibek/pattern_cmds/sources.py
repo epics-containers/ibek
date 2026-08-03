@@ -90,6 +90,22 @@ def _local_path(uri: str) -> Path:
     return Path(uri[len("file://") :] if uri.startswith("file://") else uri)
 
 
+def _refuse_symlinked_pattern(pattern_dir: Path, name: str, source: str) -> None:
+    """Refuse a pattern folder that is itself a symlink.
+
+    The vendorer refuses symlinks *inside* a pattern folder, but it can only see
+    what it is given: a symlinked folder is dereferenced by ``is_dir()`` and by
+    ``copytree`` (whose ``symlinks=True`` preserves links found *within* the
+    tree, not the root it is pointed at), so its target's files would arrive as
+    ordinary files with the escape already erased. Checked here, before either.
+    """
+    if pattern_dir.is_symlink():
+        raise PatternError(
+            f"pattern {name!r} in {source_label(source)} is a symlink; symlinks in "
+            "a pattern library are refused - not followed, not vendored, not hashed"
+        )
+
+
 def _clone_pattern(uri: str, name: str, version: str | None, dest: Path) -> Path:
     """Clone ``uri`` at ``version`` and return the ``name`` pattern folder."""
     clone_dir = dest / "clone"
@@ -105,6 +121,7 @@ def _clone_pattern(uri: str, name: str, version: str | None, dest: Path) -> Path
             f"failed to clone {uri}@{version or 'HEAD'}: {result.stderr.strip()}"
         )
     pattern_dir = clone_dir / name
+    _refuse_symlinked_pattern(pattern_dir, name, uri)
     if not pattern_dir.is_dir():
         raise PatternError(
             f"pattern {name!r} not found in {source_label(uri)}@{version or 'HEAD'}"
@@ -119,11 +136,16 @@ def fetch_pattern(uri: str, name: str, version: str | None, dest: Path) -> Path:
     """
     if _is_local(uri):
         pattern_dir = _local_path(uri) / name
+        _refuse_symlinked_pattern(pattern_dir, name, uri)
         if not pattern_dir.is_dir():
             raise PatternError(f"pattern {name!r} not found in local library {uri}")
         # Copy so the caller always works against a private, stable tree.
+        # ``symlinks=True`` stages a link *as a link*: the default dereferences,
+        # which would materialise whatever a link points at (``/etc/passwd``, a
+        # sibling folder) as a real file and hide it from the vendorer's
+        # symlink refusal. A git clone already materialises links as links.
         staged = dest / name
-        shutil.copytree(pattern_dir, staged)
+        shutil.copytree(pattern_dir, staged, symlinks=True)
         return staged
     return _clone_pattern(uri, name, version, dest)
 

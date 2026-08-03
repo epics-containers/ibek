@@ -196,13 +196,13 @@ def merge_entities(base: dict, support_yamls: list[Path]) -> dict:
 IMAGE_SOURCES = ("values.yaml", "compose.yml", "compose.yaml")
 
 
-def find_image(instance_dir: Path) -> str | None:
-    """Find the IOC image ref in an instance's ``values.yaml`` or ``compose.yml``.
+def _image_source(instance_dir: Path) -> Path | None:
+    """Return the file an instance pins its image in, if it has one.
 
-    Helm instances pin the image in ``values.yaml``; compose instances pin it in
-    ``compose.yml`` / ``compose.yaml``. The first of these that exists is searched.
+    The single definition of "does this folder look like an IOC instance at
+    all?" — a destination with neither file is simply not an instance.
     """
-    source = next(
+    return next(
         (
             instance_dir / name
             for name in IMAGE_SOURCES
@@ -210,6 +210,25 @@ def find_image(instance_dir: Path) -> str | None:
         ),
         None,
     )
+
+
+def is_instance(instance_dir: Path) -> bool:
+    """True if ``instance_dir`` looks like an IOC instance at all.
+
+    Lets a caller that asked for a schema *explicitly* explain why it did
+    nothing, while ``add`` / ``update`` stay silent about a destination that was
+    never meant to have one.
+    """
+    return _image_source(instance_dir) is not None
+
+
+def find_image(instance_dir: Path) -> str | None:
+    """Find the IOC image ref in an instance's ``values.yaml`` or ``compose.yml``.
+
+    Helm instances pin the image in ``values.yaml``; compose instances pin it in
+    ``compose.yml`` / ``compose.yaml``. The first of these that exists is searched.
+    """
+    source = _image_source(instance_dir)
     if source is None:
         return None
     data = YAML(typ="safe").load(source) or {}
@@ -249,10 +268,15 @@ def rewrite_ioc_yaml_header(ioc_yaml: Path) -> None:
 def generate_instance_schema(instance_dir: Path) -> bool:
     """Generate ``<instance>/ioc.schema.json`` and rewrite the ``ioc.yaml`` header.
 
-    Returns True if a schema was written, False if the published base schema for
-    the instance's image could not be found (reported, not an error).
+    Returns True if a schema was written, False if the destination is not an IOC
+    instance (silent) or the published base schema for the instance's image could
+    not be found (reported, not an error).
     """
     config_dir = instance_dir / "config"
+    if not is_instance(instance_dir):
+        # No values.yaml/compose.yml at all: this destination is not an IOC
+        # instance, so there is no schema to generate and nothing to say.
+        return False
     image = find_image(instance_dir)
     if image is None:
         print(
