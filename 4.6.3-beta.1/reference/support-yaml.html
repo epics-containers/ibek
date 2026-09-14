@@ -1,0 +1,1392 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Support module YAML reference (*.ibek.support.yaml) &#8212; ibek 4.6.3b1 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=cb8930eaaf36d9849b67" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=cb8930eaaf36d9849b67" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../_static/graphviz.css?v=4ae1632d" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinxcontrib_typer.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="../_static/scripts/fontawesome.js?digest=cb8930eaaf36d9849b67"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=cb8930eaaf36d9849b67" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=cb8930eaaf36d9849b67" />
+
+    <script src="../_static/documentation_options.js?v=a84d1cb6"></script>
+    <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=30646c52"></script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'reference/support-yaml';</script>
+    <script>
+        DOCUMENTATION_OPTIONS.theme_version = '0.21.0';
+        DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://epics-containers.github.io/ibek/switcher.json';
+        DOCUMENTATION_OPTIONS.theme_switcher_version_match = '4.6.3b1';
+        DOCUMENTATION_OPTIONS.show_version_warning_banner =
+            false;
+        </script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <link rel="icon" href="../_static/dls-logo.svg"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="IOC instance YAML and schemas reference" href="ioc-yaml.html" />
+    <link rel="prev" title="CLI reference" href="cli.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="4.6.3b1" />
+  
+    
+    <script src="../_static/searchtools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../searchindex.js"></script>
+  
+  </head>
+  <body data-default-mode="">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/dls-logo.svg" class="logo__image only-light" alt=""/>
+    <img src="../_static/dls-logo.svg" class="logo__image only-dark pst-js-only" alt=""/>
+  
+  
+    <p class="title logo__title">ibek</p>
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../tutorials.html">
+    Tutorials
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../how-to.html">
+    How-to Guides
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../explanations.html">
+    Explanations
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../reference.html">
+    Reference
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/epics-containers/ibek" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://pypi.org/project/ibek" title="PyPI" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fas fa-cube fa-lg" aria-hidden="true"></i><span class="visually-hidden">PyPI</span></a>
+        </li>
+</ul></div>
+      
+        <div class="navbar-item">
+<div class="version-switcher__container dropdown pst-js-only">
+  <button id="pst-version-switcher-button-2"
+    type="button"
+    class="version-switcher__button btn btn-sm dropdown-toggle"
+    data-bs-toggle="dropdown"
+    aria-haspopup="listbox"
+    aria-controls="pst-version-switcher-list-2"
+    aria-label="Version switcher list"
+  >
+    Choose version  <!-- this text may get changed later by javascript -->
+    <span class="caret"></span>
+  </button>
+  <div id="pst-version-switcher-list-2"
+    class="version-switcher__menu dropdown-menu list-group-flush py-0"
+    role="listbox" aria-labelledby="pst-version-switcher-button-2">
+    <!-- dropdown will be populated by javascript on page load -->
+  </div>
+</div></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../tutorials.html">
+    Tutorials
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../how-to.html">
+    How-to Guides
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../explanations.html">
+    Explanations
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../reference.html">
+    Reference
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/epics-containers/ibek" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://pypi.org/project/ibek" title="PyPI" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fas fa-cube fa-lg" aria-hidden="true"></i><span class="visually-hidden">PyPI</span></a>
+        </li>
+</ul></div>
+        
+          <div class="navbar-item">
+<div class="version-switcher__container dropdown pst-js-only">
+  <button id="pst-version-switcher-button-3"
+    type="button"
+    class="version-switcher__button btn btn-sm dropdown-toggle"
+    data-bs-toggle="dropdown"
+    aria-haspopup="listbox"
+    aria-controls="pst-version-switcher-list-3"
+    aria-label="Version switcher list"
+  >
+    Choose version  <!-- this text may get changed later by javascript -->
+    <span class="caret"></span>
+  </button>
+  <div id="pst-version-switcher-list-3"
+    class="version-switcher__menu dropdown-menu list-group-flush py-0"
+    role="listbox" aria-labelledby="pst-version-switcher-button-3">
+    <!-- dropdown will be populated by javascript on page load -->
+  </div>
+</div></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item pst-sidebar-collapse"><button id="pst-collapse-sidebar-button" aria-expanded="true" aria-controls="pst-primary-sidebar">
+  <svg class="pst-icon" role="img" aria-hidden="true" focusable="false" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+    <path fill="currentColor" d="M3 15.5C2.36232 15.5 1.74874 15.2564 1.28478 14.8189C0.820828 14.3815 0.541576 13.7832 0.504167 13.1467L0.5 13L0.5 3C0.499965 2.36232 0.743605 1.74874 1.18107 1.28478C1.61854 0.820828 2.21676 0.541576 2.85333 0.504167L3 0.5L13 0.5C13.6377 0.499965 14.2513 0.743605 14.7152 1.18107C15.1792 1.61854 15.4584 2.21676 15.4958 2.85333L15.5 3L15.5 13C15.5 13.6377 15.2564 14.2513 14.8189 14.7152C14.3815 15.1792 13.7832 15.4584 13.1467 15.4958L13 15.5L3 15.5ZM3 13.8333L10.5 13.8333L10.5 2.16667L3 2.16667C2.79589 2.16669 2.59889 2.24163 2.44636 2.37726C2.29383 2.5129 2.19638 2.69979 2.1725 2.9025L2.16667 3L2.16667 13C2.16669 13.2041 2.24163 13.4011 2.37726 13.5536C2.5129 13.7062 2.69979 13.8036 2.9025 13.8275L3 13.8333ZM6.65583 10.325L6.5775 10.2558L4.91083 8.58917C4.76735 8.44567 4.68116 8.25476 4.66843 8.05223C4.65569 7.84971 4.71729 7.6495 4.84167 7.48917L4.91083 7.41083L6.5775 5.74417C6.72747 5.59471 6.9287 5.50794 7.14032 5.50148C7.35194 5.49502 7.55809 5.56935 7.7169 5.70937C7.8757 5.8494 7.97525 6.04463 7.99533 6.25539C8.01541 6.46616 7.95451 6.67667 7.825 6.84417L7.75583 6.9225L6.67917 8L7.75583 9.0775C7.89931 9.22099 7.98551 9.41191 7.99824 9.61443C8.01097 9.81695 7.94938 10.0172 7.825 10.1775L7.75583 10.2558C7.61234 10.3993 7.42142 10.4855 7.2189 10.4982C7.01638 10.511 6.81617 10.4494 6.65583 10.325Z"/>
+  </svg>
+  <span class="pst-collapse-sidebar-label">Collapse Sidebar</span>
+  <span class="pst-expand-sidebar-label">Expand Sidebar</span>
+</button></div>
+        <div class="sidebar-primary-item">
+
+<nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="cli.html">CLI reference</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Support module YAML reference (<code class="docutils literal notranslate"><span class="pre">*.ibek.support.yaml</span></code>)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ioc-yaml.html">IOC instance YAML and schemas reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="jinja-context.html">Jinja template context reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../_api/ibek.html">API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../genindex.html">Index</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/epics-containers/ibek/releases">Release Notes</a></li>
+</ul>
+</div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../reference.html" class="nav-link">Reference</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Support module YAML reference (<code class="docutils literal notranslate"><span class="pre">*.ibek.support.yaml</span></code>)</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="support-module-yaml-reference-ibek-support-yaml">
+<h1>Support module YAML reference (<code class="docutils literal notranslate"><span class="pre">*.ibek.support.yaml</span></code>)<a class="headerlink" href="#support-module-yaml-reference-ibek-support-yaml" title="Link to this heading">#</a></h1>
+<p>A <code class="docutils literal notranslate"><span class="pre">*.ibek.support.yaml</span></code> file is authored by <strong>support-module developers</strong>. It
+declares the set of <em>Entity Models</em> that a support module publishes — i.e. the
+things an IOC instance is allowed to instantiate from that module (a motor
+controller, an asyn port, a database, and so on). This is the developer-facing
+half of ibek; the instance-facing half (the IOC’s <code class="docutils literal notranslate"><span class="pre">ioc.yaml</span></code>) is covered in
+<a class="reference internal" href="ioc-yaml.html"><span class="std std-doc">IOC instance YAML and schemas reference</span></a>.</p>
+<section id="file-header-convention">
+<h2>File header convention<a class="headerlink" href="#file-header-convention" title="Link to this heading">#</a></h2>
+<p>Every support file should begin with the language-server schema hint so editors
+can offer completion and validation:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># yaml-language-server: $schema=https://github.com/epics-containers/ibek/releases/download/&lt;version&gt;/ibek.support.schema.json</span>
+</pre></div>
+</div>
+<p>In the tested samples the hint points at a locally generated copy, e.g.
+<code class="docutils literal notranslate"><span class="pre">$schema=../schemas/ibek.support.schema.json</span></code>. The global schema is produced by:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>ibek<span class="w"> </span>support<span class="w"> </span>generate-schema
+</pre></div>
+</div>
+<p>(See <a class="reference internal" href="cli.html"><span class="std std-doc">CLI reference</span></a> for the full command surface.)</p>
+<section id="model-configuration-that-applies-everywhere">
+<h3>Model configuration that applies everywhere<a class="headerlink" href="#model-configuration-that-applies-everywhere" title="Link to this heading">#</a></h3>
+<p>All models in this file are Pydantic models that inherit
+<code class="docutils literal notranslate"><span class="pre">globals.BaseSettings</span></code> (<code class="docutils literal notranslate"><span class="pre">src/ibek/globals.py:128-134</span></code>), which sets:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">extra=&quot;forbid&quot;</span></code> — <strong>unknown keys are rejected</strong>. A typo in a field name is an
+error, not a silently ignored value.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">use_enum_values=True</span></code> — enum fields deserialize to their underlying value.</p></li>
+</ul>
+<p>The <strong>one exception</strong> is <a class="reference internal" href="#subentity"><code class="docutils literal notranslate"><span class="pre">SubEntity</span></code></a>, which is declared with
+<code class="docutils literal notranslate"><span class="pre">extra=&quot;allow&quot;</span></code> (<code class="docutils literal notranslate"><span class="pre">src/ibek/sub_entity.py:4</span></code>) so it can carry arbitrary
+pass-through parameters.</p>
+</section>
+</section>
+<section id="top-level-support-keys">
+<h2>Top-level <code class="docutils literal notranslate"><span class="pre">Support</span></code> keys<a class="headerlink" href="#top-level-support-keys" title="Link to this heading">#</a></h2>
+<p>Source: <code class="docutils literal notranslate"><span class="pre">src/ibek/support.py:17-30</span></code>.</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Key</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Required</p></th>
+<th class="head"><p>Default</p></th>
+<th class="head"><p>Meaning</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">module</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">str</span></code></p></td>
+<td><p><strong>yes</strong></p></td>
+<td><p>—</p></td>
+<td><p>Support module name, normally the repo name.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">entity_models</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">Sequence[EntityModel]</span></code></p></td>
+<td><p><strong>yes</strong></p></td>
+<td><p>—</p></td>
+<td><p>The Entity Models an IOC can create using this module.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">shared</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">Sequence[Any]</span></code></p></td>
+<td><p>no</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">()</span></code></p></td>
+<td><p>Scratch space to hold YAML anchors for re-use; ibek does not read it.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="entitymodel-keys">
+<h2><code class="docutils literal notranslate"><span class="pre">EntityModel</span></code> keys<a class="headerlink" href="#entitymodel-keys" title="Link to this heading">#</a></h2>
+<p>Source: <code class="docutils literal notranslate"><span class="pre">src/ibek/entity_model.py:124-174</span></code>. Each entry under <code class="docutils literal notranslate"><span class="pre">entity_models</span></code>
+describes one class of Entity, published to IOC instances as the type
+<code class="docutils literal notranslate"><span class="pre">&lt;module&gt;.&lt;name&gt;</span></code>.</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Key</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Required</p></th>
+<th class="head"><p>Default</p></th>
+<th class="head"><p>Meaning</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">name</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">str</span></code></p></td>
+<td><p><strong>yes</strong></p></td>
+<td><p>—</p></td>
+<td><p>Published as the Entity type <code class="docutils literal notranslate"><span class="pre">&lt;module&gt;.&lt;name&gt;</span></code>.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">description</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">str</span></code></p></td>
+<td><p><strong>yes</strong></p></td>
+<td><p>—</p></td>
+<td><p>Human description of the Entity.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">pre_defines</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">dict[str,</span> <span class="pre">Define]</span></code></p></td>
+<td><p>no</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">{}</span></code></p></td>
+<td><p>Calculated values rendered with Jinja <strong>before</strong> parameters.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">parameters</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">dict[str,</span> <span class="pre">Param]</span></code></p></td>
+<td><p>no</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">{}</span></code></p></td>
+<td><p>The arguments an IOC instance supplies (discriminated by <code class="docutils literal notranslate"><span class="pre">type</span></code>, see below).</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">post_defines</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">dict[str,</span> <span class="pre">Define]</span></code></p></td>
+<td><p>no</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">{}</span></code></p></td>
+<td><p>Calculated values rendered with Jinja <strong>after</strong> parameters.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">pre_init</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">Script</span></code></p></td>
+<td><p>no</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">()</span></code></p></td>
+<td><p>Startup-script snippets emitted before <code class="docutils literal notranslate"><span class="pre">iocInit()</span></code>.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">post_init</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">Script</span></code></p></td>
+<td><p>no</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">()</span></code></p></td>
+<td><p>Startup-script snippets emitted after <code class="docutils literal notranslate"><span class="pre">iocInit()</span></code> (e.g. <code class="docutils literal notranslate"><span class="pre">dbpf</span></code>).</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">databases</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">Sequence[Database]</span></code></p></td>
+<td><p>no</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">[]</span></code></p></td>
+<td><p>Database templates to load.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">env_vars</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">Sequence[EnvironmentVariable]</span></code></p></td>
+<td><p>no</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">()</span></code></p></td>
+<td><p>Environment variables to set in the boot script.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">pvi</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">EntityPVI</span> <span class="pre">|</span> <span class="pre">None</span></code></p></td>
+<td><p>no</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">None</span></code></p></td>
+<td><p>PVI device definition for this Entity.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">sub_entities</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">Sequence[SubEntity]</span></code></p></td>
+<td><p>no</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">()</span></code></p></td>
+<td><p>Other Entities instantiated for each instance of this model.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">shared</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">Sequence[Any]</span></code></p></td>
+<td><p>no</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">()</span></code></p></td>
+<td><p>YAML-anchor scratch space (as in <code class="docutils literal notranslate"><span class="pre">Support.shared</span></code>).</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<section id="render-order-pre-defines-parameters-post-defines">
+<h3>Render order: <code class="docutils literal notranslate"><span class="pre">pre_defines</span></code> -&gt; <code class="docutils literal notranslate"><span class="pre">parameters</span></code> -&gt; <code class="docutils literal notranslate"><span class="pre">post_defines</span></code><a class="headerlink" href="#render-order-pre-defines-parameters-post-defines" title="Link to this heading">#</a></h3>
+<p>These three groups are rendered in this strict order
+(<code class="docutils literal notranslate"><span class="pre">src/ibek/ioc.py:91-105</span></code>). The practical consequences:</p>
+<ul class="simple">
+<li><p>a <code class="docutils literal notranslate"><span class="pre">parameter</span></code> <strong>default</strong> can refer to a <code class="docutils literal notranslate"><span class="pre">pre_define</span></code> (the pre_define already
+has a value);</p></li>
+<li><p>a <code class="docutils literal notranslate"><span class="pre">post_define</span></code> can refer to a <code class="docutils literal notranslate"><span class="pre">parameter</span></code> (the parameter is already
+resolved);</p></li>
+<li><p>a <code class="docutils literal notranslate"><span class="pre">pre_define</span></code> cannot read a <code class="docutils literal notranslate"><span class="pre">parameter</span></code> or <code class="docutils literal notranslate"><span class="pre">post_define</span></code>, and a <code class="docutils literal notranslate"><span class="pre">parameter</span></code>
+cannot read a <code class="docutils literal notranslate"><span class="pre">post_define</span></code>.</p></li>
+</ul>
+<p>Deep Jinja semantics (the available context, filters, escaping) live in
+<a class="reference internal" href="jinja-context.html"><span class="std std-doc">Jinja template context reference</span></a>.</p>
+</section>
+</section>
+<section id="parameter-types">
+<h2>Parameter types<a class="headerlink" href="#parameter-types" title="Link to this heading">#</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">parameters</span></code> is a discriminated union keyed by <code class="docutils literal notranslate"><span class="pre">type</span></code>
+(<code class="docutils literal notranslate"><span class="pre">src/ibek/entity_model.py:118-121</span></code>, classes in <code class="docutils literal notranslate"><span class="pre">src/ibek/parameters.py:47-126</span></code>).
+Every parameter also takes a required <code class="docutils literal notranslate"><span class="pre">description</span></code>. The <code class="docutils literal notranslate"><span class="pre">default</span></code> field is
+optional throughout; when omitted the IOC instance <strong>must</strong> supply the value.</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p><code class="docutils literal notranslate"><span class="pre">type</span></code></p></th>
+<th class="head"><p><code class="docutils literal notranslate"><span class="pre">default</span></code> accepts</p></th>
+<th class="head"><p>Notes</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">str</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">str</span> <span class="pre">|</span> <span class="pre">None</span></code></p></td>
+<td><p>Plain string (may contain Jinja).</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">int</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">int</span></code> or <code class="docutils literal notranslate"><span class="pre">JinjaString</span></code></p></td>
+<td><p>A Jinja string is allowed so the default can be computed.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">float</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">float</span></code> or <code class="docutils literal notranslate"><span class="pre">JinjaString</span></code></p></td>
+<td><p>As <code class="docutils literal notranslate"><span class="pre">int</span></code>.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">bool</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">bool</span></code> or <code class="docutils literal notranslate"><span class="pre">JinjaString</span></code></p></td>
+<td><p>As <code class="docutils literal notranslate"><span class="pre">int</span></code>.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">dict</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">dict</span></code> or <code class="docutils literal notranslate"><span class="pre">JinjaString</span></code></p></td>
+<td><p>YAML map, or a Jinja string rendering to one (e.g. <code class="docutils literal notranslate"><span class="pre">...</span> <span class="pre">|</span> <span class="pre">dict</span></code>).</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">list</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">list</span></code> or <code class="docutils literal notranslate"><span class="pre">JinjaString</span></code></p></td>
+<td><p>YAML list, or a Jinja string rendering to one (e.g. <code class="docutils literal notranslate"><span class="pre">...</span> <span class="pre">|</span> <span class="pre">list</span></code>).</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">object</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">str</span></code> (an id) or <code class="docutils literal notranslate"><span class="pre">object</span></code></p></td>
+<td><p>A <strong>reference to another Entity</strong> by its id; resolved to the actual Entity during validation.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">id</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">str</span></code></p></td>
+<td><p><strong>Registers a unique global id</strong> for this Entity; other Entities’ <code class="docutils literal notranslate"><span class="pre">object</span></code> params can point at it.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">enum</span></code></p></td>
+<td><p>any of the <code class="docutils literal notranslate"><span class="pre">values</span></code></p></td>
+<td><p><strong>Requires</strong> a <code class="docutils literal notranslate"><span class="pre">values</span></code> map (see below).</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>A <code class="docutils literal notranslate"><span class="pre">JinjaString</span></code> is just a <code class="docutils literal notranslate"><span class="pre">str</span></code> constrained to contain <code class="docutils literal notranslate"><span class="pre">{{</span> <span class="pre">...</span> <span class="pre">}}</span></code>
+(<code class="docutils literal notranslate"><span class="pre">src/ibek/parameters.py:14-16</span></code>).</p>
+<section id="object-and-id-semantics">
+<h3><code class="docutils literal notranslate"><span class="pre">object</span></code> and <code class="docutils literal notranslate"><span class="pre">id</span></code> semantics<a class="headerlink" href="#object-and-id-semantics" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">id</span></code></strong> — when the IOC sets this parameter, the value is added to a global id
+index. A duplicate id raises <code class="docutils literal notranslate"><span class="pre">ValueError:</span> <span class="pre">Duplicate</span> <span class="pre">id</span> <span class="pre">...</span></code>
+(<code class="docutils literal notranslate"><span class="pre">src/ibek/ioc.py:72-76</span></code>). At most one parameter per model is the id field.</p></li>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">object</span></code></strong> — the IOC supplies the id string of another Entity. During whole-
+model validation ibek looks that id up and replaces the string with the actual
+Entity instance (<code class="docutils literal notranslate"><span class="pre">src/ibek/ioc.py:59-62</span></code>), so Jinja can then reach into its
+fields (e.g. <code class="docutils literal notranslate"><span class="pre">{{</span> <span class="pre">controller.P</span> <span class="pre">}}</span></code>).</p></li>
+</ul>
+</section>
+<section id="enum-values">
+<h3><code class="docutils literal notranslate"><span class="pre">enum</span></code> <code class="docutils literal notranslate"><span class="pre">values</span></code><a class="headerlink" href="#enum-values" title="Link to this heading">#</a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">EnumParam</span></code> requires a <code class="docutils literal notranslate"><span class="pre">values</span></code> mapping of <strong>label -&gt; value</strong>
+(<code class="docutils literal notranslate"><span class="pre">src/ibek/parameters.py:101-109</span></code>). The generated schema offers the <em>labels</em> to
+the IOC author (<code class="docutils literal notranslate"><span class="pre">src/ibek/entity_factory.py:139-143</span></code>), while ibek substitutes
+the corresponding <em>value</em> at render time
+(<code class="docutils literal notranslate"><span class="pre">IocFactory.fixup_enums</span></code>, <code class="docutils literal notranslate"><span class="pre">src/ibek/ioc_factory.py:57</span></code>). Example:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">DIR</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">enum</span>
+<span class="w">  </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">The direction of the axis</span>
+<span class="w">  </span><span class="nt">default</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0</span>
+<span class="w">  </span><span class="nt">values</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">Pos</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0</span>
+<span class="w">    </span><span class="nt">Neg</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="define-model-values-for-pre-defines-post-defines">
+<h2><code class="docutils literal notranslate"><span class="pre">Define</span></code> model (values for <code class="docutils literal notranslate"><span class="pre">pre_defines</span></code> / <code class="docutils literal notranslate"><span class="pre">post_defines</span></code>)<a class="headerlink" href="#define-model-values-for-pre-defines-post-defines" title="Link to this heading">#</a></h2>
+<p>Source: <code class="docutils literal notranslate"><span class="pre">src/ibek/parameters.py:35-44</span></code>.</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Key</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Required</p></th>
+<th class="head"><p>Default</p></th>
+<th class="head"><p>Meaning</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">description</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">str</span></code></p></td>
+<td><p><strong>yes</strong></p></td>
+<td><p>—</p></td>
+<td><p>What the calculated value is for.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">value</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">Any</span></code></p></td>
+<td><p><strong>yes</strong></p></td>
+<td><p>—</p></td>
+<td><p>The contents: a literal or a Jinja expression.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">type</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">DefineType</span></code></p></td>
+<td><p>no</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">str</span></code></p></td>
+<td><p>One of <code class="docutils literal notranslate"><span class="pre">str</span></code> / <code class="docutils literal notranslate"><span class="pre">float</span></code> / <code class="docutils literal notranslate"><span class="pre">int</span></code> / <code class="docutils literal notranslate"><span class="pre">bool</span></code> / <code class="docutils literal notranslate"><span class="pre">list</span></code>.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">DefineType</span></code> values are <code class="docutils literal notranslate"><span class="pre">str</span></code>, <code class="docutils literal notranslate"><span class="pre">float</span></code>, <code class="docutils literal notranslate"><span class="pre">int</span></code>, <code class="docutils literal notranslate"><span class="pre">bool</span></code>, <code class="docutils literal notranslate"><span class="pre">list</span></code>
+(<code class="docutils literal notranslate"><span class="pre">src/ibek/parameters.py:19-27</span></code>).</p>
+</section>
+<section id="database">
+<h2><code class="docutils literal notranslate"><span class="pre">Database</span></code><a class="headerlink" href="#database" title="Link to this heading">#</a></h2>
+<p>Source: <code class="docutils literal notranslate"><span class="pre">src/ibek/entity_model.py:34-53</span></code>.</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Key</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Required</p></th>
+<th class="head"><p>Default</p></th>
+<th class="head"><p>Meaning</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">file</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">str</span></code></p></td>
+<td><p><strong>yes</strong></p></td>
+<td><p>—</p></td>
+<td><p>Filename of the database template under <code class="docutils literal notranslate"><span class="pre">&lt;module_root&gt;/db</span></code>.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">enabled</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">str</span></code></p></td>
+<td><p>no</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">&quot;True&quot;</span></code></p></td>
+<td><p>A Jinja string that renders to <code class="docutils literal notranslate"><span class="pre">False</span></code> disables loading this database.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">args</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">Mapping[str,</span> <span class="pre">str</span> <span class="pre">|</span> <span class="pre">None]</span> <span class="pre">|</span> <span class="pre">None</span></code></p></td>
+<td><p><strong>yes</strong></p></td>
+<td><p>—</p></td>
+<td><p>Args passed through to the database. The key is required (it has no default), but you may pass <code class="docutils literal notranslate"><span class="pre">args:</span> <span class="pre">null</span></code> or <code class="docutils literal notranslate"><span class="pre">args:</span> <span class="pre">{}</span></code>. A <code class="docutils literal notranslate"><span class="pre">None</span></code> value for an individual entry means <code class="docutils literal notranslate"><span class="pre">ARG:</span> <span class="pre">'{{</span> <span class="pre">ARG</span> <span class="pre">}}'</span></code> (pass through the same-named Entity arg).</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>In the sample, <code class="docutils literal notranslate"><span class="pre">enabled:</span> <span class="pre">&quot;{{not</span> <span class="pre">is_cs}}&quot;</span></code> selects one of two database templates
+per axis, and the bare <code class="docutils literal notranslate"><span class="pre">M:</span></code> / <code class="docutils literal notranslate"><span class="pre">ADDR:</span></code> args take their values from the like-named
+parameters.</p>
+</section>
+<section id="environmentvariable">
+<h2><code class="docutils literal notranslate"><span class="pre">EnvironmentVariable</span></code><a class="headerlink" href="#environmentvariable" title="Link to this heading">#</a></h2>
+<p>Source: <code class="docutils literal notranslate"><span class="pre">src/ibek/entity_model.py:56-62</span></code>.</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Key</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Required</p></th>
+<th class="head"><p>Meaning</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">name</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">str</span></code></p></td>
+<td><p><strong>yes</strong></p></td>
+<td><p>Name of the environment variable (Jinja).</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">value</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">str</span></code></p></td>
+<td><p><strong>yes</strong></p></td>
+<td><p>Value to set (Jinja).</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="script-for-pre-init-post-init">
+<h2><code class="docutils literal notranslate"><span class="pre">Script</span></code> (for <code class="docutils literal notranslate"><span class="pre">pre_init</span></code> / <code class="docutils literal notranslate"><span class="pre">post_init</span></code>)<a class="headerlink" href="#script-for-pre-init-post-init" title="Link to this heading">#</a></h2>
+<p>A <code class="docutils literal notranslate"><span class="pre">Script</span></code> is a sequence of <code class="docutils literal notranslate"><span class="pre">Text</span></code> or <code class="docutils literal notranslate"><span class="pre">Comment</span></code> snippets
+(<code class="docutils literal notranslate"><span class="pre">src/ibek/entity_model.py:65-88</span></code>), discriminated by <code class="docutils literal notranslate"><span class="pre">type</span></code>.</p>
+<section id="text-type-text-the-default">
+<h3><code class="docutils literal notranslate"><span class="pre">Text</span></code> (<code class="docutils literal notranslate"><span class="pre">type:</span> <span class="pre">text</span></code>, the default)<a class="headerlink" href="#text-type-text-the-default" title="Link to this heading">#</a></h3>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Key</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Required</p></th>
+<th class="head"><p>Default</p></th>
+<th class="head"><p>Meaning</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">type</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">&quot;text&quot;</span></code></p></td>
+<td><p>no</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">text</span></code></p></td>
+<td><p>Discriminator.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">when</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">str</span></code></p></td>
+<td><p>no</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">&quot;every&quot;</span></code></p></td>
+<td><p><strong>Free string</strong>; <code class="docutils literal notranslate"><span class="pre">first</span></code> renders once per model.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">value</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">str</span></code></p></td>
+<td><p>no</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">&quot;&quot;</span></code></p></td>
+<td><p>Raw text added to the startup script.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="comment-type-comment">
+<h3><code class="docutils literal notranslate"><span class="pre">Comment</span></code> (<code class="docutils literal notranslate"><span class="pre">type:</span> <span class="pre">comment</span></code>)<a class="headerlink" href="#comment-type-comment" title="Link to this heading">#</a></h3>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Key</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Required</p></th>
+<th class="head"><p>Default</p></th>
+<th class="head"><p>Meaning</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">type</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">&quot;comment&quot;</span></code></p></td>
+<td><p>no</p></td>
+<td><p>—</p></td>
+<td><p>Discriminator (required to select this variant).</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">when</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">When</span></code></p></td>
+<td><p>no</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">every</span></code></p></td>
+<td><p>The <code class="docutils literal notranslate"><span class="pre">When</span></code> enum: <code class="docutils literal notranslate"><span class="pre">first</span></code> / <code class="docutils literal notranslate"><span class="pre">every</span></code> / <code class="docutils literal notranslate"><span class="pre">last</span></code>.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">value</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">str</span></code></p></td>
+<td><p>no</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">&quot;&quot;</span></code></p></td>
+<td><p>Comment text; every line is prefixed with <code class="docutils literal notranslate"><span class="pre">#</span> </code>.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Two foot-guns in the script model:</p>
+<ul class="simple">
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">when:</span> <span class="pre">last</span></code> is not implemented.</strong> It raises
+<code class="docutils literal notranslate"><span class="pre">NotImplementedError(&quot;When.last</span> <span class="pre">not</span> <span class="pre">yet</span> <span class="pre">implemented&quot;)</span></code> at render time
+(<code class="docutils literal notranslate"><span class="pre">src/ibek/render.py:45-46</span></code>). Only <code class="docutils literal notranslate"><span class="pre">first</span></code> and <code class="docutils literal notranslate"><span class="pre">every</span></code> work.</p></li>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">Text.when</span></code> is a free <code class="docutils literal notranslate"><span class="pre">str</span></code> while <code class="docutils literal notranslate"><span class="pre">Comment.when</span></code> is the <code class="docutils literal notranslate"><span class="pre">When</span></code> enum.</strong> This
+inconsistency means <code class="docutils literal notranslate"><span class="pre">Text</span></code> will silently accept an invalid <code class="docutils literal notranslate"><span class="pre">when</span></code> value where
+<code class="docutils literal notranslate"><span class="pre">Comment</span></code> would reject it. Stick to <code class="docutils literal notranslate"><span class="pre">first</span></code> / <code class="docutils literal notranslate"><span class="pre">every</span></code>.</p></li>
+</ul>
+</div>
+</section>
+</section>
+<section id="entitypvi">
+<h2><code class="docutils literal notranslate"><span class="pre">EntityPVI</span></code><a class="headerlink" href="#entitypvi" title="Link to this heading">#</a></h2>
+<p>Source: <code class="docutils literal notranslate"><span class="pre">src/ibek/entity_model.py:91-115</span></code>.</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Key</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Required</p></th>
+<th class="head"><p>Default</p></th>
+<th class="head"><p>Meaning</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">yaml_path</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">str</span></code></p></td>
+<td><p><strong>yes</strong></p></td>
+<td><p>—</p></td>
+<td><p>Path to the <code class="docutils literal notranslate"><span class="pre">.pvi.device.yaml</span></code>, absolute or relative to <code class="docutils literal notranslate"><span class="pre">PVI_DEFS</span></code>.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">ui_index</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">bool</span></code></p></td>
+<td><p>no</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">True</span></code></p></td>
+<td><p>Whether to add the UI to the IOC index.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">ui_macros</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">dict[str,</span> <span class="pre">str</span> <span class="pre">|</span> <span class="pre">None]</span> <span class="pre">|</span> <span class="pre">None</span></code></p></td>
+<td><p>no</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">None</span></code></p></td>
+<td><p>Macros to launch the UI; each key must be an arg of the owning Entity.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">pv</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">bool</span></code></p></td>
+<td><p>no</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">False</span></code></p></td>
+<td><p>Whether to generate a PVI PV (a PVAccess PV describing the device structure).</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">pv_prefix</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">str</span></code></p></td>
+<td><p>no</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">&quot;&quot;</span></code></p></td>
+<td><p>PV prefix for the PVI PV, e.g. <code class="docutils literal notranslate"><span class="pre">$(P)</span></code>.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="subentity">
+<span id="id1"></span><h2><code class="docutils literal notranslate"><span class="pre">SubEntity</span></code><a class="headerlink" href="#subentity" title="Link to this heading">#</a></h2>
+<p>Source: <code class="docutils literal notranslate"><span class="pre">src/ibek/sub_entity.py</span></code>. This is the <strong>only</strong> model with
+<code class="docutils literal notranslate"><span class="pre">extra=&quot;allow&quot;</span></code>: beyond the two declared fields it accepts arbitrary keys, which
+are passed through as parameters to the instantiated sub-Entity.</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Key</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Required</p></th>
+<th class="head"><p>Default</p></th>
+<th class="head"><p>Meaning</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">type</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">str</span></code></p></td>
+<td><p><strong>yes</strong></p></td>
+<td><p>—</p></td>
+<td><p>The Entity type to instantiate (<code class="docutils literal notranslate"><span class="pre">&lt;module&gt;.&lt;name&gt;</span></code>).</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">entity_enabled</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">bool</span></code></p></td>
+<td><p>no</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">True</span></code></p></td>
+<td><p>Enable or disable this sub-Entity instance.</p></td>
+</tr>
+<tr class="row-even"><td><p><em>(any other key)</em></p></td>
+<td><p>—</p></td>
+<td><p>no</p></td>
+<td><p>—</p></td>
+<td><p>Pass-through parameter forwarded to the sub-Entity.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="worked-example">
+<h2>Worked example<a class="headerlink" href="#worked-example" title="Link to this heading">#</a></h2>
+<p>The following file is part of the ibek test suite and exercises most of the
+schema: id/object references, <code class="docutils literal notranslate"><span class="pre">str</span></code>/<code class="docutils literal notranslate"><span class="pre">int</span></code>/<code class="docutils literal notranslate"><span class="pre">float</span></code>/<code class="docutils literal notranslate"><span class="pre">bool</span></code>/<code class="docutils literal notranslate"><span class="pre">enum</span></code> parameters, enum
+values, Jinja defaults, conditional databases, scripts and PVI. (It does not
+demonstrate <code class="docutils literal notranslate"><span class="pre">dict</span></code>/<code class="docutils literal notranslate"><span class="pre">list</span></code> parameters, <code class="docutils literal notranslate"><span class="pre">pre_defines</span></code>/<code class="docutils literal notranslate"><span class="pre">post_defines</span></code>, <code class="docutils literal notranslate"><span class="pre">env_vars</span></code>,
+<code class="docutils literal notranslate"><span class="pre">sub_entities</span></code> or <code class="docutils literal notranslate"><span class="pre">Comment</span></code> snippets.)</p>
+<div class="literal-block-wrapper docutils container" id="id2">
+<div class="code-block-caption"><span class="caption-text">tests/samples/support/motorSim.ibek.support.yaml — a complete, tested support module</span><a class="headerlink" href="#id2" title="Link to this code">#</a></div>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># yaml-language-server: $schema=../schemas/ibek.support.schema.json</span>
+
+<span class="c1"># slightly extended version of motorMotorSim.ibek.support.yaml from ibek-support.</span>
+<span class="c1"># the extra things are fictitious but are here to exercise all of the features</span>
+<span class="c1"># of the ibek.support schema</span>
+<span class="nt">module</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">motorSim</span>
+
+<span class="nt">entity_models</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">simMotorController</span>
+<span class="w">    </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|-</span>
+<span class="w">      </span><span class="no">Creates a simulation motion controller</span>
+<span class="w">    </span><span class="nt">parameters</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">controllerName</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">id</span>
+<span class="w">        </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|-</span>
+<span class="w">          </span><span class="no">The name of the controller and its Asyn Port Name</span>
+
+<span class="w">      </span><span class="nt">P</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">str</span>
+<span class="w">        </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|-</span>
+<span class="w">          </span><span class="no">Device PV Prefix</span>
+
+<span class="w">      </span><span class="nt">numAxes</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">int</span>
+<span class="w">        </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|-</span>
+<span class="w">          </span><span class="no">The number of axes to create</span>
+
+<span class="w">      </span><span class="nt">port</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">object</span>
+<span class="w">        </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|-</span>
+<span class="w">          </span><span class="no">a reference to the asyn port for communication with the controller</span>
+
+<span class="w">      </span><span class="nt">DESC</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">str</span>
+<span class="w">        </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|-</span>
+<span class="w">          </span><span class="no">The description of the controller</span>
+<span class="w">        </span><span class="nt">default</span><span class="p">:</span><span class="w"> </span><span class="s">"Simulated</span><span class="nv"> </span><span class="s">Motion</span><span class="nv"> </span><span class="s">Controller</span><span class="nv"> </span><span class="s">testing</span><span class="nv"> </span><span class="s">escaping:</span><span class="nv"> </span><span class="s">{%</span><span class="nv"> </span><span class="s">raw</span><span class="nv"> </span><span class="s">%}</span><span class="nv"> </span><span class="s">{{enclosed</span><span class="nv"> </span><span class="s">in</span><span class="nv"> </span><span class="s">escaped</span><span class="nv"> </span><span class="s">curly</span><span class="nv"> </span><span class="s">braces}}</span><span class="nv"> </span><span class="s">{%</span><span class="nv"> </span><span class="s">endraw</span><span class="nv"> </span><span class="s">%}"</span>
+
+<span class="w">    </span><span class="nt">pre_init</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
+<span class="w">          </span><span class="no"># motorSimCreateController(controller_asyn_port_name, axis_count)</span>
+<span class="w">          </span><span class="no"># testing escaping: {% raw %} {{enclosed in escaped curly braces}} {% endraw %}</span>
+<span class="w">          </span><span class="no">motorSimCreateController({{controllerName}}, {{numAxes}})</span>
+
+<span class="w">    </span><span class="nt">databases</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">file</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sim_motor.db</span>
+<span class="w">        </span><span class="nt">args</span><span class="p">:</span>
+<span class="w">          </span><span class="nt">controllerName</span><span class="p">:</span>
+<span class="w">          </span><span class="nt">P</span><span class="p">:</span>
+<span class="w">          </span><span class="nt">DESC</span><span class="p">:</span>
+
+<span class="w">    </span><span class="nt">pvi</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">yaml_path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">simple.pvi.device.yaml</span>
+<span class="w">      </span><span class="nt">ui_macros</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">P</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">pv</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">      </span><span class="nt">pv_prefix</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">$(P)</span>
+
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">simMotorAxis</span>
+<span class="w">    </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|-</span>
+<span class="w">      </span><span class="no">Creates a simulation motor axis</span>
+<span class="w">    </span><span class="nt">parameters</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">controller</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">object</span>
+<span class="w">        </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|-</span>
+<span class="w">          </span><span class="no">a reference to the motion controller</span>
+
+<span class="w">      </span><span class="nt">M</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">str</span>
+<span class="w">        </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|-</span>
+<span class="w">          </span><span class="no">PV suffix for the motor record</span>
+
+<span class="w">      </span><span class="nt">ADDR</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">int</span>
+<span class="w">        </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|-</span>
+<span class="w">          </span><span class="no">The axis number (allowed to be from 0 to controller.numAxes-1)</span>
+
+<span class="w">      </span><span class="nt">DESC</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">str</span>
+<span class="w">        </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|-</span>
+<span class="w">          </span><span class="no">The description of the axis</span>
+<span class="w">        </span><span class="nt">default</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Motor {{ADDR}}</span>
+
+<span class="w">      </span><span class="nt">DLLM</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">int</span>
+<span class="w">        </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|-</span>
+<span class="w">          </span><span class="no">The low limit of the axis (in counts)</span>
+<span class="w">        </span><span class="nt">default</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">-20000</span>
+
+<span class="w">      </span><span class="nt">DHLM</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">int</span>
+<span class="w">        </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|-</span>
+<span class="w">          </span><span class="no">The high limit of the axis (in counts)</span>
+<span class="w">        </span><span class="nt">default</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">20000</span>
+
+<span class="w">      </span><span class="nt">home</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">int</span>
+<span class="w">        </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|-</span>
+<span class="w">          </span><span class="no">The home position of the axis (in counts)</span>
+<span class="w">        </span><span class="nt">default</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0</span>
+
+<span class="w">      </span><span class="nt">start</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">str</span><span class="w"> </span><span class="c1"># int or jinja string</span>
+<span class="w">        </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|-</span>
+<span class="w">          </span><span class="no">The starting position of the axis (in counts)</span>
+<span class="w">        </span><span class="nt">default</span><span class="p">:</span><span class="w"> </span><span class="s">"{{home}}"</span>
+
+<span class="w">      </span><span class="nt">DIR</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">enum</span>
+<span class="w">        </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|-</span>
+<span class="w">          </span><span class="no">The direction of the axis</span>
+<span class="w">        </span><span class="nt">default</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0</span>
+<span class="w">        </span><span class="nt">values</span><span class="p">:</span>
+<span class="w">          </span><span class="nt">Pos</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0</span>
+<span class="w">          </span><span class="nt">Neg</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
+
+<span class="w">      </span><span class="nt">VELO</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">float</span>
+<span class="w">        </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|-</span>
+<span class="w">          </span><span class="no">The velocity of the axis (in counts/sec)</span>
+<span class="w">        </span><span class="nt">default</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10.0</span>
+
+<span class="w">      </span><span class="nt">VMAX</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">str</span><span class="w"> </span><span class="c1"># float or jinja string</span>
+<span class="w">        </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|-</span>
+<span class="w">          </span><span class="no">The maximum velocity of the axis (in counts/sec)</span>
+<span class="w">        </span><span class="nt">default</span><span class="p">:</span><span class="w"> </span><span class="s">"{{VELO}}"</span>
+
+<span class="w">      </span><span class="nt">is_cs</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">bool</span>
+<span class="w">        </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|-</span>
+<span class="w">          </span><span class="no">Set to True if this axis a coordinate system axis</span>
+<span class="w">        </span><span class="nt">default</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
+
+<span class="w">      </span><span class="nt">CS_NUM</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">int</span>
+<span class="w">        </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|-</span>
+<span class="w">          </span><span class="no">The coordinate system number for this axis</span>
+<span class="w">        </span><span class="nt">default</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0</span>
+
+<span class="w">    </span><span class="nt">post_init</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">when</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">once</span>
+<span class="w">        </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
+<span class="w">          </span><span class="no"># motorSimCreateAxis(controller_asyn_port_name, axis, axis_description)</span>
+
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
+<span class="w">          </span><span class="no">motorSimConfigAxis({{controller}}, {{ADDR}}, {{DHLM}}, {{DLLM}}, {{home}}, {{start}})</span>
+
+<span class="w">    </span><span class="nt">databases</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">file</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">basic_asyn_motor.db</span>
+<span class="w">        </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="s">"{{not</span><span class="nv"> </span><span class="s">is_cs}}"</span>
+<span class="w">        </span><span class="nt">args</span><span class="p">:</span>
+<span class="w">          </span><span class="nt">P</span><span class="p">:</span><span class="w"> </span><span class="s">"{{controller.P}}"</span>
+<span class="w">          </span><span class="nt">M</span><span class="p">:</span>
+<span class="w">          </span><span class="nt">DTYP</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">asynMotor</span>
+<span class="w">          </span><span class="nt">PORT</span><span class="p">:</span><span class="w"> </span><span class="s">"{{controller}}"</span>
+<span class="w">          </span><span class="nt">ADDR</span><span class="p">:</span>
+<span class="w">          </span><span class="nt">DESC</span><span class="p">:</span>
+<span class="w">          </span><span class="nt">EGU</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">degrees</span>
+<span class="w">          </span><span class="nt">DIR</span><span class="p">:</span>
+<span class="w">          </span><span class="nt">VELO</span><span class="p">:</span>
+<span class="w">          </span><span class="nt">VMAX</span><span class="p">:</span>
+<span class="w">          </span><span class="nt">MRES</span><span class="p">:</span><span class="w"> </span><span class="s">".01"</span>
+<span class="w">          </span><span class="nt">DHLM</span><span class="p">:</span>
+<span class="w">          </span><span class="nt">DLLM</span><span class="p">:</span>
+<span class="w">          </span><span class="nt">INIT</span><span class="p">:</span><span class="w"> </span><span class="s">""</span>
+
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">file</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">basic_cs_asyn_motor.db</span>
+<span class="w">        </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="s">"{{is_cs}}"</span>
+<span class="w">        </span><span class="nt">args</span><span class="p">:</span>
+<span class="w">          </span><span class="nt">P</span><span class="p">:</span><span class="w"> </span><span class="s">"{{controller.P}}"</span>
+<span class="w">          </span><span class="nt">CS_NUM</span><span class="p">:</span>
+<span class="w">          </span><span class="nt">DTYP</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">asynMotor</span>
+<span class="w">          </span><span class="nt">PORT</span><span class="p">:</span><span class="w"> </span><span class="s">"{{controller}}"</span>
+<span class="w">          </span><span class="nt">ADDR</span><span class="p">:</span>
+<span class="w">          </span><span class="nt">DESC</span><span class="p">:</span>
+<span class="w">          </span><span class="nt">EGU</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">degrees</span>
+<span class="w">          </span><span class="nt">DIR</span><span class="p">:</span>
+<span class="w">          </span><span class="nt">VELO</span><span class="p">:</span>
+<span class="w">          </span><span class="nt">VMAX</span><span class="p">:</span>
+<span class="w">          </span><span class="nt">MRES</span><span class="p">:</span><span class="w"> </span><span class="s">".01"</span>
+<span class="w">          </span><span class="nt">DHLM</span><span class="p">:</span>
+<span class="w">          </span><span class="nt">DLLM</span><span class="p">:</span>
+<span class="w">          </span><span class="nt">INIT</span><span class="p">:</span><span class="w"> </span><span class="s">""</span>
+</pre></div>
+</div>
+</div>
+</section>
+<section id="annotated-skeleton">
+<h2>Annotated skeleton<a class="headerlink" href="#annotated-skeleton" title="Link to this heading">#</a></h2>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># yaml-language-server: $schema=.../ibek.support.schema.json</span>
+<span class="nt">module</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">myModule</span><span class="w">                 </span><span class="c1"># REQUIRED: support module / repo name</span>
+<span class="nt">entity_models</span><span class="p">:</span><span class="w">                   </span><span class="c1"># REQUIRED: one or more Entity Models</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">myThing</span><span class="w">                </span><span class="c1"># REQUIRED: published as myModule.myThing</span>
+<span class="w">    </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">What it makes</span><span class="w">    </span><span class="c1"># REQUIRED</span>
+<span class="w">    </span><span class="nt">pre_defines</span><span class="p">:</span><span class="w">                 </span><span class="c1"># rendered first</span>
+<span class="w">      </span><span class="nt">base</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> description</span><span class="p">:</span><span class="w"> </span><span class="nv">prefix</span><span class="p p-Indicator">,</span><span class="nt"> value</span><span class="p">:</span><span class="w"> </span><span class="s">"{{</span><span class="nv"> </span><span class="s">P</span><span class="nv"> </span><span class="s">}}"</span><span class="p p-Indicator">,</span><span class="nt"> type</span><span class="p">:</span><span class="w"> </span><span class="nv">str</span><span class="w"> </span><span class="p p-Indicator">}</span>
+<span class="w">    </span><span class="nt">parameters</span><span class="p">:</span><span class="w">                  </span><span class="c1"># what the IOC supplies</span>
+<span class="w">      </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> type</span><span class="p">:</span><span class="w"> </span><span class="nv">id</span><span class="p p-Indicator">,</span><span class="nt"> description</span><span class="p">:</span><span class="w"> </span><span class="nv">unique name</span><span class="w"> </span><span class="p p-Indicator">}</span>
+<span class="w">      </span><span class="nt">P</span><span class="p">:</span><span class="w">    </span><span class="p p-Indicator">{</span><span class="nt"> type</span><span class="p">:</span><span class="w"> </span><span class="nv">str</span><span class="p p-Indicator">,</span><span class="nt"> description</span><span class="p">:</span><span class="w"> </span><span class="nv">PV prefix</span><span class="w"> </span><span class="p p-Indicator">}</span>
+<span class="w">      </span><span class="nt">port</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> type</span><span class="p">:</span><span class="w"> </span><span class="nv">object</span><span class="p p-Indicator">,</span><span class="nt"> description</span><span class="p">:</span><span class="w"> </span><span class="nv">ref to another entity by id</span><span class="w"> </span><span class="p p-Indicator">}</span>
+<span class="w">      </span><span class="nt">mode</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> type</span><span class="p">:</span><span class="w"> </span><span class="nv">enum</span><span class="p p-Indicator">,</span><span class="nt"> description</span><span class="p">:</span><span class="w"> </span><span class="nv">mode</span><span class="p p-Indicator">,</span><span class="nt"> default</span><span class="p">:</span><span class="w"> </span><span class="nv">a</span><span class="p p-Indicator">,</span><span class="nt"> values</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> a</span><span class="p">:</span><span class="w"> </span><span class="nv">0</span><span class="p p-Indicator">,</span><span class="nt"> b</span><span class="p">:</span><span class="w"> </span><span class="nv">1</span><span class="w"> </span><span class="p p-Indicator">}</span><span class="w"> </span><span class="p p-Indicator">}</span>
+<span class="w">    </span><span class="nt">post_defines</span><span class="p">:</span><span class="w">                </span><span class="c1"># rendered last; may read parameters</span>
+<span class="w">      </span><span class="nt">full</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> description</span><span class="p">:</span><span class="w"> </span><span class="nv">full pv</span><span class="p p-Indicator">,</span><span class="nt"> value</span><span class="p">:</span><span class="w"> </span><span class="s">"{{</span><span class="nv"> </span><span class="s">P</span><span class="nv"> </span><span class="s">}}:{{</span><span class="nv"> </span><span class="s">name</span><span class="nv"> </span><span class="s">}}"</span><span class="w"> </span><span class="p p-Indicator">}</span>
+<span class="w">    </span><span class="nt">pre_init</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="s">"someIocShellFunction({{</span><span class="nv"> </span><span class="s">name</span><span class="nv"> </span><span class="s">}})"</span><span class="w">   </span><span class="c1"># Text, when: every</span>
+<span class="w">    </span><span class="nt">databases</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">file</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">my.db</span>
+<span class="w">        </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="s">"True"</span>
+<span class="w">        </span><span class="nt">args</span><span class="p">:</span>
+<span class="w">          </span><span class="nt">P</span><span class="p">:</span><span class="w">                     </span><span class="c1"># None =&gt; pass through the same-named arg</span>
+<span class="w">    </span><span class="nt">env_vars</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> name</span><span class="p">:</span><span class="w"> </span><span class="nv">MY_VAR</span><span class="p p-Indicator">,</span><span class="nt"> value</span><span class="p">:</span><span class="w"> </span><span class="s">"{{</span><span class="nv"> </span><span class="s">P</span><span class="nv"> </span><span class="s">}}"</span><span class="w"> </span><span class="p p-Indicator">}</span>
+<span class="w">    </span><span class="nt">pvi</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">yaml_path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">my.pvi.device.yaml</span>
+<span class="w">    </span><span class="nt">sub_entities</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">myModule.other</span><span class="w">     </span><span class="c1"># extra keys below are pass-through params</span>
+<span class="w">        </span><span class="nt">someParam</span><span class="p">:</span><span class="w"> </span><span class="s">"{{</span><span class="nv"> </span><span class="s">P</span><span class="nv"> </span><span class="s">}}"</span>
+</pre></div>
+</div>
+</section>
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="cli.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">CLI reference</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="ioc-yaml.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">IOC instance YAML and schemas reference</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#file-header-convention">File header convention</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#model-configuration-that-applies-everywhere">Model configuration that applies everywhere</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#top-level-support-keys">Top-level <code class="docutils literal notranslate"><span class="pre">Support</span></code> keys</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#entitymodel-keys"><code class="docutils literal notranslate"><span class="pre">EntityModel</span></code> keys</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#render-order-pre-defines-parameters-post-defines">Render order: <code class="docutils literal notranslate"><span class="pre">pre_defines</span></code> -&gt; <code class="docutils literal notranslate"><span class="pre">parameters</span></code> -&gt; <code class="docutils literal notranslate"><span class="pre">post_defines</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#parameter-types">Parameter types</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#object-and-id-semantics"><code class="docutils literal notranslate"><span class="pre">object</span></code> and <code class="docutils literal notranslate"><span class="pre">id</span></code> semantics</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#enum-values"><code class="docutils literal notranslate"><span class="pre">enum</span></code> <code class="docutils literal notranslate"><span class="pre">values</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#define-model-values-for-pre-defines-post-defines"><code class="docutils literal notranslate"><span class="pre">Define</span></code> model (values for <code class="docutils literal notranslate"><span class="pre">pre_defines</span></code> / <code class="docutils literal notranslate"><span class="pre">post_defines</span></code>)</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#database"><code class="docutils literal notranslate"><span class="pre">Database</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#environmentvariable"><code class="docutils literal notranslate"><span class="pre">EnvironmentVariable</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#script-for-pre-init-post-init"><code class="docutils literal notranslate"><span class="pre">Script</span></code> (for <code class="docutils literal notranslate"><span class="pre">pre_init</span></code> / <code class="docutils literal notranslate"><span class="pre">post_init</span></code>)</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#text-type-text-the-default"><code class="docutils literal notranslate"><span class="pre">Text</span></code> (<code class="docutils literal notranslate"><span class="pre">type:</span> <span class="pre">text</span></code>, the default)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#comment-type-comment"><code class="docutils literal notranslate"><span class="pre">Comment</span></code> (<code class="docutils literal notranslate"><span class="pre">type:</span> <span class="pre">comment</span></code>)</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#entitypvi"><code class="docutils literal notranslate"><span class="pre">EntityPVI</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#subentity"><code class="docutils literal notranslate"><span class="pre">SubEntity</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#worked-example">Worked example</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#annotated-skeleton">Annotated skeleton</a></li>
+</ul>
+  </nav></div>
+
+  <div class="sidebar-secondary-item">
+
+  
+  <div class="tocsection editthispage">
+    <a href="https://github.com/epics-containers/ibek/edit/4.6.3b1/docs/reference/support-yaml.md">
+      <i class="fa-solid fa-pencil"></i>
+      
+      
+        
+          Edit on GitHub
+        
+      
+    </a>
+  </div>
+</div>
+
+  <div class="sidebar-secondary-item">
+
+  <div class="tocsection sourcelink">
+    <a href="../_sources/reference/support-yaml.md.txt">
+      <i class="fa-solid fa-file-lines"></i> Show Source
+    </a>
+  </div>
+</div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../_static/scripts/bootstrap.js?digest=cb8930eaaf36d9849b67"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=cb8930eaaf36d9849b67"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.21.0.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>
