@@ -18,8 +18,9 @@ runtime-support patterns into a services repo. See the
 tutorials.
 
 
-Source          | <https://github.com/epics-containers/ibek>
+What            | Where
 :---:           | :---:
+Source          | <https://github.com/epics-containers/ibek>
 PyPI            | `pip install ibek`
 Documentation   | <https://epics-containers.github.io/ibek>
 Releases        | <https://github.com/epics-containers/ibek/releases>
