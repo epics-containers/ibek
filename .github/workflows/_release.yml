@@ -32,7 +32,8 @@ jobs:
         with:
           prerelease: ${{ contains(github.ref_name, 'a') || contains(github.ref_name, 'b') || contains(github.ref_name, 'rc') }}
           files: |
-            dist/*
+            *.whl
+            *.tar.gz
             docs.zip
             tests/samples/schemas/ibek.support.schema.json
           generate_release_notes: true
