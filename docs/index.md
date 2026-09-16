@@ -2,55 +2,64 @@
 html_theme.sidebar_secondary.remove: true
 ---
 
-```{include} ../README.md
-:end-before: <!-- README only content
-```
+# ibek
 
+ibek turns IOC instance YAML and reusable support definitions into an EPICS
+startup script and database substitutions. It also helps prepare generic IOC
+images and manage runtime patterns in services repositories.
 
-How the documentation is structured
------------------------------------
+Start with [installation](tutorials/installation.md) and
+[render a small IOC configuration](tutorials/build-an-ioc.md).
+For a specific task, use the [CLI reference](reference/cli.md),
+[Jinja context](reference/jinja-context.md), or
+[support-definition reference](reference/support-yaml.md).
 
-Documentation is split into [four categories](https://diataxis.fr), also accessible from links in the top bar.
-
-<!-- https://sphinx-design.readthedocs.io/en/latest/grids.html -->
+These pages document ibek itself. The
+[epics-containers documentation](https://epics-containers.github.io/)
+covers the wider workflow: creating generic IOC images, configuring services,
+and deploying IOCs. [How ibek fits](explanations/overview.md) connects the two.
 
 ::::{grid} 2
-:gutter: 4
+:gutter: 3
 
-:::{grid-item-card} {material-regular}`directions_walk;2em`
+:::{grid-item-card} Tutorials
+Install ibek and generate your first startup files.
+
 ```{toctree}
-:maxdepth: 2
+:maxdepth: 1
+
 tutorials
 ```
-+++
-Tutorials for installation and typical usage. New users start here.
 :::
 
-:::{grid-item-card} {material-regular}`directions;2em`
+:::{grid-item-card} How-to guides
+Write support definitions, vendor runtime patterns, and diagnose problems.
+
 ```{toctree}
-:maxdepth: 2
+:maxdepth: 1
+
 how-to
 ```
-+++
-Practical step-by-step guides for the more experienced user.
 :::
 
-:::{grid-item-card} {material-regular}`info;2em`
-```{toctree}
-:maxdepth: 2
-explanations
-```
-+++
-Explanations of how it works and why it works that way.
-:::
+:::{grid-item-card} Reference
+Commands, YAML fields, template context, paths and environment variables.
 
-:::{grid-item-card} {material-regular}`menu_book;2em`
 ```{toctree}
-:maxdepth: 2
+:maxdepth: 1
+
 reference
 ```
-+++
-Technical reference material including APIs and release notes.
+:::
+
+:::{grid-item-card} Explanations
+The framework, ibek-support, and the path from YAML to a running IOC.
+
+```{toctree}
+:maxdepth: 1
+
+explanations
+```
 :::
 
 ::::

@@ -1,62 +1,95 @@
 # CLI reference
 
-Complete reference for the `ibek` command-line interface. Everything below is
-generated directly from the Typer application, so it always matches the
-installed version.
+Use `ibek --help` and `ibek <group> <command> --help` for the installed
+version. The complete command reference below is generated from the CLI.
 
-`ibek` groups its commands by the lifecycle phase in which you run them:
+## When to run each command
 
-- **`ibek support`** — runs during the **Generic IOC container build**, while
-  EPICS support modules are being compiled and configured.
-- **`ibek ioc`** — runs during the **container build** to turn the installed
-  support definitions into a schema and to package the runtime assets.
-- **`ibek runtime`** — runs at **container start-up**, turning an IOC
-  instance's YAML into the boot script and databases it runs from.
-- **`ibek dev`** — runs **inside a development container** to wire a checked-out
-  instance or support module into the EPICS tree for live editing.
-- **`ibek pattern`** — runs in a **services repository** to vendor pinned
-  runtime-support patterns into an IOC instance and verify their integrity.
+| Phase | Commands | Purpose |
+| --- | --- | --- |
+| Container build | `support generate-schema`, `support apt-install-runtime-packages` | Describe support YAML and install declared runtime Debian packages. |
+| Container build | `ioc generate-schema`, `ioc extract-runtime-assets` | Describe the image's available entities and package its runtime files. |
+| Container startup | `runtime generate2`, `runtime place-files`, `runtime generate-autosave`, `ioc do-wait` | Generate the instance, place its files, prepare autosave, and wait for hardware. |
+| Development container | `dev instance`, `ioc build-docker` | Select a checked-out instance; experimentally execute Dockerfile steps. |
+| Outside the IOC container | `pattern add/update/check/restore/schema` | Maintain runtime support and editor schemas in an instance repository. |
 
-```{note}
-This page is reference material. `ibek <group> <command> --help` is the
-authoritative, version-exact source of truth for any command — if the text here
-and `--help` ever disagree, trust `--help`.
+These are intended environments, not enforced modes. Schema generation can also
+run outside a container with explicit input paths. Compiling EPICS modules is
+handled by the build recipes in [ibek-support](https://github.com/epics-containers/ibek-support),
+not by a general-purpose `ibek build` command.
+
+## Runtime generation
+
+In an IOC image, the startup script normally runs the equivalent of:
+
+```bash
+ibek runtime generate2 /epics/ioc/config
+ibek runtime place-files /epics/ioc/config
+ibek runtime generate-autosave
+ibek ioc do-wait
 ```
 
-For the YAML formats these commands consume and produce, and for the vendoring
-concepts behind `ibek pattern`, see the dedicated pages — they are not repeated
-here:
+`generate2` reads `ioc.yaml` then `runtime.yaml` when present in the supplied
+folder. Repeated `--instance` / `-i` options add files **before** those two;
+the first file supplies the IOC name and later files append entities. Without
+`--definitions`, support definitions are discovered recursively in
+`$EPICS_ROOT/ibek-defs` and the config folder. Supplying `--definitions` replaces
+that automatic discovery; repeat it for each required file.
 
-- {doc}`support-yaml` and {doc}`ioc-yaml` — the support and instance YAML
-  formats and the schema artifacts.
-- {doc}`jinja-context` — the Jinja template context used during generation.
-- {doc}`../how-to/vendor-runtime-patterns` — how to use `ibek pattern`.
+Generation recreates the output directory (default `/epics/runtime`), writing
+`st.cmd`, `ioc.subst`, and any generated auxiliary files. Run `place-files`
+**after** generation: it copies top-level `.proto` / `.protocol` files into
+`runtime/protocol`, and `.db` / `.template` files into `runtime/db`.
 
-## Things worth knowing
+PVI generation is enabled by default; `--no-pvi` disables it. `--output` changes
+the startup/substitution output directory, but does not relocate every runtime
+or PVI path. See {doc}`paths-and-environment`.
 
-```{note}
-**`ibek runtime generate` is LEGACY.** It builds a startup script from a single
-instance file and is superseded by `ibek runtime generate2`, which supports
-multiple instance files. `generate2` auto-gathers `ioc.yaml` and `runtime.yaml`
-from its positional config-folder argument (e.g. a `ioc.yaml` from the image
-plus a `runtime.yaml` from the services repo), and `--instance`/`-i` supplies
-any further instance files on top of those. Prefer `generate2` for new work.
+The image's startup script still expands substitutions with EPICS `msi` and
+launches the IOC executable. `generate2` does not start the IOC.
+`runtime generate` remains available for legacy single-file invocations; use
+`generate2` for new scripts.
+
+## Schema generation
+
+The three schema commands have different inputs:
+
+```bash
+# The format accepted by every *.ibek.support.yaml file
+ibek support generate-schema --output ibek.support.schema.json
+
+# IOC entities supplied by explicitly named support definitions
+ibek ioc generate-schema --no-ibek-defs motor.ibek.support.yaml \
+    --output ibek.ioc.schema.json
+
+# Published image entities plus an instance's local runtime support
+ibek pattern schema services/my-ioc
 ```
 
-```{note}
-**`ibek support generate-schema --output` has no default.** If you omit
-`--output`, the global JSON schema is printed to stdout; pass `--output FILE` to
-write it to a file instead. The same is true of `ibek ioc generate-schema`.
+The first two print JSON to stdout when `--output` is omitted.
+`ioc generate-schema` includes definitions directly in `/epics/ibek-defs` by
+default; `--no-ibek-defs` disables that lookup. `pattern schema` instead uses
+the published schema for the instance's image; see
+{doc}`../how-to/vendor-runtime-patterns` and {doc}`paths-and-environment` for
+its cache behavior.
+
+## Development commands
+
+```bash
+ibek dev instance /workspaces/my-services/services/my-ioc
 ```
 
-```{note}
-**`ibek pattern check` integrity policy.** By default a hash mismatch between a
-vendored file and `runtime-lock.yaml` is a hard error (non-zero exit). Pass
-`--allow-dirty`, or set the environment variable `IBEK_ALLOW_DIRTY=1`, to
-downgrade mismatches to warnings while still reporting them.
-```
+This replaces `/epics/ioc/config` with a symlink to the instance's `config`
+directory. It removes the previous directory or link, so use it in the
+development container with the instance configuration kept in version control.
 
-## Command tree
+`dev support` is a placeholder and raises `NotImplementedError`.
+`ioc build-docker` is experimental: it interprets supported Dockerfile steps
+inside the development container; it is not a substitute for building an image.
+`ioc extract-runtime-assets` moves files out of its source tree for speed;
+run it only in the disposable packaging stage intended by the image build.
+
+## Complete command reference
 
 ```{eval-rst}
 .. typer:: ibek.__main__:cli

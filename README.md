@@ -5,27 +5,37 @@
 
 # ibek
 
-IOC builder for EPICS and Kubernetes
+ibek is the IOC builder for [epics-containers](https://epics-containers.github.io/).
+It combines reusable support definitions with an IOC instance's YAML to generate
+its startup script and database substitutions. A generic IOC image supplies the
+compiled EPICS support; instance configuration selects what that image runs.
 
-ibek is the [epics-containers](https://epics-containers.github.io) IOC builder.
-It declaratively defines EPICS IOC instances for containers and Kubernetes,
-separating a *generic IOC image* (which bundles a set of EPICS support modules)
-from an *IOC instance* (a YAML description of what that image should run). From
-that YAML, ibek generates the IOC startup script (`st.cmd`) and EPICS database
-that the container runs. Recent versions also add `ibek pattern` for vendoring
-runtime-support patterns into a services repo. See the
-[documentation](https://epics-containers.github.io/ibek) for the overview and
-tutorials.
+The CLI supports several stages of that workflow:
 
+| Where | Commands | Purpose |
+| --- | --- | --- |
+| Container build | `ibek support`, `ibek ioc` | Prepare support, schemas and generic IOC assets. |
+| Running IOC container | `ibek runtime` | Generate startup files, databases and related runtime assets. |
+| Development container | `ibek dev` | Connect an IOC instance checkout to the development environment. |
+| Services checkout, outside the IOC container | `ibek pattern` | Vendor runtime patterns and compose the instance schema. |
 
-What            | Where
-:---:           | :---:
-Source          | <https://github.com/epics-containers/ibek>
-PyPI            | `pip install ibek`
-Documentation   | <https://epics-containers.github.io/ibek>
-Releases        | <https://github.com/epics-containers/ibek/releases>
+See the [CLI reference](https://epics-containers.github.io/ibek/main/reference/cli.html)
+for individual commands and exceptions to these groupings.
 
+Install the standalone CLI with Python 3.13 or later:
 
-<!-- README only content. Anything below this line won't be included in index.md -->
+```bash
+uv tool install ibek
+ibek --help
+```
 
-See https://epics-containers.github.io/ibek for more detailed documentation.
+EPICS build and runtime operations also need the tools and directory layout
+provided by the appropriate IOC container.
+
+[Read the documentation](https://epics-containers.github.io/ibek/) for a small
+rendering tutorial, YAML and Jinja references, and how ibek uses ibek-support.
+For creating and deploying complete IOCs, use the
+[epics-containers documentation](https://epics-containers.github.io/).
+
+[Source](https://github.com/epics-containers/ibek) ·
+[Releases](https://github.com/epics-containers/ibek/releases)

@@ -13,9 +13,21 @@ import os
 import re
 from collections.abc import Mapping
 from pathlib import Path
+from types import MappingProxyType
 from typing import Any
 
-from jinja2 import StrictUndefined, Template
+from jinja2 import Environment, StrictUndefined, Template, Undefined
+
+
+def make_template(text: str, *, strict: bool = True) -> Template:
+    """Create a template with read-only process environment access.
+
+    Register ``env`` as a Jinja global so existing context variables with that
+    name take precedence. The mapping reflects changes to the process environment.
+    """
+    environment = Environment(undefined=StrictUndefined if strict else Undefined)
+    environment.globals["env"] = MappingProxyType(os.environ)
+    return environment.from_string(text)
 
 
 class Utils:
@@ -113,7 +125,7 @@ class Utils:
         elif isinstance(template_text, str):
             # if the template is not a string, jinja render it
             try:
-                jinja_template = Template(template_text, undefined=StrictUndefined)
+                jinja_template = make_template(template_text)
                 result = jinja_template.render(  # type: ignore
                     context,
                     # global context for all jinja renders

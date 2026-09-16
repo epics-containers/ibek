@@ -1,6 +1,6 @@
 # Explanations
 
-Explanations of how it works and why it works that way.
+Understand ibek's place in epics-containers and how its inputs become IOC assets.
 
 ```{toctree}
 :maxdepth: 1
