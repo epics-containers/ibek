@@ -26,7 +26,7 @@ and deploying IOCs. [How ibek fits](explanations/overview.md) connects the two.
 Install ibek and generate your first startup files.
 
 ```{toctree}
-:maxdepth: 1
+:maxdepth: 2
 
 tutorials
 ```
@@ -36,7 +36,7 @@ tutorials
 Write support definitions, vendor runtime patterns, and diagnose problems.
 
 ```{toctree}
-:maxdepth: 1
+:maxdepth: 2
 
 how-to
 ```
@@ -46,7 +46,7 @@ how-to
 Commands, YAML fields, template context, paths and environment variables.
 
 ```{toctree}
-:maxdepth: 1
+:maxdepth: 2
 
 reference
 ```
@@ -56,7 +56,7 @@ reference
 The framework, ibek-support, and the path from YAML to a running IOC.
 
 ```{toctree}
-:maxdepth: 1
+:maxdepth: 2
 
 explanations
 ```
