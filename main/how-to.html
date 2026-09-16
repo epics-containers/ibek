@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>How-to Guides &#8212; ibek 4.6.3b2.dev1+gd64cd8703 documentation</title>
+    <title>How-to guides &#8212; ibek 4.6.4.dev2+ge9e9f6fcc documentation</title>
   
   
   
@@ -42,7 +42,7 @@
   <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=cb8930eaaf36d9849b67" />
 <link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=cb8930eaaf36d9849b67" />
 
-    <script src="_static/documentation_options.js?v=45aba603"></script>
+    <script src="_static/documentation_options.js?v=987f8334"></script>
     <script src="_static/doctools.js?v=fd6eb6e6"></script>
     <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="_static/clipboard.min.js?v=a7894cd8"></script>
@@ -60,8 +60,8 @@
     <link rel="icon" href="_static/dls-logo.svg"/>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Vendor runtime-support patterns into a services repo" href="how-to/vendor-runtime-patterns.html" />
-    <link rel="prev" title="Build your first IOC instance" href="tutorials/build-an-ioc.html" />
+    <link rel="next" title="Write support for a module" href="how-to/write-support.html" />
+    <link rel="prev" title="Connect a controller and its motors" href="tutorials/connect-entities.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="main" />
@@ -163,14 +163,7 @@
 
 <li class="nav-item current active">
   <a class="nav-link nav-internal" href="#">
-    How-to Guides
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="explanations.html">
-    Explanations
+    How-to guides
   </a>
 </li>
 
@@ -178,6 +171,13 @@
 <li class="nav-item ">
   <a class="nav-link nav-internal" href="reference.html">
     Reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="explanations.html">
+    Explanations
   </a>
 </li>
 
@@ -316,14 +316,7 @@
 
 <li class="nav-item current active">
   <a class="nav-link nav-internal" href="#">
-    How-to Guides
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="explanations.html">
-    Explanations
+    How-to guides
   </a>
 </li>
 
@@ -331,6 +324,13 @@
 <li class="nav-item ">
   <a class="nav-link nav-internal" href="reference.html">
     Reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="explanations.html">
+    Explanations
   </a>
 </li>
 
@@ -423,8 +423,11 @@
      aria-label="Section Navigation">
   <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
   <div class="bd-toc-item navbar-nav"><ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="how-to/vendor-runtime-patterns.html">Vendor runtime-support patterns into a services repo</a></li>
-<li class="toctree-l1"><a class="reference internal" href="how-to/contribute.html">Contribute to the project</a></li>
+<li class="toctree-l1"><a class="reference internal" href="how-to/write-support.html">Write support for a module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="how-to/build-support.html">Build support with Ansible</a></li>
+<li class="toctree-l1"><a class="reference internal" href="how-to/vendor-runtime-patterns.html">Vendor runtime support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="how-to/troubleshoot.html">Troubleshoot ibek</a></li>
+<li class="toctree-l1"><a class="reference internal" href="how-to/contribute.html">Develop ibek</a></li>
 </ul>
 </div>
 </nav></div>
@@ -465,7 +468,7 @@
         <i class="fa-solid fa-home"></i>
       </a>
     </li>
-    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">How-to Guides</span></li>
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">How-to guides</span></li>
   </ul>
 </nav>
 </div>
@@ -483,12 +486,15 @@
                 <article class="bd-article">
                   
   <section id="how-to-guides">
-<h1>How-to Guides<a class="headerlink" href="#how-to-guides" title="Link to this heading">#</a></h1>
-<p>Practical step-by-step guides for the more experienced user.</p>
+<h1>How-to guides<a class="headerlink" href="#how-to-guides" title="Link to this heading">#</a></h1>
+<p>Focused recipes for support authors, IOC developers and maintainers.</p>
 <div class="toctree-wrapper compound">
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="how-to/vendor-runtime-patterns.html">Vendor runtime-support patterns into a services repo</a></li>
-<li class="toctree-l1"><a class="reference internal" href="how-to/contribute.html">Contribute to the project</a></li>
+<li class="toctree-l1"><a class="reference internal" href="how-to/write-support.html">Write support for a module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="how-to/build-support.html">Build support with Ansible</a></li>
+<li class="toctree-l1"><a class="reference internal" href="how-to/vendor-runtime-patterns.html">Vendor runtime support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="how-to/troubleshoot.html">Troubleshoot ibek</a></li>
+<li class="toctree-l1"><a class="reference internal" href="how-to/contribute.html">Develop ibek</a></li>
 </ul>
 </div>
 </section>
@@ -504,20 +510,20 @@
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="tutorials/build-an-ioc.html"
+       href="tutorials/connect-entities.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Build your first IOC instance</p>
+        <p class="prev-next-title">Connect a controller and its motors</p>
       </div>
     </a>
     <a class="right-next"
-       href="how-to/vendor-runtime-patterns.html"
+       href="how-to/write-support.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Vendor runtime-support patterns into a services repo</p>
+        <p class="prev-next-title">Write support for a module</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>

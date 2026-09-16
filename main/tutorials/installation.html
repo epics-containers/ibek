@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Installation &#8212; ibek 4.6.3b2.dev1+gd64cd8703 documentation</title>
+    <title>Install ibek &#8212; ibek 4.6.4.dev2+ge9e9f6fcc documentation</title>
   
   
   
@@ -42,7 +42,7 @@
   <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=cb8930eaaf36d9849b67" />
 <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=cb8930eaaf36d9849b67" />
 
-    <script src="../_static/documentation_options.js?v=45aba603"></script>
+    <script src="../_static/documentation_options.js?v=987f8334"></script>
     <script src="../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -60,7 +60,7 @@
     <link rel="icon" href="../_static/dls-logo.svg"/>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Build your first IOC instance" href="build-an-ioc.html" />
+    <link rel="next" title="Render an IOC configuration" href="build-an-ioc.html" />
     <link rel="prev" title="Tutorials" href="../tutorials.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
@@ -163,14 +163,7 @@
 
 <li class="nav-item ">
   <a class="nav-link nav-internal" href="../how-to.html">
-    How-to Guides
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="../explanations.html">
-    Explanations
+    How-to guides
   </a>
 </li>
 
@@ -178,6 +171,13 @@
 <li class="nav-item ">
   <a class="nav-link nav-internal" href="../reference.html">
     Reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../explanations.html">
+    Explanations
   </a>
 </li>
 
@@ -316,14 +316,7 @@
 
 <li class="nav-item ">
   <a class="nav-link nav-internal" href="../how-to.html">
-    How-to Guides
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="../explanations.html">
-    Explanations
+    How-to guides
   </a>
 </li>
 
@@ -331,6 +324,13 @@
 <li class="nav-item ">
   <a class="nav-link nav-internal" href="../reference.html">
     Reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../explanations.html">
+    Explanations
   </a>
 </li>
 
@@ -423,8 +423,9 @@
      aria-label="Section Navigation">
   <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
   <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">Installation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="build-an-ioc.html">Build your first IOC instance</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Install ibek</a></li>
+<li class="toctree-l1"><a class="reference internal" href="build-an-ioc.html">Render an IOC configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="connect-entities.html">Connect a controller and its motors</a></li>
 </ul>
 </div>
 </nav></div>
@@ -468,7 +469,7 @@
     
     <li class="breadcrumb-item"><a href="../tutorials.html" class="nav-link">Tutorials</a></li>
     
-    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Installation</span></li>
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Install ibek</span></li>
   </ul>
 </nav>
 </div>
@@ -485,53 +486,29 @@
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section id="installation">
-<h1>Installation<a class="headerlink" href="#installation" title="Link to this heading">#</a></h1>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>ibek normally runs <em>inside</em> a generic IOC container image, where it is already
-installed and where it has access to the EPICS support modules it needs. The
-direct <code class="docutils literal notranslate"><span class="pre">pip</span></code> install below is mainly for trying out the command line interface
-or for local development of ibek itself. For the bigger picture see the
-<a class="reference internal" href="../explanations/overview.html"><span class="std std-doc">overview</span></a> and the
-<a class="reference external" href="https://epics-containers.github.io">epics-containers</a> ecosystem.</p>
-</div>
-<section id="check-your-version-of-python">
-<h2>Check your version of python<a class="headerlink" href="#check-your-version-of-python" title="Link to this heading">#</a></h2>
-<p>You will need python 3.13 or later. You can check your version of python by
-typing into a terminal:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ python3 --version
+  <section id="install-ibek">
+<h1>Install ibek<a class="headerlink" href="#install-ibek" title="Link to this heading">#</a></h1>
+<p>Generic IOC containers already include ibek. Install it on your workstation to
+manage runtime patterns, generate schemas or render configuration without
+starting an IOC. Python 3.13 or newer is required.</p>
+<p>For an isolated command-line installation with <code class="docutils literal notranslate"><span class="pre">uv</span></code>:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>uv<span class="w"> </span>tool<span class="w"> </span>install<span class="w"> </span>ibek
+ibek<span class="w"> </span>--version
+ibek<span class="w"> </span>--help
 </pre></div>
 </div>
-</section>
-<section id="create-a-virtual-environment">
-<h2>Create a virtual environment<a class="headerlink" href="#create-a-virtual-environment" title="Link to this heading">#</a></h2>
-<p>It is recommended that you install into a “virtual environment” so this
-installation will not interfere with any existing Python software:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ python3 -m venv /path/to/venv
-$ source /path/to/venv/bin/activate
+<p>Alternatively, use a Python virtual environment:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python3<span class="w"> </span>-m<span class="w"> </span>venv<span class="w"> </span>.venv
+<span class="nb">source</span><span class="w"> </span>.venv/bin/activate
+python<span class="w"> </span>-m<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>ibek
+ibek<span class="w"> </span>--version
 </pre></div>
 </div>
-</section>
-<section id="installing-the-library">
-<h2>Installing the library<a class="headerlink" href="#installing-the-library" title="Link to this heading">#</a></h2>
-<p>You can now use <code class="docutils literal notranslate"><span class="pre">pip</span></code> to install the library and its dependencies:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ python3 -m pip install ibek
-</pre></div>
-</div>
-<p>If you require a feature that is not currently released you can also install
-from github:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ python3 -m pip install git+https://github.com/epics-containers/ibek.git
-</pre></div>
-</div>
-<p>The library should now be installed and the commandline interface on your path.
-You can check the version that has been installed by typing:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ ibek --version
-</pre></div>
-</div>
-<p>For an end-to-end walkthrough of building an IOC, see
-<a class="reference internal" href="build-an-ioc.html"><span class="std std-doc">Build an IOC</span></a>.</p>
-</section>
+<p>The Python package does not install EPICS, support modules or a generic IOC.
+Build and development helpers expect the environment supplied by an
+<a class="reference external" href="https://epics-containers.github.io/main/tutorials/dev_container.html">epics-containers developer container</a>.</p>
+<p>Continue with <a class="reference internal" href="build-an-ioc.html"><span class="std std-doc">Render an IOC configuration</span></a>, which needs only
+ibek. For work on ibek’s own source, see <a class="reference internal" href="../how-to/contribute.html"><span class="std std-doc">contributing</span></a>.</p>
 </section>
 
 
@@ -558,7 +535,7 @@ You can check the version that has been installed by typing:</p>
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Build your first IOC instance</p>
+        <p class="prev-next-title">Render an IOC configuration</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -572,20 +549,6 @@ You can check the version that has been installed by typing:</p>
                 <dialog id="pst-secondary-sidebar-modal"></dialog>
                 <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
 
-
-  <div class="sidebar-secondary-item">
-<div
-    id="pst-page-navigation-heading-2"
-    class="page-toc tocsection onthispage">
-    <i class="fa-solid fa-list"></i> On this page
-  </div>
-  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
-    <ul class="pst-show_toc_level nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#check-your-version-of-python">Check your version of python</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#create-a-virtual-environment">Create a virtual environment</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#installing-the-library">Installing the library</a></li>
-</ul>
-  </nav></div>
 
   <div class="sidebar-secondary-item">
 

@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Overview: what ibek is and its core concepts &#8212; ibek 4.6.3b2.dev1+gd64cd8703 documentation</title>
+    <title>Where ibek fits &#8212; ibek 4.6.4.dev2+ge9e9f6fcc documentation</title>
   
   
   
@@ -42,7 +42,7 @@
   <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=cb8930eaaf36d9849b67" />
 <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=cb8930eaaf36d9849b67" />
 
-    <script src="../_static/documentation_options.js?v=45aba603"></script>
+    <script src="../_static/documentation_options.js?v=987f8334"></script>
     <script src="../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -60,7 +60,7 @@
     <link rel="icon" href="../_static/dls-logo.svg"/>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Architecture and data flow" href="architecture.html" />
+    <link rel="next" title="Files and lifecycle" href="architecture.html" />
     <link rel="prev" title="Explanations" href="../explanations.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
@@ -163,14 +163,7 @@
 
 <li class="nav-item ">
   <a class="nav-link nav-internal" href="../how-to.html">
-    How-to Guides
-  </a>
-</li>
-
-
-<li class="nav-item current active">
-  <a class="nav-link nav-internal" href="../explanations.html">
-    Explanations
+    How-to guides
   </a>
 </li>
 
@@ -178,6 +171,13 @@
 <li class="nav-item ">
   <a class="nav-link nav-internal" href="../reference.html">
     Reference
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../explanations.html">
+    Explanations
   </a>
 </li>
 
@@ -316,14 +316,7 @@
 
 <li class="nav-item ">
   <a class="nav-link nav-internal" href="../how-to.html">
-    How-to Guides
-  </a>
-</li>
-
-
-<li class="nav-item current active">
-  <a class="nav-link nav-internal" href="../explanations.html">
-    Explanations
+    How-to guides
   </a>
 </li>
 
@@ -331,6 +324,13 @@
 <li class="nav-item ">
   <a class="nav-link nav-internal" href="../reference.html">
     Reference
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../explanations.html">
+    Explanations
   </a>
 </li>
 
@@ -423,8 +423,8 @@
      aria-label="Section Navigation">
   <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
   <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">Overview: what ibek is and its core concepts</a></li>
-<li class="toctree-l1"><a class="reference internal" href="architecture.html">Architecture and data flow</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Where ibek fits</a></li>
+<li class="toctree-l1"><a class="reference internal" href="architecture.html">Files and lifecycle</a></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="decisions.html">Architectural Decision Records</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l2"><a class="reference internal" href="decisions/0001-record-architecture-decisions.html">1. Record architecture decisions</a></li>
 <li class="toctree-l2"><a class="reference internal" href="decisions/0002-switched-to-python-copier-template.html">2. Adopt python-copier-template for project structure</a></li>
@@ -475,7 +475,7 @@
     
     <li class="breadcrumb-item"><a href="../explanations.html" class="nav-link">Explanations</a></li>
     
-    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Overview: what ibek is and its core concepts</span></li>
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Where ibek fits</span></li>
   </ul>
 </nav>
 </div>
@@ -492,169 +492,76 @@
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section id="overview-what-ibek-is-and-its-core-concepts">
-<h1>Overview: what ibek is and its core concepts<a class="headerlink" href="#overview-what-ibek-is-and-its-core-concepts" title="Link to this heading">#</a></h1>
-<p>ibek (IOC Builder for EPICS and Kubernetes) is the
-<a class="reference external" href="https://epics-containers.github.io/main/">epics-containers</a> tool for building
-EPICS IOCs that run in containers and Kubernetes. It lets you <em>declaratively</em>
-describe an EPICS IOC instance in YAML — which devices it talks to and how they
-are configured — and then renders the EPICS startup script (<code class="docutils literal notranslate"><span class="pre">st.cmd</span></code>) and
-database that boot that IOC. Instead of hand-writing and maintaining boot
-scripts and substitution files per IOC, you write a short, schema-validated YAML
-file and let ibek generate the rest at container runtime.</p>
-<p>This page introduces the ideas and vocabulary you need before reading anything
-else. It deliberately stays at the conceptual level: it does not document
-individual commands, YAML fields, or module internals — those live in the
-<a class="reference internal" href="../reference.html"><span class="doc">reference</span></a> pages and in
-<a class="reference internal" href="architecture.html"><span class="doc">architecture</span></a>.</p>
-<section id="who-ibek-is-for">
-<h2>Who ibek is for<a class="headerlink" href="#who-ibek-is-for" title="Link to this heading">#</a></h2>
-<p>ibek serves two distinct audiences, and most of the documentation is organised
-around the boundary between them.</p>
-<ul class="simple">
-<li><p><strong>Generic IOC / container developers</strong> build the container images. They pick a
-set of EPICS support modules, write the YAML that exposes each module’s
-features, and produce a reusable image (for example <code class="docutils literal notranslate"><span class="pre">ioc-pmac</span></code>). They care
-about how support is described and how an image’s schema is published.</p></li>
-<li><p><strong>IOC instance designers and operators</strong> consume those images. They write a
-small YAML file that says “run <em>this</em> generic IOC, talking to <em>these</em> devices,
-with <em>these</em> addresses and macros”, validate it against the image’s published
-schema, and deploy it to Kubernetes. They rarely touch C code or build images.</p></li>
-</ul>
-<p>The clean split between these roles is the central design idea: a developer
-publishes <em>capability</em> (an image plus a schema describing what it can do), and an
-operator declares <em>intent</em> (one instance’s configuration) against that schema.</p>
+  <section id="where-ibek-fits">
+<h1>Where ibek fits<a class="headerlink" href="#where-ibek-fits" title="Link to this heading">#</a></h1>
+<p>ibek is the configuration and build helper for
+<a class="reference external" href="https://epics-containers.github.io/main/">epics-containers</a>. Its main runtime
+job is to turn an IOC instance’s YAML into an EPICS startup script and database
+substitutions. It also provides tools for building generic IOC images and
+preparing instance configuration outside containers.</p>
+<section id="images-definitions-and-instances">
+<h2>Images, definitions and instances<a class="headerlink" href="#images-definitions-and-instances" title="Link to this heading">#</a></h2>
+<p>A <strong>generic IOC image</strong> contains an IOC executable, compiled EPICS support
+modules, database templates and ibek. It can serve many devices without being
+rebuilt for each one.</p>
+<p><strong>Support YAML</strong> describes the features that image exposes. Each file names a
+module and declares <strong>entity models</strong>: typed parameters, startup commands and
+database loads. These are commonly maintained in
+<a class="reference external" href="https://github.com/epics-containers/ibek-support">ibek-support</a>, alongside the
+recipes for building the corresponding EPICS modules.</p>
+<p>An <strong>IOC instance</strong> supplies concrete entities in YAML. Its <code class="docutils literal notranslate"><span class="pre">type</span></code> values select
+models such as <code class="docutils literal notranslate"><span class="pre">asyn.AsynIP</span></code>; other fields supply addresses, PV prefixes and
+references to other entities. At boot, ibek validates these inputs against the
+support definitions and renders the files for this instance.</p>
 </section>
-<section id="generic-iocs-versus-ioc-instances">
-<h2>Generic IOCs versus IOC instances<a class="headerlink" href="#generic-iocs-versus-ioc-instances" title="Link to this heading">#</a></h2>
-<p>The most important distinction in epics-containers is between a <strong>generic IOC</strong>
-and an <strong>IOC instance</strong>:</p>
-<ul class="simple">
-<li><p>A <strong>generic IOC</strong> is a <em>container image</em> that bundles a chosen set of EPICS
-support modules together with their libraries, DB templates and <code class="docutils literal notranslate"><span class="pre">ibek</span></code>
-itself. It is generic because, on its own, it is not configured to talk to any
-particular hardware — it is the reusable “kit of parts”. <code class="docutils literal notranslate"><span class="pre">ioc-pmac</span></code>, which
-bundles the <code class="docutils literal notranslate"><span class="pre">pmac</span></code> and <code class="docutils literal notranslate"><span class="pre">motor</span></code> support modules, is a typical example.</p></li>
-<li><p>An <strong>IOC instance</strong> is a <em>YAML description</em> of what one running IOC should do
-with a generic IOC image: which entities to create, which devices to connect
-to, and what addresses and macros to use. The image supplies the capability;
-the instance supplies the specifics.</p></li>
-</ul>
-<p>The same generic IOC image is reused by many instances — a single <code class="docutils literal notranslate"><span class="pre">ioc-pmac</span></code>
-image can back dozens of motion IOCs that differ only in their instance YAML.
-For a fuller treatment of this distinction across the whole epics-containers
-ecosystem, see the upstream explanation
-<a class="reference external" href="https://epics-containers.github.io/main/explanations/introduction.html#generic-iocs-and-instances">Generic IOCs and instances</a>.</p>
-</section>
-<section id="entity-models-and-entities">
-<h2>Entity Models and Entities<a class="headerlink" href="#entity-models-and-entities" title="Link to this heading">#</a></h2>
-<p>A generic IOC needs a machine-readable description of <em>what features its support
-modules offer</em>. ibek expresses this with <strong>Entity Models</strong>.</p>
-<p>An <strong>Entity Model</strong> (implemented by the <code class="docutils literal notranslate"><span class="pre">EntityModel</span></code> class) describes one class
-of thing an IOC instance can create — a controller, a port, an axis, a detector
-plugin, and so on. Each Entity Model declares:</p>
-<ul class="simple">
-<li><p>the parameters an instance must (or may) supply,</p></li>
-<li><p>the startup-script snippets to emit, as Jinja templates that reference those
-parameters,</p></li>
-<li><p>the EPICS databases to load, with macros taken from those parameters.</p></li>
-</ul>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>Entity Models were previously called <strong>Definitions</strong> in older ibek
-documentation and YAML. The current term is <em>Entity Model</em>; if you encounter
-“Definition” in historical material, read it as “Entity Model”.</p>
+<section id="responsibilities">
+<h2>Responsibilities<a class="headerlink" href="#responsibilities" title="Link to this heading">#</a></h2>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Component</p></th>
+<th class="head"><p>Responsibility</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>EPICS support module</p></td>
+<td><p>Driver code, record support and database templates</p></td>
+</tr>
+<tr class="row-odd"><td><p>ibek-support</p></td>
+<td><p>Module build recipes and support YAML exposing their features</p></td>
+</tr>
+<tr class="row-even"><td><p>Generic IOC project</p></td>
+<td><p>Selects module versions and builds a reusable image</p></td>
+</tr>
+<tr class="row-odd"><td><p>ibek</p></td>
+<td><p>Schema generation, YAML validation, rendering and lifecycle helpers</p></td>
+</tr>
+<tr class="row-even"><td><p>Services repository</p></td>
+<td><p>Instance YAML, runtime assets and deployment configuration</p></td>
+</tr>
+<tr class="row-odd"><td><p>Docker Compose or Kubernetes</p></td>
+<td><p>Runs and manages the container</p></td>
+</tr>
+</tbody>
+</table>
 </div>
-<p>Each support module ships its Entity Models in a file named
-<code class="docutils literal notranslate"><span class="pre">&lt;module&gt;.ibek.support.yaml</span></code>, which lives alongside the module inside the
-generic IOC image. A generic IOC therefore contains a collection of these
-support YAML files — one per support module it bundles.</p>
-<p>An <strong>Entity</strong> is a single instance of an Entity Model, created by an IOC
-instance. In the instance’s YAML each entity carries a <code class="docutils literal notranslate"><span class="pre">type</span></code> of the form
-<code class="docutils literal notranslate"><span class="pre">&lt;module&gt;.&lt;EntityModelName&gt;</span></code> (for example <code class="docutils literal notranslate"><span class="pre">motorSim.simMotorController</span></code>), which names exactly
-which Entity Model, from which module, it instantiates. ibek looks up that
-model, validates the supplied parameters against it, and renders the
-corresponding startup-script lines and database loads. The set of entities in an
-instance, taken together, is the IOC: declaring entities is how an instance
-author expresses everything the IOC should do.</p>
-<p>So the two halves fit together like a type and its values: support modules
-declare Entity Models (the available types), and an IOC instance declares
-Entities (typed values) that ibek turns into a working <code class="docutils literal notranslate"><span class="pre">st.cmd</span></code> and EPICS
-database.</p>
+<p>ibek does not require Kubernetes. The same rendering code runs on a workstation
+with explicitly supplied definitions; running the resulting IOC requires EPICS
+and the modules it references.</p>
 </section>
-<section id="the-build-and-run-lifecycle">
-<h2>The build-and-run lifecycle<a class="headerlink" href="#the-build-and-run-lifecycle" title="Link to this heading">#</a></h2>
-<p>ibek’s work is split across two phases — container <em>build</em> time and container
-<em>runtime</em> — with a published schema acting as the contract between them.</p>
-<ol class="arabic simple">
-<li><p><strong>Author support YAML.</strong> A generic IOC developer writes (or inherits from the
-support modules) one <code class="docutils literal notranslate"><span class="pre">*.ibek.support.yaml</span></code> file per module, each declaring
-that module’s Entity Models.</p></li>
-<li><p><strong>Combine into a schema at build time.</strong> When the generic IOC image is built,
-ibek merges all of the bundled support YAML files into a single <em>entities
-schema</em> — a JSON Schema describing every entity type the image can run. This
-schema is published as a GitHub artifact released alongside the image, so an
-instance author can obtain it without pulling the whole image.</p></li>
-<li><p><strong>Write the instance YAML.</strong> An IOC instance designer writes an
-<code class="docutils literal notranslate"><span class="pre">*.ibek.ioc.yaml</span></code> file listing the entities the IOC needs. Their editor
-validates this file against the image’s published entities schema, catching
-wrong types, missing parameters and typos before anything is deployed.</p></li>
-<li><p><strong>Render at runtime.</strong> When the instance’s container starts, ibek reads the
-instance YAML and the support YAML present in the image and renders the EPICS
-startup script (<code class="docutils literal notranslate"><span class="pre">st.cmd</span></code>) and the substitution/database files the IOC needs to
-boot.</p></li>
-</ol>
-<p>The important property is that the schema an operator validates against is
-generated from the very support files the image will use at runtime, so the
-thing they design against and the thing that runs cannot silently diverge. The
-detailed data flow and the file/command sequence are covered in
-<a class="reference internal" href="architecture.html"><span class="doc">architecture</span></a>.</p>
-</section>
-<section id="runtime-support-pattern-vendoring">
-<h2>Runtime-support pattern vendoring<a class="headerlink" href="#runtime-support-pattern-vendoring" title="Link to this heading">#</a></h2>
-<p>Some runtime inputs an IOC needs are not compiled into the image and are not
-naturally expressed as inline entity parameters: StreamDevice <code class="docutils literal notranslate"><span class="pre">.proto</span></code> and
-<code class="docutils literal notranslate"><span class="pre">.protocol</span></code> files, AreaDetector plugin sets, extra <code class="docutils literal notranslate"><span class="pre">*.ibek.support.yaml</span></code>, and
-their associated <code class="docutils literal notranslate"><span class="pre">db</span></code>/template files. ibek manages these with a <strong>pattern
-vendoring</strong> mechanism, driven by the <code class="docutils literal notranslate"><span class="pre">ibek</span> <span class="pre">pattern</span></code> commands.</p>
-<p>A <em>pattern</em> is a named, versioned file-set held in a central library — for
-example <code class="docutils literal notranslate"><span class="pre">ibek-runtime-streamdevice</span></code> or <code class="docutils literal notranslate"><span class="pre">ibek-runtime-support</span></code>. Rather than
-sharing those files by reference, each IOC instance <strong>vendors its own copy</strong>:
-<code class="docutils literal notranslate"><span class="pre">ibek</span> <span class="pre">pattern</span></code> copies the file-set into the instance’s <code class="docutils literal notranslate"><span class="pre">config/</span></code>, stamps each
-file with a <code class="docutils literal notranslate"><span class="pre">#</span> <span class="pre">Vendored</span> <span class="pre">from</span> <span class="pre">&lt;source&gt;&#64;&lt;version&gt;</span> <span class="pre">—</span> <span class="pre">DO</span> <span class="pre">NOT</span> <span class="pre">EDIT</span></code> header, and
-records every file’s SHA-256 in a <code class="docutils literal notranslate"><span class="pre">runtime-lock.yaml</span></code> at the instance root. The
-committed instance is then self-contained — the lock answers “what is this IOC
-actually running?” without depending on anything outside the instance.</p>
-<p>This <strong>replaces an older git-submodule-plus-symlink model</strong>, in which a
-pattern’s effective version was tied to the build image and to whatever the
-symlinks resolved to, rather than to the committed instance.</p>
-<p>Two points about the lock are worth fixing in your mind, because they shape how
-<code class="docutils literal notranslate"><span class="pre">update</span></code>, <code class="docutils literal notranslate"><span class="pre">restore</span></code> and <code class="docutils literal notranslate"><span class="pre">check</span></code> behave:</p>
-<ul class="simple">
-<li><p><strong>The upstream tag is the source of truth.</strong> Patterns are pinned by an
-immutable upstream tag; re-vendoring that tag always produces the same bytes.
-To change what an instance runs, you move the pin to a new tag.</p></li>
-<li><p><strong>The lock’s SHA-256 entries are a local-drift integrity check only.</strong> They
-exist so <code class="docutils literal notranslate"><span class="pre">ibek</span> <span class="pre">pattern</span> <span class="pre">check</span></code> can detect hand-edits to vendored files. They are
-<em>not</em> a content store and <em>not</em> a tamper-evident pin against upstream.</p></li>
-</ul>
-<p>To actually vendor, update, check and restore patterns, follow the how-to guide
-<a class="reference internal" href="../how-to/vendor-runtime-patterns.html"><span class="doc">Vendor runtime-support patterns</span></a>. The
-reasoning behind this design is recorded in the architecture decision records
-<a class="reference internal" href="decisions/0003-vendored-pattern-tag-is-authority.html"><span class="doc">ADR 3 — Vendored pattern tag is the authority</span></a>
-and
-<a class="reference internal" href="decisions/0004-vendor-runtime-support-over-submodules.html"><span class="doc">ADR 4 — Vendor runtime support over submodule + symlink</span></a>.</p>
-</section>
-<section id="where-to-go-next">
-<h2>Where to go next<a class="headerlink" href="#where-to-go-next" title="Link to this heading">#</a></h2>
-<ul class="simple">
-<li><p><a class="reference internal" href="../tutorials/build-an-ioc.html"><span class="doc">Build an IOC</span></a> — a hands-on, end-to-end
-tutorial that turns a sample instance YAML into a working <code class="docutils literal notranslate"><span class="pre">st.cmd</span></code>.</p></li>
-<li><p><a class="reference internal" href="architecture.html"><span class="doc">Architecture</span></a> — the module structure, the full data flow,
-and the file/command sequence behind the lifecycle described above.</p></li>
-<li><p><a class="reference internal" href="../reference.html"><span class="doc">Reference</span></a> — the CLI, the support and IOC YAML schemas
-field by field, and the Jinja rendering context.</p></li>
-</ul>
+<section id="two-ways-to-add-support">
+<h2>Two ways to add support<a class="headerlink" href="#two-ways-to-add-support" title="Link to this heading">#</a></h2>
+<p>Compiled drivers and libraries belong in the generic IOC image. Its support YAML
+and published IOC schema describe those capabilities.</p>
+<p>Runtime patterns add configuration files without rebuilding that image:
+StreamDevice protocols, database templates, extra support YAML or entity YAML.
+<code class="docutils literal notranslate"><span class="pre">ibek</span> <span class="pre">pattern</span></code> vendors these files into a services repository, records their
+versions and builds a combined instance schema. A pattern cannot add a missing
+compiled driver. See <a class="reference internal" href="../how-to/vendor-runtime-patterns.html"><span class="std std-doc">runtime pattern vendoring</span></a>.</p>
+<p>Start with <a class="reference internal" href="../tutorials/build-an-ioc.html"><span class="std std-doc">a local render</span></a> to learn ibek itself.
+For complete workflows, use the epics-containers guides to
+<a class="reference external" href="https://epics-containers.github.io/main/tutorials/generic_ioc.html">build a generic IOC</a>,
+<a class="reference external" href="https://epics-containers.github.io/main/tutorials/create_ioc.html">create an instance</a>
+and <a class="reference external" href="https://epics-containers.github.io/main/how-to/compose-quickstart.html">run it with Compose</a>.</p>
 </section>
 </section>
 
@@ -682,7 +589,7 @@ field by field, and the Jinja rendering context.</p></li>
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Architecture and data flow</p>
+        <p class="prev-next-title">Files and lifecycle</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -705,12 +612,9 @@ field by field, and the Jinja rendering context.</p></li>
   </div>
   <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="pst-show_toc_level nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#who-ibek-is-for">Who ibek is for</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#generic-iocs-versus-ioc-instances">Generic IOCs versus IOC instances</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#entity-models-and-entities">Entity Models and Entities</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-build-and-run-lifecycle">The build-and-run lifecycle</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#runtime-support-pattern-vendoring">Runtime-support pattern vendoring</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#where-to-go-next">Where to go next</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#images-definitions-and-instances">Images, definitions and instances</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#responsibilities">Responsibilities</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#two-ways-to-add-support">Two ways to add support</a></li>
 </ul>
   </nav></div>
 

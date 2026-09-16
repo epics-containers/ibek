@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Reference &#8212; ibek 4.6.3b2.dev1+gd64cd8703 documentation</title>
+    <title>Reference &#8212; ibek 4.6.4.dev2+ge9e9f6fcc documentation</title>
   
   
   
@@ -42,7 +42,7 @@
   <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=cb8930eaaf36d9849b67" />
 <link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=cb8930eaaf36d9849b67" />
 
-    <script src="_static/documentation_options.js?v=45aba603"></script>
+    <script src="_static/documentation_options.js?v=987f8334"></script>
     <script src="_static/doctools.js?v=fd6eb6e6"></script>
     <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="_static/clipboard.min.js?v=a7894cd8"></script>
@@ -61,7 +61,7 @@
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="CLI reference" href="reference/cli.html" />
-    <link rel="prev" title="4. Vendor runtime support over submodule + symlink" href="explanations/decisions/0004-vendor-runtime-support-over-submodules.html" />
+    <link rel="prev" title="Develop ibek" href="how-to/contribute.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="main" />
@@ -163,14 +163,7 @@
 
 <li class="nav-item ">
   <a class="nav-link nav-internal" href="how-to.html">
-    How-to Guides
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="explanations.html">
-    Explanations
+    How-to guides
   </a>
 </li>
 
@@ -178,6 +171,13 @@
 <li class="nav-item current active">
   <a class="nav-link nav-internal" href="#">
     Reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="explanations.html">
+    Explanations
   </a>
 </li>
 
@@ -316,14 +316,7 @@
 
 <li class="nav-item ">
   <a class="nav-link nav-internal" href="how-to.html">
-    How-to Guides
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="explanations.html">
-    Explanations
+    How-to guides
   </a>
 </li>
 
@@ -331,6 +324,13 @@
 <li class="nav-item current active">
   <a class="nav-link nav-internal" href="#">
     Reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="explanations.html">
+    Explanations
   </a>
 </li>
 
@@ -424,12 +424,14 @@
   <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
   <div class="bd-toc-item navbar-nav"><ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="reference/cli.html">CLI reference</a></li>
-<li class="toctree-l1"><a class="reference internal" href="reference/support-yaml.html">Support module YAML reference (<code class="docutils literal notranslate"><span class="pre">*.ibek.support.yaml</span></code>)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="reference/ioc-yaml.html">IOC instance YAML and schemas reference</a></li>
-<li class="toctree-l1"><a class="reference internal" href="reference/jinja-context.html">Jinja template context reference</a></li>
-<li class="toctree-l1"><a class="reference internal" href="_api/ibek.html">API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="reference/support-yaml.html">Support YAML</a></li>
+<li class="toctree-l1"><a class="reference internal" href="reference/ansible-recipes.html">Ansible build recipes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="reference/ioc-yaml.html">IOC YAML</a></li>
+<li class="toctree-l1"><a class="reference internal" href="reference/jinja-context.html">Jinja rendering and context</a></li>
+<li class="toctree-l1"><a class="reference internal" href="reference/paths-and-environment.html">Paths and environment</a></li>
+<li class="toctree-l1"><a class="reference internal" href="_api/ibek.html">Python internals</a></li>
 <li class="toctree-l1"><a class="reference internal" href="genindex.html">Index</a></li>
-<li class="toctree-l1"><a class="reference external" href="https://github.com/epics-containers/ibek/releases">Release Notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="release-notes.html">Changelog</a></li>
 </ul>
 </div>
 </nav></div>
@@ -489,16 +491,18 @@
                   
   <section id="reference">
 <h1>Reference<a class="headerlink" href="#reference" title="Link to this heading">#</a></h1>
-<p>Technical reference material: the CLI, support/IOC YAML schemas, the Jinja templating context, the Python API, and release notes.</p>
+<p>Look up commands, configuration fields and rendering behavior.</p>
 <div class="toctree-wrapper compound">
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="reference/cli.html">CLI reference</a></li>
-<li class="toctree-l1"><a class="reference internal" href="reference/support-yaml.html">Support module YAML reference (<code class="docutils literal notranslate"><span class="pre">*.ibek.support.yaml</span></code>)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="reference/ioc-yaml.html">IOC instance YAML and schemas reference</a></li>
-<li class="toctree-l1"><a class="reference internal" href="reference/jinja-context.html">Jinja template context reference</a></li>
-<li class="toctree-l1"><a class="reference internal" href="_api/ibek.html">API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="reference/support-yaml.html">Support YAML</a></li>
+<li class="toctree-l1"><a class="reference internal" href="reference/ansible-recipes.html">Ansible build recipes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="reference/ioc-yaml.html">IOC YAML</a></li>
+<li class="toctree-l1"><a class="reference internal" href="reference/jinja-context.html">Jinja rendering and context</a></li>
+<li class="toctree-l1"><a class="reference internal" href="reference/paths-and-environment.html">Paths and environment</a></li>
+<li class="toctree-l1"><a class="reference internal" href="_api/ibek.html">Python internals</a></li>
 <li class="toctree-l1"><a class="reference internal" href="genindex.html">Index</a></li>
-<li class="toctree-l1"><a class="reference external" href="https://github.com/epics-containers/ibek/releases">Release Notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="release-notes.html">Changelog</a></li>
 </ul>
 </div>
 </section>
@@ -514,12 +518,12 @@
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="explanations/decisions/0004-vendor-runtime-support-over-submodules.html"
+       href="how-to/contribute.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">4. Vendor runtime support over submodule + symlink</p>
+        <p class="prev-next-title">Develop ibek</p>
       </div>
     </a>
     <a class="right-next"

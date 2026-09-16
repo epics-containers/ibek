@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Build your first IOC instance &#8212; ibek 4.6.3b2.dev1+gd64cd8703 documentation</title>
+    <title>Render an IOC configuration &#8212; ibek 4.6.4.dev2+ge9e9f6fcc documentation</title>
   
   
   
@@ -42,370 +42,12 @@
   <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=cb8930eaaf36d9849b67" />
 <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=cb8930eaaf36d9849b67" />
 
-    <script src="../_static/documentation_options.js?v=45aba603"></script>
+    <script src="../_static/documentation_options.js?v=987f8334"></script>
     <script src="../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
     <script src="../_static/copybutton.js?v=30646c52"></script>
     <script src="../_static/design-tabs.js?v=f930bc37"></script>
-    <script type="module">import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11.12.1/dist/mermaid.esm.min.mjs";
-
-
-
-
-
-const initStyles = () => {
-    const defaultStyle = document.createElement('style');
-    defaultStyle.textContent = "pre.mermaid {\n    /* Same as .mermaid-container > pre */\n    display: block;\n    width: 100%;\n}\n\npre.mermaid > svg {\n    /* Same as .mermaid-container > pre > svg */\n    height: 500px;\n    width: 100%;\n    max-width: 100% !important;\n}";
-    document.head.appendChild(defaultStyle);
-
-    const fullscreenStyle = document.createElement('style');
-    fullscreenStyle.textContent = ".mermaid-container {\n    position: relative;\n    display: flex;\n    flex-direction: row;\n    width: 100%;\n}\n\n.mermaid-container > pre {\n    display: block;\n    width: 100%;\n}\n\n.mermaid-container > pre > svg {\n    height: 500px;\n    width: 100%;\n    max-width: 100% !important;\n}\n\n.mermaid-fullscreen-btn {\n    position: absolute;\n    width: 28px;\n    height: 28px;\n    background: rgba(255, 255, 255, 0.95);\n    border: 1px solid rgba(0, 0, 0, 0.3);\n    border-radius: 4px;\n    cursor: pointer;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    transition: all 0.2s;\n    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);\n    font-size: 14px;\n    line-height: 1;\n    padding: 0;\n    color: #333;\n}\n\n.mermaid-fullscreen-btn:hover {\n    opacity: 100% !important;\n    background: rgba(255, 255, 255, 1);\n    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);\n    transform: scale(1.1);\n}\n\n.mermaid-fullscreen-btn.dark-theme {\n    background: rgba(50, 50, 50, 0.95);\n    border: 1px solid rgba(255, 255, 255, 0.3);\n    color: #e0e0e0;\n}\n\n.mermaid-fullscreen-btn.dark-theme:hover {\n    background: rgba(60, 60, 60, 1);\n    box-shadow: 0 3px 10px rgba(255, 255, 255, 0.2);\n}\n\n.mermaid-fullscreen-modal {\n    display: none;\n    position: fixed !important;\n    top: 0 !important;\n    left: 0 !important;\n    width: 95vw;\n    height: 100vh;\n    background: rgba(255, 255, 255, 0.98);\n    z-index: 9999;\n    padding: 20px;\n    overflow: auto;\n}\n\n.mermaid-fullscreen-modal.dark-theme {\n    background: rgba(0, 0, 0, 0.98);\n}\n\n.mermaid-fullscreen-modal.active {\n    display: flex;\n    align-items: center;\n    justify-content: center;\n}\n\n.mermaid-container-fullscreen {\n    position: relative;\n    width: 95vw;\n    height: 90vh;\n    max-width: 95vw;\n    max-height: 90vh;\n    background: white;\n    border-radius: 8px;\n    padding: 20px;\n    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);\n    overflow: auto;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n}\n\n.mermaid-container-fullscreen.dark-theme {\n    background: #1a1a1a;\n    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);\n}\n\n.mermaid-container-fullscreen pre.mermaid {\n    width: 100%;\n    height: 100%;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n}\n\n.mermaid-container-fullscreen .mermaid svg {\n    height: 100% !important;\n    width: 100% !important;\n    cursor: grab;\n}\n\n.mermaid-fullscreen-close {\n    position: fixed !important;\n    top: 20px !important;\n    right: 20px !important;\n    width: 40px;\n    height: 40px;\n    background: rgba(255, 255, 255, 0.95);\n    border: 1px solid rgba(0, 0, 0, 0.2);\n    border-radius: 50%;\n    cursor: pointer;\n    z-index: 10000;\n    display: flex;\n    align-items: center;\n    justify-content: center;\n    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);\n    transition: all 0.2s;\n    font-size: 24px;\n    line-height: 1;\n    color: #333;\n}\n\n.mermaid-fullscreen-close:hover {\n    background: white;\n    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);\n    transform: scale(1.1);\n}\n\n.mermaid-fullscreen-close.dark-theme {\n    background: rgba(50, 50, 50, 0.95);\n    border: 1px solid rgba(255, 255, 255, 0.2);\n    color: #e0e0e0;\n}\n\n.mermaid-fullscreen-close.dark-theme:hover {\n    background: rgba(60, 60, 60, 1);\n    box-shadow: 0 6px 16px rgba(255, 255, 255, 0.2);\n}\n\n.mermaid-fullscreen-modal .mermaid-fullscreen-btn {\n    display: none !important;\n}";
-    document.head.appendChild(fullscreenStyle);
-}
-
-// Detect if page has dark background
-const isDarkTheme = () => {
-    // We use a set of heuristics:
-    // 1. Check for common dark mode classes or attributes
-    // 2. Check computed background color brightness
-    if (document.documentElement.classList.contains('dark') ||
-        document.documentElement.getAttribute('data-theme') === 'dark' ||
-        document.body.classList.contains('dark') ||
-        document.body.getAttribute('data-theme') === 'dark') {
-        // console.log("Dark theme detected via class/attribute");
-        return true;
-    }
-    if (document.documentElement.classList.contains('light') ||
-        document.documentElement.getAttribute('data-theme') === 'light' ||
-        document.body.classList.contains('light') ||
-        document.body.getAttribute('data-theme') === 'light') {
-        // console.log("Light theme detected via class/attribute");
-        return false;
-    }
-    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-        // console.log("Dark theme detected via prefers-color-scheme");
-        return true;
-    }
-    const bgColor = window.getComputedStyle(document.body).backgroundColor;
-    const match = bgColor.match(/rgb\((\d+),\s*(\d+),\s*(\d+)/);
-    if (match) {
-        const r = parseInt(match[1]);
-        const g = parseInt(match[2]);
-        const b = parseInt(match[3]);
-        const brightness = (r * 299 + g * 587 + b * 114) / 1000;
-        // console.log("Background color brightness:", brightness);
-        return brightness < 128;
-    }
-    // console.log("No dark or light theme detected, defaulting to light theme");
-    return false;
-};
-
-let darkTheme = isDarkTheme();
-let modal = null;
-let modalContent = null;
-let previousScrollOffset = [window.scrollX, window.scrollY];
-let _lazyObserver = null;
-let _renderQueue = Promise.resolve();
-let closeModal = () => {};
-
-document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && modal?.classList.contains('active')) {
-        closeModal();
-    }
-});
-
-// Apply d3 zoom to each SVG. Idempotent: an SVG already wrapped is skipped,
-// so this is safe to call both for the initial batch and for diagrams that
-// render lazily once they become visible.
-const addZoomToSvgs = (svgs) => {
-    svgs.each(function() {
-        if (this.getAttribute('data-zoom-applied') === 'true') return;
-        var svg = d3.select(this);
-        svg.html("<g class='wrapper'>" + svg.html() + "</g>");
-        var inner = svg.select("g");
-        var zoom = d3.zoom().on("zoom", function(event) {
-            inner.attr("transform", event.transform);
-        });
-        svg.call(zoom);
-        this.setAttribute('data-zoom-applied', 'true');
-    });
-};
-
-const runMermaid = async (rerun) => {
-    console.log("Running mermaid diagrams, rerun =", rerun);
-    // clear all existing mermaid charts
-    let all_mermaids = document.querySelectorAll(".mermaid");
-
-    if (rerun) {
-        // Disconnect any previous lazy rendering observer
-        if (_lazyObserver) {
-            _lazyObserver.disconnect();
-            _lazyObserver = null;
-        }
-
-        all_mermaids.forEach((el) => {
-            el.removeAttribute('data-mermaid-deferred');
-            el.removeAttribute('data-mermaid-render-failed');
-            if(!el.hasAttribute("data-original-code")) {
-                // store original code
-                // console.log(`Storing original code for first run: `, el.innerHTML);
-                el.setAttribute('data-original-code', el.innerHTML);
-            }
-            if(el.getAttribute("data-processed") === "true") {
-                // remove and restore original
-                el.removeAttribute("data-processed");
-                // console.log(`Restoring original code for re-run: `, el.getAttribute('data-original-code'));
-                el.innerHTML = el.getAttribute('data-original-code');
-            } else {
-                // store original code
-                // console.log(`Storing original code for re-run: `, el.innerHTML);
-                el.setAttribute('data-original-code', el.innerHTML);
-            }
-        });
-
-        // Separate visible and hidden elements. Mermaid's layout engine measures
-        // text dimensions via the DOM, which fails for elements hidden by a parent
-        // (e.g., Reveal.js non-active slides, sphinx-design unopened tabs),
-        // producing broken SVGs. Render visible elements now, defer hidden ones.
-        const visible = [];
-        const hidden = [];
-        all_mermaids.forEach((el) => {
-            // offsetParent is null for display:none ancestors.
-            // getClientRects().length > 0 catches position:fixed elements
-            // (which also have null offsetParent but are still visible).
-            if (el.offsetParent !== null || el.getClientRects().length > 0) {
-                visible.push(el);
-            } else {
-                hidden.push(el);
-                el.setAttribute('data-mermaid-deferred', 'true');
-            }
-        });
-
-        if (visible.length > 0) {
-            try {
-                await mermaid.run({ nodes: visible });
-            } catch (e) {
-                console.error("Mermaid rendering failed:", e);
-            }
-        }
-
-        // Lazily render hidden elements when they become visible.
-        // Uses a promise chain (_renderQueue) to serialize rendering,
-        // since IntersectionObserver may report multiple entries at once
-        // and mermaid.run() is not safe to call concurrently.
-        if (hidden.length > 0) {
-            if (typeof IntersectionObserver === 'undefined') {
-                console.warn("IntersectionObserver not available; hidden mermaid diagrams will not render.");
-            } else {
-                _renderQueue = Promise.resolve();
-                _lazyObserver = new IntersectionObserver((entries) => {
-                    for (const entry of entries) {
-                        if (entry.isIntersecting && entry.target.getAttribute("data-processed") !== "true") {
-                            _lazyObserver.unobserve(entry.target);
-                            const el = entry.target;
-                            _renderQueue = _renderQueue.then(async () => {
-                                try {
-                                    await mermaid.run({ nodes: [el] });
-                                    el.removeAttribute('data-mermaid-deferred');
-                                    // Apply zoom to the now-rendered diagram, matching
-                                    // the decoration visible diagrams receive.
-                                    if (false) {
-                                        addZoomToSvgs(d3.selectAll("").select(function() {
-                                            return this.querySelector("svg");
-                                        }));
-                                    }
-                                } catch (e) {
-                                    console.error("Mermaid deferred rendering failed:", e);
-                                    el.removeAttribute('data-mermaid-deferred');
-                                    el.setAttribute('data-mermaid-render-failed', 'true');
-                                }
-                            });
-                        }
-                    }
-                });
-                hidden.forEach((el) => _lazyObserver.observe(el));
-            }
-        }
-    }
-
-    all_mermaids = document.querySelectorAll(".mermaid");
-    // Exclude deferred (hidden) and render-failed elements from completion checks
-    const mermaids_active = document.querySelectorAll(".mermaid:not([data-mermaid-deferred]):not([data-mermaid-render-failed])");
-    const mermaids_processed = document.querySelectorAll(".mermaid:not([data-mermaid-deferred]):not([data-mermaid-render-failed])[data-processed='true']");
-
-    if (false) {
-        const mermaids_to_add_zoom = 0 === -1 ? mermaids_active.length : 0;
-        if(mermaids_to_add_zoom > 0) {
-            var svgs = d3.selectAll("").select(function() {
-                return this.querySelector("svg");
-            });
-            // Wait until every active (visible) diagram has rendered. Deferred
-            // diagrams are excluded, so a fixed d3_node_count that counts a
-            // hidden diagram no longer loops forever waiting for its SVG.
-            if(mermaids_active.length !== mermaids_processed.length) {
-                setTimeout(() => runMermaid(false), 200);
-                return;
-            }
-            addZoomToSvgs(svgs);
-        }
-    } else if(mermaids_active.length !== mermaids_processed.length) {
-        // Wait for mermaid to process all diagrams
-        setTimeout(() => runMermaid(false), 200);
-        return;
-    }
-
-    // Stop here if not adding fullscreen capability
-    if (!true) return;
-
-    if (modal !== null ) {
-        // Destroy existing modal
-        modal.remove();
-        modal = null;
-        modalContent = null;
-    }
-
-    modal = document.createElement('div');
-    modal.className = 'mermaid-fullscreen-modal' + (darkTheme ? ' dark-theme' : '');
-    modal.setAttribute('role', 'dialog');
-    modal.setAttribute('aria-modal', 'true');
-    modal.setAttribute('aria-label', 'Fullscreen diagram viewer');
-    modal.innerHTML = `
-        <button class="mermaid-fullscreen-close${darkTheme ? ' dark-theme' : ''}" aria-label="Close fullscreen">✕</button>
-        <div class="mermaid-container-fullscreen${darkTheme ? ' dark-theme' : ''}"></div>
-    `;
-    document.body.appendChild(modal);
-
-    modalContent = modal.querySelector('.mermaid-container-fullscreen');
-    const closeBtn = modal.querySelector('.mermaid-fullscreen-close');
-
-    closeModal = () => {
-        modal.classList.remove('active');
-        modalContent.innerHTML = '';
-        document.body.style.overflow = ''
-        window.scrollTo({left: previousScrollOffset[0], top: previousScrollOffset[1], behavior: 'instant'});
-    };
-
-    closeBtn.addEventListener('click', closeModal);
-    modal.addEventListener('click', (e) => {
-        if (e.target === modal) closeModal();
-    });
-    document.querySelectorAll('.mermaid').forEach((mermaidDiv) => {
-        if (mermaidDiv.parentNode.classList.contains('mermaid-container') ||
-            mermaidDiv.closest('.mermaid-fullscreen-modal')) {
-            // Already processed, adjust button class if needed
-            const existingBtn = mermaidDiv.parentNode.querySelector('.mermaid-fullscreen-btn');
-            if (existingBtn) {
-                existingBtn.className = 'mermaid-fullscreen-btn' + (darkTheme ? ' dark-theme' : '');
-            }
-            return;
-        }
-
-        const container = document.createElement('div');
-        container.className = 'mermaid-container';
-        mermaidDiv.parentNode.insertBefore(container, mermaidDiv);
-        container.appendChild(mermaidDiv);
-
-        const fullscreenBtn = document.createElement('button');
-        fullscreenBtn.className = 'mermaid-fullscreen-btn' + (darkTheme ? ' dark-theme' : '');
-        fullscreenBtn.setAttribute('aria-label', 'View diagram in fullscreen');
-        fullscreenBtn.textContent = "\u26f6";
-        fullscreenBtn.style.opacity = "50%";
-
-        // Calculate dynamic position based on diagram's margin and padding
-        const diagramStyle = window.getComputedStyle(mermaidDiv);
-        const marginTop = parseFloat(diagramStyle.marginTop) || 0;
-        const marginRight = parseFloat(diagramStyle.marginRight) || 0;
-        const paddingTop = parseFloat(diagramStyle.paddingTop) || 0;
-        const paddingRight = parseFloat(diagramStyle.paddingRight) || 0;
-        fullscreenBtn.style.top = `${marginTop + paddingTop + 4}px`;
-        fullscreenBtn.style.right = `${marginRight + paddingRight + 4}px`;
-
-        fullscreenBtn.addEventListener('click', () => {
-            previousScrollOffset = [window.scrollX, window.scrollY];
-            const clone = mermaidDiv.cloneNode(true);
-            modalContent.innerHTML = '';
-            modalContent.appendChild(clone);
-
-            const svg = clone.querySelector('svg');
-            if (svg) {
-                svg.removeAttribute('width');
-                svg.removeAttribute('height');
-                svg.style.width = '100%';
-                svg.style.height = 'auto';
-                svg.style.maxWidth = '100%';
-                svg.style.display = 'block';
-
-                if (false) {
-                    setTimeout(() => {
-                        const g = svg.querySelector('g');
-                        if (g) {
-                            var svgD3 = d3.select(svg);
-                            svgD3.html("<g class='wrapper'>" + svgD3.html() + "</g>");
-                            var inner = svgD3.select("g");
-                            var zoom = d3.zoom().on("zoom", function(event) {
-                                inner.attr("transform", event.transform);
-                            });
-                            svgD3.call(zoom);
-                        }
-                    }, 100);
-                }
-            }
-
-            modal.classList.add('active');
-            document.body.style.overflow = 'hidden';
-        });
-        container.appendChild(fullscreenBtn);
-    });
-};
-
-
-
-const load = async () => {
-    initStyles();
-
-
-    await runMermaid(true);
-
-    const reRunIfThemeChanges = async () => {
-        const newDarkTheme = isDarkTheme();
-        if (newDarkTheme !== darkTheme) {
-            darkTheme = newDarkTheme;
-            console.log("Theme change detected, re-running mermaid with", darkTheme ? "dark" : "default", "theme");
-            await mermaid.initialize(
-                {...{"startOnLoad": false},
-                ...{ darkMode: darkTheme, theme: darkTheme ? "dark" : "default" },
-                }
-            );
-            await runMermaid(true);
-        }
-    };
-
-    // Update theme classes when theme changes
-    const themeObserver = new MutationObserver(reRunIfThemeChanges);
-    themeObserver.observe(document.documentElement, {
-        attributes: true,
-        attributeFilter: ['class', 'style', 'data-theme']
-    });
-    themeObserver.observe(document.body, {
-        attributes: true,
-        attributeFilter: ['class', 'style', 'data-theme']
-    });
-};
-
-
-
-
-
-console.log("Initializing mermaid with", darkTheme ? "dark" : "default", "theme");
-mermaid.initialize(
-    {...{"startOnLoad": false},
-    ...{ darkMode: darkTheme, theme: darkTheme ? "dark" : "default" },
-    }
-);
-
-window.addEventListener("load", load);
-window.runMermaid = runMermaid;</script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'tutorials/build-an-ioc';</script>
     <script>
         DOCUMENTATION_OPTIONS.theme_version = '0.21.0';
@@ -418,8 +60,8 @@ window.runMermaid = runMermaid;</script>
     <link rel="icon" href="../_static/dls-logo.svg"/>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="How-to Guides" href="../how-to.html" />
-    <link rel="prev" title="Installation" href="installation.html" />
+    <link rel="next" title="Connect a controller and its motors" href="connect-entities.html" />
+    <link rel="prev" title="Install ibek" href="installation.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="main" />
@@ -521,14 +163,7 @@ window.runMermaid = runMermaid;</script>
 
 <li class="nav-item ">
   <a class="nav-link nav-internal" href="../how-to.html">
-    How-to Guides
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="../explanations.html">
-    Explanations
+    How-to guides
   </a>
 </li>
 
@@ -536,6 +171,13 @@ window.runMermaid = runMermaid;</script>
 <li class="nav-item ">
   <a class="nav-link nav-internal" href="../reference.html">
     Reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../explanations.html">
+    Explanations
   </a>
 </li>
 
@@ -674,14 +316,7 @@ window.runMermaid = runMermaid;</script>
 
 <li class="nav-item ">
   <a class="nav-link nav-internal" href="../how-to.html">
-    How-to Guides
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="../explanations.html">
-    Explanations
+    How-to guides
   </a>
 </li>
 
@@ -689,6 +324,13 @@ window.runMermaid = runMermaid;</script>
 <li class="nav-item ">
   <a class="nav-link nav-internal" href="../reference.html">
     Reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../explanations.html">
+    Explanations
   </a>
 </li>
 
@@ -781,8 +423,9 @@ window.runMermaid = runMermaid;</script>
      aria-label="Section Navigation">
   <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
   <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">Build your first IOC instance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Install ibek</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Render an IOC configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="connect-entities.html">Connect a controller and its motors</a></li>
 </ul>
 </div>
 </nav></div>
@@ -826,7 +469,7 @@ window.runMermaid = runMermaid;</script>
     
     <li class="breadcrumb-item"><a href="../tutorials.html" class="nav-link">Tutorials</a></li>
     
-    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Build your first IOC instance</span></li>
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Render an IOC configuration</span></li>
   </ul>
 </nav>
 </div>
@@ -843,317 +486,80 @@ window.runMermaid = runMermaid;</script>
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section id="build-your-first-ioc-instance">
-<h1>Build your first IOC instance<a class="headerlink" href="#build-your-first-ioc-instance" title="Link to this heading">#</a></h1>
-<p>This tutorial walks you end to end through turning a support module
-definition into a running EPICS IOC startup script, using the <code class="docutils literal notranslate"><span class="pre">motorSim</span></code>
-simulated‑motion sample that ships with <code class="docutils literal notranslate"><span class="pre">ibek</span></code>. By the end you will have:</p>
-<ol class="arabic simple">
-<li><p>read a <em>support definition</em> file and understood what it declares,</p></li>
-<li><p>generated a JSON <em>schema</em> for authoring instances,</p></li>
-<li><p>written an <em>IOC instance</em> file,</p></li>
-<li><p>generated the <em>runtime</em> files an IOC needs to boot, and</p></li>
-<li><p>compared the produced <code class="docutils literal notranslate"><span class="pre">st.cmd</span></code> against the known‑good sample.</p></li>
-</ol>
-<p>Every command here is real and tested. Inside a generic IOC container the
-<code class="docutils literal notranslate"><span class="pre">ibek</span></code> command is already on the <code class="docutils literal notranslate"><span class="pre">PATH</span></code>, so type the commands exactly as
-shown. If you are following along in a checkout of this repository instead,
-prefix each command with <code class="docutils literal notranslate"><span class="pre">uv</span> <span class="pre">run</span></code> (the first run rebuilds the virtual
-environment, so give it a moment).</p>
-<p>The bare file names below assume the container layout, where the support and
-instance files sit in the working directory. In a checkout they live under
-<code class="docutils literal notranslate"><span class="pre">tests/samples/support/</span></code>, <code class="docutils literal notranslate"><span class="pre">tests/samples/iocs/</span></code> and <code class="docutils literal notranslate"><span class="pre">tests/samples/outputs/</span></code>,
-so either <code class="docutils literal notranslate"><span class="pre">cd</span> <span class="pre">tests/samples</span></code> first and prefix the names with <code class="docutils literal notranslate"><span class="pre">support/</span></code>,
-<code class="docutils literal notranslate"><span class="pre">iocs/</span></code> and <code class="docutils literal notranslate"><span class="pre">outputs/</span></code>, or pass the full paths.</p>
-<section id="the-three-phases">
-<h2>The three phases<a class="headerlink" href="#the-three-phases" title="Link to this heading">#</a></h2>
-<p><code class="docutils literal notranslate"><span class="pre">ibek</span></code> is used at three different points in an IOC’s life. Keep this map in
-mind as you go — each step below belongs to one of these phases.</p>
-<pre  class="mermaid">
-        flowchart LR
-    A[Container build phase&lt;br/&gt;support modules + their&lt;br/&gt;.ibek.support.yaml defs&lt;br/&gt;baked into the image] --&gt; B[Authoring phase&lt;br/&gt;generate schema,&lt;br/&gt;write the instance YAML]
-    B --&gt; C[Boot phase&lt;br/&gt;runtime generate -&gt;&lt;br/&gt;st.cmd + runtime db,&lt;br/&gt;then the IOC starts]
-    </pre><p>Steps 1–3 are <strong>authoring</strong>: a developer does them once to create an IOC
-instance. Step 4 belongs to the <strong>boot phase</strong>: when an IOC container starts
-it regenerates these files. Production containers do this with the newer
-<code class="docutils literal notranslate"><span class="pre">generate2</span></code> subcommand; this tutorial uses the simpler legacy single‑instance
-<code class="docutils literal notranslate"><span class="pre">generate</span></code>, which is enough for one instance file. The support modules
-referenced in step 1 were compiled and their definition files collected during
-the earlier <strong>container build phase</strong>.</p>
-</section>
-<section id="step-1-start-from-a-support-definition-file">
-<h2>Step 1 — start from a support definition file<a class="headerlink" href="#step-1-start-from-a-support-definition-file" title="Link to this heading">#</a></h2>
-<p>A support module ships an <code class="docutils literal notranslate"><span class="pre">*.ibek.support.yaml</span></code> file that declares one or
-more <strong>Entity Models</strong> — the building blocks you can later instantiate in an
-IOC. Open the sample:</p>
-<p><code class="docutils literal notranslate"><span class="pre">tests/samples/support/motorSim.ibek.support.yaml</span></code></p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">module</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">motorSim</span>
-
-<span class="nt">entity_models</span><span class="p">:</span>
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">simMotorController</span>
-<span class="w">    </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|-</span>
-<span class="w">      </span><span class="no">Creates a simulation motion controller</span>
-<span class="w">    </span><span class="nt">parameters</span><span class="p">:</span>
-<span class="w">      </span><span class="nt">controllerName</span><span class="p">:</span>
-<span class="w">        </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">id</span>
-<span class="w">        </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|-</span>
-<span class="w">          </span><span class="no">The name of the controller and its Asyn Port Name</span>
-
-<span class="w">      </span><span class="nt">P</span><span class="p">:</span>
-<span class="w">        </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">str</span>
-<span class="w">        </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|-</span>
-<span class="w">          </span><span class="no">Device PV Prefix</span>
-
-<span class="w">      </span><span class="nt">numAxes</span><span class="p">:</span>
-<span class="w">        </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">int</span>
-<span class="w">        </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|-</span>
-<span class="w">          </span><span class="no">The number of axes to create</span>
-
-<span class="w">      </span><span class="nt">port</span><span class="p">:</span>
-<span class="w">        </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">object</span>
-<span class="w">        </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|-</span>
-<span class="w">          </span><span class="no">a reference to the asyn port for communication with the controller</span>
-
-<span class="w">      </span><span class="nt">DESC</span><span class="p">:</span>
-<span class="w">        </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">str</span>
-<span class="w">        </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|-</span>
-<span class="w">          </span><span class="no">The description of the controller</span>
-<span class="w">        </span><span class="nt">default</span><span class="p">:</span><span class="w"> </span><span class="s">"Simulated</span><span class="nv"> </span><span class="s">Motion</span><span class="nv"> </span><span class="s">Controller</span><span class="nv"> </span><span class="s">testing</span><span class="nv"> </span><span class="s">escaping:</span><span class="nv"> </span><span class="s">{%</span><span class="nv"> </span><span class="s">raw</span><span class="nv"> </span><span class="s">%}</span><span class="nv"> </span><span class="s">{{enclosed</span><span class="nv"> </span><span class="s">in</span><span class="nv"> </span><span class="s">escaped</span><span class="nv"> </span><span class="s">curly</span><span class="nv"> </span><span class="s">braces}}</span><span class="nv"> </span><span class="s">{%</span><span class="nv"> </span><span class="s">endraw</span><span class="nv"> </span><span class="s">%}"</span>
-
-<span class="w">    </span><span class="nt">pre_init</span><span class="p">:</span>
-<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
-<span class="w">          </span><span class="no"># motorSimCreateController(controller_asyn_port_name, axis_count)</span>
-<span class="w">          </span><span class="no"># testing escaping: {% raw %} {{enclosed in escaped curly braces}} {% endraw %}</span>
-<span class="w">          </span><span class="no">motorSimCreateController({{controllerName}}, {{numAxes}})</span>
-
-<span class="w">    </span><span class="nt">databases</span><span class="p">:</span>
-<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">file</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sim_motor.db</span>
-<span class="w">        </span><span class="nt">args</span><span class="p">:</span>
-<span class="w">          </span><span class="nt">controllerName</span><span class="p">:</span>
-<span class="w">          </span><span class="nt">P</span><span class="p">:</span>
-<span class="w">          </span><span class="nt">DESC</span><span class="p">:</span>
-
-<span class="w">    </span><span class="nt">pvi</span><span class="p">:</span>
-<span class="w">      </span><span class="nt">yaml_path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">simple.pvi.device.yaml</span>
-<span class="w">      </span><span class="nt">ui_macros</span><span class="p">:</span>
-<span class="w">        </span><span class="nt">P</span><span class="p">:</span>
-<span class="w">      </span><span class="nt">pv</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
-<span class="w">      </span><span class="nt">pv_prefix</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">$(P)</span>
+  <section id="render-an-ioc-configuration">
+<h1>Render an IOC configuration<a class="headerlink" href="#render-an-ioc-configuration" title="Link to this heading">#</a></h1>
+<p>This example runs outside a container with only <a class="reference internal" href="installation.html"><span class="std std-doc">ibek installed</span></a>.
+It generates startup and substitution files; running the IOC would additionally
+require EPICS and the referenced database template.</p>
+<section id="define-one-entity-model">
+<h2>Define one entity model<a class="headerlink" href="#define-one-entity-model" title="Link to this heading">#</a></h2>
+<p>Work in a new directory:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>mkdir<span class="w"> </span>ibek-example
+<span class="nb">cd</span><span class="w"> </span>ibek-example
+cat<span class="w"> </span>&gt;<span class="w"> </span>demo.ibek.support.yaml<span class="w"> </span><span class="s">&lt;&lt;'YAML'</span>
+<span class="s">module: demo</span>
+<span class="s">entity_models:</span>
+<span class="s">  - name: Status</span>
+<span class="s">    description: A status record with an IOC startup message</span>
+<span class="s">    parameters:</span>
+<span class="s">      P:</span>
+<span class="s">        type: str</span>
+<span class="s">        description: PV prefix</span>
+<span class="s">    pre_init:</span>
+<span class="s">      - type: comment</span>
+<span class="s">        value: "Configure {{ P }}status"</span>
+<span class="s">    databases:</span>
+<span class="s">      - file: status.template</span>
+<span class="s">        args:</span>
+<span class="s">          P:</span>
+<span class="s">YAML</span>
 </pre></div>
 </div>
-<p>The top‑level <code class="docutils literal notranslate"><span class="pre">module</span></code> names the support module, and <code class="docutils literal notranslate"><span class="pre">entity_models</span></code> is the
-list of models it provides. The first model above, <code class="docutils literal notranslate"><span class="pre">simMotorController</span></code>,
-declares its <code class="docutils literal notranslate"><span class="pre">parameters</span></code> (typed inputs such as <code class="docutils literal notranslate"><span class="pre">controllerName</span></code>, <code class="docutils literal notranslate"><span class="pre">P</span></code>,
-<code class="docutils literal notranslate"><span class="pre">numAxes</span></code> and a <code class="docutils literal notranslate"><span class="pre">port</span></code> of <code class="docutils literal notranslate"><span class="pre">type:</span> <span class="pre">object</span></code>), the <code class="docutils literal notranslate"><span class="pre">pre_init</span></code> startup‑script
-snippet it contributes, and the <code class="docutils literal notranslate"><span class="pre">databases</span></code> and <code class="docutils literal notranslate"><span class="pre">pvi</span></code> it brings. A second
-model, <code class="docutils literal notranslate"><span class="pre">simMotorAxis</span></code>, follows further down the file.</p>
-<p>For the full meaning of every field, see the
-<a class="reference internal" href="../reference/support-yaml.html"><span class="std std-doc">support YAML reference</span></a>.</p>
+<p>The empty database argument value means “use the parameter with this name”.
+<code class="docutils literal notranslate"><span class="pre">status.template</span></code> is an EPICS database template filename; ibek records its use
+without needing to open the file.</p>
 </section>
-<section id="step-2-generate-the-entities-schema">
-<h2>Step 2 — generate the entities schema<a class="headerlink" href="#step-2-generate-the-entities-schema" title="Link to this heading">#</a></h2>
-<p>To author an instance with editor autocompletion and validation, turn the
-support definitions into a JSON schema:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>ibek<span class="w"> </span>ioc<span class="w"> </span>generate-schema<span class="w"> </span><span class="se">\</span>
-<span class="w">    </span>motorSim.ibek.support.yaml<span class="w"> </span>asyn.ibek.support.yaml<span class="w"> </span><span class="se">\</span>
-<span class="w">    </span>--no-ibek-defs<span class="w"> </span><span class="se">\</span>
-<span class="w">    </span>--output<span class="w"> </span>motorSim.ibek.ioc.schema.json
+<section id="generate-a-schema-and-write-an-instance">
+<h2>Generate a schema and write an instance<a class="headerlink" href="#generate-a-schema-and-write-an-instance" title="Link to this heading">#</a></h2>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>ibek<span class="w"> </span>ioc<span class="w"> </span>generate-schema<span class="w"> </span>demo.ibek.support.yaml<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--no-ibek-defs<span class="w"> </span>--output<span class="w"> </span>ioc.schema.json
+mkdir<span class="w"> </span>config
+cat<span class="w"> </span>&gt;<span class="w"> </span>config/ioc.yaml<span class="w"> </span><span class="s">&lt;&lt;'YAML'</span>
+<span class="s"># yaml-language-server: $schema=../ioc.schema.json</span>
+<span class="s">ioc_name: demo</span>
+<span class="s">description: A minimal rendering example</span>
+<span class="s">entities:</span>
+<span class="s">  - type: demo.Status</span>
+<span class="s">    P: "DEMO:"</span>
+<span class="s">YAML</span>
 </pre></div>
 </div>
-<p>The <code class="docutils literal notranslate"><span class="pre">--no-ibek-defs</span></code> flag tells <code class="docutils literal notranslate"><span class="pre">ibek</span></code> to build the schema <strong>only</strong> from the
-files you list, instead of also pulling in the support definitions bundled
-into a generic IOC container. That is exactly what you want when you are
-working outside a container (as in this tutorial) — you supply the
-definitions yourself.</p>
-<p>We pass both <code class="docutils literal notranslate"><span class="pre">motorSim</span></code> <em>and</em> <code class="docutils literal notranslate"><span class="pre">asyn</span></code> because the instance we are about to
-write uses an entity from each module; the generated schema must know about
-every model the instance references.</p>
+<p><code class="docutils literal notranslate"><span class="pre">--no-ibek-defs</span></code> makes schema generation use only the supplied support file.
+The schema comment enables completion and checking in a YAML-aware editor.</p>
 </section>
-<section id="step-3-author-the-ioc-instance">
-<h2>Step 3 — author the IOC instance<a class="headerlink" href="#step-3-author-the-ioc-instance" title="Link to this heading">#</a></h2>
-<p>An IOC instance file lists the concrete entities you want, each one an
-instance of a model from step 1. Here is the sample:</p>
-<p><code class="docutils literal notranslate"><span class="pre">tests/samples/iocs/motorSim.ibek.ioc.yaml</span></code></p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># yaml-language-server: $schema=../schemas/motorSim.ibek.ioc.schema.json</span>
-
-<span class="nt">ioc_name</span><span class="p">:</span><span class="w"> </span><span class="s">"{{</span><span class="nv"> </span><span class="s">ioc_yaml_file_name</span><span class="nv"> </span><span class="s">}}"</span>
-<span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Example simulated motion IOC for Testing ibek</span>
-
-<span class="nt">entities</span><span class="p">:</span>
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">asyn.AsynIP</span>
-<span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">controllerOnePort</span>
-<span class="w">    </span><span class="nt">port</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">192.168.0.55:2002</span>
-
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">motorSim.simMotorController</span>
-<span class="w">    </span><span class="nt">port</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">controllerOnePort</span>
-<span class="w">    </span><span class="nt">controllerName</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">controllerOne</span>
-<span class="w">    </span><span class="nt">numAxes</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">4</span>
-<span class="w">    </span><span class="nt">P</span><span class="p">:</span><span class="w"> </span><span class="s">"IBEK-MO-TST-01:"</span>
-
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">motorSim.simMotorAxis</span>
-<span class="w">    </span><span class="nt">controller</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">controllerOne</span>
-<span class="w">    </span><span class="c1"># Use ADDR in other fields to verify jinja templating between Args</span>
-<span class="w">    </span><span class="nt">M</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">M{{ADDR}}</span>
-<span class="w">    </span><span class="nt">ADDR</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0</span>
-<span class="w">    </span><span class="c1"># Also use ioc_name to verify jinja templating of ioc_name</span>
-<span class="w">    </span><span class="nt">DESC</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Motor {{ADDR}} for ioc {{ioc_name}}</span>
-<span class="w">    </span><span class="nt">home</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">500</span>
-
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">motorSim.simMotorAxis</span>
-<span class="w">    </span><span class="nt">controller</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">controllerOne</span>
-<span class="w">    </span><span class="nt">M</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">M{{ADDR}}</span>
-<span class="w">    </span><span class="nt">ADDR</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
-<span class="w">    </span><span class="c1"># verify escaping for jinja templating</span>
-<span class="w">    </span><span class="nt">DESC</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Motor {{ADDR}} {% raw %} {{enclosed in escaped curly braces}} {% endraw %}</span>
-<span class="w">    </span><span class="nt">home</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">500</span>
-
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">motorSim.simMotorAxis</span>
-<span class="w">    </span><span class="nt">controller</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">controllerOne</span>
-<span class="w">    </span><span class="nt">M</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">M{{ADDR}}</span>
-<span class="w">    </span><span class="nt">ADDR</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2</span>
-<span class="w">    </span><span class="c1"># testing default DESC</span>
-<span class="w">    </span><span class="nt">home</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1500</span>
-
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">motorSim.simMotorAxis</span>
-<span class="w">    </span><span class="nt">controller</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">controllerOne</span>
-<span class="w">    </span><span class="nt">M</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">M{{ADDR}}</span>
-<span class="w">    </span><span class="nt">ADDR</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">3</span>
-<span class="w">    </span><span class="nt">DESC</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Motor {{ADDR}}</span>
-<span class="w">    </span><span class="nt">home</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2500</span>
-
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">motorSim.simMotorAxis</span>
-<span class="w">    </span><span class="nt">controller</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">controllerOne</span>
-<span class="w">    </span><span class="nt">M</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">CS_M{{ADDR}}</span>
-<span class="w">    </span><span class="nt">ADDR</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
-<span class="w">    </span><span class="nt">DESC</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">CS Motor {{ADDR}}</span>
-<span class="w">    </span><span class="nt">home</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">100</span>
-<span class="w">    </span><span class="nt">CS_NUM</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">3</span>
-<span class="w">    </span><span class="nt">is_cs</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
-
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">motorSim.simMotorAxis</span>
-<span class="w">    </span><span class="nt">controller</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">controllerOne</span>
-<span class="w">    </span><span class="nt">M</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">CS_M{{ADDR}}</span>
-<span class="w">    </span><span class="nt">ADDR</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2</span>
-<span class="w">    </span><span class="nt">DESC</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">CS Motor {{ADDR}}</span>
-<span class="w">    </span><span class="nt">home</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">100</span>
-<span class="w">    </span><span class="nt">CS_NUM</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">3</span>
-<span class="w">    </span><span class="nt">is_cs</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<section id="render-and-inspect">
+<h2>Render and inspect<a class="headerlink" href="#render-and-inspect" title="Link to this heading">#</a></h2>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nv">IOC</span><span class="o">=</span>/epics/ioc<span class="w"> </span><span class="nv">RUNTIME_DIR</span><span class="o">=</span>/epics/runtime<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>ibek<span class="w"> </span>runtime<span class="w"> </span>generate2<span class="w"> </span>config<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--definitions<span class="w"> </span>demo.ibek.support.yaml<span class="w"> </span>--no-pvi<span class="w"> </span>--output<span class="w"> </span>generated
+cat<span class="w"> </span>generated/st.cmd
+cat<span class="w"> </span>generated/ioc.subst
 </pre></div>
 </div>
-<p>Three things to notice:</p>
-<ul class="simple">
-<li><p><strong><code class="docutils literal notranslate"><span class="pre">ioc_name</span></code></strong> identifies the IOC. Here it uses the Jinja value
-<code class="docutils literal notranslate"><span class="pre">{{</span> <span class="pre">ioc_yaml_file_name</span> <span class="pre">}}</span></code>, which <code class="docutils literal notranslate"><span class="pre">ibek</span></code> fills in from the instance
-file’s own name.</p></li>
-<li><p><strong><code class="docutils literal notranslate"><span class="pre">type:</span></code></strong> on each entity selects a model using <code class="docutils literal notranslate"><span class="pre">module.model</span></code>
-notation — <code class="docutils literal notranslate"><span class="pre">asyn.AsynIP</span></code>, <code class="docutils literal notranslate"><span class="pre">motorSim.simMotorController</span></code>,
-<code class="docutils literal notranslate"><span class="pre">motorSim.simMotorAxis</span></code>.</p></li>
-<li><p><strong>Object references</strong> wire entities together. The <code class="docutils literal notranslate"><span class="pre">simMotorController</span></code>’s
-<code class="docutils literal notranslate"><span class="pre">port</span></code> is set to <code class="docutils literal notranslate"><span class="pre">controllerOnePort</span></code> (the <code class="docutils literal notranslate"><span class="pre">name</span></code> of the <code class="docutils literal notranslate"><span class="pre">asyn.AsynIP</span></code>
-entity above it), and each <code class="docutils literal notranslate"><span class="pre">simMotorAxis</span></code> sets <code class="docutils literal notranslate"><span class="pre">controller</span></code> to
-<code class="docutils literal notranslate"><span class="pre">controllerOne</span></code> (the controller’s <code class="docutils literal notranslate"><span class="pre">controllerName</span></code>). <code class="docutils literal notranslate"><span class="pre">ibek</span></code> validates
-these references, so a typo is caught early.</p></li>
-</ul>
-<p>The first line is a <code class="docutils literal notranslate"><span class="pre">yaml-language-server</span></code> comment pointing at the schema
-from step 2 — that is what gives you autocompletion in a YAML‑aware editor.</p>
-<p>For the field‑by‑field details see the
-<a class="reference internal" href="../reference/ioc-yaml.html"><span class="std std-doc">IOC YAML reference</span></a>, and for how the <code class="docutils literal notranslate"><span class="pre">{{</span> <span class="pre">...</span> <span class="pre">}}</span></code>
-templating is evaluated see the
-<a class="reference internal" href="../reference/jinja-context.html"><span class="std std-doc">Jinja context reference</span></a>.</p>
-</section>
-<section id="step-4-generate-the-runtime-files">
-<h2>Step 4 — generate the runtime files<a class="headerlink" href="#step-4-generate-the-runtime-files" title="Link to this heading">#</a></h2>
-<p>Now produce the files the IOC needs to boot. The <code class="docutils literal notranslate"><span class="pre">generate</span></code> subcommand used
-here is the legacy single‑instance form (production containers run <code class="docutils literal notranslate"><span class="pre">generate2</span></code>
-at startup); it is the simplest way to follow along with one instance file:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>ibek<span class="w"> </span>runtime<span class="w"> </span>generate<span class="w"> </span><span class="se">\</span>
-<span class="w">    </span>motorSim.ibek.ioc.yaml<span class="w"> </span><span class="se">\</span>
-<span class="w">    </span>motorSim.ibek.support.yaml<span class="w"> </span>asyn.ibek.support.yaml<span class="w"> </span><span class="se">\</span>
-<span class="w">    </span>--no-pvi<span class="w"> </span><span class="se">\</span>
-<span class="w">    </span>-o<span class="w"> </span>/tmp/runtime
-</pre></div>
-</div>
-<p>The first argument is the instance file; the remaining arguments are the
-support definition files for <strong>every</strong> module the instance uses — again both
-<code class="docutils literal notranslate"><span class="pre">motorSim</span></code> and <code class="docutils literal notranslate"><span class="pre">asyn</span></code>. The <code class="docutils literal notranslate"><span class="pre">-o</span></code> option chooses the output folder. The
-<code class="docutils literal notranslate"><span class="pre">--no-pvi</span></code> flag skips generating PVI screens, which <code class="docutils literal notranslate"><span class="pre">ibek</span></code> would otherwise
-write to <code class="docutils literal notranslate"><span class="pre">/epics/opi</span></code> regardless of <code class="docutils literal notranslate"><span class="pre">-o</span></code> — a path that only exists inside a
-container, so the command fails without it when run from a checkout.</p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>Inside a real IOC container these support definition files live in a known
-location that was populated during the container build phase, and the
-EPICS environment variables that set the IOC and runtime paths are already
-exported. In this tutorial’s sandbox those variables are unset, so the
-absolute paths in the generated script differ slightly — the structure is
-identical.</p>
-</div>
-</section>
-<section id="step-5-inspect-the-generated-st-cmd">
-<h2>Step 5 — inspect the generated <code class="docutils literal notranslate"><span class="pre">st.cmd</span></code><a class="headerlink" href="#step-5-inspect-the-generated-st-cmd" title="Link to this heading">#</a></h2>
-<p>Look at <code class="docutils literal notranslate"><span class="pre">/tmp/runtime/st.cmd</span></code>. It should match the tested sample at
-<code class="docutils literal notranslate"><span class="pre">tests/samples/outputs/motorSim/st.cmd</span></code>:</p>
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="c1"># EPICS IOC Startup Script generated by https://github.com/epics-containers/ibek</span>
-
-<span class="nb">cd</span><span class="w"> </span><span class="s2">"/epics/ioc"</span>
-
-epicsEnvSet<span class="w"> </span>NAME_AS_ENV_VAR<span class="w"> </span>my<span class="w"> </span>name<span class="w"> </span>is<span class="w"> </span>controllerOnePort
-
-dbLoadDatabase<span class="w"> </span>dbd/ioc.dbd
-ioc_registerRecordDeviceDriver<span class="w"> </span>pdbbase
-
-<span class="c1"># Setting up Asyn Port controllerOnePort on 192.168.0.55:2002:</span>
-<span class="c1"># AsynIPConfigure({{name}}, {{port}}, {{stop}}, {{parity}}, {{bits}}) </span>
-AsynIPConfigure<span class="o">(</span>controllerOnePort,<span class="w"> </span><span class="m">192</span>.168.0.55:2002,<span class="w"> </span><span class="m">1</span>,<span class="w"> </span>none,<span class="w"> </span><span class="m">8</span><span class="o">)</span>
-asynSetOption<span class="o">(</span><span class="m">9600</span>,<span class="w"> </span><span class="m">0</span>,<span class="w"> </span>N,<span class="w"> </span>Y<span class="o">)</span>
-asynOctetSetInputEos<span class="o">(</span><span class="s2">"\n"</span><span class="o">)</span>
-asynOctetSetOutputEos<span class="o">(</span><span class="s2">"\n"</span><span class="o">)</span>
-<span class="c1"># motorSimCreateController(controller_asyn_port_name, axis_count)</span>
-<span class="c1"># testing escaping:  {{enclosed in escaped curly braces}} </span>
-motorSimCreateController<span class="o">(</span>controllerOne,<span class="w"> </span><span class="m">4</span><span class="o">)</span>
-
-dbLoadRecords<span class="w"> </span>/epics/runtime/ioc.db
-iocInit
-
-<span class="c1"># motorSimCreateAxis(controller_asyn_port_name, axis, axis_description)</span>
-motorSimConfigAxis<span class="o">(</span>controllerOne,<span class="w"> </span><span class="m">0</span>,<span class="w"> </span><span class="m">20000</span>,<span class="w"> </span>-20000,<span class="w"> </span><span class="m">500</span>,<span class="w"> </span><span class="m">500</span><span class="o">)</span>
-<span class="c1"># motorSimCreateAxis(controller_asyn_port_name, axis, axis_description)</span>
-motorSimConfigAxis<span class="o">(</span>controllerOne,<span class="w"> </span><span class="m">1</span>,<span class="w"> </span><span class="m">20000</span>,<span class="w"> </span>-20000,<span class="w"> </span><span class="m">500</span>,<span class="w"> </span><span class="m">500</span><span class="o">)</span>
-<span class="c1"># motorSimCreateAxis(controller_asyn_port_name, axis, axis_description)</span>
-motorSimConfigAxis<span class="o">(</span>controllerOne,<span class="w"> </span><span class="m">2</span>,<span class="w"> </span><span class="m">20000</span>,<span class="w"> </span>-20000,<span class="w"> </span><span class="m">1500</span>,<span class="w"> </span><span class="m">1500</span><span class="o">)</span>
-<span class="c1"># motorSimCreateAxis(controller_asyn_port_name, axis, axis_description)</span>
-motorSimConfigAxis<span class="o">(</span>controllerOne,<span class="w"> </span><span class="m">3</span>,<span class="w"> </span><span class="m">20000</span>,<span class="w"> </span>-20000,<span class="w"> </span><span class="m">2500</span>,<span class="w"> </span><span class="m">2500</span><span class="o">)</span>
-<span class="c1"># motorSimCreateAxis(controller_asyn_port_name, axis, axis_description)</span>
-motorSimConfigAxis<span class="o">(</span>controllerOne,<span class="w"> </span><span class="m">1</span>,<span class="w"> </span><span class="m">20000</span>,<span class="w"> </span>-20000,<span class="w"> </span><span class="m">100</span>,<span class="w"> </span><span class="m">100</span><span class="o">)</span>
-<span class="c1"># motorSimCreateAxis(controller_asyn_port_name, axis, axis_description)</span>
-motorSimConfigAxis<span class="o">(</span>controllerOne,<span class="w"> </span><span class="m">2</span>,<span class="w"> </span><span class="m">20000</span>,<span class="w"> </span>-20000,<span class="w"> </span><span class="m">100</span>,<span class="w"> </span><span class="m">100</span><span class="o">)</span>
-</pre></div>
-</div>
-<p>Trace it back to your inputs:</p>
-<ul class="simple">
-<li><p>The <code class="docutils literal notranslate"><span class="pre">AsynIPConfigure(...)</span></code> line came from the <code class="docutils literal notranslate"><span class="pre">asyn.AsynIP</span></code> entity.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">motorSimCreateController(controllerOne,</span> <span class="pre">4)</span></code> is the <code class="docutils literal notranslate"><span class="pre">simMotorController</span></code>’s
-<code class="docutils literal notranslate"><span class="pre">pre_init</span></code> snippet, with <code class="docutils literal notranslate"><span class="pre">{{controllerName}}</span></code> and <code class="docutils literal notranslate"><span class="pre">{{numAxes}}</span></code> filled in.</p></li>
-<li><p>The block of <code class="docutils literal notranslate"><span class="pre">motorSimConfigAxis(...)</span></code> lines are the <code class="docutils literal notranslate"><span class="pre">post_init</span></code> snippets
-of each <code class="docutils literal notranslate"><span class="pre">simMotorAxis</span></code>, in the order you declared them.</p></li>
-</ul>
-<p>Alongside <code class="docutils literal notranslate"><span class="pre">st.cmd</span></code> you will also find <code class="docutils literal notranslate"><span class="pre">ioc.subst</span></code>, the substitution file that
-expands into the runtime EPICS database. Together these are everything the
-IOC binary needs to start.</p>
-</section>
-<section id="where-to-go-next">
-<h2>Where to go next<a class="headerlink" href="#where-to-go-next" title="Link to this heading">#</a></h2>
-<ul class="simple">
-<li><p>The <a class="reference internal" href="../reference/cli.html"><span class="std std-doc">CLI reference</span></a> documents every command and option
-used above (<code class="docutils literal notranslate"><span class="pre">ibek</span> <span class="pre">ioc</span> <span class="pre">generate-schema</span></code>, <code class="docutils literal notranslate"><span class="pre">ibek</span> <span class="pre">runtime</span> <span class="pre">generate</span></code>, and more).</p></li>
-<li><p>The <a class="reference internal" href="../reference/support-yaml.html"><span class="std std-doc">support YAML</span></a> and
-<a class="reference internal" href="../reference/ioc-yaml.html"><span class="std std-doc">IOC YAML</span></a> references describe the two file
-formats in full.</p></li>
-<li><p>The <a class="reference internal" href="../reference/jinja-context.html"><span class="std std-doc">Jinja context reference</span></a> lists the
-variables and helpers available inside <code class="docutils literal notranslate"><span class="pre">{{</span> <span class="pre">...</span> <span class="pre">}}</span></code> templates.</p></li>
-<li><p>For the bigger picture of how these pieces fit together, read
-<a class="reference internal" href="../explanations/overview.html"><span class="std std-doc">the overview</span></a>.</p></li>
-</ul>
+<p>Use a dedicated output directory: rendering replaces its contents. <code class="docutils literal notranslate"><span class="pre">--no-pvi</span></code>
+skips UI generation and its container-specific output paths. <code class="docutils literal notranslate"><span class="pre">IOC</span></code> and
+<code class="docutils literal notranslate"><span class="pre">RUNTIME_DIR</span></code> here provide paths written into the script; they do not need to
+exist for this render.</p>
+<p><code class="docutils literal notranslate"><span class="pre">st.cmd</span></code> contains <code class="docutils literal notranslate"><span class="pre">#</span> <span class="pre">Configure</span> <span class="pre">DEMO:status</span></code>, followed by the standard database
+load and IOC initialization. <code class="docutils literal notranslate"><span class="pre">ioc.subst</span></code> contains a <code class="docutils literal notranslate"><span class="pre">status.template</span></code> block with
+macro <code class="docutils literal notranslate"><span class="pre">P</span></code> set to <code class="docutils literal notranslate"><span class="pre">DEMO:</span></code>. Changing <code class="docutils literal notranslate"><span class="pre">P</span></code> and rendering again changes both outputs.
+The instance is also validated during rendering: try removing <code class="docutils literal notranslate"><span class="pre">P</span></code> to see the
+missing-parameter error.</p>
+<p>Next, <a class="reference internal" href="connect-entities.html"><span class="std std-doc">connect a controller and its motors</span></a> to see how
+entities refer to each other using real support definitions.
+To expose a real module, see <a class="reference internal" href="../how-to/write-support.html"><span class="std std-doc">writing support</span></a>.
+For the remaining steps to build and run a container, follow the
+<a class="reference external" href="https://epics-containers.github.io/main/tutorials/generic_ioc.html">epics-containers generic IOC tutorial</a>.</p>
 </section>
 </section>
 
@@ -1173,15 +579,15 @@ variables and helpers available inside <code class="docutils literal notranslate
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Installation</p>
+        <p class="prev-next-title">Install ibek</p>
       </div>
     </a>
     <a class="right-next"
-       href="../how-to.html"
+       href="connect-entities.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">How-to Guides</p>
+        <p class="prev-next-title">Connect a controller and its motors</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -1204,13 +610,9 @@ variables and helpers available inside <code class="docutils literal notranslate
   </div>
   <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="pst-show_toc_level nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-three-phases">The three phases</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#step-1-start-from-a-support-definition-file">Step 1 — start from a support definition file</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#step-2-generate-the-entities-schema">Step 2 — generate the entities schema</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#step-3-author-the-ioc-instance">Step 3 — author the IOC instance</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#step-4-generate-the-runtime-files">Step 4 — generate the runtime files</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#step-5-inspect-the-generated-st-cmd">Step 5 — inspect the generated <code class="docutils literal notranslate"><span class="pre">st.cmd</span></code></a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#where-to-go-next">Where to go next</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#define-one-entity-model">Define one entity model</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#generate-a-schema-and-write-an-instance">Generate a schema and write an instance</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#render-and-inspect">Render and inspect</a></li>
 </ul>
   </nav></div>
 

@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Jinja template context reference &#8212; ibek 4.6.3b2.dev1+gd64cd8703 documentation</title>
+    <title>Jinja rendering and context &#8212; ibek 4.6.4.dev2+ge9e9f6fcc documentation</title>
   
   
   
@@ -42,7 +42,7 @@
   <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=cb8930eaaf36d9849b67" />
 <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=cb8930eaaf36d9849b67" />
 
-    <script src="../_static/documentation_options.js?v=45aba603"></script>
+    <script src="../_static/documentation_options.js?v=987f8334"></script>
     <script src="../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -60,8 +60,8 @@
     <link rel="icon" href="../_static/dls-logo.svg"/>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="ibek" href="../_api/ibek.html" />
-    <link rel="prev" title="IOC instance YAML and schemas reference" href="ioc-yaml.html" />
+    <link rel="next" title="Paths and environment" href="paths-and-environment.html" />
+    <link rel="prev" title="IOC YAML" href="ioc-yaml.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="main" />
@@ -163,14 +163,7 @@
 
 <li class="nav-item ">
   <a class="nav-link nav-internal" href="../how-to.html">
-    How-to Guides
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="../explanations.html">
-    Explanations
+    How-to guides
   </a>
 </li>
 
@@ -178,6 +171,13 @@
 <li class="nav-item current active">
   <a class="nav-link nav-internal" href="../reference.html">
     Reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../explanations.html">
+    Explanations
   </a>
 </li>
 
@@ -316,14 +316,7 @@
 
 <li class="nav-item ">
   <a class="nav-link nav-internal" href="../how-to.html">
-    How-to Guides
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="../explanations.html">
-    Explanations
+    How-to guides
   </a>
 </li>
 
@@ -331,6 +324,13 @@
 <li class="nav-item current active">
   <a class="nav-link nav-internal" href="../reference.html">
     Reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../explanations.html">
+    Explanations
   </a>
 </li>
 
@@ -424,12 +424,14 @@
   <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
   <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="cli.html">CLI reference</a></li>
-<li class="toctree-l1"><a class="reference internal" href="support-yaml.html">Support module YAML reference (<code class="docutils literal notranslate"><span class="pre">*.ibek.support.yaml</span></code>)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="ioc-yaml.html">IOC instance YAML and schemas reference</a></li>
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">Jinja template context reference</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../_api/ibek.html">API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="support-yaml.html">Support YAML</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ansible-recipes.html">Ansible build recipes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ioc-yaml.html">IOC YAML</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Jinja rendering and context</a></li>
+<li class="toctree-l1"><a class="reference internal" href="paths-and-environment.html">Paths and environment</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../_api/ibek.html">Python internals</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../genindex.html">Index</a></li>
-<li class="toctree-l1"><a class="reference external" href="https://github.com/epics-containers/ibek/releases">Release Notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../release-notes.html">Changelog</a></li>
 </ul>
 </div>
 </nav></div>
@@ -473,7 +475,7 @@
     
     <li class="breadcrumb-item"><a href="../reference.html" class="nav-link">Reference</a></li>
     
-    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Jinja template context reference</span></li>
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Jinja rendering and context</span></li>
   </ul>
 </nav>
 </div>
@@ -490,140 +492,46 @@
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section id="jinja-template-context-reference">
-<h1>Jinja template context reference<a class="headerlink" href="#jinja-template-context-reference" title="Link to this heading">#</a></h1>
-<p>Every string value in a support YAML file — <code class="docutils literal notranslate"><span class="pre">pre_init</span></code>/<code class="docutils literal notranslate"><span class="pre">post_init</span></code> text,
-<code class="docutils literal notranslate"><span class="pre">databases</span></code> argument values, <code class="docutils literal notranslate"><span class="pre">env_vars</span></code> values, and parameter/<code class="docutils literal notranslate"><span class="pre">pre_defines</span></code>/
-<code class="docutils literal notranslate"><span class="pre">post_defines</span></code> defaults — is treated as a <a class="reference external" href="https://jinja.palletsprojects.com/">Jinja2</a>
-template. This page enumerates <strong>everything you can reference inside those
-templates</strong> when writing a support YAML file.</p>
-<p>For the meaning of each parameter or define <em>type</em>, see
-<a class="reference internal" href="support-yaml.html"><span class="std std-doc">Support module YAML reference (*.ibek.support.yaml)</span></a>; this page only covers what is in scope at render time and
-how a declared type drives coercion.</p>
-<section id="the-render-entrypoint">
-<h2>The render entrypoint<a class="headerlink" href="#the-render-entrypoint" title="Link to this heading">#</a></h2>
-<p>Every per-entity string field goes through a single method, <code class="docutils literal notranslate"><span class="pre">Utils.render</span></code>,
-which compiles the string with <code class="docutils literal notranslate"><span class="pre">jinja2.StrictUndefined</span></code>. (The top-level assembly
-templates <code class="docutils literal notranslate"><span class="pre">st.cmd.jinja</span></code> and <code class="docutils literal notranslate"><span class="pre">ioc.subst.jinja</span></code> are rendered separately and
-directly via <code class="docutils literal notranslate"><span class="pre">Template(...).render()</span></code> in <code class="docutils literal notranslate"><span class="pre">gen_scripts.py</span></code>, not through
-<code class="docutils literal notranslate"><span class="pre">Utils.render</span></code>.) For the per-entity renders the practical consequences are:</p>
-<ul class="simple">
-<li><p><strong>Unknown names raise.</strong> Referencing a name that is not in scope is an error,
-not an empty string. The original Jinja exception is re-wrapped and raised as
-a <code class="docutils literal notranslate"><span class="pre">ValueError</span></code> that quotes the offending template text, so a typo in a
-variable name fails the <code class="docutils literal notranslate"><span class="pre">ibek</span></code> run rather than producing silent garbage.</p></li>
-<li><p><strong>No custom Jinja extensions are registered.</strong> ibek does <strong>not</strong> add any
-custom filters, globals or tests. Only stock Jinja2 builtins are available
-(e.g. <code class="docutils literal notranslate"><span class="pre">range</span></code>, <code class="docutils literal notranslate"><span class="pre">format</span></code>, <code class="docutils literal notranslate"><span class="pre">sort</span></code>, <code class="docutils literal notranslate"><span class="pre">list</span></code>, <code class="docutils literal notranslate"><span class="pre">int</span></code>, <code class="docutils literal notranslate"><span class="pre">dict</span></code>, slicing and
-arithmetic), plus the <code class="docutils literal notranslate"><span class="pre">_global</span></code> helper object described below. If a filter or
-function is not part of standard Jinja2, it is not available here.</p></li>
-</ul>
-<p>A single <code class="docutils literal notranslate"><span class="pre">Utils</span></code> instance (the <code class="docutils literal notranslate"><span class="pre">UTILS</span></code> singleton) is shared across <strong>one whole
-<code class="docutils literal notranslate"><span class="pre">ibek</span></code> generate run</strong>, so any state it accumulates (counters, stored variables)
-persists from one entity to the next in render order.</p>
-</section>
-<section id="top-level-names">
-<h2>Top-level names<a class="headerlink" href="#top-level-names" title="Link to this heading">#</a></h2>
-<section id="the-entity-s-own-fields">
-<h3>The entity’s own fields<a class="headerlink" href="#the-entity-s-own-fields" title="Link to this heading">#</a></h3>
-<p>Inside a template for a given entity, <strong>all of that entity’s fields are
-available as bare names</strong>:</p>
-<ul class="simple">
-<li><p>every declared <strong>parameter</strong>,</p></li>
-<li><p>every <strong><code class="docutils literal notranslate"><span class="pre">pre_defines</span></code></strong> value,</p></li>
-<li><p>every <strong><code class="docutils literal notranslate"><span class="pre">post_defines</span></code></strong> value,</p></li>
-<li><p>the always-present <code class="docutils literal notranslate"><span class="pre">type</span></code> (the entity model name, e.g.
-<code class="docutils literal notranslate"><span class="pre">motorSim.simMotorController</span></code>) and <code class="docutils literal notranslate"><span class="pre">entity_enabled</span></code> (a bool, default <code class="docutils literal notranslate"><span class="pre">True</span></code>).</p></li>
-</ul>
-<p>Fields become available in a fixed order — <strong><code class="docutils literal notranslate"><span class="pre">pre_defines</span></code> → <code class="docutils literal notranslate"><span class="pre">parameters</span></code> →
-<code class="docutils literal notranslate"><span class="pre">post_defines</span></code></strong> — and each is rendered in that order. A later field may
-reference an earlier one, but not the other way round. For example, in the
-<code class="docutils literal notranslate"><span class="pre">motorSim.simMotorAxis</span></code> model the <code class="docutils literal notranslate"><span class="pre">start</span></code> parameter defaults to another
-parameter’s value:</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">start</span><span class="p">:</span>
-<span class="w">  </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">str</span><span class="w"> </span><span class="c1"># int or jinja string</span>
-<span class="w">  </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">The starting position of the axis (in counts)</span>
-<span class="w">  </span><span class="nt">default</span><span class="p">:</span><span class="w"> </span><span class="s">"{{home}}"</span>
-</pre></div>
-</div>
-<p>Here <code class="docutils literal notranslate"><span class="pre">home</span></code> (declared earlier) is in scope when <code class="docutils literal notranslate"><span class="pre">start</span></code>’s default is rendered.</p>
-</section>
-<section id="global-the-shared-utils-object">
-<h3><code class="docutils literal notranslate"><span class="pre">_global</span></code> — the shared <code class="docutils literal notranslate"><span class="pre">Utils</span></code> object<a class="headerlink" href="#global-the-shared-utils-object" title="Link to this heading">#</a></h3>
-<p>The name <code class="docutils literal notranslate"><span class="pre">_global</span></code> is bound to the shared <code class="docutils literal notranslate"><span class="pre">UTILS</span></code> singleton in every template.
-Its state survives across the whole generate run, which is what makes counters
-and stored variables useful. Its public methods are:</p>
-<div class="pst-scrollable-table-container"><table class="table">
-<thead>
-<tr class="row-odd"><th class="head"><p>Call</p></th>
-<th class="head"><p>Returns</p></th>
-<th class="head"><p>Notes</p></th>
-</tr>
-</thead>
-<tbody>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">_global.get_env(key)</span></code></p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">str</span></code></p></td>
-<td><p>The environment variable <code class="docutils literal notranslate"><span class="pre">key</span></code>, or <code class="docutils literal notranslate"><span class="pre">''</span></code> if it is unset. Never raises.</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">_global.set(key,</span> <span class="pre">value)</span></code></p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">value</span></code></p></td>
-<td><p>Stores <code class="docutils literal notranslate"><span class="pre">value</span></code> under <code class="docutils literal notranslate"><span class="pre">key</span></code> <strong>and returns it</strong>, so it can be used inline (the assignment and the rendered output happen in one expression).</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">_global.get(key,</span> <span class="pre">default='')</span></code></p></td>
-<td><p>stored value</p></td>
-<td><p>Reads a variable previously stored with <code class="docutils literal notranslate"><span class="pre">set</span></code>; returns <code class="docutils literal notranslate"><span class="pre">default</span></code> if unset.</p></td>
-</tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">_global.incrementor(name,</span> <span class="pre">start=0,</span> <span class="pre">increment=1,</span> <span class="pre">stop=None)</span></code></p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">int</span></code></p></td>
-<td><p>A named counter. First call creates it set to <code class="docutils literal notranslate"><span class="pre">start</span></code>; each later call adds <code class="docutils literal notranslate"><span class="pre">increment</span></code>. Raises <code class="docutils literal notranslate"><span class="pre">ValueError</span></code> if the value would exceed <code class="docutils literal notranslate"><span class="pre">stop</span></code>, or if a variable of that name already exists and is not an <code class="docutils literal notranslate"><span class="pre">int</span></code>.</p></td>
-</tr>
-</tbody>
-</table>
-</div>
-<p>The <code class="docutils literal notranslate"><span class="pre">render</span></code> and <code class="docutils literal notranslate"><span class="pre">render_map</span></code> methods are also reachable on <code class="docutils literal notranslate"><span class="pre">_global</span></code> but are
-mostly internal. One <code class="docutils literal notranslate"><span class="pre">render_map</span></code> behaviour is worth knowing because it shapes
-how <code class="docutils literal notranslate"><span class="pre">databases</span></code> args are written: <strong>a value of <code class="docutils literal notranslate"><span class="pre">None</span></code> means “use the key name as
-the template”</strong>, i.e. <code class="docutils literal notranslate"><span class="pre">{'P':</span> <span class="pre">None}</span></code> is equivalent to <code class="docutils literal notranslate"><span class="pre">{'P':</span> <span class="pre">'{{</span> <span class="pre">P</span> <span class="pre">}}'}</span></code>. This is
-why a <code class="docutils literal notranslate"><span class="pre">databases</span></code> arg can be left blank to pass the matching parameter straight
-through:</p>
+  <section id="jinja-rendering-and-context">
+<h1>Jinja rendering and context<a class="headerlink" href="#jinja-rendering-and-context" title="Link to this heading">#</a></h1>
+<p>ibek uses Jinja to turn IOC parameters and support definitions into startup
+commands and database substitutions. Jinja runs <strong>during generation</strong>;
+EPICS <code class="docutils literal notranslate"><span class="pre">$(MACRO)</span></code> expressions belong to the later database/IOC processing stages.</p>
 <div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">databases</span><span class="p">:</span>
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">file</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sim_motor.db</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">file</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">example.db</span>
 <span class="w">    </span><span class="nt">args</span><span class="p">:</span>
-<span class="w">      </span><span class="nt">controllerName</span><span class="p">:</span><span class="w">   </span><span class="c1"># == controllerName: "{{ controllerName }}"</span>
-<span class="w">      </span><span class="nt">P</span><span class="p">:</span>
-<span class="w">      </span><span class="nt">DESC</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">P</span><span class="p">:</span><span class="w"> </span><span class="s">"{{</span><span class="nv"> </span><span class="s">P</span><span class="nv"> </span><span class="s">}}"</span><span class="w">               </span><span class="c1"># ibek substitutes the entity parameter</span>
+<span class="w">      </span><span class="nt">PORT</span><span class="p">:</span><span class="w"> </span><span class="s">"{{</span><span class="nv"> </span><span class="s">controller</span><span class="nv"> </span><span class="s">}}"</span><span class="w">   </span><span class="c1"># ibek substitutes the referenced entity ID</span>
+<span class="w">      </span><span class="nt">HOST</span><span class="p">:</span><span class="w"> </span><span class="s">"$(DEVICE_HOST)"</span><span class="w">     </span><span class="c1"># left for EPICS macro expansion</span>
 </pre></div>
 </div>
+<p>ibek does not run Jinja over the contents of every <code class="docutils literal notranslate"><span class="pre">.db</span></code> file. It renders the
+filename and argument values into <code class="docutils literal notranslate"><span class="pre">ioc.subst</span></code>; EPICS tooling expands the
+referenced database templates.</p>
+<section id="evaluation-order">
+<h2>Evaluation order<a class="headerlink" href="#evaluation-order" title="Link to this heading">#</a></h2>
+<ol class="arabic simple">
+<li><p>Render the IOC’s <code class="docutils literal notranslate"><span class="pre">ioc_name</span></code>.</p></li>
+<li><p>Load top-level entities in order. For each entity, render <code class="docutils literal notranslate"><span class="pre">pre_defines</span></code>,
+<code class="docutils literal notranslate"><span class="pre">parameters</span></code>, then <code class="docutils literal notranslate"><span class="pre">post_defines</span></code>, in each group’s declaration order.</p></li>
+<li><p>Expand repeats and sub-entities, rendering child inputs in their parent or
+iteration context before validating the child.</p></li>
+<li><p>Generate PVI output when enabled, render the startup environment assignments,
+pre-init and post-init snippets, then render database substitutions.</p></li>
+</ol>
+<p>Use earlier values as dependencies. Parameter fields exist before their
+individual render, so an early expression can see a later parameter’s <strong>raw</strong>
+value; it cannot rely on that value already having been expanded. Use
+<code class="docutils literal notranslate"><span class="pre">post_defines</span></code> for calculations requiring resolved parameters. Enum labels are
+mapped to their output values after top-level entity validation, so defines
+should not depend on that conversion having happened yet.</p>
+<p>Jinja expressions are evaluated where supported, not recursively over every
+YAML node. In particular, native list/dict parameter contents and <code class="docutils literal notranslate"><span class="pre">shared</span></code>
+anchor storage are not generally traversed and rendered. Return a whole typed
+collection from an expression when it needs calculation.</p>
 </section>
-<section id="variables-created-with-set-incrementor-are-also-bare-names">
-<h3>Variables created with <code class="docutils literal notranslate"><span class="pre">set</span></code>/<code class="docutils literal notranslate"><span class="pre">incrementor</span></code> are also bare names<a class="headerlink" href="#variables-created-with-set-incrementor-are-also-bare-names" title="Link to this heading">#</a></h3>
-<p>Whenever you call <code class="docutils literal notranslate"><span class="pre">_global.set(...)</span></code> or <code class="docutils literal notranslate"><span class="pre">_global.incrementor(...)</span></code>, the stored
-variable is <strong>also spread into the template context as a bare top-level name</strong>
-for all subsequent renders. So after a <code class="docutils literal notranslate"><span class="pre">post_defines</span></code> stores a value with
-<code class="docutils literal notranslate"><span class="pre">set</span></code>, a later <code class="docutils literal notranslate"><span class="pre">pre_init</span></code> line can read it directly by name. From
-<code class="docutils literal notranslate"><span class="pre">tests/samples/support/utils.ibek.support.yaml</span></code>:</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">post_defines</span><span class="p">:</span>
-<span class="w">  </span><span class="nt">test_global_var</span><span class="p">:</span>
-<span class="w">    </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">test global variable setter</span>
-<span class="w">    </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="s">'{{</span><span class="nv">  </span><span class="s">_global.set("magic_global",</span><span class="nv"> </span><span class="s">42)</span><span class="nv"> </span><span class="s">}}'</span>
-<span class="w">  </span><span class="nt">get_global</span><span class="p">:</span>
-<span class="w">    </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">test global variable getter</span>
-<span class="w">    </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="s">'{{</span><span class="nv">  </span><span class="s">_global.get("magic_global")</span><span class="nv"> </span><span class="s">}}'</span>
-
-<span class="nt">pre_init</span><span class="p">:</span>
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">comment</span>
-<span class="w">    </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">global "magic" is {{ get_global }}</span>
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">comment</span>
-<span class="w">    </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">counter "InterruptVector" is now {{ _global.incrementor("InterruptVector", start=192, stop=255) }}</span>
-</pre></div>
-</div>
-<p>Here <code class="docutils literal notranslate"><span class="pre">get_global</span></code> (a <code class="docutils literal notranslate"><span class="pre">post_defines</span></code> field) is referenced as a bare name in
-<code class="docutils literal notranslate"><span class="pre">pre_init</span></code>. The same counter name reused in a different entity continues from
-where it left off, because <code class="docutils literal notranslate"><span class="pre">UTILS</span></code> is shared across the run.</p>
-</section>
-<section id="special-variables">
-<h3>Special variables<a class="headerlink" href="#special-variables" title="Link to this heading">#</a></h3>
-<p>Two extra names are injected into every template:</p>
+<section id="names-in-an-entity-template">
+<h2>Names in an entity template<a class="headerlink" href="#names-in-an-entity-template" title="Link to this heading">#</a></h2>
 <div class="pst-scrollable-table-container"><table class="table">
 <thead>
 <tr class="row-odd"><th class="head"><p>Name</p></th>
@@ -631,107 +539,132 @@ where it left off, because <code class="docutils literal notranslate"><span clas
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">ioc_yaml_file_name</span></code></p></td>
-<td><p>The stem (filename without extension) of the <strong>first</strong> IOC instance YAML file being processed.</p></td>
+<tr class="row-even"><td><p>Parameter and define names</p></td>
+<td><p>This entity’s fields, with defines added as they are evaluated.</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">ioc_name</span></code></p></td>
-<td><p>The IOC instance name, <strong>already rendered</strong> (its own <code class="docutils literal notranslate"><span class="pre">{{</span> <span class="pre">}}</span></code> expressions have been expanded before it is offered to other templates).</p></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">type</span></code>, <code class="docutils literal notranslate"><span class="pre">entity_enabled</span></code></p></td>
+<td><p>Entity type and enable flag.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">ioc_name</span></code></p></td>
+<td><p>Rendered IOC name.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">ioc_yaml_file_name</span></code></p></td>
+<td><p>Stem of the first input filename: <code class="docutils literal notranslate"><span class="pre">ioc.yaml</span></code> gives <code class="docutils literal notranslate"><span class="pre">ioc</span></code>; <code class="docutils literal notranslate"><span class="pre">demo.ibek.ioc.yaml</span></code> gives <code class="docutils literal notranslate"><span class="pre">demo.ibek.ioc</span></code>.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">env</span></code></p></td>
+<td><p>Read-only view of the process environment.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">_global</span></code></p></td>
+<td><p>Shared helper object described below.</p></td>
+</tr>
+<tr class="row-even"><td><p>Names stored by <code class="docutils literal notranslate"><span class="pre">_global.set</span></code> or <code class="docutils literal notranslate"><span class="pre">incrementor</span></code></p></td>
+<td><p>Shared values available to subsequent renders.</p></td>
 </tr>
 </tbody>
 </table>
 </div>
+<p>Object references expose the target entity’s attributes: <code class="docutils literal notranslate"><span class="pre">{{</span> <span class="pre">controller.P</span> <span class="pre">}}</span></code>.
+Rendering the object itself, <code class="docutils literal notranslate"><span class="pre">{{</span> <span class="pre">controller</span> <span class="pre">}}</span></code>, produces its ID. IDs must
+already exist when references are resolved.</p>
+<p>Shared helper variables take precedence over entity fields of the same name.
+The special IOC names and <code class="docutils literal notranslate"><span class="pre">_global</span></code> are supplied by ibek; avoid reusing those
+names. <code class="docutils literal notranslate"><span class="pre">env</span></code> is a Jinja global default, so an existing entity field or shared
+variable called <code class="docutils literal notranslate"><span class="pre">env</span></code> takes precedence and remains compatible.</p>
+<p>Unknown names in entity expressions raise an error containing the offending
+template. Normal Jinja expressions, loops, tests and filters are available;
+ibek adds no custom filters. Literal braces can be escaped with
+<code class="docutils literal notranslate"><span class="pre">{%</span> <span class="pre">raw</span> <span class="pre">%}{{</span> <span class="pre">literal</span> <span class="pre">}}{%</span> <span class="pre">endraw</span> <span class="pre">%}</span></code>.</p>
 </section>
-</section>
-<section id="type-coercion">
-<h2>Type coercion<a class="headerlink" href="#type-coercion" title="Link to this heading">#</a></h2>
-<p>Jinja always produces a string. ibek coerces that string back to a typed value
-in two ways:</p>
-<ol class="arabic simple">
-<li><p><strong>Declared types coerce automatically.</strong> When a parameter or define is
-declared as <code class="docutils literal notranslate"><span class="pre">int</span></code>, <code class="docutils literal notranslate"><span class="pre">float</span></code>, <code class="docutils literal notranslate"><span class="pre">bool</span></code>, <code class="docutils literal notranslate"><span class="pre">list</span></code> or <code class="docutils literal notranslate"><span class="pre">dict</span></code>, the rendered string is
-passed through <code class="docutils literal notranslate"><span class="pre">ast.literal_eval</span></code> and cast to that type. (Types <code class="docutils literal notranslate"><span class="pre">str</span></code>,
-<code class="docutils literal notranslate"><span class="pre">object</span></code>, <code class="docutils literal notranslate"><span class="pre">id</span></code> and <code class="docutils literal notranslate"><span class="pre">enum</span></code> are not coerced — they stay as the rendered
-string, with <code class="docutils literal notranslate"><span class="pre">object</span></code>/<code class="docutils literal notranslate"><span class="pre">id</span></code> then resolved as described below.) Note that
-<code class="docutils literal notranslate"><span class="pre">pre_defines</span></code>/<code class="docutils literal notranslate"><span class="pre">post_defines</span></code> support only <code class="docutils literal notranslate"><span class="pre">str</span></code>, <code class="docutils literal notranslate"><span class="pre">float</span></code>, <code class="docutils literal notranslate"><span class="pre">int</span></code>, <code class="docutils literal notranslate"><span class="pre">bool</span></code> and
-<code class="docutils literal notranslate"><span class="pre">list</span></code>; the <code class="docutils literal notranslate"><span class="pre">dict</span></code>, <code class="docutils literal notranslate"><span class="pre">object</span></code>, <code class="docutils literal notranslate"><span class="pre">id</span></code> and <code class="docutils literal notranslate"><span class="pre">enum</span></code> types are parameter-only.</p></li>
-<li><p><strong>Inline coercion suffix.</strong> You can force coercion inside a single
-expression by ending it with a <code class="docutils literal notranslate"><span class="pre">|</span> <span class="pre">&lt;typ&gt;</span> <span class="pre">}}</span></code> suffix, where <code class="docutils literal notranslate"><span class="pre">&lt;typ&gt;</span></code> is one of
-<code class="docutils literal notranslate"><span class="pre">int</span></code>, <code class="docutils literal notranslate"><span class="pre">float</span></code>, <code class="docutils literal notranslate"><span class="pre">bool</span></code>, <code class="docutils literal notranslate"><span class="pre">list</span></code>, <code class="docutils literal notranslate"><span class="pre">dict</span></code>. This is a genuine <strong>Jinja builtin
-filter</strong> that Jinja itself applies during rendering — ibek does <strong>not</strong> strip
-it. After rendering, ibek separately inspects the template text with a regular
-expression (<code class="docutils literal notranslate"><span class="pre">re_get_type</span></code>) and, if the suffix names one of those five types,
-applies the same <code class="docutils literal notranslate"><span class="pre">ast.literal_eval</span></code>-based cast to the result.</p></li>
-</ol>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>Because the suffix is a real Jinja filter, it only works for filter names Jinja
-actually knows. Writing a suffix that is <strong>not</strong> a Jinja filter (e.g.
-<code class="docutils literal notranslate"><span class="pre">{{</span> <span class="pre">x</span> <span class="pre">|</span> <span class="pre">foo</span> <span class="pre">}}</span></code>) makes Jinja raise <em>“No filter named ‘foo’”</em>, which ibek
-re-wraps as a <code class="docutils literal notranslate"><span class="pre">ValueError</span></code>. A suffix that <em>is</em> a real Jinja filter but not one of
-the five coercion types (e.g. <code class="docutils literal notranslate"><span class="pre">|</span> <span class="pre">upper</span></code>) is applied by Jinja and then ignored by
-ibek’s coercion step, so no extra cast happens.</p>
-</div>
-</section>
-<section id="referencing-another-entity">
-<h2>Referencing another entity<a class="headerlink" href="#referencing-another-entity" title="Link to this heading">#</a></h2>
-<p>A parameter declared with <code class="docutils literal notranslate"><span class="pre">type:</span> <span class="pre">object</span></code> does not hold a string — after
-validation it holds the <strong>actual referenced <code class="docutils literal notranslate"><span class="pre">Entity</span></code></strong>. Two things follow:</p>
-<ul class="simple">
-<li><p><strong>Rendering the object itself</strong> (<code class="docutils literal notranslate"><span class="pre">{{</span> <span class="pre">port</span> <span class="pre">}}</span></code>) calls <code class="docutils literal notranslate"><span class="pre">Entity.__str__</span></code>, which
-returns the value of the target entity’s <code class="docutils literal notranslate"><span class="pre">id</span></code> field. This <strong>raises</strong> if the
-referenced entity has no <code class="docutils literal notranslate"><span class="pre">id</span></code>-typed parameter.</p></li>
-<li><p><strong>Attribute access</strong> (<code class="docutils literal notranslate"><span class="pre">{{</span> <span class="pre">port.field</span> <span class="pre">}}</span></code>) reaches into the target entity’s
-fields.</p></li>
-</ul>
-<p>From <code class="docutils literal notranslate"><span class="pre">motorSim.simMotorAxis</span></code>, the <code class="docutils literal notranslate"><span class="pre">controller</span></code> parameter is an object reference
-to a <code class="docutils literal notranslate"><span class="pre">simMotorController</span></code>:</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">databases</span><span class="p">:</span>
-<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">file</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">basic_asyn_motor.db</span>
-<span class="w">    </span><span class="nt">args</span><span class="p">:</span>
-<span class="w">      </span><span class="nt">P</span><span class="p">:</span><span class="w"> </span><span class="s">"{{controller.P}}"</span><span class="w">     </span><span class="c1"># the controller's P field</span>
-<span class="w">      </span><span class="nt">PORT</span><span class="p">:</span><span class="w"> </span><span class="s">"{{controller}}"</span><span class="w">    </span><span class="c1"># the controller's id (its controllerName)</span>
+<section id="environment-variables">
+<span id="id1"></span><h2>Environment variables<a class="headerlink" href="#environment-variables" title="Link to this heading">#</a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">env</span></code> mapping is new in the <a class="reference internal" href="../release-notes.html"><span class="std std-doc">unreleased changes</span></a>.
+On older ibek releases, use <code class="docutils literal notranslate"><span class="pre">_global.get_env('NAME')</span></code>.</p>
+<div class="highlight-jinja notranslate"><div class="highlight"><pre><span></span><span class="cp">{{</span> <span class="nv">env.EPICS_ROOT</span> <span class="cp">}}</span>
+<span class="cp">{{</span> <span class="nv">env</span><span class="o">[</span><span class="s1">'EPICS_ROOT'</span><span class="o">]</span> <span class="cp">}}</span>
+<span class="cp">{{</span> <span class="nv">env.get</span><span class="o">(</span><span class="s1">'DEVICE_HOST'</span><span class="o">,</span> <span class="s1">'localhost'</span><span class="o">)</span> <span class="cp">}}</span>
 </pre></div>
 </div>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>In <code class="docutils literal notranslate"><span class="pre">sub_entities</span></code>/<code class="docutils literal notranslate"><span class="pre">shared</span></code> anchors there is no type information, so an object
-parameter there is just a plain dict. As the <code class="docutils literal notranslate"><span class="pre">quadEM.Plugins</span></code> model notes, you
-must use an explicit field such as <code class="docutils literal notranslate"><span class="pre">{{DEVICE.P}}</span></code> / <code class="docutils literal notranslate"><span class="pre">{{DEVICE.PORT}}</span></code> rather than
-<code class="docutils literal notranslate"><span class="pre">{{DEVICE}}</span></code> in that context.</p>
-</div>
-</section>
-<section id="the-jinjastring-rule-for-non-string-defaults">
-<h2>The JinjaString rule for non-string defaults<a class="headerlink" href="#the-jinjastring-rule-for-non-string-defaults" title="Link to this heading">#</a></h2>
-<p>A default for an <code class="docutils literal notranslate"><span class="pre">int</span></code>, <code class="docutils literal notranslate"><span class="pre">float</span></code>, <code class="docutils literal notranslate"><span class="pre">bool</span></code>, <code class="docutils literal notranslate"><span class="pre">list</span></code> or <code class="docutils literal notranslate"><span class="pre">dict</span></code> <strong>parameter</strong> may be
-written as a string, <strong>but only if that string actually contains a <code class="docutils literal notranslate"><span class="pre">{{</span> <span class="pre">...</span> <span class="pre">}}</span></code>
-expression</strong>. This is enforced by schema validation against the <code class="docutils literal notranslate"><span class="pre">JINJA</span></code> pattern
-(<code class="docutils literal notranslate"><span class="pre">.*\{\{.*\}\}.*</span></code>). A bare literal string in one of these slots is rejected — use
-the native YAML literal instead (e.g. <code class="docutils literal notranslate"><span class="pre">default:</span> <span class="pre">20</span></code>, not <code class="docutils literal notranslate"><span class="pre">default:</span> <span class="pre">&quot;20&quot;</span></code>). The
-rule applies only to typed parameter defaults; a <code class="docutils literal notranslate"><span class="pre">pre_defines</span></code>/<code class="docutils literal notranslate"><span class="pre">post_defines</span></code>
-<code class="docutils literal notranslate"><span class="pre">value</span></code> is typed <code class="docutils literal notranslate"><span class="pre">Any</span></code> with no pattern and is not subject to it.</p>
-<p>To include literal <code class="docutils literal notranslate"><span class="pre">{{</span></code> / <code class="docutils literal notranslate"><span class="pre">}}</span></code> characters that Jinja should <strong>not</strong> evaluate,
-wrap them in <code class="docutils literal notranslate"><span class="pre">{%</span> <span class="pre">raw</span> <span class="pre">%}</span> <span class="pre">...</span> <span class="pre">{%</span> <span class="pre">endraw</span> <span class="pre">%}</span></code>, as the <code class="docutils literal notranslate"><span class="pre">simMotorController.DESC</span></code>
-default does:</p>
-<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">DESC</span><span class="p">:</span>
-<span class="w">  </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">str</span>
-<span class="w">  </span><span class="nt">default</span><span class="p">:</span><span class="w"> </span><span class="s">"Simulated</span><span class="nv"> </span><span class="s">Motion</span><span class="nv"> </span><span class="s">Controller</span><span class="nv"> </span><span class="s">testing</span><span class="nv"> </span><span class="s">escaping:</span><span class="nv"> </span><span class="s">{%</span><span class="nv"> </span><span class="s">raw</span><span class="nv"> </span><span class="s">%}</span><span class="nv"> </span><span class="s">{{enclosed</span><span class="nv"> </span><span class="s">in</span><span class="nv"> </span><span class="s">escaped</span><span class="nv"> </span><span class="s">curly</span><span class="nv"> </span><span class="s">braces}}</span><span class="nv"> </span><span class="s">{%</span><span class="nv"> </span><span class="s">endraw</span><span class="nv"> </span><span class="s">%}"</span>
+<p><code class="docutils literal notranslate"><span class="pre">env</span></code> reads the environment of the running ibek process at render time, not
+values that will be set later by generated <code class="docutils literal notranslate"><span class="pre">epicsEnvSet</span></code> commands. Values are
+strings. A missing direct lookup fails in entity templates; <code class="docutils literal notranslate"><span class="pre">.get()</span></code> supplies
+an explicit fallback. Use brackets for names that overlap mapping methods,
+such as <code class="docutils literal notranslate"><span class="pre">env['items']</span></code> or <code class="docutils literal notranslate"><span class="pre">env['get']</span></code>. The mapping cannot be modified through
+the template.</p>
+<p>For a numeric parameter, convert explicitly:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">count</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">int</span>
+<span class="w">  </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Number of channels</span>
+<span class="w">  </span><span class="nt">default</span><span class="p">:</span><span class="w"> </span><span class="s">"{{</span><span class="nv"> </span><span class="s">env.get('CHANNEL_COUNT',</span><span class="nv"> </span><span class="s">'4')</span><span class="nv"> </span><span class="s">|</span><span class="nv"> </span><span class="s">int</span><span class="nv"> </span><span class="s">}}"</span>
 </pre></div>
 </div>
+<p><code class="docutils literal notranslate"><span class="pre">_global.get_env('NAME')</span></code> remains supported with unchanged behavior: it returns
+an empty string when the variable is unset. There is no requirement to migrate
+existing definitions.</p>
 </section>
-<section id="the-st-cmd-phase-2-render">
-<h2>The <code class="docutils literal notranslate"><span class="pre">st.cmd</span></code> (phase 2) render<a class="headerlink" href="#the-st-cmd-phase-2-render" title="Link to this heading">#</a></h2>
-<p>The boot script is rendered in a second pass from <code class="docutils literal notranslate"><span class="pre">st.cmd.jinja</span></code>. That
-top-level render sees:</p>
-<ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">_global</span></code> (the same shared <code class="docutils literal notranslate"><span class="pre">UTILS</span></code> singleton), and</p></li>
-<li><p>every variable spread from <code class="docutils literal notranslate"><span class="pre">UTILS.variables</span></code> (everything created with
-<code class="docutils literal notranslate"><span class="pre">set</span></code>/<code class="docutils literal notranslate"><span class="pre">incrementor</span></code>),</p></li>
-<li><p>plus the <strong>already-rendered per-entity blocks</strong>: the environment-variable
-entries, the pre-<code class="docutils literal notranslate"><span class="pre">iocInit</span></code> script entries, and the post-<code class="docutils literal notranslate"><span class="pre">iocInit</span></code> entries.</p></li>
-</ul>
-<p>Because the per-entity blocks are already rendered before this pass, counters
-and stored globals reflect the totals accumulated across all entities by the
-time the <code class="docutils literal notranslate"><span class="pre">st.cmd</span></code> template runs.</p>
+<section id="typed-expressions">
+<h2>Typed expressions<a class="headerlink" href="#typed-expressions" title="Link to this heading">#</a></h2>
+<p>Jinja produces text. ibek converts string expressions for typed <code class="docutils literal notranslate"><span class="pre">int</span></code>, <code class="docutils literal notranslate"><span class="pre">float</span></code>,
+<code class="docutils literal notranslate"><span class="pre">bool</span></code>, <code class="docutils literal notranslate"><span class="pre">list</span></code> and <code class="docutils literal notranslate"><span class="pre">dict</span></code> parameters back into Python values. The result must
+be a valid literal of the intended kind; <code class="docutils literal notranslate"><span class="pre">{{</span> <span class="pre">count</span> <span class="pre">&gt;</span> <span class="pre">0</span> <span class="pre">}}</span></code> produces a suitable
+boolean. Native YAML values need no Jinja expression.</p>
+<p>In untyped expansion contexts, such as repeat <code class="docutils literal notranslate"><span class="pre">values</span></code>, an expression ending
+in <code class="docutils literal notranslate"><span class="pre">|</span> <span class="pre">list</span></code> or <code class="docutils literal notranslate"><span class="pre">|</span> <span class="pre">int</span></code> also tells ibek to recover the corresponding type:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">values</span><span class="p">:</span><span class="w"> </span><span class="s">"{{</span><span class="nv"> </span><span class="s">range(1,</span><span class="nv"> </span><span class="s">5)</span><span class="nv"> </span><span class="s">|</span><span class="nv"> </span><span class="s">list</span><span class="nv"> </span><span class="s">}}"</span>
+</pre></div>
+</div>
+<p>Use only actual Jinja filters. In particular, <code class="docutils literal notranslate"><span class="pre">bool</span></code> and <code class="docutils literal notranslate"><span class="pre">dict</span></code> are not Jinja
+filters: use a declared parameter type for those conversions, not <code class="docutils literal notranslate"><span class="pre">|</span> <span class="pre">bool</span></code> or
+<code class="docutils literal notranslate"><span class="pre">|</span> <span class="pre">dict</span></code>.</p>
+</section>
+<section id="shared-helpers">
+<h2>Shared helpers<a class="headerlink" href="#shared-helpers" title="Link to this heading">#</a></h2>
+<p>These helpers share state across entities and render stages in a generation
+run. Prefer parameters and object references for ordinary dependencies; use
+shared state for values that need to accumulate across entities.</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Expression</p></th>
+<th class="head"><p>Behavior</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">_global.get_env(key)</span></code></p></td>
+<td><p>Environment string, or <code class="docutils literal notranslate"><span class="pre">''</span></code> if missing.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">_global.set(key,</span> <span class="pre">value)</span></code></p></td>
+<td><p>Store and return a shared value.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">_global.get(key,</span> <span class="pre">default='')</span></code></p></td>
+<td><p>Read a shared value, or return the default without storing it.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">_global.incrementor(name,</span> <span class="pre">start=0,</span> <span class="pre">increment=1,</span> <span class="pre">stop=None)</span></code></p></td>
+<td><p>First call returns <code class="docutils literal notranslate"><span class="pre">start</span></code>; later calls add <code class="docutils literal notranslate"><span class="pre">increment</span></code>. Errors if an existing value is not an integer or a later value exceeds <code class="docutils literal notranslate"><span class="pre">stop</span></code>.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">pre_defines</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">address</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Allocate a controller address</span>
+<span class="w">    </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">int</span>
+<span class="w">    </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="s">"{{</span><span class="nv"> </span><span class="s">_global.incrementor('controller_address',</span><span class="nv"> </span><span class="s">start=1,</span><span class="nv"> </span><span class="s">stop=32)</span><span class="nv"> </span><span class="s">}}"</span>
+</pre></div>
+</div>
+<p>Stored values become bare names in subsequent renders; within the expression
+that stores them, use the helper’s return value or <code class="docutils literal notranslate"><span class="pre">_global.get</span></code>. Counters
+advance per evaluation, so allocate once in a define and reuse the result
+instead of incrementing separately in startup and database templates.</p>
+</section>
+<section id="assembly-templates">
+<h2>Assembly templates<a class="headerlink" href="#assembly-templates" title="Link to this heading">#</a></h2>
+<p>The packaged <code class="docutils literal notranslate"><span class="pre">st.cmd.jinja</span></code> joins the already rendered startup blocks. It sees
+<code class="docutils literal notranslate"><span class="pre">env_var_elements</span></code>, <code class="docutils literal notranslate"><span class="pre">script_elements</span></code>, <code class="docutils literal notranslate"><span class="pre">post_ioc_init_elements</span></code>, <code class="docutils literal notranslate"><span class="pre">_global</span></code>,
+shared helper variables and <code class="docutils literal notranslate"><span class="pre">env</span></code>. <code class="docutils literal notranslate"><span class="pre">ioc.subst.jinja</span></code> receives the grouped
+<code class="docutils literal notranslate"><span class="pre">templates</span></code> data and <code class="docutils literal notranslate"><span class="pre">env</span></code>.</p>
+<p>These assembly templates retain their existing permissive Jinja undefined
+behavior; the strict missing-name errors described above apply to entity
+expressions. Inserted startup blocks are already rendered text and are not
+recursively evaluated by the assembly pass.</p>
 </section>
 </section>
 
@@ -751,15 +684,15 @@ time the <code class="docutils literal notranslate"><span class="pre">st.cmd</sp
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">IOC instance YAML and schemas reference</p>
+        <p class="prev-next-title">IOC YAML</p>
       </div>
     </a>
     <a class="right-next"
-       href="../_api/ibek.html"
+       href="paths-and-environment.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title"><code class="docutils literal notranslate"><span class="pre">ibek</span></code></p>
+        <p class="prev-next-title">Paths and environment</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -782,18 +715,12 @@ time the <code class="docutils literal notranslate"><span class="pre">st.cmd</sp
   </div>
   <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="pst-show_toc_level nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-render-entrypoint">The render entrypoint</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#top-level-names">Top-level names</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#the-entity-s-own-fields">The entity’s own fields</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#global-the-shared-utils-object"><code class="docutils literal notranslate"><span class="pre">_global</span></code> — the shared <code class="docutils literal notranslate"><span class="pre">Utils</span></code> object</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#variables-created-with-set-incrementor-are-also-bare-names">Variables created with <code class="docutils literal notranslate"><span class="pre">set</span></code>/<code class="docutils literal notranslate"><span class="pre">incrementor</span></code> are also bare names</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#special-variables">Special variables</a></li>
-</ul>
-</li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#type-coercion">Type coercion</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#referencing-another-entity">Referencing another entity</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-jinjastring-rule-for-non-string-defaults">The JinjaString rule for non-string defaults</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-st-cmd-phase-2-render">The <code class="docutils literal notranslate"><span class="pre">st.cmd</span></code> (phase 2) render</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#evaluation-order">Evaluation order</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#names-in-an-entity-template">Names in an entity template</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#environment-variables">Environment variables</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#typed-expressions">Typed expressions</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#shared-helpers">Shared helpers</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#assembly-templates">Assembly templates</a></li>
 </ul>
   </nav></div>
 

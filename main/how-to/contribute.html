@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Contribute to the project &#8212; ibek 4.6.3b2.dev1+gd64cd8703 documentation</title>
+    <title>Develop ibek &#8212; ibek 4.6.4.dev2+ge9e9f6fcc documentation</title>
   
   
   
@@ -42,7 +42,7 @@
   <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=cb8930eaaf36d9849b67" />
 <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=cb8930eaaf36d9849b67" />
 
-    <script src="../_static/documentation_options.js?v=45aba603"></script>
+    <script src="../_static/documentation_options.js?v=987f8334"></script>
     <script src="../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -60,8 +60,8 @@
     <link rel="icon" href="../_static/dls-logo.svg"/>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Explanations" href="../explanations.html" />
-    <link rel="prev" title="Vendor runtime-support patterns into a services repo" href="vendor-runtime-patterns.html" />
+    <link rel="next" title="Reference" href="../reference.html" />
+    <link rel="prev" title="Troubleshoot ibek" href="troubleshoot.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="main" />
@@ -163,14 +163,7 @@
 
 <li class="nav-item current active">
   <a class="nav-link nav-internal" href="../how-to.html">
-    How-to Guides
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="../explanations.html">
-    Explanations
+    How-to guides
   </a>
 </li>
 
@@ -178,6 +171,13 @@
 <li class="nav-item ">
   <a class="nav-link nav-internal" href="../reference.html">
     Reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../explanations.html">
+    Explanations
   </a>
 </li>
 
@@ -316,14 +316,7 @@
 
 <li class="nav-item current active">
   <a class="nav-link nav-internal" href="../how-to.html">
-    How-to Guides
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="../explanations.html">
-    Explanations
+    How-to guides
   </a>
 </li>
 
@@ -331,6 +324,13 @@
 <li class="nav-item ">
   <a class="nav-link nav-internal" href="../reference.html">
     Reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../explanations.html">
+    Explanations
   </a>
 </li>
 
@@ -423,8 +423,11 @@
      aria-label="Section Navigation">
   <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
   <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="vendor-runtime-patterns.html">Vendor runtime-support patterns into a services repo</a></li>
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">Contribute to the project</a></li>
+<li class="toctree-l1"><a class="reference internal" href="write-support.html">Write support for a module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="build-support.html">Build support with Ansible</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vendor-runtime-patterns.html">Vendor runtime support</a></li>
+<li class="toctree-l1"><a class="reference internal" href="troubleshoot.html">Troubleshoot ibek</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Develop ibek</a></li>
 </ul>
 </div>
 </nav></div>
@@ -466,9 +469,9 @@
       </a>
     </li>
     
-    <li class="breadcrumb-item"><a href="../how-to.html" class="nav-link">How-to Guides</a></li>
+    <li class="breadcrumb-item"><a href="../how-to.html" class="nav-link">How-to guides</a></li>
     
-    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Contribute to the project</span></li>
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Develop ibek</span></li>
   </ul>
 </nav>
 </div>
@@ -485,31 +488,32 @@
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section id="contribute-to-the-project">
-<h1>Contribute to the project<a class="headerlink" href="#contribute-to-the-project" title="Link to this heading">#</a></h1>
-<p>Contributions and issues are most welcome! All issues and pull requests are
-handled through <a class="reference external" href="https://github.com/epics-containers/ibek/issues">GitHub</a>. Also, please check for any existing issues before
-filing a new one. If you have a great idea but it involves big changes, please
-file a ticket before making a pull request! We want to make sure you don’t spend
-your time coding something that might not fit the scope of the project.</p>
-<section id="issue-or-discussion">
-<h2>Issue or Discussion?<a class="headerlink" href="#issue-or-discussion" title="Link to this heading">#</a></h2>
-<p>Github also offers <a class="reference external" href="https://github.com/epics-containers/ibek/discussions">discussions</a> as a place to ask questions and share ideas. If
-your issue is open ended and it is not obvious when it can be “closed”, please
-raise it as a discussion instead.</p>
-</section>
-<section id="code-coverage">
-<h2>Code Coverage<a class="headerlink" href="#code-coverage" title="Link to this heading">#</a></h2>
-<p>While 100% code coverage does not make a library bug-free, it significantly
-reduces the number of easily caught bugs! Please make sure coverage remains the
-same or is improved by a pull request!</p>
-</section>
-<section id="developer-information">
-<h2>Developer Information<a class="headerlink" href="#developer-information" title="Link to this heading">#</a></h2>
-<p>It is recommended that developers use a <a class="reference external" href="https://code.visualstudio.com/docs/devcontainers/containers">vscode devcontainer</a>. This repository contains configuration to set up a containerized development environment that suits its own needs.</p>
-<p>This project was created using the <a class="reference external" href="https://github.com/DiamondLightSource/python-copier-template">Diamond Light Source Copier Template</a> for Python projects.</p>
-<p>For more information on common tasks like setting up a developer environment, running the tests, and setting a pre-commit hook, see the template’s <a class="reference external" href="https://diamondlightsource.github.io/python-copier-template/5.4.0/how-to.html">How-to guides</a>.</p>
-</section>
+  <section id="develop-ibek">
+<h1>Develop ibek<a class="headerlink" href="#develop-ibek" title="Link to this heading">#</a></h1>
+<p>Work on the Python CLI and renderer in this repository. EPICS module recipes
+and their entity definitions normally belong in
+<a class="reference external" href="https://github.com/epics-containers/ibek-support">ibek-support</a>.</p>
+<p>From a checkout, with Python 3.13 or newer and <code class="docutils literal notranslate"><span class="pre">uv</span></code> available:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>uv<span class="w"> </span>sync
+uv<span class="w"> </span>run<span class="w"> </span>ibek<span class="w"> </span>--help
+uv<span class="w"> </span>run<span class="w"> </span>tox<span class="w"> </span>-p
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">tox</span> <span class="pre">-p</span></code> runs formatting and lint checks, type checking, tests and the Sphinx
+build. For a focused change:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>uv<span class="w"> </span>run<span class="w"> </span>pytest<span class="w"> </span>tests/test_runtime.py
+uv<span class="w"> </span>run<span class="w"> </span>tox<span class="w"> </span>-e<span class="w"> </span>docs
+</pre></div>
+</div>
+<p>Tests under <code class="docutils literal notranslate"><span class="pre">tests/</span></code> include sample support YAML, instance YAML and expected
+rendered files in <code class="docutils literal notranslate"><span class="pre">tests/samples/</span></code>. When changing rendering behavior, check the
+resulting startup script and substitution file, and add a regression test for
+the behavior being changed. The Python suite does not replace running a real
+IOC when changing EPICS integration.</p>
+<p>The implementation path is described in
+<a class="reference internal" href="../explanations/architecture.html"><span class="std std-doc">files and lifecycle</span></a>. Report bugs and propose
+changes through <a class="reference external" href="https://github.com/epics-containers/ibek/issues">GitHub issues</a>;
+include the ibek version, command, relevant YAML and expected output.</p>
 </section>
 
 
@@ -523,20 +527,20 @@ same or is improved by a pull request!</p>
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="vendor-runtime-patterns.html"
+       href="troubleshoot.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Vendor runtime-support patterns into a services repo</p>
+        <p class="prev-next-title">Troubleshoot ibek</p>
       </div>
     </a>
     <a class="right-next"
-       href="../explanations.html"
+       href="../reference.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Explanations</p>
+        <p class="prev-next-title">Reference</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -550,20 +554,6 @@ same or is improved by a pull request!</p>
                 <dialog id="pst-secondary-sidebar-modal"></dialog>
                 <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
 
-
-  <div class="sidebar-secondary-item">
-<div
-    id="pst-page-navigation-heading-2"
-    class="page-toc tocsection onthispage">
-    <i class="fa-solid fa-list"></i> On this page
-  </div>
-  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
-    <ul class="pst-show_toc_level nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#issue-or-discussion">Issue or Discussion?</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#code-coverage">Code Coverage</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#developer-information">Developer Information</a></li>
-</ul>
-  </nav></div>
 
   <div class="sidebar-secondary-item">
 

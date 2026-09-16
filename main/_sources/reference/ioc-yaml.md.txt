@@ -1,194 +1,141 @@
-# IOC instance YAML and schemas reference
+# IOC YAML
 
-This page is a field-by-field reference for an **IOC instance file**
-(`*.ibek.ioc.yaml`) and for the three JSON schema artifacts that validate the
-ibek YAML files. The audience is IOC-instance designers writing the file that
-describes a single IOC.
-
-An IOC instance file lists the *entities* (port drivers, axes, databases, …)
-that make up one IOC. ibek loads it into the `IOC` model,
-validates every entity against the entity models published by the support
-modules baked into the generic-IOC image, and renders the startup assets
-(`st.cmd`, database substitutions, etc.).
-
-```{seealso}
-- The support-module file that *defines* the entity models is documented in
-  {doc}`support-yaml` — this page does not repeat those field tables.
-- The Jinja context available inside entity arguments is documented in
-  {doc}`jinja-context` — this page does not deep-dive Jinja.
-```
-
-## The `$schema` header convention
-
-The first line of an instance file is, by convention, a
-[yaml-language-server](https://github.com/redhat-developer/yaml-language-server)
-modeline that points an editor at the schema to validate against:
+An IOC configuration lists the entities to instantiate from the available
+[support definitions](support-yaml.md). It selects and configures compiled
+support; adding an entity does not install a missing driver.
 
 ```yaml
-# yaml-language-server: $schema=../schemas/motorSim.ibek.ioc.schema.json
+# yaml-language-server: $schema=../ioc.schema.json
+ioc_name: "{{ env.get('IOC_NAME', 'demo') }}"
+description: Example device IOC
+entities:
+  - type: example.Device
+    name: device1
+    P: "DEMO:"
+    count: 4
 ```
 
-The comment is not interpreted by ibek itself — it is a hint for editors
-(VS Code, Neovim, …) so they offer completion and inline validation while you
-type. It should point at one of the *ioc* schemas described in
-[Schemas](#schemas) below.
+This uses the `example.Device` model in the support reference. For real
+configurations, use the types offered by your image's schema.
 
-When an instance is managed by `ibek pattern`, the header is rewritten
-automatically to point at the self-contained per-instance schema
-(`../ioc.schema.json`) every time `ibek pattern schema` runs.
+## Fields and ordering
 
-## Top-level keys
+| Field | Meaning |
+| --- | --- |
+| `ioc_name` | Required string; Jinja is evaluated before the entities. |
+| `description` | Required description. |
+| `entities` | Required ordered list of entity instances. |
+| `shared` | Optional list for YAML anchors; does not create Jinja variables. |
 
-The instance file has four top-level keys, defined by the
-`IOC` model (`ibek.ioc.IOC`):
+Every entity supplies `type: <module>.<model>` and the parameters declared by
+that model. Parameters with defaults may be omitted. Unknown fields, missing
+required parameters, invalid enum labels and duplicate IDs are errors.
 
-| Key           | Type         | Required | Description                                                              |
-| ------------- | ------------ | :------: | ------------------------------------------------------------------------ |
-| `ioc_name`    | `str`        |   yes    | Name of the IOC instance. May contain Jinja (see below).                 |
-| `description` | `str`        |   yes    | Free-text description of what the IOC does.                              |
-| `entities`    | `list`       |   yes    | The ordered list of entity instances that make up the IOC.              |
-| `shared`      | `Sequence`   |    no    | Scratch space for YAML anchors; ignored by ibek. Defaults to empty.      |
+An `object` parameter refers to another entity's `id` value. Put the target
+before the referring entity. Parameter expressions can read earlier rendered
+parameters, for example `DESC: "Axis {{ ADDR }}"`; their evaluation order comes
+from the **support definition**, not the order of keys in the IOC file.
+See [Jinja context](jinja-context.md).
 
-### `ioc_name`
+`entity_enabled: false` suppresses an ordinary entity's startup snippets and
+databases, but the entity is still validated and its IDs and calculated values
+are processed. It does not recursively disable sub-entities, PVI generation or
+built-in wait entries. Remove those entries when they should not be generated.
 
-The IOC instance name. Because it is a string field it is Jinja-rendered, so it
-is commonly derived rather than hard-coded. Two idioms seen in real instances:
+## Reuse with YAML anchors
+
+Anchors are YAML's own mechanism, resolved before ibek evaluates Jinja. Use
+`shared` to hold common parameter maps:
 
 ```yaml
-# take the name from the yaml file name (without the .ibek.ioc.yaml suffix)
-ioc_name: "{{ ioc_yaml_file_name }}"
+shared:
+  - &common
+    P: "DEMO:"
+    count: 4
+entities:
+  - type: example.Device
+    <<: *common
+    name: device1
 ```
+
+## Repeating entities
+
+`ibek.repeat` expands one entity for each item in `values`. Set `variable` to
+the iteration name (default `index`). `<variable>_num` is the zero-based
+position, independent of the item's value.
 
 ```yaml
-# take the name from an environment variable
-ioc_name: "{{ _global.get_env('IOC_NAME') }}"
+entities:
+  - type: ibek.repeat
+    variable: channel
+    values: [A, B, C]
+    entity:
+      type: example.Device
+      name: "device_{{ channel }}"
+      P: "DEMO:{{ channel }}:"
+      count: 1
 ```
 
-### `shared`
+`values` can also be `"{{ range(1, 5) | list }}"`. Repeats may nest; use distinct
+variable names to retain access to outer values. Support models can use the
+same mechanism within `sub_entities`.
 
-`shared` exists only to give you somewhere to declare reusable YAML
-[anchors](https://yaml.org/spec/1.2.2/#anchors-and-aliases) that can be aliased
-into multiple entities. ibek does not read it — it is dropped after YAML
-parsing.
+Expansion happens after the top-level entities have been loaded. References
+between repeated entities work when the target is expanded first; a regular
+top-level entity cannot refer to an ID that only a later expansion creates.
 
-## Entity entries
+## Waiting for hardware
 
-Each item in `entities` is an entity instance. Every entry has two built-in
-fields plus the parameters of its model:
-
-| Field            | Type   | Required | Default | Description                                            |
-| ---------------- | ------ | :------: | :-----: | ------------------------------------------------------ |
-| `type`           | `str`  |   yes    |    —    | Selects the entity model, written `<module>.<EntityModelName>`. |
-| `entity_enabled` | `bool` |    no    | `True`  | Set `false` to keep the entry but skip rendering it.   |
-
-`type` names the support module and the entity model within it, e.g.
-`asyn.AsynIP` or `motorSim.simMotorController`. ibek looks up the matching
-dynamically-generated subclass of `Entity` (`ibek.ioc.Entity`) and validates the
-remaining keys against that model's parameters.
-
-Important validation behaviour:
-
-- **Unknown keys are rejected.** Entity models are validated with
-  Pydantic `extra="forbid"`, so a mistyped or unsupported argument is an error
-  rather than being silently ignored.
-- **Arguments are Jinja-rendered**, including references *between* arguments of
-  the same entity. In the sample below `M: M{{ADDR}}` and
-  `DESC: Motor {{ADDR}} for ioc {{ioc_name}}` both interpolate other values.
-- **Built-in entities** (those whose `type` starts with `ibek.`, such as
-  `ibek.repeat`) are provided by ibek itself and subclass
-  `BuiltInEntity` (`ibek.ioc.BuiltInEntity`) rather than coming from a support module.
-
-### Worked example
-
-```{literalinclude} ../../tests/samples/iocs/motorSim.ibek.ioc.yaml
-:language: yaml
-:caption: tests/samples/iocs/motorSim.ibek.ioc.yaml — a simulated-motion IOC instance
+```yaml
+entities:
+  - type: ibek.wait_ip
+    device: controller
+    address: "192.168.0.10:4000"
+    timeout: 30
 ```
 
-Rendering this instance produces the startup script below (one of several
-generated assets):
+Generation writes an entry to `wait_list.yaml` without waiting. The image's
+startup script runs `ibek ioc do-wait` to process the list.
+`address` is required, `device` defaults to
+`DEVICE`, and `timeout` defaults to zero (wait indefinitely). `ibek.wait_usb`
+accepts `id: "vendor_id:product_id"` with the same optional fields, but its
+runtime implementation is not yet available.
 
-```{literalinclude} ../../tests/samples/outputs/motorSim/st.cmd
-:language: shell
-:caption: tests/samples/outputs/motorSim/st.cmd — generated from the instance above
-```
+## Multiple files
+
+`ibek runtime generate2` accepts `config/ioc.yaml` and optional
+`config/runtime.yaml`, plus explicit `--instance` files. Each is a complete IOC
+YAML document with `ioc_name`, `description` and `entities`; their entity lists
+are concatenated. Use the same `ioc_name` in all files: the main IOC retains
+the first document's name, while later loads update the Jinja `ioc_name`.
+The [CLI reference](cli.md) describes file discovery and explicit ordering.
 
 (schemas)=
 ## Schemas
 
-ibek works with **three** JSON schema artifacts. They differ in scope — what set
-of entity models they describe — and in which command produces them.
+The first-line `yaml-language-server` comment enables editor validation and
+completion. It is an editor hint, not a runtime instruction. Runtime validation
+uses the supplied support definitions.
 
-```{note}
-The schema names below are the **current** ones. The old names
-`ibek.defs.schema.json` and `<container>.ibek.entities.schema.json` are
-**retired** and should not be used or referenced.
-```
+| Schema | Describes | Command |
+| --- | --- | --- |
+| `ibek.support.schema.json` | Support YAML structure | `ibek support generate-schema` |
+| `<image>.ibek.ioc.schema.json` | IOC entities available in a particular image | `ibek ioc generate-schema` |
+| `ioc.schema.json` | Image entities plus an instance's local/vendored definitions | `ibek pattern schema` |
 
-### 1. The global support schema — `ibek.support.schema.json`
-
-Validates *any* `*.ibek.support.yaml` support-module file (the files that
-*define* entity models). It is global: it does not depend on any particular
-image or support module. Produce it with:
+Generate an IOC schema directly from support files:
 
 ```bash
-ibek support generate-schema [--output FILE]
+ibek ioc generate-schema --no-ibek-defs \
+  example.ibek.support.yaml --output example.ibek.ioc.schema.json
 ```
 
-Prints to stdout, or writes to `--output` if given. It is the
-`Support.get_schema()` JSON schema of the `Support` model
-(`ibek.support.Support`).
+Without `--no-ibek-defs`, this command also includes the image's installed
+support definitions from `/epics/ibek-defs` (under `EPICS_ROOT`). The resulting
+schema includes ibek's built-in entities.
 
-::::{dropdown} tests/samples/schemas/ibek.support.schema.json
-:icon: code
-
-```{literalinclude} ../../tests/samples/schemas/ibek.support.schema.json
-:language: json
-```
-::::
-
-### 2. The generic-IOC entities schema — `<container>.ibek.ioc.schema.json`
-
-Validates an `*.ibek.ioc.yaml` *instance* file against the entity models
-built into a particular generic-IOC image. By convention it is named after the
-container, e.g. `motorSim.ibek.ioc.schema.json`. Produce it with:
-
-```bash
-ibek ioc generate-schema [DEFINITIONS...] [--output FILE] [--ibek-defs/--no-ibek-defs]
-```
-
-- `DEFINITIONS` are paths to one or more `*.ibek.support.yaml` files.
-- By default (`--ibek-defs`) the command also adds every support file bundled in
-  the image's `IBEK_DEFS` directory, so the schema covers all built-in
-  entities.
-- The schema is printed to stdout unless `--output` is given.
-- `--no-ibek-defs` with **no** `DEFINITIONS` is an error — there would be
-  nothing to build a schema from.
-
-This is the schema published as a GitHub release artifact alongside the
-generic-IOC image, so instance authors can validate against the exact entity
-set their image provides.
-
-::::{dropdown} tests/samples/schemas/motorSim.ibek.ioc.schema.json
-:icon: code
-
-```{literalinclude} ../../tests/samples/schemas/motorSim.ibek.ioc.schema.json
-:language: json
-```
-::::
-
-### 3. The per-instance schema — `ioc.schema.json`
-
-A *self-contained* schema for a single IOC instance, named `ioc.schema.json`
-(the value of `IOC_SCHEMA_NAME`). It merges schema (2) — fetched as the
-published base schema for the image pinned by the instance — with the entity
-models from the instance's own vendored / local support files. Produce it with:
-
-```bash
-ibek pattern schema [INSTANCE]
-```
-
-This writes `ioc.schema.json` at the instance root and rewrites the instance's
-`config/ioc.yaml` header to `# yaml-language-server: $schema=../ioc.schema.json`,
-so the editor validates against the merged result. See
-{doc}`../how-to/vendor-runtime-patterns` for the `ibek pattern` workflow.
+For a managed instance, run `ibek pattern schema INSTANCE`. It merges the
+image's published schema with local definitions, writes `ioc.schema.json`, and
+updates the `config/ioc.yaml` editor hint. See
+[runtime patterns](../how-to/vendor-runtime-patterns.md) for version selection,
+caching and reproducible schema downloads.
