@@ -1,54 +1,29 @@
-# Installation
+# Install ibek
 
-```{note}
-ibek normally runs *inside* a generic IOC container image, where it is already
-installed and where it has access to the EPICS support modules it needs. The
-direct `pip` install below is mainly for trying out the command line interface
-or for local development of ibek itself. For the bigger picture see the
-[overview](../explanations/overview.md) and the
-[epics-containers](https://epics-containers.github.io) ecosystem.
+Generic IOC containers already include ibek. Install it on your workstation to
+manage runtime patterns, generate schemas or render configuration without
+starting an IOC. Python 3.13 or newer is required.
+
+For an isolated command-line installation with `uv`:
+
+```bash
+uv tool install ibek
+ibek --version
+ibek --help
 ```
 
-## Check your version of python
+Alternatively, use a Python virtual environment:
 
-You will need python 3.13 or later. You can check your version of python by
-typing into a terminal:
-
-```
-$ python3 --version
-```
-
-## Create a virtual environment
-
-It is recommended that you install into a “virtual environment” so this
-installation will not interfere with any existing Python software:
-
-```
-$ python3 -m venv /path/to/venv
-$ source /path/to/venv/bin/activate
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+python -m pip install ibek
+ibek --version
 ```
 
-## Installing the library
+The Python package does not install EPICS, support modules or a generic IOC.
+Build and development helpers expect the environment supplied by an
+[epics-containers developer container](https://epics-containers.github.io/main/tutorials/dev_container.html).
 
-You can now use `pip` to install the library and its dependencies:
-
-```
-$ python3 -m pip install ibek
-```
-
-If you require a feature that is not currently released you can also install
-from github:
-
-```
-$ python3 -m pip install git+https://github.com/epics-containers/ibek.git
-```
-
-The library should now be installed and the commandline interface on your path.
-You can check the version that has been installed by typing:
-
-```
-$ ibek --version
-```
-
-For an end-to-end walkthrough of building an IOC, see
-[Build an IOC](./build-an-ioc.md).
+Continue with [Render an IOC configuration](build-an-ioc.md), which needs only
+ibek. For work on ibek's own source, see [contributing](../how-to/contribute.md).

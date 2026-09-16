@@ -5,9 +5,7 @@ Functions for building the db and boot scripts
 import logging
 from collections.abc import Sequence
 
-from jinja2 import StrictUndefined, Template
-
-from ibek.utils import UTILS
+from ibek.utils import UTILS, make_template
 
 from .entity_model import Database
 from .globals import TEMPLATES
@@ -32,9 +30,7 @@ def create_db_script(
         templates = renderer.render_database(extra_databases)
 
         try:
-            return Template(jinja_txt).render(
-                templates=templates, undefined=StrictUndefined
-            )
+            return make_template(jinja_txt, strict=False).render(templates=templates)
         except Exception:
             print(f"ERROR RENDERING DATABASE TEMPLATE:\n{templates}")
             raise
@@ -45,7 +41,7 @@ def create_boot_script(entities: Sequence[Entity]) -> str:
     Create the boot script for an IOC
     """
     with open(TEMPLATES / "st.cmd.jinja") as f:
-        template = Template(f.read())
+        template = make_template(f.read(), strict=False)
 
     renderer = Render()
 
