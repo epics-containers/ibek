@@ -10,6 +10,12 @@ pre-commit and CI.
 If no published schema can be found for the instance's image, this is reported
 and the schema is left untouched (not an error) — generic images that have not
 published a schema release simply do not get editor validation.
+
+Downloaded base schemas are cached per image tag and revalidated on every run
+with a conditional request, so a re-uploaded release asset reaches the cache.
+If the server cannot be reached, the cached copy is used. If there is no cached
+copy and the instance already has an ``ioc.schema.json``, generation fails:
+that schema may belong to a different image and must not pass silently.
 """
 
 from __future__ import annotations
@@ -21,6 +27,7 @@ import ssl
 import urllib.error
 import urllib.request
 from pathlib import Path
+from typing import NamedTuple
 
 import truststore
 from ruamel.yaml import YAML
@@ -28,6 +35,8 @@ from ruamel.yaml import YAML
 from ibek.entity_factory import EntityFactory
 from ibek.globals import IOC_SCHEMA_NAME
 from ibek.ioc_factory import IocFactory
+
+from .sources import PatternError
 
 # Entity defs always present in a generated base schema; never re-copied on merge.
 BUILTIN_DEFS = {"RepeatEntity", "Wait4IPEntity", "Wait4USBEntity"}
@@ -38,6 +47,21 @@ SCHEMA_HEADER = f"# yaml-language-server: $schema=../{IOC_SCHEMA_NAME}"
 
 class SchemaNotFoundError(Exception):
     """The published base schema for an image could not be located."""
+
+
+class SchemaFetchError(SchemaNotFoundError):
+    """The schema server could not be reached, so the schema may still exist."""
+
+
+class StaleSchemaError(PatternError):
+    """An instance schema exists but its base schema could not be fetched."""
+
+
+class Fetched(NamedTuple):
+    """An HTTP response: ``body`` is None for 304 Not Modified."""
+
+    body: bytes | None
+    validators: dict[str, str]
 
 
 # --------------------------------------------------------------------------- #
@@ -79,34 +103,83 @@ def _cache_path(image: str) -> Path:
     return root / f"{org}__{repo}__{tag}.json"
 
 
-def _http_get(url: str) -> bytes:
-    """Fetch ``url``; raise SchemaNotFound on any failure (monkeypatched in tests)."""
+def _http_get(url: str, headers: dict[str, str]) -> Fetched:
+    """Fetch ``url`` with extra request ``headers`` (monkeypatched in tests).
+
+    Raises SchemaNotFoundError for a 4xx response and SchemaFetchError when the
+    server cannot be reached or fails.
+    """
     # Verify against the OS trust store. The uv-managed Python that uvx uses
     # has OpenSSL CA paths compiled for Debian (/etc/ssl/cert.pem), which do
     # not exist on RHEL, so the default context fails verification (#364).
     context = truststore.SSLContext(ssl.PROTOCOL_TLS_CLIENT)
+    request = urllib.request.Request(url, headers=headers)
     try:
         with urllib.request.urlopen(  # noqa: S310
-            url, timeout=30, context=context
+            request, timeout=10, context=context
         ) as response:
-            return response.read()
+            validators = {
+                key: response.headers[key]
+                for key in ("ETag", "Last-Modified")
+                if response.headers.get(key)
+            }
+            return Fetched(response.read(), validators)
+    except urllib.error.HTTPError as exc:
+        if exc.code == 304:
+            return Fetched(None, {})
+        if 400 <= exc.code < 500:
+            raise SchemaNotFoundError(f"could not fetch {url}: {exc}") from exc
+        raise SchemaFetchError(f"could not fetch {url}: {exc}") from exc
     except (urllib.error.URLError, OSError) as exc:
-        raise SchemaNotFoundError(f"could not fetch {url}: {exc}") from exc
+        raise SchemaFetchError(f"could not fetch {url}: {exc}") from exc
 
 
 def fetch_base_schema(image: str) -> dict:
-    """Return the published base schema for ``image`` (cached per immutable tag)."""
+    """Return the published base schema for ``image``.
+
+    The cached copy for the image tag is revalidated with ``If-None-Match`` /
+    ``If-Modified-Since``. The cached copy is also used when the server cannot
+    be reached.
+
+    Raises:
+        SchemaNotFoundError: no schema is published for the image.
+        SchemaFetchError: the server cannot be reached and nothing is cached.
+    """
     cache = _cache_path(image)
-    if cache.exists():
-        return json.loads(cache.read_text())
+    validators_path = cache.with_suffix(".validators.json")
+    cached = json.loads(cache.read_text()) if cache.exists() else None
+
+    headers = {}
+    if cached is not None and validators_path.exists():
+        validators = json.loads(validators_path.read_text())
+        if "ETag" in validators:
+            headers["If-None-Match"] = validators["ETag"]
+        if "Last-Modified" in validators:
+            headers["If-Modified-Since"] = validators["Last-Modified"]
+
     url = published_schema_url(image)
-    data = _http_get(url)
     try:
-        schema = json.loads(data)
+        fetched = _http_get(url, headers)
+    except SchemaFetchError as exc:
+        if cached is None:
+            raise
+        print(f"Using cached schema for {image}, could not revalidate it: {exc}")
+        return cached
+
+    if fetched.body is None:
+        if cached is None:
+            raise SchemaFetchError(f"{url} returned 304 but nothing is cached")
+        return cached
+    try:
+        schema = json.loads(fetched.body)
     except json.JSONDecodeError as exc:
         raise SchemaNotFoundError(f"{url} did not return JSON: {exc}") from exc
+
+    if cached is not None and schema != cached:
+        print(f"Published schema for {image} changed since it was cached")
     cache.parent.mkdir(parents=True, exist_ok=True)
     cache.write_text(json.dumps(schema, indent=2))
+    validators_path.write_text(json.dumps(fetched.validators))
     return schema
 
 
@@ -259,8 +332,13 @@ def generate_instance_schema(instance_dir: Path) -> bool:
 
     Returns True if a schema was written, False if the published base schema for
     the instance's image could not be found (reported, not an error).
+
+    Raises:
+        StaleSchemaError: the base schema could not be fetched or read from the
+            cache, but ``ioc.schema.json`` exists and may be for another image.
     """
     config_dir = instance_dir / "config"
+    schema_path = instance_dir / IOC_SCHEMA_NAME
     image = find_image(instance_dir)
     if image is None:
         print(
@@ -272,6 +350,11 @@ def generate_instance_schema(instance_dir: Path) -> bool:
     try:
         base = fetch_base_schema(image)
     except SchemaNotFoundError as exc:
+        if isinstance(exc, SchemaFetchError) and schema_path.exists():
+            raise StaleSchemaError(
+                f"Cannot refresh {schema_path} (image {image}): {exc}. "
+                "The existing schema may be for a different image."
+            ) from exc
         print(
             f"Schema not found for {instance_dir.name} (image {image}): {exc}; "
             "skipping schema generation"
@@ -281,7 +364,6 @@ def generate_instance_schema(instance_dir: Path) -> bool:
     support_yamls = sorted(config_dir.glob("*.ibek.support.yaml"))
     merged = merge_entities(base, support_yamls)
 
-    schema_path = instance_dir / IOC_SCHEMA_NAME
     schema_path.write_text(json.dumps(merged, indent=2) + "\n")
     rewrite_ioc_yaml_header(config_dir / "ioc.yaml")
     return True

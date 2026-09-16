@@ -146,4 +146,7 @@ def schema(
     Fetches the published base schema for the instance's pinned image and merges
     the instance's vendored / local support entities into it.
     """
-    generate_instance_schema(instance)
+    try:
+        generate_instance_schema(instance)
+    except PatternError as exc:
+        _fail(exc)

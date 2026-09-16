@@ -16,17 +16,22 @@ when a default is intentional.
 
 ## No schema download, or an old schema appears
 
-A cached base schema is reused indefinitely, including across fresh virtual
-environments. Run with a new `IBEK_SCHEMA_CACHE` directory to reproduce a
-first download; the complete recipe and cache key are in
-{doc}`../reference/paths-and-environment`.
+A cached base schema is revalidated on every run and is also used when the
+server cannot be reached, including across fresh virtual environments. A
+`Using cached schema ... could not revalidate it` message means the download
+failed but the cache hid the failure. Run with a new `IBEK_SCHEMA_CACHE`
+directory to reproduce a first download; the complete recipe and cache key are
+in {doc}`../reference/paths-and-environment`.
 
 If the command reports that schema generation was skipped, check the image
-in `values.yaml` or `compose.yml` / `compose.yaml`, its explicit tag, network
-access, and the repository's `ibek.ioc.schema.json` release asset. An existing
-schema is left untouched after a skipped download, so exit status alone does
-not prove that it was updated. A malformed cached JSON file raises a parsing
-error; using a fresh cache also isolates that case.
+in `values.yaml` or `compose.yml` / `compose.yaml`, its explicit tag, and the
+repository's `ibek.ioc.schema.json` release asset. A skip leaves an existing
+schema untouched and exits 0.
+
+If the command exits 1 with `Cannot refresh ... ioc.schema.json`, ibek could not
+reach the server and has no cached copy for the image tag. Check network access
+and TLS certificates. A malformed cached JSON file raises a parsing error; using
+a fresh cache also isolates that case.
 
 ## Runtime protocols or templates are missing
 

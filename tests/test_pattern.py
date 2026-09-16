@@ -373,6 +373,11 @@ def test_merge_entities_byte_stable_across_hashseed(samples: Path):
 # --------------------------------------------------------------------------- #
 # instance schema generation
 # --------------------------------------------------------------------------- #
+def serve(body: bytes):
+    """A fake ``schema._http_get`` that always returns ``body``."""
+    return lambda url, headers: schema.Fetched(body, {})
+
+
 def test_generate_instance_schema_merges_and_rewrites_header(
     tmp_path: Path, library: Path, samples: Path, monkeypatch
 ):
@@ -383,7 +388,7 @@ def test_generate_instance_schema_merges_and_rewrites_header(
     # base schema served for the image (built from a real sample module)
     support = sorted((samples / "support").glob("*.ibek.support.yaml"))
     base = generate_schema_dict([support[0]])
-    monkeypatch.setattr(schema, "_http_get", lambda url: json.dumps(base).encode())
+    monkeypatch.setattr(schema, "_http_get", serve(json.dumps(base).encode()))
     # vendor mydevice so its support yaml is in config/
     vendor.add("mydevice@1.0.0", instance, source_override=str(library))
 
@@ -416,7 +421,7 @@ def test_generate_instance_schema_compose_merges_and_rewrites_header(
     monkeypatch.setenv("IBEK_SCHEMA_CACHE", str(tmp_path / "cache"))
     support = sorted((samples / "support").glob("*.ibek.support.yaml"))
     base = generate_schema_dict([support[0]])
-    monkeypatch.setattr(schema, "_http_get", lambda url: json.dumps(base).encode())
+    monkeypatch.setattr(schema, "_http_get", serve(json.dumps(base).encode()))
     vendor.add("mydevice@1.0.0", instance, source_override=str(library))
 
     assert generate_instance_schema(instance) is True
@@ -444,12 +449,27 @@ def test_generate_instance_schema_fetch_failure_is_graceful(
     )
     monkeypatch.setenv("IBEK_SCHEMA_CACHE", str(tmp_path / "cache"))
 
-    def boom(url):
+    def boom(url, headers):
         raise schema.SchemaNotFoundError("404")
 
     monkeypatch.setattr(schema, "_http_get", boom)
     assert generate_instance_schema(instance) is False
     assert "Schema not found" in capsys.readouterr().out
+
+
+class FakeResponse:
+    def __init__(self, body: bytes, headers: dict[str, str] | None = None):
+        self.body = body
+        self.headers = headers or {}
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, *args):
+        return False
+
+    def read(self):
+        return self.body
 
 
 def test_http_get_uses_system_trust_store(monkeypatch):
@@ -458,23 +478,157 @@ def test_http_get_uses_system_trust_store(monkeypatch):
 
     seen = {}
 
-    class Response:
-        def __enter__(self):
-            return self
-
-        def __exit__(self, *args):
-            return False
-
-        def read(self):
-            return b"{}"
-
-    def fake_urlopen(url, timeout, context):
+    def fake_urlopen(request, timeout, context):
         seen["context"] = context
-        return Response()
+        seen["headers"] = dict(request.header_items())
+        return FakeResponse(b"{}", {"ETag": '"abc"'})
 
     monkeypatch.setattr(schema.urllib.request, "urlopen", fake_urlopen)
-    assert schema._http_get("https://example.com/schema.json") == b"{}"
+    fetched = schema._http_get("https://example.com/s.json", {"If-None-Match": "x"})
+    assert fetched == schema.Fetched(b"{}", {"ETag": '"abc"'})
     assert isinstance(seen["context"], truststore.SSLContext)
+    assert seen["headers"] == {"If-none-match": "x"}
+
+
+@pytest.mark.parametrize(
+    "error, expected",
+    [
+        (304, None),
+        (404, schema.SchemaNotFoundError),
+        (503, schema.SchemaFetchError),
+        ("offline", schema.SchemaFetchError),
+    ],
+)
+def test_http_get_classifies_responses(monkeypatch, error, expected):
+    import urllib.error
+
+    url = "https://example.com/s.json"
+
+    def fake_urlopen(request, timeout, context):
+        if error == "offline":
+            raise urllib.error.URLError("Name or service not known")
+        raise urllib.error.HTTPError(url, error, "status", {}, None)  # type: ignore[arg-type]
+
+    monkeypatch.setattr(schema.urllib.request, "urlopen", fake_urlopen)
+    if expected is None:
+        assert schema._http_get(url, {}) == schema.Fetched(None, {})
+    else:
+        with pytest.raises(expected) as info:
+            schema._http_get(url, {})
+        # a missing schema must not be mistaken for an unreachable server
+        assert type(info.value) is expected
+
+
+IMAGE = "ghcr.io/epics-containers/ioc-adsimdetector-runtime:2025.11.1"
+
+
+class FakeServer:
+    """Serve one schema with an ETag, honouring If-None-Match."""
+
+    def __init__(self, schema_dict: dict, etag: str = '"v1"'):
+        self.schema = schema_dict
+        self.etag = etag
+        self.offline = False
+        self.requests: list[dict[str, str]] = []
+
+    def __call__(self, url: str, headers: dict[str, str]) -> schema.Fetched:
+        self.requests.append(headers)
+        if self.offline:
+            raise schema.SchemaFetchError("offline")
+        if headers.get("If-None-Match") == self.etag:
+            return schema.Fetched(None, {})
+        body = json.dumps(self.schema).encode()
+        return schema.Fetched(body, {"ETag": self.etag})
+
+
+def test_fetch_base_schema_revalidates_cache(tmp_path: Path, monkeypatch, capsys):
+    monkeypatch.setenv("IBEK_SCHEMA_CACHE", str(tmp_path / "cache"))
+    server = FakeServer({"version": 1})
+    monkeypatch.setattr(schema, "_http_get", server)
+
+    assert schema.fetch_base_schema(IMAGE) == {"version": 1}
+    assert server.requests[-1] == {}
+
+    # unchanged asset: conditional request, 304, cached copy used
+    assert schema.fetch_base_schema(IMAGE) == {"version": 1}
+    assert server.requests[-1] == {"If-None-Match": '"v1"'}
+
+    # re-uploaded asset for the same tag reaches the cache
+    server.schema, server.etag = {"version": 2}, '"v2"'
+    assert schema.fetch_base_schema(IMAGE) == {"version": 2}
+    assert "changed since it was cached" in capsys.readouterr().out
+    server.offline = True
+    assert schema.fetch_base_schema(IMAGE) == {"version": 2}
+
+
+def test_fetch_base_schema_uses_cache_when_offline(tmp_path: Path, monkeypatch, capsys):
+    monkeypatch.setenv("IBEK_SCHEMA_CACHE", str(tmp_path / "cache"))
+    server = FakeServer({"version": 1})
+    monkeypatch.setattr(schema, "_http_get", server)
+    schema.fetch_base_schema(IMAGE)
+
+    server.offline = True
+    assert schema.fetch_base_schema(IMAGE) == {"version": 1}
+    assert "Using cached schema" in capsys.readouterr().out
+
+
+def test_fetch_base_schema_without_validators_refetches(tmp_path: Path, monkeypatch):
+    """A cache written by an older ibek has no validators file."""
+    monkeypatch.setenv("IBEK_SCHEMA_CACHE", str(tmp_path / "cache"))
+    cache = schema._cache_path(IMAGE)
+    cache.parent.mkdir(parents=True)
+    cache.write_text(json.dumps({"version": "old"}))
+    server = FakeServer({"version": 1})
+    monkeypatch.setattr(schema, "_http_get", server)
+
+    assert schema.fetch_base_schema(IMAGE) == {"version": 1}
+    assert server.requests == [{}]
+
+
+def test_generate_instance_schema_unreachable_without_schema_skips(
+    tmp_path: Path, monkeypatch, capsys
+):
+    instance = make_instance(tmp_path, image=IMAGE)
+    monkeypatch.setenv("IBEK_SCHEMA_CACHE", str(tmp_path / "cache"))
+    server = FakeServer({})
+    server.offline = True
+    monkeypatch.setattr(schema, "_http_get", server)
+
+    assert generate_instance_schema(instance) is False
+    assert "Schema not found" in capsys.readouterr().out
+
+
+def test_generate_instance_schema_unreachable_with_schema_fails(
+    tmp_path: Path, monkeypatch
+):
+    """An image bump must not leave the old image's schema in place silently."""
+    instance = make_instance(tmp_path, image=IMAGE)
+    monkeypatch.setenv("IBEK_SCHEMA_CACHE", str(tmp_path / "cache"))
+    (instance / IOC_SCHEMA_NAME).write_text("{}\n")
+    server = FakeServer({})
+    server.offline = True
+    monkeypatch.setattr(schema, "_http_get", server)
+
+    with pytest.raises(schema.StaleSchemaError):
+        generate_instance_schema(instance)
+    result = runner.invoke(cli, ["pattern", "schema", str(instance)])
+    assert result.exit_code == 1
+    assert (instance / IOC_SCHEMA_NAME).read_text() == "{}\n"
+
+
+def test_generate_instance_schema_not_published_with_schema_skips(
+    tmp_path: Path, monkeypatch, capsys
+):
+    instance = make_instance(tmp_path, image=IMAGE)
+    monkeypatch.setenv("IBEK_SCHEMA_CACHE", str(tmp_path / "cache"))
+    (instance / IOC_SCHEMA_NAME).write_text("{}\n")
+
+    def not_found(url, headers):
+        raise schema.SchemaNotFoundError("HTTP Error 404: Not Found")
+
+    monkeypatch.setattr(schema, "_http_get", not_found)
+    assert generate_instance_schema(instance) is False
+    assert "Schema not found" in capsys.readouterr().out
 
 
 # --------------------------------------------------------------------------- #

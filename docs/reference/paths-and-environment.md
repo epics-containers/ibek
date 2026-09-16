@@ -58,10 +58,24 @@ The image registry is removed, as are a final `-developer` or `-runtime` and
 its optional preceding `-rtems-beatnik`. Developer and runtime variants thus
 share the base-schema cache entry. The registry host is not part of the key.
 
-If that cache file exists, ibek reads it without contacting GitHub: there is no
-expiry, freshness check, or automatic re-download. On a miss it downloads the
-release asset and caches successfully parsed JSON. Failed downloads are not
-cached. Published tags are expected to be immutable.
+Next to each cache file, `<key>.validators.json` stores the `ETag` and
+`Last-Modified` response headers. On every run ibek sends them back as
+`If-None-Match` and `If-Modified-Since`:
+
+| Response | Result |
+| --- | --- |
+| `304 Not Modified` | The cached schema is used. |
+| `200` | The cache file is replaced; a changed schema prints `Published schema for <image> changed since it was cached`. |
+| 4xx | No schema is published: generation is skipped. |
+| 5xx, network or TLS error | The cached schema is used, with a warning. With no cached copy, see below. |
+
+On a miss ibek downloads the release asset and caches successfully parsed JSON.
+Failed downloads are not cached. A cache file without a validators file, for
+example from an older ibek, is downloaded again once.
+
+If the server cannot be reached and nothing is cached for the tag, an existing
+instance `ioc.schema.json` makes the command exit 1, because that schema may
+belong to a previous image. Without an existing schema, generation is skipped.
 
 The instance's `ioc.schema.json` is a separate, generated file. Each successful
 schema run rebuilds it from the base schema plus top-level
@@ -77,7 +91,8 @@ schema_cache=$(mktemp -d)
 IBEK_SCHEMA_CACHE="$schema_cache" ibek pattern schema services/my-ioc
 ```
 
-Reusing that directory for a second invocation exercises a cache hit. A new
+Reusing that directory for a second invocation exercises a revalidated cache
+hit. A new
 empty directory exercises another miss. The command still updates the
 instance schema and `config/ioc.yaml` header on success, so inspect their diff
 afterward. See {doc}`../how-to/troubleshoot` for failed or stale schema results.
