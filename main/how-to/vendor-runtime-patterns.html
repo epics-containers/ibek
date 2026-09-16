@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Vendor runtime support &#8212; ibek 4.6.4.dev2+ge9e9f6fcc documentation</title>
+    <title>Vendor runtime support &#8212; ibek 4.6.4.dev7+g4ec60962d documentation</title>
   
   
   
@@ -42,7 +42,7 @@
   <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=cb8930eaaf36d9849b67" />
 <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=cb8930eaaf36d9849b67" />
 
-    <script src="../_static/documentation_options.js?v=987f8334"></script>
+    <script src="../_static/documentation_options.js?v=ec7198f8"></script>
     <script src="../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -544,14 +544,20 @@ To regenerate after editing local support definitions:</p>
 </pre></div>
 </div>
 <p>ibek finds the image in the first existing file among <code class="docutils literal notranslate"><span class="pre">values.yaml</span></code>,
-<code class="docutils literal notranslate"><span class="pre">compose.yml</span></code>, and <code class="docutils literal notranslate"><span class="pre">compose.yaml</span></code>, downloads or reuses its published base
+<code class="docutils literal notranslate"><span class="pre">compose.yml</span></code>, and <code class="docutils literal notranslate"><span class="pre">compose.yaml</span></code>, downloads or revalidates its published base
 schema, and adds entities from top-level <code class="docutils literal notranslate"><span class="pre">config/*.ibek.support.yaml</span></code> files.
 Existing base entity types are retained, not overridden. It also updates the
 first-line schema comment in <code class="docutils literal notranslate"><span class="pre">config/ioc.yaml</span></code> to reference
 <code class="docutils literal notranslate"><span class="pre">../ioc.schema.json</span></code>.</p>
-<p>If no suitable image is found or its published schema cannot be downloaded,
-schema generation prints a message and leaves the existing schema untouched;
-this is not a command failure. Vendoring still completes.</p>
+<p>If no suitable image is found, or the image has no published schema (a 404 or
+410 response), schema generation prints a message and leaves the existing schema
+untouched; this is not a command failure. Vendoring still completes.</p>
+<p>If the fetch fails for any other reason, such as a network or TLS error, a
+server error, or a 403 or 429 response, ibek uses the cached base schema for the
+image tag. With no cached copy, an existing <code class="docutils literal notranslate"><span class="pre">ioc.schema.json</span></code> makes the command exit
+1, because that schema may belong to a previous image. Vendored files and the
+lock are already written when this happens. Without an existing schema, the
+command prints a message and skips generation.</p>
 <p>Commit the vendored files, lock, schema, and changed YAML header together.
 At startup, <code class="docutils literal notranslate"><span class="pre">runtime</span> <span class="pre">generate2</span></code> reads the support definitions and
 <code class="docutils literal notranslate"><span class="pre">runtime</span> <span class="pre">place-files</span></code> copies top-level protocol and database files into their
@@ -562,8 +568,12 @@ collection are not recursive.</p>
 <section id="schema-caching">
 <h2>Schema caching<a class="headerlink" href="#schema-caching" title="Link to this heading">#</a></h2>
 <p>Downloaded base schemas are cached in <code class="docutils literal notranslate"><span class="pre">~/.cache/ibek/schemas</span></code>, shared across
-virtual environments. A matching cache entry is reused without contacting
-GitHub, so recreating a venv does not reproduce a first download.</p>
+virtual environments. Every run revalidates a matching cache entry with a
+conditional request, so a release asset uploaded again for the same tag
+replaces the cached copy. A cache entry written by an older ibek has no stored
+validators: ibek downloads that entry once, then revalidates it on later runs.
+The cached copy is also used when a fetch fails, so recreating a venv does not
+reproduce a first download.</p>
 <p>Set <code class="docutils literal notranslate"><span class="pre">IBEK_SCHEMA_CACHE</span></code> to a new empty directory to test a fresh download.
 See <a class="reference internal" href="../reference/paths-and-environment.html#published-schema-cache"><span class="std std-ref">Published schema cache</span></a> for the cache keys, reuse rules and a
 copyable fresh-cache command.</p>

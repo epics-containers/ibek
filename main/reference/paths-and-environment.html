@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Paths and environment &#8212; ibek 4.6.4.dev2+ge9e9f6fcc documentation</title>
+    <title>Paths and environment &#8212; ibek 4.6.4.dev7+g4ec60962d documentation</title>
   
   
   
@@ -42,7 +42,7 @@
   <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=cb8930eaaf36d9849b67" />
 <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=cb8930eaaf36d9849b67" />
 
-    <script src="../_static/documentation_options.js?v=987f8334"></script>
+    <script src="../_static/documentation_options.js?v=ec7198f8"></script>
     <script src="../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -586,10 +586,38 @@ Cache: ~/.cache/ibek/schemas/epics-containers__ioc-adsimdetector__2025.11.1.json
 <p>The image registry is removed, as are a final <code class="docutils literal notranslate"><span class="pre">-developer</span></code> or <code class="docutils literal notranslate"><span class="pre">-runtime</span></code> and
 its optional preceding <code class="docutils literal notranslate"><span class="pre">-rtems-beatnik</span></code>. Developer and runtime variants thus
 share the base-schema cache entry. The registry host is not part of the key.</p>
-<p>If that cache file exists, ibek reads it without contacting GitHub: there is no
-expiry, freshness check, or automatic re-download. On a miss it downloads the
-release asset and caches successfully parsed JSON. Failed downloads are not
-cached. Published tags are expected to be immutable.</p>
+<p>Next to each cache file, <code class="docutils literal notranslate"><span class="pre">&lt;key&gt;.validators.json</span></code> stores the <code class="docutils literal notranslate"><span class="pre">ETag</span></code> and
+<code class="docutils literal notranslate"><span class="pre">Last-Modified</span></code> response headers. On every run ibek sends them back as
+<code class="docutils literal notranslate"><span class="pre">If-None-Match</span></code> and <code class="docutils literal notranslate"><span class="pre">If-Modified-Since</span></code>:</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Response</p></th>
+<th class="head"><p>Result</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">304</span> <span class="pre">Not</span> <span class="pre">Modified</span></code></p></td>
+<td><p>The cached schema is used.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">200</span></code></p></td>
+<td><p>The cache file is replaced; a changed schema prints <code class="docutils literal notranslate"><span class="pre">Published</span> <span class="pre">schema</span> <span class="pre">for</span> <span class="pre">&lt;image&gt;</span> <span class="pre">changed</span> <span class="pre">since</span> <span class="pre">it</span> <span class="pre">was</span> <span class="pre">cached</span></code>.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">404</span></code>, <code class="docutils literal notranslate"><span class="pre">410</span></code></p></td>
+<td><p>No schema is published: generation is skipped.</p></td>
+</tr>
+<tr class="row-odd"><td><p>Other 4xx (for example <code class="docutils literal notranslate"><span class="pre">403</span></code>, <code class="docutils literal notranslate"><span class="pre">429</span></code>), 5xx, network or TLS error</p></td>
+<td><p>The fetch failed: the cached schema is used, with a warning. With no cached copy, see below.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>On a miss ibek downloads the release asset and caches successfully parsed JSON.
+Failed downloads are not cached. Both files are written atomically. A cache
+file without a validators file, for example from an older ibek, is downloaded
+again once. An unreadable or invalid cache file is ignored and downloaded again.</p>
+<p>If the fetch fails and nothing is cached for the tag, an existing
+instance <code class="docutils literal notranslate"><span class="pre">ioc.schema.json</span></code> makes the command exit 1, because that schema may
+belong to a previous image. Without an existing schema, generation is skipped.</p>
 <p>The instance’s <code class="docutils literal notranslate"><span class="pre">ioc.schema.json</span></code> is a separate, generated file. Each successful
 schema run rebuilds it from the base schema plus top-level
 <code class="docutils literal notranslate"><span class="pre">config/*.ibek.support.yaml</span></code> files; its existence does <strong>not</strong> prevent a
@@ -601,7 +629,8 @@ while local sources are copied from their current working tree.</p>
 <span class="nv">IBEK_SCHEMA_CACHE</span><span class="o">=</span><span class="s2">"</span><span class="nv">$schema_cache</span><span class="s2">"</span><span class="w"> </span>ibek<span class="w"> </span>pattern<span class="w"> </span>schema<span class="w"> </span>services/my-ioc
 </pre></div>
 </div>
-<p>Reusing that directory for a second invocation exercises a cache hit. A new
+<p>Reusing that directory for a second invocation exercises a revalidated cache
+hit. A new
 empty directory exercises another miss. The command still updates the
 instance schema and <code class="docutils literal notranslate"><span class="pre">config/ioc.yaml</span></code> header on success, so inspect their diff
 afterward. See <a class="reference internal" href="../how-to/troubleshoot.html"><span class="doc">Troubleshoot ibek</span></a> for failed or stale schema results.</p>

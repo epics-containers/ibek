@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Changelog &#8212; ibek 4.6.4.dev2+ge9e9f6fcc documentation</title>
+    <title>Changelog &#8212; ibek 4.6.4.dev7+g4ec60962d documentation</title>
   
   
   
@@ -42,7 +42,7 @@
   <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=cb8930eaaf36d9849b67" />
 <link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=cb8930eaaf36d9849b67" />
 
-    <script src="_static/documentation_options.js?v=987f8334"></script>
+    <script src="_static/documentation_options.js?v=ec7198f8"></script>
     <script src="_static/doctools.js?v=fd6eb6e6"></script>
     <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="_static/clipboard.min.js?v=a7894cd8"></script>
@@ -511,6 +511,20 @@ In particular, <code class="docutils literal notranslate"><span class="pre">_glo
 unset variable. Older ibek releases without the new <code class="docutils literal notranslate"><span class="pre">env</span></code> mapping should
 continue to use that form.</p>
 </section>
+<section id="fixed">
+<h3>Fixed<a class="headerlink" href="#fixed" title="Link to this heading">#</a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">ibek</span> <span class="pre">pattern</span> <span class="pre">schema</span></code> failed with <code class="docutils literal notranslate"><span class="pre">CERTIFICATE_VERIFY_FAILED</span></code> on RHEL when
+run through <code class="docutils literal notranslate"><span class="pre">uvx</span></code>, because the uv-managed Python looks for CA certificates
+at <code class="docutils literal notranslate"><span class="pre">/etc/ssl/cert.pem</span></code>. Schema downloads now verify against the operating
+system trust store with <code class="docutils literal notranslate"><span class="pre">truststore</span></code> (#364).</p>
+<p>The published schema cache no longer assumes release tags are immutable.
+Each run revalidates the cached copy with <code class="docutils literal notranslate"><span class="pre">If-None-Match</span></code> /
+<code class="docutils literal notranslate"><span class="pre">If-Modified-Since</span></code>, and uses the cached copy when a fetch fails.</p>
+<p>A failed fetch no longer leaves a possibly stale <code class="docutils literal notranslate"><span class="pre">ioc.schema.json</span></code> in place
+silently. If nothing is cached for the image tag and the instance already has
+a schema, <code class="docutils literal notranslate"><span class="pre">ibek</span> <span class="pre">pattern</span> <span class="pre">schema</span></code> exits 1. Only a 404 or 410 response still
+skips generation quietly.</p>
+</section>
 <section id="documentation">
 <h3>Documentation<a class="headerlink" href="#documentation" title="Link to this heading">#</a></h3>
 <p>Replaced the maintained guides and references with compact documentation of
@@ -572,6 +586,7 @@ documented the persistent schema cache used by <code class="docutils literal not
     <ul class="pst-show_toc_level nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#unreleased">Unreleased</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#added">Added</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#fixed">Fixed</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#documentation">Documentation</a></li>
 </ul>
 </li>
