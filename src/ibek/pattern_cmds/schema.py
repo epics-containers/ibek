@@ -17,10 +17,12 @@ from __future__ import annotations
 import json
 import os
 import re
+import ssl
 import urllib.error
 import urllib.request
 from pathlib import Path
 
+import truststore
 from ruamel.yaml import YAML
 
 from ibek.entity_factory import EntityFactory
@@ -79,8 +81,14 @@ def _cache_path(image: str) -> Path:
 
 def _http_get(url: str) -> bytes:
     """Fetch ``url``; raise SchemaNotFound on any failure (monkeypatched in tests)."""
+    # Verify against the OS trust store. The uv-managed Python that uvx uses
+    # has OpenSSL CA paths compiled for Debian (/etc/ssl/cert.pem), which do
+    # not exist on RHEL, so the default context fails verification (#364).
+    context = truststore.SSLContext(ssl.PROTOCOL_TLS_CLIENT)
     try:
-        with urllib.request.urlopen(url, timeout=30) as response:  # noqa: S310
+        with urllib.request.urlopen(  # noqa: S310
+            url, timeout=30, context=context
+        ) as response:
             return response.read()
     except (urllib.error.URLError, OSError) as exc:
         raise SchemaNotFoundError(f"could not fetch {url}: {exc}") from exc

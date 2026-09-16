@@ -452,6 +452,31 @@ def test_generate_instance_schema_fetch_failure_is_graceful(
     assert "Schema not found" in capsys.readouterr().out
 
 
+def test_http_get_uses_system_trust_store(monkeypatch):
+    """uv-managed Pythons have no usable OpenSSL CA path on RHEL (#364)."""
+    import truststore
+
+    seen = {}
+
+    class Response:
+        def __enter__(self):
+            return self
+
+        def __exit__(self, *args):
+            return False
+
+        def read(self):
+            return b"{}"
+
+    def fake_urlopen(url, timeout, context):
+        seen["context"] = context
+        return Response()
+
+    monkeypatch.setattr(schema.urllib.request, "urlopen", fake_urlopen)
+    assert schema._http_get("https://example.com/schema.json") == b"{}"
+    assert isinstance(seen["context"], truststore.SSLContext)
+
+
 # --------------------------------------------------------------------------- #
 # CLI integration
 # --------------------------------------------------------------------------- #
