@@ -22,6 +22,23 @@ In particular, ``_global.get_env('NAME')`` still returns an empty string for an
 unset variable. Older ibek releases without the new ``env`` mapping should
 continue to use that form.
 
+Fixed
+~~~~~
+
+``ibek pattern schema`` failed with ``CERTIFICATE_VERIFY_FAILED`` on RHEL when
+run through ``uvx``, because the uv-managed Python looks for CA certificates
+at ``/etc/ssl/cert.pem``. Schema downloads now verify against the operating
+system trust store with ``truststore`` (#364).
+
+The published schema cache no longer assumes release tags are immutable.
+Each run revalidates the cached copy with ``If-None-Match`` /
+``If-Modified-Since``, and uses the cached copy when a fetch fails.
+
+A failed fetch no longer leaves a possibly stale ``ioc.schema.json`` in place
+silently. If nothing is cached for the image tag and the instance already has
+a schema, ``ibek pattern schema`` exits 1. Only a 404 or 410 response still
+skips generation quietly.
+
 Documentation
 ~~~~~~~~~~~~~
 
