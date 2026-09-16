@@ -495,6 +495,10 @@ def test_http_get_uses_system_trust_store(monkeypatch):
     [
         (304, None),
         (404, schema.SchemaNotFoundError),
+        (410, schema.SchemaNotFoundError),
+        (403, schema.SchemaFetchError),
+        (408, schema.SchemaFetchError),
+        (429, schema.SchemaFetchError),
         (503, schema.SchemaFetchError),
         ("offline", schema.SchemaFetchError),
     ],
@@ -583,6 +587,25 @@ def test_fetch_base_schema_without_validators_refetches(tmp_path: Path, monkeypa
 
     assert schema.fetch_base_schema(IMAGE) == {"version": 1}
     assert server.requests == [{}]
+
+
+@pytest.mark.parametrize("record", ["schema", "validators"])
+def test_fetch_base_schema_recovers_from_invalid_cache(
+    tmp_path: Path, monkeypatch, record
+):
+    """A partial or corrupt cache record must lead to a fresh download."""
+    monkeypatch.setenv("IBEK_SCHEMA_CACHE", str(tmp_path / "cache"))
+    server = FakeServer({"version": 1})
+    monkeypatch.setattr(schema, "_http_get", server)
+    schema.fetch_base_schema(IMAGE)
+    cache = schema._cache_path(IMAGE)
+    broken = cache if record == "schema" else cache.with_suffix(".validators.json")
+    broken.write_text('{"trunc')
+
+    assert schema.fetch_base_schema(IMAGE) == {"version": 1}
+    assert server.requests[-1] == {}
+    assert json.loads(cache.read_text()) == {"version": 1}
+    assert not list(cache.parent.glob(".*"))  # no temporary files left behind
 
 
 def test_generate_instance_schema_unreachable_without_schema_skips(

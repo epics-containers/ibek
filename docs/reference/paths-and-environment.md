@@ -66,14 +66,15 @@ Next to each cache file, `<key>.validators.json` stores the `ETag` and
 | --- | --- |
 | `304 Not Modified` | The cached schema is used. |
 | `200` | The cache file is replaced; a changed schema prints `Published schema for <image> changed since it was cached`. |
-| 4xx | No schema is published: generation is skipped. |
-| 5xx, network or TLS error | The cached schema is used, with a warning. With no cached copy, see below. |
+| `404`, `410` | No schema is published: generation is skipped. |
+| Other 4xx (for example `403`, `429`), 5xx, network or TLS error | The fetch failed: the cached schema is used, with a warning. With no cached copy, see below. |
 
 On a miss ibek downloads the release asset and caches successfully parsed JSON.
-Failed downloads are not cached. A cache file without a validators file, for
-example from an older ibek, is downloaded again once.
+Failed downloads are not cached. Both files are written atomically. A cache
+file without a validators file, for example from an older ibek, is downloaded
+again once. An unreadable or invalid cache file is ignored and downloaded again.
 
-If the server cannot be reached and nothing is cached for the tag, an existing
+If the fetch fails and nothing is cached for the tag, an existing
 instance `ioc.schema.json` makes the command exit 1, because that schema may
 belong to a previous image. Without an existing schema, generation is skipped.
 

@@ -24,6 +24,7 @@ import json
 import os
 import re
 import ssl
+import tempfile
 import urllib.error
 import urllib.request
 from pathlib import Path
@@ -42,6 +43,9 @@ from .sources import PatternError
 BUILTIN_DEFS = {"RepeatEntity", "Wait4IPEntity", "Wait4USBEntity"}
 
 PUBLISHED_SCHEMA_ASSET = "ibek.ioc.schema.json"
+# Only these statuses prove that no schema is published. Other 4xx responses,
+# such as 403, 408 or 429, can be transient and must not hide a stale schema.
+NOT_PUBLISHED_STATUSES = {404, 410}
 SCHEMA_HEADER = f"# yaml-language-server: $schema=../{IOC_SCHEMA_NAME}"
 
 
@@ -106,8 +110,8 @@ def _cache_path(image: str) -> Path:
 def _http_get(url: str, headers: dict[str, str]) -> Fetched:
     """Fetch ``url`` with extra request ``headers`` (monkeypatched in tests).
 
-    Raises SchemaNotFoundError for a 4xx response and SchemaFetchError when the
-    server cannot be reached or fails.
+    Raises SchemaNotFoundError for a 404 or 410 response, and SchemaFetchError
+    for any other failure.
     """
     # Verify against the OS trust store. The uv-managed Python that uvx uses
     # has OpenSSL CA paths compiled for Debian (/etc/ssl/cert.pem), which do
@@ -127,35 +131,58 @@ def _http_get(url: str, headers: dict[str, str]) -> Fetched:
     except urllib.error.HTTPError as exc:
         if exc.code == 304:
             return Fetched(None, {})
-        if 400 <= exc.code < 500:
+        if exc.code in NOT_PUBLISHED_STATUSES:
             raise SchemaNotFoundError(f"could not fetch {url}: {exc}") from exc
         raise SchemaFetchError(f"could not fetch {url}: {exc}") from exc
     except (urllib.error.URLError, OSError) as exc:
         raise SchemaFetchError(f"could not fetch {url}: {exc}") from exc
 
 
+def _read_json(path: Path) -> dict | None:
+    """Return the JSON object in ``path``, or None if it is missing or invalid.
+
+    An interrupted write or a manual edit can leave an invalid cache record,
+    which must cause a fresh download rather than a crash.
+    """
+    try:
+        data = json.loads(path.read_text())
+    except (OSError, ValueError):
+        return None
+    return data if isinstance(data, dict) else None
+
+
+def _write_atomic(path: Path, text: str) -> None:
+    """Write ``text`` to ``path`` so that readers never see a partial file."""
+    with tempfile.NamedTemporaryFile(
+        "w", dir=path.parent, prefix=f".{path.name}.", delete=False
+    ) as tmp:
+        tmp.write(text)
+    os.replace(tmp.name, path)
+
+
 def fetch_base_schema(image: str) -> dict:
     """Return the published base schema for ``image``.
 
     The cached copy for the image tag is revalidated with ``If-None-Match`` /
-    ``If-Modified-Since``. The cached copy is also used when the server cannot
-    be reached.
+    ``If-Modified-Since``. The cached copy is also used when the fetch fails.
+    An invalid cache record is ignored and downloaded again.
 
     Raises:
         SchemaNotFoundError: no schema is published for the image.
-        SchemaFetchError: the server cannot be reached and nothing is cached.
+        SchemaFetchError: the fetch failed and nothing is cached.
     """
     cache = _cache_path(image)
     validators_path = cache.with_suffix(".validators.json")
-    cached = json.loads(cache.read_text()) if cache.exists() else None
+    cached = _read_json(cache)
 
     headers = {}
-    if cached is not None and validators_path.exists():
-        validators = json.loads(validators_path.read_text())
-        if "ETag" in validators:
-            headers["If-None-Match"] = validators["ETag"]
-        if "Last-Modified" in validators:
-            headers["If-Modified-Since"] = validators["Last-Modified"]
+    validators = _read_json(validators_path) if cached is not None else None
+    for key, header in (
+        ("ETag", "If-None-Match"),
+        ("Last-Modified", "If-Modified-Since"),
+    ):
+        if validators and isinstance(validators.get(key), str):
+            headers[header] = validators[key]
 
     url = published_schema_url(image)
     try:
@@ -178,8 +205,8 @@ def fetch_base_schema(image: str) -> dict:
     if cached is not None and schema != cached:
         print(f"Published schema for {image} changed since it was cached")
     cache.parent.mkdir(parents=True, exist_ok=True)
-    cache.write_text(json.dumps(schema, indent=2))
-    validators_path.write_text(json.dumps(fetched.validators))
+    _write_atomic(cache, json.dumps(schema, indent=2))
+    _write_atomic(validators_path, json.dumps(fetched.validators))
     return schema
 
 
@@ -334,8 +361,8 @@ def generate_instance_schema(instance_dir: Path) -> bool:
     the instance's image could not be found (reported, not an error).
 
     Raises:
-        StaleSchemaError: the base schema could not be fetched or read from the
-            cache, but ``ioc.schema.json`` exists and may be for another image.
+        StaleSchemaError: the base schema fetch failed with nothing cached, but
+            ``ioc.schema.json`` exists and may be for another image.
     """
     config_dir = instance_dir / "config"
     schema_path = instance_dir / IOC_SCHEMA_NAME

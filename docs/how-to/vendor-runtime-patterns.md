@@ -70,12 +70,13 @@ Existing base entity types are retained, not overridden. It also updates the
 first-line schema comment in `config/ioc.yaml` to reference
 `../ioc.schema.json`.
 
-If no suitable image is found, or the image has no published schema (a 4xx
-response), schema generation prints a message and leaves the existing schema
+If no suitable image is found, or the image has no published schema (a 404 or
+410 response), schema generation prints a message and leaves the existing schema
 untouched; this is not a command failure. Vendoring still completes.
 
-If the server cannot be reached, ibek uses the cached base schema for the image
-tag. With no cached copy, an existing `ioc.schema.json` makes the command exit
+If the fetch fails for any other reason, such as a network or TLS error, a
+server error, or a 403 or 429 response, ibek uses the cached base schema for the
+image tag. With no cached copy, an existing `ioc.schema.json` makes the command exit
 1, because that schema may belong to a previous image. Vendored files and the
 lock are already written when this happens. Without an existing schema, the
 command prints a message and skips generation.
@@ -92,8 +93,10 @@ collection are not recursive.
 Downloaded base schemas are cached in `~/.cache/ibek/schemas`, shared across
 virtual environments. Every run revalidates a matching cache entry with a
 conditional request, so a release asset uploaded again for the same tag
-replaces the cached copy. The cached copy is also used when GitHub cannot be
-reached, so recreating a venv does not reproduce a first download.
+replaces the cached copy. A cache entry written by an older ibek has no stored
+validators: ibek downloads that entry once, then revalidates it on later runs.
+The cached copy is also used when a fetch fails, so recreating a venv does not
+reproduce a first download.
 
 Set `IBEK_SCHEMA_CACHE` to a new empty directory to test a fresh download.
 See {ref}`published-schema-cache` for the cache keys, reuse rules and a
