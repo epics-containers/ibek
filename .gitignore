@@ -69,3 +69,8 @@ lockfiles/
 
 # ruff cache
 .ruff_cache/
+
+**/*.code-workspace
+
+# git worktrees created by Claude Code
+.claude/worktrees/
