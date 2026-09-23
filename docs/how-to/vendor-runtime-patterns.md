@@ -6,6 +6,12 @@ into an instance's `config/`, recording the source, version, and file hashes in
 `runtime-lock.yaml`. This adds configuration and templates to an existing
 image; it does not install compiled drivers.
 
+For why it works this way, see
+[ADR 0003](../explanations/decisions/0003-vendored-pattern-tag-is-authority.md),
+[ADR 0004](../explanations/decisions/0004-vendor-runtime-support-over-submodules.md)
+and
+[ADR 0005](../explanations/decisions/0005-pattern-manifest-declares-what-is-vendored.md).
+
 ## Add and update
 
 A reference is `[library:]name[@version]`. The built-in libraries are
@@ -24,14 +30,6 @@ IOC-specific) defaults to `.`, so run the command from inside the IOC instance
 folder, or name it explicitly. Without a library qualifier ibek tries
 registered libraries in order. Without a version it uses the remote default
 branch and records `HEAD`; that is not an immutable pin.
-
-```{warning}
-`ibek` reads and writes exactly one `runtime-lock.yaml` shape: a `version:` /
-`patterns:` root, with keys relative to the instance root
-(`config/x.proto`, not `x.proto`). `add`, `update` and `check` all refuse a
-lock in any other shape outright. See
-[Unrecognised locks](#unrecognised-locks) below for what to do about one.
-```
 
 Use `--source` to test a local library:
 
@@ -90,6 +88,18 @@ pattern. Omit `--name` to process every locked pattern.
 such as `"DIRTY # testing a protocol change"`; that entry is skipped with a
 warning, even if the file is missing. A missing or empty lock has nothing to
 check and succeeds. Extra untracked files are not checked.
+
+The library tag is the source of truth and is treated as immutable: `restore`,
+and `update` without `--version`, reproduce the same bytes; to change what an
+instance runs, move the pin with `update --version`.
+
+Vendored files carry no marker of their own, so `ibek pattern check` is the
+only guard against a silent edit. The services-template-helm pre-commit hook
+and `ci_verify.sh` run it without `--allow-dirty`, so record an intended
+divergence with a `DIRTY # <reason>` lock entry rather than the flag:
+`--allow-dirty` still prints `vendored files match the lock`, which reads as
+clean in logs. Any formatter or whitespace-fixing hook must exclude the
+vendored files under `config/`.
 
 (unrecognised-locks)=
 
@@ -173,3 +183,12 @@ reproduce a first download.
 Set `IBEK_SCHEMA_CACHE` to a new empty directory to test a fresh download.
 See {ref}`published-schema-cache` for the cache keys, reuse rules and a
 copyable fresh-cache command.
+
+## Artifacts at a glance
+
+| File | Location | Role |
+| --- | --- | --- |
+| Vendored pattern files | `<instance>/config/` | Real copies, byte-identical to the library at its tag; placed into the IOC at boot. |
+| `ibek.manifest.yaml` | `<library>/<pattern>/` | Optional, in the *library*: declares which files are vendored and where. Never vendored itself. |
+| `runtime-lock.yaml` | `<instance>/` | Per-pattern version + source label + per-file SHA-256 (local-drift check), keyed relative to the instance root. |
+| `ioc.schema.json` | `<instance>/` | Self-contained schema merging the base image schema with vendored + local support. |
