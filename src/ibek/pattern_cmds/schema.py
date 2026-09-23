@@ -314,7 +314,7 @@ def _image_source(instance_dir: Path) -> Path | None:
         (
             instance_dir / name
             for name in IMAGE_SOURCES
-            if (instance_dir / name).exists()
+            if (instance_dir / name).is_file()
         ),
         None,
     )

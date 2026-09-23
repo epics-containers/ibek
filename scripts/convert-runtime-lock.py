@@ -34,11 +34,21 @@ from ruamel.yaml.error import YAMLError
 LOCK_VERSION = 1
 
 
-def is_recognised(raw: object) -> bool:
-    """True if ``raw`` is already the ``version:`` / ``patterns:`` shape."""
-    return isinstance(raw, dict) and (
-        "patterns" in raw or isinstance(raw.get("version"), int)
-    )
+def is_recognised(raw: dict) -> bool:
+    """True if ``raw`` is already the fully-formed ``version:``/``patterns:``
+    shape ibek reads, so there is nothing to convert."""
+    return raw.get("version") == LOCK_VERSION and isinstance(raw.get("patterns"), dict)
+
+
+def is_malformed_wrapper(raw: dict) -> bool:
+    """True if ``raw`` carries a ``version`` or ``patterns`` key but not the
+    exact shape ``is_recognised`` requires.
+
+    Such a lock is a broken wrapper, not a flat lock that simply has not been
+    converted yet, so it must not be handed to :func:`convert` as if it were
+    one -- doing so would silently misread its keys as pattern names.
+    """
+    return "version" in raw or "patterns" in raw
 
 
 def rebase_files(files: dict[str, str]) -> dict[str, str]:
@@ -86,6 +96,14 @@ def main(argv: list[str]) -> int:
     if is_recognised(raw):
         print(f"{path}: already in the format ibek reads; nothing to do")
         return 0
+    if is_malformed_wrapper(raw):
+        print(
+            f"{path}: has 'version' and/or 'patterns' but not the shape ibek "
+            f"reads ('version' must be {LOCK_VERSION}, 'patterns' must be a "
+            "mapping)",
+            file=sys.stderr,
+        )
+        return 1
 
     try:
         converted = convert(raw)

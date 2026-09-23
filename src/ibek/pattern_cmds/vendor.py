@@ -309,7 +309,7 @@ def check(
                 reason = expected.partition("#")[2].strip() or "no reason given"
                 result.warnings.append(f"{pattern_name}:{rel} marked DIRTY ({reason})")
                 continue
-            if not target.exists():
+            if not target.is_file():
                 result.failures.append(f"{pattern_name}:{rel} missing vendored file")
                 continue
             actual = file_hash(target.read_bytes())

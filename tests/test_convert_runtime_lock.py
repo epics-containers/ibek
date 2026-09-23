@@ -139,6 +139,31 @@ def test_key_already_starting_with_config_is_still_prefixed(tmp_path: Path, scri
     }
 
 
+def test_incomplete_wrapper_exits_1(tmp_path: Path, script, capsys):
+    """``version: 1`` with no ``patterns`` is a broken wrapper, not a flat lock
+    -- it must be reported as broken, not silently treated as already-converted
+    or misread as pattern names."""
+    lock = write_lock(tmp_path / "runtime-lock.yaml", "version: 1\n")
+
+    rc = script.main([str(lock)])
+
+    assert rc == 1
+    err = capsys.readouterr().err
+    assert "not the shape ibek reads" in err
+    assert load_yaml(lock) == {"version": 1}  # untouched
+
+
+def test_patterns_not_a_mapping_exits_1(tmp_path: Path, script, capsys):
+    lock = write_lock(
+        tmp_path / "runtime-lock.yaml", "version: 1\npatterns: not-a-mapping\n"
+    )
+
+    rc = script.main([str(lock)])
+
+    assert rc == 1
+    assert "not the shape ibek reads" in capsys.readouterr().err
+
+
 def test_missing_file_exits_1(tmp_path: Path, script, capsys):
     rc = script.main([str(tmp_path / "missing.yaml")])
 

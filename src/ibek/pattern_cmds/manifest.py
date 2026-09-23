@@ -98,6 +98,8 @@ def _validate_version(raw: dict) -> None:
     telling the reader their manifest is illegal rather than their ibek is old.
     """
     version = raw.get("version")
+    if version is None:
+        raise ManifestError(f"{MANIFEST_NAME}: 'version' is required")
     if version not in SUPPORTED_MANIFEST_VERSIONS:
         supported = ", ".join(str(v) for v in sorted(SUPPORTED_MANIFEST_VERSIONS))
         raise ManifestError(

@@ -27,6 +27,7 @@ from ibek.pattern_cmds.schema import (
     find_image,
     generate_instance_schema,
     generate_schema_dict,
+    is_instance,
     merge_entities,
     resolve_image_ref,
 )
@@ -188,6 +189,24 @@ def test_check_missing_file_fails(tmp_path: Path, library: Path):
     result = vendor.check(instance)
     assert not result.ok
     assert any("missing" in f for f in result.failures)
+
+
+def test_check_reports_missing_when_target_is_a_directory(
+    tmp_path: Path, library: Path
+):
+    """A directory occupying a locked file's path is reported as missing, not
+    a crash: ``check`` reads bytes from the target, which a directory cannot
+    ever satisfy."""
+    instance = make_instance(tmp_path)
+    vendor.add("mydevice@1.0.0", instance, source_override=str(library))
+    proto = instance / "config" / "mydevice.proto"
+    proto.unlink()
+    proto.mkdir()
+
+    result = vendor.check(instance)
+
+    assert not result.ok
+    assert any("mydevice.proto" in f and "missing" in f for f in result.failures)
 
 
 def test_check_respects_dirty_marker(tmp_path: Path, library: Path):
@@ -432,6 +451,19 @@ def test_find_image_reads_compose_yml(tmp_path: Path):
     instance = make_instance(tmp_path, image=image, compose=True)
     assert not (instance / "values.yaml").exists()
     assert find_image(instance) == image
+
+
+def test_is_instance_ignores_a_directory_named_like_the_image_source(
+    tmp_path: Path,
+):
+    """A directory named ``values.yaml`` is not an image source: treating it
+    as one would hand it to ``YAML.load()`` and crash, instead of correctly
+    reporting the destination as not an instance."""
+    instance = tmp_path / "not-an-instance"
+    (instance / "values.yaml").mkdir(parents=True)
+
+    assert is_instance(instance) is False
+    assert generate_instance_schema(instance) is False
 
 
 def test_generate_instance_schema_compose_merges_and_rewrites_header(
@@ -1199,6 +1231,24 @@ def test_reject_future_manifest_version_before_its_future_keys(tmp_path: Path):
     assert "version" in message and "2" in message
     assert "upgrade ibek" in message
     assert "requires" not in message
+
+
+def test_reject_manifest_missing_version(tmp_path: Path):
+    """A manifest with no ``version:`` key gets its own message, not the
+    unsupported-version one (which would call it version ``None`` and tell the
+    reader to upgrade ibek -- misleading, since the file is simply incomplete).
+    """
+    library = make_pattern(
+        tmp_path / "lib",
+        "noversion",
+        {"noversion.proto": "x\n"},
+        manifest="vendor:\n  - src: '.*'\n    dest: config\n",
+    )
+    with pytest.raises(ManifestError) as exc:
+        load_manifest(library / "noversion")
+    message = str(exc.value)
+    assert "version" in message and "required" in message
+    assert "upgrade ibek" not in message
 
 
 def test_reject_destination_collision_between_key_spellings(tmp_path: Path):
