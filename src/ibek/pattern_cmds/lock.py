@@ -49,7 +49,10 @@ DIRTY_MARKER = "DIRTY"
 # on to change.
 UNRECOGNISED_LOCK_HINT = (
     "lock format not recognised; convert it with "
-    "'uv run scripts/convert-runtime-lock.py <lock>' "
+    "'uv run scripts/convert-runtime-lock.py <lock>' from an ibek checkout, or "
+    "'uv run https://raw.githubusercontent.com/epics-containers/ibek/main/"
+    "scripts/convert-runtime-lock.py <lock>' from anywhere, including a "
+    "services repo with no ibek checkout "
     "(see docs/how-to/vendor-runtime-patterns.md)"
 )
 
@@ -88,6 +91,10 @@ class RuntimeLock:
         generic hint naming the standalone conversion script: there is no safe
         way to guess a file-set from an unrecognised shape, and reading one as
         an *empty* lock would let ``check`` pass having verified nothing.
+
+        An empty file (or one containing only ``{}``) carries no shape to
+        judge either way, so it is read the same as a missing lock: no
+        patterns, nothing to check.
         """
         try:
             raw = YAML(typ="safe").load(self.path) or {}
@@ -95,6 +102,8 @@ class RuntimeLock:
             raise PatternError(f"{self.path}: invalid YAML: {exc}") from exc
         if not isinstance(raw, dict):
             raise PatternError(f"{self.path}: expected a mapping at the top level")
+        if not raw:
+            return
         if "patterns" not in raw and not isinstance(raw.get("version"), int):
             raise PatternError(f"{self.path}: {UNRECOGNISED_LOCK_HINT}")
         version = raw.get("version")

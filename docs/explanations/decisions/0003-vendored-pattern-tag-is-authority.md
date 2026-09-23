@@ -61,7 +61,8 @@ and the lock is a local-drift check only — is unchanged, and is in fact
   committed and authoritative — and was already the only thing anything read.
 - Enforcement of *do not edit* moves entirely to `ibek pattern check` via the
   pre-commit hook and `ci_verify.sh`. That raises the stakes on those hooks being
-  correct: the file no longer says "do not edit" to the person opening it.
+  correct: the file itself carries no "do not edit" warning, so the person
+  opening it relies on `check` to catch an edit.
 
 Which files are vendored, and where they land, is now declared per pattern by
 `ibek.manifest.yaml` (see

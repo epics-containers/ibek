@@ -71,6 +71,8 @@ Two forms:
 value for an IOC instance, because that folder is the Kubernetes ConfigMap
 payload that reaches the container.
 
+(no-manifest)=
+
 ### No manifest
 
 A pattern with no `ibek.manifest.yaml` is vendored through this default
@@ -155,5 +157,5 @@ than fails, without needing `--allow-dirty`.
 `ibek` reads and writes exactly the `version:` / `patterns:` shape above.
 `add`, `update` and `check` all refuse a `runtime-lock.yaml` in any other
 shape, with a generic message naming a conversion script — see
-[the vendoring how-to](../how-to/vendor-runtime-patterns.md#unrecognised-locks).
+{ref}`the vendoring how-to <unrecognised-locks>`.
 ```

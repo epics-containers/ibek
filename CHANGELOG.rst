@@ -24,7 +24,11 @@ continue to use that form.
 
 A standalone ``scripts/convert-runtime-lock.py`` rewrites a ``runtime-lock.yaml``
 that is not in the ``version:``/``patterns:`` shape this ibek reads. Run it once
-per instance: ``uv run scripts/convert-runtime-lock.py <instance>/runtime-lock.yaml``
+per instance, from an ``ibek`` checkout:
+``uv run scripts/convert-runtime-lock.py <instance>/runtime-lock.yaml``; or from
+anywhere, including a services repo with no ``ibek`` checkout, straight from its
+raw URL:
+``uv run https://raw.githubusercontent.com/epics-containers/ibek/main/scripts/convert-runtime-lock.py <instance>/runtime-lock.yaml``
 (#363).
 
 Changed

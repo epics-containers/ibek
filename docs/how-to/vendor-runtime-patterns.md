@@ -63,7 +63,7 @@ first-match-wins **allow-list** — a file matched by no entry is not vendored.
 
 **A pattern with no manifest is vendored through a default manifest ibek
 supplies**: every file, into `config/` (see
-[No manifest](../reference/pattern-manifest.md#no-manifest)). You only need to
+{ref}`No manifest <no-manifest>`). You only need to
 write one when a pattern contains files that must *not* reach the instance.
 The full format, including validation rules, is in the
 [manifest reference](../reference/pattern-manifest.md).
@@ -91,6 +91,8 @@ such as `"DIRTY # testing a protocol change"`; that entry is skipped with a
 warning, even if the file is missing. A missing or empty lock has nothing to
 check and succeeds. Extra untracked files are not checked.
 
+(unrecognised-locks)=
+
 ### Unrecognised locks
 
 `ibek` reads and writes exactly one `runtime-lock.yaml` shape: a `version:` /
@@ -103,18 +105,26 @@ error: <instance>/runtime-lock.yaml: lock format not recognised; convert it
 with 'uv run scripts/convert-runtime-lock.py <lock>' ...
 ```
 
-Convert the lock in place, from an `ibek` checkout:
+Convert the lock in place. From an `ibek` checkout:
 
 ```bash
 uv run scripts/convert-runtime-lock.py <instance>/runtime-lock.yaml
+```
+
+From anywhere else — a services repo with no `ibek` checkout — run it straight
+from its raw URL on the branch or tag you want:
+
+```bash
+uv run https://raw.githubusercontent.com/epics-containers/ibek/main/scripts/convert-runtime-lock.py <instance>/runtime-lock.yaml
 ```
 
 This rewrites the lock's own text only — it never touches the vendored files,
 so their recorded hashes still verify. Re-run `check`; from there `add`,
 `update` and `restore` all work on the converted lock exactly as on any other.
 The script is standalone (a `scripts/` entry point carrying its own PEP 723
-dependency), not part of the installed `ibek` package, so it runs against any
-instance's lock without first vendoring anything.
+dependency), not part of the installed `ibek` package, so `uv run` fetches and
+runs it — whether given a local path or a URL — without first vendoring
+anything.
 
 ## Instance schemas
 

@@ -59,9 +59,10 @@ submodule is unchanged; the mechanism is amended as follows.
   is adjacent, committed and authoritative.
 - **Vendored files are real files, not symlinks** — and that is now enforced from
   both ends: a **symlink anywhere in a pattern folder is refused** at vendor
-  time, not followed, not vendored and not hashed. Previously `rglob` + `is_file`
-  silently dereferenced a good link and silently skipped a broken one, so a
-  symlink to `/etc/passwd` in a library repo would have been vendored.
+  time, not followed, not vendored and not hashed. A walk built from `rglob` +
+  `is_file` alone would silently dereference a good link and silently skip a
+  broken one, so a symlink to `/etc/passwd` in a library repo would be
+  vendored; the refusal above closes that off.
 - **What is copied, and where, is declared by the pattern** in an
   `ibek.manifest.yaml`, rather than being hard-coded as "every file into
   `config/`". A pattern with no manifest is vendored through a default
@@ -77,4 +78,4 @@ hashes computed over a header the file does not itself carry — is refused
 outright, with a generic message naming a standalone conversion script
 (`scripts/convert-runtime-lock.py`) rather than an explanation tied to this
 particular change: see the
-[vendoring how-to](../../how-to/vendor-runtime-patterns.md#unrecognised-locks).
+{ref}`vendoring how-to <unrecognised-locks>`.

@@ -1327,7 +1327,8 @@ def test_vendored_bytes_are_identical_to_the_library(
 
 
 def test_non_hash_comment_file_is_not_corrupted(tmp_path: Path, pattern_library: Path):
-    """A ``.json`` file would not survive a ``#`` header line."""
+    """Vendoring leaves a ``.json`` file's content untouched — no ``#`` line is
+    prepended, which would break its syntax."""
     instance = make_instance(tmp_path)
     vendor.add("mydevice@1.0.0", instance, source_override=str(pattern_library))
     settings = instance / "config" / "mydevice.settings.json"
@@ -1435,6 +1436,22 @@ def test_update_refuses_an_unrecognised_lock(tmp_path: Path, library: Path):
     with pytest.raises(PatternError) as exc:
         vendor.update("mydevice", instance, source_override=str(library))
     assert "scripts/convert-runtime-lock.py" in str(exc.value)
+
+
+@pytest.mark.parametrize("content", ["", "{}\n"])
+def test_empty_lock_has_nothing_to_check(tmp_path: Path, content: str):
+    """A 0-byte lock, or one containing only ``{}``, is read as no patterns —
+    the same as a missing lock — rather than refused as unrecognised."""
+    instance = make_instance(tmp_path)
+    path = instance / RUNTIME_LOCK_NAME
+    path.write_text(content)
+
+    lock = RuntimeLock(path)
+    assert lock.patterns == {}
+
+    result = vendor.check(instance)
+    assert result.ok
+    assert runner.invoke(cli, ["pattern", "check", str(instance)]).exit_code == 0
 
 
 def test_unreadable_lock_cannot_be_masked_by_allow_dirty(tmp_path: Path):

@@ -43,11 +43,10 @@ def is_recognised(raw: object) -> bool:
 
 def rebase_files(files: dict[str, str]) -> dict[str, str]:
     """Prefix every key with ``config/``, the root every such key was relative
-    to, unless it is already there."""
-    return {
-        (key if key.startswith("config/") else f"config/{key}"): value
-        for key, value in files.items()
-    }
+    to. A flat lock's keys are always ``config/``-relative, even one that
+    happens to start with ``config/`` itself (a pattern vendoring its own
+    nested ``config/`` folder) — so the prefix is unconditional."""
+    return {f"config/{key}": value for key, value in files.items()}
 
 
 def convert(raw: dict) -> dict:

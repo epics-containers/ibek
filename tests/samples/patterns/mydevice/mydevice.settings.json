@@ -1,4 +1,4 @@
 {
-  "note": "a file whose format has no '#' line comment - the old vendored header would have corrupted it",
+  "note": "a file whose format has no '#' line comment - a '#'-prefixed header would corrupt it",
   "channels": [1, 2, 3]
 }
