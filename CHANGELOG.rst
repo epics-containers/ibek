@@ -22,6 +22,19 @@ In particular, ``_global.get_env('NAME')`` still returns an empty string for an
 unset variable. Older ibek releases without the new ``env`` mapping should
 continue to use that form.
 
+A standalone ``scripts/convert-runtime-lock.py`` rewrites a ``runtime-lock.yaml``
+that is not in the ``version:``/``patterns:`` shape this ibek reads. Run it once
+per instance: ``uv run scripts/convert-runtime-lock.py <instance>/runtime-lock.yaml``
+(#363).
+
+Changed
+~~~~~~~
+
+``ibek pattern check``/``add``/``update`` refuse a ``runtime-lock.yaml`` in any
+format they do not recognise, rather than special-casing one earlier shape. If
+you see "lock format not recognised", convert the lock with
+``uv run scripts/convert-runtime-lock.py <lock>`` and retry (#363).
+
 Fixed
 ~~~~~
 
