@@ -4,6 +4,10 @@
   <y use_class="true">0</y>
   <width>2224</width>
   <height>966</height>
+  <background_color>
+    <color red="245" green="247" blue="250">
+    </color>
+  </background_color>
   <grid_step_x>4</grid_step_x>
   <grid_step_y>4</grid_step_y>
   <widget type="label" version="2.0.0">
@@ -25,12 +29,20 @@
     <transparent use_class="true">true</transparent>
     <horizontal_alignment>1</horizontal_alignment>
   </widget>
-  <widget type="group" version="2.0.0">
+  <widget type="group" version="3.0.0">
     <name>AD Plugins</name>
     <x>5</x>
     <y>30</y>
     <width>446</width>
     <height>56</height>
+    <font>
+      <font family="Cantarell" style="REGULAR" size="16.0">
+      </font>
+    </font>
+    <background_color>
+      <color red="246" green="247" blue="249">
+      </color>
+    </background_color>
     <transparent>true</transparent>
     <widget type="label" version="2.0.0">
       <name>Label</name>
@@ -39,6 +51,10 @@
       <y>0</y>
       <width>200</width>
       <height>20</height>
+      <font>
+        <font family="Cantarell" style="REGULAR" size="14.0">
+      </font>
+      </font>
       <tooltip>Net - No description provided</tooltip>
     </widget>
     <widget type="textentry" version="3.0.0">
@@ -48,6 +64,14 @@
       <y>0</y>
       <width>100</width>
       <height>20</height>
+      <font>
+        <font family="Cantarell" style="REGULAR" size="14.0">
+      </font>
+      </font>
+      <background_color>
+        <color red="229" green="235" blue="255">
+      </color>
+      </background_color>
       <horizontal_alignment>1</horizontal_alignment>
     </widget>
     <widget type="textupdate" version="2.0.0">
@@ -58,18 +82,38 @@
       <width>100</width>
       <height>20</height>
       <font>
-        <font name="Default Bold" family="Liberation Sans" style="BOLD" size="14.0">
+        <font family="Cantarell" style="BOLD" size="14.0">
       </font>
       </font>
+      <foreground_color>
+        <color red="15" green="23" blue="42">
+      </color>
+      </foreground_color>
+      <background_color>
+        <color red="245" green="247" blue="250">
+      </color>
+      </background_color>
       <horizontal_alignment>1</horizontal_alignment>
+      <border_color>
+        <color red="203" green="213" blue="225">
+      </color>
+      </border_color>
     </widget>
   </widget>
-  <widget type="group" version="2.0.0">
+  <widget type="group" version="3.0.0">
     <name>AD Readout</name>
     <x>5</x>
     <y>91</y>
     <width>446</width>
     <height>206</height>
+    <font>
+      <font family="Cantarell" style="REGULAR" size="16.0">
+      </font>
+    </font>
+    <background_color>
+      <color red="246" green="247" blue="249">
+      </color>
+    </background_color>
     <transparent>true</transparent>
     <widget type="label" version="2.0.0">
       <name>Label</name>
@@ -78,6 +122,10 @@
       <y>0</y>
       <width>200</width>
       <height>20</height>
+      <font>
+        <font family="Cantarell" style="REGULAR" size="14.0">
+      </font>
+      </font>
       <tooltip>Min Y - No description provided</tooltip>
     </widget>
     <widget type="textentry" version="3.0.0">
@@ -87,6 +135,14 @@
       <y>0</y>
       <width>100</width>
       <height>20</height>
+      <font>
+        <font family="Cantarell" style="REGULAR" size="14.0">
+      </font>
+      </font>
+      <background_color>
+        <color red="229" green="235" blue="255">
+      </color>
+      </background_color>
       <horizontal_alignment>1</horizontal_alignment>
     </widget>
     <widget type="textupdate" version="2.0.0">
@@ -97,10 +153,22 @@
       <width>100</width>
       <height>20</height>
       <font>
-        <font name="Default Bold" family="Liberation Sans" style="BOLD" size="14.0">
+        <font family="Cantarell" style="BOLD" size="14.0">
       </font>
       </font>
+      <foreground_color>
+        <color red="15" green="23" blue="42">
+      </color>
+      </foreground_color>
+      <background_color>
+        <color red="245" green="247" blue="250">
+      </color>
+      </background_color>
       <horizontal_alignment>1</horizontal_alignment>
+      <border_color>
+        <color red="203" green="213" blue="225">
+      </color>
+      </border_color>
     </widget>
     <widget type="label" version="2.0.0">
       <name>Label</name>
@@ -109,6 +177,10 @@
       <y>25</y>
       <width>200</width>
       <height>20</height>
+      <font>
+        <font family="Cantarell" style="REGULAR" size="14.0">
+      </font>
+      </font>
       <tooltip>Min X - No description provided</tooltip>
     </widget>
     <widget type="textentry" version="3.0.0">
@@ -118,6 +190,14 @@
       <y>25</y>
       <width>100</width>
       <height>20</height>
+      <font>
+        <font family="Cantarell" style="REGULAR" size="14.0">
+      </font>
+      </font>
+      <background_color>
+        <color red="229" green="235" blue="255">
+      </color>
+      </background_color>
       <horizontal_alignment>1</horizontal_alignment>
     </widget>
     <widget type="textupdate" version="2.0.0">
@@ -128,10 +208,22 @@
       <width>100</width>
       <height>20</height>
       <font>
-        <font name="Default Bold" family="Liberation Sans" style="BOLD" size="14.0">
+        <font family="Cantarell" style="BOLD" size="14.0">
       </font>
       </font>
+      <foreground_color>
+        <color red="15" green="23" blue="42">
+      </color>
+      </foreground_color>
+      <background_color>
+        <color red="245" green="247" blue="250">
+      </color>
+      </background_color>
       <horizontal_alignment>1</horizontal_alignment>
+      <border_color>
+        <color red="203" green="213" blue="225">
+      </color>
+      </border_color>
     </widget>
     <widget type="label" version="2.0.0">
       <name>Label</name>
@@ -140,6 +232,10 @@
       <y>50</y>
       <width>200</width>
       <height>20</height>
+      <font>
+        <font family="Cantarell" style="REGULAR" size="14.0">
+      </font>
+      </font>
       <tooltip>Array Size X - No description provided</tooltip>
     </widget>
     <widget type="textupdate" version="2.0.0">
@@ -150,10 +246,22 @@
       <width>205</width>
       <height>20</height>
       <font>
-        <font name="Default Bold" family="Liberation Sans" style="BOLD" size="14.0">
+        <font family="Cantarell" style="BOLD" size="14.0">
       </font>
       </font>
+      <foreground_color>
+        <color red="15" green="23" blue="42">
+      </color>
+      </foreground_color>
+      <background_color>
+        <color red="245" green="247" blue="250">
+      </color>
+      </background_color>
       <horizontal_alignment>1</horizontal_alignment>
+      <border_color>
+        <color red="203" green="213" blue="225">
+      </color>
+      </border_color>
     </widget>
     <widget type="label" version="2.0.0">
       <name>Label</name>
@@ -162,6 +270,10 @@
       <y>75</y>
       <width>200</width>
       <height>20</height>
+      <font>
+        <font family="Cantarell" style="REGULAR" size="14.0">
+      </font>
+      </font>
       <tooltip>Array Size Y - No description provided</tooltip>
     </widget>
     <widget type="textupdate" version="2.0.0">
@@ -172,10 +284,22 @@
       <width>205</width>
       <height>20</height>
       <font>
-        <font name="Default Bold" family="Liberation Sans" style="BOLD" size="14.0">
+        <font family="Cantarell" style="BOLD" size="14.0">
       </font>
       </font>
+      <foreground_color>
+        <color red="15" green="23" blue="42">
+      </color>
+      </foreground_color>
+      <background_color>
+        <color red="245" green="247" blue="250">
+      </color>
+      </background_color>
       <horizontal_alignment>1</horizontal_alignment>
+      <border_color>
+        <color red="203" green="213" blue="225">
+      </color>
+      </border_color>
     </widget>
     <widget type="label" version="2.0.0">
       <name>Label</name>
@@ -184,6 +308,10 @@
       <y>100</y>
       <width>200</width>
       <height>20</height>
+      <font>
+        <font family="Cantarell" style="REGULAR" size="14.0">
+      </font>
+      </font>
       <tooltip>Array Size - No description provided</tooltip>
     </widget>
     <widget type="textupdate" version="2.0.0">
@@ -194,10 +322,22 @@
       <width>205</width>
       <height>20</height>
       <font>
-        <font name="Default Bold" family="Liberation Sans" style="BOLD" size="14.0">
+        <font family="Cantarell" style="BOLD" size="14.0">
       </font>
       </font>
+      <foreground_color>
+        <color red="15" green="23" blue="42">
+      </color>
+      </foreground_color>
+      <background_color>
+        <color red="245" green="247" blue="250">
+      </color>
+      </background_color>
       <horizontal_alignment>1</horizontal_alignment>
+      <border_color>
+        <color red="203" green="213" blue="225">
+      </color>
+      </border_color>
     </widget>
     <widget type="label" version="2.0.0">
       <name>Label</name>
@@ -206,6 +346,10 @@
       <y>125</y>
       <width>200</width>
       <height>20</height>
+      <font>
+        <font family="Cantarell" style="REGULAR" size="14.0">
+      </font>
+      </font>
       <tooltip>Data Type - No description provided</tooltip>
     </widget>
     <widget type="combo" version="2.0.0">
@@ -215,6 +359,19 @@
       <y>125</y>
       <width>100</width>
       <height>20</height>
+      <font>
+        <font family="Cantarell" style="REGULAR" size="14.0">
+      </font>
+      </font>
+      <background_color>
+        <color red="229" green="235" blue="255">
+      </color>
+      </background_color>
+      <items>
+        <item>item 0</item>
+        <item>Item 1</item>
+        <item>Item 2</item>
+      </items>
     </widget>
     <widget type="textupdate" version="2.0.0">
       <name>TextUpdate</name>
@@ -224,10 +381,22 @@
       <width>100</width>
       <height>20</height>
       <font>
-        <font name="Default Bold" family="Liberation Sans" style="BOLD" size="14.0">
+        <font family="Cantarell" style="BOLD" size="14.0">
       </font>
       </font>
+      <foreground_color>
+        <color red="15" green="23" blue="42">
+      </color>
+      </foreground_color>
+      <background_color>
+        <color red="245" green="247" blue="250">
+      </color>
+      </background_color>
       <horizontal_alignment>1</horizontal_alignment>
+      <border_color>
+        <color red="203" green="213" blue="225">
+      </color>
+      </border_color>
     </widget>
     <widget type="label" version="2.0.0">
       <name>Label</name>
@@ -236,6 +405,10 @@
       <y>150</y>
       <width>200</width>
       <height>20</height>
+      <font>
+        <font family="Cantarell" style="REGULAR" size="14.0">
+      </font>
+      </font>
       <tooltip>Color Mode - No description provided</tooltip>
     </widget>
     <widget type="combo" version="2.0.0">
@@ -245,6 +418,19 @@
       <y>150</y>
       <width>100</width>
       <height>20</height>
+      <font>
+        <font family="Cantarell" style="REGULAR" size="14.0">
+      </font>
+      </font>
+      <background_color>
+        <color red="229" green="235" blue="255">
+      </color>
+      </background_color>
+      <items>
+        <item>item 0</item>
+        <item>Item 1</item>
+        <item>Item 2</item>
+      </items>
     </widget>
     <widget type="textupdate" version="2.0.0">
       <name>TextUpdate</name>
@@ -254,18 +440,38 @@
       <width>100</width>
       <height>20</height>
       <font>
-        <font name="Default Bold" family="Liberation Sans" style="BOLD" size="14.0">
+        <font family="Cantarell" style="BOLD" size="14.0">
       </font>
       </font>
+      <foreground_color>
+        <color red="15" green="23" blue="42">
+      </color>
+      </foreground_color>
+      <background_color>
+        <color red="245" green="247" blue="250">
+      </color>
+      </background_color>
       <horizontal_alignment>1</horizontal_alignment>
+      <border_color>
+        <color red="203" green="213" blue="225">
+      </color>
+      </border_color>
     </widget>
   </widget>
-  <widget type="group" version="2.0.0">
+  <widget type="group" version="3.0.0">
     <name>ND Plugin Time Series N</name>
     <x>5</x>
     <y>302</y>
     <width>446</width>
     <height>256</height>
+    <font>
+      <font family="Cantarell" style="REGULAR" size="16.0">
+      </font>
+    </font>
+    <background_color>
+      <color red="246" green="247" blue="249">
+      </color>
+    </background_color>
     <transparent>true</transparent>
     <widget type="label" version="2.0.0">
       <name>Label</name>
@@ -274,6 +480,10 @@
       <y>0</y>
       <width>200</width>
       <height>20</height>
+      <font>
+        <font family="Cantarell" style="REGULAR" size="14.0">
+      </font>
+      </font>
       <tooltip>TS Min Value - No description provided</tooltip>
     </widget>
     <widget type="textupdate" version="2.0.0">
@@ -284,10 +494,22 @@
       <width>205</width>
       <height>20</height>
       <font>
-        <font name="Default Bold" family="Liberation Sans" style="BOLD" size="14.0">
+        <font family="Cantarell" style="BOLD" size="14.0">
       </font>
       </font>
+      <foreground_color>
+        <color red="15" green="23" blue="42">
+      </color>
+      </foreground_color>
+      <background_color>
+        <color red="245" green="247" blue="250">
+      </color>
+      </background_color>
       <horizontal_alignment>1</horizontal_alignment>
+      <border_color>
+        <color red="203" green="213" blue="225">
+      </color>
+      </border_color>
     </widget>
     <widget type="label" version="2.0.0">
       <name>Label</name>
@@ -296,6 +518,10 @@
       <y>25</y>
       <width>200</width>
       <height>20</height>
+      <font>
+        <font family="Cantarell" style="REGULAR" size="14.0">
+      </font>
+      </font>
       <tooltip>TS Max Value - No description provided</tooltip>
     </widget>
     <widget type="textupdate" version="2.0.0">
@@ -306,10 +532,22 @@
       <width>205</width>
       <height>20</height>
       <font>
-        <font name="Default Bold" family="Liberation Sans" style="BOLD" size="14.0">
+        <font family="Cantarell" style="BOLD" size="14.0">
       </font>
       </font>
+      <foreground_color>
+        <color red="15" green="23" blue="42">
+      </color>
+      </foreground_color>
+      <background_color>
+        <color red="245" green="247" blue="250">
+      </color>
+      </background_color>
       <horizontal_alignment>1</horizontal_alignment>
+      <border_color>
+        <color red="203" green="213" blue="225">
+      </color>
+      </border_color>
     </widget>
     <widget type="label" version="2.0.0">
       <name>Label</name>
@@ -318,6 +556,10 @@
       <y>50</y>
       <width>200</width>
       <height>20</height>
+      <font>
+        <font family="Cantarell" style="REGULAR" size="14.0">
+      </font>
+      </font>
       <tooltip>TS Mean Value - No description provided</tooltip>
     </widget>
     <widget type="textupdate" version="2.0.0">
@@ -328,10 +570,22 @@
       <width>205</width>
       <height>20</height>
       <font>
-        <font name="Default Bold" family="Liberation Sans" style="BOLD" size="14.0">
+        <font family="Cantarell" style="BOLD" size="14.0">
       </font>
       </font>
+      <foreground_color>
+        <color red="15" green="23" blue="42">
+      </color>
+      </foreground_color>
+      <background_color>
+        <color red="245" green="247" blue="250">
+      </color>
+      </background_color>
       <horizontal_alignment>1</horizontal_alignment>
+      <border_color>
+        <color red="203" green="213" blue="225">
+      </color>
+      </border_color>
     </widget>
     <widget type="label" version="2.0.0">
       <name>Label</name>
@@ -340,6 +594,10 @@
       <y>75</y>
       <width>200</width>
       <height>20</height>
+      <font>
+        <font family="Cantarell" style="REGULAR" size="14.0">
+      </font>
+      </font>
       <tooltip>TS Total - No description provided</tooltip>
     </widget>
     <widget type="textupdate" version="2.0.0">
@@ -350,10 +608,22 @@
       <width>205</width>
       <height>20</height>
       <font>
-        <font name="Default Bold" family="Liberation Sans" style="BOLD" size="14.0">
+        <font family="Cantarell" style="BOLD" size="14.0">
       </font>
       </font>
+      <foreground_color>
+        <color red="15" green="23" blue="42">
+      </color>
+      </foreground_color>
+      <background_color>
+        <color red="245" green="247" blue="250">
+      </color>
+      </background_color>
       <horizontal_alignment>1</horizontal_alignment>
+      <border_color>
+        <color red="203" green="213" blue="225">
+      </color>
+      </border_color>
     </widget>
     <widget type="label" version="2.0.0">
       <name>Label</name>
@@ -362,6 +632,10 @@
       <y>100</y>
       <width>200</width>
       <height>20</height>
+      <font>
+        <font family="Cantarell" style="REGULAR" size="14.0">
+      </font>
+      </font>
       <tooltip>TS Net - No description provided</tooltip>
     </widget>
     <widget type="textupdate" version="2.0.0">
@@ -372,10 +646,22 @@
       <width>205</width>
       <height>20</height>
       <font>
-        <font name="Default Bold" family="Liberation Sans" style="BOLD" size="14.0">
+        <font family="Cantarell" style="BOLD" size="14.0">
       </font>
       </font>
+      <foreground_color>
+        <color red="15" green="23" blue="42">
+      </color>
+      </foreground_color>
+      <background_color>
+        <color red="245" green="247" blue="250">
+      </color>
+      </background_color>
       <horizontal_alignment>1</horizontal_alignment>
+      <border_color>
+        <color red="203" green="213" blue="225">
+      </color>
+      </border_color>
     </widget>
     <widget type="label" version="2.0.0">
       <name>Label</name>
@@ -384,6 +670,10 @@
       <y>125</y>
       <width>200</width>
       <height>20</height>
+      <font>
+        <font family="Cantarell" style="REGULAR" size="14.0">
+      </font>
+      </font>
       <tooltip>Min Value - No description provided</tooltip>
     </widget>
     <widget type="textentry" version="3.0.0">
@@ -393,6 +683,14 @@
       <y>125</y>
       <width>100</width>
       <height>20</height>
+      <font>
+        <font family="Cantarell" style="REGULAR" size="14.0">
+      </font>
+      </font>
+      <background_color>
+        <color red="229" green="235" blue="255">
+      </color>
+      </background_color>
       <horizontal_alignment>1</horizontal_alignment>
     </widget>
     <widget type="textupdate" version="2.0.0">
@@ -403,10 +701,22 @@
       <width>100</width>
       <height>20</height>
       <font>
-        <font name="Default Bold" family="Liberation Sans" style="BOLD" size="14.0">
+        <font family="Cantarell" style="BOLD" size="14.0">
       </font>
       </font>
+      <foreground_color>
+        <color red="15" green="23" blue="42">
+      </color>
+      </foreground_color>
+      <background_color>
+        <color red="245" green="247" blue="250">
+      </color>
+      </background_color>
       <horizontal_alignment>1</horizontal_alignment>
+      <border_color>
+        <color red="203" green="213" blue="225">
+      </color>
+      </border_color>
     </widget>
     <widget type="label" version="2.0.0">
       <name>Label</name>
@@ -415,6 +725,10 @@
       <y>150</y>
       <width>200</width>
       <height>20</height>
+      <font>
+        <font family="Cantarell" style="REGULAR" size="14.0">
+      </font>
+      </font>
       <tooltip>Max Value - No description provided</tooltip>
     </widget>
     <widget type="textentry" version="3.0.0">
@@ -424,6 +738,14 @@
       <y>150</y>
       <width>100</width>
       <height>20</height>
+      <font>
+        <font family="Cantarell" style="REGULAR" size="14.0">
+      </font>
+      </font>
+      <background_color>
+        <color red="229" green="235" blue="255">
+      </color>
+      </background_color>
       <horizontal_alignment>1</horizontal_alignment>
     </widget>
     <widget type="textupdate" version="2.0.0">
@@ -434,10 +756,22 @@
       <width>100</width>
       <height>20</height>
       <font>
-        <font name="Default Bold" family="Liberation Sans" style="BOLD" size="14.0">
+        <font family="Cantarell" style="BOLD" size="14.0">
       </font>
       </font>
+      <foreground_color>
+        <color red="15" green="23" blue="42">
+      </color>
+      </foreground_color>
+      <background_color>
+        <color red="245" green="247" blue="250">
+      </color>
+      </background_color>
       <horizontal_alignment>1</horizontal_alignment>
+      <border_color>
+        <color red="203" green="213" blue="225">
+      </color>
+      </border_color>
     </widget>
     <widget type="label" version="2.0.0">
       <name>Label</name>
@@ -446,6 +780,10 @@
       <y>175</y>
       <width>200</width>
       <height>20</height>
+      <font>
+        <font family="Cantarell" style="REGULAR" size="14.0">
+      </font>
+      </font>
       <tooltip>Mean Value - No description provided</tooltip>
     </widget>
     <widget type="textentry" version="3.0.0">
@@ -455,6 +793,14 @@
       <y>175</y>
       <width>100</width>
       <height>20</height>
+      <font>
+        <font family="Cantarell" style="REGULAR" size="14.0">
+      </font>
+      </font>
+      <background_color>
+        <color red="229" green="235" blue="255">
+      </color>
+      </background_color>
       <horizontal_alignment>1</horizontal_alignment>
     </widget>
     <widget type="textupdate" version="2.0.0">
@@ -465,10 +811,22 @@
       <width>100</width>
       <height>20</height>
       <font>
-        <font name="Default Bold" family="Liberation Sans" style="BOLD" size="14.0">
+        <font family="Cantarell" style="BOLD" size="14.0">
       </font>
       </font>
+      <foreground_color>
+        <color red="15" green="23" blue="42">
+      </color>
+      </foreground_color>
+      <background_color>
+        <color red="245" green="247" blue="250">
+      </color>
+      </background_color>
       <horizontal_alignment>1</horizontal_alignment>
+      <border_color>
+        <color red="203" green="213" blue="225">
+      </color>
+      </border_color>
     </widget>
     <widget type="label" version="2.0.0">
       <name>Label</name>
@@ -477,6 +835,10 @@
       <y>200</y>
       <width>200</width>
       <height>20</height>
+      <font>
+        <font family="Cantarell" style="REGULAR" size="14.0">
+      </font>
+      </font>
       <tooltip>Total - No description provided</tooltip>
     </widget>
     <widget type="textentry" version="3.0.0">
@@ -486,6 +848,14 @@
       <y>200</y>
       <width>100</width>
       <height>20</height>
+      <font>
+        <font family="Cantarell" style="REGULAR" size="14.0">
+      </font>
+      </font>
+      <background_color>
+        <color red="229" green="235" blue="255">
+      </color>
+      </background_color>
       <horizontal_alignment>1</horizontal_alignment>
     </widget>
     <widget type="textupdate" version="2.0.0">
@@ -496,18 +866,38 @@
       <width>100</width>
       <height>20</height>
       <font>
-        <font name="Default Bold" family="Liberation Sans" style="BOLD" size="14.0">
+        <font family="Cantarell" style="BOLD" size="14.0">
       </font>
       </font>
+      <foreground_color>
+        <color red="15" green="23" blue="42">
+      </color>
+      </foreground_color>
+      <background_color>
+        <color red="245" green="247" blue="250">
+      </color>
+      </background_color>
       <horizontal_alignment>1</horizontal_alignment>
+      <border_color>
+        <color red="203" green="213" blue="225">
+      </color>
+      </border_color>
     </widget>
   </widget>
-  <widget type="group" version="2.0.0">
+  <widget type="group" version="3.0.0">
     <name>NDROI Stat 8</name>
     <x>5</x>
     <y>563</y>
     <width>446</width>
     <height>56</height>
+    <font>
+      <font family="Cantarell" style="REGULAR" size="16.0">
+      </font>
+    </font>
+    <background_color>
+      <color red="246" green="247" blue="249">
+      </color>
+    </background_color>
     <transparent>true</transparent>
     <widget type="label" version="2.0.0">
       <name>Label</name>
@@ -516,6 +906,10 @@
       <y>0</y>
       <width>200</width>
       <height>20</height>
+      <font>
+        <font family="Cantarell" style="REGULAR" size="14.0">
+      </font>
+      </font>
       <tooltip>Bgd Width - No description provided</tooltip>
     </widget>
     <widget type="textentry" version="3.0.0">
@@ -525,6 +919,14 @@
       <y>0</y>
       <width>100</width>
       <height>20</height>
+      <font>
+        <font family="Cantarell" style="REGULAR" size="14.0">
+      </font>
+      </font>
+      <background_color>
+        <color red="229" green="235" blue="255">
+      </color>
+      </background_color>
       <horizontal_alignment>1</horizontal_alignment>
     </widget>
     <widget type="textupdate" version="2.0.0">
@@ -535,18 +937,38 @@
       <width>100</width>
       <height>20</height>
       <font>
-        <font name="Default Bold" family="Liberation Sans" style="BOLD" size="14.0">
+        <font family="Cantarell" style="BOLD" size="14.0">
       </font>
       </font>
+      <foreground_color>
+        <color red="15" green="23" blue="42">
+      </color>
+      </foreground_color>
+      <background_color>
+        <color red="245" green="247" blue="250">
+      </color>
+      </background_color>
       <horizontal_alignment>1</horizontal_alignment>
+      <border_color>
+        <color red="203" green="213" blue="225">
+      </color>
+      </border_color>
     </widget>
   </widget>
-  <widget type="group" version="2.0.0">
+  <widget type="group" version="3.0.0">
     <name>ND Stats</name>
     <x>456</x>
     <y>30</y>
     <width>861</width>
     <height>931</height>
+    <font>
+      <font family="Cantarell" style="REGULAR" size="16.0">
+      </font>
+    </font>
+    <background_color>
+      <color red="246" green="247" blue="249">
+      </color>
+    </background_color>
     <transparent>true</transparent>
     <widget type="label" version="2.0.0">
       <name>Label</name>
@@ -555,6 +977,10 @@
       <y>0</y>
       <width>200</width>
       <height>20</height>
+      <font>
+        <font family="Cantarell" style="REGULAR" size="14.0">
+      </font>
+      </font>
       <tooltip>Compute Statistics - No description provided</tooltip>
     </widget>
     <widget type="slide_button" version="2.0.0">
@@ -565,6 +991,18 @@
       <y>0</y>
       <width>20</width>
       <height>20</height>
+      <off_color>
+        <color red="229" green="235" blue="255">
+      </color>
+      </off_color>
+      <on_color>
+        <color red="37" green="99" blue="235">
+      </color>
+      </on_color>
+      <font>
+        <font family="Cantarell" style="REGULAR" size="14.0">
+      </font>
+      </font>
     </widget>
     <widget type="led" version="2.0.0">
       <name>LED</name>
@@ -573,6 +1011,21 @@
       <y>0</y>
       <width>20</width>
       <height>20</height>
+      <off_label>&#9675;</off_label>
+      <off_color>
+        <color red="22" green="163" blue="74">
+      </color>
+      </off_color>
+      <on_label>&#9679;</on_label>
+      <on_color>
+        <color red="167" green="243" blue="208">
+      </color>
+      </on_color>
+      <font>
+        <font family="Cantarell" style="BOLD" size="12.0">
+      </font>
+      </font>
+      <square>true</square>
     </widget>
     <widget type="label" version="2.0.0">
       <name>Label</name>
@@ -581,6 +1034,10 @@
       <y>25</y>
       <width>200</width>
       <height>20</height>
+      <font>
+        <font family="Cantarell" style="REGULAR" size="14.0">
+      </font>
+      </font>
       <tooltip>Compute Profiles - No description provided</tooltip>
     </widget>
     <widget type="slide_button" version="2.0.0">
@@ -591,6 +1048,18 @@
       <y>25</y>
       <width>20</width>
       <height>20</height>
+      <off_color>
+        <color red="229" green="235" blue="255">
+      </color>
+      </off_color>
+      <on_color>
+        <color red="37" green="99" blue="235">
+      </color>
+      </on_color>
+      <font>
+        <font family="Cantarell" style="REGULAR" size="14.0">
+      </font>
+      </font>
     </widget>
     <widget type="led" version="2.0.0">
       <name>LED</name>
@@ -599,6 +1068,21 @@
       <y>25</y>
       <width>20</width>
       <height>20</height>
+      <off_label>&#9675;</off_label>
+      <off_color>
+        <color red="22" green="163" blue="74">
+      </color>
+      </off_color>
+      <on_label>&#9679;</on_label>
+      <on_color>
+        <color red="167" green="243" blue="208">
+      </color>
+      </on_color>
+      <font>
+        <font family="Cantarell" style="BOLD" size="12.0">
+      </font>
+      </font>
+      <square>true</square>
     </widget>
     <widget type="label" version="2.0.0">
       <name>Label</name>
@@ -607,6 +1091,10 @@
       <y>50</y>
       <width>200</width>
       <height>20</height>
+      <font>
+        <font family="Cantarell" style="REGULAR" size="14.0">
+      </font>
+      </font>
       <tooltip>Profile Size X - No description provided</tooltip>
     </widget>
     <widget type="textupdate" version="2.0.0">
@@ -617,10 +1105,22 @@
       <width>205</width>
       <height>20</height>
       <font>
-        <font name="Default Bold" family="Liberation Sans" style="BOLD" size="14.0">
+        <font family="Cantarell" style="BOLD" size="14.0">
       </font>
       </font>
+      <foreground_color>
+        <color red="15" green="23" blue="42">
+      </color>
+      </foreground_color>
+      <background_color>
+        <color red="245" green="247" blue="250">
+      </color>
+      </background_color>
       <horizontal_alignment>1</horizontal_alignment>
+      <border_color>
+        <color red="203" green="213" blue="225">
+      </color>
+      </border_color>
     </widget>
     <widget type="label" version="2.0.0">
       <name>Label</name>
@@ -629,6 +1129,10 @@
       <y>75</y>
       <width>200</width>
       <height>20</height>
+      <font>
+        <font family="Cantarell" style="REGULAR" size="14.0">
+      </font>
+      </font>
       <tooltip>Profile Size Y - No description provided</tooltip>
     </widget>
     <widget type="textupdate" version="2.0.0">
@@ -639,10 +1143,22 @@
       <width>205</width>
       <height>20</height>
       <font>
-        <font name="Default Bold" family="Liberation Sans" style="BOLD" size="14.0">
+        <font family="Cantarell" style="BOLD" size="14.0">
       </font>
       </font>
+      <foreground_color>
+        <color red="15" green="23" blue="42">
+      </color>
+      </foreground_color>
+      <background_color>
+        <color red="245" green="247" blue="250">
+      </color>
+      </background_color>
       <horizontal_alignment>1</horizontal_alignment>
+      <border_color>
+        <color red="203" green="213" blue="225">
+      </color>
+      </border_color>
     </widget>
     <widget type="label" version="2.0.0">
       <name>Label</name>
@@ -651,6 +1167,10 @@
       <y>100</y>
       <width>200</width>
       <height>20</height>
+      <font>
+        <font family="Cantarell" style="REGULAR" size="14.0">
+      </font>
+      </font>
       <tooltip>Profile Average X - No description provided</tooltip>
     </widget>
     <widget type="textupdate" version="2.0.0">
@@ -661,10 +1181,22 @@
       <width>205</width>
       <height>20</height>
       <font>
-        <font name="Default Bold" family="Liberation Sans" style="BOLD" size="14.0">
+        <font family="Cantarell" style="BOLD" size="14.0">
       </font>
       </font>
+      <foreground_color>
+        <color red="15" green="23" blue="42">
+      </color>
+      </foreground_color>
+      <background_color>
+        <color red="245" green="247" blue="250">
+      </color>
+      </background_color>
       <horizontal_alignment>1</horizontal_alignment>
+      <border_color>
+        <color red="203" green="213" blue="225">
+      </color>
+      </border_color>
     </widget>
     <widget type="label" version="2.0.0">
       <name>Label</name>
@@ -673,6 +1205,10 @@
       <y>125</y>
       <width>200</width>
       <height>20</height>
+      <font>
+        <font family="Cantarell" style="REGULAR" size="14.0">
+      </font>
+      </font>
       <tooltip>Profile Average Y - No description provided</tooltip>
     </widget>
     <widget type="textupdate" version="2.0.0">
@@ -683,10 +1219,22 @@
       <width>205</width>
       <height>20</height>
       <font>
-        <font name="Default Bold" family="Liberation Sans" style="BOLD" size="14.0">
+        <font family="Cantarell" style="BOLD" size="14.0">
       </font>
       </font>
+      <foreground_color>
+        <color red="15" green="23" blue="42">
+      </color>
+      </foreground_color>
+      <background_color>
+        <color red="245" green="247" blue="250">
+      </color>
+      </background_color>
       <horizontal_alignment>1</horizontal_alignment>
+      <border_color>
+        <color red="203" green="213" blue="225">
+      </color>
+      </border_color>
     </widget>
     <widget type="label" version="2.0.0">
       <name>Label</name>
@@ -695,6 +1243,10 @@
       <y>150</y>
       <width>200</width>
       <height>20</height>
+      <font>
+        <font family="Cantarell" style="REGULAR" size="14.0">
+      </font>
+      </font>
       <tooltip>Profile Threshold X - No description provided</tooltip>
     </widget>
     <widget type="textupdate" version="2.0.0">
@@ -705,10 +1257,22 @@
       <width>205</width>
       <height>20</height>
       <font>
-        <font name="Default Bold" family="Liberation Sans" style="BOLD" size="14.0">
+        <font family="Cantarell" style="BOLD" size="14.0">
       </font>
       </font>
+      <foreground_color>
+        <color red="15" green="23" blue="42">
+      </color>
+      </foreground_color>
+      <background_color>
+        <color red="245" green="247" blue="250">
+      </color>
+      </background_color>
       <horizontal_alignment>1</horizontal_alignment>
+      <border_color>
+        <color red="203" green="213" blue="225">
+      </color>
+      </border_color>
     </widget>
     <widget type="label" version="2.0.0">
       <name>Label</name>
@@ -717,6 +1281,10 @@
       <y>175</y>
       <width>200</width>
       <height>20</height>
+      <font>
+        <font family="Cantarell" style="REGULAR" size="14.0">
+      </font>
+      </font>
       <tooltip>Profile Threshold Y - No description provided</tooltip>
     </widget>
     <widget type="textupdate" version="2.0.0">
@@ -727,10 +1295,22 @@
       <width>205</width>
       <height>20</height>
       <font>
-        <font name="Default Bold" family="Liberation Sans" style="BOLD" size="14.0">
+        <font family="Cantarell" style="BOLD" size="14.0">
       </font>
       </font>
+      <foreground_color>
+        <color red="15" green="23" blue="42">
+      </color>
+      </foreground_color>
+      <background_color>
+        <color red="245" green="247" blue="250">
+      </color>
+      </background_color>
       <horizontal_alignment>1</horizontal_alignment>
+      <border_color>
+        <color red="203" green="213" blue="225">
+      </color>
+      </border_color>
     </widget>
     <widget type="label" version="2.0.0">
       <name>Label</name>
@@ -739,6 +1319,10 @@
       <y>200</y>
       <width>200</width>
       <height>20</height>
+      <font>
+        <font family="Cantarell" style="REGULAR" size="14.0">
+      </font>
+      </font>
       <tooltip>Profile Centroid X - No description provided</tooltip>
     </widget>
     <widget type="textupdate" version="2.0.0">
@@ -749,10 +1333,22 @@
       <width>205</width>
       <height>20</height>
       <font>
-        <font name="Default Bold" family="Liberation Sans" style="BOLD" size="14.0">
+        <font family="Cantarell" style="BOLD" size="14.0">
       </font>
       </font>
+      <foreground_color>
+        <color red="15" green="23" blue="42">
+      </color>
+      </foreground_color>
+      <background_color>
+        <color red="245" green="247" blue="250">
+      </color>
+      </background_color>
       <horizontal_alignment>1</horizontal_alignment>
+      <border_color>
+        <color red="203" green="213" blue="225">
+      </color>
+      </border_color>
     </widget>
     <widget type="label" version="2.0.0">
       <name>Label</name>
@@ -761,6 +1357,10 @@
       <y>225</y>
       <width>200</width>
       <height>20</height>
+      <font>
+        <font family="Cantarell" style="REGULAR" size="14.0">
+      </font>
+      </font>
       <tooltip>Profile Centroid Y - No description provided</tooltip>
     </widget>
     <widget type="textupdate" version="2.0.0">
@@ -771,10 +1371,22 @@
       <width>205</width>
       <height>20</height>
       <font>
-        <font name="Default Bold" family="Liberation Sans" style="BOLD" size="14.0">
+        <font family="Cantarell" style="BOLD" size="14.0">
       </font>
       </font>
+      <foreground_color>
+        <color red="15" green="23" blue="42">
+      </color>
+      </foreground_color>
+      <background_color>
+        <color red="245" green="247" blue="250">
+      </color>
+      </background_color>
       <horizontal_alignment>1</horizontal_alignment>
+      <border_color>
+        <color red="203" green="213" blue="225">
+      </color>
+      </border_color>
     </widget>
     <widget type="label" version="2.0.0">
       <name>Label</name>
@@ -783,6 +1395,10 @@
       <y>250</y>
       <width>200</width>
       <height>20</height>
+      <font>
+        <font family="Cantarell" style="REGULAR" size="14.0">
+      </font>
+      </font>
       <tooltip>Profile Cursor X - No description provided</tooltip>
     </widget>
     <widget type="textupdate" version="2.0.0">
@@ -793,10 +1409,22 @@
       <width>205</width>
       <height>20</height>
       <font>
-        <font name="Default Bold" family="Liberation Sans" style="BOLD" size="14.0">
+        <font family="Cantarell" style="BOLD" size="14.0">
       </font>
       </font>
+      <foreground_color>
+        <color red="15" green="23" blue="42">
+      </color>
+      </foreground_color>
+      <background_color>
+        <color red="245" green="247" blue="250">
+      </color>
+      </background_color>
       <horizontal_alignment>1</horizontal_alignment>
+      <border_color>
+        <color red="203" green="213" blue="225">
+      </color>
+      </border_color>
     </widget>
     <widget type="label" version="2.0.0">
       <name>Label</name>
@@ -805,6 +1433,10 @@
       <y>275</y>
       <width>200</width>
       <height>20</height>
+      <font>
+        <font family="Cantarell" style="REGULAR" size="14.0">
+      </font>
+      </font>
       <tooltip>Profile Cursor Y - No description provided</tooltip>
     </widget>
     <widget type="textupdate" version="2.0.0">
@@ -815,10 +1447,22 @@
       <width>205</width>
       <height>20</height>
       <font>
-        <font name="Default Bold" family="Liberation Sans" style="BOLD" size="14.0">
+        <font family="Cantarell" style="BOLD" size="14.0">
       </font>
       </font>
+      <foreground_color>
+        <color red="15" green="23" blue="42">
+      </color>
+      </foreground_color>
+      <background_color>
+        <color red="245" green="247" blue="250">
+      </color>
+      </background_color>
       <horizontal_alignment>1</horizontal_alignment>
+      <border_color>
+        <color red="203" green="213" blue="225">
+      </color>
+      </border_color>
     </widget>
     <widget type="label" version="2.0.0">
       <name>Label</name>
@@ -827,6 +1471,10 @@
       <y>300</y>
       <width>200</width>
       <height>20</height>
+      <font>
+        <font family="Cantarell" style="REGULAR" size="14.0">
+      </font>
+      </font>
       <tooltip>Cursor X - No description provided</tooltip>
     </widget>
     <widget type="textentry" version="3.0.0">
@@ -836,6 +1484,14 @@
       <y>300</y>
       <width>100</width>
       <height>20</height>
+      <font>
+        <font family="Cantarell" style="REGULAR" size="14.0">
+      </font>
+      </font>
+      <background_color>
+        <color red="229" green="235" blue="255">
+      </color>
+      </background_color>
       <horizontal_alignment>1</horizontal_alignment>
     </widget>
     <widget type="textupdate" version="2.0.0">
@@ -846,10 +1502,22 @@
       <width>100</width>
       <height>20</height>
       <font>
-        <font name="Default Bold" family="Liberation Sans" style="BOLD" size="14.0">
+        <font family="Cantarell" style="BOLD" size="14.0">
       </font>
       </font>
+      <foreground_color>
+        <color red="15" green="23" blue="42">
+      </color>
+      </foreground_color>
+      <background_color>
+        <color red="245" green="247" blue="250">
+      </color>
+      </background_color>
       <horizontal_alignment>1</horizontal_alignment>
+      <border_color>
+        <color red="203" green="213" blue="225">
+      </color>
+      </border_color>
     </widget>
     <widget type="label" version="2.0.0">
       <name>Label</name>
@@ -858,6 +1526,10 @@
       <y>325</y>
       <width>200</width>
       <height>20</height>
+      <font>
+        <font family="Cantarell" style="REGULAR" size="14.0">
+      </font>
+      </font>
       <tooltip>Cursor Y - No description provided</tooltip>
     </widget>
     <widget type="textentry" version="3.0.0">
@@ -867,6 +1539,14 @@
       <y>325</y>
       <width>100</width>
       <height>20</height>
+      <font>
+        <font family="Cantarell" style="REGULAR" size="14.0">
+      </font>
+      </font>
+      <background_color>
+        <color red="229" green="235" blue="255">
+      </color>
+      </background_color>
       <horizontal_alignment>1</horizontal_alignment>
     </widget>
     <widget type="textupdate" version="2.0.0">
@@ -877,10 +1557,22 @@
       <width>100</width>
       <height>20</height>
       <font>
-        <font name="Default Bold" family="Liberation Sans" style="BOLD" size="14.0">
+        <font family="Cantarell" style="BOLD" size="14.0">
       </font>
       </font>
+      <foreground_color>
+        <color red="15" green="23" blue="42">
+      </color>
+      </foreground_color>
+      <background_color>
+        <color red="245" green="247" blue="250">
+      </color>
+      </background_color>
       <horizontal_alignment>1</horizontal_alignment>
+      <border_color>
+        <color red="203" green="213" blue="225">
+      </color>
+      </border_color>
     </widget>
     <widget type="label" version="2.0.0">
       <name>Label</name>
@@ -889,6 +1581,10 @@
       <y>350</y>
       <width>200</width>
       <height>20</height>
+      <font>
+        <font family="Cantarell" style="REGULAR" size="14.0">
+      </font>
+      </font>
       <tooltip>TS Min X - No description provided</tooltip>
     </widget>
     <widget type="textupdate" version="2.0.0">
@@ -899,10 +1595,22 @@
       <width>205</width>
       <height>20</height>
       <font>
-        <font name="Default Bold" family="Liberation Sans" style="BOLD" size="14.0">
+        <font family="Cantarell" style="BOLD" size="14.0">
       </font>
       </font>
+      <foreground_color>
+        <color red="15" green="23" blue="42">
+      </color>
+      </foreground_color>
+      <background_color>
+        <color red="245" green="247" blue="250">
+      </color>
+      </background_color>
       <horizontal_alignment>1</horizontal_alignment>
+      <border_color>
+        <color red="203" green="213" blue="225">
+      </color>
+      </border_color>
     </widget>
     <widget type="label" version="2.0.0">
       <name>Label</name>
@@ -911,6 +1619,10 @@
       <y>375</y>
       <width>200</width>
       <height>20</height>
+      <font>
+        <font family="Cantarell" style="REGULAR" size="14.0">
+      </font>
+      </font>
       <tooltip>TS Min Y - No description provided</tooltip>
     </widget>
     <widget type="textupdate" version="2.0.0">
@@ -921,10 +1633,22 @@
       <width>205</width>
       <height>20</height>
       <font>
-        <font name="Default Bold" family="Liberation Sans" style="BOLD" size="14.0">
+        <font family="Cantarell" style="BOLD" size="14.0">
       </font>
       </font>
+      <foreground_color>
+        <color red="15" green="23" blue="42">
+      </color>
+      </foreground_color>
+      <background_color>
+        <color red="245" green="247" blue="250">
+      </color>
+      </background_color>
       <horizontal_alignment>1</horizontal_alignment>
+      <border_color>
+        <color red="203" green="213" blue="225">
+      </color>
+      </border_color>
     </widget>
     <widget type="label" version="2.0.0">
       <name>Label</name>
@@ -933,6 +1657,10 @@
       <y>400</y>
       <width>200</width>
       <height>20</height>
+      <font>
+        <font family="Cantarell" style="REGULAR" size="14.0">
+      </font>
+      </font>
       <tooltip>TS Max X - No description provided</tooltip>
     </widget>
     <widget type="textupdate" version="2.0.0">
@@ -943,10 +1671,22 @@
       <width>205</width>
       <height>20</height>
       <font>
-        <font name="Default Bold" family="Liberation Sans" style="BOLD" size="14.0">
+        <font family="Cantarell" style="BOLD" size="14.0">
       </font>
       </font>
+      <foreground_color>
+        <color red="15" green="23" blue="42">
+      </color>
+      </foreground_color>
+      <background_color>
+        <color red="245" green="247" blue="250">
+      </color>
+      </background_color>
       <horizontal_alignment>1</horizontal_alignment>
+      <border_color>
+        <color red="203" green="213" blue="225">
+      </color>
+      </border_color>
     </widget>
     <widget type="label" version="2.0.0">
       <name>Label</name>
@@ -955,6 +1695,10 @@
       <y>425</y>
       <width>200</width>
       <height>20</height>
+      <font>
+        <font family="Cantarell" style="REGULAR" size="14.0">
+      </font>
+      </font>
       <tooltip>TS Max Y - No description provided</tooltip>
     </widget>
     <widget type="textupdate" version="2.0.0">
@@ -965,10 +1709,22 @@
       <width>205</width>
       <height>20</height>
       <font>
-        <font name="Default Bold" family="Liberation Sans" style="BOLD" size="14.0">
+        <font family="Cantarell" style="BOLD" size="14.0">
       </font>
       </font>
+      <foreground_color>
+        <color red="15" green="23" blue="42">
+      </color>
+      </foreground_color>
+      <background_color>
+        <color red="245" green="247" blue="250">
+      </color>
+      </background_color>
       <horizontal_alignment>1</horizontal_alignment>
+      <border_color>
+        <color red="203" green="213" blue="225">
+      </color>
+      </border_color>
     </widget>
     <widget type="label" version="2.0.0">
       <name>Label</name>
@@ -977,6 +1733,10 @@
       <y>450</y>
       <width>200</width>
       <height>20</height>
+      <font>
+        <font family="Cantarell" style="REGULAR" size="14.0">
+      </font>
+      </font>
       <tooltip>TS Timestamp - No description provided</tooltip>
     </widget>
     <widget type="textupdate" version="2.0.0">
@@ -987,10 +1747,22 @@
       <width>205</width>
       <height>20</height>
       <font>
-        <font name="Default Bold" family="Liberation Sans" style="BOLD" size="14.0">
+        <font family="Cantarell" style="BOLD" size="14.0">
       </font>
       </font>
+      <foreground_color>
+        <color red="15" green="23" blue="42">
+      </color>
+      </foreground_color>
+      <background_color>
+        <color red="245" green="247" blue="250">
+      </color>
+      </background_color>
       <horizontal_alignment>1</horizontal_alignment>
+      <border_color>
+        <color red="203" green="213" blue="225">
+      </color>
+      </border_color>
     </widget>
     <widget type="label" version="2.0.0">
       <name>Label</name>
@@ -999,6 +1771,10 @@
       <y>475</y>
       <width>200</width>
       <height>20</height>
+      <font>
+        <font family="Cantarell" style="REGULAR" size="14.0">
+      </font>
+      </font>
       <tooltip>Max X - No description provided</tooltip>
     </widget>
     <widget type="textentry" version="3.0.0">
@@ -1008,6 +1784,14 @@
       <y>475</y>
       <width>100</width>
       <height>20</height>
+      <font>
+        <font family="Cantarell" style="REGULAR" size="14.0">
+      </font>
+      </font>
+      <background_color>
+        <color red="229" green="235" blue="255">
+      </color>
+      </background_color>
       <horizontal_alignment>1</horizontal_alignment>
     </widget>
     <widget type="textupdate" version="2.0.0">
@@ -1018,10 +1802,22 @@
       <width>100</width>
       <height>20</height>
       <font>
-        <font name="Default Bold" family="Liberation Sans" style="BOLD" size="14.0">
+        <font family="Cantarell" style="BOLD" size="14.0">
       </font>
       </font>
+      <foreground_color>
+        <color red="15" green="23" blue="42">
+      </color>
+      </foreground_color>
+      <background_color>
+        <color red="245" green="247" blue="250">
+      </color>
+      </background_color>
       <horizontal_alignment>1</horizontal_alignment>
+      <border_color>
+        <color red="203" green="213" blue="225">
+      </color>
+      </border_color>
     </widget>
     <widget type="label" version="2.0.0">
       <name>Label</name>
@@ -1030,6 +1826,10 @@
       <y>500</y>
       <width>200</width>
       <height>20</height>
+      <font>
+        <font family="Cantarell" style="REGULAR" size="14.0">
+      </font>
+      </font>
       <tooltip>Max Y - No description provided</tooltip>
     </widget>
     <widget type="textentry" version="3.0.0">
@@ -1039,6 +1839,14 @@
       <y>500</y>
       <width>100</width>
       <height>20</height>
+      <font>
+        <font family="Cantarell" style="REGULAR" size="14.0">
+      </font>
+      </font>
+      <background_color>
+        <color red="229" green="235" blue="255">
+      </color>
+      </background_color>
       <horizontal_alignment>1</horizontal_alignment>
     </widget>
     <widget type="textupdate" version="2.0.0">
@@ -1049,10 +1857,22 @@
       <width>100</width>
       <height>20</height>
       <font>
-        <font name="Default Bold" family="Liberation Sans" style="BOLD" size="14.0">
+        <font family="Cantarell" style="BOLD" size="14.0">
       </font>
       </font>
+      <foreground_color>
+        <color red="15" green="23" blue="42">
+      </color>
+      </foreground_color>
+      <background_color>
+        <color red="245" green="247" blue="250">
+      </color>
+      </background_color>
       <horizontal_alignment>1</horizontal_alignment>
+      <border_color>
+        <color red="203" green="213" blue="225">
+      </color>
+      </border_color>
     </widget>
     <widget type="label" version="2.0.0">
       <name>Label</name>
@@ -1061,6 +1881,10 @@
       <y>525</y>
       <width>200</width>
       <height>20</height>
+      <font>
+        <font family="Cantarell" style="REGULAR" size="14.0">
+      </font>
+      </font>
       <tooltip>Compute Histogram - No description provided</tooltip>
     </widget>
     <widget type="slide_button" version="2.0.0">
@@ -1071,6 +1895,18 @@
       <y>525</y>
       <width>20</width>
       <height>20</height>
+      <off_color>
+        <color red="229" green="235" blue="255">
+      </color>
+      </off_color>
+      <on_color>
+        <color red="37" green="99" blue="235">
+      </color>
+      </on_color>
+      <font>
+        <font family="Cantarell" style="REGULAR" size="14.0">
+      </font>
+      </font>
     </widget>
     <widget type="led" version="2.0.0">
       <name>LED</name>
@@ -1079,6 +1915,21 @@
       <y>525</y>
       <width>20</width>
       <height>20</height>
+      <off_label>&#9675;</off_label>
+      <off_color>
+        <color red="22" green="163" blue="74">
+      </color>
+      </off_color>
+      <on_label>&#9679;</on_label>
+      <on_color>
+        <color red="167" green="243" blue="208">
+      </color>
+      </on_color>
+      <font>
+        <font family="Cantarell" style="BOLD" size="12.0">
+      </font>
+      </font>
+      <square>true</square>
     </widget>
     <widget type="label" version="2.0.0">
       <name>Label</name>
@@ -1087,6 +1938,10 @@
       <y>550</y>
       <width>200</width>
       <height>20</height>
+      <font>
+        <font family="Cantarell" style="REGULAR" size="14.0">
+      </font>
+      </font>
       <tooltip>Hist Size - No description provided</tooltip>
     </widget>
     <widget type="textentry" version="3.0.0">
@@ -1096,6 +1951,14 @@
       <y>550</y>
       <width>100</width>
       <height>20</height>
+      <font>
+        <font family="Cantarell" style="REGULAR" size="14.0">
+      </font>
+      </font>
+      <background_color>
+        <color red="229" green="235" blue="255">
+      </color>
+      </background_color>
       <horizontal_alignment>1</horizontal_alignment>
     </widget>
     <widget type="textupdate" version="2.0.0">
@@ -1106,10 +1969,22 @@
       <width>100</width>
       <height>20</height>
       <font>
-        <font name="Default Bold" family="Liberation Sans" style="BOLD" size="14.0">
+        <font family="Cantarell" style="BOLD" size="14.0">
       </font>
       </font>
+      <foreground_color>
+        <color red="15" green="23" blue="42">
+      </color>
+      </foreground_color>
+      <background_color>
+        <color red="245" green="247" blue="250">
+      </color>
+      </background_color>
       <horizontal_alignment>1</horizontal_alignment>
+      <border_color>
+        <color red="203" green="213" blue="225">
+      </color>
+      </border_color>
     </widget>
     <widget type="label" version="2.0.0">
       <name>Label</name>
@@ -1118,6 +1993,10 @@
       <y>575</y>
       <width>200</width>
       <height>20</height>
+      <font>
+        <font family="Cantarell" style="REGULAR" size="14.0">
+      </font>
+      </font>
       <tooltip>Compute Centroid - No description provided</tooltip>
     </widget>
     <widget type="slide_button" version="2.0.0">
@@ -1128,6 +2007,18 @@
       <y>575</y>
       <width>20</width>
       <height>20</height>
+      <off_color>
+        <color red="229" green="235" blue="255">
+      </color>
+      </off_color>
+      <on_color>
+        <color red="37" green="99" blue="235">
+      </color>
+      </on_color>
+      <font>
+        <font family="Cantarell" style="REGULAR" size="14.0">
+      </font>
+      </font>
     </widget>
     <widget type="led" version="2.0.0">
       <name>LED</name>
@@ -1136,6 +2027,21 @@
       <y>575</y>
       <width>20</width>
       <height>20</height>
+      <off_label>&#9675;</off_label>
+      <off_color>
+        <color red="22" green="163" blue="74">
+      </color>
+      </off_color>
+      <on_label>&#9679;</on_label>
+      <on_color>
+        <color red="167" green="243" blue="208">
+      </color>
+      </on_color>
+      <font>
+        <font family="Cantarell" style="BOLD" size="12.0">
+      </font>
+      </font>
+      <square>true</square>
     </widget>
     <widget type="label" version="2.0.0">
       <name>Label</name>
@@ -1144,6 +2050,10 @@
       <y>600</y>
       <width>200</width>
       <height>20</height>
+      <font>
+        <font family="Cantarell" style="REGULAR" size="14.0">
+      </font>
+      </font>
       <tooltip>Hist Min - No description provided</tooltip>
     </widget>
     <widget type="textentry" version="3.0.0">
@@ -1153,6 +2063,14 @@
       <y>600</y>
       <width>100</width>
       <height>20</height>
+      <font>
+        <font family="Cantarell" style="REGULAR" size="14.0">
+      </font>
+      </font>
+      <background_color>
+        <color red="229" green="235" blue="255">
+      </color>
+      </background_color>
       <horizontal_alignment>1</horizontal_alignment>
     </widget>
     <widget type="textupdate" version="2.0.0">
@@ -1163,10 +2081,22 @@
       <width>100</width>
       <height>20</height>
       <font>
-        <font name="Default Bold" family="Liberation Sans" style="BOLD" size="14.0">
+        <font family="Cantarell" style="BOLD" size="14.0">
       </font>
       </font>
+      <foreground_color>
+        <color red="15" green="23" blue="42">
+      </color>
+      </foreground_color>
+      <background_color>
+        <color red="245" green="247" blue="250">
+      </color>
+      </background_color>
       <horizontal_alignment>1</horizontal_alignment>
+      <border_color>
+        <color red="203" green="213" blue="225">
+      </color>
+      </border_color>
     </widget>
     <widget type="label" version="2.0.0">
       <name>Label</name>
@@ -1175,6 +2105,10 @@
       <y>625</y>
       <width>200</width>
       <height>20</height>
+      <font>
+        <font family="Cantarell" style="REGULAR" size="14.0">
+      </font>
+      </font>
       <tooltip>Centroid Threshold - No description provided</tooltip>
     </widget>
     <widget type="textentry" version="3.0.0">
@@ -1184,6 +2118,14 @@
       <y>625</y>
       <width>100</width>
       <height>20</height>
+      <font>
+        <font family="Cantarell" style="REGULAR" size="14.0">
+      </font>
+      </font>
+      <background_color>
+        <color red="229" green="235" blue="255">
+      </color>
+      </background_color>
       <horizontal_alignment>1</horizontal_alignment>
     </widget>
     <widget type="textupdate" version="2.0.0">
@@ -1194,10 +2136,22 @@
       <width>100</width>
       <height>20</height>
       <font>
-        <font name="Default Bold" family="Liberation Sans" style="BOLD" size="14.0">
+        <font family="Cantarell" style="BOLD" size="14.0">
       </font>
       </font>
+      <foreground_color>
+        <color red="15" green="23" blue="42">
+      </color>
+      </foreground_color>
+      <background_color>
+        <color red="245" green="247" blue="250">
+      </color>
+      </background_color>
       <horizontal_alignment>1</horizontal_alignment>
+      <border_color>
+        <color red="203" green="213" blue="225">
+      </color>
+      </border_color>
     </widget>
     <widget type="label" version="2.0.0">
       <name>Label</name>
@@ -1206,6 +2160,10 @@
       <y>650</y>
       <width>200</width>
       <height>20</height>
+      <font>
+        <font family="Cantarell" style="REGULAR" size="14.0">
+      </font>
+      </font>
       <tooltip>Hist Max - No description provided</tooltip>
     </widget>
     <widget type="textentry" version="3.0.0">
@@ -1215,6 +2173,14 @@
       <y>650</y>
       <width>100</width>
       <height>20</height>
+      <font>
+        <font family="Cantarell" style="REGULAR" size="14.0">
+      </font>
+      </font>
+      <background_color>
+        <color red="229" green="235" blue="255">
+      </color>
+      </background_color>
       <horizontal_alignment>1</horizontal_alignment>
     </widget>
     <widget type="textupdate" version="2.0.0">
@@ -1225,10 +2191,22 @@
       <width>100</width>
       <height>20</height>
       <font>
-        <font name="Default Bold" family="Liberation Sans" style="BOLD" size="14.0">
+        <font family="Cantarell" style="BOLD" size="14.0">
       </font>
       </font>
+      <foreground_color>
+        <color red="15" green="23" blue="42">
+      </color>
+      </foreground_color>
+      <background_color>
+        <color red="245" green="247" blue="250">
+      </color>
+      </background_color>
       <horizontal_alignment>1</horizontal_alignment>
+      <border_color>
+        <color red="203" green="213" blue="225">
+      </color>
+      </border_color>
     </widget>
     <widget type="label" version="2.0.0">
       <name>Label</name>
@@ -1237,6 +2215,10 @@
       <y>675</y>
       <width>200</width>
       <height>20</height>
+      <font>
+        <font family="Cantarell" style="REGULAR" size="14.0">
+      </font>
+      </font>
       <tooltip>Hist Below - No description provided</tooltip>
     </widget>
     <widget type="textentry" version="3.0.0">
@@ -1246,6 +2228,14 @@
       <y>675</y>
       <width>100</width>
       <height>20</height>
+      <font>
+        <font family="Cantarell" style="REGULAR" size="14.0">
+      </font>
+      </font>
+      <background_color>
+        <color red="229" green="235" blue="255">
+      </color>
+      </background_color>
       <horizontal_alignment>1</horizontal_alignment>
     </widget>
     <widget type="textupdate" version="2.0.0">
@@ -1256,10 +2246,22 @@
       <width>100</width>
       <height>20</height>
       <font>
-        <font name="Default Bold" family="Liberation Sans" style="BOLD" size="14.0">
+        <font family="Cantarell" style="BOLD" size="14.0">
       </font>
       </font>
+      <foreground_color>
+        <color red="15" green="23" blue="42">
+      </color>
+      </foreground_color>
+      <background_color>
+        <color red="245" green="247" blue="250">
+      </color>
+      </background_color>
       <horizontal_alignment>1</horizontal_alignment>
+      <border_color>
+        <color red="203" green="213" blue="225">
+      </color>
+      </border_color>
     </widget>
     <widget type="label" version="2.0.0">
       <name>Label</name>
@@ -1268,6 +2270,10 @@
       <y>700</y>
       <width>200</width>
       <height>20</height>
+      <font>
+        <font family="Cantarell" style="REGULAR" size="14.0">
+      </font>
+      </font>
       <tooltip>Hist Above - No description provided</tooltip>
     </widget>
     <widget type="textentry" version="3.0.0">
@@ -1277,6 +2283,14 @@
       <y>700</y>
       <width>100</width>
       <height>20</height>
+      <font>
+        <font family="Cantarell" style="REGULAR" size="14.0">
+      </font>
+      </font>
+      <background_color>
+        <color red="229" green="235" blue="255">
+      </color>
+      </background_color>
       <horizontal_alignment>1</horizontal_alignment>
     </widget>
     <widget type="textupdate" version="2.0.0">
@@ -1287,10 +2301,22 @@
       <width>100</width>
       <height>20</height>
       <font>
-        <font name="Default Bold" family="Liberation Sans" style="BOLD" size="14.0">
+        <font family="Cantarell" style="BOLD" size="14.0">
       </font>
       </font>
+      <foreground_color>
+        <color red="15" green="23" blue="42">
+      </color>
+      </foreground_color>
+      <background_color>
+        <color red="245" green="247" blue="250">
+      </color>
+      </background_color>
       <horizontal_alignment>1</horizontal_alignment>
+      <border_color>
+        <color red="203" green="213" blue="225">
+      </color>
+      </border_color>
     </widget>
     <widget type="label" version="2.0.0">
       <name>Label</name>
@@ -1299,6 +2325,10 @@
       <y>725</y>
       <width>200</width>
       <height>20</height>
+      <font>
+        <font family="Cantarell" style="REGULAR" size="14.0">
+      </font>
+      </font>
       <tooltip>Hist Entropy - No description provided</tooltip>
     </widget>
     <widget type="textentry" version="3.0.0">
@@ -1308,6 +2338,14 @@
       <y>725</y>
       <width>100</width>
       <height>20</height>
+      <font>
+        <font family="Cantarell" style="REGULAR" size="14.0">
+      </font>
+      </font>
+      <background_color>
+        <color red="229" green="235" blue="255">
+      </color>
+      </background_color>
       <horizontal_alignment>1</horizontal_alignment>
     </widget>
     <widget type="textupdate" version="2.0.0">
@@ -1318,10 +2356,22 @@
       <width>100</width>
       <height>20</height>
       <font>
-        <font name="Default Bold" family="Liberation Sans" style="BOLD" size="14.0">
+        <font family="Cantarell" style="BOLD" size="14.0">
       </font>
       </font>
+      <foreground_color>
+        <color red="15" green="23" blue="42">
+      </color>
+      </foreground_color>
+      <background_color>
+        <color red="245" green="247" blue="250">
+      </color>
+      </background_color>
       <horizontal_alignment>1</horizontal_alignment>
+      <border_color>
+        <color red="203" green="213" blue="225">
+      </color>
+      </border_color>
     </widget>
     <widget type="label" version="2.0.0">
       <name>Label</name>
@@ -1330,6 +2380,10 @@
       <y>750</y>
       <width>200</width>
       <height>20</height>
+      <font>
+        <font family="Cantarell" style="REGULAR" size="14.0">
+      </font>
+      </font>
       <tooltip>Histogram - No description provided</tooltip>
     </widget>
     <widget type="textupdate" version="2.0.0">
@@ -1340,10 +2394,22 @@
       <width>205</width>
       <height>20</height>
       <font>
-        <font name="Default Bold" family="Liberation Sans" style="BOLD" size="14.0">
+        <font family="Cantarell" style="BOLD" size="14.0">
       </font>
       </font>
+      <foreground_color>
+        <color red="15" green="23" blue="42">
+      </color>
+      </foreground_color>
+      <background_color>
+        <color red="245" green="247" blue="250">
+      </color>
+      </background_color>
       <horizontal_alignment>1</horizontal_alignment>
+      <border_color>
+        <color red="203" green="213" blue="225">
+      </color>
+      </border_color>
     </widget>
     <widget type="label" version="2.0.0">
       <name>Label</name>
@@ -1352,6 +2418,10 @@
       <y>775</y>
       <width>200</width>
       <height>20</height>
+      <font>
+        <font family="Cantarell" style="REGULAR" size="14.0">
+      </font>
+      </font>
       <tooltip>Histogram X - No description provided</tooltip>
     </widget>
     <widget type="textupdate" version="2.0.0">
@@ -1362,10 +2432,22 @@
       <width>205</width>
       <height>20</height>
       <font>
-        <font name="Default Bold" family="Liberation Sans" style="BOLD" size="14.0">
+        <font family="Cantarell" style="BOLD" size="14.0">
       </font>
       </font>
+      <foreground_color>
+        <color red="15" green="23" blue="42">
+      </color>
+      </foreground_color>
+      <background_color>
+        <color red="245" green="247" blue="250">
+      </color>
+      </background_color>
       <horizontal_alignment>1</horizontal_alignment>
+      <border_color>
+        <color red="203" green="213" blue="225">
+      </color>
+      </border_color>
     </widget>
     <widget type="label" version="2.0.0">
       <name>Label</name>
@@ -1374,6 +2456,10 @@
       <y>800</y>
       <width>200</width>
       <height>20</height>
+      <font>
+        <font family="Cantarell" style="REGULAR" size="14.0">
+      </font>
+      </font>
       <tooltip>Eccentricity - No description provided</tooltip>
     </widget>
     <widget type="textentry" version="3.0.0">
@@ -1383,6 +2469,14 @@
       <y>800</y>
       <width>100</width>
       <height>20</height>
+      <font>
+        <font family="Cantarell" style="REGULAR" size="14.0">
+      </font>
+      </font>
+      <background_color>
+        <color red="229" green="235" blue="255">
+      </color>
+      </background_color>
       <horizontal_alignment>1</horizontal_alignment>
     </widget>
     <widget type="textupdate" version="2.0.0">
@@ -1393,10 +2487,22 @@
       <width>100</width>
       <height>20</height>
       <font>
-        <font name="Default Bold" family="Liberation Sans" style="BOLD" size="14.0">
+        <font family="Cantarell" style="BOLD" size="14.0">
       </font>
       </font>
+      <foreground_color>
+        <color red="15" green="23" blue="42">
+      </color>
+      </foreground_color>
+      <background_color>
+        <color red="245" green="247" blue="250">
+      </color>
+      </background_color>
       <horizontal_alignment>1</horizontal_alignment>
+      <border_color>
+        <color red="203" green="213" blue="225">
+      </color>
+      </border_color>
     </widget>
     <widget type="label" version="2.0.0">
       <name>Label</name>
@@ -1405,6 +2511,10 @@
       <y>825</y>
       <width>200</width>
       <height>20</height>
+      <font>
+        <font family="Cantarell" style="REGULAR" size="14.0">
+      </font>
+      </font>
       <tooltip>Orientation - No description provided</tooltip>
     </widget>
     <widget type="textentry" version="3.0.0">
@@ -1414,6 +2524,14 @@
       <y>825</y>
       <width>100</width>
       <height>20</height>
+      <font>
+        <font family="Cantarell" style="REGULAR" size="14.0">
+      </font>
+      </font>
+      <background_color>
+        <color red="229" green="235" blue="255">
+      </color>
+      </background_color>
       <horizontal_alignment>1</horizontal_alignment>
     </widget>
     <widget type="textupdate" version="2.0.0">
@@ -1424,10 +2542,22 @@
       <width>100</width>
       <height>20</height>
       <font>
-        <font name="Default Bold" family="Liberation Sans" style="BOLD" size="14.0">
+        <font family="Cantarell" style="BOLD" size="14.0">
       </font>
       </font>
+      <foreground_color>
+        <color red="15" green="23" blue="42">
+      </color>
+      </foreground_color>
+      <background_color>
+        <color red="245" green="247" blue="250">
+      </color>
+      </background_color>
       <horizontal_alignment>1</horizontal_alignment>
+      <border_color>
+        <color red="203" green="213" blue="225">
+      </color>
+      </border_color>
     </widget>
     <widget type="label" version="2.0.0">
       <name>Label</name>
@@ -1436,6 +2566,10 @@
       <y>850</y>
       <width>200</width>
       <height>20</height>
+      <font>
+        <font family="Cantarell" style="REGULAR" size="14.0">
+      </font>
+      </font>
       <tooltip>TS Sigma - No description provided</tooltip>
     </widget>
     <widget type="textupdate" version="2.0.0">
@@ -1446,10 +2580,22 @@
       <width>205</width>
       <height>20</height>
       <font>
-        <font name="Default Bold" family="Liberation Sans" style="BOLD" size="14.0">
+        <font family="Cantarell" style="BOLD" size="14.0">
       </font>
       </font>
+      <foreground_color>
+        <color red="15" green="23" blue="42">
+      </color>
+      </foreground_color>
+      <background_color>
+        <color red="245" green="247" blue="250">
+      </color>
+      </background_color>
       <horizontal_alignment>1</horizontal_alignment>
+      <border_color>
+        <color red="203" green="213" blue="225">
+      </color>
+      </border_color>
     </widget>
     <widget type="label" version="2.0.0">
       <name>Label</name>
@@ -1458,6 +2604,10 @@
       <y>875</y>
       <width>200</width>
       <height>20</height>
+      <font>
+        <font family="Cantarell" style="REGULAR" size="14.0">
+      </font>
+      </font>
       <tooltip>TS Centroid Total - No description provided</tooltip>
     </widget>
     <widget type="textupdate" version="2.0.0">
@@ -1468,10 +2618,22 @@
       <width>205</width>
       <height>20</height>
       <font>
-        <font name="Default Bold" family="Liberation Sans" style="BOLD" size="14.0">
+        <font family="Cantarell" style="BOLD" size="14.0">
       </font>
       </font>
+      <foreground_color>
+        <color red="15" green="23" blue="42">
+      </color>
+      </foreground_color>
+      <background_color>
+        <color red="245" green="247" blue="250">
+      </color>
+      </background_color>
       <horizontal_alignment>1</horizontal_alignment>
+      <border_color>
+        <color red="203" green="213" blue="225">
+      </color>
+      </border_color>
     </widget>
     <widget type="label" version="2.0.0">
       <name>Label</name>
@@ -1480,6 +2642,10 @@
       <y>0</y>
       <width>200</width>
       <height>20</height>
+      <font>
+        <font family="Cantarell" style="REGULAR" size="14.0">
+      </font>
+      </font>
       <tooltip>TS Centroid X - No description provided</tooltip>
     </widget>
     <widget type="textupdate" version="2.0.0">
@@ -1490,10 +2656,22 @@
       <width>205</width>
       <height>20</height>
       <font>
-        <font name="Default Bold" family="Liberation Sans" style="BOLD" size="14.0">
+        <font family="Cantarell" style="BOLD" size="14.0">
       </font>
       </font>
+      <foreground_color>
+        <color red="15" green="23" blue="42">
+      </color>
+      </foreground_color>
+      <background_color>
+        <color red="245" green="247" blue="250">
+      </color>
+      </background_color>
       <horizontal_alignment>1</horizontal_alignment>
+      <border_color>
+        <color red="203" green="213" blue="225">
+      </color>
+      </border_color>
     </widget>
     <widget type="label" version="2.0.0">
       <name>Label</name>
@@ -1502,6 +2680,10 @@
       <y>25</y>
       <width>200</width>
       <height>20</height>
+      <font>
+        <font family="Cantarell" style="REGULAR" size="14.0">
+      </font>
+      </font>
       <tooltip>TS Centroid Y - No description provided</tooltip>
     </widget>
     <widget type="textupdate" version="2.0.0">
@@ -1512,10 +2694,22 @@
       <width>205</width>
       <height>20</height>
       <font>
-        <font name="Default Bold" family="Liberation Sans" style="BOLD" size="14.0">
+        <font family="Cantarell" style="BOLD" size="14.0">
       </font>
       </font>
+      <foreground_color>
+        <color red="15" green="23" blue="42">
+      </color>
+      </foreground_color>
+      <background_color>
+        <color red="245" green="247" blue="250">
+      </color>
+      </background_color>
       <horizontal_alignment>1</horizontal_alignment>
+      <border_color>
+        <color red="203" green="213" blue="225">
+      </color>
+      </border_color>
     </widget>
     <widget type="label" version="2.0.0">
       <name>Label</name>
@@ -1524,6 +2718,10 @@
       <y>50</y>
       <width>200</width>
       <height>20</height>
+      <font>
+        <font family="Cantarell" style="REGULAR" size="14.0">
+      </font>
+      </font>
       <tooltip>TS Sigma X - No description provided</tooltip>
     </widget>
     <widget type="textupdate" version="2.0.0">
@@ -1534,10 +2732,22 @@
       <width>205</width>
       <height>20</height>
       <font>
-        <font name="Default Bold" family="Liberation Sans" style="BOLD" size="14.0">
+        <font family="Cantarell" style="BOLD" size="14.0">
       </font>
       </font>
+      <foreground_color>
+        <color red="15" green="23" blue="42">
+      </color>
+      </foreground_color>
+      <background_color>
+        <color red="245" green="247" blue="250">
+      </color>
+      </background_color>
       <horizontal_alignment>1</horizontal_alignment>
+      <border_color>
+        <color red="203" green="213" blue="225">
+      </color>
+      </border_color>
     </widget>
     <widget type="label" version="2.0.0">
       <name>Label</name>
@@ -1546,6 +2756,10 @@
       <y>75</y>
       <width>200</width>
       <height>20</height>
+      <font>
+        <font family="Cantarell" style="REGULAR" size="14.0">
+      </font>
+      </font>
       <tooltip>TS Sigma Y - No description provided</tooltip>
     </widget>
     <widget type="textupdate" version="2.0.0">
@@ -1556,10 +2770,22 @@
       <width>205</width>
       <height>20</height>
       <font>
-        <font name="Default Bold" family="Liberation Sans" style="BOLD" size="14.0">
+        <font family="Cantarell" style="BOLD" size="14.0">
       </font>
       </font>
+      <foreground_color>
+        <color red="15" green="23" blue="42">
+      </color>
+      </foreground_color>
+      <background_color>
+        <color red="245" green="247" blue="250">
+      </color>
+      </background_color>
       <horizontal_alignment>1</horizontal_alignment>
+      <border_color>
+        <color red="203" green="213" blue="225">
+      </color>
+      </border_color>
     </widget>
     <widget type="label" version="2.0.0">
       <name>Label</name>
@@ -1568,6 +2794,10 @@
       <y>100</y>
       <width>200</width>
       <height>20</height>
+      <font>
+        <font family="Cantarell" style="REGULAR" size="14.0">
+      </font>
+      </font>
       <tooltip>TS Sigma XY - No description provided</tooltip>
     </widget>
     <widget type="textupdate" version="2.0.0">
@@ -1578,10 +2808,22 @@
       <width>205</width>
       <height>20</height>
       <font>
-        <font name="Default Bold" family="Liberation Sans" style="BOLD" size="14.0">
+        <font family="Cantarell" style="BOLD" size="14.0">
       </font>
       </font>
+      <foreground_color>
+        <color red="15" green="23" blue="42">
+      </color>
+      </foreground_color>
+      <background_color>
+        <color red="245" green="247" blue="250">
+      </color>
+      </background_color>
       <horizontal_alignment>1</horizontal_alignment>
+      <border_color>
+        <color red="203" green="213" blue="225">
+      </color>
+      </border_color>
     </widget>
     <widget type="label" version="2.0.0">
       <name>Label</name>
@@ -1590,6 +2832,10 @@
       <y>125</y>
       <width>200</width>
       <height>20</height>
+      <font>
+        <font family="Cantarell" style="REGULAR" size="14.0">
+      </font>
+      </font>
       <tooltip>TS Skew X - No description provided</tooltip>
     </widget>
     <widget type="textupdate" version="2.0.0">
@@ -1600,10 +2846,22 @@
       <width>205</width>
       <height>20</height>
       <font>
-        <font name="Default Bold" family="Liberation Sans" style="BOLD" size="14.0">
+        <font family="Cantarell" style="BOLD" size="14.0">
       </font>
       </font>
+      <foreground_color>
+        <color red="15" green="23" blue="42">
+      </color>
+      </foreground_color>
+      <background_color>
+        <color red="245" green="247" blue="250">
+      </color>
+      </background_color>
       <horizontal_alignment>1</horizontal_alignment>
+      <border_color>
+        <color red="203" green="213" blue="225">
+      </color>
+      </border_color>
     </widget>
     <widget type="label" version="2.0.0">
       <name>Label</name>
@@ -1612,6 +2870,10 @@
       <y>150</y>
       <width>200</width>
       <height>20</height>
+      <font>
+        <font family="Cantarell" style="REGULAR" size="14.0">
+      </font>
+      </font>
       <tooltip>TS Skew Y - No description provided</tooltip>
     </widget>
     <widget type="textupdate" version="2.0.0">
@@ -1622,10 +2884,22 @@
       <width>205</width>
       <height>20</height>
       <font>
-        <font name="Default Bold" family="Liberation Sans" style="BOLD" size="14.0">
+        <font family="Cantarell" style="BOLD" size="14.0">
       </font>
       </font>
+      <foreground_color>
+        <color red="15" green="23" blue="42">
+      </color>
+      </foreground_color>
+      <background_color>
+        <color red="245" green="247" blue="250">
+      </color>
+      </background_color>
       <horizontal_alignment>1</horizontal_alignment>
+      <border_color>
+        <color red="203" green="213" blue="225">
+      </color>
+      </border_color>
     </widget>
     <widget type="label" version="2.0.0">
       <name>Label</name>
@@ -1634,6 +2908,10 @@
       <y>175</y>
       <width>200</width>
       <height>20</height>
+      <font>
+        <font family="Cantarell" style="REGULAR" size="14.0">
+      </font>
+      </font>
       <tooltip>TS Kurtosis X - No description provided</tooltip>
     </widget>
     <widget type="textupdate" version="2.0.0">
@@ -1644,10 +2922,22 @@
       <width>205</width>
       <height>20</height>
       <font>
-        <font name="Default Bold" family="Liberation Sans" style="BOLD" size="14.0">
+        <font family="Cantarell" style="BOLD" size="14.0">
       </font>
       </font>
+      <foreground_color>
+        <color red="15" green="23" blue="42">
+      </color>
+      </foreground_color>
+      <background_color>
+        <color red="245" green="247" blue="250">
+      </color>
+      </background_color>
       <horizontal_alignment>1</horizontal_alignment>
+      <border_color>
+        <color red="203" green="213" blue="225">
+      </color>
+      </border_color>
     </widget>
     <widget type="label" version="2.0.0">
       <name>Label</name>
@@ -1656,6 +2946,10 @@
       <y>200</y>
       <width>200</width>
       <height>20</height>
+      <font>
+        <font family="Cantarell" style="REGULAR" size="14.0">
+      </font>
+      </font>
       <tooltip>TS Kurtosis Y - No description provided</tooltip>
     </widget>
     <widget type="textupdate" version="2.0.0">
@@ -1666,10 +2960,22 @@
       <width>205</width>
       <height>20</height>
       <font>
-        <font name="Default Bold" family="Liberation Sans" style="BOLD" size="14.0">
+        <font family="Cantarell" style="BOLD" size="14.0">
       </font>
       </font>
+      <foreground_color>
+        <color red="15" green="23" blue="42">
+      </color>
+      </foreground_color>
+      <background_color>
+        <color red="245" green="247" blue="250">
+      </color>
+      </background_color>
       <horizontal_alignment>1</horizontal_alignment>
+      <border_color>
+        <color red="203" green="213" blue="225">
+      </color>
+      </border_color>
     </widget>
     <widget type="label" version="2.0.0">
       <name>Label</name>
@@ -1678,6 +2984,10 @@
       <y>225</y>
       <width>200</width>
       <height>20</height>
+      <font>
+        <font family="Cantarell" style="REGULAR" size="14.0">
+      </font>
+      </font>
       <tooltip>TS Eccentricity - No description provided</tooltip>
     </widget>
     <widget type="textupdate" version="2.0.0">
@@ -1688,10 +2998,22 @@
       <width>205</width>
       <height>20</height>
       <font>
-        <font name="Default Bold" family="Liberation Sans" style="BOLD" size="14.0">
+        <font family="Cantarell" style="BOLD" size="14.0">
       </font>
       </font>
+      <foreground_color>
+        <color red="15" green="23" blue="42">
+      </color>
+      </foreground_color>
+      <background_color>
+        <color red="245" green="247" blue="250">
+      </color>
+      </background_color>
       <horizontal_alignment>1</horizontal_alignment>
+      <border_color>
+        <color red="203" green="213" blue="225">
+      </color>
+      </border_color>
     </widget>
     <widget type="label" version="2.0.0">
       <name>Label</name>
@@ -1700,6 +3022,10 @@
       <y>250</y>
       <width>200</width>
       <height>20</height>
+      <font>
+        <font family="Cantarell" style="REGULAR" size="14.0">
+      </font>
+      </font>
       <tooltip>TS Orientation - No description provided</tooltip>
     </widget>
     <widget type="textupdate" version="2.0.0">
@@ -1710,10 +3036,22 @@
       <width>205</width>
       <height>20</height>
       <font>
-        <font name="Default Bold" family="Liberation Sans" style="BOLD" size="14.0">
+        <font family="Cantarell" style="BOLD" size="14.0">
       </font>
       </font>
+      <foreground_color>
+        <color red="15" green="23" blue="42">
+      </color>
+      </foreground_color>
+      <background_color>
+        <color red="245" green="247" blue="250">
+      </color>
+      </background_color>
       <horizontal_alignment>1</horizontal_alignment>
+      <border_color>
+        <color red="203" green="213" blue="225">
+      </color>
+      </border_color>
     </widget>
     <widget type="label" version="2.0.0">
       <name>Label</name>
@@ -1722,6 +3060,10 @@
       <y>275</y>
       <width>200</width>
       <height>20</height>
+      <font>
+        <font family="Cantarell" style="REGULAR" size="14.0">
+      </font>
+      </font>
       <tooltip>Centroid Total - No description provided</tooltip>
     </widget>
     <widget type="textentry" version="3.0.0">
@@ -1731,6 +3073,14 @@
       <y>275</y>
       <width>100</width>
       <height>20</height>
+      <font>
+        <font family="Cantarell" style="REGULAR" size="14.0">
+      </font>
+      </font>
+      <background_color>
+        <color red="229" green="235" blue="255">
+      </color>
+      </background_color>
       <horizontal_alignment>1</horizontal_alignment>
     </widget>
     <widget type="textupdate" version="2.0.0">
@@ -1741,10 +3091,22 @@
       <width>100</width>
       <height>20</height>
       <font>
-        <font name="Default Bold" family="Liberation Sans" style="BOLD" size="14.0">
+        <font family="Cantarell" style="BOLD" size="14.0">
       </font>
       </font>
+      <foreground_color>
+        <color red="15" green="23" blue="42">
+      </color>
+      </foreground_color>
+      <background_color>
+        <color red="245" green="247" blue="250">
+      </color>
+      </background_color>
       <horizontal_alignment>1</horizontal_alignment>
+      <border_color>
+        <color red="203" green="213" blue="225">
+      </color>
+      </border_color>
     </widget>
     <widget type="label" version="2.0.0">
       <name>Label</name>
@@ -1753,6 +3115,10 @@
       <y>300</y>
       <width>200</width>
       <height>20</height>
+      <font>
+        <font family="Cantarell" style="REGULAR" size="14.0">
+      </font>
+      </font>
       <tooltip>Centroid X - No description provided</tooltip>
     </widget>
     <widget type="textentry" version="3.0.0">
@@ -1762,6 +3128,14 @@
       <y>300</y>
       <width>100</width>
       <height>20</height>
+      <font>
+        <font family="Cantarell" style="REGULAR" size="14.0">
+      </font>
+      </font>
+      <background_color>
+        <color red="229" green="235" blue="255">
+      </color>
+      </background_color>
       <horizontal_alignment>1</horizontal_alignment>
     </widget>
     <widget type="textupdate" version="2.0.0">
@@ -1772,10 +3146,22 @@
       <width>100</width>
       <height>20</height>
       <font>
-        <font name="Default Bold" family="Liberation Sans" style="BOLD" size="14.0">
+        <font family="Cantarell" style="BOLD" size="14.0">
       </font>
       </font>
+      <foreground_color>
+        <color red="15" green="23" blue="42">
+      </color>
+      </foreground_color>
+      <background_color>
+        <color red="245" green="247" blue="250">
+      </color>
+      </background_color>
       <horizontal_alignment>1</horizontal_alignment>
+      <border_color>
+        <color red="203" green="213" blue="225">
+      </color>
+      </border_color>
     </widget>
     <widget type="label" version="2.0.0">
       <name>Label</name>
@@ -1784,6 +3170,10 @@
       <y>325</y>
       <width>200</width>
       <height>20</height>
+      <font>
+        <font family="Cantarell" style="REGULAR" size="14.0">
+      </font>
+      </font>
       <tooltip>Centroid Y - No description provided</tooltip>
     </widget>
     <widget type="textentry" version="3.0.0">
@@ -1793,6 +3183,14 @@
       <y>325</y>
       <width>100</width>
       <height>20</height>
+      <font>
+        <font family="Cantarell" style="REGULAR" size="14.0">
+      </font>
+      </font>
+      <background_color>
+        <color red="229" green="235" blue="255">
+      </color>
+      </background_color>
       <horizontal_alignment>1</horizontal_alignment>
     </widget>
     <widget type="textupdate" version="2.0.0">
@@ -1803,10 +3201,22 @@
       <width>100</width>
       <height>20</height>
       <font>
-        <font name="Default Bold" family="Liberation Sans" style="BOLD" size="14.0">
+        <font family="Cantarell" style="BOLD" size="14.0">
       </font>
       </font>
+      <foreground_color>
+        <color red="15" green="23" blue="42">
+      </color>
+      </foreground_color>
+      <background_color>
+        <color red="245" green="247" blue="250">
+      </color>
+      </background_color>
       <horizontal_alignment>1</horizontal_alignment>
+      <border_color>
+        <color red="203" green="213" blue="225">
+      </color>
+      </border_color>
     </widget>
     <widget type="label" version="2.0.0">
       <name>Label</name>
@@ -1815,6 +3225,10 @@
       <y>350</y>
       <width>200</width>
       <height>20</height>
+      <font>
+        <font family="Cantarell" style="REGULAR" size="14.0">
+      </font>
+      </font>
       <tooltip>Sigma X - No description provided</tooltip>
     </widget>
     <widget type="textentry" version="3.0.0">
@@ -1824,6 +3238,14 @@
       <y>350</y>
       <width>100</width>
       <height>20</height>
+      <font>
+        <font family="Cantarell" style="REGULAR" size="14.0">
+      </font>
+      </font>
+      <background_color>
+        <color red="229" green="235" blue="255">
+      </color>
+      </background_color>
       <horizontal_alignment>1</horizontal_alignment>
     </widget>
     <widget type="textupdate" version="2.0.0">
@@ -1834,10 +3256,22 @@
       <width>100</width>
       <height>20</height>
       <font>
-        <font name="Default Bold" family="Liberation Sans" style="BOLD" size="14.0">
+        <font family="Cantarell" style="BOLD" size="14.0">
       </font>
       </font>
+      <foreground_color>
+        <color red="15" green="23" blue="42">
+      </color>
+      </foreground_color>
+      <background_color>
+        <color red="245" green="247" blue="250">
+      </color>
+      </background_color>
       <horizontal_alignment>1</horizontal_alignment>
+      <border_color>
+        <color red="203" green="213" blue="225">
+      </color>
+      </border_color>
     </widget>
     <widget type="label" version="2.0.0">
       <name>Label</name>
@@ -1846,6 +3280,10 @@
       <y>375</y>
       <width>200</width>
       <height>20</height>
+      <font>
+        <font family="Cantarell" style="REGULAR" size="14.0">
+      </font>
+      </font>
       <tooltip>Sigma Y - No description provided</tooltip>
     </widget>
     <widget type="textentry" version="3.0.0">
@@ -1855,6 +3293,14 @@
       <y>375</y>
       <width>100</width>
       <height>20</height>
+      <font>
+        <font family="Cantarell" style="REGULAR" size="14.0">
+      </font>
+      </font>
+      <background_color>
+        <color red="229" green="235" blue="255">
+      </color>
+      </background_color>
       <horizontal_alignment>1</horizontal_alignment>
     </widget>
     <widget type="textupdate" version="2.0.0">
@@ -1865,10 +3311,22 @@
       <width>100</width>
       <height>20</height>
       <font>
-        <font name="Default Bold" family="Liberation Sans" style="BOLD" size="14.0">
+        <font family="Cantarell" style="BOLD" size="14.0">
       </font>
       </font>
+      <foreground_color>
+        <color red="15" green="23" blue="42">
+      </color>
+      </foreground_color>
+      <background_color>
+        <color red="245" green="247" blue="250">
+      </color>
+      </background_color>
       <horizontal_alignment>1</horizontal_alignment>
+      <border_color>
+        <color red="203" green="213" blue="225">
+      </color>
+      </border_color>
     </widget>
     <widget type="label" version="2.0.0">
       <name>Label</name>
@@ -1877,6 +3335,10 @@
       <y>400</y>
       <width>200</width>
       <height>20</height>
+      <font>
+        <font family="Cantarell" style="REGULAR" size="14.0">
+      </font>
+      </font>
       <tooltip>Sigma XY - No description provided</tooltip>
     </widget>
     <widget type="textentry" version="3.0.0">
@@ -1886,6 +3348,14 @@
       <y>400</y>
       <width>100</width>
       <height>20</height>
+      <font>
+        <font family="Cantarell" style="REGULAR" size="14.0">
+      </font>
+      </font>
+      <background_color>
+        <color red="229" green="235" blue="255">
+      </color>
+      </background_color>
       <horizontal_alignment>1</horizontal_alignment>
     </widget>
     <widget type="textupdate" version="2.0.0">
@@ -1896,10 +3366,22 @@
       <width>100</width>
       <height>20</height>
       <font>
-        <font name="Default Bold" family="Liberation Sans" style="BOLD" size="14.0">
+        <font family="Cantarell" style="BOLD" size="14.0">
       </font>
       </font>
+      <foreground_color>
+        <color red="15" green="23" blue="42">
+      </color>
+      </foreground_color>
+      <background_color>
+        <color red="245" green="247" blue="250">
+      </color>
+      </background_color>
       <horizontal_alignment>1</horizontal_alignment>
+      <border_color>
+        <color red="203" green="213" blue="225">
+      </color>
+      </border_color>
     </widget>
     <widget type="label" version="2.0.0">
       <name>Label</name>
@@ -1908,6 +3390,10 @@
       <y>425</y>
       <width>200</width>
       <height>20</height>
+      <font>
+        <font family="Cantarell" style="REGULAR" size="14.0">
+      </font>
+      </font>
       <tooltip>Skew X - No description provided</tooltip>
     </widget>
     <widget type="textentry" version="3.0.0">
@@ -1917,6 +3403,14 @@
       <y>425</y>
       <width>100</width>
       <height>20</height>
+      <font>
+        <font family="Cantarell" style="REGULAR" size="14.0">
+      </font>
+      </font>
+      <background_color>
+        <color red="229" green="235" blue="255">
+      </color>
+      </background_color>
       <horizontal_alignment>1</horizontal_alignment>
     </widget>
     <widget type="textupdate" version="2.0.0">
@@ -1927,10 +3421,22 @@
       <width>100</width>
       <height>20</height>
       <font>
-        <font name="Default Bold" family="Liberation Sans" style="BOLD" size="14.0">
+        <font family="Cantarell" style="BOLD" size="14.0">
       </font>
       </font>
+      <foreground_color>
+        <color red="15" green="23" blue="42">
+      </color>
+      </foreground_color>
+      <background_color>
+        <color red="245" green="247" blue="250">
+      </color>
+      </background_color>
       <horizontal_alignment>1</horizontal_alignment>
+      <border_color>
+        <color red="203" green="213" blue="225">
+      </color>
+      </border_color>
     </widget>
     <widget type="label" version="2.0.0">
       <name>Label</name>
@@ -1939,6 +3445,10 @@
       <y>450</y>
       <width>200</width>
       <height>20</height>
+      <font>
+        <font family="Cantarell" style="REGULAR" size="14.0">
+      </font>
+      </font>
       <tooltip>Skew Y - No description provided</tooltip>
     </widget>
     <widget type="textentry" version="3.0.0">
@@ -1948,6 +3458,14 @@
       <y>450</y>
       <width>100</width>
       <height>20</height>
+      <font>
+        <font family="Cantarell" style="REGULAR" size="14.0">
+      </font>
+      </font>
+      <background_color>
+        <color red="229" green="235" blue="255">
+      </color>
+      </background_color>
       <horizontal_alignment>1</horizontal_alignment>
     </widget>
     <widget type="textupdate" version="2.0.0">
@@ -1958,10 +3476,22 @@
       <width>100</width>
       <height>20</height>
       <font>
-        <font name="Default Bold" family="Liberation Sans" style="BOLD" size="14.0">
+        <font family="Cantarell" style="BOLD" size="14.0">
       </font>
       </font>
+      <foreground_color>
+        <color red="15" green="23" blue="42">
+      </color>
+      </foreground_color>
+      <background_color>
+        <color red="245" green="247" blue="250">
+      </color>
+      </background_color>
       <horizontal_alignment>1</horizontal_alignment>
+      <border_color>
+        <color red="203" green="213" blue="225">
+      </color>
+      </border_color>
     </widget>
     <widget type="label" version="2.0.0">
       <name>Label</name>
@@ -1970,6 +3500,10 @@
       <y>475</y>
       <width>200</width>
       <height>20</height>
+      <font>
+        <font family="Cantarell" style="REGULAR" size="14.0">
+      </font>
+      </font>
       <tooltip>Kurtosis X - No description provided</tooltip>
     </widget>
     <widget type="textentry" version="3.0.0">
@@ -1979,6 +3513,14 @@
       <y>475</y>
       <width>100</width>
       <height>20</height>
+      <font>
+        <font family="Cantarell" style="REGULAR" size="14.0">
+      </font>
+      </font>
+      <background_color>
+        <color red="229" green="235" blue="255">
+      </color>
+      </background_color>
       <horizontal_alignment>1</horizontal_alignment>
     </widget>
     <widget type="textupdate" version="2.0.0">
@@ -1989,10 +3531,22 @@
       <width>100</width>
       <height>20</height>
       <font>
-        <font name="Default Bold" family="Liberation Sans" style="BOLD" size="14.0">
+        <font family="Cantarell" style="BOLD" size="14.0">
       </font>
       </font>
+      <foreground_color>
+        <color red="15" green="23" blue="42">
+      </color>
+      </foreground_color>
+      <background_color>
+        <color red="245" green="247" blue="250">
+      </color>
+      </background_color>
       <horizontal_alignment>1</horizontal_alignment>
+      <border_color>
+        <color red="203" green="213" blue="225">
+      </color>
+      </border_color>
     </widget>
     <widget type="label" version="2.0.0">
       <name>Label</name>
@@ -2001,6 +3555,10 @@
       <y>500</y>
       <width>200</width>
       <height>20</height>
+      <font>
+        <font family="Cantarell" style="REGULAR" size="14.0">
+      </font>
+      </font>
       <tooltip>Kurtosis Y - No description provided</tooltip>
     </widget>
     <widget type="textentry" version="3.0.0">
@@ -2010,6 +3568,14 @@
       <y>500</y>
       <width>100</width>
       <height>20</height>
+      <font>
+        <font family="Cantarell" style="REGULAR" size="14.0">
+      </font>
+      </font>
+      <background_color>
+        <color red="229" green="235" blue="255">
+      </color>
+      </background_color>
       <horizontal_alignment>1</horizontal_alignment>
     </widget>
     <widget type="textupdate" version="2.0.0">
@@ -2020,18 +3586,38 @@
       <width>100</width>
       <height>20</height>
       <font>
-        <font name="Default Bold" family="Liberation Sans" style="BOLD" size="14.0">
+        <font family="Cantarell" style="BOLD" size="14.0">
       </font>
       </font>
+      <foreground_color>
+        <color red="15" green="23" blue="42">
+      </color>
+      </foreground_color>
+      <background_color>
+        <color red="245" green="247" blue="250">
+      </color>
+      </background_color>
       <horizontal_alignment>1</horizontal_alignment>
+      <border_color>
+        <color red="203" green="213" blue="225">
+      </color>
+      </border_color>
     </widget>
   </widget>
-  <widget type="group" version="2.0.0">
+  <widget type="group" version="3.0.0">
     <name>NDPluginStats Ungrouped</name>
     <x>1322</x>
     <y>30</y>
     <width>446</width>
     <height>81</height>
+    <font>
+      <font family="Cantarell" style="REGULAR" size="16.0">
+      </font>
+    </font>
+    <background_color>
+      <color red="246" green="247" blue="249">
+      </color>
+    </background_color>
     <transparent>true</transparent>
     <widget type="label" version="2.0.0">
       <name>Label</name>
@@ -2040,6 +3626,10 @@
       <y>0</y>
       <width>200</width>
       <height>20</height>
+      <font>
+        <font family="Cantarell" style="REGULAR" size="14.0">
+      </font>
+      </font>
       <tooltip>Cursor Val - No description provided</tooltip>
     </widget>
     <widget type="textupdate" version="2.0.0">
@@ -2050,10 +3640,22 @@
       <width>205</width>
       <height>20</height>
       <font>
-        <font name="Default Bold" family="Liberation Sans" style="BOLD" size="14.0">
+        <font family="Cantarell" style="BOLD" size="14.0">
       </font>
       </font>
+      <foreground_color>
+        <color red="15" green="23" blue="42">
+      </color>
+      </foreground_color>
+      <background_color>
+        <color red="245" green="247" blue="250">
+      </color>
+      </background_color>
       <horizontal_alignment>1</horizontal_alignment>
+      <border_color>
+        <color red="203" green="213" blue="225">
+      </color>
+      </border_color>
     </widget>
     <widget type="label" version="2.0.0">
       <name>Label</name>
@@ -2062,6 +3664,10 @@
       <y>25</y>
       <width>200</width>
       <height>20</height>
+      <font>
+        <font family="Cantarell" style="REGULAR" size="14.0">
+      </font>
+      </font>
       <tooltip>Sigma Value - No description provided</tooltip>
     </widget>
     <widget type="textentry" version="3.0.0">
@@ -2071,6 +3677,14 @@
       <y>25</y>
       <width>100</width>
       <height>20</height>
+      <font>
+        <font family="Cantarell" style="REGULAR" size="14.0">
+      </font>
+      </font>
+      <background_color>
+        <color red="229" green="235" blue="255">
+      </color>
+      </background_color>
       <horizontal_alignment>1</horizontal_alignment>
     </widget>
     <widget type="textupdate" version="2.0.0">
@@ -2081,18 +3695,38 @@
       <width>100</width>
       <height>20</height>
       <font>
-        <font name="Default Bold" family="Liberation Sans" style="BOLD" size="14.0">
+        <font family="Cantarell" style="BOLD" size="14.0">
       </font>
       </font>
+      <foreground_color>
+        <color red="15" green="23" blue="42">
+      </color>
+      </foreground_color>
+      <background_color>
+        <color red="245" green="247" blue="250">
+      </color>
+      </background_color>
       <horizontal_alignment>1</horizontal_alignment>
+      <border_color>
+        <color red="203" green="213" blue="225">
+      </color>
+      </border_color>
     </widget>
   </widget>
-  <widget type="group" version="2.0.0">
+  <widget type="group" version="3.0.0">
     <name>ND Plugin Base</name>
     <x>1322</x>
     <y>116</y>
     <width>446</width>
     <height>281</height>
+    <font>
+      <font family="Cantarell" style="REGULAR" size="16.0">
+      </font>
+    </font>
+    <background_color>
+      <color red="246" green="247" blue="249">
+      </color>
+    </background_color>
     <transparent>true</transparent>
     <widget type="label" version="2.0.0">
       <name>Label</name>
@@ -2101,6 +3735,10 @@
       <y>0</y>
       <width>200</width>
       <height>20</height>
+      <font>
+        <font family="Cantarell" style="REGULAR" size="14.0">
+      </font>
+      </font>
       <tooltip>Plugin Type - No description provided</tooltip>
     </widget>
     <widget type="textupdate" version="2.0.0">
@@ -2111,10 +3749,22 @@
       <width>205</width>
       <height>20</height>
       <font>
-        <font name="Default Bold" family="Liberation Sans" style="BOLD" size="14.0">
+        <font family="Cantarell" style="BOLD" size="14.0">
       </font>
       </font>
+      <foreground_color>
+        <color red="15" green="23" blue="42">
+      </color>
+      </foreground_color>
+      <background_color>
+        <color red="245" green="247" blue="250">
+      </color>
+      </background_color>
       <horizontal_alignment>1</horizontal_alignment>
+      <border_color>
+        <color red="203" green="213" blue="225">
+      </color>
+      </border_color>
     </widget>
     <widget type="label" version="2.0.0">
       <name>Label</name>
@@ -2123,6 +3773,10 @@
       <y>25</y>
       <width>200</width>
       <height>20</height>
+      <font>
+        <font family="Cantarell" style="REGULAR" size="14.0">
+      </font>
+      </font>
       <tooltip>ND Array Port - No description provided</tooltip>
     </widget>
     <widget type="textentry" version="3.0.0">
@@ -2132,6 +3786,14 @@
       <y>25</y>
       <width>100</width>
       <height>20</height>
+      <font>
+        <font family="Cantarell" style="REGULAR" size="14.0">
+      </font>
+      </font>
+      <background_color>
+        <color red="229" green="235" blue="255">
+      </color>
+      </background_color>
       <horizontal_alignment>1</horizontal_alignment>
     </widget>
     <widget type="textupdate" version="2.0.0">
@@ -2142,10 +3804,22 @@
       <width>100</width>
       <height>20</height>
       <font>
-        <font name="Default Bold" family="Liberation Sans" style="BOLD" size="14.0">
+        <font family="Cantarell" style="BOLD" size="14.0">
       </font>
       </font>
+      <foreground_color>
+        <color red="15" green="23" blue="42">
+      </color>
+      </foreground_color>
+      <background_color>
+        <color red="245" green="247" blue="250">
+      </color>
+      </background_color>
       <horizontal_alignment>1</horizontal_alignment>
+      <border_color>
+        <color red="203" green="213" blue="225">
+      </color>
+      </border_color>
     </widget>
     <widget type="label" version="2.0.0">
       <name>Label</name>
@@ -2154,6 +3828,10 @@
       <y>50</y>
       <width>200</width>
       <height>20</height>
+      <font>
+        <font family="Cantarell" style="REGULAR" size="14.0">
+      </font>
+      </font>
       <tooltip>ND Array Address - No description provided</tooltip>
     </widget>
     <widget type="textentry" version="3.0.0">
@@ -2163,6 +3841,14 @@
       <y>50</y>
       <width>100</width>
       <height>20</height>
+      <font>
+        <font family="Cantarell" style="REGULAR" size="14.0">
+      </font>
+      </font>
+      <background_color>
+        <color red="229" green="235" blue="255">
+      </color>
+      </background_color>
       <horizontal_alignment>1</horizontal_alignment>
     </widget>
     <widget type="textupdate" version="2.0.0">
@@ -2173,10 +3859,22 @@
       <width>100</width>
       <height>20</height>
       <font>
-        <font name="Default Bold" family="Liberation Sans" style="BOLD" size="14.0">
+        <font family="Cantarell" style="BOLD" size="14.0">
       </font>
       </font>
+      <foreground_color>
+        <color red="15" green="23" blue="42">
+      </color>
+      </foreground_color>
+      <background_color>
+        <color red="245" green="247" blue="250">
+      </color>
+      </background_color>
       <horizontal_alignment>1</horizontal_alignment>
+      <border_color>
+        <color red="203" green="213" blue="225">
+      </color>
+      </border_color>
     </widget>
     <widget type="label" version="2.0.0">
       <name>Label</name>
@@ -2185,6 +3883,10 @@
       <y>75</y>
       <width>200</width>
       <height>20</height>
+      <font>
+        <font family="Cantarell" style="REGULAR" size="14.0">
+      </font>
+      </font>
       <tooltip>Enable Callbacks - No description provided</tooltip>
     </widget>
     <widget type="slide_button" version="2.0.0">
@@ -2195,6 +3897,18 @@
       <y>75</y>
       <width>20</width>
       <height>20</height>
+      <off_color>
+        <color red="229" green="235" blue="255">
+      </color>
+      </off_color>
+      <on_color>
+        <color red="37" green="99" blue="235">
+      </color>
+      </on_color>
+      <font>
+        <font family="Cantarell" style="REGULAR" size="14.0">
+      </font>
+      </font>
     </widget>
     <widget type="led" version="2.0.0">
       <name>LED</name>
@@ -2203,6 +3917,21 @@
       <y>75</y>
       <width>20</width>
       <height>20</height>
+      <off_label>&#9675;</off_label>
+      <off_color>
+        <color red="22" green="163" blue="74">
+      </color>
+      </off_color>
+      <on_label>&#9679;</on_label>
+      <on_color>
+        <color red="167" green="243" blue="208">
+      </color>
+      </on_color>
+      <font>
+        <font family="Cantarell" style="BOLD" size="12.0">
+      </font>
+      </font>
+      <square>true</square>
     </widget>
     <widget type="label" version="2.0.0">
       <name>Label</name>
@@ -2211,6 +3940,10 @@
       <y>100</y>
       <width>200</width>
       <height>20</height>
+      <font>
+        <font family="Cantarell" style="REGULAR" size="14.0">
+      </font>
+      </font>
       <tooltip>Min Callback Time - No description provided</tooltip>
     </widget>
     <widget type="textentry" version="3.0.0">
@@ -2220,6 +3953,14 @@
       <y>100</y>
       <width>100</width>
       <height>20</height>
+      <font>
+        <font family="Cantarell" style="REGULAR" size="14.0">
+      </font>
+      </font>
+      <background_color>
+        <color red="229" green="235" blue="255">
+      </color>
+      </background_color>
       <horizontal_alignment>1</horizontal_alignment>
     </widget>
     <widget type="textupdate" version="2.0.0">
@@ -2230,10 +3971,22 @@
       <width>100</width>
       <height>20</height>
       <font>
-        <font name="Default Bold" family="Liberation Sans" style="BOLD" size="14.0">
+        <font family="Cantarell" style="BOLD" size="14.0">
       </font>
       </font>
+      <foreground_color>
+        <color red="15" green="23" blue="42">
+      </color>
+      </foreground_color>
+      <background_color>
+        <color red="245" green="247" blue="250">
+      </color>
+      </background_color>
       <horizontal_alignment>1</horizontal_alignment>
+      <border_color>
+        <color red="203" green="213" blue="225">
+      </color>
+      </border_color>
     </widget>
     <widget type="label" version="2.0.0">
       <name>Label</name>
@@ -2242,6 +3995,10 @@
       <y>125</y>
       <width>200</width>
       <height>20</height>
+      <font>
+        <font family="Cantarell" style="REGULAR" size="14.0">
+      </font>
+      </font>
       <tooltip>Queue Free - No description provided</tooltip>
     </widget>
     <widget type="textupdate" version="2.0.0">
@@ -2252,10 +4009,22 @@
       <width>205</width>
       <height>20</height>
       <font>
-        <font name="Default Bold" family="Liberation Sans" style="BOLD" size="14.0">
+        <font family="Cantarell" style="BOLD" size="14.0">
       </font>
       </font>
+      <foreground_color>
+        <color red="15" green="23" blue="42">
+      </color>
+      </foreground_color>
+      <background_color>
+        <color red="245" green="247" blue="250">
+      </color>
+      </background_color>
       <horizontal_alignment>1</horizontal_alignment>
+      <border_color>
+        <color red="203" green="213" blue="225">
+      </color>
+      </border_color>
     </widget>
     <widget type="label" version="2.0.0">
       <name>Label</name>
@@ -2264,6 +4033,10 @@
       <y>150</y>
       <width>200</width>
       <height>20</height>
+      <font>
+        <font family="Cantarell" style="REGULAR" size="14.0">
+      </font>
+      </font>
       <tooltip>Queue Size - No description provided</tooltip>
     </widget>
     <widget type="textentry" version="3.0.0">
@@ -2273,6 +4046,14 @@
       <y>150</y>
       <width>100</width>
       <height>20</height>
+      <font>
+        <font family="Cantarell" style="REGULAR" size="14.0">
+      </font>
+      </font>
+      <background_color>
+        <color red="229" green="235" blue="255">
+      </color>
+      </background_color>
       <horizontal_alignment>1</horizontal_alignment>
     </widget>
     <widget type="textupdate" version="2.0.0">
@@ -2283,10 +4064,22 @@
       <width>100</width>
       <height>20</height>
       <font>
-        <font name="Default Bold" family="Liberation Sans" style="BOLD" size="14.0">
+        <font family="Cantarell" style="BOLD" size="14.0">
       </font>
       </font>
+      <foreground_color>
+        <color red="15" green="23" blue="42">
+      </color>
+      </foreground_color>
+      <background_color>
+        <color red="245" green="247" blue="250">
+      </color>
+      </background_color>
       <horizontal_alignment>1</horizontal_alignment>
+      <border_color>
+        <color red="203" green="213" blue="225">
+      </color>
+      </border_color>
     </widget>
     <widget type="label" version="2.0.0">
       <name>Label</name>
@@ -2295,6 +4088,10 @@
       <y>175</y>
       <width>200</width>
       <height>20</height>
+      <font>
+        <font family="Cantarell" style="REGULAR" size="14.0">
+      </font>
+      </font>
       <tooltip>Execution Time - No description provided</tooltip>
     </widget>
     <widget type="textupdate" version="2.0.0">
@@ -2305,10 +4102,22 @@
       <width>205</width>
       <height>20</height>
       <font>
-        <font name="Default Bold" family="Liberation Sans" style="BOLD" size="14.0">
+        <font family="Cantarell" style="BOLD" size="14.0">
       </font>
       </font>
+      <foreground_color>
+        <color red="15" green="23" blue="42">
+      </color>
+      </foreground_color>
+      <background_color>
+        <color red="245" green="247" blue="250">
+      </color>
+      </background_color>
       <horizontal_alignment>1</horizontal_alignment>
+      <border_color>
+        <color red="203" green="213" blue="225">
+      </color>
+      </border_color>
     </widget>
     <widget type="label" version="2.0.0">
       <name>Label</name>
@@ -2317,6 +4126,10 @@
       <y>200</y>
       <width>200</width>
       <height>20</height>
+      <font>
+        <font family="Cantarell" style="REGULAR" size="14.0">
+      </font>
+      </font>
       <tooltip>Dropped Arrays - No description provided</tooltip>
     </widget>
     <widget type="textentry" version="3.0.0">
@@ -2326,6 +4139,14 @@
       <y>200</y>
       <width>100</width>
       <height>20</height>
+      <font>
+        <font family="Cantarell" style="REGULAR" size="14.0">
+      </font>
+      </font>
+      <background_color>
+        <color red="229" green="235" blue="255">
+      </color>
+      </background_color>
       <horizontal_alignment>1</horizontal_alignment>
     </widget>
     <widget type="textupdate" version="2.0.0">
@@ -2336,10 +4157,22 @@
       <width>100</width>
       <height>20</height>
       <font>
-        <font name="Default Bold" family="Liberation Sans" style="BOLD" size="14.0">
+        <font family="Cantarell" style="BOLD" size="14.0">
       </font>
       </font>
+      <foreground_color>
+        <color red="15" green="23" blue="42">
+      </color>
+      </foreground_color>
+      <background_color>
+        <color red="245" green="247" blue="250">
+      </color>
+      </background_color>
       <horizontal_alignment>1</horizontal_alignment>
+      <border_color>
+        <color red="203" green="213" blue="225">
+      </color>
+      </border_color>
     </widget>
     <widget type="label" version="2.0.0">
       <name>Label</name>
@@ -2348,6 +4181,10 @@
       <y>225</y>
       <width>200</width>
       <height>20</height>
+      <font>
+        <font family="Cantarell" style="REGULAR" size="14.0">
+      </font>
+      </font>
       <tooltip>Process Plugin - No description provided</tooltip>
     </widget>
     <widget type="slide_button" version="2.0.0">
@@ -2358,14 +4195,34 @@
       <y>225</y>
       <width>20</width>
       <height>20</height>
+      <off_color>
+        <color red="229" green="235" blue="255">
+      </color>
+      </off_color>
+      <on_color>
+        <color red="37" green="99" blue="235">
+      </color>
+      </on_color>
+      <font>
+        <font family="Cantarell" style="REGULAR" size="14.0">
+      </font>
+      </font>
     </widget>
   </widget>
-  <widget type="group" version="2.0.0">
+  <widget type="group" version="3.0.0">
     <name>ND Plugin Base Full</name>
     <x>1322</x>
     <y>402</y>
     <width>446</width>
     <height>281</height>
+    <font>
+      <font family="Cantarell" style="REGULAR" size="16.0">
+      </font>
+    </font>
+    <background_color>
+      <color red="246" green="247" blue="249">
+      </color>
+    </background_color>
     <transparent>true</transparent>
     <widget type="label" version="2.0.0">
       <name>Label</name>
@@ -2374,6 +4231,10 @@
       <y>0</y>
       <width>200</width>
       <height>20</height>
+      <font>
+        <font family="Cantarell" style="REGULAR" size="14.0">
+      </font>
+      </font>
       <tooltip>Dropped Output Arrays - No description provided</tooltip>
     </widget>
     <widget type="textentry" version="3.0.0">
@@ -2383,6 +4244,14 @@
       <y>0</y>
       <width>100</width>
       <height>20</height>
+      <font>
+        <font family="Cantarell" style="REGULAR" size="14.0">
+      </font>
+      </font>
+      <background_color>
+        <color red="229" green="235" blue="255">
+      </color>
+      </background_color>
       <horizontal_alignment>1</horizontal_alignment>
     </widget>
     <widget type="textupdate" version="2.0.0">
@@ -2393,10 +4262,22 @@
       <width>100</width>
       <height>20</height>
       <font>
-        <font name="Default Bold" family="Liberation Sans" style="BOLD" size="14.0">
+        <font family="Cantarell" style="BOLD" size="14.0">
       </font>
       </font>
+      <foreground_color>
+        <color red="15" green="23" blue="42">
+      </color>
+      </foreground_color>
+      <background_color>
+        <color red="245" green="247" blue="250">
+      </color>
+      </background_color>
       <horizontal_alignment>1</horizontal_alignment>
+      <border_color>
+        <color red="203" green="213" blue="225">
+      </color>
+      </border_color>
     </widget>
     <widget type="label" version="2.0.0">
       <name>Label</name>
@@ -2405,6 +4286,10 @@
       <y>25</y>
       <width>200</width>
       <height>20</height>
+      <font>
+        <font family="Cantarell" style="REGULAR" size="14.0">
+      </font>
+      </font>
       <tooltip>Max Byte Rate - No description provided</tooltip>
     </widget>
     <widget type="textentry" version="3.0.0">
@@ -2414,6 +4299,14 @@
       <y>25</y>
       <width>100</width>
       <height>20</height>
+      <font>
+        <font family="Cantarell" style="REGULAR" size="14.0">
+      </font>
+      </font>
+      <background_color>
+        <color red="229" green="235" blue="255">
+      </color>
+      </background_color>
       <horizontal_alignment>1</horizontal_alignment>
     </widget>
     <widget type="textupdate" version="2.0.0">
@@ -2424,10 +4317,22 @@
       <width>100</width>
       <height>20</height>
       <font>
-        <font name="Default Bold" family="Liberation Sans" style="BOLD" size="14.0">
+        <font family="Cantarell" style="BOLD" size="14.0">
       </font>
       </font>
+      <foreground_color>
+        <color red="15" green="23" blue="42">
+      </color>
+      </foreground_color>
+      <background_color>
+        <color red="245" green="247" blue="250">
+      </color>
+      </background_color>
       <horizontal_alignment>1</horizontal_alignment>
+      <border_color>
+        <color red="203" green="213" blue="225">
+      </color>
+      </border_color>
     </widget>
     <widget type="label" version="2.0.0">
       <name>Label</name>
@@ -2436,6 +4341,10 @@
       <y>50</y>
       <width>200</width>
       <height>20</height>
+      <font>
+        <font family="Cantarell" style="REGULAR" size="14.0">
+      </font>
+      </font>
       <tooltip>Blocking Callbacks - No description provided</tooltip>
     </widget>
     <widget type="slide_button" version="2.0.0">
@@ -2446,6 +4355,18 @@
       <y>50</y>
       <width>20</width>
       <height>20</height>
+      <off_color>
+        <color red="229" green="235" blue="255">
+      </color>
+      </off_color>
+      <on_color>
+        <color red="37" green="99" blue="235">
+      </color>
+      </on_color>
+      <font>
+        <font family="Cantarell" style="REGULAR" size="14.0">
+      </font>
+      </font>
     </widget>
     <widget type="led" version="2.0.0">
       <name>LED</name>
@@ -2454,6 +4375,21 @@
       <y>50</y>
       <width>20</width>
       <height>20</height>
+      <off_label>&#9675;</off_label>
+      <off_color>
+        <color red="22" green="163" blue="74">
+      </color>
+      </off_color>
+      <on_label>&#9679;</on_label>
+      <on_color>
+        <color red="167" green="243" blue="208">
+      </color>
+      </on_color>
+      <font>
+        <font family="Cantarell" style="BOLD" size="12.0">
+      </font>
+      </font>
+      <square>true</square>
     </widget>
     <widget type="label" version="2.0.0">
       <name>Label</name>
@@ -2462,6 +4398,10 @@
       <y>75</y>
       <width>200</width>
       <height>20</height>
+      <font>
+        <font family="Cantarell" style="REGULAR" size="14.0">
+      </font>
+      </font>
       <tooltip>Num Threads - No description provided</tooltip>
     </widget>
     <widget type="textentry" version="3.0.0">
@@ -2471,6 +4411,14 @@
       <y>75</y>
       <width>100</width>
       <height>20</height>
+      <font>
+        <font family="Cantarell" style="REGULAR" size="14.0">
+      </font>
+      </font>
+      <background_color>
+        <color red="229" green="235" blue="255">
+      </color>
+      </background_color>
       <horizontal_alignment>1</horizontal_alignment>
     </widget>
     <widget type="textupdate" version="2.0.0">
@@ -2481,10 +4429,22 @@
       <width>100</width>
       <height>20</height>
       <font>
-        <font name="Default Bold" family="Liberation Sans" style="BOLD" size="14.0">
+        <font family="Cantarell" style="BOLD" size="14.0">
       </font>
       </font>
+      <foreground_color>
+        <color red="15" green="23" blue="42">
+      </color>
+      </foreground_color>
+      <background_color>
+        <color red="245" green="247" blue="250">
+      </color>
+      </background_color>
       <horizontal_alignment>1</horizontal_alignment>
+      <border_color>
+        <color red="203" green="213" blue="225">
+      </color>
+      </border_color>
     </widget>
     <widget type="label" version="2.0.0">
       <name>Label</name>
@@ -2493,6 +4453,10 @@
       <y>100</y>
       <width>200</width>
       <height>20</height>
+      <font>
+        <font family="Cantarell" style="REGULAR" size="14.0">
+      </font>
+      </font>
       <tooltip>Max Threads - No description provided</tooltip>
     </widget>
     <widget type="textupdate" version="2.0.0">
@@ -2503,10 +4467,22 @@
       <width>205</width>
       <height>20</height>
       <font>
-        <font name="Default Bold" family="Liberation Sans" style="BOLD" size="14.0">
+        <font family="Cantarell" style="BOLD" size="14.0">
       </font>
       </font>
+      <foreground_color>
+        <color red="15" green="23" blue="42">
+      </color>
+      </foreground_color>
+      <background_color>
+        <color red="245" green="247" blue="250">
+      </color>
+      </background_color>
       <horizontal_alignment>1</horizontal_alignment>
+      <border_color>
+        <color red="203" green="213" blue="225">
+      </color>
+      </border_color>
     </widget>
     <widget type="label" version="2.0.0">
       <name>Label</name>
@@ -2515,6 +4491,10 @@
       <y>125</y>
       <width>200</width>
       <height>20</height>
+      <font>
+        <font family="Cantarell" style="REGULAR" size="14.0">
+      </font>
+      </font>
       <tooltip>Sort Mode - No description provided</tooltip>
     </widget>
     <widget type="combo" version="2.0.0">
@@ -2524,6 +4504,19 @@
       <y>125</y>
       <width>100</width>
       <height>20</height>
+      <font>
+        <font family="Cantarell" style="REGULAR" size="14.0">
+      </font>
+      </font>
+      <background_color>
+        <color red="229" green="235" blue="255">
+      </color>
+      </background_color>
+      <items>
+        <item>item 0</item>
+        <item>Item 1</item>
+        <item>Item 2</item>
+      </items>
     </widget>
     <widget type="textupdate" version="2.0.0">
       <name>TextUpdate</name>
@@ -2533,10 +4526,22 @@
       <width>100</width>
       <height>20</height>
       <font>
-        <font name="Default Bold" family="Liberation Sans" style="BOLD" size="14.0">
+        <font family="Cantarell" style="BOLD" size="14.0">
       </font>
       </font>
+      <foreground_color>
+        <color red="15" green="23" blue="42">
+      </color>
+      </foreground_color>
+      <background_color>
+        <color red="245" green="247" blue="250">
+      </color>
+      </background_color>
       <horizontal_alignment>1</horizontal_alignment>
+      <border_color>
+        <color red="203" green="213" blue="225">
+      </color>
+      </border_color>
     </widget>
     <widget type="label" version="2.0.0">
       <name>Label</name>
@@ -2545,6 +4550,10 @@
       <y>150</y>
       <width>200</width>
       <height>20</height>
+      <font>
+        <font family="Cantarell" style="REGULAR" size="14.0">
+      </font>
+      </font>
       <tooltip>Sort Time - No description provided</tooltip>
     </widget>
     <widget type="textentry" version="3.0.0">
@@ -2554,6 +4563,14 @@
       <y>150</y>
       <width>100</width>
       <height>20</height>
+      <font>
+        <font family="Cantarell" style="REGULAR" size="14.0">
+      </font>
+      </font>
+      <background_color>
+        <color red="229" green="235" blue="255">
+      </color>
+      </background_color>
       <horizontal_alignment>1</horizontal_alignment>
     </widget>
     <widget type="textupdate" version="2.0.0">
@@ -2564,10 +4581,22 @@
       <width>100</width>
       <height>20</height>
       <font>
-        <font name="Default Bold" family="Liberation Sans" style="BOLD" size="14.0">
+        <font family="Cantarell" style="BOLD" size="14.0">
       </font>
       </font>
+      <foreground_color>
+        <color red="15" green="23" blue="42">
+      </color>
+      </foreground_color>
+      <background_color>
+        <color red="245" green="247" blue="250">
+      </color>
+      </background_color>
       <horizontal_alignment>1</horizontal_alignment>
+      <border_color>
+        <color red="203" green="213" blue="225">
+      </color>
+      </border_color>
     </widget>
     <widget type="label" version="2.0.0">
       <name>Label</name>
@@ -2576,6 +4605,10 @@
       <y>175</y>
       <width>200</width>
       <height>20</height>
+      <font>
+        <font family="Cantarell" style="REGULAR" size="14.0">
+      </font>
+      </font>
       <tooltip>Sort Free - No description provided</tooltip>
     </widget>
     <widget type="textupdate" version="2.0.0">
@@ -2586,10 +4619,22 @@
       <width>205</width>
       <height>20</height>
       <font>
-        <font name="Default Bold" family="Liberation Sans" style="BOLD" size="14.0">
+        <font family="Cantarell" style="BOLD" size="14.0">
       </font>
       </font>
+      <foreground_color>
+        <color red="15" green="23" blue="42">
+      </color>
+      </foreground_color>
+      <background_color>
+        <color red="245" green="247" blue="250">
+      </color>
+      </background_color>
       <horizontal_alignment>1</horizontal_alignment>
+      <border_color>
+        <color red="203" green="213" blue="225">
+      </color>
+      </border_color>
     </widget>
     <widget type="label" version="2.0.0">
       <name>Label</name>
@@ -2598,6 +4643,10 @@
       <y>200</y>
       <width>200</width>
       <height>20</height>
+      <font>
+        <font family="Cantarell" style="REGULAR" size="14.0">
+      </font>
+      </font>
       <tooltip>Sort Size - No description provided</tooltip>
     </widget>
     <widget type="textentry" version="3.0.0">
@@ -2607,6 +4656,14 @@
       <y>200</y>
       <width>100</width>
       <height>20</height>
+      <font>
+        <font family="Cantarell" style="REGULAR" size="14.0">
+      </font>
+      </font>
+      <background_color>
+        <color red="229" green="235" blue="255">
+      </color>
+      </background_color>
       <horizontal_alignment>1</horizontal_alignment>
     </widget>
     <widget type="textupdate" version="2.0.0">
@@ -2617,10 +4674,22 @@
       <width>100</width>
       <height>20</height>
       <font>
-        <font name="Default Bold" family="Liberation Sans" style="BOLD" size="14.0">
+        <font family="Cantarell" style="BOLD" size="14.0">
       </font>
       </font>
+      <foreground_color>
+        <color red="15" green="23" blue="42">
+      </color>
+      </foreground_color>
+      <background_color>
+        <color red="245" green="247" blue="250">
+      </color>
+      </background_color>
       <horizontal_alignment>1</horizontal_alignment>
+      <border_color>
+        <color red="203" green="213" blue="225">
+      </color>
+      </border_color>
     </widget>
     <widget type="label" version="2.0.0">
       <name>Label</name>
@@ -2629,6 +4698,10 @@
       <y>225</y>
       <width>200</width>
       <height>20</height>
+      <font>
+        <font family="Cantarell" style="REGULAR" size="14.0">
+      </font>
+      </font>
       <tooltip>Disordered Arrays - No description provided</tooltip>
     </widget>
     <widget type="textentry" version="3.0.0">
@@ -2638,6 +4711,14 @@
       <y>225</y>
       <width>100</width>
       <height>20</height>
+      <font>
+        <font family="Cantarell" style="REGULAR" size="14.0">
+      </font>
+      </font>
+      <background_color>
+        <color red="229" green="235" blue="255">
+      </color>
+      </background_color>
       <horizontal_alignment>1</horizontal_alignment>
     </widget>
     <widget type="textupdate" version="2.0.0">
@@ -2648,18 +4729,38 @@
       <width>100</width>
       <height>20</height>
       <font>
-        <font name="Default Bold" family="Liberation Sans" style="BOLD" size="14.0">
+        <font family="Cantarell" style="BOLD" size="14.0">
       </font>
       </font>
+      <foreground_color>
+        <color red="15" green="23" blue="42">
+      </color>
+      </foreground_color>
+      <background_color>
+        <color red="245" green="247" blue="250">
+      </color>
+      </background_color>
       <horizontal_alignment>1</horizontal_alignment>
+      <border_color>
+        <color red="203" green="213" blue="225">
+      </color>
+      </border_color>
     </widget>
   </widget>
-  <widget type="group" version="2.0.0">
+  <widget type="group" version="3.0.0">
     <name>AD Setup</name>
     <x>1322</x>
     <y>688</y>
     <width>446</width>
     <height>231</height>
+    <font>
+      <font family="Cantarell" style="REGULAR" size="16.0">
+      </font>
+    </font>
+    <background_color>
+      <color red="246" green="247" blue="249">
+      </color>
+    </background_color>
     <transparent>true</transparent>
     <widget type="label" version="2.0.0">
       <name>Label</name>
@@ -2668,6 +4769,10 @@
       <y>0</y>
       <width>200</width>
       <height>20</height>
+      <font>
+        <font family="Cantarell" style="REGULAR" size="14.0">
+      </font>
+      </font>
       <tooltip>Port Name - No description provided</tooltip>
     </widget>
     <widget type="textupdate" version="2.0.0">
@@ -2678,10 +4783,22 @@
       <width>205</width>
       <height>20</height>
       <font>
-        <font name="Default Bold" family="Liberation Sans" style="BOLD" size="14.0">
+        <font family="Cantarell" style="BOLD" size="14.0">
       </font>
       </font>
+      <foreground_color>
+        <color red="15" green="23" blue="42">
+      </color>
+      </foreground_color>
+      <background_color>
+        <color red="245" green="247" blue="250">
+      </color>
+      </background_color>
       <horizontal_alignment>1</horizontal_alignment>
+      <border_color>
+        <color red="203" green="213" blue="225">
+      </color>
+      </border_color>
     </widget>
     <widget type="label" version="2.0.0">
       <name>Label</name>
@@ -2690,6 +4807,10 @@
       <y>25</y>
       <width>200</width>
       <height>20</height>
+      <font>
+        <font family="Cantarell" style="REGULAR" size="14.0">
+      </font>
+      </font>
       <tooltip>Manufacturer - No description provided</tooltip>
     </widget>
     <widget type="textupdate" version="2.0.0">
@@ -2700,10 +4821,22 @@
       <width>205</width>
       <height>20</height>
       <font>
-        <font name="Default Bold" family="Liberation Sans" style="BOLD" size="14.0">
+        <font family="Cantarell" style="BOLD" size="14.0">
       </font>
       </font>
+      <foreground_color>
+        <color red="15" green="23" blue="42">
+      </color>
+      </foreground_color>
+      <background_color>
+        <color red="245" green="247" blue="250">
+      </color>
+      </background_color>
       <horizontal_alignment>1</horizontal_alignment>
+      <border_color>
+        <color red="203" green="213" blue="225">
+      </color>
+      </border_color>
     </widget>
     <widget type="label" version="2.0.0">
       <name>Label</name>
@@ -2712,6 +4845,10 @@
       <y>50</y>
       <width>200</width>
       <height>20</height>
+      <font>
+        <font family="Cantarell" style="REGULAR" size="14.0">
+      </font>
+      </font>
       <tooltip>Model - No description provided</tooltip>
     </widget>
     <widget type="textupdate" version="2.0.0">
@@ -2722,10 +4859,22 @@
       <width>205</width>
       <height>20</height>
       <font>
-        <font name="Default Bold" family="Liberation Sans" style="BOLD" size="14.0">
+        <font family="Cantarell" style="BOLD" size="14.0">
       </font>
       </font>
+      <foreground_color>
+        <color red="15" green="23" blue="42">
+      </color>
+      </foreground_color>
+      <background_color>
+        <color red="245" green="247" blue="250">
+      </color>
+      </background_color>
       <horizontal_alignment>1</horizontal_alignment>
+      <border_color>
+        <color red="203" green="213" blue="225">
+      </color>
+      </border_color>
     </widget>
     <widget type="label" version="2.0.0">
       <name>Label</name>
@@ -2734,6 +4883,10 @@
       <y>75</y>
       <width>200</width>
       <height>20</height>
+      <font>
+        <font family="Cantarell" style="REGULAR" size="14.0">
+      </font>
+      </font>
       <tooltip>Serial Number - No description provided</tooltip>
     </widget>
     <widget type="textupdate" version="2.0.0">
@@ -2744,10 +4897,22 @@
       <width>205</width>
       <height>20</height>
       <font>
-        <font name="Default Bold" family="Liberation Sans" style="BOLD" size="14.0">
+        <font family="Cantarell" style="BOLD" size="14.0">
       </font>
       </font>
+      <foreground_color>
+        <color red="15" green="23" blue="42">
+      </color>
+      </foreground_color>
+      <background_color>
+        <color red="245" green="247" blue="250">
+      </color>
+      </background_color>
       <horizontal_alignment>1</horizontal_alignment>
+      <border_color>
+        <color red="203" green="213" blue="225">
+      </color>
+      </border_color>
     </widget>
     <widget type="label" version="2.0.0">
       <name>Label</name>
@@ -2756,6 +4921,10 @@
       <y>100</y>
       <width>200</width>
       <height>20</height>
+      <font>
+        <font family="Cantarell" style="REGULAR" size="14.0">
+      </font>
+      </font>
       <tooltip>Firmware Version - No description provided</tooltip>
     </widget>
     <widget type="textupdate" version="2.0.0">
@@ -2766,10 +4935,22 @@
       <width>205</width>
       <height>20</height>
       <font>
-        <font name="Default Bold" family="Liberation Sans" style="BOLD" size="14.0">
+        <font family="Cantarell" style="BOLD" size="14.0">
       </font>
       </font>
+      <foreground_color>
+        <color red="15" green="23" blue="42">
+      </color>
+      </foreground_color>
+      <background_color>
+        <color red="245" green="247" blue="250">
+      </color>
+      </background_color>
       <horizontal_alignment>1</horizontal_alignment>
+      <border_color>
+        <color red="203" green="213" blue="225">
+      </color>
+      </border_color>
     </widget>
     <widget type="label" version="2.0.0">
       <name>Label</name>
@@ -2778,6 +4959,10 @@
       <y>125</y>
       <width>200</width>
       <height>20</height>
+      <font>
+        <font family="Cantarell" style="REGULAR" size="14.0">
+      </font>
+      </font>
       <tooltip>SDK Version - No description provided</tooltip>
     </widget>
     <widget type="textupdate" version="2.0.0">
@@ -2788,10 +4973,22 @@
       <width>205</width>
       <height>20</height>
       <font>
-        <font name="Default Bold" family="Liberation Sans" style="BOLD" size="14.0">
+        <font family="Cantarell" style="BOLD" size="14.0">
       </font>
       </font>
+      <foreground_color>
+        <color red="15" green="23" blue="42">
+      </color>
+      </foreground_color>
+      <background_color>
+        <color red="245" green="247" blue="250">
+      </color>
+      </background_color>
       <horizontal_alignment>1</horizontal_alignment>
+      <border_color>
+        <color red="203" green="213" blue="225">
+      </color>
+      </border_color>
     </widget>
     <widget type="label" version="2.0.0">
       <name>Label</name>
@@ -2800,6 +4997,10 @@
       <y>150</y>
       <width>200</width>
       <height>20</height>
+      <font>
+        <font family="Cantarell" style="REGULAR" size="14.0">
+      </font>
+      </font>
       <tooltip>Driver Version - No description provided</tooltip>
     </widget>
     <widget type="textupdate" version="2.0.0">
@@ -2810,10 +5011,22 @@
       <width>205</width>
       <height>20</height>
       <font>
-        <font name="Default Bold" family="Liberation Sans" style="BOLD" size="14.0">
+        <font family="Cantarell" style="BOLD" size="14.0">
       </font>
       </font>
+      <foreground_color>
+        <color red="15" green="23" blue="42">
+      </color>
+      </foreground_color>
+      <background_color>
+        <color red="245" green="247" blue="250">
+      </color>
+      </background_color>
       <horizontal_alignment>1</horizontal_alignment>
+      <border_color>
+        <color red="203" green="213" blue="225">
+      </color>
+      </border_color>
     </widget>
     <widget type="label" version="2.0.0">
       <name>Label</name>
@@ -2822,6 +5035,10 @@
       <y>175</y>
       <width>200</width>
       <height>20</height>
+      <font>
+        <font family="Cantarell" style="REGULAR" size="14.0">
+      </font>
+      </font>
       <tooltip>AD Core Version - No description provided</tooltip>
     </widget>
     <widget type="textupdate" version="2.0.0">
@@ -2832,18 +5049,38 @@
       <width>205</width>
       <height>20</height>
       <font>
-        <font name="Default Bold" family="Liberation Sans" style="BOLD" size="14.0">
+        <font family="Cantarell" style="BOLD" size="14.0">
       </font>
       </font>
+      <foreground_color>
+        <color red="15" green="23" blue="42">
+      </color>
+      </foreground_color>
+      <background_color>
+        <color red="245" green="247" blue="250">
+      </color>
+      </background_color>
       <horizontal_alignment>1</horizontal_alignment>
+      <border_color>
+        <color red="203" green="213" blue="225">
+      </color>
+      </border_color>
     </widget>
   </widget>
-  <widget type="group" version="2.0.0">
+  <widget type="group" version="3.0.0">
     <name>AD Collect</name>
     <x>1773</x>
     <y>30</y>
     <width>446</width>
     <height>156</height>
+    <font>
+      <font family="Cantarell" style="REGULAR" size="16.0">
+      </font>
+    </font>
+    <background_color>
+      <color red="246" green="247" blue="249">
+      </color>
+    </background_color>
     <transparent>true</transparent>
     <widget type="label" version="2.0.0">
       <name>Label</name>
@@ -2852,6 +5089,10 @@
       <y>0</y>
       <width>200</width>
       <height>20</height>
+      <font>
+        <font family="Cantarell" style="REGULAR" size="14.0">
+      </font>
+      </font>
       <tooltip>Num Queued Arrays - No description provided</tooltip>
     </widget>
     <widget type="textupdate" version="2.0.0">
@@ -2862,10 +5103,22 @@
       <width>205</width>
       <height>20</height>
       <font>
-        <font name="Default Bold" family="Liberation Sans" style="BOLD" size="14.0">
+        <font family="Cantarell" style="BOLD" size="14.0">
       </font>
       </font>
+      <foreground_color>
+        <color red="15" green="23" blue="42">
+      </color>
+      </foreground_color>
+      <background_color>
+        <color red="245" green="247" blue="250">
+      </color>
+      </background_color>
       <horizontal_alignment>1</horizontal_alignment>
+      <border_color>
+        <color red="203" green="213" blue="225">
+      </color>
+      </border_color>
     </widget>
     <widget type="label" version="2.0.0">
       <name>Label</name>
@@ -2874,6 +5127,10 @@
       <y>25</y>
       <width>200</width>
       <height>20</height>
+      <font>
+        <font family="Cantarell" style="REGULAR" size="14.0">
+      </font>
+      </font>
       <tooltip>Wait For Plugins - No description provided</tooltip>
     </widget>
     <widget type="slide_button" version="2.0.0">
@@ -2884,6 +5141,18 @@
       <y>25</y>
       <width>20</width>
       <height>20</height>
+      <off_color>
+        <color red="229" green="235" blue="255">
+      </color>
+      </off_color>
+      <on_color>
+        <color red="37" green="99" blue="235">
+      </color>
+      </on_color>
+      <font>
+        <font family="Cantarell" style="REGULAR" size="14.0">
+      </font>
+      </font>
     </widget>
     <widget type="label" version="2.0.0">
       <name>Label</name>
@@ -2892,6 +5161,10 @@
       <y>50</y>
       <width>200</width>
       <height>20</height>
+      <font>
+        <font family="Cantarell" style="REGULAR" size="14.0">
+      </font>
+      </font>
       <tooltip>Acquire - No description provided</tooltip>
     </widget>
     <widget type="slide_button" version="2.0.0">
@@ -2902,6 +5175,18 @@
       <y>50</y>
       <width>20</width>
       <height>20</height>
+      <off_color>
+        <color red="229" green="235" blue="255">
+      </color>
+      </off_color>
+      <on_color>
+        <color red="37" green="99" blue="235">
+      </color>
+      </on_color>
+      <font>
+        <font family="Cantarell" style="REGULAR" size="14.0">
+      </font>
+      </font>
     </widget>
     <widget type="led" version="2.0.0">
       <name>LED</name>
@@ -2910,6 +5195,21 @@
       <y>50</y>
       <width>20</width>
       <height>20</height>
+      <off_label>&#9675;</off_label>
+      <off_color>
+        <color red="22" green="163" blue="74">
+      </color>
+      </off_color>
+      <on_label>&#9679;</on_label>
+      <on_color>
+        <color red="167" green="243" blue="208">
+      </color>
+      </on_color>
+      <font>
+        <font family="Cantarell" style="BOLD" size="12.0">
+      </font>
+      </font>
+      <square>true</square>
     </widget>
     <widget type="label" version="2.0.0">
       <name>Label</name>
@@ -2918,6 +5218,10 @@
       <y>75</y>
       <width>200</width>
       <height>20</height>
+      <font>
+        <font family="Cantarell" style="REGULAR" size="14.0">
+      </font>
+      </font>
       <tooltip>Array Counter - No description provided</tooltip>
     </widget>
     <widget type="textentry" version="3.0.0">
@@ -2927,6 +5231,14 @@
       <y>75</y>
       <width>100</width>
       <height>20</height>
+      <font>
+        <font family="Cantarell" style="REGULAR" size="14.0">
+      </font>
+      </font>
+      <background_color>
+        <color red="229" green="235" blue="255">
+      </color>
+      </background_color>
       <horizontal_alignment>1</horizontal_alignment>
     </widget>
     <widget type="textupdate" version="2.0.0">
@@ -2937,10 +5249,22 @@
       <width>100</width>
       <height>20</height>
       <font>
-        <font name="Default Bold" family="Liberation Sans" style="BOLD" size="14.0">
+        <font family="Cantarell" style="BOLD" size="14.0">
       </font>
       </font>
+      <foreground_color>
+        <color red="15" green="23" blue="42">
+      </color>
+      </foreground_color>
+      <background_color>
+        <color red="245" green="247" blue="250">
+      </color>
+      </background_color>
       <horizontal_alignment>1</horizontal_alignment>
+      <border_color>
+        <color red="203" green="213" blue="225">
+      </color>
+      </border_color>
     </widget>
     <widget type="label" version="2.0.0">
       <name>Label</name>
@@ -2949,6 +5273,10 @@
       <y>100</y>
       <width>200</width>
       <height>20</height>
+      <font>
+        <font family="Cantarell" style="REGULAR" size="14.0">
+      </font>
+      </font>
       <tooltip>Array Callbacks - No description provided</tooltip>
     </widget>
     <widget type="slide_button" version="2.0.0">
@@ -2959,6 +5287,18 @@
       <y>100</y>
       <width>20</width>
       <height>20</height>
+      <off_color>
+        <color red="229" green="235" blue="255">
+      </color>
+      </off_color>
+      <on_color>
+        <color red="37" green="99" blue="235">
+      </color>
+      </on_color>
+      <font>
+        <font family="Cantarell" style="REGULAR" size="14.0">
+      </font>
+      </font>
     </widget>
     <widget type="led" version="2.0.0">
       <name>LED</name>
@@ -2967,14 +5307,37 @@
       <y>100</y>
       <width>20</width>
       <height>20</height>
+      <off_label>&#9675;</off_label>
+      <off_color>
+        <color red="22" green="163" blue="74">
+      </color>
+      </off_color>
+      <on_label>&#9679;</on_label>
+      <on_color>
+        <color red="167" green="243" blue="208">
+      </color>
+      </on_color>
+      <font>
+        <font family="Cantarell" style="BOLD" size="12.0">
+      </font>
+      </font>
+      <square>true</square>
     </widget>
   </widget>
-  <widget type="group" version="2.0.0">
+  <widget type="group" version="3.0.0">
     <name>AD Attr File</name>
     <x>1773</x>
     <y>191</y>
     <width>446</width>
     <height>106</height>
+    <font>
+      <font family="Cantarell" style="REGULAR" size="16.0">
+      </font>
+    </font>
+    <background_color>
+      <color red="246" green="247" blue="249">
+      </color>
+    </background_color>
     <transparent>true</transparent>
     <widget type="label" version="2.0.0">
       <name>Label</name>
@@ -2983,6 +5346,10 @@
       <y>0</y>
       <width>200</width>
       <height>20</height>
+      <font>
+        <font family="Cantarell" style="REGULAR" size="14.0">
+      </font>
+      </font>
       <tooltip>ND Attributes File - No description provided</tooltip>
     </widget>
     <widget type="textentry" version="3.0.0">
@@ -2992,6 +5359,14 @@
       <y>0</y>
       <width>205</width>
       <height>20</height>
+      <font>
+        <font family="Cantarell" style="REGULAR" size="14.0">
+      </font>
+      </font>
+      <background_color>
+        <color red="229" green="235" blue="255">
+      </color>
+      </background_color>
       <horizontal_alignment>1</horizontal_alignment>
       <format>6</format>
     </widget>
@@ -3002,6 +5377,10 @@
       <y>25</y>
       <width>200</width>
       <height>20</height>
+      <font>
+        <font family="Cantarell" style="REGULAR" size="14.0">
+      </font>
+      </font>
       <tooltip>ND Attributes Macros - No description provided</tooltip>
     </widget>
     <widget type="textentry" version="3.0.0">
@@ -3011,6 +5390,14 @@
       <y>25</y>
       <width>205</width>
       <height>20</height>
+      <font>
+        <font family="Cantarell" style="REGULAR" size="14.0">
+      </font>
+      </font>
+      <background_color>
+        <color red="229" green="235" blue="255">
+      </color>
+      </background_color>
       <horizontal_alignment>1</horizontal_alignment>
       <format>6</format>
     </widget>
@@ -3021,6 +5408,10 @@
       <y>50</y>
       <width>200</width>
       <height>20</height>
+      <font>
+        <font family="Cantarell" style="REGULAR" size="14.0">
+      </font>
+      </font>
       <tooltip>ND Attributes Status - No description provided</tooltip>
     </widget>
     <widget type="textupdate" version="2.0.0">
@@ -3031,18 +5422,38 @@
       <width>205</width>
       <height>20</height>
       <font>
-        <font name="Default Bold" family="Liberation Sans" style="BOLD" size="14.0">
+        <font family="Cantarell" style="BOLD" size="14.0">
       </font>
       </font>
+      <foreground_color>
+        <color red="15" green="23" blue="42">
+      </color>
+      </foreground_color>
+      <background_color>
+        <color red="245" green="247" blue="250">
+      </color>
+      </background_color>
       <horizontal_alignment>1</horizontal_alignment>
+      <border_color>
+        <color red="203" green="213" blue="225">
+      </color>
+      </border_color>
     </widget>
   </widget>
-  <widget type="group" version="2.0.0">
+  <widget type="group" version="3.0.0">
     <name>asynNDArrayDriver Ungrouped</name>
     <x>1773</x>
     <y>302</y>
     <width>446</width>
     <height>431</height>
+    <font>
+      <font family="Cantarell" style="REGULAR" size="16.0">
+      </font>
+    </font>
+    <background_color>
+      <color red="246" green="247" blue="249">
+      </color>
+    </background_color>
     <transparent>true</transparent>
     <widget type="label" version="2.0.0">
       <name>Label</name>
@@ -3051,6 +5462,10 @@
       <y>0</y>
       <width>200</width>
       <height>20</height>
+      <font>
+        <font family="Cantarell" style="REGULAR" size="14.0">
+      </font>
+      </font>
       <tooltip>Empty Free List - No description provided</tooltip>
     </widget>
     <widget type="slide_button" version="2.0.0">
@@ -3061,6 +5476,18 @@
       <y>0</y>
       <width>20</width>
       <height>20</height>
+      <off_color>
+        <color red="229" green="235" blue="255">
+      </color>
+      </off_color>
+      <on_color>
+        <color red="37" green="99" blue="235">
+      </color>
+      </on_color>
+      <font>
+        <font family="Cantarell" style="REGULAR" size="14.0">
+      </font>
+      </font>
     </widget>
     <widget type="label" version="2.0.0">
       <name>Label</name>
@@ -3069,6 +5496,10 @@
       <y>25</y>
       <width>200</width>
       <height>20</height>
+      <font>
+        <font family="Cantarell" style="REGULAR" size="14.0">
+      </font>
+      </font>
       <tooltip>Acquire Busy CB - No description provided</tooltip>
     </widget>
     <widget type="led" version="2.0.0">
@@ -3078,6 +5509,21 @@
       <y>25</y>
       <width>20</width>
       <height>20</height>
+      <off_label>&#9675;</off_label>
+      <off_color>
+        <color red="22" green="163" blue="74">
+      </color>
+      </off_color>
+      <on_label>&#9679;</on_label>
+      <on_color>
+        <color red="167" green="243" blue="208">
+      </color>
+      </on_color>
+      <font>
+        <font family="Cantarell" style="BOLD" size="12.0">
+      </font>
+      </font>
+      <square>true</square>
     </widget>
     <widget type="label" version="2.0.0">
       <name>Label</name>
@@ -3086,6 +5532,10 @@
       <y>50</y>
       <width>200</width>
       <height>20</height>
+      <font>
+        <font family="Cantarell" style="REGULAR" size="14.0">
+      </font>
+      </font>
       <tooltip>Bayer Pattern - No description provided</tooltip>
     </widget>
     <widget type="textupdate" version="2.0.0">
@@ -3096,10 +5546,22 @@
       <width>205</width>
       <height>20</height>
       <font>
-        <font name="Default Bold" family="Liberation Sans" style="BOLD" size="14.0">
+        <font family="Cantarell" style="BOLD" size="14.0">
       </font>
       </font>
+      <foreground_color>
+        <color red="15" green="23" blue="42">
+      </color>
+      </foreground_color>
+      <background_color>
+        <color red="245" green="247" blue="250">
+      </color>
+      </background_color>
       <horizontal_alignment>1</horizontal_alignment>
+      <border_color>
+        <color red="203" green="213" blue="225">
+      </color>
+      </border_color>
     </widget>
     <widget type="label" version="2.0.0">
       <name>Label</name>
@@ -3108,6 +5570,10 @@
       <y>75</y>
       <width>200</width>
       <height>20</height>
+      <font>
+        <font family="Cantarell" style="REGULAR" size="14.0">
+      </font>
+      </font>
       <tooltip>Array Size Z - No description provided</tooltip>
     </widget>
     <widget type="textupdate" version="2.0.0">
@@ -3118,10 +5584,22 @@
       <width>205</width>
       <height>20</height>
       <font>
-        <font name="Default Bold" family="Liberation Sans" style="BOLD" size="14.0">
+        <font family="Cantarell" style="BOLD" size="14.0">
       </font>
       </font>
+      <foreground_color>
+        <color red="15" green="23" blue="42">
+      </color>
+      </foreground_color>
+      <background_color>
+        <color red="245" green="247" blue="250">
+      </color>
+      </background_color>
       <horizontal_alignment>1</horizontal_alignment>
+      <border_color>
+        <color red="203" green="213" blue="225">
+      </color>
+      </border_color>
     </widget>
     <widget type="label" version="2.0.0">
       <name>Label</name>
@@ -3130,6 +5608,10 @@
       <y>100</y>
       <width>200</width>
       <height>20</height>
+      <font>
+        <font family="Cantarell" style="REGULAR" size="14.0">
+      </font>
+      </font>
       <tooltip>Codec - No description provided</tooltip>
     </widget>
     <widget type="textupdate" version="2.0.0">
@@ -3140,10 +5622,22 @@
       <width>205</width>
       <height>20</height>
       <font>
-        <font name="Default Bold" family="Liberation Sans" style="BOLD" size="14.0">
+        <font family="Cantarell" style="BOLD" size="14.0">
       </font>
       </font>
+      <foreground_color>
+        <color red="15" green="23" blue="42">
+      </color>
+      </foreground_color>
+      <background_color>
+        <color red="245" green="247" blue="250">
+      </color>
+      </background_color>
       <horizontal_alignment>1</horizontal_alignment>
+      <border_color>
+        <color red="203" green="213" blue="225">
+      </color>
+      </border_color>
     </widget>
     <widget type="label" version="2.0.0">
       <name>Label</name>
@@ -3152,6 +5646,10 @@
       <y>125</y>
       <width>200</width>
       <height>20</height>
+      <font>
+        <font family="Cantarell" style="REGULAR" size="14.0">
+      </font>
+      </font>
       <tooltip>Compressed Size - No description provided</tooltip>
     </widget>
     <widget type="textupdate" version="2.0.0">
@@ -3162,10 +5660,22 @@
       <width>205</width>
       <height>20</height>
       <font>
-        <font name="Default Bold" family="Liberation Sans" style="BOLD" size="14.0">
+        <font family="Cantarell" style="BOLD" size="14.0">
       </font>
       </font>
+      <foreground_color>
+        <color red="15" green="23" blue="42">
+      </color>
+      </foreground_color>
+      <background_color>
+        <color red="245" green="247" blue="250">
+      </color>
+      </background_color>
       <horizontal_alignment>1</horizontal_alignment>
+      <border_color>
+        <color red="203" green="213" blue="225">
+      </color>
+      </border_color>
     </widget>
     <widget type="label" version="2.0.0">
       <name>Label</name>
@@ -3174,6 +5684,10 @@
       <y>150</y>
       <width>200</width>
       <height>20</height>
+      <font>
+        <font family="Cantarell" style="REGULAR" size="14.0">
+      </font>
+      </font>
       <tooltip>Unique Id - No description provided</tooltip>
     </widget>
     <widget type="textupdate" version="2.0.0">
@@ -3184,10 +5698,22 @@
       <width>205</width>
       <height>20</height>
       <font>
-        <font name="Default Bold" family="Liberation Sans" style="BOLD" size="14.0">
+        <font family="Cantarell" style="BOLD" size="14.0">
       </font>
       </font>
+      <foreground_color>
+        <color red="15" green="23" blue="42">
+      </color>
+      </foreground_color>
+      <background_color>
+        <color red="245" green="247" blue="250">
+      </color>
+      </background_color>
       <horizontal_alignment>1</horizontal_alignment>
+      <border_color>
+        <color red="203" green="213" blue="225">
+      </color>
+      </border_color>
     </widget>
     <widget type="label" version="2.0.0">
       <name>Label</name>
@@ -3196,6 +5722,10 @@
       <y>175</y>
       <width>200</width>
       <height>20</height>
+      <font>
+        <font family="Cantarell" style="REGULAR" size="14.0">
+      </font>
+      </font>
       <tooltip>Time Stamp - No description provided</tooltip>
     </widget>
     <widget type="textupdate" version="2.0.0">
@@ -3206,10 +5736,22 @@
       <width>205</width>
       <height>20</height>
       <font>
-        <font name="Default Bold" family="Liberation Sans" style="BOLD" size="14.0">
+        <font family="Cantarell" style="BOLD" size="14.0">
       </font>
       </font>
+      <foreground_color>
+        <color red="15" green="23" blue="42">
+      </color>
+      </foreground_color>
+      <background_color>
+        <color red="245" green="247" blue="250">
+      </color>
+      </background_color>
       <horizontal_alignment>1</horizontal_alignment>
+      <border_color>
+        <color red="203" green="213" blue="225">
+      </color>
+      </border_color>
     </widget>
     <widget type="label" version="2.0.0">
       <name>Label</name>
@@ -3218,6 +5760,10 @@
       <y>200</y>
       <width>200</width>
       <height>20</height>
+      <font>
+        <font family="Cantarell" style="REGULAR" size="14.0">
+      </font>
+      </font>
       <tooltip>Epics TS Sec - No description provided</tooltip>
     </widget>
     <widget type="textupdate" version="2.0.0">
@@ -3228,10 +5774,22 @@
       <width>205</width>
       <height>20</height>
       <font>
-        <font name="Default Bold" family="Liberation Sans" style="BOLD" size="14.0">
+        <font family="Cantarell" style="BOLD" size="14.0">
       </font>
       </font>
+      <foreground_color>
+        <color red="15" green="23" blue="42">
+      </color>
+      </foreground_color>
+      <background_color>
+        <color red="245" green="247" blue="250">
+      </color>
+      </background_color>
       <horizontal_alignment>1</horizontal_alignment>
+      <border_color>
+        <color red="203" green="213" blue="225">
+      </color>
+      </border_color>
     </widget>
     <widget type="label" version="2.0.0">
       <name>Label</name>
@@ -3240,6 +5798,10 @@
       <y>225</y>
       <width>200</width>
       <height>20</height>
+      <font>
+        <font family="Cantarell" style="REGULAR" size="14.0">
+      </font>
+      </font>
       <tooltip>Epics TS Nsec - No description provided</tooltip>
     </widget>
     <widget type="textupdate" version="2.0.0">
@@ -3250,10 +5812,22 @@
       <width>205</width>
       <height>20</height>
       <font>
-        <font name="Default Bold" family="Liberation Sans" style="BOLD" size="14.0">
+        <font family="Cantarell" style="BOLD" size="14.0">
       </font>
       </font>
+      <foreground_color>
+        <color red="15" green="23" blue="42">
+      </color>
+      </foreground_color>
+      <background_color>
+        <color red="245" green="247" blue="250">
+      </color>
+      </background_color>
       <horizontal_alignment>1</horizontal_alignment>
+      <border_color>
+        <color red="203" green="213" blue="225">
+      </color>
+      </border_color>
     </widget>
     <widget type="label" version="2.0.0">
       <name>Label</name>
@@ -3262,6 +5836,10 @@
       <y>250</y>
       <width>200</width>
       <height>20</height>
+      <font>
+        <font family="Cantarell" style="REGULAR" size="14.0">
+      </font>
+      </font>
       <tooltip>Pool Max Mem - No description provided</tooltip>
     </widget>
     <widget type="textupdate" version="2.0.0">
@@ -3272,10 +5850,22 @@
       <width>205</width>
       <height>20</height>
       <font>
-        <font name="Default Bold" family="Liberation Sans" style="BOLD" size="14.0">
+        <font family="Cantarell" style="BOLD" size="14.0">
       </font>
       </font>
+      <foreground_color>
+        <color red="15" green="23" blue="42">
+      </color>
+      </foreground_color>
+      <background_color>
+        <color red="245" green="247" blue="250">
+      </color>
+      </background_color>
       <horizontal_alignment>1</horizontal_alignment>
+      <border_color>
+        <color red="203" green="213" blue="225">
+      </color>
+      </border_color>
     </widget>
     <widget type="label" version="2.0.0">
       <name>Label</name>
@@ -3284,6 +5874,10 @@
       <y>275</y>
       <width>200</width>
       <height>20</height>
+      <font>
+        <font family="Cantarell" style="REGULAR" size="14.0">
+      </font>
+      </font>
       <tooltip>Pool Used Mem - No description provided</tooltip>
     </widget>
     <widget type="textupdate" version="2.0.0">
@@ -3294,10 +5888,22 @@
       <width>205</width>
       <height>20</height>
       <font>
-        <font name="Default Bold" family="Liberation Sans" style="BOLD" size="14.0">
+        <font family="Cantarell" style="BOLD" size="14.0">
       </font>
       </font>
+      <foreground_color>
+        <color red="15" green="23" blue="42">
+      </color>
+      </foreground_color>
+      <background_color>
+        <color red="245" green="247" blue="250">
+      </color>
+      </background_color>
       <horizontal_alignment>1</horizontal_alignment>
+      <border_color>
+        <color red="203" green="213" blue="225">
+      </color>
+      </border_color>
     </widget>
     <widget type="label" version="2.0.0">
       <name>Label</name>
@@ -3306,6 +5912,10 @@
       <y>300</y>
       <width>200</width>
       <height>20</height>
+      <font>
+        <font family="Cantarell" style="REGULAR" size="14.0">
+      </font>
+      </font>
       <tooltip>Pool Alloc Buffers - No description provided</tooltip>
     </widget>
     <widget type="textupdate" version="2.0.0">
@@ -3316,10 +5926,22 @@
       <width>205</width>
       <height>20</height>
       <font>
-        <font name="Default Bold" family="Liberation Sans" style="BOLD" size="14.0">
+        <font family="Cantarell" style="BOLD" size="14.0">
       </font>
       </font>
+      <foreground_color>
+        <color red="15" green="23" blue="42">
+      </color>
+      </foreground_color>
+      <background_color>
+        <color red="245" green="247" blue="250">
+      </color>
+      </background_color>
       <horizontal_alignment>1</horizontal_alignment>
+      <border_color>
+        <color red="203" green="213" blue="225">
+      </color>
+      </border_color>
     </widget>
     <widget type="label" version="2.0.0">
       <name>Label</name>
@@ -3328,6 +5950,10 @@
       <y>325</y>
       <width>200</width>
       <height>20</height>
+      <font>
+        <font family="Cantarell" style="REGULAR" size="14.0">
+      </font>
+      </font>
       <tooltip>Pool Free Buffers - No description provided</tooltip>
     </widget>
     <widget type="textupdate" version="2.0.0">
@@ -3338,10 +5964,22 @@
       <width>205</width>
       <height>20</height>
       <font>
-        <font name="Default Bold" family="Liberation Sans" style="BOLD" size="14.0">
+        <font family="Cantarell" style="BOLD" size="14.0">
       </font>
       </font>
+      <foreground_color>
+        <color red="15" green="23" blue="42">
+      </color>
+      </foreground_color>
+      <background_color>
+        <color red="245" green="247" blue="250">
+      </color>
+      </background_color>
       <horizontal_alignment>1</horizontal_alignment>
+      <border_color>
+        <color red="203" green="213" blue="225">
+      </color>
+      </border_color>
     </widget>
     <widget type="label" version="2.0.0">
       <name>Label</name>
@@ -3350,6 +5988,10 @@
       <y>350</y>
       <width>200</width>
       <height>20</height>
+      <font>
+        <font family="Cantarell" style="REGULAR" size="14.0">
+      </font>
+      </font>
       <tooltip>N Dimensions - No description provided</tooltip>
     </widget>
     <widget type="textentry" version="3.0.0">
@@ -3359,6 +6001,14 @@
       <y>350</y>
       <width>100</width>
       <height>20</height>
+      <font>
+        <font family="Cantarell" style="REGULAR" size="14.0">
+      </font>
+      </font>
+      <background_color>
+        <color red="229" green="235" blue="255">
+      </color>
+      </background_color>
       <horizontal_alignment>1</horizontal_alignment>
     </widget>
     <widget type="textupdate" version="2.0.0">
@@ -3369,10 +6019,22 @@
       <width>100</width>
       <height>20</height>
       <font>
-        <font name="Default Bold" family="Liberation Sans" style="BOLD" size="14.0">
+        <font family="Cantarell" style="BOLD" size="14.0">
       </font>
       </font>
+      <foreground_color>
+        <color red="15" green="23" blue="42">
+      </color>
+      </foreground_color>
+      <background_color>
+        <color red="245" green="247" blue="250">
+      </color>
+      </background_color>
       <horizontal_alignment>1</horizontal_alignment>
+      <border_color>
+        <color red="203" green="213" blue="225">
+      </color>
+      </border_color>
     </widget>
     <widget type="label" version="2.0.0">
       <name>Label</name>
@@ -3381,6 +6043,10 @@
       <y>375</y>
       <width>200</width>
       <height>20</height>
+      <font>
+        <font family="Cantarell" style="REGULAR" size="14.0">
+      </font>
+      </font>
       <tooltip>Dimensions - No description provided</tooltip>
     </widget>
     <widget type="textentry" version="3.0.0">
@@ -3390,6 +6056,14 @@
       <y>375</y>
       <width>100</width>
       <height>20</height>
+      <font>
+        <font family="Cantarell" style="REGULAR" size="14.0">
+      </font>
+      </font>
+      <background_color>
+        <color red="229" green="235" blue="255">
+      </color>
+      </background_color>
       <horizontal_alignment>1</horizontal_alignment>
     </widget>
     <widget type="textupdate" version="2.0.0">
@@ -3400,10 +6074,22 @@
       <width>100</width>
       <height>20</height>
       <font>
-        <font name="Default Bold" family="Liberation Sans" style="BOLD" size="14.0">
+        <font family="Cantarell" style="BOLD" size="14.0">
       </font>
       </font>
+      <foreground_color>
+        <color red="15" green="23" blue="42">
+      </color>
+      </foreground_color>
+      <background_color>
+        <color red="245" green="247" blue="250">
+      </color>
+      </background_color>
       <horizontal_alignment>1</horizontal_alignment>
+      <border_color>
+        <color red="203" green="213" blue="225">
+      </color>
+      </border_color>
     </widget>
   </widget>
 </display>

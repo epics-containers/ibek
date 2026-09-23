@@ -39,6 +39,10 @@ format they do not recognise, rather than special-casing one earlier shape. If
 you see "lock format not recognised", convert the lock with
 ``uv run scripts/convert-runtime-lock.py <lock>`` and retry (#363).
 
+The ``pvi`` dependency floor is now ``0.14.1``, with no ceiling. Generated PVI
+screens use pvi's updated widget styling (fonts, colours and layout), so the
+test goldens under ``tests/samples/outputs`` were regenerated to match.
+
 Fixed
 ~~~~~
 

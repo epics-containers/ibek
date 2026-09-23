@@ -19,7 +19,7 @@ dependencies = [
     "jinja2",
     "GitPython",
     "semantic-version",
-    "pvi",
+    "pvi>=0.14.1",
     "truststore",
 ]
 dynamic = ["version"]
