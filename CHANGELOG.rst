@@ -46,6 +46,14 @@ test goldens under ``tests/samples/outputs`` were regenerated to match.
 Fixed
 ~~~~~
 
+``ioc.subst`` rows for a database file shared by several entity models are now
+written in the order of the file's headings. Previously each row followed its own
+entity model's arg order, so values could land under the wrong heading when two
+models listed the same args in a different order. Every entity that loads the
+same database file must now supply the same set of args; a mismatch fails with
+an error naming the file, the entity type and the missing and extra args,
+instead of writing a misaligned pattern row (#349).
+
 ``ibek pattern schema`` failed with ``CERTIFICATE_VERIFY_FAILED`` on RHEL when
 run through ``uvx``, because the uv-managed Python looks for CA certificates
 at ``/etc/ssl/cert.pem``. Schema downloads now verify against the operating

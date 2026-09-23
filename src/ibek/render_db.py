@@ -23,6 +23,8 @@ class RenderDb:
         filename: str
         rows: list[list[str]]
         columns: list[int]
+        # the arg names in heading order; every row is emitted in this order
+        keys: list[str]
 
     def __init__(self, entities: Sequence[Entity]) -> None:
         self.entities = entities
@@ -34,23 +36,41 @@ class RenderDb:
         Accumulate rows of arguments for each template file,
         Adding a new template file if it does not already exist.
         Convert all arguments to strings.
+
+        The first row added for a file fixes its headings. Later rows are
+        emitted in heading order, whatever order their args were declared in.
+        Every row for a file must supply the same set of args.
         """
         filename = UTILS.render(dict(entity), filename, "str")
 
         if filename not in self.render_templates:
             # for new filenames create a new RenderDbTemplate entry
-            headings = [str(i) for i in list(params.keys())]
+            keys = [str(i) for i in params.keys()]
             self.render_templates[filename] = RenderDb.RenderDbTemplate(
                 filename=filename,
-                rows=[headings],  # first row is the headings
-                columns=[0] * len(params),
+                rows=[list(keys)],  # first row is the headings
+                columns=[0] * len(keys),
+                keys=keys,
             )
 
-        # add a new row of argument values, rendering any Jinja template fields
-        row = list(UTILS.render_map(dict(entity), params).values())
+        template = self.render_templates[filename]
 
-        # save the new row
-        self.render_templates[filename].rows.append(row)
+        # render argument values, expanding any Jinja template fields
+        rendered = {
+            str(k): v for k, v in UTILS.render_map(dict(entity), params).items()
+        }
+
+        if set(rendered) != set(template.keys):
+            missing = [k for k in template.keys if k not in rendered]
+            extra = [k for k in rendered if k not in template.keys]
+            raise ValueError(
+                f"database '{filename}' args for entity type '{entity.type}' "
+                f"do not match the args used by earlier entities for this file. "
+                f"Missing: {missing}. Extra: {extra}."
+            )
+
+        # save the new row, in heading order
+        template.rows.append([rendered[k] for k in template.keys])
 
     def parse_instances(self) -> None:
         """
