@@ -81,7 +81,8 @@ class Entity(BaseSettings):
         Whole Entity model validation
 
         Do jinja rendering of pre_defines/ parameters / post_defines
-        in the correct order.
+        in the correct order, then check the EntityModel's validate
+        assertions if this instance is enabled.
 
         Also adds pre_defines and post_defines to the model instance, making
         them available for the phase 2 (final) jinja rendering performed in
@@ -102,7 +103,29 @@ class Entity(BaseSettings):
                 for name, define in self._model.post_defines.items():
                     self._process_field(name, define.value, define.type)
 
+            if self.entity_enabled:
+                for validation in self._model.validate_:
+                    self._check_validation(validation.assert_, validation.message)
+
         return self
+
+    def _check_validation(self, expression: str, message: str):
+        """
+        Evaluate a validation assertion from the EntityModel against this
+        instance and raise a ValueError with the rendered message if it fails.
+        """
+        try:
+            result = UTILS.render(
+                self, "{% if " + expression + " %}True{% else %}False{% endif %}"
+            )
+        except ValueError as e:
+            raise ValueError(
+                f"{self.type}: could not evaluate validation '{expression}': {e}"
+            ) from e
+        if result != "True":
+            raise ValueError(
+                f"{self.type}: validation failed: {UTILS.render(self, message)}"
+            )
 
     def __str__(self):
         """

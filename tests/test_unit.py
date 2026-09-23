@@ -5,8 +5,10 @@ Some unit tests for ibek.
 import dataclasses
 
 import pytest
+from pydantic import ValidationError
 
-from ibek.ioc import id_to_entity
+from ibek.entity_model import Validation
+from ibek.ioc import clear_entity_model_ids, id_to_entity
 from ibek.ioc_factory import IocFactory
 from ibek.parameters import IdParam, ObjectParam
 from ibek.support import EntityModel, Support
@@ -53,6 +55,150 @@ def test_object_references(entity_factory):
     assert device.type == "mymodule.device"
     assert device.port is port
     assert id_to_entity == {"PORT": port}
+
+
+def make_validated_ioc_model(entity_factory, validate: list[dict]):
+    """
+    Make an IOC model from a support module whose 'device' entity model has
+    the given validate list. The support is built from a dict so that the
+    YAML 'assert' key is used.
+    """
+    support = Support.model_validate(
+        {
+            "module": "mymodule",
+            "entity_models": [
+                {
+                    "name": "port",
+                    "description": "a port",
+                    "parameters": {
+                        "name": {"type": "id", "description": "an id"},
+                        "count": {
+                            "type": "int",
+                            "description": "a count",
+                            "default": 1,
+                        },
+                    },
+                },
+                {
+                    "name": "device",
+                    "description": "a device",
+                    "parameters": {
+                        "port": {"type": "object", "description": "the port"},
+                        "gain": {"type": "int", "description": "a gain"},
+                    },
+                    "post_defines": {
+                        "double_gain": {
+                            "description": "twice the gain",
+                            "type": "int",
+                            "value": "{{ gain * 2 }}",
+                        }
+                    },
+                    "validate": validate,
+                },
+            ],
+        }
+    )
+    entities = entity_factory._make_entity_types(support)
+    return IocFactory().make_ioc_model(entities)
+
+
+def make_ioc_dict(gain: int, count: int = 1, enabled: bool = True) -> dict:
+    return {
+        "ioc_name": "",
+        "description": "",
+        "entities": [
+            {"type": "mymodule.port", "name": "PORT", "count": count},
+            {
+                "type": "mymodule.device",
+                "port": "PORT",
+                "gain": gain,
+                "entity_enabled": enabled,
+            },
+        ],
+    }
+
+
+def test_validate_assert_key():
+    """
+    The YAML key is 'assert' and maps to the assert_ attribute
+    """
+    model = EntityModel.model_validate(
+        {
+            "name": "device",
+            "description": "a device",
+            "validate": [{"assert": "gain > 0", "message": "bad gain"}],
+        }
+    )
+    assert model.validate_ == [Validation(assert_="gain > 0", message="bad gain")]
+
+    with pytest.raises(ValidationError):
+        Validation.model_validate({"assert": "True", "message": "", "extra": 1})
+
+
+def test_validate_pass(entity_factory):
+    ioc_model = make_validated_ioc_model(
+        entity_factory,
+        [
+            {"assert": "gain > 0", "message": "gain must be positive"},
+            {"assert": "double_gain == 2 * gain", "message": "post_define"},
+        ],
+    )
+    ioc = ioc_model(**make_ioc_dict(gain=3))
+    assert ioc.entities[1].double_gain == 6
+
+
+def test_validate_fail(entity_factory):
+    ioc_model = make_validated_ioc_model(
+        entity_factory,
+        [{"assert": "gain > 0", "message": "gain {{ gain }} must be positive"}],
+    )
+    with pytest.raises(ValidationError) as exc:
+        ioc_model(**make_ioc_dict(gain=-1))
+    assert "mymodule.device: validation failed: gain -1 must be positive" in str(
+        exc.value
+    )
+
+
+def test_validate_object_reference(entity_factory):
+    ioc_model = make_validated_ioc_model(
+        entity_factory,
+        [
+            {
+                "assert": "port.count > 1",
+                "message": "port {{ port }} needs count > 1",
+            }
+        ],
+    )
+    ioc = ioc_model(**make_ioc_dict(gain=1, count=2))
+    assert ioc.entities[1].port.count == 2
+
+    # instantiate a second IOC with the same ids
+    clear_entity_model_ids()
+    with pytest.raises(ValidationError) as exc:
+        ioc_model(**make_ioc_dict(gain=1, count=1))
+    assert "mymodule.device: validation failed: port PORT needs count > 1" in str(
+        exc.value
+    )
+
+
+def test_validate_disabled_entity(entity_factory):
+    ioc_model = make_validated_ioc_model(
+        entity_factory,
+        [{"assert": "gain > 0", "message": "gain must be positive"}],
+    )
+    ioc = ioc_model(**make_ioc_dict(gain=-1, enabled=False))
+    assert ioc.entities[1].entity_enabled is False
+
+
+def test_validate_undefined_name(entity_factory):
+    ioc_model = make_validated_ioc_model(
+        entity_factory,
+        [{"assert": "gian > 0", "message": "gain must be positive"}],
+    )
+    with pytest.raises(ValidationError) as exc:
+        ioc_model(**make_ioc_dict(gain=1))
+    assert "mymodule.device: could not evaluate validation 'gian > 0'" in str(exc.value)
+    assert "'gian' is undefined" in str(exc.value)
 
 
 @dataclasses.dataclass
