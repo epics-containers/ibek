@@ -60,6 +60,20 @@ silently. If nothing is cached for the image tag and the instance already has
 a schema, ``ibek pattern schema`` exits 1. Only a 404 or 410 response still
 skips generation quietly.
 
+``ibek pattern schema`` parses more image refs. A registry port such as
+``localhost:5000/org/ioc-x-runtime:1.0`` is no longer read as the tag, and a
+ref with no registry host such as ``epics-containers/ioc-x-runtime:1.0`` no
+longer loses its org. A ``-linux`` architecture infix is stripped like
+``-rtems-beatnik``. An image on a GitLab registry now reports that
+GitLab-published schemas are not supported yet, instead of failing to fetch a
+GitHub URL built from the wrong project (part of #375).
+
+The published schema cache is keyed on registry host, full image path and tag
+(``<host>/<path>/<tag>.json``), so images with the same name on different
+registries no longer share an entry. Entries in the old
+``<org>__<repo>__<tag>.json`` layout are not read; each schema is downloaded
+once more (part of #375).
+
 Documentation
 ~~~~~~~~~~~~~
 

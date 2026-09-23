@@ -29,6 +29,8 @@ from ibek.pattern_cmds.schema import (
     generate_schema_dict,
     is_instance,
     merge_entities,
+    parse_image_ref,
+    published_schema_url,
     resolve_image_ref,
 )
 from ibek.pattern_cmds.sources import PatternError, parse_ref
@@ -362,6 +364,155 @@ def test_parse_ref(text, library, name, version):
 )
 def test_resolve_image_ref(image, expected):
     assert resolve_image_ref(image) == expected
+
+
+# Image strings from the table in #375.
+ADARAVIS = "ghcr.io/epics-containers/ioc-adaravis-runtime:2025.11.1"
+GITLAB_DEEP = (
+    "registry.gitlab.diamond.ac.uk/controls/containers/accelerator/"
+    "ioc-foo/ioc-foo-linux-runtime:1.2.3"
+)
+GITLAB_PORT = "gitlab.diamond.ac.uk:5050/controls/ioc-bar-runtime:1.0"
+LOCAL_PORT = "localhost:5000/myorg/ioc-baz-runtime:1.0"
+NO_HOST = "epics-containers/ioc-adaravis-runtime:2025.11.1"
+
+
+@pytest.mark.parametrize(
+    "image, expected",
+    [
+        (
+            ADARAVIS,
+            ("ghcr.io", ("epics-containers", "ioc-adaravis-runtime"), "2025.11.1"),
+        ),
+        (
+            GITLAB_DEEP,
+            (
+                "registry.gitlab.diamond.ac.uk",
+                (
+                    "controls",
+                    "containers",
+                    "accelerator",
+                    "ioc-foo",
+                    "ioc-foo-linux-runtime",
+                ),
+                "1.2.3",
+            ),
+        ),
+        (
+            GITLAB_PORT,
+            ("gitlab.diamond.ac.uk:5050", ("controls", "ioc-bar-runtime"), "1.0"),
+        ),
+        (LOCAL_PORT, ("localhost:5000", ("myorg", "ioc-baz-runtime"), "1.0")),
+        (NO_HOST, (None, ("epics-containers", "ioc-adaravis-runtime"), "2025.11.1")),
+        (
+            "ghcr.io/org/ioc-x-runtime:1.0@sha256:" + "0" * 64,
+            ("ghcr.io", ("org", "ioc-x-runtime"), "1.0"),
+        ),
+    ],
+)
+def test_parse_image_ref(image, expected):
+    assert parse_image_ref(image) == expected
+
+
+@pytest.mark.parametrize(
+    "image, expected",
+    [
+        (ADARAVIS, ("epics-containers", "ioc-adaravis", "2025.11.1")),
+        (LOCAL_PORT, ("myorg", "ioc-baz", "1.0")),
+        (NO_HOST, ("epics-containers", "ioc-adaravis", "2025.11.1")),
+        ("ghcr.io/myorg/ioc-foo-linux-runtime:1.0", ("myorg", "ioc-foo", "1.0")),
+        ("ghcr.io/myorg/ioc-foo-linux-developer:1.0", ("myorg", "ioc-foo", "1.0")),
+    ],
+)
+def test_resolve_image_ref_issue_375(image, expected):
+    assert resolve_image_ref(image) == expected
+
+
+def test_published_schema_url_github():
+    assert published_schema_url(ADARAVIS) == (
+        "https://github.com/epics-containers/ioc-adaravis/releases/download/"
+        "2025.11.1/ibek.ioc.schema.json"
+    )
+    assert published_schema_url(NO_HOST) == published_schema_url(ADARAVIS)
+
+
+@pytest.mark.parametrize("image", [GITLAB_DEEP, GITLAB_PORT])
+def test_gitlab_image_points_at_issue(image):
+    """GitLab-published schemas are not resolved yet; say so, don't 404."""
+    with pytest.raises(schema.SchemaNotFoundError, match="issues/375"):
+        published_schema_url(image)
+
+
+@pytest.mark.parametrize(
+    "image, message",
+    [
+        ("ghcr.io/org/ioc-x-runtime", "has no tag"),
+        ("localhost:5000/org/ioc-x-runtime", "has no tag"),
+        ("ghcr.io/org/../ioc-x-runtime:1.0", "cannot parse image path"),
+        ("ghcr.io//ioc-x-runtime:1.0", "cannot parse image path"),
+        ("ioc-x-runtime:1.0", "cannot parse org/repo"),
+    ],
+)
+def test_bad_image_refs(image, message):
+    with pytest.raises(schema.SchemaNotFoundError, match=message):
+        resolve_image_ref(image)
+
+
+def test_cache_path_keys_on_host_and_full_path(tmp_path: Path, monkeypatch):
+    monkeypatch.setenv("IBEK_SCHEMA_CACHE", str(tmp_path))
+    assert schema._cache_path(ADARAVIS) == (
+        tmp_path / "ghcr.io/epics-containers/ioc-adaravis/2025.11.1.json"
+    )
+    assert schema._cache_path(LOCAL_PORT) == (
+        tmp_path / "localhost_5000/myorg/ioc-baz/1.0.json"
+    )
+    assert schema._cache_path(GITLAB_DEEP) == (
+        tmp_path / "registry.gitlab.diamond.ac.uk/controls/containers/"
+        "accelerator/ioc-foo/ioc-foo/1.2.3.json"
+    )
+    # developer and runtime variants share one entry
+    assert schema._cache_path(ADARAVIS) == schema._cache_path(
+        ADARAVIS.replace("-runtime", "-developer")
+    )
+    # a ref with no host is a Docker Hub ref
+    assert schema._cache_path(NO_HOST) == schema._cache_path("docker.io/" + NO_HOST)
+
+
+@pytest.mark.parametrize(
+    "first, second",
+    [
+        # same org/name/tag on two registries
+        ("ghcr.io/org/ioc-x-runtime:1.0", "localhost:5000/org/ioc-x-runtime:1.0"),
+        ("ghcr.io/org/ioc-x-runtime:1.0", "ghcr.io:5000/org/ioc-x-runtime:1.0"),
+        # same host, org, name and tag, but different subgroups
+        (
+            "reg.example.org/a/b/ioc-x-runtime:1.0",
+            "reg.example.org/a/c/ioc-x-runtime:1.0",
+        ),
+        # the old org__repo__tag key could not tell these apart
+        ("ghcr.io/a__b/ioc-x-runtime:1.0", "ghcr.io/a/b__ioc-x-runtime:1.0"),
+    ],
+)
+def test_cache_paths_do_not_collide(tmp_path: Path, monkeypatch, first, second):
+    monkeypatch.setenv("IBEK_SCHEMA_CACHE", str(tmp_path))
+    assert schema._cache_path(first) != schema._cache_path(second)
+
+
+def test_two_registries_cache_separately(tmp_path: Path, monkeypatch):
+    """Fetching one registry's schema must not serve it for another's image."""
+    monkeypatch.setenv("IBEK_SCHEMA_CACHE", str(tmp_path / "cache"))
+    server = FakeServer({"registry": "ghcr"})
+    monkeypatch.setattr(schema, "_http_get", server)
+    assert schema.fetch_base_schema("ghcr.io/org/ioc-x-runtime:1.0") == {
+        "registry": "ghcr"
+    }
+
+    server.schema, server.etag = {"registry": "local"}, '"v2"'
+    assert schema.fetch_base_schema("localhost:5000/org/ioc-x-runtime:1.0") == {
+        "registry": "local"
+    }
+    # the second fetch was unconditional: nothing was cached for that registry
+    assert server.requests[-1] == {}
 
 
 # --------------------------------------------------------------------------- #

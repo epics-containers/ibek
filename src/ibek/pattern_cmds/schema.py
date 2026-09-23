@@ -71,23 +71,73 @@ class Fetched(NamedTuple):
 # --------------------------------------------------------------------------- #
 # image ref -> published release asset
 # --------------------------------------------------------------------------- #
+GITLAB_ISSUE = "https://github.com/epics-containers/ibek/issues/375"
+# Docker Hub is the registry for a ref that names no host.
+DEFAULT_REGISTRY = "docker.io"
+# A final -developer/-runtime and its optional architecture infix.
+IMAGE_SUFFIX = re.compile(r"(-linux|-rtems-beatnik)?(-developer|-runtime)$")
+
+
+class ImageRef(NamedTuple):
+    """A parsed image ref: ``host`` is None when the ref names no registry."""
+
+    host: str | None
+    path: tuple[str, ...]
+    tag: str
+
+
+def parse_image_ref(image: str) -> ImageRef:
+    """Split a container image ref into registry host, path parts and tag.
+
+    Follows Docker's reference grammar: the first part is a registry host only
+    if it contains ``.`` or ``:`` or is ``localhost``, and the tag is split off
+    the last part only, so a registry port is not mistaken for a tag. A
+    trailing ``@digest`` is ignored; the schema is keyed on the tag.
+    """
+    ref = image.strip().partition("@")[0]
+    parts = ref.split("/")
+    host = None
+    if len(parts) > 1 and (
+        "." in parts[0] or ":" in parts[0] or parts[0] == "localhost"
+    ):
+        host = parts.pop(0)
+    name, _, tag = parts[-1].partition(":")
+    if not tag:
+        raise SchemaNotFoundError(f"image {image!r} has no tag")
+    path = (*parts[:-1], name)
+    if any(part in ("", ".", "..") for part in path):
+        raise SchemaNotFoundError(f"cannot parse image path from {image!r}")
+    return ImageRef(host, path, tag)
+
+
+def _base_name(name: str) -> str:
+    """Strip the developer/runtime suffix and optional architecture infix."""
+    return IMAGE_SUFFIX.sub("", name)
+
+
+def _is_gitlab(host: str | None) -> bool:
+    return host is not None and "gitlab" in host.partition(":")[0].split(".")
+
+
 def resolve_image_ref(image: str) -> tuple[str, str, str]:
-    """Map a container image ref to ``(org, repo, tag)``.
+    """Map a GitHub-published container image ref to ``(org, repo, tag)``.
 
     ``ghcr.io/epics-containers/ioc-adsimdetector-runtime:2025.11.1`` ->
     ``("epics-containers", "ioc-adsimdetector", "2025.11.1")``.
+
+    Raises SchemaNotFoundError for an image on a GitLab registry, whose
+    schemas are published with a different layout that ibek cannot yet
+    resolve.
     """
-    ref = re.sub(r"^[a-z0-9.-]+/", "", image.strip())  # strip registry host
-    repo_path, _, tag = ref.partition(":")
-    if not tag:
-        raise SchemaNotFoundError(f"image {image!r} has no tag")
-    parts = repo_path.split("/")
-    if len(parts) < 2:
+    ref = parse_image_ref(image)
+    if _is_gitlab(ref.host):
+        raise SchemaNotFoundError(
+            f"image {image!r} is on GitLab registry {ref.host}; ibek cannot "
+            f"yet locate schemas published on GitLab (see {GITLAB_ISSUE})"
+        )
+    if len(ref.path) < 2:
         raise SchemaNotFoundError(f"cannot parse org/repo from image {image!r}")
-    org, name = parts[0], parts[-1]
-    # Strip the developer/runtime suffix and optional architecture infix.
-    name = re.sub(r"(-rtems-beatnik)?(-developer|-runtime)$", "", name)
-    return org, name, tag
+    return ref.path[0], _base_name(ref.path[-1]), ref.tag
 
 
 def published_schema_url(image: str) -> str:
@@ -100,11 +150,21 @@ def published_schema_url(image: str) -> str:
 
 
 def _cache_path(image: str) -> Path:
-    org, repo, tag = resolve_image_ref(image)
+    """Return the cache file for an image's base schema.
+
+    The key is the registry host, the full image path and the tag, one
+    directory per part, so images with the same name on different registries
+    cannot collide. The last part has its developer/runtime suffix stripped,
+    so the variants of one image share an entry.
+    """
+    ref = parse_image_ref(image)
     root = Path(
         os.getenv("IBEK_SCHEMA_CACHE", Path.home() / ".cache" / "ibek" / "schemas")
     )
-    return root / f"{org}__{repo}__{tag}.json"
+    # A host cannot contain "_", so replacing the port's ":" cannot collide.
+    host = (ref.host or DEFAULT_REGISTRY).replace(":", "_")
+    *parents, name = ref.path
+    return root.joinpath(host, *parents, _base_name(name), f"{ref.tag}.json")
 
 
 def _http_get(url: str, headers: dict[str, str]) -> Fetched:
