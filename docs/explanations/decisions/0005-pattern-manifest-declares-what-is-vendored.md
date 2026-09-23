@@ -47,25 +47,21 @@ vendor:
   IOC silently is not, which is not acceptable in an integrity system. Every
   message names the offending entry.
 - **Lock keys are relative to the destination root**, always — not to `config/`.
-  Legacy behaviour produces `config/...` keys naturally via the synthesised
-  default, so there is no per-pattern base field and no branch in `check`.
+  The synthesised default (a pattern with no manifest) produces `config/...`
+  keys naturally, so there is no per-pattern base field and no branch in
+  `check`.
 
-The lock gains a `version:` / `patterns:` root wrapper, because
-`RuntimeLock.load` treated every top-level key as a pattern name and there was
-nowhere to put metadata. The lock is **not versioned for migration purposes** —
-legacy behaviour is expressible in the new format, so there is nothing to
-migrate: re-vendoring produces a current lock without a translation step.
+The lock has a `version:` / `patterns:` root wrapper, because a bare
+`{pattern_name: entry}` mapping has nowhere to put metadata: `version:` gives
+the format room to evolve, `patterns:` holds each vendored pattern by name.
 
-A pre-wrapper lock is therefore still **read**, as the legacy shape it is. It
-must be, because the recovery from one is `ibek pattern update`, and update
-cannot rewrite a lock it refuses to open — an error whose only advice is the
-command it makes impossible is not a recovery. What it must never be read as is
-an *empty* lock: `check` would pass with zero files verified and the instance
-would silently become unmanaged. So every entry is carried over verbatim,
-`check` reports its files as missing and names the command once per pattern, and
-a bare `update` rewrites the whole thing. Rewriting only *part* of an old lock is
-refused, because `save()` emits the current format for every entry: the patterns
-that were not re-vendored would end up wearing a format they do not have.
+`ibek` reads and writes exactly this one shape. A lock in any other shape is
+refused outright, with a generic message naming a standalone conversion
+script rather than describing what the other shape is or how it arose — a
+description that would go stale the moment the lock format changes again.
+Reading such a lock as an *empty* one is the one thing that must never happen:
+`check` would then pass having verified nothing, and the instance would
+silently become unmanaged.
 
 ## Consequences
 
@@ -107,8 +103,10 @@ that were not re-vendored would end up wearing a format they do not have.
 - **A per-pattern `root:` field in the lock, or a "has manifest" flag.**
   Destination-root-relative keys make both unnecessary, and `check` is offline
   and cannot see the manifest anyway. The version pin already pins it.
-- **Versioning the lock for migration.** There is nothing to migrate; the root
-  `version:` is for future evolution only.
+- **Making the lock's `version:` a switch ibek branches on to read an older
+  shape.** It exists for future evolution and validation only; a shape ibek
+  does not recognise is refused, and converting it is a standalone step
+  outside ibek entirely (`scripts/convert-runtime-lock.py`).
 - **A `{pattern}` token in `dest`, a `requires:` key, dependency resolution, and
   one lock spanning several destinations.** All belong to the build-time support
   issue, and none of them need a format break — which is why the manifest root is

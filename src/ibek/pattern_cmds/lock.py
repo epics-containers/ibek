@@ -9,13 +9,14 @@ upstream bytes verbatim and ``ibek pattern check`` is a trivial
 ``sha256(file) == lock``.
 
 Keys under a pattern's ``files`` are relative to the **destination root**, not to
-``config/``. Legacy behaviour (everything into ``config/``) produces ``config/...``
-keys naturally via the manifest default, so there is no per-pattern base field
-and no branch in ``check``.
+``config/``. A pattern with no manifest is vendored through a synthesised
+default that lands everything under ``config/``, so those keys read
+``config/...`` naturally — there is no per-pattern base field and no branch in
+``check``.
 
-A lock written before the ``version:`` / ``patterns:`` root wrapper is still
-*read* — as :attr:`RuntimeLock.legacy` — because the documented recovery from one
-is ``ibek pattern update``, and update cannot rewrite a lock it refuses to open.
+The lock is a single mapping under a ``version:`` / ``patterns:`` root. A file
+in any other shape is refused with a generic error naming the standalone
+conversion script — see :data:`UNRECOGNISED_LOCK_HINT`.
 """
 
 from __future__ import annotations
@@ -33,13 +34,24 @@ from ibek.globals import BaseSettings
 from .sources import PatternError
 
 # The lock's root ``version:``. This exists so the on-disk format can evolve; it
-# is deliberately *not* a migration mechanism (see ADR 0005).
+# is deliberately *not* a switch ibek branches on to convert what it reads (see
+# ADR 0005).
 LOCK_VERSION = 1
 SUPPORTED_LOCK_VERSIONS = frozenset({1})
 
 # A lock entry whose hash is replaced by a string starting with this marker is a
 # deliberately, visibly dirty file (e.g. testing a fix against real hardware).
 DIRTY_MARKER = "DIRTY"
+
+# Emitted whenever a lock's top level is not ``{"version": int, "patterns":
+# {...}}``. Deliberately silent about what shape it actually is: the only
+# actionable fact is "convert it", and that stays true however the format goes
+# on to change.
+UNRECOGNISED_LOCK_HINT = (
+    "lock format not recognised; convert it with "
+    "'uv run scripts/convert-runtime-lock.py <lock>' "
+    "(see docs/how-to/vendor-runtime-patterns.md)"
+)
 
 
 def file_hash(data: bytes) -> str:
@@ -66,26 +78,16 @@ class RuntimeLock:
     def __init__(self, path: Path):
         self.path = path
         self.patterns: dict[str, PatternEntry] = {}
-        # True when the file on disk predates the version:/patterns: wrapper, and
-        # therefore records config/-relative file keys. See load().
-        self.legacy = False
         if path.exists():
             self.load()
 
     def load(self) -> None:
-        """Read the lock, refusing anything this ibek cannot read faithfully.
+        """Read the lock, refusing any shape but ``version:`` / ``patterns:``.
 
-        A pre-wrapper lock's top level *is* ``{pattern_name: entry}``. It is read
-        as such and flagged :attr:`legacy`, **not** rejected: the recovery from an
-        old lock is ``ibek pattern update``, so update / restore / add must all be
-        able to open one — a hard error here would make the only documented escape
-        route impossible to run.
-
-        What must never happen is reading one as an *empty* lock, which would let
-        ``check`` pass having verified nothing: a failure that looks like success
-        in a CI log. Every entry is therefore carried over verbatim, and its
-        config/-relative keys are left exactly as written so ``check`` can
-        recognise them and name the command that rewrites them.
+        A shape this ibek does not recognise is refused outright, with a
+        generic hint naming the standalone conversion script: there is no safe
+        way to guess a file-set from an unrecognised shape, and reading one as
+        an *empty* lock would let ``check`` pass having verified nothing.
         """
         try:
             raw = YAML(typ="safe").load(self.path) or {}
@@ -93,20 +95,16 @@ class RuntimeLock:
             raise PatternError(f"{self.path}: invalid YAML: {exc}") from exc
         if not isinstance(raw, dict):
             raise PatternError(f"{self.path}: expected a mapping at the top level")
-        if "patterns" in raw or isinstance(raw.get("version"), int):
-            # Wrapped: a root ``version:`` is an int and pattern names are not,
-            # so the two shapes cannot be confused for one another.
-            version = raw.get("version")
-            if version not in SUPPORTED_LOCK_VERSIONS:
-                supported = ", ".join(str(v) for v in sorted(SUPPORTED_LOCK_VERSIONS))
-                raise PatternError(
-                    f"{self.path}: unsupported lock version {version!r} "
-                    f"(this ibek reads: {supported})"
-                )
-            patterns = raw.get("patterns") or {}
-        else:
-            self.legacy = True
-            patterns = raw
+        if "patterns" not in raw and not isinstance(raw.get("version"), int):
+            raise PatternError(f"{self.path}: {UNRECOGNISED_LOCK_HINT}")
+        version = raw.get("version")
+        if version not in SUPPORTED_LOCK_VERSIONS:
+            supported = ", ".join(str(v) for v in sorted(SUPPORTED_LOCK_VERSIONS))
+            raise PatternError(
+                f"{self.path}: unsupported lock version {version!r} "
+                f"(this ibek reads: {supported})"
+            )
+        patterns = raw.get("patterns") or {}
         if not isinstance(patterns, dict):
             raise PatternError(f"{self.path}: 'patterns' must be a mapping")
         try:
@@ -117,16 +115,8 @@ class RuntimeLock:
             raise PatternError(f"{self.path}: invalid pattern entry: {exc}") from exc
 
     def vendored_keys(self, name: str) -> set[str]:
-        """A pattern's recorded files as **destination-root-relative** paths.
-
-        Rebasing a legacy lock's config/-relative keys here rather than at load
-        time is deliberate: ``check`` needs to see the keys exactly as written in
-        order to recognise an old lock, while orphan pruning needs to know where
-        the files actually are, or ``update`` would strand every file the new
-        file-set no longer produces.
-        """
-        prefix = "config/" if self.legacy else ""
-        return {prefix + key for key in self.patterns[name].files}
+        """A pattern's recorded files as destination-root-relative paths."""
+        return set(self.patterns[name].files)
 
     def set_pattern(
         self, name: str, version: str, source: str, files: dict[str, str]
@@ -137,8 +127,6 @@ class RuntimeLock:
         self.patterns.pop(name, None)
 
     def save(self) -> None:
-        # Whatever shape it was read in, what is written is the current format.
-        self.legacy = False
         # Patterns are emitted in name order so a lock re-written with the same
         # set in a different order produces no diff.
         data = {

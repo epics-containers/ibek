@@ -1374,8 +1374,10 @@ def test_lock_round_trip_has_root_wrapper(tmp_path: Path):
     assert reloaded.patterns["alpha"].files == {"config/a.proto": "sha256:2"}
 
 
-def write_legacy_lock(instance: Path, library: Path, extra_files: str = "") -> Path:
-    """Write a lock in the pre-wrapper, config/-relative shape ibek used to emit."""
+def write_unwrapped_lock(instance: Path, library: Path, extra_files: str = "") -> Path:
+    """Write a lock whose top level is ``{pattern_name: entry}`` directly,
+    rather than ``version:`` / ``patterns:`` — a shape this ibek does not
+    parse."""
     path = instance / RUNTIME_LOCK_NAME
     path.write_text(
         "mydevice:\n"
@@ -1388,100 +1390,51 @@ def write_legacy_lock(instance: Path, library: Path, extra_files: str = "") -> P
     return path
 
 
-def test_legacy_lock_is_read_not_rejected(tmp_path: Path, library: Path):
-    """A pre-wrapper lock must be readable, or its own recovery cannot run.
+def test_unrecognised_lock_is_refused(tmp_path: Path, library: Path):
+    """A lock whose top level is not ``{version:, patterns:}`` is refused.
 
-    It must equally never be read as an *empty* lock, which would let ``check``
-    pass having verified nothing.
+    Reading it as an *empty* lock would let ``check`` pass having verified
+    nothing, so it must never be silently accepted.
     """
     instance = make_instance(tmp_path)
-    lock = RuntimeLock(write_legacy_lock(instance, library))
+    path = write_unwrapped_lock(instance, library)
 
-    assert lock.legacy
-    assert set(lock.patterns) == {"mydevice"}
-    assert lock.patterns["mydevice"].version == "1.0.0"
-    # keys are kept exactly as written, so check can recognise them...
-    assert set(lock.patterns["mydevice"].files) == {
-        "mydevice.proto",
-        "mydevice.ibek.support.yaml",
-    }
-    # ...while pruning knows where the files really are
-    assert lock.vendored_keys("mydevice") == {
-        "config/mydevice.proto",
-        "config/mydevice.ibek.support.yaml",
-    }
+    with pytest.raises(PatternError) as exc:
+        RuntimeLock(path)
+    assert "scripts/convert-runtime-lock.py" in str(exc.value)
 
 
-def test_legacy_lock_check_names_a_recovery_that_runs(tmp_path: Path, library: Path):
-    """`check` -> "run ibek pattern update" -> `update` -> `check` passes.
-
-    The whole point of the hint: the command it names must be runnable on the
-    very state that produced it.
-    """
+def test_check_refuses_an_unrecognised_lock(tmp_path: Path, library: Path):
     instance = make_instance(tmp_path)
-    vendor.add("mydevice@1.0.0", instance, source_override=str(library))
-    # a file the current version no longer ships, recorded config/-relative
-    (instance / "config" / "gone.proto").write_text("dropped upstream\n")
-    write_legacy_lock(instance, library, "    gone.proto: sha256:deadbeef\n")
+    write_unwrapped_lock(instance, library)
 
     result = vendor.check(instance)
     assert not result.ok
-    assert any("ibek pattern update" in failure for failure in result.failures)
-
-    assert runner.invoke(cli, ["pattern", "check", str(instance)]).exit_code == 1
-    updated = runner.invoke(cli, ["pattern", "update", str(instance)])
-    assert updated.exit_code == 0, updated.output
-
-    lock = RuntimeLock(instance / RUNTIME_LOCK_NAME)
-    assert not lock.legacy
-    assert (instance / RUNTIME_LOCK_NAME).read_text().startswith("version: ")
-    assert set(lock.patterns["mydevice"].files) == {
-        "config/mydevice.proto",
-        "config/mydevice.ibek.support.yaml",
-    }
-    # the config/-relative orphan was resolved, not stranded
-    assert not (instance / "config" / "gone.proto").exists()
-    assert vendor.check(instance).ok
-    assert runner.invoke(cli, ["pattern", "check", str(instance)]).exit_code == 0
-
-
-def test_legacy_lock_refuses_a_partial_rewrite(tmp_path: Path, library: Path):
-    """Rewriting one pattern of an old lock would mislabel the others."""
-    instance = make_instance(tmp_path)
-    write_legacy_lock(instance, library)
-    lock_text = (instance / RUNTIME_LOCK_NAME).read_text()
-    (instance / RUNTIME_LOCK_NAME).write_text(
-        lock_text + f"other:\n  version: 1.0.0\n  source: {library}\n  files:\n"
-        "    other.proto: sha256:deadbeef\n"
+    assert any(
+        "scripts/convert-runtime-lock.py" in failure for failure in result.failures
     )
-
-    for call in (
-        lambda: vendor.add("mydevice@1.0.0", instance, source_override=str(library)),
-        lambda: vendor.update("mydevice", instance, source_override=str(library)),
-    ):
-        with pytest.raises(PatternError) as exc:
-            call()
-        assert "ibek pattern update" in str(exc.value)
-        assert "other" in str(exc.value)
-        # untouched: the lock is still the one the user has to recover from
-        assert RuntimeLock(instance / RUNTIME_LOCK_NAME).legacy
+    assert runner.invoke(cli, ["pattern", "check", str(instance)]).exit_code == 1
 
 
-def test_legacy_lock_may_be_rewritten_whole_by_add(tmp_path: Path, library: Path):
-    """Re-vendoring the only pattern in an old lock leaves nothing half-written."""
+def test_add_refuses_an_unrecognised_lock(tmp_path: Path, library: Path):
     instance = make_instance(tmp_path)
-    write_legacy_lock(instance, library)
-    (instance / "config" / "mydevice.proto").write_text("stale, header and all\n")
+    path = write_unwrapped_lock(instance, library)
+    before = path.read_text()
 
-    vendor.add("mydevice@1.0.0", instance, source_override=str(library))
+    with pytest.raises(PatternError) as exc:
+        vendor.add("mydevice@1.0.0", instance, source_override=str(library))
+    assert "scripts/convert-runtime-lock.py" in str(exc.value)
+    # untouched: nothing was written on top of a lock ibek could not open
+    assert path.read_text() == before
 
-    lock = RuntimeLock(instance / RUNTIME_LOCK_NAME)
-    assert not lock.legacy
-    assert set(lock.patterns["mydevice"].files) == {
-        "config/mydevice.proto",
-        "config/mydevice.ibek.support.yaml",
-    }
-    assert vendor.check(instance).ok
+
+def test_update_refuses_an_unrecognised_lock(tmp_path: Path, library: Path):
+    instance = make_instance(tmp_path)
+    write_unwrapped_lock(instance, library)
+
+    with pytest.raises(PatternError) as exc:
+        vendor.update("mydevice", instance, source_override=str(library))
+    assert "scripts/convert-runtime-lock.py" in str(exc.value)
 
 
 def test_unreadable_lock_cannot_be_masked_by_allow_dirty(tmp_path: Path):
@@ -1502,24 +1455,12 @@ def test_lock_rejects_a_future_version(tmp_path: Path):
     assert "99" in str(exc.value)
 
 
-def test_check_hints_once_per_pattern_at_a_legacy_lock(tmp_path: Path, library: Path):
-    """An old lock's every key is missing; the explanation is said once."""
-    instance = make_instance(tmp_path)
-    vendor.add("mydevice@1.0.0", instance, source_override=str(library))
-    write_legacy_lock(instance, library)
+def test_check_does_not_add_a_conversion_hint_to_a_recognised_lock(tmp_path: Path):
+    """A missing file under a root-level key is reported plainly.
 
-    result = vendor.check(instance)
-    assert not result.ok
-    hints = [f for f in result.failures if "ibek pattern update" in f]
-    assert len(hints) == 1  # once per pattern, not once per key
-    assert sum("missing vendored file" in f for f in result.failures) == 2
-
-
-def test_check_does_not_claim_a_current_lock_is_legacy(tmp_path: Path):
-    """A current lock may hold a root-level key; that is not an old lock.
-
-    Telling its owner to "run ibek pattern update to rewrite it" would be false,
-    and would send them off to fix a lock that is already right.
+    A destination-root key with no slash (a ``dest: '\\1'`` manifest root
+    placement) is a legitimate lock key in its own right, not a sign the lock
+    needs converting.
     """
     library = make_pattern(
         tmp_path / "lib",
@@ -1528,9 +1469,6 @@ def test_check_does_not_claim_a_current_lock_is_legacy(tmp_path: Path):
         manifest="version: 1\nvendor:\n  - src: '(.*)'\n    dest: '\\1'\n",
     )
     instance = make_instance(tmp_path)
-    # an unrelated file of the same name under config/, which the old structural
-    # guess ("no slash in the key, and config/<key> exists") mistook for proof
-    (instance / "config" / "Dockerfile").write_text("unrelated\n")
     vendor.add("rooted@1.0.0", instance, source_override=str(library))
     assert set(RuntimeLock(instance / RUNTIME_LOCK_NAME).patterns["rooted"].files) == {
         "Dockerfile"
@@ -1539,7 +1477,7 @@ def test_check_does_not_claim_a_current_lock_is_legacy(tmp_path: Path):
     (instance / "Dockerfile").unlink()
     result = vendor.check(instance)
     assert any("missing vendored file" in f for f in result.failures)
-    assert not any("ibek pattern update" in f for f in result.failures)
+    assert not any("convert" in f for f in result.failures)
 
 
 @pytest.mark.parametrize(

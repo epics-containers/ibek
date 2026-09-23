@@ -64,11 +64,17 @@ submodule is unchanged; the mechanism is amended as follows.
   symlink to `/etc/passwd` in a library repo would have been vendored.
 - **What is copied, and where, is declared by the pattern** in an
   `ibek.manifest.yaml`, rather than being hard-coded as "every file into
-  `config/`". A pattern with no manifest behaves exactly as before. See
+  `config/`". A pattern with no manifest is vendored through a default
+  manifest that ibek itself supplies, with that same "everything into
+  `config/`" effect. See
   [ADR 5](./0005-pattern-manifest-declares-what-is-vendored.md).
-- **Lock keys are relative to the destination root**, not to `config/`, and the
-  lock gained a `version:` / `patterns:` root wrapper.
+- **Lock keys are relative to the destination root**, not to `config/`, under a
+  `version:` / `patterns:` root wrapper — see
+  [ADR 5](./0005-pattern-manifest-declares-what-is-vendored.md).
 
-Existing locks are invalidated twice over — rebased keys and hashes computed
-without the header. This is deliberate, both changes land in the same release,
-and recovery is `ibek pattern update`.
+A lock in any other shape — for example root-relative pattern names, with
+hashes computed over a header the file does not itself carry — is refused
+outright, with a generic message naming a standalone conversion script
+(`scripts/convert-runtime-lock.py`) rather than an explanation tied to this
+particular change: see the
+[vendoring how-to](../../how-to/vendor-runtime-patterns.md#unrecognised-locks).

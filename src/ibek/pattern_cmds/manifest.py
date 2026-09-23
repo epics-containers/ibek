@@ -9,8 +9,8 @@ does not import this module.
 
 The manifest is an ordered, first-match-wins **allow-list**: a file matched by no
 entry is not vendored. A pattern with no manifest is vendored through the
-synthesised :data:`DEFAULT_MANIFEST_YAML`, which reproduces the historical
-"everything into ``config/``" behaviour — one vendoring path, no branches.
+synthesised :data:`DEFAULT_MANIFEST_YAML`, ibek's default of "everything into
+``config/``" — one vendoring path, no branches.
 """
 
 from __future__ import annotations

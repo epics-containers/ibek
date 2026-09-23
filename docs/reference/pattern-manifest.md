@@ -73,8 +73,8 @@ payload that reaches the container.
 
 ### No manifest
 
-A pattern with no `ibek.manifest.yaml` is vendored through exactly this
-synthesised manifest, which reproduces the historical behaviour:
+A pattern with no `ibek.manifest.yaml` is vendored through this default
+manifest, supplied by `ibek` itself:
 
 ```yaml
 version: 1
@@ -132,16 +132,16 @@ patterns:
 
 | Key | Meaning |
 | --- | --- |
-| `version` | Lock format version. Room for the format to evolve — **not** a migration mechanism. |
+| `version` | Lock format version. Room for the format to evolve — reading it does not make ibek convert anything on your behalf. |
 | `patterns` | Vendored patterns by name, emitted in name order so re-writing the same set produces no diff. |
 | `patterns[].version` | The pinned upstream tag. |
 | `patterns[].source` | The scheme-stripped library label the pattern came from. |
 | `patterns[].files` | `<destination-root-relative path>: sha256:<hex>` for every vendored file. |
 
 **Keys are relative to the destination root, always** — `config/x.proto`, not
-`x.proto`. Legacy "everything into `config/`" behaviour produces `config/...`
-keys naturally through the synthesised default, so there is no per-pattern base
-field and no branch in `check`.
+`x.proto`. The synthesised default (a pattern with no manifest) produces
+`config/...` keys naturally, so there is no per-pattern base field and no
+branch in `check`.
 
 The recorded digest is over the library's bytes **verbatim**: nothing is injected
 or rewritten on the way in, so `check` is a plain `sha256(file) == lock` and
@@ -152,15 +152,8 @@ A file entry whose value begins with `DIRTY` (conventionally
 than fails, without needing `--allow-dirty`.
 
 ```{warning}
-A lock with no `patterns:` root key predates this format. Its keys are
-`config/`-relative and its hashes cover the vendored header that no longer
-exists, so nothing in it can be verified: `check` reports every file as missing
-and names `ibek pattern update` once per pattern. It is **read**, so that the
-command it names can run, but it is never read as an *empty* lock — that would
-let `check` pass having verified nothing.
-
-A bare `ibek pattern update <dest>` re-vendors every pattern and rewrites the
-lock whole. Rewriting only part of an old lock (`add`, or `update --name` where
-other patterns remain) is refused: the entries that were not re-vendored would
-be written out in a format they do not have.
+`ibek` reads and writes exactly the `version:` / `patterns:` shape above.
+`add`, `update` and `check` all refuse a `runtime-lock.yaml` in any other
+shape, with a generic message naming a conversion script — see
+[the vendoring how-to](../how-to/vendor-runtime-patterns.md#unrecognised-locks).
 ```

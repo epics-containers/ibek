@@ -151,25 +151,6 @@ def _do_vendor(
     )
 
 
-def _refuse_partial_rewrite(lock: RuntimeLock, refreshed: set[str]) -> None:
-    """Refuse to rewrite only part of a pre-wrapper lock.
-
-    ``save()`` writes the current format for *every* entry, so re-vendoring one
-    pattern of an old lock would leave the rest wearing a format they do not
-    have — config/-relative keys and hashes covering the removed header, now
-    indistinguishable from current ones and no longer able to explain themselves
-    to ``check``. Re-vendoring the whole lock is what makes it consistent, and is
-    exactly what a bare ``ibek pattern update`` does.
-    """
-    stale = sorted(set(lock.patterns) - refreshed)
-    if lock.legacy and stale:
-        raise PatternError(
-            f"{lock.path} predates destination-root-relative lock keys, and this "
-            f"would leave {', '.join(stale)} half-rewritten; "
-            "run 'ibek pattern update' (all patterns) first"
-        )
-
-
 def _candidate_uris(
     libraries: list[str], extra_libraries: dict[str, str] | None
 ) -> list[str]:
@@ -195,7 +176,6 @@ def add(
     """
     ref = parse_ref(qualified)
     lock = RuntimeLock(_lock_path(dest_dir))
-    _refuse_partial_rewrite(lock, {ref.name})
     old_files = lock.vendored_keys(ref.name) if ref.name in lock.patterns else set()
     label, version, files = _do_vendor(ref, dest_dir, source_override, extra_libraries)
     _prune_orphans(dest_dir, old_files - set(files))
@@ -250,13 +230,12 @@ def update(
 ) -> None:
     """Re-vendor one (or all) patterns, optionally moving the pinned version.
 
-    A bare ``update`` is the documented recovery from a pre-wrapper lock: it
-    re-fetches every pattern at its pinned version and rewrites the lock whole,
-    with destination-root-relative keys and hashes over the library's bytes.
+    Re-fetches each pattern at its pinned (or new) version and rewrites the
+    lock whole, with destination-root-relative keys and hashes over the
+    library's bytes.
     """
     lock = RuntimeLock(_lock_path(dest_dir))
     names = _locked_names(lock, name, "update")
-    _refuse_partial_rewrite(lock, set(names))
     for pattern_name in names:
         existing = lock.patterns[pattern_name]
         label, resolved_version, files = _revendor(
@@ -310,16 +289,6 @@ def _source_uri(source: str, extra_libraries: dict[str, str] | None) -> str:
     return source
 
 
-# Emitted for a pre-wrapper lock, whose keys are config/-relative and whose
-# hashes still cover the vendored header that no longer exists: neither its paths
-# nor its digests can be verified, and re-vendoring is the only way back.
-LEGACY_KEYS_HINT = (
-    "this lock predates destination-root-relative keys (no 'patterns:' root key) "
-    "and its hashes cover the removed vendored header; "
-    "run 'ibek pattern update' to rewrite it"
-)
-
-
 def check(
     dest_dir: Path,
     allow_dirty: bool = False,
@@ -334,7 +303,6 @@ def check(
         result.failures.append(str(exc))
         return result
     for pattern_name, entry in lock.patterns.items():
-        hinted = False
         for rel, expected in entry.files.items():
             target = dest_dir / rel
             if is_dirty(expected):
@@ -343,12 +311,6 @@ def check(
                 continue
             if not target.exists():
                 result.failures.append(f"{pattern_name}:{rel} missing vendored file")
-                # Once per pattern, and only for a lock that really is old: a
-                # current lock may legitimately hold a root-level key, and
-                # telling its owner to "fix" it would be a lie.
-                if lock.legacy and not hinted:
-                    result.failures.append(f"{pattern_name}: {LEGACY_KEYS_HINT}")
-                    hinted = True
                 continue
             actual = file_hash(target.read_bytes())
             if actual != expected:

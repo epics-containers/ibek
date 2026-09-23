@@ -25,6 +25,14 @@ folder, or name it explicitly. Without a library qualifier ibek tries
 registered libraries in order. Without a version it uses the remote default
 branch and records `HEAD`; that is not an immutable pin.
 
+```{warning}
+`ibek` reads and writes exactly one `runtime-lock.yaml` shape: a `version:` /
+`patterns:` root, with keys relative to the instance root
+(`config/x.proto`, not `x.proto`). `add`, `update` and `check` all refuse a
+lock in any other shape outright. See
+[Unrecognised locks](#unrecognised-locks) below for what to do about one.
+```
+
 Use `--source` to test a local library:
 
 ```bash
@@ -37,12 +45,27 @@ additional named libraries; see {doc}`../reference/paths-and-environment`.
 
 ## What gets vendored
 
-A pattern folder may carry an `ibek.manifest.yaml` declaring which of its
-files are vendored and where they land — how a library keeps documentation
-alongside its runtime files without shipping the docs into an IOC. A pattern
-with [no manifest](../reference/pattern-manifest.md#no-manifest) is vendored
-through a default that puts every file into `config/`; most patterns need
-nothing more. The full format, including validation rules, is in the
+A pattern folder may carry an **`ibek.manifest.yaml`** declaring which of its
+files are vendored and where they land. This is how a library keeps browsable
+documentation alongside its runtime files without shipping the docs into an IOC:
+
+```yaml
+version: 1
+vendor:
+  - src: '.*\.(template|proto|protocol|db|req|ibek\.support\.yaml)$'
+    dest: config
+```
+
+`src` is a regular expression matched (with `re.fullmatch`) against each file's
+path relative to the pattern folder; `dest` is a folder relative to the instance
+root, joined with that path so nesting is preserved. The list is an ordered,
+first-match-wins **allow-list** — a file matched by no entry is not vendored.
+
+**A pattern with no manifest is vendored through a default manifest ibek
+supplies**: every file, into `config/` (see
+[No manifest](../reference/pattern-manifest.md#no-manifest)). You only need to
+write one when a pattern contains files that must *not* reach the instance.
+The full format, including validation rules, is in the
 [manifest reference](../reference/pattern-manifest.md).
 
 ## Check and restore
