@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Changelog &#8212; ibek 4.8.0b3.dev2+g7b638bb6a documentation</title>
+    <title>Changelog &#8212; ibek 4.8.0b3.dev4+g7d119465a documentation</title>
   
   
   
@@ -42,7 +42,7 @@
   <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=cb8930eaaf36d9849b67" />
 <link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=cb8930eaaf36d9849b67" />
 
-    <script src="_static/documentation_options.js?v=6b70f440"></script>
+    <script src="_static/documentation_options.js?v=e18823c8"></script>
     <script src="_static/doctools.js?v=fd6eb6e6"></script>
     <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="_static/clipboard.min.js?v=a7894cd8"></script>
@@ -532,6 +532,13 @@ test goldens under <code class="docutils literal notranslate"><span class="pre">
 </section>
 <section id="fixed">
 <h3>Fixed<a class="headerlink" href="#fixed" title="Link to this heading">#</a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">ioc.subst</span></code> rows for a database file shared by several entity models are now
+written in the order of the file’s headings. Previously each row followed its own
+entity model’s arg order, so values could land under the wrong heading when two
+models listed the same args in a different order. Every entity that loads the
+same database file must now supply the same set of args; a mismatch fails with
+an error naming the file, the entity type and the missing and extra args,
+instead of writing a misaligned pattern row (#349).</p>
 <p><code class="docutils literal notranslate"><span class="pre">ibek</span> <span class="pre">pattern</span> <span class="pre">schema</span></code> failed with <code class="docutils literal notranslate"><span class="pre">CERTIFICATE_VERIFY_FAILED</span></code> on RHEL when
 run through <code class="docutils literal notranslate"><span class="pre">uvx</span></code>, because the uv-managed Python looks for CA certificates
 at <code class="docutils literal notranslate"><span class="pre">/etc/ssl/cert.pem</span></code>. Schema downloads now verify against the operating
