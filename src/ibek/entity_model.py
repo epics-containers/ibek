@@ -8,7 +8,7 @@ from collections.abc import Mapping, Sequence
 from enum import Enum
 from typing import Annotated, Any, Literal, Union
 
-from pydantic import Field, PydanticUndefinedAnnotation
+from pydantic import ConfigDict, Field, PydanticUndefinedAnnotation
 
 from .globals import BaseSettings
 from .parameters import Define, IdParam, Param
@@ -115,6 +115,27 @@ class EntityPVI(BaseSettings):
     pv_prefix: str = Field("", description='PV prefix for PVI PV - e.g. "$(P)"')
 
 
+class Validation(BaseSettings):
+    """
+    A check on an Entity instance, evaluated after all of its pre_defines,
+    parameters and post_defines have been rendered
+    """
+
+    model_config = ConfigDict(extra="forbid", populate_by_name=True)
+
+    assert_: str = Field(
+        alias="assert",
+        description="A Jinja expression, without '{{ }}', that must be true "
+        "for the Entity instance to be valid. Any of the Entity's pre_defines, "
+        "parameters and post_defines may be used, including attributes of "
+        "object parameters",
+    )
+    message: str = Field(
+        description="The error message reported if the assertion is false. "
+        "This may contain Jinja"
+    )
+
+
 discriminated = Annotated[  # type: ignore
     Union[tuple(Param.__subclasses__())],
     Field(discriminator="type", description="union of arg types"),
@@ -125,6 +146,8 @@ class EntityModel(BaseSettings):
     """
     A Model for a class of Entity that an IOC instance may instantiate
     """
+
+    model_config = ConfigDict(populate_by_name=True)
 
     name: str = Field(
         description="Publish EntityModel as type <module>.<name> for IOC instances"
@@ -146,6 +169,13 @@ class EntityModel(BaseSettings):
         description="Calculated values to use as additional arguments "
         "With Jinja evaluation after all Args",
         default={},
+    )
+    # 'validate' would shadow BaseModel.validate, so use an alias
+    validate_: Sequence[Validation] = Field(
+        alias="validate",
+        description="Assertions to check against each enabled instance of this "
+        "Entity, after all pre_defines, parameters and post_defines are rendered",
+        default=(),
     )
     pre_init: Script = Field(
         description="Startup script snippets to add before iocInit()", default=()

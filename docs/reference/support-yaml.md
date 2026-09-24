@@ -53,6 +53,7 @@ Each `entity_models` entry accepts:
 | `parameters` | Named inputs, each with a `type`, `description` and optional `default`. |
 | `pre_defines` | Named calculated values evaluated before parameters. |
 | `post_defines` | Named calculated values evaluated after parameters. |
+| `validate` | Assertions checked against each enabled instance; see {ref}`validation <entity-validation>`. |
 | `pre_init`, `post_init` | Lists of startup snippets before or after `iocInit`. |
 | `databases` | Database templates and macro arguments. |
 | `env_vars` | Environment assignments emitted into the startup script. |
@@ -104,6 +105,31 @@ Defines have required `description` and `value` fields, and optional `type`
 support model, not supplied by the IOC author. Within each group, declaration
 order matters: put dependencies first. Use `post_defines` for calculations
 that require fully rendered parameters.
+
+(entity-validation)=
+
+### Validation
+
+`validate` lists checks that each enabled instance must pass. Each entry has
+two required fields: `assert`, a Jinja expression written without `{{ }}`, and
+`message`, which may contain Jinja. The checks run after `pre_defines`,
+parameters and `post_defines` are rendered, so they may use any of these,
+including fields of `object` parameters:
+
+```yaml
+parameters:
+  interrupt_vector:
+    type: object
+    description: Vector reserved with epics.InterruptVectorVME, count=3
+validate:
+  - assert: interrupt_vector.count == 3
+    message: "{{ interrupt_vector }} must be reserved with count=3"
+```
+
+A false assertion stops generation with
+`<module>.<name>: validation failed: <message>`. Instances with
+`entity_enabled: false` are not checked. Expressions are strict: an undefined
+name is an error, not a false result.
 
 ## Startup snippets and environment assignments
 

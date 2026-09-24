@@ -7,6 +7,14 @@ Unreleased
 Added
 ~~~~~
 
+Entity models accept a ``validate`` list of checks, each with an ``assert``
+Jinja expression (written without ``{{ }}``) and a ``message`` that may contain
+Jinja. The checks run against each enabled instance after its
+``pre_defines``, parameters and ``post_defines`` are rendered, so they can read
+fields of object parameters, for example
+``assert: interrupt_vector.count == 3``. A false assertion stops generation
+with ``<module>.<name>: validation failed: <message>`` (#64).
+
 Templates can read the ibek process environment with ``{{ env.NAME }}``,
 ``{{ env['NAME'] }}``, or ``{{ env.get('NAME', 'fallback') }}``.
 The mapping is read-only and reflects the environment at render time.

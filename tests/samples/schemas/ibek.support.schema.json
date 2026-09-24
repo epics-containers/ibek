@@ -278,6 +278,15 @@
           "title": "Post Defines",
           "type": "object"
         },
+        "validate": {
+          "default": [],
+          "description": "Assertions to check against each enabled instance of this Entity, after all pre_defines, parameters and post_defines are rendered",
+          "items": {
+            "$ref": "#/$defs/Validation"
+          },
+          "title": "Validate",
+          "type": "array"
+        },
         "pre_init": {
           "default": [],
           "description": "Startup script snippets to add before iocInit()",
@@ -749,6 +758,28 @@
         }
       },
       "title": "Text",
+      "type": "object"
+    },
+    "Validation": {
+      "additionalProperties": false,
+      "description": "A check on an Entity instance, evaluated after all of its pre_defines,\nparameters and post_defines have been rendered",
+      "properties": {
+        "assert": {
+          "description": "A Jinja expression, without '{{ }}', that must be true for the Entity instance to be valid. Any of the Entity's pre_defines, parameters and post_defines may be used, including attributes of object parameters",
+          "title": "Assert",
+          "type": "string"
+        },
+        "message": {
+          "description": "The error message reported if the assertion is false. This may contain Jinja",
+          "title": "Message",
+          "type": "string"
+        }
+      },
+      "required": [
+        "assert",
+        "message"
+      ],
+      "title": "Validation",
       "type": "object"
     },
     "When": {
