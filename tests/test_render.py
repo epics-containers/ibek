@@ -5,6 +5,9 @@ Entity classes
 
 from typing import Literal
 
+import pytest
+
+from ibek.ioc import Entity
 from ibek.render import Render
 from ibek.render_db import RenderDb
 
@@ -127,3 +130,37 @@ def test_environment_variables(motor_classes):
     env_text = render.render_environment_variables(asyn_obj)
 
     assert env_text == "epicsEnvSet NAME_AS_ENV_VAR my name is asyn1\n"
+
+
+def test_render_db_arg_order_independent():
+    """Rows are emitted in heading order whatever order their args are in (#349)"""
+    render_db = RenderDb([])
+    render_db.add_row(
+        "x.db", {"P": "A:", "DLLM": "-10", "DHLM": "10"}, Entity(type="a.first")
+    )
+    render_db.add_row(
+        "x.db", {"DHLM": "20", "DLLM": "-20", "P": "B:"}, Entity(type="a.second")
+    )
+
+    template = render_db.render_templates["x.db"]
+    assert template.keys == ["P", "DLLM", "DHLM"]
+    assert template.rows == [
+        ["P", "DLLM", "DHLM"],
+        ["A:", "-10", "10"],
+        ["B:", "-20", "20"],
+    ]
+
+
+def test_render_db_mismatched_args_raises():
+    """A row whose args differ from the file's headings is an error"""
+    render_db = RenderDb([])
+    render_db.add_row("x.db", {"P": "A:", "M": "1"}, Entity(type="a.first"))
+
+    with pytest.raises(ValueError) as excinfo:
+        render_db.add_row("x.db", {"P": "B:", "Q": "2"}, Entity(type="a.second"))
+
+    message = str(excinfo.value)
+    assert "x.db" in message
+    assert "a.second" in message
+    assert "Missing: ['M']" in message
+    assert "Extra: ['Q']" in message
