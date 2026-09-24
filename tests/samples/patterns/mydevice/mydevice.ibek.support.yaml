@@ -1,0 +1,14 @@
+# yaml-language-server: $schema=../../schemas/ibek.support.schema.json
+
+module: mydevice
+
+entity_models:
+  - name: mydevice
+    description: a test device
+    parameters:
+      name:
+        type: id
+        description: identifier
+      P:
+        type: str
+        description: pv prefix

@@ -9,6 +9,7 @@ reference/cli
 reference/support-yaml
 reference/ansible-recipes
 reference/ioc-yaml
+reference/pattern-manifest
 reference/jinja-context
 reference/paths-and-environment
 Python internals <_api/ibek>

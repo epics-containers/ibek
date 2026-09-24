@@ -134,7 +134,7 @@ Without `--no-ibek-defs`, this command also includes the image's installed
 support definitions from `/epics/ibek-defs` (under `EPICS_ROOT`). The resulting
 schema includes ibek's built-in entities.
 
-For a managed instance, run `ibek pattern schema INSTANCE`. It merges the
+For a managed instance, run `ibek pattern schema DEST`. It merges the
 image's published schema with local definitions, writes `ioc.schema.json`, and
 updates the `config/ioc.yaml` editor hint. See
 [runtime patterns](../how-to/vendor-runtime-patterns.md) for version selection,
