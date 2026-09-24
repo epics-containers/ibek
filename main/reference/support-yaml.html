@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Support YAML &#8212; ibek 4.8.0b3.dev4+g7d119465a documentation</title>
+    <title>Support YAML &#8212; ibek 4.8.0b3.dev8+gb21ad178a documentation</title>
   
   
   
@@ -42,7 +42,7 @@
   <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=cb8930eaaf36d9849b67" />
 <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=cb8930eaaf36d9849b67" />
 
-    <script src="../_static/documentation_options.js?v=e18823c8"></script>
+    <script src="../_static/documentation_options.js?v=244c4431"></script>
     <script src="../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -556,22 +556,25 @@ Unknown fields are rejected.</p>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">post_defines</span></code></p></td>
 <td><p>Named calculated values evaluated after parameters.</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">pre_init</span></code>, <code class="docutils literal notranslate"><span class="pre">post_init</span></code></p></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">validate</span></code></p></td>
+<td><p>Assertions checked against each enabled instance; see <a class="reference internal" href="#entity-validation"><span class="std std-ref">validation</span></a>.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">pre_init</span></code>, <code class="docutils literal notranslate"><span class="pre">post_init</span></code></p></td>
 <td><p>Lists of startup snippets before or after <code class="docutils literal notranslate"><span class="pre">iocInit</span></code>.</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">databases</span></code></p></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">databases</span></code></p></td>
 <td><p>Database templates and macro arguments.</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">env_vars</span></code></p></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">env_vars</span></code></p></td>
 <td><p>Environment assignments emitted into the startup script.</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">sub_entities</span></code></p></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">sub_entities</span></code></p></td>
 <td><p>Additional entity instances created for each instance of this model.</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">pvi</span></code></p></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">pvi</span></code></p></td>
 <td><p>Optional PVI device, interface and UI settings.</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">shared</span></code></p></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">shared</span></code></p></td>
 <td><p>YAML anchors for reuse within this file.</p></td>
 </tr>
 </tbody>
@@ -635,6 +638,27 @@ by repeats or sub-entities retain the selected label rather than its mapped valu
 support model, not supplied by the IOC author. Within each group, declaration
 order matters: put dependencies first. Use <code class="docutils literal notranslate"><span class="pre">post_defines</span></code> for calculations
 that require fully rendered parameters.</p>
+<section id="validation">
+<span id="entity-validation"></span><h3>Validation<a class="headerlink" href="#validation" title="Link to this heading">#</a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">validate</span></code> lists checks that each enabled instance must pass. Each entry has
+two required fields: <code class="docutils literal notranslate"><span class="pre">assert</span></code>, a Jinja expression written without <code class="docutils literal notranslate"><span class="pre">{{</span> <span class="pre">}}</span></code>, and
+<code class="docutils literal notranslate"><span class="pre">message</span></code>, which may contain Jinja. The checks run after <code class="docutils literal notranslate"><span class="pre">pre_defines</span></code>,
+parameters and <code class="docutils literal notranslate"><span class="pre">post_defines</span></code> are rendered, so they may use any of these,
+including fields of <code class="docutils literal notranslate"><span class="pre">object</span></code> parameters:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">parameters</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">interrupt_vector</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">object</span>
+<span class="w">    </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Vector reserved with epics.InterruptVectorVME, count=3</span>
+<span class="nt">validate</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">assert</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">interrupt_vector.count == 3</span>
+<span class="w">    </span><span class="nt">message</span><span class="p">:</span><span class="w"> </span><span class="s">"{{</span><span class="nv"> </span><span class="s">interrupt_vector</span><span class="nv"> </span><span class="s">}}</span><span class="nv"> </span><span class="s">must</span><span class="nv"> </span><span class="s">be</span><span class="nv"> </span><span class="s">reserved</span><span class="nv"> </span><span class="s">with</span><span class="nv"> </span><span class="s">count=3"</span>
+</pre></div>
+</div>
+<p>A false assertion stops generation with
+<code class="docutils literal notranslate"><span class="pre">&lt;module&gt;.&lt;name&gt;:</span> <span class="pre">validation</span> <span class="pre">failed:</span> <span class="pre">&lt;message&gt;</span></code>. Instances with
+<code class="docutils literal notranslate"><span class="pre">entity_enabled:</span> <span class="pre">false</span></code> are not checked. Expressions are strict: an undefined
+name is an error, not a false result.</p>
+</section>
 </section>
 <section id="startup-snippets-and-environment-assignments">
 <h2>Startup snippets and environment assignments<a class="headerlink" href="#startup-snippets-and-environment-assignments" title="Link to this heading">#</a></h2>
@@ -802,7 +826,10 @@ specific set of those definitions; see <a class="reference internal" href="ioc-y
   <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="pst-show_toc_level nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#file-and-entity-fields">File and entity fields</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#parameters-and-calculated-values">Parameters and calculated values</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#parameters-and-calculated-values">Parameters and calculated values</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#validation">Validation</a></li>
+</ul>
+</li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#startup-snippets-and-environment-assignments">Startup snippets and environment assignments</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#databases">Databases</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#sub-entities">Sub-entities</a></li>

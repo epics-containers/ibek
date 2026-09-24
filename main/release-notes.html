@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Changelog &#8212; ibek 4.8.0b3.dev4+g7d119465a documentation</title>
+    <title>Changelog &#8212; ibek 4.8.0b3.dev8+gb21ad178a documentation</title>
   
   
   
@@ -42,7 +42,7 @@
   <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=cb8930eaaf36d9849b67" />
 <link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=cb8930eaaf36d9849b67" />
 
-    <script src="_static/documentation_options.js?v=e18823c8"></script>
+    <script src="_static/documentation_options.js?v=244c4431"></script>
     <script src="_static/doctools.js?v=fd6eb6e6"></script>
     <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="_static/clipboard.min.js?v=a7894cd8"></script>
@@ -499,6 +499,13 @@
 <h2>Unreleased<a class="headerlink" href="#unreleased" title="Link to this heading">#</a></h2>
 <section id="added">
 <h3>Added<a class="headerlink" href="#added" title="Link to this heading">#</a></h3>
+<p>Entity models accept a <code class="docutils literal notranslate"><span class="pre">validate</span></code> list of checks, each with an <code class="docutils literal notranslate"><span class="pre">assert</span></code>
+Jinja expression (written without <code class="docutils literal notranslate"><span class="pre">{{</span> <span class="pre">}}</span></code>) and a <code class="docutils literal notranslate"><span class="pre">message</span></code> that may contain
+Jinja. The checks run against each enabled instance after its
+<code class="docutils literal notranslate"><span class="pre">pre_defines</span></code>, parameters and <code class="docutils literal notranslate"><span class="pre">post_defines</span></code> are rendered, so they can read
+fields of object parameters, for example
+<code class="docutils literal notranslate"><span class="pre">assert:</span> <span class="pre">interrupt_vector.count</span> <span class="pre">==</span> <span class="pre">3</span></code>. A false assertion stops generation
+with <code class="docutils literal notranslate"><span class="pre">&lt;module&gt;.&lt;name&gt;:</span> <span class="pre">validation</span> <span class="pre">failed:</span> <span class="pre">&lt;message&gt;</span></code> (#64).</p>
 <p>Templates can read the ibek process environment with <code class="docutils literal notranslate"><span class="pre">{{</span> <span class="pre">env.NAME</span> <span class="pre">}}</span></code>,
 <code class="docutils literal notranslate"><span class="pre">{{</span> <span class="pre">env['NAME']</span> <span class="pre">}}</span></code>, or <code class="docutils literal notranslate"><span class="pre">{{</span> <span class="pre">env.get('NAME',</span> <span class="pre">'fallback')</span> <span class="pre">}}</span></code>.
 The mapping is read-only and reflects the environment at render time.</p>
@@ -550,6 +557,18 @@ Each run revalidates the cached copy with <code class="docutils literal notransl
 silently. If nothing is cached for the image tag and the instance already has
 a schema, <code class="docutils literal notranslate"><span class="pre">ibek</span> <span class="pre">pattern</span> <span class="pre">schema</span></code> exits 1. Only a 404 or 410 response still
 skips generation quietly.</p>
+<p><code class="docutils literal notranslate"><span class="pre">ibek</span> <span class="pre">pattern</span> <span class="pre">schema</span></code> parses more image refs. A registry port such as
+<code class="docutils literal notranslate"><span class="pre">localhost:5000/org/ioc-x-runtime:1.0</span></code> is no longer read as the tag, and a
+ref with no registry host such as <code class="docutils literal notranslate"><span class="pre">epics-containers/ioc-x-runtime:1.0</span></code> no
+longer loses its org. A <code class="docutils literal notranslate"><span class="pre">-linux</span></code> architecture infix is stripped like
+<code class="docutils literal notranslate"><span class="pre">-rtems-beatnik</span></code>. An image on a GitLab registry now reports that
+GitLab-published schemas are not supported yet, instead of failing to fetch a
+GitHub URL built from the wrong project (part of #375).</p>
+<p>The published schema cache is keyed on registry host, full image path and tag
+(<code class="docutils literal notranslate"><span class="pre">&lt;host&gt;/&lt;path&gt;/&lt;tag&gt;.json</span></code>), so images with the same name on different
+registries no longer share an entry. Entries in the old
+<code class="docutils literal notranslate"><span class="pre">&lt;org&gt;__&lt;repo&gt;__&lt;tag&gt;.json</span></code> layout are not read; each schema is downloaded
+once more (part of #375).</p>
 </section>
 <section id="documentation">
 <h3>Documentation<a class="headerlink" href="#documentation" title="Link to this heading">#</a></h3>

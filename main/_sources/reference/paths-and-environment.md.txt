@@ -46,17 +46,27 @@ cache the **downloaded base schema**. The default directory is
 running another ibek installation as the same user therefore reuses the cache.
 `IBEK_SCHEMA_CACHE` overrides the directory; `XDG_CACHE_HOME` is not consulted.
 
-The key is `<org>__<repository>__<image-tag>.json`. For example:
+The key is `<registry host>/<image path>/<image-tag>.json`, one directory
+per part. For example:
 
 ```text
 Image: ghcr.io/epics-containers/ioc-adsimdetector-runtime:2025.11.1
 Asset: https://github.com/epics-containers/ioc-adsimdetector/releases/download/2025.11.1/ibek.ioc.schema.json
-Cache: ~/.cache/ibek/schemas/epics-containers__ioc-adsimdetector__2025.11.1.json
+Cache: ~/.cache/ibek/schemas/ghcr.io/epics-containers/ioc-adsimdetector/2025.11.1.json
 ```
 
-The image registry is removed, as are a final `-developer` or `-runtime` and
-its optional preceding `-rtems-beatnik`. Developer and runtime variants thus
-share the base-schema cache entry. The registry host is not part of the key.
+The last part of the image path loses a final `-developer` or `-runtime` and
+its optional preceding `-linux` or `-rtems-beatnik`, so developer and runtime
+variants share the base-schema cache entry. The registry host and every path
+part are kept, so images of the same name on different registries have
+separate entries. A port is written with `_` (`localhost_5000`), and an image
+with no registry host is cached under `docker.io`.
+
+Only the part before the tag is read as a registry host when it contains `.`
+or `:` or is `localhost`, as in Docker's reference grammar;
+`epics-containers/ioc-adaravis-runtime:2025.11.1` has no host. Images on a
+GitLab registry get no schema yet: ibek reports that GitLab-published schemas
+are not supported and skips generation (#375).
 
 Next to each cache file, `<key>.validators.json` stores the `ETag` and
 `Last-Modified` response headers. On every run ibek sends them back as
