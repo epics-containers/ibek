@@ -47,7 +47,12 @@ Runtime patterns add configuration files without rebuilding that image:
 StreamDevice protocols, database templates, extra support YAML or entity YAML.
 `ibek pattern` vendors these files into a services repository, records their
 versions and builds a combined instance schema. A pattern cannot add a missing
-compiled driver. See [runtime pattern vendoring](../how-to/vendor-runtime-patterns.md).
+compiled driver. Each instance carries its own copies, so the committed
+instance answers what configuration the IOC runs; the image it pins answers
+the rest. See
+[runtime pattern vendoring](../how-to/vendor-runtime-patterns.md),
+[ADR 0003](decisions/0003-vendored-pattern-tag-is-authority.md) and
+[ADR 0004](decisions/0004-vendor-runtime-support-over-submodules.md).
 
 Start with [a local render](../tutorials/build-an-ioc.md) to learn ibek itself.
 For complete workflows, use the epics-containers guides to

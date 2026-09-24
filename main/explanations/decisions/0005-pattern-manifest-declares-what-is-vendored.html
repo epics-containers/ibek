@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>2. Adopt python-copier-template for project structure &#8212; ibek 4.8.0b3.dev2+g7b638bb6a documentation</title>
+    <title>5. A pattern declares what is vendored &#8212; ibek 4.8.0b3.dev2+g7b638bb6a documentation</title>
   
   
   
@@ -48,7 +48,7 @@
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
     <script src="../../_static/copybutton.js?v=30646c52"></script>
     <script src="../../_static/design-tabs.js?v=f930bc37"></script>
-    <script>DOCUMENTATION_OPTIONS.pagename = 'explanations/decisions/0002-switched-to-python-copier-template';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'explanations/decisions/0005-pattern-manifest-declares-what-is-vendored';</script>
     <script>
         DOCUMENTATION_OPTIONS.theme_version = '0.21.0';
         DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://epics-containers.github.io/ibek/switcher.json';
@@ -60,8 +60,7 @@
     <link rel="icon" href="../../_static/dls-logo.svg"/>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="3. Vendored pattern tag is the authority" href="0003-vendored-pattern-tag-is-authority.html" />
-    <link rel="prev" title="1. Record architecture decisions" href="0001-record-architecture-decisions.html" />
+    <link rel="prev" title="4. Vendor runtime support over submodule + symlink" href="0004-vendor-runtime-support-over-submodules.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="main" />
@@ -427,10 +426,10 @@
 <li class="toctree-l1"><a class="reference internal" href="../architecture.html">Files and lifecycle</a></li>
 <li class="toctree-l1 current active has-children"><a class="reference internal" href="../decisions.html">Architectural Decision Records</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="0001-record-architecture-decisions.html">1. Record architecture decisions</a></li>
-<li class="toctree-l2 current active"><a class="current reference internal" href="#">2. Adopt python-copier-template for project structure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="0002-switched-to-python-copier-template.html">2. Adopt python-copier-template for project structure</a></li>
 <li class="toctree-l2"><a class="reference internal" href="0003-vendored-pattern-tag-is-authority.html">3. Vendored pattern tag is the authority</a></li>
 <li class="toctree-l2"><a class="reference internal" href="0004-vendor-runtime-support-over-submodules.html">4. Vendor runtime support over submodule + symlink</a></li>
-<li class="toctree-l2"><a class="reference internal" href="0005-pattern-manifest-declares-what-is-vendored.html">5. A pattern declares what is vendored</a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">5. A pattern declares what is vendored</a></li>
 </ul>
 </details></li>
 </ul>
@@ -479,7 +478,7 @@
     
     <li class="breadcrumb-item"><a href="../decisions.html" class="nav-link">Architectural Decision Records</a></li>
     
-    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">2. Adopt python-copier-template for project structure</span></li>
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">5. A pattern declares what is vendored</span></li>
   </ul>
 </nav>
 </div>
@@ -496,34 +495,122 @@
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section id="adopt-python-copier-template-for-project-structure">
-<h1>2. Adopt python-copier-template for project structure<a class="headerlink" href="#adopt-python-copier-template-for-project-structure" title="Link to this heading">#</a></h1>
+  <section id="a-pattern-declares-what-is-vendored">
+<h1>5. A pattern declares what is vendored<a class="headerlink" href="#a-pattern-declares-what-is-vendored" title="Link to this heading">#</a></h1>
 <section id="status">
 <h2>Status<a class="headerlink" href="#status" title="Link to this heading">#</a></h2>
 <p>Accepted</p>
 </section>
 <section id="context">
 <h2>Context<a class="headerlink" href="#context" title="Link to this heading">#</a></h2>
-<p>We should use the following <a class="reference external" href="https://github.com/DiamondLightSource/python-copier-template">python-copier-template</a>.
-The template will ensure consistency in developer
-environments and package management.</p>
+<p><code class="docutils literal notranslate"><span class="pre">ibek</span> <span class="pre">pattern</span></code> hard-coded its vendoring policy: every file in a pattern folder
+was copied into <code class="docutils literal notranslate"><span class="pre">&lt;instance&gt;/config/</span></code> and hashed into <code class="docutils literal notranslate"><span class="pre">runtime-lock.yaml</span></code>. That is
+exactly right for a flat StreamDevice pattern and wrong for everything else.</p>
+<p>The immediate driver is documentation. We want the useful docs from each source
+module to live in <code class="docutils literal notranslate"><span class="pre">ibek-runtime-streamdevice</span></code> alongside the protocol and template
+files, so the library is browsable and self-explanatory. Those docs must <em>not</em> be
+vendored into an IOC instance — they are repo context, not runtime files, and
+<code class="docutils literal notranslate"><span class="pre">config/</span></code> is the Kubernetes ConfigMap payload. There was no way to express that.</p>
+<p>The second driver is forward compatibility with build-time support management,
+which needs the same declarative description of “which files go where” against a
+different library and a different destination.</p>
 </section>
 <section id="decision">
 <h2>Decision<a class="headerlink" href="#decision" title="Link to this heading">#</a></h2>
-<p>We have switched to using the template.</p>
+<p>A pattern folder may carry an <strong><code class="docutils literal notranslate"><span class="pre">ibek.manifest.yaml</span></code></strong> declaring which of its
+files are vendored and where they land:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
+<span class="nt">vendor</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">src</span><span class="p">:</span><span class="w"> </span><span class="s">'.*\.(template|proto|protocol|db|req|ibek\.support\.yaml)$'</span>
+<span class="w">    </span><span class="nt">dest</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">config</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p><strong>It is an allow-list.</strong> A file matched by no entry is not vendored. That is
+the mechanism that keeps <code class="docutils literal notranslate"><span class="pre">docs/</span></code> out of <code class="docutils literal notranslate"><span class="pre">config/</span></code>.</p></li>
+<li><p><strong>The list is ordered and first-match-wins.</strong> Without that, one file could land
+in two places under two lock keys, and both <code class="docutils literal notranslate"><span class="pre">check</span></code> and orphan-pruning become
+ambiguous about which copy is authoritative.</p></li>
+<li><p><strong>A pattern with no manifest is vendored through a synthesised default</strong>
+(<code class="docutils literal notranslate"><span class="pre">src:</span> <span class="pre">'.*'</span></code>, <code class="docutils literal notranslate"><span class="pre">dest:</span> <span class="pre">config</span></code>) rather than through a second code path. One
+vendoring path, one check path, no branches — and the default is covered by
+the same validation and the same tests as a hand-written manifest. A pattern
+gets a manifest if and only if it contains files that must not be vendored.</p></li>
+<li><p><strong>Validation is whole-manifest and fails hard, before a single file is
+written.</strong> A skipped-with-warning entry would mean a file that should be in the
+IOC silently is not, which is not acceptable in an integrity system. Every
+message names the offending entry.</p></li>
+<li><p><strong>Lock keys are relative to the destination root</strong>, always — not to <code class="docutils literal notranslate"><span class="pre">config/</span></code>.
+The synthesised default (a pattern with no manifest) produces <code class="docutils literal notranslate"><span class="pre">config/...</span></code>
+keys naturally, so there is no per-pattern base field and no branch in
+<code class="docutils literal notranslate"><span class="pre">check</span></code>.</p></li>
+</ul>
+<p>The lock has a <code class="docutils literal notranslate"><span class="pre">version:</span></code> / <code class="docutils literal notranslate"><span class="pre">patterns:</span></code> root wrapper, because a bare
+<code class="docutils literal notranslate"><span class="pre">{pattern_name:</span> <span class="pre">entry}</span></code> mapping has nowhere to put metadata: <code class="docutils literal notranslate"><span class="pre">version:</span></code> gives
+the format room to evolve, <code class="docutils literal notranslate"><span class="pre">patterns:</span></code> holds each vendored pattern by name.</p>
+<p><code class="docutils literal notranslate"><span class="pre">ibek</span></code> reads and writes exactly this one shape. A lock in any other shape is
+refused outright, with a generic message naming a standalone conversion
+script rather than describing what the other shape is or how it arose — a
+description that would go stale the moment the lock format changes again.
+Reading such a lock as an <em>empty</em> one is the one thing that must never happen:
+<code class="docutils literal notranslate"><span class="pre">check</span></code> would then pass having verified nothing, and the instance would
+silently become unmanaged.</p>
 </section>
 <section id="consequences">
 <h2>Consequences<a class="headerlink" href="#consequences" title="Link to this heading">#</a></h2>
-<p>This module will use a fixed set of tools as developed in <code class="docutils literal notranslate"><span class="pre">python-copier-template</span></code>
-and can pull from this template to update the packaging to the latest techniques.</p>
-<p>As such, the developer environment may have changed, the following could be
-different:</p>
 <ul class="simple">
-<li><p>linting</p></li>
-<li><p>formatting</p></li>
-<li><p>pip venv setup</p></li>
-<li><p>CI/CD</p></li>
+<li><p>Switching a pattern’s manifest can prune an emptied <code class="docutils literal notranslate"><span class="pre">config/</span></code> itself, since
+orphan pruning now walks up to the destination root. Correct, but startling in
+a diff.</p></li>
+<li><p>Orphans are computed from the <strong>old lock’s</strong> key list and new files from the
+<strong>new</strong> plan, so <code class="docutils literal notranslate"><span class="pre">update</span></code> across a version that gains a manifest removes
+exactly the files the manifest stopped matching.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">dest</span></code> may also be a substitution (<code class="docutils literal notranslate"><span class="pre">\1</span></code> / <code class="docutils literal notranslate"><span class="pre">\g&lt;name&gt;</span></code>), expanding to the whole
+destination-relative path for flattening, renaming or re-rooting. It is kept
+out of the user-facing tutorial: <code class="docutils literal notranslate"><span class="pre">dest:</span> <span class="pre">config</span></code> is the only form a services
+repo needs. <code class="docutils literal notranslate"><span class="pre">..</span></code> is therefore checked <em>after</em> expansion, since a capture group
+can introduce one.</p></li>
+<li><p>A vendored <code class="docutils literal notranslate"><span class="pre">*.ibek.support.yaml</span></code> must land at the <code class="docutils literal notranslate"><span class="pre">config/</span></code> root, because
+<code class="docutils literal notranslate"><span class="pre">ibek</span> <span class="pre">pattern</span> <span class="pre">schema</span></code> merges <code class="docutils literal notranslate"><span class="pre">config/*.ibek.support.yaml</span></code> <strong>non-recursively</strong>.
+A misrouted one vendors cleanly, checks cleanly, and is then silently missing
+from the instance’s editor schema. (<code class="docutils literal notranslate"><span class="pre">ibek</span> <span class="pre">runtime</span> <span class="pre">generate2</span></code> globs
+<code class="docutils literal notranslate"><span class="pre">config/**/*.ibek.support.yaml</span></code> and does find a nested one, so the IOC itself
+still boots — what is lost is editor validation.) The rule is conditional on
+the file being vendored at all.</p></li>
+<li><p>Two sources mapping to one destination is a hard error, not a last-writer-wins
+overwrite that <code class="docutils literal notranslate"><span class="pre">check</span></code> would then pass — and destinations are compared in
+normal form, so <code class="docutils literal notranslate"><span class="pre">config/x</span></code> and <code class="docutils literal notranslate"><span class="pre">config/./x</span></code> are recognised as the one file
+they are. Likewise one destination cannot be both a file and the folder
+holding another, which would otherwise fail half way through the write.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">dest</span></code> is the only user-controlled placement, and <code class="docutils literal notranslate"><span class="pre">ibek</span> <span class="pre">runtime</span> <span class="pre">place-files</span></code>
+copies <code class="docutils literal notranslate"><span class="pre">*.proto</span></code> / <code class="docutils literal notranslate"><span class="pre">*.db</span></code> / <code class="docutils literal notranslate"><span class="pre">*.template</span></code> from the <code class="docutils literal notranslate"><span class="pre">config/</span></code> root only. Nesting
+those under <code class="docutils literal notranslate"><span class="pre">config/</span></code> is for repo organisation; they will not reach the IOC’s
+runtime search path. Closing that gap belongs to <code class="docutils literal notranslate"><span class="pre">place-files</span></code>, not here.</p></li>
 </ul>
+</section>
+<section id="rejected">
+<h2>Rejected<a class="headerlink" href="#rejected" title="Link to this heading">#</a></h2>
+<ul class="simple">
+<li><p><strong>A <code class="docutils literal notranslate"><span class="pre">lock:</span></code> key in the manifest.</strong> A pattern can never be the authority on
+where a <em>destination’s</em> lock lives. <code class="docutils literal notranslate"><span class="pre">runtime-lock.yaml</span></code> at the destination
+root, always.</p></li>
+<li><p><strong>A <code class="docutils literal notranslate"><span class="pre">stamp:</span></code> key</strong> — moot once the vendored header is dropped (see
+<a class="reference internal" href="0004-vendor-runtime-support-over-submodules.html"><span class="std std-doc">ADR 4</span></a>).</p></li>
+<li><p><strong>A per-pattern <code class="docutils literal notranslate"><span class="pre">root:</span></code> field in the lock, or a “has manifest” flag.</strong>
+Destination-root-relative keys make both unnecessary, and <code class="docutils literal notranslate"><span class="pre">check</span></code> is offline
+and cannot see the manifest anyway. The version pin already pins it.</p></li>
+<li><p><strong>Making the lock’s <code class="docutils literal notranslate"><span class="pre">version:</span></code> a switch ibek branches on to read an older
+shape.</strong> It exists for future evolution and validation only; a shape ibek
+does not recognise is refused, and converting it is a standalone step
+outside ibek entirely (<code class="docutils literal notranslate"><span class="pre">scripts/convert-runtime-lock.py</span></code>).</p></li>
+<li><p><strong>A <code class="docutils literal notranslate"><span class="pre">{pattern}</span></code> token in <code class="docutils literal notranslate"><span class="pre">dest</span></code>, a <code class="docutils literal notranslate"><span class="pre">requires:</span></code> key, dependency resolution, and
+one lock spanning several destinations.</strong> All belong to the build-time support
+issue, and none of them need a format break — which is why the manifest root is
+a mapping rather than a bare list.</p></li>
+</ul>
+<p>See <a class="reference internal" href="0003-vendored-pattern-tag-is-authority.html"><span class="std std-doc">ADR 3</span></a> for where the authority
+for a pattern’s <em>content</em> lives, and the
+<a class="reference internal" href="../../reference/pattern-manifest.html"><span class="std std-doc">pattern manifest reference</span></a> for the format.</p>
 </section>
 </section>
 
@@ -538,22 +625,13 @@ different:</p>
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="0001-record-architecture-decisions.html"
+       href="0004-vendor-runtime-support-over-submodules.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">1. Record architecture decisions</p>
+        <p class="prev-next-title">4. Vendor runtime support over submodule + symlink</p>
       </div>
-    </a>
-    <a class="right-next"
-       href="0003-vendored-pattern-tag-is-authority.html"
-       title="next page">
-      <div class="prev-next-info">
-        <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">3. Vendored pattern tag is the authority</p>
-      </div>
-      <i class="fa-solid fa-angle-right"></i>
     </a>
 </div>
                 </footer>
@@ -578,6 +656,7 @@ different:</p>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#context">Context</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#decision">Decision</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#consequences">Consequences</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#rejected">Rejected</a></li>
 </ul>
   </nav></div>
 
@@ -585,7 +664,7 @@ different:</p>
 
   
   <div class="tocsection editthispage">
-    <a href="https://github.com/epics-containers/ibek/edit/main/docs/explanations/decisions/0002-switched-to-python-copier-template.md">
+    <a href="https://github.com/epics-containers/ibek/edit/main/docs/explanations/decisions/0005-pattern-manifest-declares-what-is-vendored.md">
       <i class="fa-solid fa-pencil"></i>
       
       
@@ -600,7 +679,7 @@ different:</p>
   <div class="sidebar-secondary-item">
 
   <div class="tocsection sourcelink">
-    <a href="../../_sources/explanations/decisions/0002-switched-to-python-copier-template.md.txt">
+    <a href="../../_sources/explanations/decisions/0005-pattern-manifest-declares-what-is-vendored.md.txt">
       <i class="fa-solid fa-file-lines"></i> Show Source
     </a>
   </div>

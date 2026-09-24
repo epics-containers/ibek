@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Changelog &#8212; ibek 4.7.1.dev4+gf457e45b6 documentation</title>
+    <title>Changelog &#8212; ibek 4.8.0b3.dev2+g7b638bb6a documentation</title>
   
   
   
@@ -42,7 +42,7 @@
   <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=cb8930eaaf36d9849b67" />
 <link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=cb8930eaaf36d9849b67" />
 
-    <script src="_static/documentation_options.js?v=15929cf4"></script>
+    <script src="_static/documentation_options.js?v=6b70f440"></script>
     <script src="_static/doctools.js?v=fd6eb6e6"></script>
     <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="_static/clipboard.min.js?v=a7894cd8"></script>
@@ -427,6 +427,7 @@
 <li class="toctree-l1"><a class="reference internal" href="reference/support-yaml.html">Support YAML</a></li>
 <li class="toctree-l1"><a class="reference internal" href="reference/ansible-recipes.html">Ansible build recipes</a></li>
 <li class="toctree-l1"><a class="reference internal" href="reference/ioc-yaml.html">IOC YAML</a></li>
+<li class="toctree-l1"><a class="reference internal" href="reference/pattern-manifest.html"><code class="docutils literal notranslate"><span class="pre">ibek.manifest.yaml</span></code> and <code class="docutils literal notranslate"><span class="pre">runtime-lock.yaml</span></code></a></li>
 <li class="toctree-l1"><a class="reference internal" href="reference/jinja-context.html">Jinja rendering and context</a></li>
 <li class="toctree-l1"><a class="reference internal" href="reference/paths-and-environment.html">Paths and environment</a></li>
 <li class="toctree-l1"><a class="reference internal" href="_api/ibek.html">Python internals</a></li>
@@ -510,6 +511,24 @@ take precedence over the new helper.</p>
 In particular, <code class="docutils literal notranslate"><span class="pre">_global.get_env('NAME')</span></code> still returns an empty string for an
 unset variable. Older ibek releases without the new <code class="docutils literal notranslate"><span class="pre">env</span></code> mapping should
 continue to use that form.</p>
+<p>A standalone <code class="docutils literal notranslate"><span class="pre">scripts/convert-runtime-lock.py</span></code> rewrites a <code class="docutils literal notranslate"><span class="pre">runtime-lock.yaml</span></code>
+that is not in the <code class="docutils literal notranslate"><span class="pre">version:</span></code>/<code class="docutils literal notranslate"><span class="pre">patterns:</span></code> shape this ibek reads. Run it once
+per destination, from an <code class="docutils literal notranslate"><span class="pre">ibek</span></code> checkout:
+<code class="docutils literal notranslate"><span class="pre">uv</span> <span class="pre">run</span> <span class="pre">scripts/convert-runtime-lock.py</span> <span class="pre">&lt;dest&gt;/runtime-lock.yaml</span></code>; or from
+anywhere, including a services repo with no <code class="docutils literal notranslate"><span class="pre">ibek</span></code> checkout, straight from its
+raw URL:
+<code class="docutils literal notranslate"><span class="pre">uv</span> <span class="pre">run</span> <span class="pre">https://raw.githubusercontent.com/epics-containers/ibek/main/scripts/convert-runtime-lock.py</span> <span class="pre">&lt;dest&gt;/runtime-lock.yaml</span></code>
+(#363).</p>
+</section>
+<section id="changed">
+<h3>Changed<a class="headerlink" href="#changed" title="Link to this heading">#</a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">ibek</span> <span class="pre">pattern</span> <span class="pre">check</span></code>/<code class="docutils literal notranslate"><span class="pre">add</span></code>/<code class="docutils literal notranslate"><span class="pre">update</span></code> refuse a <code class="docutils literal notranslate"><span class="pre">runtime-lock.yaml</span></code> in any
+format they do not recognise, rather than special-casing one earlier shape. If
+you see “lock format not recognised”, convert the lock with
+<code class="docutils literal notranslate"><span class="pre">uv</span> <span class="pre">run</span> <span class="pre">scripts/convert-runtime-lock.py</span> <span class="pre">&lt;lock&gt;</span></code> and retry (#363).</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">pvi</span></code> dependency floor is now <code class="docutils literal notranslate"><span class="pre">0.14.1</span></code>, with no ceiling. Generated PVI
+screens use pvi’s updated widget styling (fonts, colours and layout), so the
+test goldens under <code class="docutils literal notranslate"><span class="pre">tests/samples/outputs</span></code> were regenerated to match.</p>
 </section>
 <section id="fixed">
 <h3>Fixed<a class="headerlink" href="#fixed" title="Link to this heading">#</a></h3>
@@ -586,6 +605,7 @@ documented the persistent schema cache used by <code class="docutils literal not
     <ul class="pst-show_toc_level nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#unreleased">Unreleased</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#added">Added</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#changed">Changed</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#fixed">Fixed</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#documentation">Documentation</a></li>
 </ul>

@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>4. Vendor runtime support over submodule + symlink &#8212; ibek 4.7.1.dev4+gf457e45b6 documentation</title>
+    <title>4. Vendor runtime support over submodule + symlink &#8212; ibek 4.8.0b3.dev2+g7b638bb6a documentation</title>
   
   
   
@@ -42,7 +42,7 @@
   <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=cb8930eaaf36d9849b67" />
 <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=cb8930eaaf36d9849b67" />
 
-    <script src="../../_static/documentation_options.js?v=15929cf4"></script>
+    <script src="../../_static/documentation_options.js?v=6b70f440"></script>
     <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -60,6 +60,7 @@
     <link rel="icon" href="../../_static/dls-logo.svg"/>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="5. A pattern declares what is vendored" href="0005-pattern-manifest-declares-what-is-vendored.html" />
     <link rel="prev" title="3. Vendored pattern tag is the authority" href="0003-vendored-pattern-tag-is-authority.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
@@ -429,6 +430,7 @@
 <li class="toctree-l2"><a class="reference internal" href="0002-switched-to-python-copier-template.html">2. Adopt python-copier-template for project structure</a></li>
 <li class="toctree-l2"><a class="reference internal" href="0003-vendored-pattern-tag-is-authority.html">3. Vendored pattern tag is the authority</a></li>
 <li class="toctree-l2 current active"><a class="current reference internal" href="#">4. Vendor runtime support over submodule + symlink</a></li>
+<li class="toctree-l2"><a class="reference internal" href="0005-pattern-manifest-declares-what-is-vendored.html">5. A pattern declares what is vendored</a></li>
 </ul>
 </details></li>
 </ul>
@@ -541,6 +543,41 @@ resolved through a submodule at build time.</p></li>
 to the lock.</p></li>
 </ul>
 </section>
+<section id="amendment-ibek-361">
+<h2>Amendment (ibek#361)<a class="headerlink" href="#amendment-ibek-361" title="Link to this heading">#</a></h2>
+<p>The Decision and Consequences above describe a deterministic
+<code class="docutils literal notranslate"><span class="pre">#</span> <span class="pre">Vendored</span> <span class="pre">from</span> <span class="pre">&lt;source&gt;&#64;&lt;version&gt;</span> <span class="pre">—</span> <span class="pre">DO</span> <span class="pre">NOT</span> <span class="pre">EDIT</span></code> header prepended to each
+vendored file. <strong>The header is gone.</strong> The decision to vendor rather than
+submodule is unchanged; the mechanism is amended as follows.</p>
+<ul class="simple">
+<li><p><strong>No header.</strong> Nothing ever read it — it was write-only — and the
+<code class="docutils literal notranslate"><span class="pre">#</span></code>-for-any-unknown-suffix fallback was a guess that could only corrupt: the
+build-time libraries carry <code class="docutils literal notranslate"><span class="pre">.patch</span></code>, <code class="docutils literal notranslate"><span class="pre">.json</span></code> and <code class="docutils literal notranslate"><span class="pre">.cpp</span></code>, none of which survive
+a leading <code class="docutils literal notranslate"><span class="pre">#</span></code> line. Provenance now lives solely in <code class="docutils literal notranslate"><span class="pre">runtime-lock.yaml</span></code>, which
+is adjacent, committed and authoritative.</p></li>
+<li><p><strong>Vendored files are real files, not symlinks</strong> — and that is now enforced from
+both ends: a <strong>symlink anywhere in a pattern folder is refused</strong> at vendor
+time, not followed, not vendored and not hashed. A walk built from <code class="docutils literal notranslate"><span class="pre">rglob</span></code> +
+<code class="docutils literal notranslate"><span class="pre">is_file</span></code> alone would silently dereference a good link and silently skip a
+broken one, so a symlink to <code class="docutils literal notranslate"><span class="pre">/etc/passwd</span></code> in a library repo would be
+vendored; the refusal above closes that off.</p></li>
+<li><p><strong>What is copied, and where, is declared by the pattern</strong> in an
+<code class="docutils literal notranslate"><span class="pre">ibek.manifest.yaml</span></code>, rather than being hard-coded as “every file into
+<code class="docutils literal notranslate"><span class="pre">config/</span></code>”. A pattern with no manifest is vendored through a default
+manifest that ibek itself supplies, with that same “everything into
+<code class="docutils literal notranslate"><span class="pre">config/</span></code>” effect. See
+<a class="reference internal" href="0005-pattern-manifest-declares-what-is-vendored.html"><span class="std std-doc">ADR 5</span></a>.</p></li>
+<li><p><strong>Lock keys are relative to the destination root</strong>, not to <code class="docutils literal notranslate"><span class="pre">config/</span></code>, under a
+<code class="docutils literal notranslate"><span class="pre">version:</span></code> / <code class="docutils literal notranslate"><span class="pre">patterns:</span></code> root wrapper — see
+<a class="reference internal" href="0005-pattern-manifest-declares-what-is-vendored.html"><span class="std std-doc">ADR 5</span></a>.</p></li>
+</ul>
+<p>A lock in any other shape — for example root-relative pattern names, with
+hashes computed over a header the file does not itself carry — is refused
+outright, with a generic message naming a standalone conversion script
+(<code class="docutils literal notranslate"><span class="pre">scripts/convert-runtime-lock.py</span></code>) rather than an explanation tied to this
+particular change: see the
+<a class="reference internal" href="../../how-to/vendor-runtime-patterns.html#unrecognised-locks"><span class="std std-ref">vendoring how-to</span></a>.</p>
+</section>
 </section>
 
 
@@ -561,6 +598,15 @@ to the lock.</p></li>
         <p class="prev-next-subtitle">previous</p>
         <p class="prev-next-title">3. Vendored pattern tag is the authority</p>
       </div>
+    </a>
+    <a class="right-next"
+       href="0005-pattern-manifest-declares-what-is-vendored.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">5. A pattern declares what is vendored</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
     </a>
 </div>
                 </footer>
@@ -585,6 +631,7 @@ to the lock.</p></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#context">Context</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#decision">Decision</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#consequences">Consequences</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#amendment-ibek-361">Amendment (ibek#361)</a></li>
 </ul>
   </nav></div>
 

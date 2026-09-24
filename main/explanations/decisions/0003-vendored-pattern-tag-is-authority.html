@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>3. Vendored pattern tag is the authority &#8212; ibek 4.7.1.dev4+gf457e45b6 documentation</title>
+    <title>3. Vendored pattern tag is the authority &#8212; ibek 4.8.0b3.dev2+g7b638bb6a documentation</title>
   
   
   
@@ -42,7 +42,7 @@
   <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=cb8930eaaf36d9849b67" />
 <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=cb8930eaaf36d9849b67" />
 
-    <script src="../../_static/documentation_options.js?v=15929cf4"></script>
+    <script src="../../_static/documentation_options.js?v=6b70f440"></script>
     <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -430,6 +430,7 @@
 <li class="toctree-l2"><a class="reference internal" href="0002-switched-to-python-copier-template.html">2. Adopt python-copier-template for project structure</a></li>
 <li class="toctree-l2 current active"><a class="current reference internal" href="#">3. Vendored pattern tag is the authority</a></li>
 <li class="toctree-l2"><a class="reference internal" href="0004-vendor-runtime-support-over-submodules.html">4. Vendor runtime support over submodule + symlink</a></li>
+<li class="toctree-l2"><a class="reference internal" href="0005-pattern-manifest-declares-what-is-vendored.html">5. A pattern declares what is vendored</a></li>
 </ul>
 </details></li>
 </ul>
@@ -540,6 +541,31 @@ if that ever changes.</p></li>
 <p>See <a class="reference internal" href="0004-vendor-runtime-support-over-submodules.html"><span class="std std-doc">ADR 4</span></a> for the underlying
 decision to vendor runtime support in the first place.</p>
 </section>
+<section id="amendment-ibek-361">
+<h2>Amendment (ibek#361)<a class="headerlink" href="#amendment-ibek-361" title="Link to this heading">#</a></h2>
+<p>The Context above describes the vendored files as carrying a
+<code class="docutils literal notranslate"><span class="pre">#</span> <span class="pre">Vendored</span> <span class="pre">from</span> <span class="pre">&lt;source&gt;&#64;&lt;version&gt;</span> <span class="pre">—</span> <span class="pre">DO</span> <span class="pre">NOT</span> <span class="pre">EDIT</span></code> header. <strong>That header has been
+removed.</strong> The decision recorded here — that the upstream tag is the authority
+and the lock is a local-drift check only — is unchanged, and is in fact
+<em>strengthened</em> by the removal:</p>
+<ul class="simple">
+<li><p>Vendored files are now <strong>byte-identical</strong> to the library at its tag, so
+<code class="docutils literal notranslate"><span class="pre">diff</span> <span class="pre">-r</span> <span class="pre">&lt;dest&gt;/config/</span> <span class="pre">&lt;library&gt;/&lt;pattern&gt;/</span></code> verifies an instance against
+upstream directly. The header made that impossible: every file differed from
+its upstream by one line, so “did this come from the tag?” could only be
+answered through ibek.</p></li>
+<li><p>Provenance moves entirely into <code class="docutils literal notranslate"><span class="pre">runtime-lock.yaml</span></code>, which is adjacent,
+committed and authoritative — and was already the only thing anything read.</p></li>
+<li><p>Enforcement of <em>do not edit</em> moves entirely to <code class="docutils literal notranslate"><span class="pre">ibek</span> <span class="pre">pattern</span> <span class="pre">check</span></code> via the
+pre-commit hook and <code class="docutils literal notranslate"><span class="pre">ci_verify.sh</span></code>. That raises the stakes on those hooks being
+correct: the file itself carries no “do not edit” warning, so the person
+opening it relies on <code class="docutils literal notranslate"><span class="pre">check</span></code> to catch an edit.</p></li>
+</ul>
+<p>Which files are vendored, and where they land, is now declared per pattern by
+<code class="docutils literal notranslate"><span class="pre">ibek.manifest.yaml</span></code> (see
+<a class="reference internal" href="0005-pattern-manifest-declares-what-is-vendored.html"><span class="std std-doc">ADR 5</span></a>); this does not
+affect where the authority for their <em>content</em> lives.</p>
+</section>
 </section>
 
 
@@ -593,6 +619,7 @@ decision to vendor runtime support in the first place.</p>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#context">Context</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#decision">Decision</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#consequences">Consequences</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#amendment-ibek-361">Amendment (ibek#361)</a></li>
 </ul>
   </nav></div>
 
