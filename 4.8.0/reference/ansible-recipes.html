@@ -1,0 +1,881 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Ansible build recipes &#8212; ibek 4.8.0 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=cb8930eaaf36d9849b67" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=cb8930eaaf36d9849b67" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../_static/graphviz.css?v=4ae1632d" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinxcontrib_typer.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="../_static/scripts/fontawesome.js?digest=cb8930eaaf36d9849b67"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=cb8930eaaf36d9849b67" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=cb8930eaaf36d9849b67" />
+
+    <script src="../_static/documentation_options.js?v=0b4ca7ae"></script>
+    <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=30646c52"></script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'reference/ansible-recipes';</script>
+    <script>
+        DOCUMENTATION_OPTIONS.theme_version = '0.21.0';
+        DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://epics-containers.github.io/ibek/switcher.json';
+        DOCUMENTATION_OPTIONS.theme_switcher_version_match = '4.8.0';
+        DOCUMENTATION_OPTIONS.show_version_warning_banner =
+            false;
+        </script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <link rel="icon" href="../_static/dls-logo.svg"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="IOC YAML" href="ioc-yaml.html" />
+    <link rel="prev" title="Support YAML" href="support-yaml.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="4.8.0" />
+  
+    
+    <script src="../_static/searchtools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../searchindex.js"></script>
+  
+  </head>
+  <body data-default-mode="">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/dls-logo.svg" class="logo__image only-light" alt=""/>
+    <img src="../_static/dls-logo.svg" class="logo__image only-dark pst-js-only" alt=""/>
+  
+  
+    <p class="title logo__title">ibek</p>
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../tutorials.html">
+    Tutorials
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../how-to.html">
+    How-to guides
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../reference.html">
+    Reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../explanations.html">
+    Explanations
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/epics-containers/ibek" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://pypi.org/project/ibek" title="PyPI" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fas fa-cube fa-lg" aria-hidden="true"></i><span class="visually-hidden">PyPI</span></a>
+        </li>
+</ul></div>
+      
+        <div class="navbar-item">
+<div class="version-switcher__container dropdown pst-js-only">
+  <button id="pst-version-switcher-button-2"
+    type="button"
+    class="version-switcher__button btn btn-sm dropdown-toggle"
+    data-bs-toggle="dropdown"
+    aria-haspopup="listbox"
+    aria-controls="pst-version-switcher-list-2"
+    aria-label="Version switcher list"
+  >
+    Choose version  <!-- this text may get changed later by javascript -->
+    <span class="caret"></span>
+  </button>
+  <div id="pst-version-switcher-list-2"
+    class="version-switcher__menu dropdown-menu list-group-flush py-0"
+    role="listbox" aria-labelledby="pst-version-switcher-button-2">
+    <!-- dropdown will be populated by javascript on page load -->
+  </div>
+</div></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../tutorials.html">
+    Tutorials
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../how-to.html">
+    How-to guides
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../reference.html">
+    Reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../explanations.html">
+    Explanations
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/epics-containers/ibek" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://pypi.org/project/ibek" title="PyPI" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fas fa-cube fa-lg" aria-hidden="true"></i><span class="visually-hidden">PyPI</span></a>
+        </li>
+</ul></div>
+        
+          <div class="navbar-item">
+<div class="version-switcher__container dropdown pst-js-only">
+  <button id="pst-version-switcher-button-3"
+    type="button"
+    class="version-switcher__button btn btn-sm dropdown-toggle"
+    data-bs-toggle="dropdown"
+    aria-haspopup="listbox"
+    aria-controls="pst-version-switcher-list-3"
+    aria-label="Version switcher list"
+  >
+    Choose version  <!-- this text may get changed later by javascript -->
+    <span class="caret"></span>
+  </button>
+  <div id="pst-version-switcher-list-3"
+    class="version-switcher__menu dropdown-menu list-group-flush py-0"
+    role="listbox" aria-labelledby="pst-version-switcher-button-3">
+    <!-- dropdown will be populated by javascript on page load -->
+  </div>
+</div></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item pst-sidebar-collapse"><button id="pst-collapse-sidebar-button" aria-expanded="true" aria-controls="pst-primary-sidebar">
+  <svg class="pst-icon" role="img" aria-hidden="true" focusable="false" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+    <path fill="currentColor" d="M3 15.5C2.36232 15.5 1.74874 15.2564 1.28478 14.8189C0.820828 14.3815 0.541576 13.7832 0.504167 13.1467L0.5 13L0.5 3C0.499965 2.36232 0.743605 1.74874 1.18107 1.28478C1.61854 0.820828 2.21676 0.541576 2.85333 0.504167L3 0.5L13 0.5C13.6377 0.499965 14.2513 0.743605 14.7152 1.18107C15.1792 1.61854 15.4584 2.21676 15.4958 2.85333L15.5 3L15.5 13C15.5 13.6377 15.2564 14.2513 14.8189 14.7152C14.3815 15.1792 13.7832 15.4584 13.1467 15.4958L13 15.5L3 15.5ZM3 13.8333L10.5 13.8333L10.5 2.16667L3 2.16667C2.79589 2.16669 2.59889 2.24163 2.44636 2.37726C2.29383 2.5129 2.19638 2.69979 2.1725 2.9025L2.16667 3L2.16667 13C2.16669 13.2041 2.24163 13.4011 2.37726 13.5536C2.5129 13.7062 2.69979 13.8036 2.9025 13.8275L3 13.8333ZM6.65583 10.325L6.5775 10.2558L4.91083 8.58917C4.76735 8.44567 4.68116 8.25476 4.66843 8.05223C4.65569 7.84971 4.71729 7.6495 4.84167 7.48917L4.91083 7.41083L6.5775 5.74417C6.72747 5.59471 6.9287 5.50794 7.14032 5.50148C7.35194 5.49502 7.55809 5.56935 7.7169 5.70937C7.8757 5.8494 7.97525 6.04463 7.99533 6.25539C8.01541 6.46616 7.95451 6.67667 7.825 6.84417L7.75583 6.9225L6.67917 8L7.75583 9.0775C7.89931 9.22099 7.98551 9.41191 7.99824 9.61443C8.01097 9.81695 7.94938 10.0172 7.825 10.1775L7.75583 10.2558C7.61234 10.3993 7.42142 10.4855 7.2189 10.4982C7.01638 10.511 6.81617 10.4494 6.65583 10.325Z"/>
+  </svg>
+  <span class="pst-collapse-sidebar-label">Collapse Sidebar</span>
+  <span class="pst-expand-sidebar-label">Expand Sidebar</span>
+</button></div>
+        <div class="sidebar-primary-item">
+
+<nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="cli.html">CLI reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="support-yaml.html">Support YAML</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Ansible build recipes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ioc-yaml.html">IOC YAML</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pattern-manifest.html"><code class="docutils literal notranslate"><span class="pre">ibek.manifest.yaml</span></code> and <code class="docutils literal notranslate"><span class="pre">runtime-lock.yaml</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="jinja-context.html">Jinja rendering and context</a></li>
+<li class="toctree-l1"><a class="reference internal" href="paths-and-environment.html">Paths and environment</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../_api/ibek.html">Python internals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../genindex.html">Index</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../release-notes.html">Changelog</a></li>
+</ul>
+</div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../reference.html" class="nav-link">Reference</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Ansible build recipes</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="ansible-build-recipes">
+<h1>Ansible build recipes<a class="headerlink" href="#ansible-build-recipes" title="Link to this heading">#</a></h1>
+<p>An ibek-support recipe is <code class="docutils literal notranslate"><span class="pre">&lt;module&gt;/&lt;module&gt;.install.yml</span></code>, loaded as Ansible
+variables by <code class="docutils literal notranslate"><span class="pre">ansible.sh</span></code>. It builds EPICS support; it is separate from the
+<code class="docutils literal notranslate"><span class="pre">*.ibek.support.yaml</span></code> consumed by ibek at runtime. See
+<a class="reference internal" href="../how-to/build-support.html"><span class="std std-doc">build support modules</span></a> for the workflow.</p>
+<p>The tables below describe the current
+<a class="reference external" href="https://github.com/epics-containers/ibek-support/tree/main/_ansible">ibek-support roles</a>,
+including behavior that differs from its editor schema. These defaults belong
+to ibek-support, so use the version selected by your generic IOC project.</p>
+<section id="source-and-build-fields">
+<h2>Source and build fields<a class="headerlink" href="#source-and-build-fields" title="Link to this heading">#</a></h2>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Field</p></th>
+<th class="head"><p>Default and behavior</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">module</span></code></p></td>
+<td><p>Required, nonempty module name. Usually matches the recipe directory.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">version</span></code></p></td>
+<td><p>Required, nonempty Git tag, branch or commit used for the initial clone. Quote version numbers.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">organization</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">https://github.com/epics-modules</span></code>.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">git_repo</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">{{</span> <span class="pre">organization.rstrip('/')</span> <span class="pre">}}/{{</span> <span class="pre">module</span> <span class="pre">}}</span></code>; override for a different repository.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">local_path</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">{{</span> <span class="pre">support_folder</span> <span class="pre">}}/{{</span> <span class="pre">module</span> <span class="pre">}}</span></code>, normally <code class="docutils literal notranslate"><span class="pre">/epics/support/&lt;module&gt;</span></code>.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">recursive</span></code></p></td>
+<td><p>False if unset; enable Git submodule checkout.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">make_options</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">-j{{</span> <span class="pre">ansible_processor_vcpus</span> <span class="pre">}}</span></code>; passed to <code class="docutils literal notranslate"><span class="pre">make</span></code>.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">macro</span></code></p></td>
+<td><p>Uppercase module name with hyphens replaced by underscores; the module’s RELEASE macro.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">remove_macros</span></code></p></td>
+<td><p>Empty list; add blank assignments for macros absent from the global RELEASE file. Existing assignments are retained.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">extra_release_macros</span></code></p></td>
+<td><p>Empty mapping; add or replace global RELEASE assignments, e.g. <code class="docutils literal notranslate"><span class="pre">AREA_DETECTOR:</span> <span class="pre">&quot;$(SUPPORT)&quot;</span></code>.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">libs</span></code></p></td>
+<td><p>Empty list; library names, without <code class="docutils literal notranslate"><span class="pre">lib</span></code> prefix or extension, added to <code class="docutils literal notranslate"><span class="pre">configure/lib_list</span></code> for IOC linking.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">dbds</span></code></p></td>
+<td><p>Empty list; DBD filenames, including <code class="docutils literal notranslate"><span class="pre">.dbd</span></code>, added to <code class="docutils literal notranslate"><span class="pre">configure/dbd_list</span></code>.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">skip_clean</span></code></p></td>
+<td><p>False; true skips the final <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">clean</span></code>, <strong>not</strong> the initial clean before compilation.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>An existing <code class="docutils literal notranslate"><span class="pre">local_path</span></code> is used as-is: it is not fetched, checked out at
+<code class="docutils literal notranslate"><span class="pre">version</span></code>, or reset. <code class="docutils literal notranslate"><span class="pre">patch_file</span></code> also runs only on a fresh clone. The declared
+<code class="docutils literal notranslate"><span class="pre">force_clone</span></code> and <code class="docutils literal notranslate"><span class="pre">force_build</span></code> variables currently have no implementing tasks;
+they do not change that behavior.</p>
+</section>
+<section id="dependencies-and-runtime-assets">
+<h2>Dependencies and runtime assets<a class="headerlink" href="#dependencies-and-runtime-assets" title="Link to this heading">#</a></h2>
+<p>All lists below default to empty.</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Field</p></th>
+<th class="head"><p>Behavior</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">apt_developer</span></code></p></td>
+<td><p>Install Linux build packages. Names use the package manager; absolute paths identify local <code class="docutils literal notranslate"><span class="pre">.deb</span></code> files.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">apt_runtime</span></code></p></td>
+<td><p>Record Linux runtime packages in <code class="docutils literal notranslate"><span class="pre">configure/runtime_debs</span></code> for the image’s runtime stage; does not install them here.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">download_extras</span></code></p></td>
+<td><p>List of <code class="docutils literal notranslate"><span class="pre">{url:</span> <span class="pre">...,</span> <span class="pre">dest:</span> <span class="pre">...}</span></code> downloads, performed before package installation.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">runtime_files</span></code></p></td>
+<td><p>Absolute paths recorded in <code class="docutils literal notranslate"><span class="pre">configure/runtime_files_list</span></code> for later runtime extraction.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">protocol_files</span></code></p></td>
+<td><p>Paths relative to <code class="docutils literal notranslate"><span class="pre">local_path</span></code>, copied into <code class="docutils literal notranslate"><span class="pre">/epics/support/configure/protocol</span></code>.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">skip_apt:</span> <span class="pre">true</span></code> skips the whole system-dependency stage, including downloads
+and registration of <code class="docutils literal notranslate"><span class="pre">apt_runtime</span></code>, not just package installation. It defaults
+to false. Downloads otherwise run for either target architecture; package
+installation and runtime-package registration are restricted to Linux targets.</p>
+<p>Support YAML, PVI definitions and autosave requests need no list entries:
+the role links top-level <code class="docutils literal notranslate"><span class="pre">*.ibek.support.yaml</span></code>, <code class="docutils literal notranslate"><span class="pre">*.pvi.device.yaml</span></code> and <code class="docutils literal notranslate"><span class="pre">*.req</span></code>
+from the recipe directory into <code class="docutils literal notranslate"><span class="pre">/epics/ibek-defs</span></code>, <code class="docutils literal notranslate"><span class="pre">/epics/pvi-defs</span></code> and
+<code class="docutils literal notranslate"><span class="pre">/epics/autosave</span></code> respectively. These are files from the <strong>recipe directory</strong>,
+whereas <code class="docutils literal notranslate"><span class="pre">protocol_files</span></code> come from the <strong>module source directory</strong>.</p>
+</section>
+<section id="customization-fields">
+<h2>Customization fields<a class="headerlink" href="#customization-fields" title="Link to this heading">#</a></h2>
+<p>The following fields are lists, except <code class="docutils literal notranslate"><span class="pre">patch_file</span></code>, which is one mapping.
+Paths in <code class="docutils literal notranslate"><span class="pre">comment_out</span></code>, <code class="docutils literal notranslate"><span class="pre">patch_lines</span></code>, <code class="docutils literal notranslate"><span class="pre">patch_blocks</span></code>, and
+<code class="docutils literal notranslate"><span class="pre">remove_files_prebuild</span></code> are relative to <code class="docutils literal notranslate"><span class="pre">local_path</span></code>. Script, task and patch
+file paths are relative to <code class="docutils literal notranslate"><span class="pre">ibek_support_folder</span></code>, the recipe directory.</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Field</p></th>
+<th class="head"><p>Entry format and behavior</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">remove_files_prebuild</span></code></p></td>
+<td><p>List of paths to delete before the build; default empty.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">comment_out</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">{path,</span> <span class="pre">regexp,</span> <span class="pre">when?}</span></code>; prefixes matching, not-already-commented lines with <code class="docutils literal notranslate"><span class="pre">#</span> </code>. Pre-build only.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">patch_lines</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">{path,</span> <span class="pre">regexp,</span> <span class="pre">line,</span> <span class="pre">when?,</span> <span class="pre">post_build?}</span></code>; replace a matching line or append when absent; creates missing files.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">patch_blocks</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">{path,</span> <span class="pre">block,</span> <span class="pre">insertafter?,</span> <span class="pre">marker?,</span> <span class="pre">when?,</span> <span class="pre">post_build?}</span></code>; insert or update a managed text block; creates missing files.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">patch_file</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">{path,</span> <span class="pre">when,</span> <span class="pre">commit?}</span></code>; apply a Git patch on a fresh clone when enabled. See below.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">scripts</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">{path,</span> <span class="pre">post_build?}</span></code>; execute <code class="docutils literal notranslate"><span class="pre">bash</span> <span class="pre">&lt;recipe-dir&gt;/&lt;path&gt;</span></code> with <code class="docutils literal notranslate"><span class="pre">local_path</span></code> as working directory.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">bash</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">{cmd,</span> <span class="pre">when?,</span> <span class="pre">post_build?}</span></code>; execute a command with <code class="docutils literal notranslate"><span class="pre">/bin/bash</span></code> in <code class="docutils literal notranslate"><span class="pre">local_path</span></code>.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">tasks</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">{path,</span> <span class="pre">when?,</span> <span class="pre">post_build?}</span></code>; include a file containing an Ansible task list.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Omitted list fields are empty. <code class="docutils literal notranslate"><span class="pre">post_build</span></code> defaults to false. For entries that
+support <code class="docutils literal notranslate"><span class="pre">when</span></code>, omission normally means true; <code class="docutils literal notranslate"><span class="pre">patch_file</span></code> is the exception
+and is disabled unless its <code class="docutils literal notranslate"><span class="pre">when</span></code> is true. Supply evaluated conditions:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">patch_lines</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">configure/CONFIG_SITE</span>
+<span class="w">    </span><span class="nt">regexp</span><span class="p">:</span><span class="w"> </span><span class="s">'^WITH_FEATURE\s*='</span>
+<span class="w">    </span><span class="nt">line</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">WITH_FEATURE = YES</span>
+<span class="w">    </span><span class="nt">when</span><span class="p">:</span><span class="w"> </span><span class="s">"{{</span><span class="nv"> </span><span class="s">is_linux</span><span class="nv"> </span><span class="s">}}"</span>
+<span class="nt">bash</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">cmd</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">./prepare-generated-sources.sh</span>
+<span class="w">    </span><span class="nt">when</span><span class="p">:</span><span class="w"> </span><span class="s">"{{</span><span class="nv"> </span><span class="s">is_linux</span><span class="nv"> </span><span class="s">}}"</span>
+<span class="nt">tasks</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">extra-build-steps.yml</span>
+<span class="w">    </span><span class="nt">post_build</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+</pre></div>
+</div>
+<p>Do not use <code class="docutils literal notranslate"><span class="pre">when:</span> <span class="pre">is_linux</span></code> as a variable reference: it is a literal string in
+these recipe structures. <code class="docutils literal notranslate"><span class="pre">scripts</span></code> does <strong>not</strong> implement <code class="docutils literal notranslate"><span class="pre">when</span></code>; use a <code class="docutils literal notranslate"><span class="pre">bash</span></code>
+entry or conditional Ansible task when needed.</p>
+<p>For <code class="docutils literal notranslate"><span class="pre">patch_blocks</span></code>, <code class="docutils literal notranslate"><span class="pre">insertafter</span></code> defaults to <code class="docutils literal notranslate"><span class="pre">EOF</span></code> and <code class="docutils literal notranslate"><span class="pre">marker</span></code> to
+<code class="docutils literal notranslate"><span class="pre">#</span> <span class="pre">{mark}</span> <span class="pre">ANSIBLE</span> <span class="pre">MANAGED</span> <span class="pre">BLOCK</span></code>. Use distinct markers for multiple pre-build
+blocks in one file. Post-build blocks currently ignore a custom marker and
+always use that default.</p>
+<p>For <code class="docutils literal notranslate"><span class="pre">patch_file</span></code>, enable it explicitly and supply a base commit when needed:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">patch_file</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">fix-build.patch</span>
+<span class="w">  </span><span class="nt">commit</span><span class="p">:</span><span class="w"> </span><span class="s">"0123456789abcdef0123456789abcdef01234567"</span><span class="w">  </span><span class="c1"># Replace with the base commit</span>
+<span class="w">  </span><span class="nt">when</span><span class="p">:</span><span class="w"> </span><span class="s">"{{</span><span class="nv"> </span><span class="s">is_rtems</span><span class="nv"> </span><span class="s">|</span><span class="nv"> </span><span class="s">bool</span><span class="nv"> </span><span class="s">}}"</span>
+</pre></div>
+</div>
+<p>An enabled patch causes a full initial clone rather than a shallow one. If a
+<code class="docutils literal notranslate"><span class="pre">commit</span></code> is supplied, the role checks it out before <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">apply</span></code>. A recipe that
+omits <code class="docutils literal notranslate"><span class="pre">commit</span></code> applies to the configured <code class="docutils literal notranslate"><span class="pre">version</span></code>; the schema’s advertised
+<code class="docutils literal notranslate"><span class="pre">HEAD</span></code> default is not injected into the recipe by the playbook.</p>
+</section>
+<section id="task-order">
+<h2>Task order<a class="headerlink" href="#task-order" title="Link to this heading">#</a></h2>
+<p>For each module, the role performs:</p>
+<ol class="arabic simple">
+<li><p>System packages/downloads, then source clone and optional Git patch.</p></li>
+<li><p>Custom pre-build <code class="docutils literal notranslate"><span class="pre">tasks</span></code>.</p></li>
+<li><p>File removals, comments, line/block patches, <code class="docutils literal notranslate"><span class="pre">scripts</span></code>, then <code class="docutils literal notranslate"><span class="pre">bash</span></code> commands.</p></li>
+<li><p>RELEASE setup, including linking <code class="docutils literal notranslate"><span class="pre">configure/RELEASE.local</span></code> to the global
+RELEASE and ensuring it is included last in applicable RELEASE files.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">clean</span></code>, <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">{{</span> <span class="pre">make_options</span> <span class="pre">}}</span></code>, then the optional final clean.</p></li>
+<li><p>Registration of module paths, library/DBD lists and runtime files; post-build
+line/block patches, scripts and bash commands.</p></li>
+<li><p>Custom post-build <code class="docutils literal notranslate"><span class="pre">tasks</span></code>, then links/copies for runtime assets.</p></li>
+</ol>
+<p>Tasks within a customization list run in list order. Across lists, role order
+wins: a pre-build <code class="docutils literal notranslate"><span class="pre">tasks</span></code> entry runs before <code class="docutils literal notranslate"><span class="pre">patch_lines</span></code>, regardless of their
+order in the recipe. These are build instructions with real side effects,
+including shell execution; run them in the intended build/development container.</p>
+<p>The support-stage tags, in order, are <code class="docutils literal notranslate"><span class="pre">system</span></code>, <code class="docutils literal notranslate"><span class="pre">clone</span></code>, <code class="docutils literal notranslate"><span class="pre">pre_build_tasks</span></code>,
+<code class="docutils literal notranslate"><span class="pre">pre_build</span></code>, <code class="docutils literal notranslate"><span class="pre">release</span></code>, <code class="docutils literal notranslate"><span class="pre">do_build</span></code>, <code class="docutils literal notranslate"><span class="pre">post_build</span></code>, <code class="docutils literal notranslate"><span class="pre">post_build_tasks</span></code>, and <code class="docutils literal notranslate"><span class="pre">runtime</span></code>.
+For an already prepared module, <code class="docutils literal notranslate"><span class="pre">ansible.sh</span> <span class="pre">motorMotorSim</span> <span class="pre">--tags</span> <span class="pre">do_build</span></code>
+runs the compilation stage. A tagged run still performs the <code class="docutils literal notranslate"><span class="pre">always</span></code>-tagged
+module discovery and variable loading, and assumes skipped prerequisites have
+already been completed. Use a full module build to test a recipe change.</p>
+</section>
+<section id="build-time-jinja-context">
+<h2>Build-time Jinja context<a class="headerlink" href="#build-time-jinja-context" title="Link to this heading">#</a></h2>
+<p>Recipe expressions are evaluated by <strong>Ansible</strong>, not ibek’s runtime renderer.
+They have Ansible variables, facts, lookups and filters; they do not gain ibek’s
+<code class="docutils literal notranslate"><span class="pre">env</span></code> mapping, <code class="docutils literal notranslate"><span class="pre">_global</span></code> helpers or IOC entity parameters.</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Variable</p></th>
+<th class="head"><p>Meaning</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">module</span></code>, <code class="docutils literal notranslate"><span class="pre">version</span></code>, <code class="docutils literal notranslate"><span class="pre">local_path</span></code>, <code class="docutils literal notranslate"><span class="pre">macro</span></code></p></td>
+<td><p>The selected module’s recipe values and defaults.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">all_root</span></code></p></td>
+<td><p>Root containing the generic IOC Dockerfile and <code class="docutils literal notranslate"><span class="pre">ibek-support*</span></code> checkouts; normally two directories above the playbook.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">ibek_support_root</span></code>, <code class="docutils literal notranslate"><span class="pre">ansible_root</span></code></p></td>
+<td><p>Main <code class="docutils literal notranslate"><span class="pre">ibek-support</span></code> checkout and its <code class="docutils literal notranslate"><span class="pre">_ansible</span></code> directory.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">ibek_support_folder</span></code></p></td>
+<td><p>Discovered recipe directory, possibly in an additional <code class="docutils literal notranslate"><span class="pre">ibek-support*</span></code> checkout.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">epics_folder</span></code>, <code class="docutils literal notranslate"><span class="pre">support_folder</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">/epics</span></code> and <code class="docutils literal notranslate"><span class="pre">/epics/support</span></code>.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">configure_folder</span></code>, <code class="docutils literal notranslate"><span class="pre">release_file</span></code></p></td>
+<td><p>Shared support <code class="docutils literal notranslate"><span class="pre">configure</span></code> directory and its global <code class="docutils literal notranslate"><span class="pre">RELEASE</span></code>.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">target_arch</span></code>, <code class="docutils literal notranslate"><span class="pre">host_arch</span></code></p></td>
+<td><p>Environment values <code class="docutils literal notranslate"><span class="pre">EPICS_TARGET_ARCH</span></code> and <code class="docutils literal notranslate"><span class="pre">EPICS_HOST_ARCH</span></code>.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">is_linux</span></code>, <code class="docutils literal notranslate"><span class="pre">is_rtems</span></code></p></td>
+<td><p>Whether the target architecture contains <code class="docutils literal notranslate"><span class="pre">linux</span></code> or <code class="docutils literal notranslate"><span class="pre">RTEMS</span></code>, respectively.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">config_linux_host</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">configure/CONFIG_SITE.linux-x86_64.Common</span></code>.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">config_linux_target</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">configure/CONFIG_SITE.Common.linux-x86_64</span></code>.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">ansible_processor_vcpus</span></code></p></td>
+<td><p>Gathered CPU fact used in the default parallel build options.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Read other environment variables through an Ansible lookup, for example
+<code class="docutils literal notranslate"><span class="pre">&quot;{{</span> <span class="pre">lookup('ansible.builtin.env',</span> <span class="pre">'MY_BUILD_SETTING')</span> <span class="pre">}}&quot;</span></code>.
+The two <code class="docutils literal notranslate"><span class="pre">config_linux_*</span></code> paths are fixed strings, not derived from <code class="docutils literal notranslate"><span class="pre">host_arch</span></code>.</p>
+</section>
+<section id="editor-schema-and-runtime-behavior">
+<h2>Editor schema and runtime behavior<a class="headerlink" href="#editor-schema-and-runtime-behavior" title="Link to this heading">#</a></h2>
+<p>The repository’s <code class="docutils literal notranslate"><span class="pre">_scripts/support_install_variables.json</span></code> is generated by
+<code class="docutils literal notranslate"><span class="pre">_scripts/install_schema.py</span></code>. It assists editing but the playbook loads YAML
+as variables; it does not instantiate that Python model or apply its defaults.</p>
+<p>The schema currently differs from the roles: it omits <code class="docutils literal notranslate"><span class="pre">skip_clean</span></code> and
+<code class="docutils literal notranslate"><span class="pre">skip_apt</span></code>, does not describe every templated condition, and describes the
+<code class="docutils literal notranslate"><span class="pre">macro</span></code> default without hyphen replacement. Some optional <code class="docutils literal notranslate"><span class="pre">when</span></code> defaults
+also differ. For execution, use the behavior documented above and the selected
+checkout’s role variables/tasks; the schema is not an execution contract.</p>
+</section>
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="support-yaml.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Support YAML</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="ioc-yaml.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">IOC YAML</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#source-and-build-fields">Source and build fields</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#dependencies-and-runtime-assets">Dependencies and runtime assets</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#customization-fields">Customization fields</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#task-order">Task order</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#build-time-jinja-context">Build-time Jinja context</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#editor-schema-and-runtime-behavior">Editor schema and runtime behavior</a></li>
+</ul>
+  </nav></div>
+
+  <div class="sidebar-secondary-item">
+
+  
+  <div class="tocsection editthispage">
+    <a href="https://github.com/epics-containers/ibek/edit/4.8.0/docs/reference/ansible-recipes.md">
+      <i class="fa-solid fa-pencil"></i>
+      
+      
+        
+          Edit on GitHub
+        
+      
+    </a>
+  </div>
+</div>
+
+  <div class="sidebar-secondary-item">
+
+  <div class="tocsection sourcelink">
+    <a href="../_sources/reference/ansible-recipes.md.txt">
+      <i class="fa-solid fa-file-lines"></i> Show Source
+    </a>
+  </div>
+</div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../_static/scripts/bootstrap.js?digest=cb8930eaaf36d9849b67"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=cb8930eaaf36d9849b67"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.21.0.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>
