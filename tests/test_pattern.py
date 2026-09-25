@@ -4,6 +4,7 @@ Tests for the ``ibek pattern`` runtime-support vendoring subsystem.
 
 import json
 import os
+import re
 import shutil
 import subprocess
 import sys
@@ -14,8 +15,16 @@ from typer.testing import CliRunner
 
 from ibek.__main__ import cli
 from ibek.globals import IOC_SCHEMA_NAME, RUNTIME_LOCK_NAME
+from ibek.pattern_cmds import lock as lock_module
 from ibek.pattern_cmds import schema, vendor
-from ibek.pattern_cmds.lock import LOCK_VERSION, RuntimeLock, file_hash
+from ibek.pattern_cmds.lock import (
+    LOCK_VERSION,
+    SELECT_LOCK_VERSION,
+    RuntimeLock,
+    Selection,
+    SelectRule,
+    file_hash,
+)
 from ibek.pattern_cmds.manifest import (
     DEFAULT_MANIFEST_YAML,
     MANIFEST_NAME,
@@ -1727,3 +1736,379 @@ def test_prune_orphans_never_escapes_the_destination(tmp_path: Path, library: Pa
     )
     assert outside.read_text() == "user data\n"
     assert not (instance / "config" / "mydevice.proto").exists()  # in-scope key pruned
+
+
+# --------------------------------------------------------------------------- #
+# select: a destination's adjustment to the manifest's file-set
+# --------------------------------------------------------------------------- #
+SIM_MANIFEST = (
+    "version: 1\n"
+    "vendor:\n"
+    "  - src: '[^/]+\\.(template|proto|ibek\\.support\\.yaml)'\n"
+    "    dest: config\n"
+)
+
+
+@pytest.fixture
+def sim_library(tmp_path: Path) -> Path:
+    """A pattern whose manifest vendors the top-level files and leaves ``sim/``."""
+    return make_pattern(
+        tmp_path / "lib",
+        "simdev",
+        {
+            "simdev.ibek.support.yaml": MYDEVICE_SUPPORT,
+            "simdev.proto": MYDEVICE_PROTO,
+            "simdev.template": "record(ai, X) {}\n",
+            "extra.template": "record(ai, Y) {}\n",
+            "sim/simdev_sim.template": "record(ai, SIM) {}\n",
+            "README.md": "docs\n",
+        },
+        manifest=SIM_MANIFEST,
+    )
+
+
+def sim_select() -> Selection:
+    """Add the sim template at ``config/``; drop ``extra.template``."""
+    return Selection(
+        include=[SelectRule(src="sim/(.*_sim\\.template)", dest="config/\\1")],
+        exclude=["extra\\.template"],
+    )
+
+
+def pattern_block(text: str, name: str) -> str:
+    """One pattern's entry under ``patterns:`` (name line plus its 4-space body).
+
+    Lets a test assert that a sibling pattern's block came out byte-identical
+    without comparing the whole lock file, whose *other* pattern's content
+    legitimately changed.
+    """
+    match = re.search(rf"(?m)^  {re.escape(name)}:\n(?:^ {{4}}.*\n?)*", text)
+    assert match is not None, f"{name!r} not found in {text!r}"
+    return match.group(0)
+
+
+def test_select_adds_and_narrows(tmp_path: Path, sim_library: Path):
+    instance = make_instance(tmp_path)
+    vendor.add(
+        "simdev@1.0.0", instance, source_override=str(sim_library), select=sim_select()
+    )
+
+    files = RuntimeLock(instance / RUNTIME_LOCK_NAME).patterns["simdev"].files
+    assert set(files) == {
+        "config/simdev.ibek.support.yaml",
+        "config/simdev.proto",
+        "config/simdev.template",
+        "config/simdev_sim.template",  # added, at the chosen local path
+    }  # extra.template narrowed away; README.md never in the manifest
+    assert (instance / "config" / "simdev_sim.template").read_text() == (
+        "record(ai, SIM) {}\n"
+    )
+    assert not (instance / "config" / "extra.template").exists()
+    assert vendor.check(instance).ok
+
+
+def test_select_include_overrides_the_manifest_destination(
+    tmp_path: Path, sim_library: Path
+):
+    """An include rule wins over the manifest for a file both match."""
+    instance = make_instance(tmp_path)
+    select = Selection(include=[SelectRule(src="simdev\\.template", dest="config/db")])
+    vendor.add(
+        "simdev@1.0.0", instance, source_override=str(sim_library), select=select
+    )
+    files = RuntimeLock(instance / RUNTIME_LOCK_NAME).patterns["simdev"].files
+    assert "config/db/simdev.template" in files
+    assert "config/simdev.template" not in files
+
+
+def test_select_include_alone_can_replace_the_manifest(
+    tmp_path: Path, sim_library: Path
+):
+    """``exclude: ['.*']`` plus includes vendors only the named files."""
+    instance = make_instance(tmp_path)
+    select = Selection(
+        include=[SelectRule(src="simdev\\.template", dest="config")], exclude=[".*"]
+    )
+    vendor.add(
+        "simdev@1.0.0", instance, source_override=str(sim_library), select=select
+    )
+    assert set(RuntimeLock(instance / RUNTIME_LOCK_NAME).patterns["simdev"].files) == {
+        "config/simdev.template"
+    }
+
+
+def test_lock_without_select_is_version_1_and_byte_identical(
+    tmp_path: Path, library: Path
+):
+    """A selection-free lock is read and re-written byte for byte."""
+    text = (
+        "version: 1\n"
+        "patterns:\n"
+        "  mydevice:\n"
+        "    version: 1.0.0\n"
+        f"    source: {library}\n"
+        "    files:\n"
+        f"      config/mydevice.ibek.support.yaml: {file_hash(b'a')}\n"
+        f"      config/mydevice.proto: {file_hash(b'b')}\n"
+    )
+    path = tmp_path / RUNTIME_LOCK_NAME
+    path.write_text(text)
+    lock = RuntimeLock(path)
+    lock.save()
+    assert path.read_text() == text
+
+    instance = make_instance(tmp_path)
+    vendor.add("mydevice@1.0.0", instance, source_override=str(library))
+    assert (instance / RUNTIME_LOCK_NAME).read_text().startswith("version: 1\n")
+    assert "    select:" not in (instance / RUNTIME_LOCK_NAME).read_text()
+
+
+def test_select_writes_version_2_and_re_add_without_it_writes_version_1(
+    tmp_path: Path, sim_library: Path
+):
+    instance = make_instance(tmp_path)
+    lock_path = instance / RUNTIME_LOCK_NAME
+    source = str(sim_library)
+    vendor.add("simdev@1.0.0", instance, source_override=source, select=sim_select())
+
+    text = lock_path.read_text()
+    assert text.startswith(f"version: {SELECT_LOCK_VERSION}\n")
+    # select sits between source and files
+    assert text.index("source:") < text.index("select:") < text.index("files:")
+    assert RuntimeLock(lock_path).patterns["simdev"].select == sim_select()
+
+    vendor.add("simdev@1.0.0", instance, source_override=source)
+    assert lock_path.read_text().startswith(f"version: {LOCK_VERSION}\n")
+    assert "    select:" not in lock_path.read_text()
+    assert not (instance / "config" / "simdev_sim.template").exists()  # pruned
+    assert (instance / "config" / "extra.template").exists()
+
+
+def test_update_and_restore_reproduce_the_selection(tmp_path: Path, sim_library: Path):
+    instance = make_instance(tmp_path)
+    source = str(sim_library)
+    vendor.add("simdev@1.0.0", instance, source_override=source, select=sim_select())
+    before = (instance / RUNTIME_LOCK_NAME).read_text()
+    before_tree = tree(instance)
+
+    vendor.update("simdev", instance, source_override=source)
+    assert (instance / RUNTIME_LOCK_NAME).read_text() == before
+    assert tree(instance) == before_tree
+
+    sim = instance / "config" / "simdev_sim.template"
+    sim.write_text("edited\n")
+    assert not vendor.check(instance).ok
+    vendor.restore("simdev", instance)
+    assert sim.read_text() == "record(ai, SIM) {}\n"
+    assert (instance / RUNTIME_LOCK_NAME).read_text() == before
+    assert vendor.check(instance).ok
+
+
+def test_update_applies_a_hand_edited_selection(tmp_path: Path, sim_library: Path):
+    """Editing ``select:`` in the lock and running ``update`` narrows the tree."""
+    instance = make_instance(tmp_path)
+    lock_path = instance / RUNTIME_LOCK_NAME
+    vendor.add("simdev@1.0.0", instance, source_override=str(sim_library))
+    text = lock_path.read_text().replace("version: 1\n", "version: 2\n", 1)
+    text = text.replace(
+        "    files:\n", "    select:\n      exclude: [extra.*]\n    files:\n"
+    )
+    lock_path.write_text(text)
+
+    vendor.update("simdev", instance)
+    assert not (instance / "config" / "extra.template").exists()
+    assert "config/extra.template" not in lock_path.read_text()
+    assert vendor.check(instance).ok
+
+
+def test_readd_one_pattern_replaces_only_its_own_selection(
+    tmp_path: Path, sim_library: Path
+):
+    """Re-running ``add`` for one pattern must not touch a sibling's entry.
+
+    Two patterns share one lock, each with its own ``select``. Re-adding one
+    with a smaller selection -- then with none at all -- must change only that
+    pattern's entry and file-set; the other pattern's block in the lock (and
+    its vendored files) must come out byte-identical every time.
+    """
+    make_pattern(
+        sim_library,
+        "otherdev",
+        {
+            "otherdev.ibek.support.yaml": MYDEVICE_SUPPORT,
+            "otherdev.proto": MYDEVICE_PROTO,
+            "otherdev.template": "record(ai, X) {}\n",
+            "extra.template": "record(ai, Y) {}\n",
+            "sim/otherdev_sim.template": "record(ai, SIM) {}\n",
+            "README.md": "docs\n",
+        },
+        manifest=SIM_MANIFEST,
+    )
+    other_select = Selection(
+        include=[SelectRule(src="sim/(.*_sim\\.template)", dest="config/\\1")],
+        exclude=["extra\\.template"],
+    )
+
+    instance = make_instance(tmp_path)
+    lock_path = instance / RUNTIME_LOCK_NAME
+    source = str(sim_library)
+    vendor.add("simdev@1.0.0", instance, source_override=source, select=sim_select())
+    vendor.add("otherdev@1.0.0", instance, source_override=source, select=other_select)
+    other_block = pattern_block(lock_path.read_text(), "otherdev")
+    other_sim_template = instance / "config" / "otherdev_sim.template"
+    assert other_sim_template.read_text() == "record(ai, SIM) {}\n"
+
+    # Re-add simdev with a smaller selection: drop the include, keep the exclude.
+    smaller = Selection(exclude=["extra\\.template"])
+    vendor.add("simdev@1.0.0", instance, source_override=source, select=smaller)
+    text = lock_path.read_text()
+    assert pattern_block(text, "otherdev") == other_block
+    simdev = RuntimeLock(lock_path).patterns["simdev"]
+    assert simdev.select == smaller
+    assert "config/simdev_sim.template" not in simdev.files  # include dropped
+    assert not (instance / "config" / "simdev_sim.template").exists()  # pruned
+    assert other_sim_template.read_text() == "record(ai, SIM) {}\n"  # untouched
+
+    # Re-add simdev with no selection at all.
+    vendor.add("simdev@1.0.0", instance, source_override=source, select=None)
+    text = lock_path.read_text()
+    assert pattern_block(text, "otherdev") == other_block
+    simdev = RuntimeLock(lock_path).patterns["simdev"]
+    assert simdev.select is None
+    assert (instance / "config" / "extra.template").exists()  # exclude dropped too
+
+    other = RuntimeLock(lock_path).patterns["otherdev"]
+    assert other.select == other_select
+    assert other_sim_template.read_text() == "record(ai, SIM) {}\n"  # still untouched
+    assert vendor.check(instance).ok
+
+
+def test_lock_rejects_unknown_top_level_keys(tmp_path: Path):
+    """An unknown top-level key would be ignored and then dropped by save."""
+    path = tmp_path / RUNTIME_LOCK_NAME
+    path.write_text("version: 1\npatterns: {}\nselections:\n  p: {}\n")
+    with pytest.raises(PatternError) as exc:
+        RuntimeLock(path)
+    assert "unknown top-level key(s) selections" in str(exc.value)
+
+
+def test_lock_rejects_select_in_a_version_1_lock(tmp_path: Path):
+    """A lock that selects must say version 2, which older readers refuse."""
+    path = tmp_path / RUNTIME_LOCK_NAME
+    path.write_text(
+        "version: 1\npatterns:\n  p:\n    version: '1'\n    source: s\n"
+        "    select:\n      exclude: [x]\n    files: {}\n"
+    )
+    with pytest.raises(PatternError) as exc:
+        RuntimeLock(path)
+    assert "has a 'select' but the lock is version 1" in str(exc.value)
+
+
+def test_version_2_lock_is_refused_by_a_version_1_reader(
+    tmp_path: Path, sim_library: Path, monkeypatch
+):
+    """A reader that knows only version 1 refuses a lock with a selection.
+
+    ibek 4.8.0 is exactly this reader: its ``SUPPORTED_LOCK_VERSIONS`` is
+    ``{1}`` and the version is checked before any entry is parsed.
+    """
+    instance = make_instance(tmp_path)
+    vendor.add(
+        "simdev@1.0.0",
+        instance,
+        source_override=str(sim_library),
+        select=sim_select(),
+    )
+    monkeypatch.setattr(lock_module, "SUPPORTED_LOCK_VERSIONS", frozenset({1}))
+    result = vendor.check(instance)
+    assert result.failures == [
+        f"{instance / RUNTIME_LOCK_NAME}: unsupported lock version 2 "
+        "(this ibek reads: 1)"
+    ]
+
+
+@pytest.mark.parametrize(
+    "select, fragment",
+    [
+        (
+            Selection(include=[SelectRule(src="sim/nothing", dest="config")]),
+            "select.include entry 0 (src='sim/nothing', dest='config'): "
+            "selects no file",
+        ),
+        (Selection(exclude=["README\\.md"]), "drops no file that ibek.manifest"),
+        (Selection(exclude=["("]), "select.exclude '(': invalid regex"),
+        (
+            Selection(include=[SelectRule(src="(", dest="config")]),
+            "invalid src regex",
+        ),
+        (
+            Selection(include=[SelectRule(src="sim/.*", dest="../up")]),
+            "dest must not contain '..'",
+        ),
+        (
+            Selection(
+                include=[
+                    SelectRule(
+                        src="sim/(simdev)_sim\\.template", dest="config/\\1.template"
+                    )
+                ]
+            ),
+            "both vendor to 'config/simdev.template'",
+        ),
+        (Selection(exclude=[".*"]), "once the runtime-lock.yaml select is applied"),
+    ],
+)
+def test_select_rejects(tmp_path: Path, sim_library: Path, select, fragment):
+    """A bad or ineffective selection fails before anything is written."""
+    instance = make_instance(tmp_path)
+    with pytest.raises(ManifestError) as exc:
+        vendor.add(
+            "simdev@1.0.0", instance, source_override=str(sim_library), select=select
+        )
+    assert fragment in str(exc.value)
+    assert not (instance / RUNTIME_LOCK_NAME).exists()
+    assert tree(instance / "config") == {"ioc.yaml"}
+
+
+def test_cli_add_with_include_and_exclude(tmp_path: Path, sim_library: Path):
+    instance = make_instance(tmp_path)
+    result = runner.invoke(
+        cli,
+        [
+            "pattern",
+            "add",
+            "simdev@1.0.0",
+            str(instance),
+            "--source",
+            str(sim_library),
+            "--include",
+            "sim/(.*_sim\\.template)=config/\\1",
+            "--exclude",
+            "extra\\.template",
+        ],
+    )
+    assert result.exit_code == 0, result.output
+    assert RuntimeLock(instance / RUNTIME_LOCK_NAME).patterns["simdev"].select == (
+        sim_select()
+    )
+
+
+def test_cli_add_rejects_include_without_a_destination(
+    tmp_path: Path, sim_library: Path
+):
+    instance = make_instance(tmp_path)
+    result = runner.invoke(
+        cli,
+        [
+            "pattern",
+            "add",
+            "simdev@1.0.0",
+            str(instance),
+            "--source",
+            str(sim_library),
+            "--include",
+            "sim/.*",
+        ],
+    )
+    assert result.exit_code == 1
+    assert not (instance / RUNTIME_LOCK_NAME).exists()

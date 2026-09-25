@@ -66,6 +66,10 @@ write one when a pattern contains files that must *not* reach the instance.
 The full format, including validation rules, is in the
 [manifest reference](../reference/pattern-manifest.md).
 
+The manifest's file-set suits most instances. An instance that needs a
+different set of files can record a selection in its lock; see
+{doc}`select-pattern-files`.
+
 ## Check and restore
 
 ```bash

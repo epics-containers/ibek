@@ -9,7 +9,7 @@ from pathlib import Path, PurePosixPath
 
 from ibek.globals import RUNTIME_LOCK_NAME
 
-from .lock import RuntimeLock, file_hash, is_dirty
+from .lock import RuntimeLock, Selection, file_hash, is_dirty
 from .manifest import plan_vendor
 from .schema import generate_instance_schema
 from .sources import (
@@ -114,8 +114,12 @@ def _do_vendor(
     dest_dir: Path,
     source_override: str | None,
     extra_libraries: dict[str, str] | None,
+    select: Selection | None = None,
 ) -> tuple[str, str, dict[str, str]]:
     """Fetch + vendor ``ref`` into the destination; return (label, version, files).
+
+    ``select`` is the destination's adjustment to the manifest's file-set,
+    applied by ``plan_vendor``.
 
     An explicit ``source_override`` (a user ``--source`` or a recorded lock
     label) is normalised to a fetchable URI here — the single point every caller
@@ -143,7 +147,8 @@ def _do_vendor(
                 last_error = exc
                 continue
             label = source_label(candidate_uri)
-            plan = plan_vendor(pattern_dir)
+            select = select or Selection()
+            plan = plan_vendor(pattern_dir, select.include, select.exclude)
             files = _vendor_files(plan, dest_dir)
             return label, ref.version or "HEAD", files
     raise PatternError(
@@ -165,8 +170,12 @@ def add(
     dest_dir: Path,
     source_override: str | None = None,
     extra_libraries: dict[str, str] | None = None,
+    select: Selection | None = None,
 ) -> None:
     """Vendor a pattern into ``dest_dir`` and write the lock + schema.
+
+    ``select`` is recorded in the lock as given, replacing any selection the
+    pattern had, so ``update`` and ``restore`` reproduce the same file-set.
 
     The lock is read *before* anything is vendored, so an unreadable one aborts
     before a file is written. Re-adding an already-locked pattern prunes the
@@ -177,9 +186,11 @@ def add(
     ref = parse_ref(qualified)
     lock = RuntimeLock(_lock_path(dest_dir))
     old_files = lock.vendored_keys(ref.name) if ref.name in lock.patterns else set()
-    label, version, files = _do_vendor(ref, dest_dir, source_override, extra_libraries)
+    label, version, files = _do_vendor(
+        ref, dest_dir, source_override, extra_libraries, select
+    )
     _prune_orphans(dest_dir, old_files - set(files))
-    lock.set_pattern(ref.name, version, label, files)
+    lock.set_pattern(ref.name, version, label, files, select)
     lock.save()
     generate_instance_schema(dest_dir)
 
@@ -202,6 +213,7 @@ def _revendor(
     source: str,
     old_files: set[str],
     extra_libraries: dict[str, str] | None,
+    select: Selection | None,
 ) -> tuple[str, str, dict[str, str]]:
     """Re-fetch an already-locked pattern and rewrite its files in place.
 
@@ -213,10 +225,13 @@ def _revendor(
     file kept under a new destination has its old key pruned only after the new
     key has been written. Returns the ``(label, version, files)`` the caller
     records — restore discards it and leaves the lock untouched, since its
-    rewritten bytes reproduce the pin.
+    rewritten bytes reproduce the pin. ``select`` is the lock's recorded
+    selection, reapplied so the file-set matches the one the lock records.
     """
     ref = PatternRef(name=name, version=version)
-    label, resolved_version, files = _do_vendor(ref, dest_dir, source, extra_libraries)
+    label, resolved_version, files = _do_vendor(
+        ref, dest_dir, source, extra_libraries, select
+    )
     _prune_orphans(dest_dir, old_files - set(files))
     return label, resolved_version, files
 
@@ -245,8 +260,9 @@ def update(
             source_override or existing.source,
             lock.vendored_keys(pattern_name),
             extra_libraries,
+            existing.select,
         )
-        lock.set_pattern(pattern_name, resolved_version, label, files)
+        lock.set_pattern(pattern_name, resolved_version, label, files, existing.select)
     lock.save()
     generate_instance_schema(dest_dir)
 
@@ -267,6 +283,7 @@ def restore(
             entry.source,
             lock.vendored_keys(pattern_name),
             extra_libraries,
+            entry.select,
         )
     generate_instance_schema(dest_dir)
 

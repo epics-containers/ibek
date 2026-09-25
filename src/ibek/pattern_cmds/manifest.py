@@ -11,18 +11,25 @@ The manifest is an ordered, first-match-wins **allow-list**: a file matched by n
 entry is not vendored. A pattern with no manifest is vendored through the
 synthesised :data:`DEFAULT_MANIFEST_YAML`, ibek's default of "everything into
 ``config/``" — one vendoring path, no branches.
+
+A destination may adjust that file-set with a ``select:`` recorded in its
+``runtime-lock.yaml``: ``include`` rules (the same ``src`` / ``dest`` shape as a
+manifest rule) are tried before the manifest, and ``exclude`` regexes drop files
+the manifest would vendor. :func:`plan_vendor` takes both as plain arguments,
+so this module still never reads the lock.
 """
 
 from __future__ import annotations
 
 import re
+from collections.abc import Sequence
 from pathlib import Path, PurePosixPath
 
 from pydantic import ValidationError
 from ruamel.yaml import YAML
 from ruamel.yaml.error import YAMLError
 
-from ibek.globals import BaseSettings
+from ibek.globals import RUNTIME_LOCK_NAME, BaseSettings
 
 from .sources import PatternError
 
@@ -84,9 +91,13 @@ def is_substitution(dest: str) -> bool:
     return _SUBSTITUTION_RE.search(dest) is not None
 
 
-def _entry_prefix(index: int, rule: VendorRule) -> str:
+def _entry_prefix(index: int, rule, where: str = f"{MANIFEST_NAME} entry") -> str:
     """Name the offending entry, so no failure is anonymous."""
-    return f"{MANIFEST_NAME} entry {index} (src={rule.src!r}, dest={rule.dest!r}): "
+    return f"{where} {index} (src={rule.src!r}, dest={rule.dest!r}): "
+
+
+def _include_where(pattern_name: str) -> str:
+    return f"{pattern_name}: {RUNTIME_LOCK_NAME} select.include entry"
 
 
 def _validate_version(raw: dict) -> None:
@@ -117,17 +128,23 @@ def _validate_manifest(manifest: PatternManifest) -> None:
     if not manifest.vendor:
         raise ManifestError(f"{MANIFEST_NAME}: 'vendor' must list at least one entry")
     for index, rule in enumerate(manifest.vendor):
-        prefix = _entry_prefix(index, rule)
-        try:
-            re.compile(rule.src)
-        except re.error as exc:
-            raise ManifestError(f"{prefix}invalid src regex: {exc}") from exc
-        if PurePosixPath(rule.dest).is_absolute():
-            raise ManifestError(
-                f"{prefix}dest must be relative to the destination root"
-            )
-        if not is_substitution(rule.dest) and ".." in PurePosixPath(rule.dest).parts:
-            raise ManifestError(f"{prefix}dest must not contain '..'")
+        _validate_rule(_entry_prefix(index, rule), rule)
+
+
+def _validate_rule(prefix: str, rule) -> re.Pattern:
+    """Validate one ``src`` / ``dest`` rule (manifest or ``select.include``).
+
+    Returns the compiled ``src``.
+    """
+    try:
+        regex = re.compile(rule.src)
+    except re.error as exc:
+        raise ManifestError(f"{prefix}invalid src regex: {exc}") from exc
+    if PurePosixPath(rule.dest).is_absolute():
+        raise ManifestError(f"{prefix}dest must be relative to the destination root")
+    if not is_substitution(rule.dest) and ".." in PurePosixPath(rule.dest).parts:
+        raise ManifestError(f"{prefix}dest must not contain '..'")
+    return regex
 
 
 def _symlink_message(pattern_name: str, rel: str) -> str:
@@ -205,9 +222,8 @@ def _validate_key(prefix: str, rel: str, key: str) -> str:
     return key
 
 
-def _destination(index: int, rule: VendorRule, match: re.Match, rel: str) -> str:
+def _destination(prefix: str, rule, match: re.Match, rel: str) -> str:
     """Resolve the destination-root-relative key one rule produces for ``rel``."""
-    prefix = _entry_prefix(index, rule)
     if is_substitution(rule.dest):
         try:
             key = match.expand(rule.dest)
@@ -266,45 +282,116 @@ def _refuse_nested_keys(plan: dict[str, Path], pattern_dir: Path) -> None:
             )
 
 
-def plan_vendor(pattern_dir: Path) -> list[tuple[Path, str]]:
+def _compile_excludes(pattern_name: str, exclude: Sequence[str]) -> list:
+    where = f"{pattern_name}: {RUNTIME_LOCK_NAME} select.exclude"
+    compiled = []
+    for text in exclude:
+        try:
+            compiled.append(re.compile(text))
+        except re.error as exc:
+            raise ManifestError(f"{where} {text!r}: invalid regex: {exc}") from exc
+    return compiled
+
+
+def plan_vendor(
+    pattern_dir: Path,
+    include: Sequence = (),
+    exclude: Sequence[str] = (),
+) -> list[tuple[Path, str]]:
     """Return the complete ``(source path, destination key)`` plan, or raise.
 
     Every source path is absolute; every destination key is relative to the
     destination root (``config/...`` for a pattern with no manifest). The plan is
     fully validated before it is returned, so ``_vendor_files`` cannot leave a
     half-vendored tree behind: nothing is written until this has succeeded.
+
+    ``include`` and ``exclude`` are a destination's ``select:``. Each file is
+    offered to the ``include`` rules first, then to the manifest's rules, both
+    first-match-wins; a file the manifest places is dropped if an ``exclude``
+    regex matches it. A selection entry that selects or drops nothing is an
+    error, the same as a manifest that matches nothing: it records an intent
+    the vendored tree does not carry out.
     """
+    name = pattern_dir.name
     files = _pattern_files(pattern_dir)
     manifest = load_manifest(pattern_dir)
     # Compile up front so a bad regex fails before any destination is resolved.
-    rules = [(re.compile(rule.src), rule) for rule in manifest.vendor]
+    include_rules = []
+    for index, rule in enumerate(include):
+        prefix = _entry_prefix(index, rule, _include_where(name))
+        include_rules.append((_validate_rule(prefix, rule), rule, prefix))
+    manifest_rules = [
+        (re.compile(r.src), r, _entry_prefix(i, r))
+        for i, r in enumerate(manifest.vendor)
+    ]
+    excludes = _compile_excludes(name, exclude)
+    used_includes: set[int] = set()
+    used_excludes: set[int] = set()
 
     plan: dict[str, Path] = {}
     for path, rel in files:
-        for index, (regex, rule) in enumerate(rules):
-            match = regex.fullmatch(rel)
-            if match is None:
+        placed = _first_match(include_rules, rel)
+        if placed is not None:
+            used_includes.add(placed[0])
+        else:
+            placed = _first_match(manifest_rules, rel)
+            if placed is None:
                 continue
-            key = _destination(index, rule, match, rel)
-            if key in plan:
-                first = plan[key].relative_to(pattern_dir).as_posix()
-                raise ManifestError(
-                    f"{_entry_prefix(index, rule)}{rel} and {first} both vendor to "
-                    f"{key!r}; one would silently overwrite the other"
-                )
-            plan[key] = path
-            break
+            dropped = [i for i, regex in enumerate(excludes) if regex.fullmatch(rel)]
+            if dropped:
+                used_excludes.update(dropped)
+                continue
+        _, key, prefix = placed
+        if key in plan:
+            first = plan[key].relative_to(pattern_dir).as_posix()
+            raise ManifestError(
+                f"{prefix}{rel} and {first} both vendor to "
+                f"{key!r}; one would silently overwrite the other"
+            )
+        plan[key] = path
+    _refuse_unused_selection(name, include, exclude, used_includes, used_excludes)
     if not plan:
         # The same mistake as ``vendor: []``, one character further on. Left
         # silent it is worse than that: `update` onto a manifest that matches
         # nothing prunes every file the pattern had, records ``files: {}``, and
         # `check` then passes having verified nothing.
         raise ManifestError(
-            f"{pattern_dir.name}: no file is matched by any {MANIFEST_NAME} entry, "
-            "so nothing would be vendored - a pattern that vendors nothing is a "
-            "mistake, not a policy"
+            f"{name}: no file is matched by any {MANIFEST_NAME} entry"
+            + (f" once the {RUNTIME_LOCK_NAME} select is applied" if exclude else "")
+            + ", so nothing would be vendored - a pattern that vendors nothing is "
+            "a mistake, not a policy"
         )
     _refuse_nested_keys(plan, pattern_dir)
     # Sorted by destination key so the lock's file ordering is deterministic
     # even under substitutions that reorder relative to the source walk.
     return [(source, key) for key, source in sorted(plan.items())]
+
+
+def _first_match(rules: list, rel: str) -> tuple[int, str, str] | None:
+    """The ``(index, destination key, prefix)`` of the first rule matching ``rel``."""
+    for index, (regex, rule, prefix) in enumerate(rules):
+        match = regex.fullmatch(rel)
+        if match is not None:
+            return index, _destination(prefix, rule, match, rel), prefix
+    return None
+
+
+def _refuse_unused_selection(
+    name: str,
+    include: Sequence,
+    exclude: Sequence[str],
+    used_includes: set[int],
+    used_excludes: set[int],
+) -> None:
+    for index, rule in enumerate(include):
+        if index not in used_includes:
+            raise ManifestError(
+                f"{_entry_prefix(index, rule, _include_where(name))}"
+                "selects no file of the pattern"
+            )
+    for index, text in enumerate(exclude):
+        if index not in used_excludes:
+            raise ManifestError(
+                f"{name}: {RUNTIME_LOCK_NAME} select.exclude {text!r} drops no "
+                f"file that {MANIFEST_NAME} vendors"
+            )

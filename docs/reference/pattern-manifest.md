@@ -134,10 +134,11 @@ patterns:
 
 | Key | Meaning |
 | --- | --- |
-| `version` | Lock format version. Room for the format to evolve — reading it does not make ibek convert anything on your behalf. |
+| `version` | Lock format version: `1`, or `2` when any pattern has a `select`. ibek writes the lowest version that holds the lock's content. Reading it does not make ibek convert anything on your behalf. |
 | `patterns` | Vendored patterns by name, emitted in name order so re-writing the same set produces no diff. |
 | `patterns[].version` | The pinned upstream tag. |
 | `patterns[].source` | The scheme-stripped library label the pattern came from. |
+| `patterns[].select` | Optional. This instance's `include` rules (`src` / `dest`, as in the manifest) and `exclude` regexes applied to the manifest's file-set; see {doc}`../how-to/select-pattern-files`. |
 | `patterns[].files` | `<destination-root-relative path>: sha256:<hex>` for every vendored file. |
 
 **Keys are relative to the destination root, always** — `config/x.proto`, not
@@ -154,7 +155,8 @@ A file entry whose value begins with `DIRTY` (conventionally
 than fails, without needing `--allow-dirty`.
 
 ```{warning}
-`ibek` reads and writes exactly the `version:` / `patterns:` shape above.
+`ibek` reads and writes exactly the `version:` / `patterns:` shape above, and
+refuses any other top-level key.
 `add`, `update` and `check` all refuse a `runtime-lock.yaml` in any other
 shape, with a generic message naming a conversion script — see
 {ref}`the vendoring how-to <unrecognised-locks>`.
