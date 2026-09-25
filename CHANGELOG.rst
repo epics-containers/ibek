@@ -64,6 +64,12 @@ The ``pvi`` dependency floor is now ``0.14.1``, with no ceiling. Generated PVI
 screens use pvi's updated widget styling (fonts, colours and layout), so the
 test goldens under ``tests/samples/outputs`` were regenerated to match.
 
+The ``pvi`` dependency floor is now ``0.14.2b1``. Each field of a generated
+``$(P)PVI`` group now names itself as its ``+trigger``, matching the mapping
+QSRV (pvxs) applies by default, so pvxs no longer logs "Group ...PVI defines
+no +trigger mappings" for every PVI group at IOC start. The ``*.pvi.template``
+test goldens under ``tests/samples/outputs`` were regenerated to match.
+
 Fixed
 ~~~~~
 

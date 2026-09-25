@@ -7,6 +7,7 @@ record("*", "$(P)$(R)Net") {
             "pvi.Net.w": {
                 "+channel": "NAME",
                 "+type": "plain",
+                "+trigger": "pvi.Net.w",
             }
         }
     })
@@ -18,6 +19,7 @@ record("*", "$(P)$(R)Net_RBV") {
             "pvi.Net.r": {
                 "+channel": "NAME",
                 "+type": "plain",
+                "+trigger": "pvi.Net.r",
             }
         }
     })
@@ -29,6 +31,7 @@ record("*", "$(P)$(R)MinY") {
             "pvi.MinY.w": {
                 "+channel": "NAME",
                 "+type": "plain",
+                "+trigger": "pvi.MinY.w",
             }
         }
     })
@@ -40,6 +43,7 @@ record("*", "$(P)$(R)MinY_RBV") {
             "pvi.MinY.r": {
                 "+channel": "NAME",
                 "+type": "plain",
+                "+trigger": "pvi.MinY.r",
             }
         }
     })
@@ -51,6 +55,7 @@ record("*", "$(P)$(R)MinX") {
             "pvi.MinX.w": {
                 "+channel": "NAME",
                 "+type": "plain",
+                "+trigger": "pvi.MinX.w",
             }
         }
     })
@@ -62,6 +67,7 @@ record("*", "$(P)$(R)MinX_RBV") {
             "pvi.MinX.r": {
                 "+channel": "NAME",
                 "+type": "plain",
+                "+trigger": "pvi.MinX.r",
             }
         }
     })
@@ -73,6 +79,7 @@ record("*", "$(P)$(R)ArraySizeX_RBV") {
             "pvi.ArraySizeX.r": {
                 "+channel": "NAME",
                 "+type": "plain",
+                "+trigger": "pvi.ArraySizeX.r",
             }
         }
     })
@@ -84,6 +91,7 @@ record("*", "$(P)$(R)ArraySizeY_RBV") {
             "pvi.ArraySizeY.r": {
                 "+channel": "NAME",
                 "+type": "plain",
+                "+trigger": "pvi.ArraySizeY.r",
             }
         }
     })
@@ -95,6 +103,7 @@ record("*", "$(P)$(R)ArraySize_RBV") {
             "pvi.ArraySize.r": {
                 "+channel": "NAME",
                 "+type": "plain",
+                "+trigger": "pvi.ArraySize.r",
             }
         }
     })
@@ -106,6 +115,7 @@ record("*", "$(P)$(R)DataType") {
             "pvi.DataType.w": {
                 "+channel": "NAME",
                 "+type": "plain",
+                "+trigger": "pvi.DataType.w",
             }
         }
     })
@@ -117,6 +127,7 @@ record("*", "$(P)$(R)DataType_RBV") {
             "pvi.DataType.r": {
                 "+channel": "NAME",
                 "+type": "plain",
+                "+trigger": "pvi.DataType.r",
             }
         }
     })
@@ -128,6 +139,7 @@ record("*", "$(P)$(R)ColorMode") {
             "pvi.ColorMode.w": {
                 "+channel": "NAME",
                 "+type": "plain",
+                "+trigger": "pvi.ColorMode.w",
             }
         }
     })
@@ -139,6 +151,7 @@ record("*", "$(P)$(R)ColorMode_RBV") {
             "pvi.ColorMode.r": {
                 "+channel": "NAME",
                 "+type": "plain",
+                "+trigger": "pvi.ColorMode.r",
             }
         }
     })
@@ -150,6 +163,7 @@ record("*", "$(P)$(R)TSMinValue") {
             "pvi.TSMinValue.r": {
                 "+channel": "NAME",
                 "+type": "plain",
+                "+trigger": "pvi.TSMinValue.r",
             }
         }
     })
@@ -161,6 +175,7 @@ record("*", "$(P)$(R)TSMaxValue") {
             "pvi.TSMaxValue.r": {
                 "+channel": "NAME",
                 "+type": "plain",
+                "+trigger": "pvi.TSMaxValue.r",
             }
         }
     })
@@ -172,6 +187,7 @@ record("*", "$(P)$(R)TSMeanValue") {
             "pvi.TSMeanValue.r": {
                 "+channel": "NAME",
                 "+type": "plain",
+                "+trigger": "pvi.TSMeanValue.r",
             }
         }
     })
@@ -183,6 +199,7 @@ record("*", "$(P)$(R)TSTotal") {
             "pvi.TSTotal.r": {
                 "+channel": "NAME",
                 "+type": "plain",
+                "+trigger": "pvi.TSTotal.r",
             }
         }
     })
@@ -194,6 +211,7 @@ record("*", "$(P)$(R)TSNet") {
             "pvi.TSNet.r": {
                 "+channel": "NAME",
                 "+type": "plain",
+                "+trigger": "pvi.TSNet.r",
             }
         }
     })
@@ -205,6 +223,7 @@ record("*", "$(P)$(R)MinValue") {
             "pvi.MinValue.w": {
                 "+channel": "NAME",
                 "+type": "plain",
+                "+trigger": "pvi.MinValue.w",
             }
         }
     })
@@ -216,6 +235,7 @@ record("*", "$(P)$(R)MinValue_RBV") {
             "pvi.MinValue.r": {
                 "+channel": "NAME",
                 "+type": "plain",
+                "+trigger": "pvi.MinValue.r",
             }
         }
     })
@@ -227,6 +247,7 @@ record("*", "$(P)$(R)MaxValue") {
             "pvi.MaxValue.w": {
                 "+channel": "NAME",
                 "+type": "plain",
+                "+trigger": "pvi.MaxValue.w",
             }
         }
     })
@@ -238,6 +259,7 @@ record("*", "$(P)$(R)MaxValue_RBV") {
             "pvi.MaxValue.r": {
                 "+channel": "NAME",
                 "+type": "plain",
+                "+trigger": "pvi.MaxValue.r",
             }
         }
     })
@@ -249,6 +271,7 @@ record("*", "$(P)$(R)MeanValue") {
             "pvi.MeanValue.w": {
                 "+channel": "NAME",
                 "+type": "plain",
+                "+trigger": "pvi.MeanValue.w",
             }
         }
     })
@@ -260,6 +283,7 @@ record("*", "$(P)$(R)MeanValue_RBV") {
             "pvi.MeanValue.r": {
                 "+channel": "NAME",
                 "+type": "plain",
+                "+trigger": "pvi.MeanValue.r",
             }
         }
     })
@@ -271,6 +295,7 @@ record("*", "$(P)$(R)Total") {
             "pvi.Total.w": {
                 "+channel": "NAME",
                 "+type": "plain",
+                "+trigger": "pvi.Total.w",
             }
         }
     })
@@ -282,6 +307,7 @@ record("*", "$(P)$(R)Total_RBV") {
             "pvi.Total.r": {
                 "+channel": "NAME",
                 "+type": "plain",
+                "+trigger": "pvi.Total.r",
             }
         }
     })
@@ -293,6 +319,7 @@ record("*", "$(P)$(R)BgdWidth") {
             "pvi.BgdWidth.w": {
                 "+channel": "NAME",
                 "+type": "plain",
+                "+trigger": "pvi.BgdWidth.w",
             }
         }
     })
@@ -304,6 +331,7 @@ record("*", "$(P)$(R)BgdWidth_RBV") {
             "pvi.BgdWidth.r": {
                 "+channel": "NAME",
                 "+type": "plain",
+                "+trigger": "pvi.BgdWidth.r",
             }
         }
     })
@@ -315,6 +343,7 @@ record("*", "$(P)$(R)ComputeStatistics") {
             "pvi.ComputeStatistics.w": {
                 "+channel": "NAME",
                 "+type": "plain",
+                "+trigger": "pvi.ComputeStatistics.w",
             }
         }
     })
@@ -326,6 +355,7 @@ record("*", "$(P)$(R)ComputeStatistics_RBV") {
             "pvi.ComputeStatistics.r": {
                 "+channel": "NAME",
                 "+type": "plain",
+                "+trigger": "pvi.ComputeStatistics.r",
             }
         }
     })
@@ -337,6 +367,7 @@ record("*", "$(P)$(R)ComputeProfiles") {
             "pvi.ComputeProfiles.w": {
                 "+channel": "NAME",
                 "+type": "plain",
+                "+trigger": "pvi.ComputeProfiles.w",
             }
         }
     })
@@ -348,6 +379,7 @@ record("*", "$(P)$(R)ComputeProfiles_RBV") {
             "pvi.ComputeProfiles.r": {
                 "+channel": "NAME",
                 "+type": "plain",
+                "+trigger": "pvi.ComputeProfiles.r",
             }
         }
     })
@@ -359,6 +391,7 @@ record("*", "$(P)$(R)ProfileSizeX_RBV") {
             "pvi.ProfileSizeX.r": {
                 "+channel": "NAME",
                 "+type": "plain",
+                "+trigger": "pvi.ProfileSizeX.r",
             }
         }
     })
@@ -370,6 +403,7 @@ record("*", "$(P)$(R)ProfileSizeY_RBV") {
             "pvi.ProfileSizeY.r": {
                 "+channel": "NAME",
                 "+type": "plain",
+                "+trigger": "pvi.ProfileSizeY.r",
             }
         }
     })
@@ -381,6 +415,7 @@ record("*", "$(P)$(R)ProfileAverageX_RBV") {
             "pvi.ProfileAverageX.r": {
                 "+channel": "NAME",
                 "+type": "plain",
+                "+trigger": "pvi.ProfileAverageX.r",
             }
         }
     })
@@ -392,6 +427,7 @@ record("*", "$(P)$(R)ProfileAverageY_RBV") {
             "pvi.ProfileAverageY.r": {
                 "+channel": "NAME",
                 "+type": "plain",
+                "+trigger": "pvi.ProfileAverageY.r",
             }
         }
     })
@@ -403,6 +439,7 @@ record("*", "$(P)$(R)ProfileThresholdX_RBV") {
             "pvi.ProfileThresholdX.r": {
                 "+channel": "NAME",
                 "+type": "plain",
+                "+trigger": "pvi.ProfileThresholdX.r",
             }
         }
     })
@@ -414,6 +451,7 @@ record("*", "$(P)$(R)ProfileThresholdY_RBV") {
             "pvi.ProfileThresholdY.r": {
                 "+channel": "NAME",
                 "+type": "plain",
+                "+trigger": "pvi.ProfileThresholdY.r",
             }
         }
     })
@@ -425,6 +463,7 @@ record("*", "$(P)$(R)ProfileCentroidX_RBV") {
             "pvi.ProfileCentroidX.r": {
                 "+channel": "NAME",
                 "+type": "plain",
+                "+trigger": "pvi.ProfileCentroidX.r",
             }
         }
     })
@@ -436,6 +475,7 @@ record("*", "$(P)$(R)ProfileCentroidY_RBV") {
             "pvi.ProfileCentroidY.r": {
                 "+channel": "NAME",
                 "+type": "plain",
+                "+trigger": "pvi.ProfileCentroidY.r",
             }
         }
     })
@@ -447,6 +487,7 @@ record("*", "$(P)$(R)ProfileCursorX_RBV") {
             "pvi.ProfileCursorX.r": {
                 "+channel": "NAME",
                 "+type": "plain",
+                "+trigger": "pvi.ProfileCursorX.r",
             }
         }
     })
@@ -458,6 +499,7 @@ record("*", "$(P)$(R)ProfileCursorY_RBV") {
             "pvi.ProfileCursorY.r": {
                 "+channel": "NAME",
                 "+type": "plain",
+                "+trigger": "pvi.ProfileCursorY.r",
             }
         }
     })
@@ -469,6 +511,7 @@ record("*", "$(P)$(R)CursorX") {
             "pvi.CursorX.w": {
                 "+channel": "NAME",
                 "+type": "plain",
+                "+trigger": "pvi.CursorX.w",
             }
         }
     })
@@ -480,6 +523,7 @@ record("*", "$(P)$(R)CursorX_RBV") {
             "pvi.CursorX.r": {
                 "+channel": "NAME",
                 "+type": "plain",
+                "+trigger": "pvi.CursorX.r",
             }
         }
     })
@@ -491,6 +535,7 @@ record("*", "$(P)$(R)CursorY") {
             "pvi.CursorY.w": {
                 "+channel": "NAME",
                 "+type": "plain",
+                "+trigger": "pvi.CursorY.w",
             }
         }
     })
@@ -502,6 +547,7 @@ record("*", "$(P)$(R)CursorY_RBV") {
             "pvi.CursorY.r": {
                 "+channel": "NAME",
                 "+type": "plain",
+                "+trigger": "pvi.CursorY.r",
             }
         }
     })
@@ -513,6 +559,7 @@ record("*", "$(P)$(R)TSMinX") {
             "pvi.TSMinX.r": {
                 "+channel": "NAME",
                 "+type": "plain",
+                "+trigger": "pvi.TSMinX.r",
             }
         }
     })
@@ -524,6 +571,7 @@ record("*", "$(P)$(R)TSMinY") {
             "pvi.TSMinY.r": {
                 "+channel": "NAME",
                 "+type": "plain",
+                "+trigger": "pvi.TSMinY.r",
             }
         }
     })
@@ -535,6 +583,7 @@ record("*", "$(P)$(R)TSMaxX") {
             "pvi.TSMaxX.r": {
                 "+channel": "NAME",
                 "+type": "plain",
+                "+trigger": "pvi.TSMaxX.r",
             }
         }
     })
@@ -546,6 +595,7 @@ record("*", "$(P)$(R)TSMaxY") {
             "pvi.TSMaxY.r": {
                 "+channel": "NAME",
                 "+type": "plain",
+                "+trigger": "pvi.TSMaxY.r",
             }
         }
     })
@@ -557,6 +607,7 @@ record("*", "$(P)$(R)TSTimestamp") {
             "pvi.TSTimestamp.r": {
                 "+channel": "NAME",
                 "+type": "plain",
+                "+trigger": "pvi.TSTimestamp.r",
             }
         }
     })
@@ -568,6 +619,7 @@ record("*", "$(P)$(R)MaxX") {
             "pvi.MaxX.w": {
                 "+channel": "NAME",
                 "+type": "plain",
+                "+trigger": "pvi.MaxX.w",
             }
         }
     })
@@ -579,6 +631,7 @@ record("*", "$(P)$(R)MaxX_RBV") {
             "pvi.MaxX.r": {
                 "+channel": "NAME",
                 "+type": "plain",
+                "+trigger": "pvi.MaxX.r",
             }
         }
     })
@@ -590,6 +643,7 @@ record("*", "$(P)$(R)MaxY") {
             "pvi.MaxY.w": {
                 "+channel": "NAME",
                 "+type": "plain",
+                "+trigger": "pvi.MaxY.w",
             }
         }
     })
@@ -601,6 +655,7 @@ record("*", "$(P)$(R)MaxY_RBV") {
             "pvi.MaxY.r": {
                 "+channel": "NAME",
                 "+type": "plain",
+                "+trigger": "pvi.MaxY.r",
             }
         }
     })
@@ -612,6 +667,7 @@ record("*", "$(P)$(R)ComputeHistogram") {
             "pvi.ComputeHistogram.w": {
                 "+channel": "NAME",
                 "+type": "plain",
+                "+trigger": "pvi.ComputeHistogram.w",
             }
         }
     })
@@ -623,6 +679,7 @@ record("*", "$(P)$(R)ComputeHistogram_RBV") {
             "pvi.ComputeHistogram.r": {
                 "+channel": "NAME",
                 "+type": "plain",
+                "+trigger": "pvi.ComputeHistogram.r",
             }
         }
     })
@@ -634,6 +691,7 @@ record("*", "$(P)$(R)HistSize") {
             "pvi.HistSize.w": {
                 "+channel": "NAME",
                 "+type": "plain",
+                "+trigger": "pvi.HistSize.w",
             }
         }
     })
@@ -645,6 +703,7 @@ record("*", "$(P)$(R)HistSize_RBV") {
             "pvi.HistSize.r": {
                 "+channel": "NAME",
                 "+type": "plain",
+                "+trigger": "pvi.HistSize.r",
             }
         }
     })
@@ -656,6 +715,7 @@ record("*", "$(P)$(R)ComputeCentroid") {
             "pvi.ComputeCentroid.w": {
                 "+channel": "NAME",
                 "+type": "plain",
+                "+trigger": "pvi.ComputeCentroid.w",
             }
         }
     })
@@ -667,6 +727,7 @@ record("*", "$(P)$(R)ComputeCentroid_RBV") {
             "pvi.ComputeCentroid.r": {
                 "+channel": "NAME",
                 "+type": "plain",
+                "+trigger": "pvi.ComputeCentroid.r",
             }
         }
     })
@@ -678,6 +739,7 @@ record("*", "$(P)$(R)HistMin") {
             "pvi.HistMin.w": {
                 "+channel": "NAME",
                 "+type": "plain",
+                "+trigger": "pvi.HistMin.w",
             }
         }
     })
@@ -689,6 +751,7 @@ record("*", "$(P)$(R)HistMin_RBV") {
             "pvi.HistMin.r": {
                 "+channel": "NAME",
                 "+type": "plain",
+                "+trigger": "pvi.HistMin.r",
             }
         }
     })
@@ -700,6 +763,7 @@ record("*", "$(P)$(R)CentroidThreshold") {
             "pvi.CentroidThreshold.w": {
                 "+channel": "NAME",
                 "+type": "plain",
+                "+trigger": "pvi.CentroidThreshold.w",
             }
         }
     })
@@ -711,6 +775,7 @@ record("*", "$(P)$(R)CentroidThreshold_RBV") {
             "pvi.CentroidThreshold.r": {
                 "+channel": "NAME",
                 "+type": "plain",
+                "+trigger": "pvi.CentroidThreshold.r",
             }
         }
     })
@@ -722,6 +787,7 @@ record("*", "$(P)$(R)HistMax") {
             "pvi.HistMax.w": {
                 "+channel": "NAME",
                 "+type": "plain",
+                "+trigger": "pvi.HistMax.w",
             }
         }
     })
@@ -733,6 +799,7 @@ record("*", "$(P)$(R)HistMax_RBV") {
             "pvi.HistMax.r": {
                 "+channel": "NAME",
                 "+type": "plain",
+                "+trigger": "pvi.HistMax.r",
             }
         }
     })
@@ -744,6 +811,7 @@ record("*", "$(P)$(R)HistBelow") {
             "pvi.HistBelow.w": {
                 "+channel": "NAME",
                 "+type": "plain",
+                "+trigger": "pvi.HistBelow.w",
             }
         }
     })
@@ -755,6 +823,7 @@ record("*", "$(P)$(R)HistBelow_RBV") {
             "pvi.HistBelow.r": {
                 "+channel": "NAME",
                 "+type": "plain",
+                "+trigger": "pvi.HistBelow.r",
             }
         }
     })
@@ -766,6 +835,7 @@ record("*", "$(P)$(R)HistAbove") {
             "pvi.HistAbove.w": {
                 "+channel": "NAME",
                 "+type": "plain",
+                "+trigger": "pvi.HistAbove.w",
             }
         }
     })
@@ -777,6 +847,7 @@ record("*", "$(P)$(R)HistAbove_RBV") {
             "pvi.HistAbove.r": {
                 "+channel": "NAME",
                 "+type": "plain",
+                "+trigger": "pvi.HistAbove.r",
             }
         }
     })
@@ -788,6 +859,7 @@ record("*", "$(P)$(R)HistEntropy") {
             "pvi.HistEntropy.w": {
                 "+channel": "NAME",
                 "+type": "plain",
+                "+trigger": "pvi.HistEntropy.w",
             }
         }
     })
@@ -799,6 +871,7 @@ record("*", "$(P)$(R)HistEntropy_RBV") {
             "pvi.HistEntropy.r": {
                 "+channel": "NAME",
                 "+type": "plain",
+                "+trigger": "pvi.HistEntropy.r",
             }
         }
     })
@@ -810,6 +883,7 @@ record("*", "$(P)$(R)Histogram_RBV") {
             "pvi.Histogram.r": {
                 "+channel": "NAME",
                 "+type": "plain",
+                "+trigger": "pvi.Histogram.r",
             }
         }
     })
@@ -821,6 +895,7 @@ record("*", "$(P)$(R)HistogramX_RBV") {
             "pvi.HistogramX.r": {
                 "+channel": "NAME",
                 "+type": "plain",
+                "+trigger": "pvi.HistogramX.r",
             }
         }
     })
@@ -832,6 +907,7 @@ record("*", "$(P)$(R)Eccentricity") {
             "pvi.Eccentricity.w": {
                 "+channel": "NAME",
                 "+type": "plain",
+                "+trigger": "pvi.Eccentricity.w",
             }
         }
     })
@@ -843,6 +919,7 @@ record("*", "$(P)$(R)Eccentricity_RBV") {
             "pvi.Eccentricity.r": {
                 "+channel": "NAME",
                 "+type": "plain",
+                "+trigger": "pvi.Eccentricity.r",
             }
         }
     })
@@ -854,6 +931,7 @@ record("*", "$(P)$(R)Orientation") {
             "pvi.Orientation.w": {
                 "+channel": "NAME",
                 "+type": "plain",
+                "+trigger": "pvi.Orientation.w",
             }
         }
     })
@@ -865,6 +943,7 @@ record("*", "$(P)$(R)Orientation_RBV") {
             "pvi.Orientation.r": {
                 "+channel": "NAME",
                 "+type": "plain",
+                "+trigger": "pvi.Orientation.r",
             }
         }
     })
@@ -876,6 +955,7 @@ record("*", "$(P)$(R)TSSigma") {
             "pvi.TSSigma.r": {
                 "+channel": "NAME",
                 "+type": "plain",
+                "+trigger": "pvi.TSSigma.r",
             }
         }
     })
@@ -887,6 +967,7 @@ record("*", "$(P)$(R)TSCentroidTotal") {
             "pvi.TSCentroidTotal.r": {
                 "+channel": "NAME",
                 "+type": "plain",
+                "+trigger": "pvi.TSCentroidTotal.r",
             }
         }
     })
@@ -898,6 +979,7 @@ record("*", "$(P)$(R)TSCentroidX") {
             "pvi.TSCentroidX.r": {
                 "+channel": "NAME",
                 "+type": "plain",
+                "+trigger": "pvi.TSCentroidX.r",
             }
         }
     })
@@ -909,6 +991,7 @@ record("*", "$(P)$(R)TSCentroidY") {
             "pvi.TSCentroidY.r": {
                 "+channel": "NAME",
                 "+type": "plain",
+                "+trigger": "pvi.TSCentroidY.r",
             }
         }
     })
@@ -920,6 +1003,7 @@ record("*", "$(P)$(R)TSSigmaX") {
             "pvi.TSSigmaX.r": {
                 "+channel": "NAME",
                 "+type": "plain",
+                "+trigger": "pvi.TSSigmaX.r",
             }
         }
     })
@@ -931,6 +1015,7 @@ record("*", "$(P)$(R)TSSigmaY") {
             "pvi.TSSigmaY.r": {
                 "+channel": "NAME",
                 "+type": "plain",
+                "+trigger": "pvi.TSSigmaY.r",
             }
         }
     })
@@ -942,6 +1027,7 @@ record("*", "$(P)$(R)TSSigmaXY") {
             "pvi.TSSigmaXY.r": {
                 "+channel": "NAME",
                 "+type": "plain",
+                "+trigger": "pvi.TSSigmaXY.r",
             }
         }
     })
@@ -953,6 +1039,7 @@ record("*", "$(P)$(R)TSSkewX") {
             "pvi.TSSkewX.r": {
                 "+channel": "NAME",
                 "+type": "plain",
+                "+trigger": "pvi.TSSkewX.r",
             }
         }
     })
@@ -964,6 +1051,7 @@ record("*", "$(P)$(R)TSSkewY") {
             "pvi.TSSkewY.r": {
                 "+channel": "NAME",
                 "+type": "plain",
+                "+trigger": "pvi.TSSkewY.r",
             }
         }
     })
@@ -975,6 +1063,7 @@ record("*", "$(P)$(R)TSKurtosisX") {
             "pvi.TSKurtosisX.r": {
                 "+channel": "NAME",
                 "+type": "plain",
+                "+trigger": "pvi.TSKurtosisX.r",
             }
         }
     })
@@ -986,6 +1075,7 @@ record("*", "$(P)$(R)TSKurtosisY") {
             "pvi.TSKurtosisY.r": {
                 "+channel": "NAME",
                 "+type": "plain",
+                "+trigger": "pvi.TSKurtosisY.r",
             }
         }
     })
@@ -997,6 +1087,7 @@ record("*", "$(P)$(R)TSEccentricity") {
             "pvi.TSEccentricity.r": {
                 "+channel": "NAME",
                 "+type": "plain",
+                "+trigger": "pvi.TSEccentricity.r",
             }
         }
     })
@@ -1008,6 +1099,7 @@ record("*", "$(P)$(R)TSOrientation") {
             "pvi.TSOrientation.r": {
                 "+channel": "NAME",
                 "+type": "plain",
+                "+trigger": "pvi.TSOrientation.r",
             }
         }
     })
@@ -1019,6 +1111,7 @@ record("*", "$(P)$(R)CentroidTotal") {
             "pvi.CentroidTotal.w": {
                 "+channel": "NAME",
                 "+type": "plain",
+                "+trigger": "pvi.CentroidTotal.w",
             }
         }
     })
@@ -1030,6 +1123,7 @@ record("*", "$(P)$(R)CentroidTotal_RBV") {
             "pvi.CentroidTotal.r": {
                 "+channel": "NAME",
                 "+type": "plain",
+                "+trigger": "pvi.CentroidTotal.r",
             }
         }
     })
@@ -1041,6 +1135,7 @@ record("*", "$(P)$(R)CentroidX") {
             "pvi.CentroidX.w": {
                 "+channel": "NAME",
                 "+type": "plain",
+                "+trigger": "pvi.CentroidX.w",
             }
         }
     })
@@ -1052,6 +1147,7 @@ record("*", "$(P)$(R)CentroidX_RBV") {
             "pvi.CentroidX.r": {
                 "+channel": "NAME",
                 "+type": "plain",
+                "+trigger": "pvi.CentroidX.r",
             }
         }
     })
@@ -1063,6 +1159,7 @@ record("*", "$(P)$(R)CentroidY") {
             "pvi.CentroidY.w": {
                 "+channel": "NAME",
                 "+type": "plain",
+                "+trigger": "pvi.CentroidY.w",
             }
         }
     })
@@ -1074,6 +1171,7 @@ record("*", "$(P)$(R)CentroidY_RBV") {
             "pvi.CentroidY.r": {
                 "+channel": "NAME",
                 "+type": "plain",
+                "+trigger": "pvi.CentroidY.r",
             }
         }
     })
@@ -1085,6 +1183,7 @@ record("*", "$(P)$(R)SigmaX") {
             "pvi.SigmaX.w": {
                 "+channel": "NAME",
                 "+type": "plain",
+                "+trigger": "pvi.SigmaX.w",
             }
         }
     })
@@ -1096,6 +1195,7 @@ record("*", "$(P)$(R)SigmaX_RBV") {
             "pvi.SigmaX.r": {
                 "+channel": "NAME",
                 "+type": "plain",
+                "+trigger": "pvi.SigmaX.r",
             }
         }
     })
@@ -1107,6 +1207,7 @@ record("*", "$(P)$(R)SigmaY") {
             "pvi.SigmaY.w": {
                 "+channel": "NAME",
                 "+type": "plain",
+                "+trigger": "pvi.SigmaY.w",
             }
         }
     })
@@ -1118,6 +1219,7 @@ record("*", "$(P)$(R)SigmaY_RBV") {
             "pvi.SigmaY.r": {
                 "+channel": "NAME",
                 "+type": "plain",
+                "+trigger": "pvi.SigmaY.r",
             }
         }
     })
@@ -1129,6 +1231,7 @@ record("*", "$(P)$(R)SigmaXY") {
             "pvi.SigmaXY.w": {
                 "+channel": "NAME",
                 "+type": "plain",
+                "+trigger": "pvi.SigmaXY.w",
             }
         }
     })
@@ -1140,6 +1243,7 @@ record("*", "$(P)$(R)SigmaXY_RBV") {
             "pvi.SigmaXY.r": {
                 "+channel": "NAME",
                 "+type": "plain",
+                "+trigger": "pvi.SigmaXY.r",
             }
         }
     })
@@ -1151,6 +1255,7 @@ record("*", "$(P)$(R)SkewX") {
             "pvi.SkewX.w": {
                 "+channel": "NAME",
                 "+type": "plain",
+                "+trigger": "pvi.SkewX.w",
             }
         }
     })
@@ -1162,6 +1267,7 @@ record("*", "$(P)$(R)SkewX_RBV") {
             "pvi.SkewX.r": {
                 "+channel": "NAME",
                 "+type": "plain",
+                "+trigger": "pvi.SkewX.r",
             }
         }
     })
@@ -1173,6 +1279,7 @@ record("*", "$(P)$(R)SkewY") {
             "pvi.SkewY.w": {
                 "+channel": "NAME",
                 "+type": "plain",
+                "+trigger": "pvi.SkewY.w",
             }
         }
     })
@@ -1184,6 +1291,7 @@ record("*", "$(P)$(R)SkewY_RBV") {
             "pvi.SkewY.r": {
                 "+channel": "NAME",
                 "+type": "plain",
+                "+trigger": "pvi.SkewY.r",
             }
         }
     })
@@ -1195,6 +1303,7 @@ record("*", "$(P)$(R)KurtosisX") {
             "pvi.KurtosisX.w": {
                 "+channel": "NAME",
                 "+type": "plain",
+                "+trigger": "pvi.KurtosisX.w",
             }
         }
     })
@@ -1206,6 +1315,7 @@ record("*", "$(P)$(R)KurtosisX_RBV") {
             "pvi.KurtosisX.r": {
                 "+channel": "NAME",
                 "+type": "plain",
+                "+trigger": "pvi.KurtosisX.r",
             }
         }
     })
@@ -1217,6 +1327,7 @@ record("*", "$(P)$(R)KurtosisY") {
             "pvi.KurtosisY.w": {
                 "+channel": "NAME",
                 "+type": "plain",
+                "+trigger": "pvi.KurtosisY.w",
             }
         }
     })
@@ -1228,6 +1339,7 @@ record("*", "$(P)$(R)KurtosisY_RBV") {
             "pvi.KurtosisY.r": {
                 "+channel": "NAME",
                 "+type": "plain",
+                "+trigger": "pvi.KurtosisY.r",
             }
         }
     })
@@ -1239,6 +1351,7 @@ record("*", "$(P)$(R)CursorVal") {
             "pvi.CursorVal.r": {
                 "+channel": "NAME",
                 "+type": "plain",
+                "+trigger": "pvi.CursorVal.r",
             }
         }
     })
@@ -1250,6 +1363,7 @@ record("*", "$(P)$(R)SigmaValue") {
             "pvi.SigmaValue.w": {
                 "+channel": "NAME",
                 "+type": "plain",
+                "+trigger": "pvi.SigmaValue.w",
             }
         }
     })
@@ -1261,6 +1375,7 @@ record("*", "$(P)$(R)Sigma_RBV") {
             "pvi.SigmaValue.r": {
                 "+channel": "NAME",
                 "+type": "plain",
+                "+trigger": "pvi.SigmaValue.r",
             }
         }
     })
@@ -1272,6 +1387,7 @@ record("*", "$(P)$(R)PluginType_RBV") {
             "pvi.PluginType.r": {
                 "+channel": "NAME",
                 "+type": "plain",
+                "+trigger": "pvi.PluginType.r",
             }
         }
     })
@@ -1283,6 +1399,7 @@ record("*", "$(P)$(R)NDArrayPort") {
             "pvi.NDArrayPort.w": {
                 "+channel": "NAME",
                 "+type": "plain",
+                "+trigger": "pvi.NDArrayPort.w",
             }
         }
     })
@@ -1294,6 +1411,7 @@ record("*", "$(P)$(R)NDArrayPort_RBV") {
             "pvi.NDArrayPort.r": {
                 "+channel": "NAME",
                 "+type": "plain",
+                "+trigger": "pvi.NDArrayPort.r",
             }
         }
     })
@@ -1305,6 +1423,7 @@ record("*", "$(P)$(R)NDArrayAddress") {
             "pvi.NDArrayAddress.w": {
                 "+channel": "NAME",
                 "+type": "plain",
+                "+trigger": "pvi.NDArrayAddress.w",
             }
         }
     })
@@ -1316,6 +1435,7 @@ record("*", "$(P)$(R)NDArrayAddress_RBV") {
             "pvi.NDArrayAddress.r": {
                 "+channel": "NAME",
                 "+type": "plain",
+                "+trigger": "pvi.NDArrayAddress.r",
             }
         }
     })
@@ -1327,6 +1447,7 @@ record("*", "$(P)$(R)EnableCallbacks") {
             "pvi.EnableCallbacks.w": {
                 "+channel": "NAME",
                 "+type": "plain",
+                "+trigger": "pvi.EnableCallbacks.w",
             }
         }
     })
@@ -1338,6 +1459,7 @@ record("*", "$(P)$(R)EnableCallbacks_RBV") {
             "pvi.EnableCallbacks.r": {
                 "+channel": "NAME",
                 "+type": "plain",
+                "+trigger": "pvi.EnableCallbacks.r",
             }
         }
     })
@@ -1349,6 +1471,7 @@ record("*", "$(P)$(R)MinCallbackTime") {
             "pvi.MinCallbackTime.w": {
                 "+channel": "NAME",
                 "+type": "plain",
+                "+trigger": "pvi.MinCallbackTime.w",
             }
         }
     })
@@ -1360,6 +1483,7 @@ record("*", "$(P)$(R)MinCallbackTime_RBV") {
             "pvi.MinCallbackTime.r": {
                 "+channel": "NAME",
                 "+type": "plain",
+                "+trigger": "pvi.MinCallbackTime.r",
             }
         }
     })
@@ -1371,6 +1495,7 @@ record("*", "$(P)$(R)QueueFree") {
             "pvi.QueueFree.r": {
                 "+channel": "NAME",
                 "+type": "plain",
+                "+trigger": "pvi.QueueFree.r",
             }
         }
     })
@@ -1382,6 +1507,7 @@ record("*", "$(P)$(R)QueueSize") {
             "pvi.QueueSize.w": {
                 "+channel": "NAME",
                 "+type": "plain",
+                "+trigger": "pvi.QueueSize.w",
             }
         }
     })
@@ -1393,6 +1519,7 @@ record("*", "$(P)$(R)QueueSize_RBV") {
             "pvi.QueueSize.r": {
                 "+channel": "NAME",
                 "+type": "plain",
+                "+trigger": "pvi.QueueSize.r",
             }
         }
     })
@@ -1404,6 +1531,7 @@ record("*", "$(P)$(R)ExecutionTime_RBV") {
             "pvi.ExecutionTime.r": {
                 "+channel": "NAME",
                 "+type": "plain",
+                "+trigger": "pvi.ExecutionTime.r",
             }
         }
     })
@@ -1415,6 +1543,7 @@ record("*", "$(P)$(R)DroppedArrays") {
             "pvi.DroppedArrays.w": {
                 "+channel": "NAME",
                 "+type": "plain",
+                "+trigger": "pvi.DroppedArrays.w",
             }
         }
     })
@@ -1426,6 +1555,7 @@ record("*", "$(P)$(R)DroppedArrays_RBV") {
             "pvi.DroppedArrays.r": {
                 "+channel": "NAME",
                 "+type": "plain",
+                "+trigger": "pvi.DroppedArrays.r",
             }
         }
     })
@@ -1437,6 +1567,7 @@ record("*", "$(P)$(R)ProcessPlugin") {
             "pvi.ProcessPlugin.w": {
                 "+channel": "NAME",
                 "+type": "plain",
+                "+trigger": "pvi.ProcessPlugin.w",
             }
         }
     })
@@ -1448,6 +1579,7 @@ record("*", "$(P)$(R)DroppedOutputArrays") {
             "pvi.DroppedOutputArrays.w": {
                 "+channel": "NAME",
                 "+type": "plain",
+                "+trigger": "pvi.DroppedOutputArrays.w",
             }
         }
     })
@@ -1459,6 +1591,7 @@ record("*", "$(P)$(R)DroppedOutputArrays_RBV") {
             "pvi.DroppedOutputArrays.r": {
                 "+channel": "NAME",
                 "+type": "plain",
+                "+trigger": "pvi.DroppedOutputArrays.r",
             }
         }
     })
@@ -1470,6 +1603,7 @@ record("*", "$(P)$(R)MaxByteRate") {
             "pvi.MaxByteRate.w": {
                 "+channel": "NAME",
                 "+type": "plain",
+                "+trigger": "pvi.MaxByteRate.w",
             }
         }
     })
@@ -1481,6 +1615,7 @@ record("*", "$(P)$(R)MaxByteRate_RBV") {
             "pvi.MaxByteRate.r": {
                 "+channel": "NAME",
                 "+type": "plain",
+                "+trigger": "pvi.MaxByteRate.r",
             }
         }
     })
@@ -1492,6 +1627,7 @@ record("*", "$(P)$(R)BlockingCallbacks") {
             "pvi.BlockingCallbacks.w": {
                 "+channel": "NAME",
                 "+type": "plain",
+                "+trigger": "pvi.BlockingCallbacks.w",
             }
         }
     })
@@ -1503,6 +1639,7 @@ record("*", "$(P)$(R)BlockingCallbacks_RBV") {
             "pvi.BlockingCallbacks.r": {
                 "+channel": "NAME",
                 "+type": "plain",
+                "+trigger": "pvi.BlockingCallbacks.r",
             }
         }
     })
@@ -1514,6 +1651,7 @@ record("*", "$(P)$(R)NumThreads") {
             "pvi.NumThreads.w": {
                 "+channel": "NAME",
                 "+type": "plain",
+                "+trigger": "pvi.NumThreads.w",
             }
         }
     })
@@ -1525,6 +1663,7 @@ record("*", "$(P)$(R)NumThreads_RBV") {
             "pvi.NumThreads.r": {
                 "+channel": "NAME",
                 "+type": "plain",
+                "+trigger": "pvi.NumThreads.r",
             }
         }
     })
@@ -1536,6 +1675,7 @@ record("*", "$(P)$(R)MaxThreads_RBV") {
             "pvi.MaxThreads.r": {
                 "+channel": "NAME",
                 "+type": "plain",
+                "+trigger": "pvi.MaxThreads.r",
             }
         }
     })
@@ -1547,6 +1687,7 @@ record("*", "$(P)$(R)SortMode") {
             "pvi.SortMode.w": {
                 "+channel": "NAME",
                 "+type": "plain",
+                "+trigger": "pvi.SortMode.w",
             }
         }
     })
@@ -1558,6 +1699,7 @@ record("*", "$(P)$(R)SortMode_RBV") {
             "pvi.SortMode.r": {
                 "+channel": "NAME",
                 "+type": "plain",
+                "+trigger": "pvi.SortMode.r",
             }
         }
     })
@@ -1569,6 +1711,7 @@ record("*", "$(P)$(R)SortTime") {
             "pvi.SortTime.w": {
                 "+channel": "NAME",
                 "+type": "plain",
+                "+trigger": "pvi.SortTime.w",
             }
         }
     })
@@ -1580,6 +1723,7 @@ record("*", "$(P)$(R)SortTime_RBV") {
             "pvi.SortTime.r": {
                 "+channel": "NAME",
                 "+type": "plain",
+                "+trigger": "pvi.SortTime.r",
             }
         }
     })
@@ -1591,6 +1735,7 @@ record("*", "$(P)$(R)SortFree") {
             "pvi.SortFree.r": {
                 "+channel": "NAME",
                 "+type": "plain",
+                "+trigger": "pvi.SortFree.r",
             }
         }
     })
@@ -1602,6 +1747,7 @@ record("*", "$(P)$(R)SortSize") {
             "pvi.SortSize.w": {
                 "+channel": "NAME",
                 "+type": "plain",
+                "+trigger": "pvi.SortSize.w",
             }
         }
     })
@@ -1613,6 +1759,7 @@ record("*", "$(P)$(R)SortSize_RBV") {
             "pvi.SortSize.r": {
                 "+channel": "NAME",
                 "+type": "plain",
+                "+trigger": "pvi.SortSize.r",
             }
         }
     })
@@ -1624,6 +1771,7 @@ record("*", "$(P)$(R)DisorderedArrays") {
             "pvi.DisorderedArrays.w": {
                 "+channel": "NAME",
                 "+type": "plain",
+                "+trigger": "pvi.DisorderedArrays.w",
             }
         }
     })
@@ -1635,6 +1783,7 @@ record("*", "$(P)$(R)DisorderedArrays_RBV") {
             "pvi.DisorderedArrays.r": {
                 "+channel": "NAME",
                 "+type": "plain",
+                "+trigger": "pvi.DisorderedArrays.r",
             }
         }
     })
@@ -1646,6 +1795,7 @@ record("*", "$(P)$(R)PortName_RBV") {
             "pvi.PortName.r": {
                 "+channel": "NAME",
                 "+type": "plain",
+                "+trigger": "pvi.PortName.r",
             }
         }
     })
@@ -1657,6 +1807,7 @@ record("*", "$(P)$(R)Manufacturer_RBV") {
             "pvi.Manufacturer.r": {
                 "+channel": "NAME",
                 "+type": "plain",
+                "+trigger": "pvi.Manufacturer.r",
             }
         }
     })
@@ -1668,6 +1819,7 @@ record("*", "$(P)$(R)Model_RBV") {
             "pvi.Model.r": {
                 "+channel": "NAME",
                 "+type": "plain",
+                "+trigger": "pvi.Model.r",
             }
         }
     })
@@ -1679,6 +1831,7 @@ record("*", "$(P)$(R)SerialNumber_RBV") {
             "pvi.SerialNumber.r": {
                 "+channel": "NAME",
                 "+type": "plain",
+                "+trigger": "pvi.SerialNumber.r",
             }
         }
     })
@@ -1690,6 +1843,7 @@ record("*", "$(P)$(R)FirmwareVersion_RBV") {
             "pvi.FirmwareVersion.r": {
                 "+channel": "NAME",
                 "+type": "plain",
+                "+trigger": "pvi.FirmwareVersion.r",
             }
         }
     })
@@ -1701,6 +1855,7 @@ record("*", "$(P)$(R)SDKVersion_RBV") {
             "pvi.SDKVersion.r": {
                 "+channel": "NAME",
                 "+type": "plain",
+                "+trigger": "pvi.SDKVersion.r",
             }
         }
     })
@@ -1712,6 +1867,7 @@ record("*", "$(P)$(R)DriverVersion_RBV") {
             "pvi.DriverVersion.r": {
                 "+channel": "NAME",
                 "+type": "plain",
+                "+trigger": "pvi.DriverVersion.r",
             }
         }
     })
@@ -1723,6 +1879,7 @@ record("*", "$(P)$(R)ADCoreVersion_RBV") {
             "pvi.ADCoreVersion.r": {
                 "+channel": "NAME",
                 "+type": "plain",
+                "+trigger": "pvi.ADCoreVersion.r",
             }
         }
     })
@@ -1734,6 +1891,7 @@ record("*", "$(P)$(R)NumQueuedArrays") {
             "pvi.NumQueuedArrays.r": {
                 "+channel": "NAME",
                 "+type": "plain",
+                "+trigger": "pvi.NumQueuedArrays.r",
             }
         }
     })
@@ -1745,6 +1903,7 @@ record("*", "$(P)$(R)WaitForPlugins") {
             "pvi.WaitForPlugins.w": {
                 "+channel": "NAME",
                 "+type": "plain",
+                "+trigger": "pvi.WaitForPlugins.w",
             }
         }
     })
@@ -1756,6 +1915,7 @@ record("*", "$(P)$(R)Acquire") {
             "pvi.Acquire.w": {
                 "+channel": "NAME",
                 "+type": "plain",
+                "+trigger": "pvi.Acquire.w",
             }
         }
     })
@@ -1767,6 +1927,7 @@ record("*", "$(P)$(R)Acquire_RBV") {
             "pvi.Acquire.r": {
                 "+channel": "NAME",
                 "+type": "plain",
+                "+trigger": "pvi.Acquire.r",
             }
         }
     })
@@ -1778,6 +1939,7 @@ record("*", "$(P)$(R)ArrayCounter") {
             "pvi.ArrayCounter.w": {
                 "+channel": "NAME",
                 "+type": "plain",
+                "+trigger": "pvi.ArrayCounter.w",
             }
         }
     })
@@ -1789,6 +1951,7 @@ record("*", "$(P)$(R)ArrayCounter_RBV") {
             "pvi.ArrayCounter.r": {
                 "+channel": "NAME",
                 "+type": "plain",
+                "+trigger": "pvi.ArrayCounter.r",
             }
         }
     })
@@ -1800,6 +1963,7 @@ record("*", "$(P)$(R)ArrayCallbacks") {
             "pvi.ArrayCallbacks.w": {
                 "+channel": "NAME",
                 "+type": "plain",
+                "+trigger": "pvi.ArrayCallbacks.w",
             }
         }
     })
@@ -1811,6 +1975,7 @@ record("*", "$(P)$(R)ArrayCallbacks_RBV") {
             "pvi.ArrayCallbacks.r": {
                 "+channel": "NAME",
                 "+type": "plain",
+                "+trigger": "pvi.ArrayCallbacks.r",
             }
         }
     })
@@ -1822,6 +1987,7 @@ record("*", "$(P)$(R)NDAttributesFile") {
             "pvi.NDAttributesFile.w": {
                 "+channel": "NAME",
                 "+type": "plain",
+                "+trigger": "pvi.NDAttributesFile.w",
             }
         }
     })
@@ -1833,6 +1999,7 @@ record("*", "$(P)$(R)NDAttributesMacros") {
             "pvi.NDAttributesMacros.w": {
                 "+channel": "NAME",
                 "+type": "plain",
+                "+trigger": "pvi.NDAttributesMacros.w",
             }
         }
     })
@@ -1844,6 +2011,7 @@ record("*", "$(P)$(R)NDAttributesStatus") {
             "pvi.NDAttributesStatus.r": {
                 "+channel": "NAME",
                 "+type": "plain",
+                "+trigger": "pvi.NDAttributesStatus.r",
             }
         }
     })
@@ -1855,6 +2023,7 @@ record("*", "$(P)$(R)EmptyFreeList") {
             "pvi.EmptyFreeList.w": {
                 "+channel": "NAME",
                 "+type": "plain",
+                "+trigger": "pvi.EmptyFreeList.w",
             }
         }
     })
@@ -1866,6 +2035,7 @@ record("*", "$(P)$(R)AcquireBusyCB") {
             "pvi.AcquireBusyCB.r": {
                 "+channel": "NAME",
                 "+type": "plain",
+                "+trigger": "pvi.AcquireBusyCB.r",
             }
         }
     })
@@ -1877,6 +2047,7 @@ record("*", "$(P)$(R)BayerPattern_RBV") {
             "pvi.BayerPattern.r": {
                 "+channel": "NAME",
                 "+type": "plain",
+                "+trigger": "pvi.BayerPattern.r",
             }
         }
     })
@@ -1888,6 +2059,7 @@ record("*", "$(P)$(R)ArraySizeZ_RBV") {
             "pvi.ArraySizeZ.r": {
                 "+channel": "NAME",
                 "+type": "plain",
+                "+trigger": "pvi.ArraySizeZ.r",
             }
         }
     })
@@ -1899,6 +2071,7 @@ record("*", "$(P)$(R)Codec_RBV") {
             "pvi.Codec.r": {
                 "+channel": "NAME",
                 "+type": "plain",
+                "+trigger": "pvi.Codec.r",
             }
         }
     })
@@ -1910,6 +2083,7 @@ record("*", "$(P)$(R)CompressedSize_RBV") {
             "pvi.CompressedSize.r": {
                 "+channel": "NAME",
                 "+type": "plain",
+                "+trigger": "pvi.CompressedSize.r",
             }
         }
     })
@@ -1921,6 +2095,7 @@ record("*", "$(P)$(R)UniqueId_RBV") {
             "pvi.UniqueId.r": {
                 "+channel": "NAME",
                 "+type": "plain",
+                "+trigger": "pvi.UniqueId.r",
             }
         }
     })
@@ -1932,6 +2107,7 @@ record("*", "$(P)$(R)TimeStamp_RBV") {
             "pvi.TimeStamp.r": {
                 "+channel": "NAME",
                 "+type": "plain",
+                "+trigger": "pvi.TimeStamp.r",
             }
         }
     })
@@ -1943,6 +2119,7 @@ record("*", "$(P)$(R)EpicsTSSec_RBV") {
             "pvi.EpicsTSSec.r": {
                 "+channel": "NAME",
                 "+type": "plain",
+                "+trigger": "pvi.EpicsTSSec.r",
             }
         }
     })
@@ -1954,6 +2131,7 @@ record("*", "$(P)$(R)EpicsTSNsec_RBV") {
             "pvi.EpicsTSNsec.r": {
                 "+channel": "NAME",
                 "+type": "plain",
+                "+trigger": "pvi.EpicsTSNsec.r",
             }
         }
     })
@@ -1965,6 +2143,7 @@ record("*", "$(P)$(R)PoolMaxMem") {
             "pvi.PoolMaxMem.r": {
                 "+channel": "NAME",
                 "+type": "plain",
+                "+trigger": "pvi.PoolMaxMem.r",
             }
         }
     })
@@ -1976,6 +2155,7 @@ record("*", "$(P)$(R)PoolUsedMem") {
             "pvi.PoolUsedMem.r": {
                 "+channel": "NAME",
                 "+type": "plain",
+                "+trigger": "pvi.PoolUsedMem.r",
             }
         }
     })
@@ -1987,6 +2167,7 @@ record("*", "$(P)$(R)PoolAllocBuffers") {
             "pvi.PoolAllocBuffers.r": {
                 "+channel": "NAME",
                 "+type": "plain",
+                "+trigger": "pvi.PoolAllocBuffers.r",
             }
         }
     })
@@ -1998,6 +2179,7 @@ record("*", "$(P)$(R)PoolFreeBuffers") {
             "pvi.PoolFreeBuffers.r": {
                 "+channel": "NAME",
                 "+type": "plain",
+                "+trigger": "pvi.PoolFreeBuffers.r",
             }
         }
     })
@@ -2009,6 +2191,7 @@ record("*", "$(P)$(R)NDimensions") {
             "pvi.NDimensions.w": {
                 "+channel": "NAME",
                 "+type": "plain",
+                "+trigger": "pvi.NDimensions.w",
             }
         }
     })
@@ -2020,6 +2203,7 @@ record("*", "$(P)$(R)NDimensions_RBV") {
             "pvi.NDimensions.r": {
                 "+channel": "NAME",
                 "+type": "plain",
+                "+trigger": "pvi.NDimensions.r",
             }
         }
     })
@@ -2031,6 +2215,7 @@ record("*", "$(P)$(R)Dimensions") {
             "pvi.Dimensions.w": {
                 "+channel": "NAME",
                 "+type": "plain",
+                "+trigger": "pvi.Dimensions.w",
             }
         }
     })
@@ -2042,6 +2227,7 @@ record("*", "$(P)$(R)Dimensions_RBV") {
             "pvi.Dimensions.r": {
                 "+channel": "NAME",
                 "+type": "plain",
+                "+trigger": "pvi.Dimensions.r",
             }
         }
     })

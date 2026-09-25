@@ -7,6 +7,7 @@ record("*", "$(P)Simple") {
             "pvi.SimplePV.r": {
                 "+channel": "NAME",
                 "+type": "plain",
+                "+trigger": "pvi.SimplePV.r",
             }
         }
     })
