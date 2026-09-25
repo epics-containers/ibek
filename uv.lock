@@ -486,7 +486,7 @@ dev = [
 requires-dist = [
     { name = "gitpython" },
     { name = "jinja2" },
-    { name = "pvi", specifier = ">=0.14.2b1" },
+    { name = "pvi", specifier = ">=0.14.2" },
     { name = "pydantic", specifier = "<3.0.0" },
     { name = "ruamel-yaml" },
     { name = "semantic-version" },
@@ -971,7 +971,7 @@ wheels = [
 
 [[package]]
 name = "pvi"
-version = "0.14.2b1"
+version = "0.14.2"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "jinja2" },
@@ -981,9 +981,9 @@ dependencies = [
     { name = "ruamel-yaml" },
     { name = "typer" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/b8/f6/c4057ac4609856e5dc1c0e3d4af7ced069a2dab5405a9ec28437a4b3ef8a/pvi-0.14.2b1.tar.gz", hash = "sha256:13cbf68b13be3f9c194a85406b639603c0923d1d9857e0aae15f7b993b775511", size = 288718, upload-time = "2026-09-25T11:49:50.015Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/77/05/e489dc66a5d631ae6a2569631e7321a3630ec189a1a6f3b2ef5ad8de0097/pvi-0.14.2.tar.gz", hash = "sha256:5ea9327a83b3d1b6f6bb3a5a9c54c27b8317eb7e399448a7e72d3077ff238682", size = 288750, upload-time = "2026-09-25T13:13:11.44Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/53/33/4044b3ef7777783a2add9d94f36549d36eec7f690ed36ac81b2bec693102/pvi-0.14.2b1-py3-none-any.whl", hash = "sha256:87d75f8311710a9c7dcdf78791682231117159f6e5478bda286a3bbb6fb504e4", size = 59294, upload-time = "2026-09-25T11:49:48.824Z" },
+    { url = "https://files.pythonhosted.org/packages/53/2f/f79423389feebf5ad6cbe8778eab7034ac2c0a2083f7af81e4da5e80fe74/pvi-0.14.2-py3-none-any.whl", hash = "sha256:73f059d666d1f5e8782eabe9d2ffde861d51e8af116d4b1f3baa7a86ab57b231", size = 59261, upload-time = "2026-09-25T13:13:10.522Z" },
 ]
 
 [[package]]
