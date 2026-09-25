@@ -60,7 +60,7 @@ vendor:
 """
 
 # ``\\1``-style and ``\\g<...>`` backreferences mark a ``dest`` as a substitution
-# template (which produces the whole destination path) rather than a plain folder.
+# template (which produces the whole destination path) rather than a plain path.
 _SUBSTITUTION_RE = re.compile(r"\\(?:\d|g<)")
 
 
@@ -87,8 +87,21 @@ class PatternManifest(BaseSettings):
 
 
 def is_substitution(dest: str) -> bool:
-    """True if ``dest`` is a substitution template rather than a plain folder."""
+    """True if ``dest`` is a substitution template rather than a plain path."""
     return _SUBSTITUTION_RE.search(dest) is not None
+
+
+def is_file_dest(dest: str) -> bool:
+    """True if a plain ``dest`` names the one file its rule places.
+
+    A plain ``dest`` whose last component has a file extension
+    (``config/x.template``) is a file path; one that ends in ``/`` or whose last
+    component has no extension (``config``, ``config/db/``) is a folder. A
+    substitution is neither: it always expands to the whole destination path.
+    """
+    if is_substitution(dest) or dest.endswith("/"):
+        return False
+    return PurePosixPath(dest).suffix != ""
 
 
 def _entry_prefix(index: int, rule, where: str = f"{MANIFEST_NAME} entry") -> str:
@@ -231,6 +244,8 @@ def _destination(prefix: str, rule, match: re.Match, rel: str) -> str:
             raise ManifestError(
                 f"{prefix}{rel}: invalid dest substitution: {exc}"
             ) from exc
+    elif is_file_dest(rule.dest):
+        key = rule.dest
     else:
         key = (PurePosixPath(rule.dest) / rel).as_posix()
     return _validate_key(prefix, rel, key)
@@ -341,12 +356,18 @@ def plan_vendor(
             if dropped:
                 used_excludes.update(dropped)
                 continue
-        _, key, prefix = placed
+        _, key, prefix, dest = placed
         if key in plan:
             first = plan[key].relative_to(pattern_dir).as_posix()
+            hint = (
+                f"; dest {dest!r} names a single file - end it with '/' to "
+                "place files in a folder of that name, or use a \\1 substitution"
+                if is_file_dest(dest)
+                else ""
+            )
             raise ManifestError(
                 f"{prefix}{rel} and {first} both vendor to "
-                f"{key!r}; one would silently overwrite the other"
+                f"{key!r}; one would silently overwrite the other{hint}"
             )
         plan[key] = path
     _refuse_unused_selection(name, include, exclude, used_includes, used_excludes)
@@ -367,12 +388,13 @@ def plan_vendor(
     return [(source, key) for key, source in sorted(plan.items())]
 
 
-def _first_match(rules: list, rel: str) -> tuple[int, str, str] | None:
-    """The ``(index, destination key, prefix)`` of the first rule matching ``rel``."""
+def _first_match(rules: list, rel: str) -> tuple[int, str, str, str] | None:
+    """The ``(index, destination key, prefix, dest)`` of the first rule matching
+    ``rel``, where ``dest`` is the rule's unexpanded ``dest``."""
     for index, (regex, rule, prefix) in enumerate(rules):
         match = regex.fullmatch(rel)
         if match is not None:
-            return index, _destination(prefix, rule, match, rel), prefix
+            return index, _destination(prefix, rule, match, rel), prefix, rule.dest
     return None
 
 

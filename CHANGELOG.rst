@@ -67,6 +67,18 @@ test goldens under ``tests/samples/outputs`` were regenerated to match.
 Fixed
 ~~~~~
 
+A plain ``dest`` whose last part has a file extension, in a
+``pattern add --include SRC=DEST`` or a manifest rule, is the destination file:
+``--include 'sim/x_sim\.template=config/x.template'`` writes
+``config/x.template``. Such a ``dest`` that matches more than one file is
+refused. A ``dest`` ending in ``/`` is always a folder.
+
+Re-adding or updating a pattern replaces that pattern's files whatever file and
+folder shapes its previous file-set left, including a folder where the new
+file-set writes a file and a file where it needs a folder. A path in the way
+that holds files the pattern did not vendor is refused before anything is
+written.
+
 ``ioc.subst`` rows for a database file shared by several entity models are now
 written in the order of the file's headings. Previously each row followed its own
 entity model's arg order, so values could land under the wrong heading when two

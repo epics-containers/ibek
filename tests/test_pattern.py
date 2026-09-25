@@ -1203,31 +1203,27 @@ def test_update_to_a_matchless_manifest_leaves_the_instance_intact(
     assert vendor.check(instance).ok
 
 
-def test_update_refuses_when_a_vendored_file_blocks_a_new_folder(
+def test_update_replaces_a_vendored_file_with_a_new_folder(
     tmp_path: Path, library: Path
 ):
-    """Upstream turning a file into a folder must not half-write the destination.
+    """Upstream turning a file into a folder replaces the file with the folder.
 
-    ``config/notes`` cannot be a file and the folder holding ``config/notes/x``,
-    and finding that out mid-write leaves files on disk with no lock covering
-    them.
+    ``config/notes`` was this pattern's file and is no longer in its file-set,
+    so it is removed before ``config/notes/x.md`` is written.
     """
     pattern = library / "mydevice"
     (pattern / "notes").write_text("v1 was a file\n")
     instance = make_instance(tmp_path)
     vendor.add("mydevice@1.0.0", instance, source_override=str(library))
-    before = tree(instance)
 
     (pattern / "notes").unlink()
     (pattern / "notes").mkdir()
     (pattern / "notes" / "x.md").write_text("v2 is a folder\n")
-    with pytest.raises(PatternError) as exc:
-        vendor.update(
-            "mydevice", instance, version="2.0.0", source_override=str(library)
-        )
-    assert "not a directory" in str(exc.value)
+    vendor.update("mydevice", instance, version="2.0.0", source_override=str(library))
 
-    assert tree(instance) == before
+    files = RuntimeLock(instance / RUNTIME_LOCK_NAME).patterns["mydevice"].files
+    assert "config/notes/x.md" in files and "config/notes" not in files
+    assert (instance / "config" / "notes" / "x.md").read_text() == "v2 is a folder\n"
     assert vendor.check(instance).ok
 
 
@@ -2112,3 +2108,247 @@ def test_cli_add_rejects_include_without_a_destination(
     )
     assert result.exit_code == 1
     assert not (instance / RUNTIME_LOCK_NAME).exists()
+
+
+# --------------------------------------------------------------------------- #
+# select: a plain dest that names a file, and re-adding over a previous shape
+# --------------------------------------------------------------------------- #
+SIM_KEY = "config/simdev_sim.template"
+
+
+def cli_add(instance: Path, library: Path, *options: str):
+    return runner.invoke(
+        cli,
+        ["pattern", "add", "simdev@1.0.0", str(instance), "--source", str(library)]
+        + list(options),
+    )
+
+
+def assert_consistent(instance: Path, name: str = "simdev") -> dict[str, str]:
+    """The lock's files are exactly the pattern's files on disk, and check passes."""
+    files = RuntimeLock(instance / RUNTIME_LOCK_NAME).patterns[name].files
+    for key in files:
+        assert (instance / key).is_file(), key
+    assert tree(instance / "config") == {"ioc.yaml"} | {
+        k.removeprefix("config/") for k in files
+    }
+    result = runner.invoke(cli, ["pattern", "check", str(instance)])
+    assert result.exit_code == 0, result.output
+    return files
+
+
+@pytest.mark.parametrize(
+    "dest, key",
+    [
+        ("config/simdev_sim.template", SIM_KEY),
+        ("config/renamed.template", "config/renamed.template"),
+        ("config/renamed.db", "config/renamed.db"),
+        ("config", "config/sim/simdev_sim.template"),
+        ("config/", "config/sim/simdev_sim.template"),
+        ("config/sim.d/", "config/sim.d/sim/simdev_sim.template"),
+    ],
+)
+def test_select_plain_dest_names_a_file_or_a_folder(
+    tmp_path: Path, sim_library: Path, dest: str, key: str
+):
+    """A plain dest whose last part has an extension is the file's path.
+
+    Without an extension, or ending in ``/``, it is a folder that keeps the
+    file's path relative to the pattern.
+    """
+    instance = make_instance(tmp_path)
+    result = cli_add(
+        instance, sim_library, "--include", f"sim/.*_sim\\.template={dest}"
+    )
+    assert result.exit_code == 0, result.output
+    files = assert_consistent(instance)
+    assert key in files
+    assert (instance / key).read_text() == "record(ai, SIM) {}\n"
+
+
+def test_manifest_plain_dest_names_a_file(tmp_path: Path):
+    """The manifest's dest follows the same rule as a selection's."""
+    library = make_pattern(
+        tmp_path / "lib",
+        "simdev",
+        {"simdev.proto": MYDEVICE_PROTO, "simdev.template": "record(ai, X) {}\n"},
+        manifest=(
+            "version: 1\nvendor:\n"
+            "  - src: 'simdev\\.proto'\n    dest: config/renamed.proto\n"
+            "  - src: '.*'\n    dest: config\n"
+        ),
+    )
+    instance = make_instance(tmp_path)
+    vendor.add("simdev@1.0.0", instance, source_override=str(library))
+    assert set(assert_consistent(instance)) == {
+        "config/renamed.proto",
+        "config/simdev.template",
+    }
+
+
+def test_select_file_dest_matching_several_files_is_refused(
+    tmp_path: Path, sim_library: Path
+):
+    instance = make_instance(tmp_path)
+    result = cli_add(
+        instance,
+        sim_library,
+        "--exclude",
+        ".*",
+        "--include",
+        ".*\\.template=config/all.template",
+    )
+    assert result.exit_code == 1
+    with pytest.raises(ManifestError) as exc:
+        vendor.add(
+            "simdev@1.0.0",
+            instance,
+            source_override=str(sim_library),
+            select=Selection(
+                include=[SelectRule(src=".*\\.template", dest="config/all.template")],
+                exclude=[".*"],
+            ),
+        )
+    assert "'config/all.template' names a single file - end it with '/'" in str(
+        exc.value
+    )
+    assert not (instance / RUNTIME_LOCK_NAME).exists()
+    assert tree(instance / "config") == {"ioc.yaml"}
+
+
+def test_readd_after_a_file_dest_add_is_consistent(tmp_path: Path, sim_library: Path):
+    """The t11 sequence: add with a file dest, then re-add with a group dest.
+
+    Both name the same file, so the re-add rewrites it in place.
+    """
+    instance = make_instance(tmp_path)
+    first = cli_add(
+        instance,
+        sim_library,
+        "--include",
+        f"sim/simdev_sim\\.template={SIM_KEY}",
+    )
+    assert first.exit_code == 0, first.output
+    assert (instance / SIM_KEY).is_file()
+    again = cli_add(
+        instance, sim_library, "--include", "sim/(simdev_sim\\.template)=config/\\1"
+    )
+    assert again.exit_code == 0, again.output
+    assert SIM_KEY in assert_consistent(instance)
+
+
+def nested_add(instance: Path, library: Path) -> str:
+    """Vendor the sim template into a folder named like the file, as a plain
+    dest without an extension rule would: ``<SIM_KEY>/sim/simdev_sim.template``.
+    """
+    result = cli_add(
+        instance, library, "--include", f"sim/.*_sim\\.template={SIM_KEY}/"
+    )
+    assert result.exit_code == 0, result.output
+    nested = f"{SIM_KEY}/sim/simdev_sim.template"
+    assert nested in assert_consistent(instance)
+    return nested
+
+
+def test_readd_replaces_a_previous_folder_with_a_file(
+    tmp_path: Path, sim_library: Path
+):
+    """A folder the previous selection left where the new one writes a file."""
+    instance = make_instance(tmp_path)
+    nested = nested_add(instance, sim_library)
+    result = cli_add(
+        instance, sim_library, "--include", f"sim/.*_sim\\.template={SIM_KEY}"
+    )
+    assert result.exit_code == 0, result.output
+    files = assert_consistent(instance)
+    assert SIM_KEY in files and nested not in files
+
+
+def test_readd_after_the_previous_folder_was_removed_by_hand(
+    tmp_path: Path, sim_library: Path
+):
+    """Pruning a stale key whose folder is now the new file does not crash."""
+    instance = make_instance(tmp_path)
+    nested_add(instance, sim_library)
+    shutil.rmtree(instance / SIM_KEY)
+    result = cli_add(
+        instance, sim_library, "--include", f"sim/.*_sim\\.template={SIM_KEY}"
+    )
+    assert result.exit_code == 0, result.output
+    assert SIM_KEY in assert_consistent(instance)
+
+
+def test_readd_replaces_a_previous_file_with_a_folder(
+    tmp_path: Path, sim_library: Path
+):
+    """A file the previous selection left where the new one needs a folder."""
+    instance = make_instance(tmp_path)
+    first = cli_add(
+        instance, sim_library, "--include", f"sim/.*_sim\\.template={SIM_KEY}"
+    )
+    assert first.exit_code == 0, first.output
+    nested = nested_add(instance, sim_library)
+    assert SIM_KEY not in assert_consistent(instance)
+    assert (instance / nested).is_file()
+
+
+def test_readd_refuses_a_folder_holding_files_it_did_not_vendor(
+    tmp_path: Path, sim_library: Path
+):
+    """Only this pattern's previous files are cleared; nothing else is."""
+    instance = make_instance(tmp_path)
+    nested_add(instance, sim_library)
+    lock_before = (instance / RUNTIME_LOCK_NAME).read_text()
+    user_file = instance / SIM_KEY / "notes.txt"
+    user_file.write_text("mine\n")
+    result = cli_add(
+        instance, sim_library, "--include", f"sim/.*_sim\\.template={SIM_KEY}"
+    )
+    assert result.exit_code == 1
+    assert user_file.read_text() == "mine\n"
+    assert (instance / RUNTIME_LOCK_NAME).read_text() == lock_before
+    assert vendor.check(instance).ok
+
+
+def test_readd_refuses_a_file_it_did_not_vendor_in_place_of_a_folder(
+    tmp_path: Path, sim_library: Path
+):
+    instance = make_instance(tmp_path)
+    user_file = instance / SIM_KEY
+    user_file.write_text("mine\n")
+    with pytest.raises(PatternError) as exc:
+        vendor.add(
+            "simdev@1.0.0",
+            instance,
+            source_override=str(sim_library),
+            select=Selection(
+                include=[SelectRule(src="sim/.*_sim\\.template", dest=f"{SIM_KEY}/")]
+            ),
+        )
+    assert "already exists and is not a directory" in str(exc.value)
+    assert user_file.read_text() == "mine\n"
+    assert not (instance / RUNTIME_LOCK_NAME).exists()
+
+
+def test_readd_never_touches_another_patterns_files(tmp_path: Path, sim_library: Path):
+    """Another pattern's file inside the folder blocks the re-add."""
+    make_pattern(
+        sim_library,
+        "otherdev",
+        {"otherdev.template": "record(ai, O) {}\n"},
+        manifest="version: 1\nvendor:\n  - src: '.*'\n    dest: " + SIM_KEY + "/\n",
+    )
+    instance = make_instance(tmp_path)
+    nested_add(instance, sim_library)
+    vendor.add("otherdev@1.0.0", instance, source_override=str(sim_library))
+    with pytest.raises(PatternError) as exc:
+        vendor.add(
+            "simdev@1.0.0",
+            instance,
+            source_override=str(sim_library),
+            select=Selection(
+                include=[SelectRule(src="sim/.*_sim\\.template", dest=SIM_KEY)]
+            ),
+        )
+    assert "already exists and is a directory" in str(exc.value)
+    assert vendor.check(instance).ok
