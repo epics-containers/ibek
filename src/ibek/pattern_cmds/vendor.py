@@ -5,6 +5,7 @@ Vendoring orchestration for ``ibek pattern`` — add / update / check / restore.
 from __future__ import annotations
 
 import tempfile
+from collections.abc import Set as AbstractSet
 from pathlib import Path, PurePosixPath
 
 from ibek.globals import RUNTIME_LOCK_NAME
@@ -38,34 +39,82 @@ def _lock_path(dest_dir: Path) -> Path:
     return dest_dir / RUNTIME_LOCK_NAME
 
 
-def _refuse_blocked_targets(plan: list[tuple[Path, str]], dest_root: Path) -> None:
-    """Refuse a plan the destination cannot hold, before anything is written.
+def _owned_by(path: Path, dest_root: Path, orphans: set[str]) -> bool:
+    """True if every file at or beneath ``path`` is one of ``orphans``.
+
+    ``orphans`` are the destination-relative keys this pattern's previous lock
+    entry vendored and the new plan drops, so such a path is this pattern's to
+    remove. A symlink counts as a file, and is never followed.
+    """
+    if path.is_symlink() or not path.is_dir():
+        return path.relative_to(dest_root).as_posix() in orphans
+    return all(_owned_by(child, dest_root, orphans) for child in sorted(path.iterdir()))
+
+
+def _blocking_paths(
+    plan: list[tuple[Path, str]], dest_root: Path, orphans: set[str]
+) -> list[Path]:
+    """Return the paths on disk that stand where the plan must write, or raise.
 
     ``plan_vendor`` guarantees the plan is self-consistent; it cannot know what
-    is already on disk. A previously vendored *file* where the new version needs
-    a *directory* (upstream replaced ``db`` with ``db/``) would otherwise abort
-    ``mkdir`` half way through the write with a raw ``FileExistsError``, leaving a
-    half-vendored tree and no lock — invisible to ``check``.
+    is already on disk. A file where the plan needs a folder, or a folder where
+    it needs a file, would otherwise abort the write half way with a raw
+    ``FileExistsError`` or ``IsADirectoryError``.
+
+    Such a path holding only this pattern's ``orphans`` is returned, for
+    :func:`_clear_blocking_paths` to remove; one holding anything else (another
+    pattern's files, user files) is refused before anything is written.
     """
+    blocking: dict[Path, None] = {}
     for _, rel in plan:
         parts = PurePosixPath(rel).parts
         for depth in range(1, len(parts)):
             parent = dest_root.joinpath(*parts[:depth])
             if parent.exists() and not parent.is_dir():
-                raise PatternError(
-                    f"cannot vendor {rel!r}: {parent} already exists and is not a "
-                    "directory; remove it and re-run"
-                )
-        target = dest_root / rel
-        if target.is_dir():
-            raise PatternError(
-                f"cannot vendor {rel!r}: {target} already exists and is a directory; "
-                "remove it and re-run"
-            )
+                if not _owned_by(parent, dest_root, orphans):
+                    raise PatternError(
+                        f"cannot vendor {rel!r}: {parent} already exists and is "
+                        "not a directory; remove it and re-run"
+                    )
+                blocking[parent] = None
+                break
+        else:
+            target = dest_root / rel
+            if target.is_dir():
+                if not _owned_by(target, dest_root, orphans):
+                    raise PatternError(
+                        f"cannot vendor {rel!r}: {target} already exists and is a "
+                        "directory; remove it and re-run"
+                    )
+                blocking[target] = None
+    return list(blocking)
 
 
-def _vendor_files(plan: list[tuple[Path, str]], dest_root: Path) -> dict[str, str]:
+def _clear_blocking_paths(blocking: list[Path]) -> None:
+    """Remove paths that :func:`_blocking_paths` found hold only orphans."""
+    for path in blocking:
+        if path.is_symlink() or not path.is_dir():
+            path.unlink(missing_ok=True)
+            continue
+        for child in sorted(path.rglob("*"), reverse=True):
+            if child.is_dir() and not child.is_symlink():
+                child.rmdir()
+            else:
+                child.unlink()
+        path.rmdir()
+
+
+def _vendor_files(
+    plan: list[tuple[Path, str]],
+    dest_root: Path,
+    orphans: AbstractSet[str] = frozenset(),
+) -> dict[str, str]:
     """Write every planned file into ``dest_root``; return the lock's hash map.
+
+    ``orphans`` are the keys this pattern's previous lock entry vendored that
+    the plan drops. Any of them standing where the plan writes (a file where a
+    folder must go, or a folder where a file must go) is removed first; every
+    other path in the way is refused before anything is written.
 
     Read -> write -> hash, with **nothing** permitted to transform the bytes in
     between: the recorded SHA-256 is taken from the bytes read out of the library
@@ -73,7 +122,8 @@ def _vendor_files(plan: list[tuple[Path, str]], dest_root: Path) -> dict[str, st
     by construction. Any future post-write step would record a hash that no longer
     matches disk and make ``check`` fail on a freshly vendored tree.
     """
-    _refuse_blocked_targets(plan, dest_root)
+    blocking = _blocking_paths(plan, dest_root, set(orphans))
+    _clear_blocking_paths(blocking)
     files: dict[str, str] = {}
     for src, rel in plan:
         data = src.read_bytes()
@@ -93,6 +143,9 @@ def _prune_orphans(dest_root: Path, orphans: set[str]) -> None:
     ``ibek runtime place-files`` at boot. Scoped to one pattern's prior ``files``
     keys, so it never touches another pattern's or user-authored files.
 
+    An orphan already gone is skipped, including one whose parent is now a file
+    (a previous folder destination that the new plan writes as a file).
+
     Lock keys are free-form destination-relative strings, so containment in
     ``dest_root`` is enforced rather than assumed — both for the unlink and for
     the walk up through newly-empty parents.
@@ -102,6 +155,10 @@ def _prune_orphans(dest_root: Path, orphans: set[str]) -> None:
         target = (root / rel).resolve()
         if root not in target.parents:
             continue  # a key that escapes the destination root is never touched
+        if not target.parent.is_dir():
+            continue  # its folder is gone, or is now a vendored file
+        if target.is_dir():
+            continue  # a folder is never an orphan; its files are pruned by key
         target.unlink(missing_ok=True)
         parent = target.parent
         while root in parent.parents and parent.is_dir() and not any(parent.iterdir()):
@@ -115,11 +172,15 @@ def _do_vendor(
     source_override: str | None,
     extra_libraries: dict[str, str] | None,
     select: Selection | None = None,
+    old_files: AbstractSet[str] = frozenset(),
 ) -> tuple[str, str, dict[str, str]]:
     """Fetch + vendor ``ref`` into the destination; return (label, version, files).
 
     ``select`` is the destination's adjustment to the manifest's file-set,
-    applied by ``plan_vendor``.
+    applied by ``plan_vendor``. ``old_files`` are the keys the pattern's
+    previous lock entry vendored; those the new plan drops are removed, so the
+    destination holds exactly the new file-set whatever file and folder shapes
+    the previous one left.
 
     An explicit ``source_override`` (a user ``--source`` or a recorded lock
     label) is normalised to a fetchable URI here — the single point every caller
@@ -149,7 +210,9 @@ def _do_vendor(
             label = source_label(candidate_uri)
             select = select or Selection()
             plan = plan_vendor(pattern_dir, select.include, select.exclude)
-            files = _vendor_files(plan, dest_dir)
+            orphans = set(old_files) - {key for _, key in plan}
+            files = _vendor_files(plan, dest_dir, orphans)
+            _prune_orphans(dest_dir, orphans)
             return label, ref.version or "HEAD", files
     raise PatternError(
         f"could not resolve pattern {ref.name!r}: {last_error or 'no libraries'}"
@@ -187,9 +250,8 @@ def add(
     lock = RuntimeLock(_lock_path(dest_dir))
     old_files = lock.vendored_keys(ref.name) if ref.name in lock.patterns else set()
     label, version, files = _do_vendor(
-        ref, dest_dir, source_override, extra_libraries, select
+        ref, dest_dir, source_override, extra_libraries, select, old_files
     )
-    _prune_orphans(dest_dir, old_files - set(files))
     lock.set_pattern(ref.name, version, label, files, select)
     lock.save()
     generate_instance_schema(dest_dir)
@@ -220,19 +282,17 @@ def _revendor(
     The single fetch path shared by update and restore, so they can never
     diverge on how a recorded ``source`` is resolved. ``source`` (a lock label
     or an explicit override) is normalised to a fetchable URI inside
-    ``_do_vendor``; files dropped relative to ``old_files`` are pruned. Both
-    lists are in the same coordinate system (destination-root-relative), so a
-    file kept under a new destination has its old key pruned only after the new
-    key has been written. Returns the ``(label, version, files)`` the caller
+    ``_do_vendor``, which also removes the files dropped relative to
+    ``old_files``. Both lists are in the same coordinate system
+    (destination-root-relative). Returns the ``(label, version, files)`` the caller
     records — restore discards it and leaves the lock untouched, since its
     rewritten bytes reproduce the pin. ``select`` is the lock's recorded
     selection, reapplied so the file-set matches the one the lock records.
     """
     ref = PatternRef(name=name, version=version)
     label, resolved_version, files = _do_vendor(
-        ref, dest_dir, source, extra_libraries, select
+        ref, dest_dir, source, extra_libraries, select, old_files
     )
-    _prune_orphans(dest_dir, old_files - set(files))
     return label, resolved_version, files
 
 
