@@ -30,6 +30,15 @@ In particular, ``_global.get_env('NAME')`` still returns an empty string for an
 unset variable. Older ibek releases without the new ``env`` mapping should
 continue to use that form.
 
+``ibek pattern add`` takes ``--include SRC=DEST`` and ``--exclude SRC`` to vendor
+pattern files the manifest leaves out, to a chosen destination, and to drop
+files the manifest vendors, for one instance. The selection is recorded as a
+per-pattern ``select:`` in ``runtime-lock.yaml`` and reapplied by ``update`` and
+``restore``. A lock with a selection is written as ``version: 2``; one without
+stays ``version: 1``, byte for byte. ibek releases that read only version 1
+refuse a version 2 lock with "unsupported lock version 2". See
+``docs/how-to/select-pattern-files.md`` (#378).
+
 A standalone ``scripts/convert-runtime-lock.py`` rewrites a ``runtime-lock.yaml``
 that is not in the ``version:``/``patterns:`` shape this ibek reads. Run it once
 per destination, from an ``ibek`` checkout:
@@ -41,6 +50,10 @@ raw URL:
 
 Changed
 ~~~~~~~
+
+``runtime-lock.yaml`` refuses top-level keys other than ``version`` and
+``patterns`` rather than ignoring them and dropping them on the next save
+(#378).
 
 ``ibek pattern check``/``add``/``update`` refuse a ``runtime-lock.yaml`` in any
 format they do not recognise, rather than special-casing one earlier shape. If

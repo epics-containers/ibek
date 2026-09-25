@@ -22,6 +22,7 @@ import typer
 from ibek.globals import NaturalOrderGroup
 
 from . import vendor
+from .lock import Selection, SelectRule
 from .schema import generate_instance_schema, is_instance
 from .sources import PatternError
 
@@ -59,6 +60,23 @@ NameOpt = Annotated[
 ]
 
 
+def _selection(include: list[str], exclude: list[str]) -> Selection | None:
+    """Build a ``select:`` from ``--include SRC=DEST`` / ``--exclude SRC`` options.
+
+    ``SRC=DEST`` is split at its last ``=``: a regex may contain ``=`` (``(?=``),
+    a destination path does not.
+    """
+    rules = []
+    for text in include:
+        src, sep, dest = text.rpartition("=")
+        if not sep or not src or not dest:
+            raise PatternError(f"--include {text!r}: expected SRC=DEST")
+        rules.append(SelectRule(src=src, dest=dest))
+    if not rules and not exclude:
+        return None
+    return Selection(include=rules, exclude=exclude)
+
+
 def _fail(exc: Exception) -> None:
     log.error(str(exc))
     raise typer.Exit(1) from exc
@@ -75,10 +93,28 @@ def add(
     ],
     dest: DestArg = Path("."),
     source: SourceOpt = None,
+    include: Annotated[
+        list[str] | None,
+        typer.Option(
+            "--include",
+            help="Also vendor pattern files matching the regex SRC, to DEST "
+            "(a manifest-style dest). Given as SRC=DEST; repeatable; "
+            "recorded in runtime-lock.yaml",
+        ),
+    ] = None,
+    exclude: Annotated[
+        list[str] | None,
+        typer.Option(
+            "--exclude",
+            help="Do not vendor manifest files matching this regex; repeatable; "
+            "recorded in runtime-lock.yaml",
+        ),
+    ] = None,
 ):
     """Vendor a pattern into a destination: files + runtime-lock.yaml + schema."""
     try:
-        vendor.add(name, dest, source_override=source)
+        select = _selection(include or [], exclude or [])
+        vendor.add(name, dest, source_override=source, select=select)
     except PatternError as exc:
         _fail(exc)
     typer.echo(f"vendored {name} into {dest}")
