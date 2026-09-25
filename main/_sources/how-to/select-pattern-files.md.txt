@@ -33,8 +33,15 @@ files that match `SRC`. Both options can be given more than once.
 
 - `SRC` is matched with `re.fullmatch` against the file's path relative to the
   pattern folder.
-- A plain folder `DEST` keeps that relative path beneath the folder. For
-  example, `sim/.*=config` places `sim/x.py` at `config/sim/x.py`.
+- A `DEST` whose last part has a file extension is the destination file.
+  `SRC` must then match exactly one file. For example,
+  `sim/x_sim\.template=config/x.template` places `sim/x_sim.template` at
+  `config/x.template`.
+- Any other `DEST` is a folder, and the file keeps its path relative to the
+  pattern beneath it. For example, `sim/.*=config` places `sim/x.py` at
+  `config/sim/x.py`. End `DEST` with `/` to use a folder whose name has an
+  extension: `sim/.*=config/sim.d/` places `sim/x.py` at
+  `config/sim.d/sim/x.py`.
 - A `DEST` containing `\1` or `\g<name>` is the complete destination path,
   built from the regex groups. For example, `sim/(.*)=config/\1` places
   `sim/x.py` at `config/x.py`.
@@ -106,10 +113,16 @@ checked but is not placed in the IOC.
 ## Change or remove a selection
 
 `add` records the selection given on its command line and replaces any
-selection that the pattern already has. To change a selection, run `add` again
-with the complete new set of options. To remove it, run `add` with no
-`--include` or `--exclude` options. ibek removes files that are no longer in the
-file-set.
+selection that the pattern already has. Other patterns in the lock keep their
+selections and files. To change a selection, run `add` again with the complete
+new set of options. To remove it, run `add` with no `--include` or `--exclude`
+options.
+
+ibek removes the pattern's files that are no longer in the file-set. This
+includes a file or folder the new file-set needs to replace, such as a folder
+at `config/x.template` when the new selection writes a file there. ibek refuses
+the change, and writes nothing, if such a file or folder holds anything the
+pattern did not vendor.
 
 You can also edit `select:` in `runtime-lock.yaml` and run
 `ibek pattern update`. ibek then vendors the files for the edited selection and

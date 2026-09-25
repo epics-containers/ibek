@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Changelog &#8212; ibek 4.8.1 documentation</title>
+    <title>Changelog &#8212; ibek 4.8.2b1 documentation</title>
   
   
   
@@ -42,7 +42,7 @@
   <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=cb8930eaaf36d9849b67" />
 <link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=cb8930eaaf36d9849b67" />
 
-    <script src="_static/documentation_options.js?v=af3423b7"></script>
+    <script src="_static/documentation_options.js?v=3d6e3c8c"></script>
     <script src="_static/doctools.js?v=fd6eb6e6"></script>
     <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="_static/clipboard.min.js?v=a7894cd8"></script>
@@ -52,7 +52,7 @@
     <script>
         DOCUMENTATION_OPTIONS.theme_version = '0.21.0';
         DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://epics-containers.github.io/ibek/switcher.json';
-        DOCUMENTATION_OPTIONS.theme_switcher_version_match = '4.8.1';
+        DOCUMENTATION_OPTIONS.theme_switcher_version_match = '4.8.2b1';
         DOCUMENTATION_OPTIONS.show_version_warning_banner =
             false;
         </script>
@@ -64,7 +64,7 @@
     <link rel="prev" title="Index" href="genindex.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="4.8.1" />
+  <meta name="docsearch:version" content="4.8.2b1" />
   
     
     <script src="_static/searchtools.js"></script>
@@ -550,6 +550,16 @@ test goldens under <code class="docutils literal notranslate"><span class="pre">
 </section>
 <section id="fixed">
 <h3>Fixed<a class="headerlink" href="#fixed" title="Link to this heading">#</a></h3>
+<p>A plain <code class="docutils literal notranslate"><span class="pre">dest</span></code> whose last part has a file extension, in a
+<code class="docutils literal notranslate"><span class="pre">pattern</span> <span class="pre">add</span> <span class="pre">--include</span> <span class="pre">SRC=DEST</span></code> or a manifest rule, is the destination file:
+<code class="docutils literal notranslate"><span class="pre">--include</span> <span class="pre">'sim/x_sim\.template=config/x.template'</span></code> writes
+<code class="docutils literal notranslate"><span class="pre">config/x.template</span></code>. Such a <code class="docutils literal notranslate"><span class="pre">dest</span></code> that matches more than one file is
+refused. A <code class="docutils literal notranslate"><span class="pre">dest</span></code> ending in <code class="docutils literal notranslate"><span class="pre">/</span></code> is always a folder.</p>
+<p>Re-adding or updating a pattern replaces that pattern’s files whatever file and
+folder shapes its previous file-set left, including a folder where the new
+file-set writes a file and a file where it needs a folder. A path in the way
+that holds files the pattern did not vendor is refused before anything is
+written.</p>
 <p><code class="docutils literal notranslate"><span class="pre">ioc.subst</span></code> rows for a database file shared by several entity models are now
 written in the order of the file’s headings. Previously each row followed its own
 entity model’s arg order, so values could land under the wrong heading when two
@@ -654,7 +664,7 @@ documented the persistent schema cache used by <code class="docutils literal not
 
   
   <div class="tocsection editthispage">
-    <a href="https://github.com/epics-containers/ibek/edit/4.8.1/docs/release-notes.rst">
+    <a href="https://github.com/epics-containers/ibek/edit/4.8.2b1/docs/release-notes.rst">
       <i class="fa-solid fa-pencil"></i>
       
       

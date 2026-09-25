@@ -50,12 +50,17 @@ matches it.
 
 ### `dest`
 
-Two forms:
+Three forms:
 
 - **A plain folder.** Joined with the source's path relative to the pattern root,
   so nesting is preserved: with `dest: config`, `foo/bar.template` lands at
   `config/foo/bar.template`. This is the form a services repo needs, and the only
-  one the how-to mentions.
+  one the how-to mentions. A `dest` is a folder when its last part has no file
+  extension or when it ends in `/` (`config/db.d/`).
+- **A plain file.** A `dest` whose last part has a file extension and does not
+  end in `/` (`config/renamed.template`) is the destination path of the one file
+  the rule matches. A rule of this form that matches more than one file is
+  refused, as two files with one destination.
 - **A substitution.** Detected by the presence of a `\1`-style or `\g<name>`
   backreference. The expansion (`match.expand`) produces the **whole**
   destination-relative path, which gives flattening, renaming and re-rooting:

@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Select which pattern files an instance vendors &#8212; ibek 4.8.1 documentation</title>
+    <title>Select which pattern files an instance vendors &#8212; ibek 4.8.2b1 documentation</title>
   
   
   
@@ -42,7 +42,7 @@
   <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=cb8930eaaf36d9849b67" />
 <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=cb8930eaaf36d9849b67" />
 
-    <script src="../_static/documentation_options.js?v=af3423b7"></script>
+    <script src="../_static/documentation_options.js?v=3d6e3c8c"></script>
     <script src="../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -52,7 +52,7 @@
     <script>
         DOCUMENTATION_OPTIONS.theme_version = '0.21.0';
         DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://epics-containers.github.io/ibek/switcher.json';
-        DOCUMENTATION_OPTIONS.theme_switcher_version_match = '4.8.1';
+        DOCUMENTATION_OPTIONS.theme_switcher_version_match = '4.8.2b1';
         DOCUMENTATION_OPTIONS.show_version_warning_banner =
             false;
         </script>
@@ -64,7 +64,7 @@
     <link rel="prev" title="Vendor runtime support" href="vendor-runtime-patterns.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="4.8.1" />
+  <meta name="docsearch:version" content="4.8.2b1" />
   
     
     <script src="../_static/searchtools.js"></script>
@@ -520,8 +520,15 @@ files that match <code class="docutils literal notranslate"><span class="pre">SR
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">SRC</span></code> is matched with <code class="docutils literal notranslate"><span class="pre">re.fullmatch</span></code> against the file’s path relative to the
 pattern folder.</p></li>
-<li><p>A plain folder <code class="docutils literal notranslate"><span class="pre">DEST</span></code> keeps that relative path beneath the folder. For
-example, <code class="docutils literal notranslate"><span class="pre">sim/.*=config</span></code> places <code class="docutils literal notranslate"><span class="pre">sim/x.py</span></code> at <code class="docutils literal notranslate"><span class="pre">config/sim/x.py</span></code>.</p></li>
+<li><p>A <code class="docutils literal notranslate"><span class="pre">DEST</span></code> whose last part has a file extension is the destination file.
+<code class="docutils literal notranslate"><span class="pre">SRC</span></code> must then match exactly one file. For example,
+<code class="docutils literal notranslate"><span class="pre">sim/x_sim\.template=config/x.template</span></code> places <code class="docutils literal notranslate"><span class="pre">sim/x_sim.template</span></code> at
+<code class="docutils literal notranslate"><span class="pre">config/x.template</span></code>.</p></li>
+<li><p>Any other <code class="docutils literal notranslate"><span class="pre">DEST</span></code> is a folder, and the file keeps its path relative to the
+pattern beneath it. For example, <code class="docutils literal notranslate"><span class="pre">sim/.*=config</span></code> places <code class="docutils literal notranslate"><span class="pre">sim/x.py</span></code> at
+<code class="docutils literal notranslate"><span class="pre">config/sim/x.py</span></code>. End <code class="docutils literal notranslate"><span class="pre">DEST</span></code> with <code class="docutils literal notranslate"><span class="pre">/</span></code> to use a folder whose name has an
+extension: <code class="docutils literal notranslate"><span class="pre">sim/.*=config/sim.d/</span></code> places <code class="docutils literal notranslate"><span class="pre">sim/x.py</span></code> at
+<code class="docutils literal notranslate"><span class="pre">config/sim.d/sim/x.py</span></code>.</p></li>
 <li><p>A <code class="docutils literal notranslate"><span class="pre">DEST</span></code> containing <code class="docutils literal notranslate"><span class="pre">\1</span></code> or <code class="docutils literal notranslate"><span class="pre">\g&lt;name&gt;</span></code> is the complete destination path,
 built from the regex groups. For example, <code class="docutils literal notranslate"><span class="pre">sim/(.*)=config/\1</span></code> places
 <code class="docutils literal notranslate"><span class="pre">sim/x.py</span></code> at <code class="docutils literal notranslate"><span class="pre">config/x.py</span></code>.</p></li>
@@ -588,10 +595,15 @@ checked but is not placed in the IOC.</p>
 <section id="change-or-remove-a-selection">
 <h2>Change or remove a selection<a class="headerlink" href="#change-or-remove-a-selection" title="Link to this heading">#</a></h2>
 <p><code class="docutils literal notranslate"><span class="pre">add</span></code> records the selection given on its command line and replaces any
-selection that the pattern already has. To change a selection, run <code class="docutils literal notranslate"><span class="pre">add</span></code> again
-with the complete new set of options. To remove it, run <code class="docutils literal notranslate"><span class="pre">add</span></code> with no
-<code class="docutils literal notranslate"><span class="pre">--include</span></code> or <code class="docutils literal notranslate"><span class="pre">--exclude</span></code> options. ibek removes files that are no longer in the
-file-set.</p>
+selection that the pattern already has. Other patterns in the lock keep their
+selections and files. To change a selection, run <code class="docutils literal notranslate"><span class="pre">add</span></code> again with the complete
+new set of options. To remove it, run <code class="docutils literal notranslate"><span class="pre">add</span></code> with no <code class="docutils literal notranslate"><span class="pre">--include</span></code> or <code class="docutils literal notranslate"><span class="pre">--exclude</span></code>
+options.</p>
+<p>ibek removes the pattern’s files that are no longer in the file-set. This
+includes a file or folder the new file-set needs to replace, such as a folder
+at <code class="docutils literal notranslate"><span class="pre">config/x.template</span></code> when the new selection writes a file there. ibek refuses
+the change, and writes nothing, if such a file or folder holds anything the
+pattern did not vendor.</p>
 <p>You can also edit <code class="docutils literal notranslate"><span class="pre">select:</span></code> in <code class="docutils literal notranslate"><span class="pre">runtime-lock.yaml</span></code> and run
 <code class="docutils literal notranslate"><span class="pre">ibek</span> <span class="pre">pattern</span> <span class="pre">update</span></code>. ibek then vendors the files for the edited selection and
 removes files that are no longer in the file-set. A lock with a selection must
@@ -667,7 +679,7 @@ CI.</p>
 
   
   <div class="tocsection editthispage">
-    <a href="https://github.com/epics-containers/ibek/edit/4.8.1/docs/how-to/select-pattern-files.md">
+    <a href="https://github.com/epics-containers/ibek/edit/4.8.2b1/docs/how-to/select-pattern-files.md">
       <i class="fa-solid fa-pencil"></i>
       
       
