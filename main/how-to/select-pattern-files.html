@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Install ibek &#8212; ibek 4.8.1 documentation</title>
+    <title>Select which pattern files an instance vendors &#8212; ibek 4.8.1 documentation</title>
   
   
   
@@ -48,7 +48,7 @@
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
     <script src="../_static/copybutton.js?v=30646c52"></script>
     <script src="../_static/design-tabs.js?v=f930bc37"></script>
-    <script>DOCUMENTATION_OPTIONS.pagename = 'tutorials/installation';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'how-to/select-pattern-files';</script>
     <script>
         DOCUMENTATION_OPTIONS.theme_version = '0.21.0';
         DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://epics-containers.github.io/ibek/switcher.json';
@@ -60,8 +60,8 @@
     <link rel="icon" href="../_static/dls-logo.svg"/>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Render an IOC configuration" href="build-an-ioc.html" />
-    <link rel="prev" title="Tutorials" href="../tutorials.html" />
+    <link rel="next" title="Troubleshoot ibek" href="troubleshoot.html" />
+    <link rel="prev" title="Vendor runtime support" href="vendor-runtime-patterns.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="4.8.1" />
@@ -154,14 +154,14 @@
 <nav>
   <ul class="bd-navbar-elements navbar-nav">
     
-<li class="nav-item current active">
+<li class="nav-item ">
   <a class="nav-link nav-internal" href="../tutorials.html">
     Tutorials
   </a>
 </li>
 
 
-<li class="nav-item ">
+<li class="nav-item current active">
   <a class="nav-link nav-internal" href="../how-to.html">
     How-to guides
   </a>
@@ -307,14 +307,14 @@
 <nav>
   <ul class="bd-navbar-elements navbar-nav">
     
-<li class="nav-item current active">
+<li class="nav-item ">
   <a class="nav-link nav-internal" href="../tutorials.html">
     Tutorials
   </a>
 </li>
 
 
-<li class="nav-item ">
+<li class="nav-item current active">
   <a class="nav-link nav-internal" href="../how-to.html">
     How-to guides
   </a>
@@ -423,9 +423,12 @@
      aria-label="Section Navigation">
   <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
   <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">Install ibek</a></li>
-<li class="toctree-l1"><a class="reference internal" href="build-an-ioc.html">Render an IOC configuration</a></li>
-<li class="toctree-l1"><a class="reference internal" href="connect-entities.html">Connect a controller and its motors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="write-support.html">Write support for a module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="build-support.html">Build support with Ansible</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vendor-runtime-patterns.html">Vendor runtime support</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Select which pattern files an instance vendors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="troubleshoot.html">Troubleshoot ibek</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contribute.html">Develop ibek</a></li>
 </ul>
 </div>
 </nav></div>
@@ -467,9 +470,9 @@
       </a>
     </li>
     
-    <li class="breadcrumb-item"><a href="../tutorials.html" class="nav-link">Tutorials</a></li>
+    <li class="breadcrumb-item"><a href="../how-to.html" class="nav-link">How-to guides</a></li>
     
-    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Install ibek</span></li>
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Select which pattern files an instance vendors</span></li>
   </ul>
 </nav>
 </div>
@@ -486,29 +489,124 @@
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section id="install-ibek">
-<h1>Install ibek<a class="headerlink" href="#install-ibek" title="Link to this heading">#</a></h1>
-<p>Generic IOC containers already include ibek. Install it on your workstation to
-manage runtime patterns, generate schemas or render configuration without
-starting an IOC. Python 3.13 or newer is required.</p>
-<p>For an isolated command-line installation with <code class="docutils literal notranslate"><span class="pre">uv</span></code>:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>uv<span class="w"> </span>tool<span class="w"> </span>install<span class="w"> </span>ibek
-ibek<span class="w"> </span>--version
-ibek<span class="w"> </span>--help
+  <section id="select-which-pattern-files-an-instance-vendors">
+<h1>Select which pattern files an instance vendors<a class="headerlink" href="#select-which-pattern-files-an-instance-vendors" title="Link to this heading">#</a></h1>
+<p>This is an advanced option. Most instances vendor exactly what a pattern’s
+<code class="docutils literal notranslate"><span class="pre">ibek.manifest.yaml</span></code> lists, as described in
+<a class="reference internal" href="vendor-runtime-patterns.html"><span class="doc">Vendor runtime support</span></a>; stay with that unless an instance needs a
+different set of files.</p>
+<p>A <strong>selection</strong> changes the manifest’s file-set for one instance only. It can:</p>
+<ul class="simple">
+<li><p><strong>add</strong> pattern files that the manifest leaves out, such as a simulation
+template in a pattern’s <code class="docutils literal notranslate"><span class="pre">sim/</span></code> folder;</p></li>
+<li><p><strong>narrow</strong> the manifest’s files, for example to one or two templates from a
+large pattern;</p></li>
+<li><p><strong>place</strong> a selected file at a destination path you choose.</p></li>
+</ul>
+<p>The selection is recorded in the instance’s <code class="docutils literal notranslate"><span class="pre">runtime-lock.yaml</span></code>, so <code class="docutils literal notranslate"><span class="pre">update</span></code>,
+<code class="docutils literal notranslate"><span class="pre">restore</span></code> and <code class="docutils literal notranslate"><span class="pre">check</span></code> keep the same file-set.</p>
+<section id="add-a-pattern-with-a-selection">
+<h2>Add a pattern with a selection<a class="headerlink" href="#add-a-pattern-with-a-selection" title="Link to this heading">#</a></h2>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>ibek<span class="w"> </span>pattern<span class="w"> </span>add<span class="w"> </span>ibek-runtime-streamdevice:CryoconM14@0.6.0<span class="w"> </span>services/my-ioc<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--include<span class="w"> </span><span class="s1">'sim/(.*_sim\.py)=sim/\1'</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--exclude<span class="w"> </span><span class="s1">'M14_system\.template'</span>
 </pre></div>
 </div>
-<p>Alternatively, use a Python virtual environment:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python3<span class="w"> </span>-m<span class="w"> </span>venv<span class="w"> </span>.venv
-<span class="nb">source</span><span class="w"> </span>.venv/bin/activate
-python<span class="w"> </span>-m<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>ibek
-ibek<span class="w"> </span>--version
+<p><code class="docutils literal notranslate"><span class="pre">--include</span> <span class="pre">SRC=DEST</span></code> vendors every pattern file whose path matches the regular
+expression <code class="docutils literal notranslate"><span class="pre">SRC</span></code> to <code class="docutils literal notranslate"><span class="pre">DEST</span></code>. <code class="docutils literal notranslate"><span class="pre">--exclude</span> <span class="pre">SRC</span></code> stops the manifest from vendoring
+files that match <code class="docutils literal notranslate"><span class="pre">SRC</span></code>. Both options can be given more than once.</p>
+<p><code class="docutils literal notranslate"><span class="pre">SRC</span></code> and <code class="docutils literal notranslate"><span class="pre">DEST</span></code> work as they do in the manifest (see the
+<a class="reference internal" href="../reference/pattern-manifest.html"><span class="doc">manifest reference</span></a>):</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">SRC</span></code> is matched with <code class="docutils literal notranslate"><span class="pre">re.fullmatch</span></code> against the file’s path relative to the
+pattern folder.</p></li>
+<li><p>A plain folder <code class="docutils literal notranslate"><span class="pre">DEST</span></code> keeps that relative path beneath the folder. For
+example, <code class="docutils literal notranslate"><span class="pre">sim/.*=config</span></code> places <code class="docutils literal notranslate"><span class="pre">sim/x.py</span></code> at <code class="docutils literal notranslate"><span class="pre">config/sim/x.py</span></code>.</p></li>
+<li><p>A <code class="docutils literal notranslate"><span class="pre">DEST</span></code> containing <code class="docutils literal notranslate"><span class="pre">\1</span></code> or <code class="docutils literal notranslate"><span class="pre">\g&lt;name&gt;</span></code> is the complete destination path,
+built from the regex groups. For example, <code class="docutils literal notranslate"><span class="pre">sim/(.*)=config/\1</span></code> places
+<code class="docutils literal notranslate"><span class="pre">sim/x.py</span></code> at <code class="docutils literal notranslate"><span class="pre">config/x.py</span></code>.</p></li>
+</ul>
+<p><code class="docutils literal notranslate"><span class="pre">DEST</span></code> is relative to the instance root. ibek splits the argument at its last
+<code class="docutils literal notranslate"><span class="pre">=</span></code>, so the regular expression may contain <code class="docutils literal notranslate"><span class="pre">=</span></code>.</p>
+<p>The command above records:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2</span>
+<span class="nt">patterns</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">CryoconM14</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.6.0</span>
+<span class="w">    </span><span class="nt">source</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">github.com/epics-containers/ibek-runtime-streamdevice</span>
+<span class="w">    </span><span class="nt">select</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">include</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">src</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sim/(.*_sim\.py)</span>
+<span class="w">        </span><span class="nt">dest</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sim/\1</span>
+<span class="w">      </span><span class="nt">exclude</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">M14_system\.template</span>
+<span class="w">    </span><span class="nt">files</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">config/CryoconM14.ibek.support.yaml</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sha256:...</span>
+<span class="w">      </span><span class="nt">config/M14.protocol</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sha256:...</span>
+<span class="w">      </span><span class="nt">config/M14_sensor.template</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sha256:...</span>
+<span class="w">      </span><span class="nt">sim/CryoconM14_sim.py</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sha256:...</span>
 </pre></div>
 </div>
-<p>The Python package does not install EPICS, support modules or a generic IOC.
-Build and development helpers expect the environment supplied by an
-<a class="reference external" href="https://epics-containers.github.io/main/tutorials/dev_container.html">epics-containers developer container</a>.</p>
-<p>Continue with <a class="reference internal" href="build-an-ioc.html"><span class="std std-doc">Render an IOC configuration</span></a>, which needs only
-ibek. For work on ibek’s own source, see <a class="reference internal" href="../how-to/contribute.html"><span class="std std-doc">contributing</span></a>.</p>
+</section>
+<section id="how-files-are-chosen">
+<h2>How files are chosen<a class="headerlink" href="#how-files-are-chosen" title="Link to this heading">#</a></h2>
+<p>ibek considers each file in the pattern folder in this order:</p>
+<ol class="arabic simple">
+<li><p>It tries the <code class="docutils literal notranslate"><span class="pre">include</span></code> rules in order. The first match decides where the file
+goes, even if the manifest would place the file somewhere else or leave it
+out.</p></li>
+<li><p>If no <code class="docutils literal notranslate"><span class="pre">include</span></code> rule matches, ibek tries the manifest’s rules, also in order.
+If a manifest rule matches but an <code class="docutils literal notranslate"><span class="pre">exclude</span></code> regular expression also matches,
+ibek does not vendor the file.</p></li>
+<li><p>ibek does not vendor a file that matches none of the rules.</p></li>
+</ol>
+<p>To vendor only a few files from a large pattern, exclude everything and include
+the files you need:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>ibek<span class="w"> </span>pattern<span class="w"> </span>add<span class="w"> </span>ibek-runtime-streamdevice:CryoconM14@0.6.0<span class="w"> </span>services/my-ioc<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--exclude<span class="w"> </span><span class="s1">'.*'</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--include<span class="w"> </span><span class="s1">'CryoconM14\.ibek\.support\.yaml=config'</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--include<span class="w"> </span><span class="s1">'M14\.protocol=config'</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--include<span class="w"> </span><span class="s1">'M14_sensor\.template=config'</span>
+</pre></div>
+</div>
+<p>Every part of a selection must have an effect. ibek fails, and writes no files,
+if any of these is true:</p>
+<ul class="simple">
+<li><p>an <code class="docutils literal notranslate"><span class="pre">include</span></code> rule matches no file;</p></li>
+<li><p>an <code class="docutils literal notranslate"><span class="pre">exclude</span></code> expression drops no file that the manifest would vendor;</p></li>
+<li><p>after the selection, no files remain to vendor.</p></li>
+</ul>
+<p>The same rule applies on <code class="docutils literal notranslate"><span class="pre">update</span></code>. If a later pattern version renames or removes
+a selected file, update the selection in the same change.</p>
+<p>The manifest’s destination rules also apply to a selection. A
+<code class="docutils literal notranslate"><span class="pre">*.ibek.support.yaml</span></code> file must be placed directly under <code class="docutils literal notranslate"><span class="pre">config/</span></code>, and two
+files cannot use the same destination. At boot, <code class="docutils literal notranslate"><span class="pre">ibek</span> <span class="pre">runtime</span> <span class="pre">place-files</span></code> uses
+only protocol, database and template files placed directly under <code class="docutils literal notranslate"><span class="pre">config/</span></code>. A
+file selected into another folder, such as the simulator above, is vendored and
+checked but is not placed in the IOC.</p>
+</section>
+<section id="change-or-remove-a-selection">
+<h2>Change or remove a selection<a class="headerlink" href="#change-or-remove-a-selection" title="Link to this heading">#</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">add</span></code> records the selection given on its command line and replaces any
+selection that the pattern already has. To change a selection, run <code class="docutils literal notranslate"><span class="pre">add</span></code> again
+with the complete new set of options. To remove it, run <code class="docutils literal notranslate"><span class="pre">add</span></code> with no
+<code class="docutils literal notranslate"><span class="pre">--include</span></code> or <code class="docutils literal notranslate"><span class="pre">--exclude</span></code> options. ibek removes files that are no longer in the
+file-set.</p>
+<p>You can also edit <code class="docutils literal notranslate"><span class="pre">select:</span></code> in <code class="docutils literal notranslate"><span class="pre">runtime-lock.yaml</span></code> and run
+<code class="docutils literal notranslate"><span class="pre">ibek</span> <span class="pre">pattern</span> <span class="pre">update</span></code>. ibek then vendors the files for the edited selection and
+removes files that are no longer in the file-set. A lock with a selection must
+have <code class="docutils literal notranslate"><span class="pre">version:</span> <span class="pre">2</span></code>.</p>
+</section>
+<section id="lock-versions">
+<h2>Lock versions<a class="headerlink" href="#lock-versions" title="Link to this heading">#</a></h2>
+<p>ibek writes <code class="docutils literal notranslate"><span class="pre">version:</span> <span class="pre">1</span></code> when no pattern in the lock has a selection, and
+<code class="docutils literal notranslate"><span class="pre">version:</span> <span class="pre">2</span></code> when any pattern has one. A lock without a selection therefore
+stays readable by every ibek that reads version 1. An ibek that cannot apply a
+selection refuses a version 2 lock with <code class="docutils literal notranslate"><span class="pre">unsupported</span> <span class="pre">lock</span> <span class="pre">version</span> <span class="pre">2</span></code>. It does
+not vendor or check a different file-set from the one recorded. Instances that
+use a selection need an ibek that reads version 2, including in pre-commit and
+CI.</p>
+</section>
 </section>
 
 
@@ -522,20 +620,20 @@ ibek. For work on ibek’s own source, see <a class="reference internal" href=".
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="../tutorials.html"
+       href="vendor-runtime-patterns.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Tutorials</p>
+        <p class="prev-next-title">Vendor runtime support</p>
       </div>
     </a>
     <a class="right-next"
-       href="build-an-ioc.html"
+       href="troubleshoot.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Render an IOC configuration</p>
+        <p class="prev-next-title">Troubleshoot ibek</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -551,10 +649,25 @@ ibek. For work on ibek’s own source, see <a class="reference internal" href=".
 
 
   <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#add-a-pattern-with-a-selection">Add a pattern with a selection</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#how-files-are-chosen">How files are chosen</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#change-or-remove-a-selection">Change or remove a selection</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#lock-versions">Lock versions</a></li>
+</ul>
+  </nav></div>
+
+  <div class="sidebar-secondary-item">
 
   
   <div class="tocsection editthispage">
-    <a href="https://github.com/epics-containers/ibek/edit/4.8.1/docs/tutorials/installation.md">
+    <a href="https://github.com/epics-containers/ibek/edit/4.8.1/docs/how-to/select-pattern-files.md">
       <i class="fa-solid fa-pencil"></i>
       
       
@@ -569,7 +682,7 @@ ibek. For work on ibek’s own source, see <a class="reference internal" href=".
   <div class="sidebar-secondary-item">
 
   <div class="tocsection sourcelink">
-    <a href="../_sources/tutorials/installation.md.txt">
+    <a href="../_sources/how-to/select-pattern-files.md.txt">
       <i class="fa-solid fa-file-lines"></i> Show Source
     </a>
   </div>

@@ -8,6 +8,7 @@ Focused recipes for support authors, IOC developers and maintainers.
 how-to/write-support
 how-to/build-support
 how-to/vendor-runtime-patterns
+how-to/select-pattern-files
 how-to/troubleshoot
 how-to/contribute
 ```

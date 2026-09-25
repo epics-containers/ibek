@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>ibek.manifest.yaml and runtime-lock.yaml &#8212; ibek 4.8.0b3.dev8+gb21ad178a documentation</title>
+    <title>ibek.manifest.yaml and runtime-lock.yaml &#8212; ibek 4.8.1 documentation</title>
   
   
   
@@ -42,7 +42,7 @@
   <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=cb8930eaaf36d9849b67" />
 <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=cb8930eaaf36d9849b67" />
 
-    <script src="../_static/documentation_options.js?v=244c4431"></script>
+    <script src="../_static/documentation_options.js?v=af3423b7"></script>
     <script src="../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -52,7 +52,7 @@
     <script>
         DOCUMENTATION_OPTIONS.theme_version = '0.21.0';
         DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://epics-containers.github.io/ibek/switcher.json';
-        DOCUMENTATION_OPTIONS.theme_switcher_version_match = 'main';
+        DOCUMENTATION_OPTIONS.theme_switcher_version_match = '4.8.1';
         DOCUMENTATION_OPTIONS.show_version_warning_banner =
             false;
         </script>
@@ -64,7 +64,7 @@
     <link rel="prev" title="IOC YAML" href="ioc-yaml.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="main" />
+  <meta name="docsearch:version" content="4.8.1" />
   
     
     <script src="../_static/searchtools.js"></script>
@@ -666,7 +666,7 @@ vendored and checked, but they will not be placed at boot.</p>
 </thead>
 <tbody>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">version</span></code></p></td>
-<td><p>Lock format version. Room for the format to evolve — reading it does not make ibek convert anything on your behalf.</p></td>
+<td><p>Lock format version: <code class="docutils literal notranslate"><span class="pre">1</span></code>, or <code class="docutils literal notranslate"><span class="pre">2</span></code> when any pattern has a <code class="docutils literal notranslate"><span class="pre">select</span></code>. ibek writes the lowest version that holds the lock’s content. Reading it does not make ibek convert anything on your behalf.</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">patterns</span></code></p></td>
 <td><p>Vendored patterns by name, emitted in name order so re-writing the same set produces no diff.</p></td>
@@ -677,7 +677,10 @@ vendored and checked, but they will not be placed at boot.</p>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">patterns[].source</span></code></p></td>
 <td><p>The scheme-stripped library label the pattern came from.</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">patterns[].files</span></code></p></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">patterns[].select</span></code></p></td>
+<td><p>Optional. This instance’s <code class="docutils literal notranslate"><span class="pre">include</span></code> rules (<code class="docutils literal notranslate"><span class="pre">src</span></code> / <code class="docutils literal notranslate"><span class="pre">dest</span></code>, as in the manifest) and <code class="docutils literal notranslate"><span class="pre">exclude</span></code> regexes applied to the manifest’s file-set; see <a class="reference internal" href="../how-to/select-pattern-files.html"><span class="doc">Select which pattern files an instance vendors</span></a>.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">patterns[].files</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">&lt;destination-root-relative</span> <span class="pre">path&gt;:</span> <span class="pre">sha256:&lt;hex&gt;</span></code> for every vendored file.</p></td>
 </tr>
 </tbody>
@@ -695,7 +698,8 @@ or rewritten on the way in, so <code class="docutils literal notranslate"><span 
 than fails, without needing <code class="docutils literal notranslate"><span class="pre">--allow-dirty</span></code>.</p>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
-<p><code class="docutils literal notranslate"><span class="pre">ibek</span></code> reads and writes exactly the <code class="docutils literal notranslate"><span class="pre">version:</span></code> / <code class="docutils literal notranslate"><span class="pre">patterns:</span></code> shape above.
+<p><code class="docutils literal notranslate"><span class="pre">ibek</span></code> reads and writes exactly the <code class="docutils literal notranslate"><span class="pre">version:</span></code> / <code class="docutils literal notranslate"><span class="pre">patterns:</span></code> shape above, and
+refuses any other top-level key.
 <code class="docutils literal notranslate"><span class="pre">add</span></code>, <code class="docutils literal notranslate"><span class="pre">update</span></code> and <code class="docutils literal notranslate"><span class="pre">check</span></code> all refuse a <code class="docutils literal notranslate"><span class="pre">runtime-lock.yaml</span></code> in any other
 shape, with a generic message naming a conversion script — see
 <a class="reference internal" href="../how-to/vendor-runtime-patterns.html#unrecognised-locks"><span class="std std-ref">the vendoring how-to</span></a>.</p>
@@ -765,7 +769,7 @@ shape, with a generic message naming a conversion script — see
 
   
   <div class="tocsection editthispage">
-    <a href="https://github.com/epics-containers/ibek/edit/main/docs/reference/pattern-manifest.md">
+    <a href="https://github.com/epics-containers/ibek/edit/4.8.1/docs/reference/pattern-manifest.md">
       <i class="fa-solid fa-pencil"></i>
       
       

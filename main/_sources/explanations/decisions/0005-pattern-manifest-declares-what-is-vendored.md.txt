@@ -63,6 +63,14 @@ Reading such a lock as an *empty* one is the one thing that must never happen:
 `check` would then pass having verified nothing, and the instance would
 silently become unmanaged.
 
+The lock's `version:` is `1`, or `2` when any pattern carries a `select:` (an
+instance's own `include` / `exclude` adjustment to the manifest). Version 2 is
+version 1 plus that key, and ibek writes the lowest version that holds the
+content, so a lock without a selection reads the same to every ibek, while one
+that could not apply a selection refuses the lock on its version rather than
+vendoring or checking a different file-set. Unknown top-level keys are refused
+for the same reason: ignored on read, they would be dropped on the next save.
+
 ## Consequences
 
 - Switching a pattern's manifest can prune an emptied `config/` itself, since

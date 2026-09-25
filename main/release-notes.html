@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Changelog &#8212; ibek 4.8.0b3.dev8+gb21ad178a documentation</title>
+    <title>Changelog &#8212; ibek 4.8.1 documentation</title>
   
   
   
@@ -42,7 +42,7 @@
   <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=cb8930eaaf36d9849b67" />
 <link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=cb8930eaaf36d9849b67" />
 
-    <script src="_static/documentation_options.js?v=244c4431"></script>
+    <script src="_static/documentation_options.js?v=af3423b7"></script>
     <script src="_static/doctools.js?v=fd6eb6e6"></script>
     <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="_static/clipboard.min.js?v=a7894cd8"></script>
@@ -52,7 +52,7 @@
     <script>
         DOCUMENTATION_OPTIONS.theme_version = '0.21.0';
         DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://epics-containers.github.io/ibek/switcher.json';
-        DOCUMENTATION_OPTIONS.theme_switcher_version_match = 'main';
+        DOCUMENTATION_OPTIONS.theme_switcher_version_match = '4.8.1';
         DOCUMENTATION_OPTIONS.show_version_warning_banner =
             false;
         </script>
@@ -64,7 +64,7 @@
     <link rel="prev" title="Index" href="genindex.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="main" />
+  <meta name="docsearch:version" content="4.8.1" />
   
     
     <script src="_static/searchtools.js"></script>
@@ -518,6 +518,14 @@ take precedence over the new helper.</p>
 In particular, <code class="docutils literal notranslate"><span class="pre">_global.get_env('NAME')</span></code> still returns an empty string for an
 unset variable. Older ibek releases without the new <code class="docutils literal notranslate"><span class="pre">env</span></code> mapping should
 continue to use that form.</p>
+<p><code class="docutils literal notranslate"><span class="pre">ibek</span> <span class="pre">pattern</span> <span class="pre">add</span></code> takes <code class="docutils literal notranslate"><span class="pre">--include</span> <span class="pre">SRC=DEST</span></code> and <code class="docutils literal notranslate"><span class="pre">--exclude</span> <span class="pre">SRC</span></code> to vendor
+pattern files the manifest leaves out, to a chosen destination, and to drop
+files the manifest vendors, for one instance. The selection is recorded as a
+per-pattern <code class="docutils literal notranslate"><span class="pre">select:</span></code> in <code class="docutils literal notranslate"><span class="pre">runtime-lock.yaml</span></code> and reapplied by <code class="docutils literal notranslate"><span class="pre">update</span></code> and
+<code class="docutils literal notranslate"><span class="pre">restore</span></code>. A lock with a selection is written as <code class="docutils literal notranslate"><span class="pre">version:</span> <span class="pre">2</span></code>; one without
+stays <code class="docutils literal notranslate"><span class="pre">version:</span> <span class="pre">1</span></code>, byte for byte. ibek releases that read only version 1
+refuse a version 2 lock with “unsupported lock version 2”. See
+<code class="docutils literal notranslate"><span class="pre">docs/how-to/select-pattern-files.md</span></code> (#378).</p>
 <p>A standalone <code class="docutils literal notranslate"><span class="pre">scripts/convert-runtime-lock.py</span></code> rewrites a <code class="docutils literal notranslate"><span class="pre">runtime-lock.yaml</span></code>
 that is not in the <code class="docutils literal notranslate"><span class="pre">version:</span></code>/<code class="docutils literal notranslate"><span class="pre">patterns:</span></code> shape this ibek reads. Run it once
 per destination, from an <code class="docutils literal notranslate"><span class="pre">ibek</span></code> checkout:
@@ -529,6 +537,9 @@ raw URL:
 </section>
 <section id="changed">
 <h3>Changed<a class="headerlink" href="#changed" title="Link to this heading">#</a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">runtime-lock.yaml</span></code> refuses top-level keys other than <code class="docutils literal notranslate"><span class="pre">version</span></code> and
+<code class="docutils literal notranslate"><span class="pre">patterns</span></code> rather than ignoring them and dropping them on the next save
+(#378).</p>
 <p><code class="docutils literal notranslate"><span class="pre">ibek</span> <span class="pre">pattern</span> <span class="pre">check</span></code>/<code class="docutils literal notranslate"><span class="pre">add</span></code>/<code class="docutils literal notranslate"><span class="pre">update</span></code> refuse a <code class="docutils literal notranslate"><span class="pre">runtime-lock.yaml</span></code> in any
 format they do not recognise, rather than special-casing one earlier shape. If
 you see “lock format not recognised”, convert the lock with
@@ -643,7 +654,7 @@ documented the persistent schema cache used by <code class="docutils literal not
 
   
   <div class="tocsection editthispage">
-    <a href="https://github.com/epics-containers/ibek/edit/main/docs/release-notes.rst">
+    <a href="https://github.com/epics-containers/ibek/edit/4.8.1/docs/release-notes.rst">
       <i class="fa-solid fa-pencil"></i>
       
       
