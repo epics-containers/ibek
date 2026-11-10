@@ -19,6 +19,7 @@ from ibek.pattern_cmds import lock as lock_module
 from ibek.pattern_cmds import schema, vendor
 from ibek.pattern_cmds.lock import (
     LOCK_VERSION,
+    SCHEMA_URL_LOCK_VERSION,
     SELECT_LOCK_VERSION,
     RuntimeLock,
     Selection,
@@ -45,6 +46,20 @@ from ibek.pattern_cmds.schema import (
 from ibek.pattern_cmds.sources import PatternError, parse_ref
 
 runner = CliRunner()
+
+
+@pytest.fixture(autouse=True)
+def _no_schema_env(monkeypatch):
+    """Keep a developer's or CI job's tokens and overrides out of every test."""
+    for name in (
+        "IBEK_SCHEMA_URL",
+        "IBEK_GITLAB_HOSTS",
+        "GITLAB_TOKEN",
+        "CI_JOB_TOKEN",
+        "CI_SERVER_HOST",
+    ):
+        monkeypatch.delenv(name, raising=False)
+
 
 SUPPORT_HEADER = "# yaml-language-server: $schema=../schemas/ibek.support.schema.json"
 MYDEVICE_SUPPORT = f"""{SUPPORT_HEADER}
@@ -445,11 +460,125 @@ def test_published_schema_url_github():
     assert published_schema_url(NO_HOST) == published_schema_url(ADARAVIS)
 
 
-@pytest.mark.parametrize("image", [GITLAB_DEEP, GITLAB_PORT])
-def test_gitlab_image_points_at_issue(image):
-    """GitLab-published schemas are not resolved yet; say so, don't 404."""
-    with pytest.raises(schema.SchemaNotFoundError, match="issues/375"):
+# Real images on gitlab.diamond.ac.uk, as pinned in a services repo's
+# values.yaml, and the release assets their releases link (checked 2026-11-10).
+DLSLINUXVAC = (
+    "gitlab.diamond.ac.uk:5050/controls/containers/iocs/ioc-dlslinuxvac/"
+    "ioc-dlslinuxvac-linux-runtime:2026.11.3"
+)
+DLSMOTORPLC = (
+    "gitlab.diamond.ac.uk:5050/controls/containers/iocs/ioc-dlsmotorplc/"
+    "ioc-dlsmotorplc-linux-developer:2026.10.1"
+)
+
+
+@pytest.mark.parametrize(
+    "image, expected",
+    [
+        (
+            DLSLINUXVAC,
+            "https://gitlab.diamond.ac.uk/api/v4/projects/controls%2Fcontainers"
+            "%2Fiocs%2Fioc-dlslinuxvac/releases/2026.11.3/assets/links",
+        ),
+        (
+            DLSMOTORPLC,
+            "https://gitlab.diamond.ac.uk/api/v4/projects/controls%2Fcontainers"
+            "%2Fiocs%2Fioc-dlsmotorplc/releases/2026.10.1/assets/links",
+        ),
+        (
+            GITLAB_DEEP,
+            "https://gitlab.diamond.ac.uk/api/v4/projects/controls%2Fcontainers"
+            "%2Faccelerator%2Fioc-foo/releases/1.2.3/assets/links",
+        ),
+        (
+            GITLAB_PORT,
+            "https://gitlab.diamond.ac.uk/api/v4/projects/controls/releases/1.0/"
+            "assets/links",
+        ),
+        (
+            LOCAL_PORT,
+            "https://localhost/api/v4/projects/myorg/releases/1.0/assets/links",
+        ),
+        (
+            "registry.gitlab.com/group/sub/ioc-x/ioc-x-linux-runtime:2.0",
+            "https://gitlab.com/api/v4/projects/group%2Fsub%2Fioc-x/releases/2.0/"
+            "assets/links",
+        ),
+        (
+            "ghcr.io/myorg/ioc-foo-linux-runtime:1.0",
+            "https://github.com/myorg/ioc-foo/releases/download/1.0/"
+            "ibek.ioc.schema.json",
+        ),
+        (
+            "docker.io/" + NO_HOST,
+            "https://github.com/epics-containers/ioc-adaravis/releases/download/"
+            "2025.11.1/ibek.ioc.schema.json",
+        ),
+    ],
+)
+def test_published_schema_url(monkeypatch, image, expected):
+    monkeypatch.setenv(
+        "IBEK_GITLAB_HOSTS", "gitlab.diamond.ac.uk, gitlab.com, localhost"
+    )
+    assert published_schema_url(image) == expected
+
+
+@pytest.mark.parametrize(
+    "image",
+    [
+        DLSLINUXVAC,
+        LOCAL_PORT,
+        "quay.io/org/ioc-x-runtime:1.0",
+        "registry.example.org/a/b/ioc-x-linux-runtime:1.0",
+    ],
+)
+def test_unlisted_registry_has_no_published_schema(image):
+    """Only a listed GitLab host is looked up; any other registry is a skip."""
+    with pytest.raises(schema.SchemaNotFoundError, match="IBEK_GITLAB_HOSTS") as info:
         published_schema_url(image)
+    assert type(info.value) is schema.SchemaNotFoundError
+
+
+@pytest.mark.parametrize("host", ["index.docker.io", "registry-1.docker.io"])
+def test_docker_hub_aliases_use_the_github_rule(host):
+    assert published_schema_url(f"{host}/{NO_HOST}") == published_schema_url(NO_HOST)
+
+
+@pytest.mark.parametrize(
+    "listed, image, ok",
+    [
+        # a bare host means the default HTTPS port only
+        ("gitlab.example.org", "gitlab.example.org:5050/a/b/ioc-x-runtime:1", True),
+        ("gitlab.example.org:443", "gitlab.example.org/a/b/ioc-x-runtime:1", True),
+        ("gitlab.example.org:8443", "gitlab.example.org/a/b/ioc-x-runtime:1", False),
+    ],
+)
+def test_gitlab_hosts_entries(monkeypatch, listed, image, ok):
+    monkeypatch.setenv("IBEK_GITLAB_HOSTS", listed)
+    if ok:
+        assert published_schema_url(image).startswith("https://gitlab.example.org/")
+    else:
+        with pytest.raises(schema.SchemaNotFoundError):
+            published_schema_url(image)
+
+
+@pytest.mark.parametrize(
+    "registry, expected",
+    [
+        ("gitlab.diamond.ac.uk:5050", "gitlab.diamond.ac.uk"),
+        ("registry.gitlab.diamond.ac.uk", "gitlab.diamond.ac.uk"),
+        ("registry.gitlab.com:443", "gitlab.com"),
+        ("gitlab.example.org", "gitlab.example.org"),
+    ],
+)
+def test_gitlab_web_host(registry, expected):
+    assert schema.gitlab_web_host(registry) == expected
+
+
+def test_gitlab_image_needs_a_project_path(monkeypatch):
+    monkeypatch.setenv("IBEK_GITLAB_HOSTS", "gitlab.example.org")
+    with pytest.raises(schema.SchemaNotFoundError, match="project path"):
+        published_schema_url("gitlab.example.org/ioc-x-runtime:1.0")
 
 
 @pytest.mark.parametrize(
@@ -517,7 +646,8 @@ def test_two_registries_cache_separately(tmp_path: Path, monkeypatch):
     }
 
     server.schema, server.etag = {"registry": "local"}, '"v2"'
-    assert schema.fetch_base_schema("localhost:5000/org/ioc-x-runtime:1.0") == {
+    # both on the GitHub rule, so both fetch the same URL
+    assert schema.fetch_base_schema("docker.io/org/ioc-x-runtime:1.0") == {
         "registry": "local"
     }
     # the second fetch was unconditional: nothing was cached for that registry
@@ -688,22 +818,33 @@ class FakeResponse:
         return self.body
 
 
+class FakeOpener:
+    """Stands in for the opener ``schema._opener`` builds."""
+
+    def __init__(self, respond):
+        self.respond = respond
+        self.seen: dict = {}
+
+    def __call__(self, context, redirect):
+        self.seen["context"] = context
+        self.seen["redirect"] = redirect
+        return self
+
+    def open(self, request, timeout):
+        self.seen["request"] = request
+        return self.respond(request)
+
+
 def test_http_get_uses_system_trust_store(monkeypatch):
     """uv-managed Pythons have no usable OpenSSL CA path on RHEL (#364)."""
     import truststore
 
-    seen = {}
-
-    def fake_urlopen(request, timeout, context):
-        seen["context"] = context
-        seen["headers"] = dict(request.header_items())
-        return FakeResponse(b"{}", {"ETag": '"abc"'})
-
-    monkeypatch.setattr(schema.urllib.request, "urlopen", fake_urlopen)
+    opener = FakeOpener(lambda request: FakeResponse(b"{}", {"ETag": '"abc"'}))
+    monkeypatch.setattr(schema, "_opener", opener)
     fetched = schema._http_get("https://example.com/s.json", {"If-None-Match": "x"})
     assert fetched == schema.Fetched(b"{}", {"ETag": '"abc"'})
-    assert isinstance(seen["context"], truststore.SSLContext)
-    assert seen["headers"] == {"If-none-match": "x"}
+    assert isinstance(opener.seen["context"], truststore.SSLContext)
+    assert dict(opener.seen["request"].header_items()) == {"If-none-match": "x"}
 
 
 @pytest.mark.parametrize(
@@ -724,12 +865,12 @@ def test_http_get_classifies_responses(monkeypatch, error, expected):
 
     url = "https://example.com/s.json"
 
-    def fake_urlopen(request, timeout, context):
+    def respond(request):
         if error == "offline":
             raise urllib.error.URLError("Name or service not known")
         raise urllib.error.HTTPError(url, error, "status", {}, None)  # type: ignore[arg-type]
 
-    monkeypatch.setattr(schema.urllib.request, "urlopen", fake_urlopen)
+    monkeypatch.setattr(schema, "_opener", FakeOpener(respond))
     if expected is None:
         assert schema._http_get(url, {}) == schema.Fetched(None, {})
     else:
@@ -739,7 +880,418 @@ def test_http_get_classifies_responses(monkeypatch, error, expected):
         assert type(info.value) is expected
 
 
+# --------------------------------------------------------------------------- #
+# GitLab tokens
+# --------------------------------------------------------------------------- #
+GITLAB_HOST = "gitlab.diamond.ac.uk"
+LINKS_URL = (
+    "https://gitlab.diamond.ac.uk/api/v4/projects/"
+    "controls%2Fcontainers%2Fiocs%2Fioc-dlslinuxvac/releases/2026.11.3/assets/links"
+)
+PACKAGE_URL = (
+    "https://gitlab.diamond.ac.uk/api/v4/projects/6713/packages/generic/"
+    "ioc-schema/2026.11.3/ibek.ioc.schema.json"
+)
+PERMALINK_URL = (
+    "https://gitlab.diamond.ac.uk/controls/containers/iocs/ioc-dlslinuxvac/"
+    "-/releases/2026.11.3/downloads/ibek.ioc.schema.json"
+)
+GITHUB_URL = (
+    "https://github.com/epics-containers/ioc-adaravis/releases/download/"
+    "2025.11.1/ibek.ioc.schema.json"
+)
+LISTED = {"IBEK_GITLAB_HOSTS": GITLAB_HOST}
+
+
+@pytest.mark.parametrize(
+    "url, env, expected",
+    [
+        (LINKS_URL, {}, {}),
+        # a token goes only to a host the operator lists
+        (LINKS_URL, {"GITLAB_TOKEN": "pat"}, {}),
+        (LINKS_URL, {**LISTED, "GITLAB_TOKEN": "pat"}, {"PRIVATE-TOKEN": "pat"}),
+        (
+            LINKS_URL,
+            {"IBEK_GITLAB_HOSTS": " other.example.org , GitLab.Diamond.AC.uk "}
+            | {"GITLAB_TOKEN": "pat"},
+            {"PRIVATE-TOKEN": "pat"},
+        ),
+        (
+            LINKS_URL.replace(GITLAB_HOST, "GITLAB.diamond.ac.uk"),
+            {**LISTED, "GITLAB_TOKEN": "pat"},
+            {"PRIVATE-TOKEN": "pat"},
+        ),
+        # a hostile host named by repository text gets nothing
+        (
+            "https://gitlab.evil.example/a/b/ibek.ioc.schema.json",
+            {**LISTED, "GITLAB_TOKEN": "pat"},
+            {},
+        ),
+        (
+            "https://gitlab.diamond.ac.uk.evil.example/s.json",
+            {**LISTED, "GITLAB_TOKEN": "pat"},
+            {},
+        ),
+        # GITLAB_TOKEN wins over a job token
+        (
+            LINKS_URL,
+            {
+                "GITLAB_TOKEN": "pat",
+                "CI_JOB_TOKEN": "job",
+                "CI_SERVER_HOST": GITLAB_HOST,
+            },
+            {"PRIVATE-TOKEN": "pat"},
+        ),
+        # a job token goes only to the server that issued it
+        (
+            LINKS_URL,
+            {"CI_JOB_TOKEN": "job", "CI_SERVER_HOST": "GitLab.Diamond.ac.uk"},
+            {"JOB-TOKEN": "job"},
+        ),
+        (LINKS_URL, {**LISTED, "CI_JOB_TOKEN": "job"}, {}),
+        (
+            LINKS_URL,
+            {**LISTED, "CI_JOB_TOKEN": "job", "CI_SERVER_HOST": "gitlab.example.org"},
+            {},
+        ),
+        # never to GitHub, even if listed
+        (
+            GITHUB_URL,
+            {"IBEK_GITLAB_HOSTS": "github.com", "GITLAB_TOKEN": "pat"},
+            {},
+        ),
+        (
+            GITHUB_URL,
+            {"CI_JOB_TOKEN": "job", "CI_SERVER_HOST": "github.com"},
+            {},
+        ),
+        (
+            "https://objects.githubusercontent.com/x/ibek.ioc.schema.json",
+            {"IBEK_GITLAB_HOSTS": "objects.githubusercontent.com"}
+            | {"GITLAB_TOKEN": "pat"},
+            {},
+        ),
+        # never over plain HTTP
+        (
+            LINKS_URL.replace("https:", "http:"),
+            {**LISTED, "GITLAB_TOKEN": "pat"},
+            {},
+        ),
+        # a GitLab server named by CI_SERVER_HOST
+        (
+            "https://git.example.org/a/b/s.json",
+            {"GITLAB_TOKEN": "pat", "CI_SERVER_HOST": "git.example.org"},
+            {"PRIVATE-TOKEN": "pat"},
+        ),
+    ],
+)
+def test_auth_headers(monkeypatch, url, env, expected):
+    for name, value in env.items():
+        monkeypatch.setenv(name, value)
+    assert schema.auth_headers(url) == expected
+
+
+def test_http_get_sends_token_unredirected(monkeypatch):
+    """The token must not be an ordinary header, which urllib forwards anywhere."""
+    monkeypatch.setenv("IBEK_GITLAB_HOSTS", GITLAB_HOST)
+    monkeypatch.setenv("GITLAB_TOKEN", "pat")
+    opener = FakeOpener(lambda request: FakeResponse(b"{}"))
+    monkeypatch.setattr(schema, "_opener", opener)
+    schema._http_get(PACKAGE_URL, {"If-None-Match": "x"})
+    request = opener.seen["request"]
+    assert request.unredirected_hdrs == {"Private-token": "pat"}
+    assert request.headers == {"If-none-match": "x"}
+    assert opener.seen["redirect"].auth == {"PRIVATE-TOKEN": "pat"}
+
+
+def test_http_get_sends_no_token_to_github(monkeypatch):
+    monkeypatch.setenv("IBEK_GITLAB_HOSTS", GITLAB_HOST)
+    monkeypatch.setenv("GITLAB_TOKEN", "pat")
+    opener = FakeOpener(lambda request: FakeResponse(b"{}"))
+    monkeypatch.setattr(schema, "_opener", opener)
+    schema._http_get(GITHUB_URL, {})
+    request = opener.seen["request"]
+    assert "pat" not in dict(request.header_items()).values()
+    assert opener.seen["redirect"].auth == {}
+
+
+@pytest.mark.parametrize(
+    "token, message",
+    [(None, "HTTP Error 401"), ("pat", "token was refused")],
+)
+def test_http_get_401_names_a_refused_token(monkeypatch, token, message):
+    import urllib.error
+
+    monkeypatch.setenv("IBEK_GITLAB_HOSTS", GITLAB_HOST)
+    if token:
+        monkeypatch.setenv("GITLAB_TOKEN", token)
+
+    def respond(request):
+        raise urllib.error.HTTPError(LINKS_URL, 401, "Unauthorized", {}, None)  # type: ignore[arg-type]
+
+    monkeypatch.setattr(schema, "_opener", FakeOpener(respond))
+    with pytest.raises(schema.SchemaFetchError, match=message):
+        schema._http_get(LINKS_URL, {})
+
+
+def _redirect(url: str, auth: dict[str, str], newurl: str):
+    """Ask the redirect handler for the request that follows ``url``."""
+    import urllib.request
+
+    request = urllib.request.Request(url, headers={"If-None-Match": "x"})
+    for key, value in auth.items():
+        request.add_unredirected_header(key, value)
+    handler = schema._RedirectHandler(url, auth)
+    return handler.redirect_request(request, None, 302, "Found", {}, newurl)
+
+
+def test_redirect_on_same_host_keeps_token():
+    """A GitLab release permalink redirects to the package API on the same host."""
+    new = _redirect(PERMALINK_URL, {"PRIVATE-TOKEN": "pat"}, PACKAGE_URL)
+    assert new.full_url == PACKAGE_URL
+    assert new.unredirected_hdrs == {"Private-token": "pat"}
+    assert new.headers == {"If-none-match": "x"}
+
+
+@pytest.mark.parametrize(
+    "newurl",
+    [
+        "https://objects.example.com/bucket/ibek.ioc.schema.json",
+        "https://github.com/x/y/releases/download/1/ibek.ioc.schema.json",
+        PACKAGE_URL.replace(GITLAB_HOST, GITLAB_HOST + ":8443"),
+    ],
+)
+def test_redirect_to_another_origin_drops_token(newurl):
+    new = _redirect(PERMALINK_URL, {"PRIVATE-TOKEN": "pat"}, newurl)
+    assert new.full_url == newurl
+    assert "pat" not in dict(new.header_items()).values()
+
+
+def test_redirect_back_to_the_origin_after_leaving_it_drops_token():
+    """gitlab -> elsewhere -> gitlab: the last hop is chosen by the other
+    server, so the token must not be added back."""
+    import urllib.request
+
+    auth = {"PRIVATE-TOKEN": "pat"}
+    request = urllib.request.Request(PERMALINK_URL)
+    request.add_unredirected_header("PRIVATE-TOKEN", "pat")
+    handler = schema._RedirectHandler(PERMALINK_URL, auth)
+    away = handler.redirect_request(
+        request, None, 302, "Found", {}, "https://objects.example.com/x"
+    )
+    back = handler.redirect_request(away, None, 302, "Found", {}, PACKAGE_URL)
+    assert back.full_url == PACKAGE_URL
+    assert "pat" not in dict(back.header_items()).values()
+
+
+@pytest.mark.parametrize(
+    "newurl",
+    [
+        PACKAGE_URL.replace("https:", "http:"),
+        "file:///etc/passwd",
+        "ftp://gitlab.diamond.ac.uk/x.json",
+        "https://user@gitlab.diamond.ac.uk/x.json",
+        "https://gitlab.diamond.ac.uk\\@evil.example/x.json",
+    ],
+)
+def test_redirect_to_a_refused_url_fails(newurl):
+    with pytest.raises(schema.SchemaFetchError, match="refusing a redirect"):
+        _redirect(PERMALINK_URL, {"PRIVATE-TOKEN": "pat"}, newurl)
+
+
+@pytest.mark.parametrize(
+    "newurl",
+    [
+        "https://gitlab.diamond.ac.uk/users/sign_in",
+        "https://gitlab.diamond.ac.uk/gitlab/users/sign_in",
+    ],
+)
+def test_sign_in_redirect_under_a_prefix_is_detected(newurl):
+    with pytest.raises(schema.SchemaNotFoundError, match="requires sign-in"):
+        _redirect(PERMALINK_URL, {}, newurl)
+
+
+def test_sign_in_redirect_without_token_is_not_found():
+    """GitLab sends an anonymous client to sign in for a private project, and
+    for one that does not exist: report it as a skip that names the fix."""
+    with pytest.raises(schema.SchemaNotFoundError) as info:
+        _redirect(PERMALINK_URL, {}, "https://gitlab.diamond.ac.uk/users/sign_in")
+    assert type(info.value) is schema.SchemaNotFoundError
+    assert "may be private or may not exist" in str(info.value)
+    assert "IBEK_GITLAB_HOSTS" in str(info.value)
+    assert "GITLAB_TOKEN" in str(info.value)
+
+
+def test_sign_in_redirect_with_token_is_an_error():
+    with pytest.raises(schema.SchemaFetchError, match="token was refused"):
+        _redirect(
+            PERMALINK_URL,
+            {"PRIVATE-TOKEN": "pat"},
+            "https://gitlab.diamond.ac.uk/users/sign_in",
+        )
+
+
+# --------------------------------------------------------------------------- #
+# schema URL overrides
+# --------------------------------------------------------------------------- #
+def test_expand_schema_url():
+    template = "https://{registry}/{project}/{name}/{tag}/s.json"
+    assert schema.expand_schema_url(template, DLSLINUXVAC) == (
+        "https://gitlab.diamond.ac.uk:5050/controls/containers/iocs/"
+        "ioc-dlslinuxvac/ioc-dlslinuxvac/2026.11.3/s.json"
+    )
+    assert schema.expand_schema_url("https://x/{registry}/{tag}", NO_HOST) == (
+        "https://x/docker.io/2025.11.1"
+    )
+
+
+def test_expand_schema_url_rejects_unknown_placeholder():
+    with pytest.raises(PatternError, match=r"unknown placeholder \{version\}"):
+        schema.expand_schema_url("https://x/{version}/s.json", DLSLINUXVAC)
+
+
+ENV_URL = "https://env.example.com/{tag}.json"
+RECORDED_URL = "https://recorded.example.com/{tag}.json"
+
+
+@pytest.mark.parametrize(
+    "env, recorded, expected",
+    [
+        (ENV_URL, RECORDED_URL, ("https://env.example.com/2026.11.3.json", False)),
+        (None, RECORDED_URL, ("https://recorded.example.com/2026.11.3.json", False)),
+        (ENV_URL, None, ("https://env.example.com/2026.11.3.json", False)),
+        (None, None, (LINKS_URL, True)),
+        # an empty variable is no override
+        ("", RECORDED_URL, ("https://recorded.example.com/2026.11.3.json", False)),
+    ],
+)
+def test_schema_source_precedence(monkeypatch, env, recorded, expected):
+    monkeypatch.setenv("IBEK_GITLAB_HOSTS", GITLAB_HOST)
+    if env is not None:
+        monkeypatch.setenv("IBEK_SCHEMA_URL", env)
+    assert schema.schema_source(DLSLINUXVAC, recorded) == expected
+
+
+def test_schema_source_github_needs_no_lookup():
+    assert schema.schema_source(ADARAVIS) == (published_schema_url(ADARAVIS), False)
+
+
+def _record_url(instance: Path, url: str) -> None:
+    lock = RuntimeLock(instance / RUNTIME_LOCK_NAME)
+    lock.schema_url = url
+    lock.save()
+
+
+def test_generate_instance_schema_fetches_recorded_url(
+    tmp_path: Path, samples: Path, monkeypatch
+):
+    instance = make_instance(tmp_path, image=DLSLINUXVAC)
+    monkeypatch.setenv("IBEK_SCHEMA_CACHE", str(tmp_path / "cache"))
+    _record_url(instance, RECORDED_URL)
+    base = generate_schema_dict(
+        sorted((samples / "support").glob("*.ibek.support.yaml"))[:1]
+    )
+    fetched = []
+
+    def server(url, headers):
+        fetched.append(url)
+        return schema.Fetched(json.dumps(base).encode(), {})
+
+    monkeypatch.setattr(schema, "_http_get", server)
+    assert generate_instance_schema(instance) is True
+    monkeypatch.setenv("IBEK_SCHEMA_URL", ENV_URL)
+    assert generate_instance_schema(instance) is True
+    assert fetched == [
+        "https://recorded.example.com/2026.11.3.json",
+        "https://env.example.com/2026.11.3.json",
+    ]
+
+
+def test_cache_from_another_url_is_not_revalidated(tmp_path: Path, monkeypatch):
+    """A schema cached from the derived URL is no evidence for an override."""
+    monkeypatch.setenv("IBEK_SCHEMA_CACHE", str(tmp_path / "cache"))
+    server = FakeServer({"from": "derived"})
+    monkeypatch.setattr(schema, "_http_get", server)
+    assert schema.fetch_base_schema(IMAGE) == {"from": "derived"}
+
+    server.schema = {"from": "override"}
+    assert schema.fetch_base_schema(IMAGE, RECORDED_URL) == {"from": "override"}
+    assert server.requests[-1] == {}  # unconditional: the cache was ignored
+
+    # and with the override offline, the derived URL's schema is not used
+    server.offline = True
+    with pytest.raises(schema.SchemaFetchError):
+        schema.fetch_base_schema(IMAGE, "https://other.example.com/{tag}.json")
+
+
+def _write_record_without_url(image: str, cached: dict) -> None:
+    """A cache record as ibek wrote it before records named their URL."""
+    cache = schema._cache_path(image)
+    cache.parent.mkdir(parents=True)
+    cache.write_text(json.dumps(cached))
+    cache.with_suffix(".validators.json").write_text(json.dumps({"ETag": '"v1"'}))
+
+
+def test_cache_without_a_recorded_url_is_not_trusted(tmp_path: Path, monkeypatch):
+    """A validators record with no ``url`` is not evidence of what an override
+    serves: only the derived GitHub URL was fetched when it was written."""
+    monkeypatch.setenv("IBEK_SCHEMA_CACHE", str(tmp_path / "cache"))
+    _write_record_without_url(IMAGE, {"from": "unknown"})
+    server = FakeServer({"from": "server"})
+    monkeypatch.setattr(schema, "_http_get", server)
+
+    assert schema.fetch_base_schema(IMAGE, RECORDED_URL) == {"from": "server"}
+    assert server.requests == [{}]  # not revalidated with the unknown ETag
+
+    server.offline = True
+    schema._cache_path(IMAGE).with_suffix(".validators.json").write_text(
+        json.dumps({"ETag": '"v1"'})
+    )
+    with pytest.raises(schema.SchemaFetchError):
+        schema.fetch_base_schema(IMAGE, RECORDED_URL)
+
+
+def test_cache_without_a_url_is_kept_for_the_derived_github_url(
+    tmp_path: Path, monkeypatch
+):
+    """A record written before records named their URL is for the derived
+    GitHub URL, so offline it still serves the instance, as it did then."""
+    monkeypatch.setenv("IBEK_SCHEMA_CACHE", str(tmp_path / "cache"))
+    _write_record_without_url(IMAGE, {"from": "cache"})
+    server = FakeServer({"from": "server"})
+    server.offline = True
+    monkeypatch.setattr(schema, "_http_get", server)
+
+    assert schema.fetch_base_schema(IMAGE) == {"from": "cache"}
+    assert server.requests == [{"If-None-Match": '"v1"'}]
+    # the derived URL given as an override is the same source
+    github = schema.published_schema_url(IMAGE)
+    assert schema.fetch_base_schema(IMAGE, github) == {"from": "cache"}
+
+
+def test_unshaped_schema_is_not_cached(tmp_path: Path, monkeypatch):
+    """A JSON reply that is not an ibek IOC schema must not reach the cache,
+    where a later run would revalidate it and keep it."""
+    monkeypatch.setenv("IBEK_SCHEMA_CACHE", str(tmp_path / "cache"))
+    server = FakeServer({"not": "a schema"})
+    monkeypatch.setattr(schema, "_http_get", server)
+
+    assert schema.fetch_base_schema(IMAGE) == {"not": "a schema"}
+    cache = schema._cache_path(IMAGE)
+    assert not cache.exists()
+    assert not cache.with_suffix(".validators.json").exists()
+    # the next run fetches it unconditionally
+    schema.fetch_base_schema(IMAGE)
+    assert server.requests == [{}, {}]
+
+
 IMAGE = "ghcr.io/epics-containers/ioc-adsimdetector-runtime:2025.11.1"
+
+
+def shaped(version: int) -> dict:
+    """The smallest schema with the shape of an ibek IOC schema."""
+    union = {"oneOf": [], "discriminator": {"mapping": {}}}
+    return {"version": version, "properties": {"entities": {"items": union}}}
 
 
 class FakeServer:
@@ -761,34 +1313,108 @@ class FakeServer:
         return schema.Fetched(body, {"ETag": self.etag})
 
 
-def test_fetch_base_schema_revalidates_cache(tmp_path: Path, monkeypatch, capsys):
+# --------------------------------------------------------------------------- #
+# GitLab release links
+# --------------------------------------------------------------------------- #
+def gitlab_links(asset_url: str = PACKAGE_URL) -> list[dict]:
+    """The links of a GitLab release, as the releases API lists them."""
+    return [
+        {"name": "versions.json", "url": asset_url.replace("ibek.ioc", "versions")},
+        {"name": "ibek.ioc.schema.json", "url": asset_url},
+    ]
+
+
+class GitLabServer(FakeServer):
+    """Serve a release's links at LINKS_URL and the schema at its asset URL."""
+
+    def __init__(self, schema_dict: dict, links: list[dict] | None = None):
+        super().__init__(schema_dict)
+        self.links = gitlab_links() if links is None else links
+        self.urls: list[str] = []
+
+    def __call__(self, url: str, headers: dict[str, str]) -> schema.Fetched:
+        self.urls.append(url)
+        if url == LINKS_URL:
+            if self.offline:
+                raise schema.SchemaFetchError("offline")
+            assert headers == {}
+            return schema.Fetched(json.dumps(self.links).encode(), {})
+        assert url == PACKAGE_URL
+        return super().__call__(url, headers)
+
+
+def test_fetch_gitlab_schema_through_release_links(tmp_path: Path, monkeypatch):
     monkeypatch.setenv("IBEK_SCHEMA_CACHE", str(tmp_path / "cache"))
-    server = FakeServer({"version": 1})
+    monkeypatch.setenv("IBEK_GITLAB_HOSTS", GITLAB_HOST)
+    server = GitLabServer(shaped(1))
     monkeypatch.setattr(schema, "_http_get", server)
 
-    assert schema.fetch_base_schema(IMAGE) == {"version": 1}
+    assert schema.fetch_base_schema(DLSLINUXVAC) == shaped(1)
+    assert server.urls == [LINKS_URL, PACKAGE_URL]
+    # revalidated at the asset, looked up again through the links
+    assert schema.fetch_base_schema(DLSLINUXVAC) == shaped(1)
+    assert server.urls[2:] == [LINKS_URL, PACKAGE_URL]
+    assert server.requests[-1] == {"If-None-Match": '"v1"'}
+    # offline, the cache keyed on the links URL is used
+    server.offline = True
+    assert schema.fetch_base_schema(DLSLINUXVAC) == shaped(1)
+
+
+def test_gitlab_release_without_schema_asset_is_not_found(tmp_path: Path, monkeypatch):
+    monkeypatch.setenv("IBEK_SCHEMA_CACHE", str(tmp_path / "cache"))
+    monkeypatch.setenv("IBEK_GITLAB_HOSTS", GITLAB_HOST)
+    server = GitLabServer({}, links=gitlab_links()[:1])
+    monkeypatch.setattr(schema, "_http_get", server)
+    with pytest.raises(schema.SchemaNotFoundError, match="lists no ibek.ioc"):
+        schema.fetch_base_schema(DLSLINUXVAC)
+
+
+@pytest.mark.parametrize("token", [None, "pat"])
+def test_gitlab_links_404_hint(tmp_path: Path, monkeypatch, token):
+    """Without a token a 404 may mean a private project; say how to read one."""
+    monkeypatch.setenv("IBEK_SCHEMA_CACHE", str(tmp_path / "cache"))
+    monkeypatch.setenv("IBEK_GITLAB_HOSTS", GITLAB_HOST)
+    if token:
+        monkeypatch.setenv("GITLAB_TOKEN", token)
+
+    def not_found(url, headers):
+        raise schema.SchemaNotFoundError(f"could not fetch {url}: 404")
+
+    monkeypatch.setattr(schema, "_http_get", not_found)
+    with pytest.raises(schema.SchemaNotFoundError) as info:
+        schema.fetch_base_schema(DLSLINUXVAC)
+    assert type(info.value) is schema.SchemaNotFoundError
+    assert ("may be private" in str(info.value)) is (token is None)
+
+
+def test_fetch_base_schema_revalidates_cache(tmp_path: Path, monkeypatch, capsys):
+    monkeypatch.setenv("IBEK_SCHEMA_CACHE", str(tmp_path / "cache"))
+    server = FakeServer(shaped(1))
+    monkeypatch.setattr(schema, "_http_get", server)
+
+    assert schema.fetch_base_schema(IMAGE) == shaped(1)
     assert server.requests[-1] == {}
 
     # unchanged asset: conditional request, 304, cached copy used
-    assert schema.fetch_base_schema(IMAGE) == {"version": 1}
+    assert schema.fetch_base_schema(IMAGE) == shaped(1)
     assert server.requests[-1] == {"If-None-Match": '"v1"'}
 
     # re-uploaded asset for the same tag reaches the cache
-    server.schema, server.etag = {"version": 2}, '"v2"'
-    assert schema.fetch_base_schema(IMAGE) == {"version": 2}
+    server.schema, server.etag = shaped(2), '"v2"'
+    assert schema.fetch_base_schema(IMAGE) == shaped(2)
     assert "changed since it was cached" in capsys.readouterr().out
     server.offline = True
-    assert schema.fetch_base_schema(IMAGE) == {"version": 2}
+    assert schema.fetch_base_schema(IMAGE) == shaped(2)
 
 
 def test_fetch_base_schema_uses_cache_when_offline(tmp_path: Path, monkeypatch, capsys):
     monkeypatch.setenv("IBEK_SCHEMA_CACHE", str(tmp_path / "cache"))
-    server = FakeServer({"version": 1})
+    server = FakeServer(shaped(1))
     monkeypatch.setattr(schema, "_http_get", server)
     schema.fetch_base_schema(IMAGE)
 
     server.offline = True
-    assert schema.fetch_base_schema(IMAGE) == {"version": 1}
+    assert schema.fetch_base_schema(IMAGE) == shaped(1)
     assert "Using cached schema" in capsys.readouterr().out
 
 
@@ -798,10 +1424,10 @@ def test_fetch_base_schema_without_validators_refetches(tmp_path: Path, monkeypa
     cache = schema._cache_path(IMAGE)
     cache.parent.mkdir(parents=True)
     cache.write_text(json.dumps({"version": "old"}))
-    server = FakeServer({"version": 1})
+    server = FakeServer(shaped(1))
     monkeypatch.setattr(schema, "_http_get", server)
 
-    assert schema.fetch_base_schema(IMAGE) == {"version": 1}
+    assert schema.fetch_base_schema(IMAGE) == shaped(1)
     assert server.requests == [{}]
 
 
@@ -811,16 +1437,16 @@ def test_fetch_base_schema_recovers_from_invalid_cache(
 ):
     """A partial or corrupt cache record must lead to a fresh download."""
     monkeypatch.setenv("IBEK_SCHEMA_CACHE", str(tmp_path / "cache"))
-    server = FakeServer({"version": 1})
+    server = FakeServer(shaped(1))
     monkeypatch.setattr(schema, "_http_get", server)
     schema.fetch_base_schema(IMAGE)
     cache = schema._cache_path(IMAGE)
     broken = cache if record == "schema" else cache.with_suffix(".validators.json")
     broken.write_text('{"trunc')
 
-    assert schema.fetch_base_schema(IMAGE) == {"version": 1}
+    assert schema.fetch_base_schema(IMAGE) == shaped(1)
     assert server.requests[-1] == {}
-    assert json.loads(cache.read_text()) == {"version": 1}
+    assert json.loads(cache.read_text()) == shaped(1)
     assert not list(cache.parent.glob(".*"))  # no temporary files left behind
 
 
@@ -1579,6 +2205,130 @@ def test_lock_round_trip_has_root_wrapper(tmp_path: Path):
     reloaded = RuntimeLock(path)
     assert list(reloaded.patterns) == ["alpha", "zebra"]
     assert reloaded.patterns["alpha"].files == {"config/a.proto": "sha256:2"}
+
+
+def test_lock_schema_url_round_trip(tmp_path: Path):
+    path = tmp_path / RUNTIME_LOCK_NAME
+    lock = RuntimeLock(path)
+    lock.set_pattern("alpha", "2.0.0", "local", {"config/a.proto": "sha256:2"})
+    lock.schema_url = RECORDED_URL
+    lock.save()
+
+    text = path.read_text()
+    assert text.startswith(
+        f"version: {SCHEMA_URL_LOCK_VERSION}\nschema_url: {RECORDED_URL}\n"
+    )
+    assert RuntimeLock(path).schema_url == RECORDED_URL
+
+    # clearing it writes the lowest version that holds the rest
+    lock.schema_url = None
+    lock.save()
+    assert path.read_text().startswith(f"version: {LOCK_VERSION}\n")
+    assert RuntimeLock(path).schema_url is None
+
+
+def test_lock_with_only_a_schema_url_is_kept(tmp_path: Path):
+    """An instance with no vendored patterns can still record its schema URL."""
+    path = tmp_path / RUNTIME_LOCK_NAME
+    lock = RuntimeLock(path)
+    lock.schema_url = RECORDED_URL
+    lock.save()
+    reloaded = RuntimeLock(path)
+    assert reloaded.schema_url == RECORDED_URL
+    assert reloaded.patterns == {}
+
+    reloaded.schema_url = None
+    reloaded.save()
+    assert not path.exists()
+
+
+def test_vendoring_keeps_the_recorded_schema_url(
+    tmp_path: Path, library: Path, monkeypatch
+):
+    instance = make_instance(tmp_path)
+    monkeypatch.setenv("IBEK_SCHEMA_CACHE", str(tmp_path / "cache"))
+    monkeypatch.setattr(schema, "_http_get", serve(b"{}"))
+    _record_url(instance, RECORDED_URL)
+    vendor.add("mydevice@1.0.0", instance, source_override=str(library))
+    vendor.update("mydevice", instance, version="1.0.0", source_override=str(library))
+    assert RuntimeLock(instance / RUNTIME_LOCK_NAME).schema_url == RECORDED_URL
+
+
+@pytest.mark.parametrize(
+    "text, fragment",
+    [
+        (f"version: 1\nschema_url: {RECORDED_URL}\npatterns: {{}}\n", "version 3"),
+        (f"version: 2\nschema_url: {RECORDED_URL}\npatterns: {{}}\n", "version 3"),
+        ("version: 3\nschema_url: 42\npatterns: {}\n", "non-empty string"),
+        ("version: 3\nschema_url: ''\npatterns: {}\n", "non-empty string"),
+    ],
+)
+def test_lock_rejects_a_bad_schema_url(tmp_path: Path, text: str, fragment: str):
+    path = tmp_path / RUNTIME_LOCK_NAME
+    path.write_text(text)
+    with pytest.raises(PatternError, match=fragment):
+        RuntimeLock(path)
+
+
+def test_cli_schema_records_the_url_only_after_it_works(
+    tmp_path: Path, samples: Path, monkeypatch
+):
+    instance = make_instance(tmp_path, image=DLSLINUXVAC)
+    monkeypatch.setenv("IBEK_SCHEMA_CACHE", str(tmp_path / "cache"))
+    monkeypatch.setenv("IBEK_GITLAB_HOSTS", GITLAB_HOST)
+    base = generate_schema_dict(
+        sorted((samples / "support").glob("*.ibek.support.yaml"))[:1]
+    )
+    fetched = []
+
+    def server(url, headers):
+        fetched.append(url)
+        if url == "https://recorded.example.com/2026.11.3.json":
+            return schema.Fetched(json.dumps(base).encode(), {})
+        raise schema.SchemaNotFoundError("404")
+
+    monkeypatch.setattr(schema, "_http_get", server)
+
+    # a URL that serves no schema is not recorded
+    result = runner.invoke(
+        cli, ["pattern", "schema", str(instance), "--schema-url", ENV_URL]
+    )
+    assert result.exit_code == 1
+    assert not (instance / RUNTIME_LOCK_NAME).exists()
+
+    result = runner.invoke(
+        cli, ["pattern", "schema", str(instance), "--schema-url", RECORDED_URL]
+    )
+    assert result.exit_code == 0, result.output
+    assert RuntimeLock(instance / RUNTIME_LOCK_NAME).schema_url == RECORDED_URL
+    assert (instance / IOC_SCHEMA_NAME).exists()
+
+    # clearing it removes the record and fetches the derived location
+    result = runner.invoke(
+        cli, ["pattern", "schema", str(instance), "--schema-url", ""]
+    )
+    assert result.exit_code == 0, result.output
+    assert not (instance / RUNTIME_LOCK_NAME).exists()
+    assert fetched[-1] == LINKS_URL
+
+
+def test_cli_schema_rejects_an_unknown_placeholder(tmp_path: Path):
+    instance = make_instance(tmp_path, image=DLSLINUXVAC)
+    result = runner.invoke(
+        cli, ["pattern", "schema", str(instance), "--schema-url", "https://x/{v}"]
+    )
+    assert result.exit_code == 1
+    assert not (instance / RUNTIME_LOCK_NAME).exists()
+
+
+def test_cli_schema_will_not_record_under_an_env_override(tmp_path: Path, monkeypatch):
+    instance = make_instance(tmp_path, image=DLSLINUXVAC)
+    monkeypatch.setenv("IBEK_SCHEMA_URL", ENV_URL)
+    result = runner.invoke(
+        cli, ["pattern", "schema", str(instance), "--schema-url", RECORDED_URL]
+    )
+    assert result.exit_code == 1
+    assert not (instance / RUNTIME_LOCK_NAME).exists()
 
 
 def write_unwrapped_lock(instance: Path, library: Path, extra_files: str = "") -> Path:
@@ -2352,3 +3102,313 @@ def test_readd_never_touches_another_patterns_files(tmp_path: Path, sim_library:
         )
     assert "already exists and is a directory" in str(exc.value)
     assert vendor.check(instance).ok
+
+
+# --------------------------------------------------------------------------- #
+# schema URL hardening
+# --------------------------------------------------------------------------- #
+REFUSED_URLS = [
+    ("file:///etc/passwd", "not an https"),
+    ("file://{project}/config.json", "not an https"),
+    ("ftp://gitlab.diamond.ac.uk/s.json", "not an https"),
+    ("data:application/json,{}", "not an https"),
+    ("gitlab.diamond.ac.uk/s.json", "not an https"),
+    ("http://gitlab.diamond.ac.uk/s.json", "not an https"),
+    ("https://user@gitlab.diamond.ac.uk/s.json", "user information"),
+    ("https://user:pw@gitlab.diamond.ac.uk/s.json", "user information"),
+    ("https://gitlab.diamond.ac.uk\\@evil.example/s.json", "backslash"),
+    ("https:///s.json", "has no host"),
+    ("https://gitlab.diamond.ac.uk:x/s.json", "invalid port"),
+    # urlsplit raises for a netloc that NFKC normalisation changes
+    ("https://gitlab.diamond.ac.uk\uff03@evil.example/s.json", "cannot be parsed"),
+]
+
+
+@pytest.mark.parametrize("url, problem", REFUSED_URLS)
+def test_lock_refuses_a_schema_url_that_is_not_https(
+    tmp_path: Path, url: str, problem: str
+):
+    path = tmp_path / RUNTIME_LOCK_NAME
+    path.write_text(f"version: 3\nschema_url: '{url}'\npatterns: {{}}\n")
+    with pytest.raises(PatternError, match=problem):
+        RuntimeLock(path)
+
+
+@pytest.mark.parametrize("url, problem", REFUSED_URLS)
+def test_env_override_refuses_a_url_that_is_not_https(monkeypatch, url, problem):
+    monkeypatch.setenv("IBEK_SCHEMA_URL", url)
+    with pytest.raises(PatternError, match=f"IBEK_SCHEMA_URL .*{problem}"):
+        schema.schema_source(DLSLINUXVAC)
+
+
+def test_placeholder_cannot_turn_an_override_into_another_scheme():
+    """The URL is checked again once the image has filled its placeholders."""
+    with pytest.raises(PatternError, match="user information"):
+        schema.schema_source(
+            "ghcr.io/org/ioc-x-runtime:1.0", "https://{tag}@evil.example/s.json"
+        )
+
+
+@pytest.mark.parametrize("url, problem", REFUSED_URLS)
+def test_cli_refuses_a_schema_url_that_is_not_https(
+    tmp_path: Path, monkeypatch, url: str, problem: str
+):
+    instance = make_instance(tmp_path, image=DLSLINUXVAC)
+    (instance / "config" / "secret.json").write_text('{"token": "s3cret"}')
+
+    def server(url, headers):
+        raise AssertionError(f"nothing may be fetched, got {url}")
+
+    monkeypatch.setattr(schema, "_http_get", server)
+    result = runner.invoke(
+        cli, ["pattern", "schema", str(instance), "--schema-url", url]
+    )
+    assert result.exit_code == 1
+    assert not (instance / RUNTIME_LOCK_NAME).exists()
+    assert not (instance / IOC_SCHEMA_NAME).exists()
+
+
+def test_opener_handles_only_https():
+    import ssl
+    import urllib.error
+    import urllib.request
+
+    opener = schema._opener(
+        ssl.create_default_context(), schema._RedirectHandler("https://x/", {})
+    )
+    kinds = {type(handler) for handler in opener.handlers}
+    assert urllib.request.FileHandler not in kinds
+    assert urllib.request.FTPHandler not in kinds
+    assert urllib.request.DataHandler not in kinds
+    assert urllib.request.HTTPHandler not in kinds
+    for url in ("file:///etc/passwd", "data:,{}", "http://localhost/"):
+        with pytest.raises(urllib.error.URLError, match="unknown url type"):
+            opener.open(url)
+
+
+def _clear_proxies(monkeypatch):
+    for name in ("https_proxy", "http_proxy", "no_proxy", "all_proxy"):
+        monkeypatch.delenv(name, raising=False)
+        monkeypatch.delenv(name.upper(), raising=False)
+
+
+@pytest.mark.parametrize("name", ["HTTPS_PROXY", "https_proxy"])
+def test_opener_honours_https_proxy(monkeypatch, name):
+    import ssl
+    import urllib.request
+
+    _clear_proxies(monkeypatch)
+    monkeypatch.setenv(name, "http://proxy.example:3128")
+    monkeypatch.setenv("FTP_PROXY", "http://proxy.example:3128")
+    opener = schema._opener(
+        ssl.create_default_context(), schema._RedirectHandler("https://x/", {})
+    )
+    proxies = [h for h in opener.handlers if isinstance(h, urllib.request.ProxyHandler)]
+    assert len(proxies) == 1
+    # only the https proxy, so no other scheme gains a handler
+    assert proxies[0].proxies == {"https": "http://proxy.example:3128"}
+
+
+def test_http_get_connects_through_https_proxy(monkeypatch) -> None:
+    """A fetch goes to the proxy named by HTTPS_PROXY as a CONNECT tunnel."""
+    import socket
+    import threading
+
+    _clear_proxies(monkeypatch)
+    server = socket.socket()
+    server.bind(("127.0.0.1", 0))
+    server.listen(1)
+    server.settimeout(5)
+    seen: list[bytes] = []
+
+    def accept():
+        try:
+            conn, _ = server.accept()
+        except OSError:
+            return
+        with conn:
+            conn.settimeout(5)
+            seen.append(conn.recv(4096))
+            conn.sendall(b"HTTP/1.1 403 Forbidden\r\nContent-Length: 0\r\n\r\n")
+
+    thread = threading.Thread(target=accept)
+    thread.start()
+    port = server.getsockname()[1]
+    monkeypatch.setenv("HTTPS_PROXY", f"http://127.0.0.1:{port}")
+    try:
+        with pytest.raises(schema.SchemaFetchError):
+            schema._http_get("https://schema.example/s.json", {})
+    finally:
+        thread.join(10)
+        server.close()
+    assert seen and seen[0].startswith(b"CONNECT schema.example:443 ")
+
+
+@pytest.mark.parametrize("url, problem", REFUSED_URLS)
+def test_http_get_refuses_a_url_that_is_not_https(monkeypatch, url, problem):
+    def no_open(context, redirect):
+        raise AssertionError("no opener may be built")
+
+    monkeypatch.setattr(schema, "_opener", no_open)
+    with pytest.raises(schema.SchemaFetchError, match=problem):
+        schema._http_get(url, {})
+
+
+@pytest.mark.parametrize(
+    "listed, url, expected",
+    [
+        (GITLAB_HOST, PACKAGE_URL, True),
+        (GITLAB_HOST, PACKAGE_URL.replace(GITLAB_HOST, GITLAB_HOST + ":443"), True),
+        # a bare host means the default HTTPS port only
+        (GITLAB_HOST, PACKAGE_URL.replace(GITLAB_HOST, GITLAB_HOST + ":8443"), False),
+        (
+            GITLAB_HOST + ":8443",
+            PACKAGE_URL.replace(GITLAB_HOST, GITLAB_HOST + ":8443"),
+            True,
+        ),
+        (GITLAB_HOST + ":8443", PACKAGE_URL, False),
+        # a malformed entry lists nothing
+        ("https://" + GITLAB_HOST, PACKAGE_URL, False),
+        ("user@" + GITLAB_HOST, PACKAGE_URL, False),
+    ],
+)
+def test_auth_headers_match_ports(monkeypatch, listed, url, expected):
+    monkeypatch.setenv("IBEK_GITLAB_HOSTS", listed)
+    monkeypatch.setenv("GITLAB_TOKEN", "pat")
+    assert bool(schema.auth_headers(url)) is expected
+
+
+def test_job_token_follows_ci_server_port(monkeypatch):
+    monkeypatch.setenv("CI_JOB_TOKEN", "job")
+    monkeypatch.setenv("CI_SERVER_HOST", GITLAB_HOST)
+    monkeypatch.setenv("CI_SERVER_PORT", "8443")
+    on_port = PACKAGE_URL.replace(GITLAB_HOST, GITLAB_HOST + ":8443")
+    assert schema.auth_headers(on_port) == {"JOB-TOKEN": "job"}
+    assert schema.auth_headers(PACKAGE_URL) == {}
+
+
+@pytest.mark.parametrize(
+    "asset, expected",
+    [
+        (PACKAGE_URL, True),
+        (
+            "https://gitlab.diamond.ac.uk/api/v4/projects/controls%2Fcontainers"
+            "%2Fiocs%2Fioc-dlslinuxvac/packages/generic/ioc-schema/1/s.json",
+            True,
+        ),
+        (PERMALINK_URL, True),
+        # another project's web route on the same host
+        (
+            "https://gitlab.diamond.ac.uk/controls/other/-/raw/main/s.json",
+            False,
+        ),
+        # same host, outside the packages API
+        ("https://gitlab.diamond.ac.uk/api/v4/user", False),
+        ("https://gitlab.diamond.ac.uk/api/v4/projects/6713/variables", False),
+        # another origin
+        ("https://evil.example/api/v4/projects/6713/packages/x", False),
+        (PACKAGE_URL.replace(GITLAB_HOST, GITLAB_HOST + ":8443"), False),
+        ("https://u@gitlab.diamond.ac.uk/api/v4/projects/6713/packages/x", False),
+        # dot segments that climb out of the packages API or the project
+        (
+            "https://gitlab.diamond.ac.uk/api/v4/projects/6713/packages/../../../user",
+            False,
+        ),
+        (
+            "https://gitlab.diamond.ac.uk/api/v4/projects/6713/packages/%2e%2e/variables",
+            False,
+        ),
+        (
+            "https://gitlab.diamond.ac.uk/api/v4/projects/6713/packages/%2E./%2e%2E/x",
+            False,
+        ),
+        ("https://gitlab.diamond.ac.uk/api/v4/projects/6713/packages/..%2fx", False),
+        (
+            "https://gitlab.diamond.ac.uk/controls/containers/iocs/ioc-dlslinuxvac"
+            "/-/../../other/-/raw/main/s.json",
+            False,
+        ),
+        (
+            "https://gitlab.diamond.ac.uk/controls/containers/iocs/ioc-dlslinuxvac"
+            "/-/%2e%2e/%2e%2e/other/-/raw/main/s.json",
+            False,
+        ),
+        # dot segments that stay inside
+        (
+            "https://gitlab.diamond.ac.uk/api/v4/projects/6713/packages/./generic/x",
+            True,
+        ),
+        ("https://gitlab.diamond.ac.uk/x/../api/v4/projects/6713/packages/x", True),
+    ],
+)
+def test_token_may_follow_only_into_the_project(asset, expected):
+    assert schema._token_may_follow(LINKS_URL, asset) is expected
+
+
+def test_asset_outside_the_project_is_fetched_without_a_token(
+    tmp_path: Path, monkeypatch
+):
+    monkeypatch.setenv("IBEK_SCHEMA_CACHE", str(tmp_path / "cache"))
+    monkeypatch.setenv("IBEK_GITLAB_HOSTS", GITLAB_HOST)
+    monkeypatch.setenv("GITLAB_TOKEN", "pat")
+    elsewhere = "https://gitlab.diamond.ac.uk/controls/other/-/raw/main/s.json"
+    calls = []
+
+    def server(url, headers, anonymous=False):
+        calls.append((url, anonymous))
+        if url == LINKS_URL:
+            return schema.Fetched(json.dumps(gitlab_links(elsewhere)).encode(), {})
+        raise schema.SchemaNotFoundError(f"could not fetch {url}: 404")
+
+    monkeypatch.setattr(schema, "_http_get", server)
+    with pytest.raises(schema.SchemaNotFoundError, match="without a token"):
+        schema.fetch_base_schema(DLSLINUXVAC)
+    assert calls == [(LINKS_URL, False), (elsewhere, True)]
+
+
+def test_expand_schema_url_project_encoded():
+    assert schema.expand_schema_url(
+        "https://gitlab.diamond.ac.uk/api/v4/projects/{project_encoded}/x", DLSLINUXVAC
+    ) == (
+        "https://gitlab.diamond.ac.uk/api/v4/projects/"
+        "controls%2Fcontainers%2Fiocs%2Fioc-dlslinuxvac/x"
+    )
+
+
+@pytest.mark.parametrize(
+    "base, problem",
+    [
+        ([], "not a JSON object"),
+        ({}, "properties.entities.items"),
+        ({"properties": {"entities": {"items": []}}}, "properties.entities.items"),
+        (
+            {"properties": {"entities": {"items": {"$ref": "#/$defs/Missing"}}}},
+            "not in \\$defs",
+        ),
+        ({"properties": {"entities": {"items": {"oneOf": []}}}}, "discriminator"),
+        (
+            {"properties": {"entities": {"items": {"discriminator": {"mapping": {}}}}}},
+            "oneOf",
+        ),
+    ],
+)
+def test_schema_shape_problem(base, problem):
+    assert re.search(problem, schema.schema_shape_problem(base) or "")
+
+
+def test_schema_shape_accepts_a_generated_schema(samples: Path):
+    support = sorted((samples / "support").glob("*.ibek.support.yaml"))[:1]
+    assert schema.schema_shape_problem(generate_schema_dict(support)) is None
+
+
+def test_generate_instance_schema_refuses_a_malformed_base(tmp_path: Path, monkeypatch):
+    instance = make_instance(tmp_path, image=IMAGE)
+    monkeypatch.setenv("IBEK_SCHEMA_CACHE", str(tmp_path / "cache"))
+    (instance / IOC_SCHEMA_NAME).write_text("{}\n")
+    monkeypatch.setattr(schema, "_http_get", serve(b'{"token": "s3cret"}'))
+
+    with pytest.raises(schema.InvalidSchemaError, match="left unchanged"):
+        generate_instance_schema(instance)
+    assert (instance / IOC_SCHEMA_NAME).read_text() == "{}\n"
+    result = runner.invoke(cli, ["pattern", "schema", str(instance)])
+    assert result.exit_code == 1

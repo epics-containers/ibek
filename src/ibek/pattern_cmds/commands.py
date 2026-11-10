@@ -19,11 +19,16 @@ from typing import Annotated
 
 import typer
 
-from ibek.globals import NaturalOrderGroup
+from ibek.globals import RUNTIME_LOCK_NAME, NaturalOrderGroup
 
 from . import vendor
-from .lock import Selection, SelectRule
-from .schema import generate_instance_schema, is_instance
+from .lock import RuntimeLock, Selection, SelectRule
+from .schema import (
+    SCHEMA_URL_ENV,
+    check_schema_url,
+    generate_instance_schema,
+    is_instance,
+)
 from .sources import PatternError
 
 log = logging.getLogger(__name__)
@@ -175,9 +180,46 @@ def restore(
     typer.echo(f"restored {name or 'all patterns'} in {dest}")
 
 
+def _record_schema_url(dest: Path, url: str) -> None:
+    """Generate the schema from ``url``, then record ``url`` in the lock.
+
+    The URL is recorded only once a schema has been generated from it, so a
+    wrong URL leaves the lock as it was. An empty ``url`` clears the record,
+    and the schema is then generated from the URL derived from the image.
+    """
+    url = url.strip()
+    lock = RuntimeLock(dest / RUNTIME_LOCK_NAME)
+    if url:
+        check_schema_url(url, "--schema-url")
+        if os.getenv(SCHEMA_URL_ENV, "").strip():
+            raise PatternError(
+                f"{SCHEMA_URL_ENV} is set and would replace the URL being "
+                "recorded; unset it to record a schema URL"
+            )
+        if not generate_instance_schema(dest, candidate_url=url):
+            raise PatternError(
+                f"no schema was generated from {url}; it is not recorded in "
+                f"{lock.path.name}"
+            )
+    lock.schema_url = url or None
+    lock.save()
+    if not url:
+        generate_instance_schema(dest)
+
+
 @pattern_cli.command()
 def schema(
     dest: DestArg = Path("."),
+    schema_url: Annotated[
+        str | None,
+        typer.Option(
+            "--schema-url",
+            help="Generate the schema from this base-schema URL and, if that "
+            "works, record the URL in runtime-lock.yaml, replacing the one "
+            "derived from the image; may contain {registry}, {project}, "
+            "{project_encoded}, {name} and {tag}. An empty string clears it",
+        ),
+    ] = None,
 ):
     """Generate the instance's ioc.schema.json and rewrite ioc.yaml's header.
 
@@ -194,6 +236,9 @@ def schema(
         )
         return
     try:
-        generate_instance_schema(dest)
+        if schema_url is not None:
+            _record_schema_url(dest, schema_url)
+        else:
+            generate_instance_schema(dest)
     except PatternError as exc:
         _fail(exc)

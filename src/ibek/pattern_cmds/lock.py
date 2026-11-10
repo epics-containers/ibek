@@ -25,6 +25,12 @@ vendor. The file is written as ``version: 1`` when no pattern has a selection
 and ``version: 2`` when any does, so a reader that predates ``select:`` refuses
 a lock that uses it with "unsupported lock version" instead of vendoring a
 different file-set from the one recorded.
+
+A lock may also carry a top-level ``schema_url:``, the URL of the instance's
+published base schema. ``ibek pattern schema`` then fetches that URL instead of
+the one it derives from the instance image. A lock with a ``schema_url`` is
+written as ``version: 3``, so a reader that cannot honour it refuses the lock
+rather than dropping the URL on its next save.
 """
 
 from __future__ import annotations
@@ -40,16 +46,21 @@ from ruamel.yaml.error import YAMLError
 from ibek.globals import BaseSettings
 
 from .sources import PatternError
+from .urls import url_problem
 
 # The lock's root ``version:``. This exists so the on-disk format can evolve; it
 # is deliberately *not* a switch ibek branches on to convert what it reads (see
-# ADR 0005). Version 2 is version 1 plus the per-pattern ``select:``; the version
-# written is the lowest one that can hold the lock's content, so a lock without
-# a selection stays readable by every ibek that reads version 1.
+# ADR 0005). Version 2 is version 1 plus the per-pattern ``select:``, and
+# version 3 is version 2 plus the top-level ``schema_url:``. The version written
+# is the lowest one that can hold the lock's content, so a lock without either
+# stays readable by every ibek that reads version 1.
 LOCK_VERSION = 1
 SELECT_LOCK_VERSION = 2
-SUPPORTED_LOCK_VERSIONS = frozenset({LOCK_VERSION, SELECT_LOCK_VERSION})
-LOCK_KEYS = ("version", "patterns")
+SCHEMA_URL_LOCK_VERSION = 3
+SUPPORTED_LOCK_VERSIONS = frozenset(
+    {LOCK_VERSION, SELECT_LOCK_VERSION, SCHEMA_URL_LOCK_VERSION}
+)
+LOCK_KEYS = ("version", "schema_url", "patterns")
 
 # A lock entry whose hash is replaced by a string starting with this marker is a
 # deliberately, visibly dirty file (e.g. testing a fix against real hardware).
@@ -118,6 +129,9 @@ class RuntimeLock:
     def __init__(self, path: Path):
         self.path = path
         self.patterns: dict[str, PatternEntry] = {}
+        # The instance's base-schema URL, overriding the one derived from its
+        # image; None when the lock does not record one.
+        self.schema_url: str | None = None
         if path.exists():
             self.load()
 
@@ -156,8 +170,28 @@ class RuntimeLock:
         if unknown:
             raise PatternError(
                 f"{self.path}: unknown top-level key(s) {', '.join(unknown)} "
-                f"(a lock holds only {' and '.join(LOCK_KEYS)})"
+                f"(a lock holds only {', '.join(LOCK_KEYS)})"
             )
+        schema_url = raw.get("schema_url")
+        if schema_url is not None:
+            if not isinstance(schema_url, str) or not schema_url.strip():
+                raise PatternError(
+                    f"{self.path}: 'schema_url' must be a non-empty string"
+                )
+            problem = url_problem(schema_url.strip())
+            if problem:
+                raise PatternError(
+                    f"{self.path}: 'schema_url' {schema_url.strip()!r} {problem}; "
+                    "only https:// URLs are allowed"
+                )
+            if version < SCHEMA_URL_LOCK_VERSION:
+                raise PatternError(
+                    f"{self.path}: the lock has a 'schema_url' but is version "
+                    f"{version}; a lock with a schema URL is version "
+                    f"{SCHEMA_URL_LOCK_VERSION}, so that an ibek which cannot "
+                    "honour it refuses the lock"
+                )
+            self.schema_url = schema_url.strip()
         patterns = raw.get("patterns") or {}
         if not isinstance(patterns, dict):
             raise PatternError(f"{self.path}: 'patterns' must be a mapping")
@@ -221,21 +255,28 @@ class RuntimeLock:
         data["files"] = dict(entry.files)
         return data
 
+    def _version(self) -> int:
+        """The lowest lock version that can hold this lock's content."""
+        if self.schema_url:
+            return SCHEMA_URL_LOCK_VERSION
+        if any(entry.select for entry in self.patterns.values()):
+            return SELECT_LOCK_VERSION
+        return LOCK_VERSION
+
     def save(self) -> None:
         # Patterns are emitted in name order so a lock re-written with the same
         # set in a different order produces no diff.
-        has_select = any(entry.select for entry in self.patterns.values())
-        data = {
-            "version": SELECT_LOCK_VERSION if has_select else LOCK_VERSION,
-            "patterns": {
-                name: self._entry_data(name) for name in sorted(self.patterns)
-            },
+        data: dict = {"version": self._version()}
+        if self.schema_url:
+            data["schema_url"] = self.schema_url
+        data["patterns"] = {
+            name: self._entry_data(name) for name in sorted(self.patterns)
         }
         yaml = YAML()
         yaml.default_flow_style = False
         # Keep each "<file>: sha256:<hex>" on one line (do not wrap long hashes).
         yaml.width = 4096
-        if not self.patterns:
+        if not self.patterns and not self.schema_url:
             # An empty lock is removed rather than left as an empty document.
             if self.path.exists():
                 self.path.unlink()

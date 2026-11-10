@@ -156,6 +156,23 @@ Existing base entity types are retained, not overridden. It also updates the
 first-line schema comment in `config/ioc.yaml` to reference
 `../ioc.schema.json`.
 
+The base schema is located from the image: a GitHub release asset for an
+image on `ghcr.io` or Docker Hub, or the schema link of a GitLab release for
+an image on a GitLab host listed in `IBEK_GITLAB_HOSTS` (at DLS,
+`IBEK_GITLAB_HOSTS=gitlab.diamond.ac.uk`). Other registries are skipped. For a
+non-public GitLab project, also set `GITLAB_TOKEN`; ibek sends a token to no
+unlisted host. If an image's schema lives elsewhere, record its `https://` URL with the
+instance:
+
+```bash
+ibek pattern schema services/my-ioc --schema-url 'https://example.org/{tag}/ibek.ioc.schema.json'
+```
+
+This generates the schema from that URL and, if that works, writes
+`schema_url` to `runtime-lock.yaml`. For a single run,
+`IBEK_SCHEMA_URL` overrides both. See {ref}`schema-url` and
+{ref}`schema-auth`.
+
 If no suitable image is found, or the image has no published schema (a 404 or
 410 response), schema generation prints a message and leaves the existing schema
 untouched; this is not a command failure. Vendoring still completes.
@@ -194,5 +211,5 @@ copyable fresh-cache command.
 | --- | --- | --- |
 | Vendored pattern files | `<instance>/config/` | Real copies, byte-identical to the library at its tag; placed into the IOC at boot. |
 | `ibek.manifest.yaml` | `<library>/<pattern>/` | Optional, in the *library*: declares which files are vendored and where. Never vendored itself. |
-| `runtime-lock.yaml` | `<instance>/` | Per-pattern version + source label + per-file SHA-256 (local-drift check), keyed relative to the instance root. |
+| `runtime-lock.yaml` | `<instance>/` | Per-pattern version + source label + per-file SHA-256 (local-drift check), keyed relative to the instance root; optional `schema_url`. |
 | `ioc.schema.json` | `<instance>/` | Self-contained schema merging the base image schema with vendored + local support. |
