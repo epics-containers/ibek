@@ -315,6 +315,19 @@ def test_dls_plc(tmp_epics_root: Path, samples: Path):
     )
 
 
+def test_shared_template(tmp_epics_root: Path, samples: Path):
+    """
+    Two entity models load the same template with different args: ioc.subst
+    gets one block per set of args (#383)
+    """
+    generic_generate(
+        tmp_epics_root,
+        samples,
+        "sharedTemplate",
+        ["sharedTemplate"],
+    )
+
+
 def test_dls8515(tmp_epics_root: Path, samples: Path):
     """
     Cut down copy of dlsPLC containing fast vacuum master and channel

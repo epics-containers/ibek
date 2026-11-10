@@ -162,6 +162,18 @@ mv `pwd`/epics/{runtime,opi}/* `pwd`/outputs/dlsPLC
 
 
 ############################################################################
+# two entity models loading one template with different args (#383)
+############################################################################
+
+echo making an ioc schema using sharedTemplate support yaml
+ibek ioc generate-schema --no-ibek-defs support/sharedTemplate.ibek.support.yaml --output schemas/sharedTemplate.ibek.ioc.schema.json
+
+echo making ioc based on sharedTemplate support yaml
+EPICS_ROOT=`pwd`/epics ibek runtime generate iocs/sharedTemplate.ibek.ioc.yaml support/sharedTemplate.ibek.support.yaml
+mv `pwd`/epics/{runtime,opi}/* `pwd`/outputs/sharedTemplate
+
+
+############################################################################
 # doWait example
 ############################################################################
 

@@ -5,8 +5,6 @@ Entity classes
 
 from typing import Literal
 
-import pytest
-
 from ibek.ioc import Entity
 from ibek.render import Render
 from ibek.render_db import RenderDb
@@ -105,20 +103,29 @@ def test_database_render(motor_classes):
     render_db = RenderDb(entities)
     templates = render_db.render_database()
 
-    assert templates == {
-        "basic_asyn_motor.db": [
-            '"P",           "M",  "DTYP",      "PORT",  "ADDR", "DESC",    "EGU",     "DIR", "VELO", "VMAX", "MRES", "DHLM",  "DLLM",   "INIT"',
-            '"IBEK-MO-01:", "M1", "asynMotor", "ctrl1", "1",    "Motor 1", "degrees", "0",   "10.0", "10.0", ".01",  "20000", "-20000", ""    ',
-        ],
-        "basic_cs_asyn_motor.db": [
-            '"P",           "CS_NUM", "DTYP",      "PORT",  "ADDR", "DESC",    "EGU",     "DIR", "VELO", "VMAX", "MRES", "DHLM",  "DLLM",   "INIT"',
-            '"IBEK-MO-01:", "0",      "asynMotor", "ctrl1", "2",    "Motor 2", "degrees", "0",   "10.0", "10.0", ".01",  "20000", "-20000", ""    ',
-        ],
-        "sim_motor.db": [
-            '"controllerName", "P",           "DESC"',
-            '"ctrl1",          "IBEK-MO-01:", "test"',
-        ],
-    }
+    assert templates == [
+        (
+            "sim_motor.db",
+            [
+                '"controllerName", "P",           "DESC"',
+                '"ctrl1",          "IBEK-MO-01:", "test"',
+            ],
+        ),
+        (
+            "basic_asyn_motor.db",
+            [
+                '"P",           "M",  "DTYP",      "PORT",  "ADDR", "DESC",    "EGU",     "DIR", "VELO", "VMAX", "MRES", "DHLM",  "DLLM",   "INIT"',
+                '"IBEK-MO-01:", "M1", "asynMotor", "ctrl1", "1",    "Motor 1", "degrees", "0",   "10.0", "10.0", ".01",  "20000", "-20000", ""    ',
+            ],
+        ),
+        (
+            "basic_cs_asyn_motor.db",
+            [
+                '"P",           "CS_NUM", "DTYP",      "PORT",  "ADDR", "DESC",    "EGU",     "DIR", "VELO", "VMAX", "MRES", "DHLM",  "DLLM",   "INIT"',
+                '"IBEK-MO-01:", "0",      "asynMotor", "ctrl1", "2",    "Motor 2", "degrees", "0",   "10.0", "10.0", ".01",  "20000", "-20000", ""    ',
+            ],
+        ),
+    ]
 
 
 def test_environment_variables(motor_classes):
@@ -142,7 +149,7 @@ def test_render_db_arg_order_independent():
         "x.db", {"DHLM": "20", "DLLM": "-20", "P": "B:"}, Entity(type="a.second")
     )
 
-    template = render_db.render_templates["x.db"]
+    (template,) = render_db.render_templates["x.db"]
     assert template.keys == ["P", "DLLM", "DHLM"]
     assert template.rows == [
         ["P", "DLLM", "DHLM"],
@@ -151,16 +158,22 @@ def test_render_db_arg_order_independent():
     ]
 
 
-def test_render_db_mismatched_args_raises():
-    """A row whose args differ from the file's headings is an error"""
+def test_render_db_different_args_separate_blocks():
+    """Each distinct set of args for one file gets its own block (#383)"""
     render_db = RenderDb([])
     render_db.add_row("x.db", {"P": "A:", "M": "1"}, Entity(type="a.first"))
+    render_db.add_row("y.db", {"P": "Y:"}, Entity(type="a.other"))
+    render_db.add_row("x.db", {"P": "B:", "Q": "2"}, Entity(type="a.second"))
+    render_db.add_row("x.db", {"M": "3", "P": "C:"}, Entity(type="a.first"))
+    render_db.add_row("x.db", {"Q": "4", "P": "D:"}, Entity(type="a.second"))
 
-    with pytest.raises(ValueError) as excinfo:
-        render_db.add_row("x.db", {"P": "B:", "Q": "2"}, Entity(type="a.second"))
+    first, second = render_db.render_templates["x.db"]
+    assert first.rows == [["P", "M"], ["A:", "1"], ["C:", "3"]]
+    assert second.rows == [["P", "Q"], ["B:", "2"], ["D:", "4"]]
 
-    message = str(excinfo.value)
-    assert "x.db" in message
-    assert "a.second" in message
-    assert "Missing: ['M']" in message
-    assert "Extra: ['Q']" in message
+    # blocks for one file are adjacent, in the order each set was first seen
+    assert [name for name, _ in render_db.render_database()] == [
+        "x.db",
+        "x.db",
+        "y.db",
+    ]

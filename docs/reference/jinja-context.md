@@ -145,8 +145,10 @@ instead of incrementing separately in startup and database templates.
 
 The packaged `st.cmd.jinja` joins the already rendered startup blocks. It sees
 `env_var_elements`, `script_elements`, `post_ioc_init_elements`, `_global`,
-shared helper variables and `env`. `ioc.subst.jinja` receives the grouped
-`templates` data and `env`.
+shared helper variables and `env`. `ioc.subst.jinja` receives `env` and
+`templates`, a list of `(file, rows)` pairs with one pair per `file` block. A
+database file loaded with more than one set of args has one pair per set,
+next to each other, and the first row of each pair is its headings.
 
 These assembly templates retain their existing permissive Jinja undefined
 behavior; the strict missing-name errors described above apply to entity

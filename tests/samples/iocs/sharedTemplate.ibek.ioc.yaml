@@ -1,0 +1,23 @@
+# yaml-language-server: $schema=../schemas/sharedTemplate.ibek.ioc.schema.json
+
+ioc_name: shared-template
+
+description: two entity models load pump.template with different args (#383)
+
+entities:
+  - type: pump._pumpTemplate
+    device: BASE1
+
+  - type: pump.pumpIonp
+    device: IONP1
+    CTLR: controller-1
+
+  - type: pump.pumpGroup
+    device: GROUP
+
+  - type: pump._pumpTemplate
+    device: BASE2
+
+  - type: pump.pumpIonp
+    device: IONP2
+    CTLR: controller-2
