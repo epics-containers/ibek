@@ -7,7 +7,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Jinja rendering and context &#8212; ibek 4.8.3.dev3+ga4984d6df documentation</title>
+    <title>Jinja rendering and context &#8212; ibek 4.8.4.dev2+g37faa8bbc documentation</title>
   
   
   
@@ -41,7 +41,7 @@
   <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=64cc4de3f052d77215f0" />
 <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=64cc4de3f052d77215f0" />
 
-    <script src="../_static/documentation_options.js?v=897d0c18"></script>
+    <script src="../_static/documentation_options.js?v=95d3a2ef"></script>
     <script src="../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -659,8 +659,10 @@ instead of incrementing separately in startup and database templates.</p>
 <h2>Assembly templates<a class="headerlink" href="#assembly-templates" title="Link to this heading">#</a></h2>
 <p>The packaged <code class="docutils literal notranslate"><span class="pre">st.cmd.jinja</span></code> joins the already rendered startup blocks. It sees
 <code class="docutils literal notranslate"><span class="pre">env_var_elements</span></code>, <code class="docutils literal notranslate"><span class="pre">script_elements</span></code>, <code class="docutils literal notranslate"><span class="pre">post_ioc_init_elements</span></code>, <code class="docutils literal notranslate"><span class="pre">_global</span></code>,
-shared helper variables and <code class="docutils literal notranslate"><span class="pre">env</span></code>. <code class="docutils literal notranslate"><span class="pre">ioc.subst.jinja</span></code> receives the grouped
-<code class="docutils literal notranslate"><span class="pre">templates</span></code> data and <code class="docutils literal notranslate"><span class="pre">env</span></code>.</p>
+shared helper variables and <code class="docutils literal notranslate"><span class="pre">env</span></code>. <code class="docutils literal notranslate"><span class="pre">ioc.subst.jinja</span></code> receives <code class="docutils literal notranslate"><span class="pre">env</span></code> and
+<code class="docutils literal notranslate"><span class="pre">templates</span></code>, a list of <code class="docutils literal notranslate"><span class="pre">(file,</span> <span class="pre">rows)</span></code> pairs with one pair per <code class="docutils literal notranslate"><span class="pre">file</span></code> block. A
+database file loaded with more than one set of args has one pair per set,
+next to each other, and the first row of each pair is its headings.</p>
 <p>These assembly templates retain their existing permissive Jinja undefined
 behavior; the strict missing-name errors described above apply to entity
 expressions. Inserted startup blocks are already rendered text and are not
