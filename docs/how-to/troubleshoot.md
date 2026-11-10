@@ -25,8 +25,14 @@ in {doc}`../reference/paths-and-environment`.
 
 If the command reports that schema generation was skipped, check the image
 in `values.yaml` or `compose.yml` / `compose.yaml`, its explicit tag, and the
-repository's `ibek.ioc.schema.json` release asset. A skip leaves an existing
-schema untouched and exits 0.
+repository's `ibek.ioc.schema.json` release asset. The message names the URL
+that was tried; see {ref}`schema-url` for how it is derived and how to
+override it. A skip leaves an existing schema untouched and exits 0.
+
+`GitLab requires sign-in` means the image's GitLab project is not public: set
+`GITLAB_TOKEN` to a token with `read_api` scope (see {ref}`schema-auth`). A
+GitLab release whose schema link has no `direct_asset_path` returns 404 at the
+derived URL; record the package URL with `--schema-url` instead.
 
 If the command exits 1 with `Cannot refresh ... ioc.schema.json`, the fetch
 failed and ibek has no cached copy for the image tag. The message includes the

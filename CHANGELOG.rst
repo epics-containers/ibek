@@ -7,6 +7,20 @@ Unreleased
 Added
 ~~~~~
 
+``ibek pattern schema`` finds the base schema of an image published on GitLab.
+An image on any registry other than ``ghcr.io`` or Docker Hub maps to
+``https://<web host>/<project path>/-/releases/<tag>/downloads/ibek.ioc.schema.json``,
+where the web host is the registry host without its port or ``registry.``
+prefix and the project path is the image path without its last part. ibek
+sends ``GITLAB_TOKEN`` as ``PRIVATE-TOKEN``, or GitLab CI's ``CI_JOB_TOKEN`` as
+``JOB-TOKEN``, only to a GitLab host over HTTPS, and never across a redirect
+to another origin. A non-public project with no token is reported as needing
+a token rather than as having no schema. An instance can record its schema URL
+in ``runtime-lock.yaml`` with ``ibek pattern schema --schema-url URL``, and
+``IBEK_SCHEMA_URL`` overrides it for one run; both accept ``{registry}``,
+``{project}``, ``{name}`` and ``{tag}``. A lock with a ``schema_url`` is written
+as ``version: 3``. See ``docs/reference/paths-and-environment.md`` (#375).
+
 Entity models accept a ``validate`` list of checks, each with an ``assert``
 Jinja expression (written without ``{{ }}``) and a ``message`` that may contain
 Jinja. The checks run against each enabled instance after its
@@ -111,9 +125,7 @@ skips generation quietly.
 ``localhost:5000/org/ioc-x-runtime:1.0`` is no longer read as the tag, and a
 ref with no registry host such as ``epics-containers/ioc-x-runtime:1.0`` no
 longer loses its org. A ``-linux`` architecture infix is stripped like
-``-rtems-beatnik``. An image on a GitLab registry now reports that
-GitLab-published schemas are not supported yet, instead of failing to fetch a
-GitHub URL built from the wrong project (part of #375).
+``-rtems-beatnik`` (part of #375).
 
 The published schema cache is keyed on registry host, full image path and tag
 (``<host>/<path>/<tag>.json``), so images with the same name on different

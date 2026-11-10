@@ -11,6 +11,13 @@ If no published schema can be found for the instance's image, this is reported
 and the schema is left untouched (not an error) — generic images that have not
 published a schema release simply do not get editor validation.
 
+The base schema URL is derived from the image: a GitHub release asset for an
+image on ``ghcr.io`` (or with no registry host), and a GitLab release asset for
+an image on any other registry. A ``schema_url`` recorded in the instance's
+``runtime-lock.yaml`` replaces the derived URL, and the ``IBEK_SCHEMA_URL``
+environment variable replaces both. A GitLab token is sent only to a GitLab
+host, over HTTPS.
+
 Downloaded base schemas are cached per image tag and revalidated on every run
 with a conditional request, so a re-uploaded release asset reaches the cache.
 If the server cannot be reached, the cached copy is used. If there is no cached
@@ -29,14 +36,16 @@ import urllib.error
 import urllib.request
 from pathlib import Path
 from typing import NamedTuple
+from urllib.parse import urlsplit
 
 import truststore
 from ruamel.yaml import YAML
 
 from ibek.entity_factory import EntityFactory
-from ibek.globals import IOC_SCHEMA_NAME
+from ibek.globals import IOC_SCHEMA_NAME, RUNTIME_LOCK_NAME
 from ibek.ioc_factory import IocFactory
 
+from .lock import RuntimeLock
 from .sources import PatternError
 
 # Entity defs always present in a generated base schema; never re-copied on merge.
@@ -71,9 +80,15 @@ class Fetched(NamedTuple):
 # --------------------------------------------------------------------------- #
 # image ref -> published release asset
 # --------------------------------------------------------------------------- #
-GITLAB_ISSUE = "https://github.com/epics-containers/ibek/issues/375"
 # Docker Hub is the registry for a ref that names no host.
 DEFAULT_REGISTRY = "docker.io"
+# Images on these registries (and on none) publish their schema as a GitHub
+# release asset; images on any other registry are assumed to be on GitLab.
+GITHUB_REGISTRIES = {"ghcr.io", DEFAULT_REGISTRY}
+# A one-off override of the schema URL for every instance in this run.
+SCHEMA_URL_ENV = "IBEK_SCHEMA_URL"
+# The placeholders a schema URL override may contain.
+URL_PLACEHOLDER = re.compile(r"\{([^{}]*)\}")
 # A final -developer/-runtime and its optional architecture infix.
 IMAGE_SUFFIX = re.compile(r"(-linux|-rtems-beatnik)?(-developer|-runtime)$")
 
@@ -115,38 +130,91 @@ def _base_name(name: str) -> str:
     return IMAGE_SUFFIX.sub("", name)
 
 
-def _is_gitlab(host: str | None) -> bool:
-    return host is not None and "gitlab" in host.partition(":")[0].split(".")
-
-
 def resolve_image_ref(image: str) -> tuple[str, str, str]:
-    """Map a GitHub-published container image ref to ``(org, repo, tag)``.
+    """Map a container image ref to ``(org, repo, tag)`` for the GitHub rule.
 
     ``ghcr.io/epics-containers/ioc-adsimdetector-runtime:2025.11.1`` ->
     ``("epics-containers", "ioc-adsimdetector", "2025.11.1")``.
-
-    Raises SchemaNotFoundError for an image on a GitLab registry, whose
-    schemas are published with a different layout that ibek cannot yet
-    resolve.
     """
     ref = parse_image_ref(image)
-    if _is_gitlab(ref.host):
-        raise SchemaNotFoundError(
-            f"image {image!r} is on GitLab registry {ref.host}; ibek cannot "
-            f"yet locate schemas published on GitLab (see {GITLAB_ISSUE})"
-        )
     if len(ref.path) < 2:
         raise SchemaNotFoundError(f"cannot parse org/repo from image {image!r}")
     return ref.path[0], _base_name(ref.path[-1]), ref.tag
 
 
+def gitlab_web_host(registry: str) -> str:
+    """Map a GitLab container registry host to the GitLab web host.
+
+    Drops any port and a ``registry.`` prefix:
+    ``gitlab.diamond.ac.uk:5050`` and ``registry.gitlab.com`` ->
+    ``gitlab.diamond.ac.uk`` and ``gitlab.com``.
+    """
+    host = registry.partition(":")[0]
+    return host.removeprefix("registry.")
+
+
 def published_schema_url(image: str) -> str:
-    """Build the GitHub release-asset URL for an image's published schema."""
-    org, repo, tag = resolve_image_ref(image)
+    """Build the release-asset URL of an image's published schema.
+
+    An image on ``ghcr.io``, or with no registry host, maps to a GitHub
+    release asset of ``<org>/<repo>``. An image on any other registry maps to
+    a GitLab release asset: the GitLab flavour of ioc-template pushes
+    ``<registry>/<project path>/<name>-<arch>-<target>:<tag>``, so the
+    project is the image path without its last part.
+    """
+    ref = parse_image_ref(image)
+    if ref.host is None or ref.host in GITHUB_REGISTRIES:
+        org, repo, tag = resolve_image_ref(image)
+        return (
+            f"https://github.com/{org}/{repo}/releases/download/{tag}/"
+            f"{PUBLISHED_SCHEMA_ASSET}"
+        )
+    if len(ref.path) < 2:
+        raise SchemaNotFoundError(f"cannot parse project path from image {image!r}")
+    project = "/".join(ref.path[:-1])
     return (
-        f"https://github.com/{org}/{repo}/releases/download/{tag}/"
-        f"{PUBLISHED_SCHEMA_ASSET}"
+        f"https://{gitlab_web_host(ref.host)}/{project}/-/releases/{ref.tag}/"
+        f"downloads/{PUBLISHED_SCHEMA_ASSET}"
     )
+
+
+def expand_schema_url(template: str, image: str) -> str:
+    """Fill the placeholders of a schema URL override from ``image``.
+
+    ``{registry}`` is the registry host (``docker.io`` when the image names
+    none), ``{project}`` the image path without its last part, ``{name}`` the
+    last part without its developer/runtime suffix, and ``{tag}`` the tag.
+    """
+    ref = parse_image_ref(image)
+    values = {
+        "registry": ref.host or DEFAULT_REGISTRY,
+        "project": "/".join(ref.path[:-1]),
+        "name": _base_name(ref.path[-1]),
+        "tag": ref.tag,
+    }
+
+    def fill(match: re.Match[str]) -> str:
+        key = match.group(1)
+        if key not in values:
+            raise PatternError(
+                f"schema URL {template!r}: unknown placeholder {{{key}}} "
+                f"(use {', '.join('{' + k + '}' for k in values)})"
+            )
+        return values[key]
+
+    return URL_PLACEHOLDER.sub(fill, template)
+
+
+def schema_url(image: str, recorded: str | None = None) -> str:
+    """Return the base-schema URL for ``image``.
+
+    ``IBEK_SCHEMA_URL`` wins, then ``recorded`` (the instance lock's
+    ``schema_url``), then the URL derived from the image.
+    """
+    override = os.getenv(SCHEMA_URL_ENV, "").strip() or recorded
+    if override:
+        return expand_schema_url(override, image)
+    return published_schema_url(image)
 
 
 def _cache_path(image: str) -> Path:
@@ -167,8 +235,104 @@ def _cache_path(image: str) -> Path:
     return root.joinpath(host, *parents, _base_name(name), f"{ref.tag}.json")
 
 
+# --------------------------------------------------------------------------- #
+# authenticated download
+# --------------------------------------------------------------------------- #
+# Personal, project or group access token, sent as PRIVATE-TOKEN.
+GITLAB_TOKEN_ENV = "GITLAB_TOKEN"
+# A GitLab CI job's token, sent as JOB-TOKEN, only to the job's own server.
+JOB_TOKEN_ENV = "CI_JOB_TOKEN"
+CI_SERVER_HOST_ENV = "CI_SERVER_HOST"
+# Hosts that never get a GitLab token, whatever else they match.
+GITHUB_HOSTS = ("github.com", "githubusercontent.com", "ghcr.io")
+# Where GitLab sends a client that may not see a project without signing in.
+GITLAB_SIGN_IN_PATH = "/users/sign_in"
+
+
+def _is_github_host(host: str) -> bool:
+    return any(host == name or host.endswith("." + name) for name in GITHUB_HOSTS)
+
+
+def _is_gitlab_host(host: str) -> bool:
+    """True for a host with a ``gitlab`` label, or this CI job's GitLab server."""
+    return "gitlab" in host.split(".") or host == os.getenv(CI_SERVER_HOST_ENV)
+
+
+def auth_headers(url: str) -> dict[str, str]:
+    """Return the token header to send with a request for ``url``.
+
+    A token goes only over HTTPS, only to a GitLab host, and never to a GitHub
+    host. ``GITLAB_TOKEN`` is sent as ``PRIVATE-TOKEN``; without it,
+    ``CI_JOB_TOKEN`` is sent as ``JOB-TOKEN``, and only to ``CI_SERVER_HOST``,
+    the GitLab server that issued it.
+    """
+    parts = urlsplit(url)
+    host = (parts.hostname or "").lower()
+    if parts.scheme != "https" or not host or _is_github_host(host):
+        return {}
+    if not _is_gitlab_host(host):
+        return {}
+    token = os.getenv(GITLAB_TOKEN_ENV, "").strip()
+    if token:
+        return {"PRIVATE-TOKEN": token}
+    token = os.getenv(JOB_TOKEN_ENV, "").strip()
+    if token and host == os.getenv(CI_SERVER_HOST_ENV):
+        return {"JOB-TOKEN": token}
+    return {}
+
+
+def _origin(url: str) -> tuple[str, str, int | None]:
+    parts = urlsplit(url)
+    return parts.scheme, (parts.hostname or "").lower(), parts.port
+
+
+class _RedirectHandler(urllib.request.HTTPRedirectHandler):
+    """Follow redirects, sending the token again only to the same origin.
+
+    urllib copies a request's ordinary headers to every redirect, whatever its
+    host, so the token travels as an unredirected header and this handler
+    re-adds it only when the redirect stays on the scheme, host and port the
+    token was meant for. A GitLab release asset redirects to the package API
+    on the same host, which needs the token again for a non-public project.
+    """
+
+    def __init__(self, url: str, auth: dict[str, str]):
+        super().__init__()
+        self.origin = _origin(url)
+        self.auth = auth
+
+    def redirect_request(self, req, fp, code, msg, headers, newurl):
+        new = super().redirect_request(req, fp, code, msg, headers, newurl)
+        if new is None:
+            return None
+        if urlsplit(newurl).path == GITLAB_SIGN_IN_PATH:
+            hint = (
+                "the token was refused"
+                if self.auth
+                else f"set {GITLAB_TOKEN_ENV} to a token with read_api scope"
+            )
+            raise SchemaFetchError(
+                f"could not fetch {req.full_url}: GitLab requires sign-in; {hint}"
+            )
+        if _origin(newurl) == self.origin:
+            for key, value in self.auth.items():
+                new.add_unredirected_header(key, value)
+        return new
+
+
+def _opener(
+    context: ssl.SSLContext, redirect: urllib.request.HTTPRedirectHandler
+) -> urllib.request.OpenerDirector:
+    """Build the URL opener (monkeypatched in tests)."""
+    return urllib.request.build_opener(
+        urllib.request.HTTPSHandler(context=context), redirect
+    )
+
+
 def _http_get(url: str, headers: dict[str, str]) -> Fetched:
     """Fetch ``url`` with extra request ``headers`` (monkeypatched in tests).
+
+    Adds the token header that :func:`auth_headers` chooses for ``url``.
 
     Raises SchemaNotFoundError for a 404 or 410 response, and SchemaFetchError
     for any other failure.
@@ -177,11 +341,13 @@ def _http_get(url: str, headers: dict[str, str]) -> Fetched:
     # has OpenSSL CA paths compiled for Debian (/etc/ssl/cert.pem), which do
     # not exist on RHEL, so the default context fails verification (#364).
     context = truststore.SSLContext(ssl.PROTOCOL_TLS_CLIENT)
+    auth = auth_headers(url)
     request = urllib.request.Request(url, headers=headers)
+    for key, value in auth.items():
+        request.add_unredirected_header(key, value)
+    opener = _opener(context, _RedirectHandler(url, auth))
     try:
-        with urllib.request.urlopen(  # noqa: S310
-            request, timeout=10, context=context
-        ) as response:
+        with opener.open(request, timeout=10) as response:
             validators = {
                 key: response.headers[key]
                 for key in ("ETag", "Last-Modified")
@@ -220,23 +386,32 @@ def _write_atomic(path: Path, text: str) -> None:
     os.replace(tmp.name, path)
 
 
-def fetch_base_schema(image: str) -> dict:
+def fetch_base_schema(image: str, recorded_url: str | None = None) -> dict:
     """Return the published base schema for ``image``.
+
+    ``recorded_url`` is the instance's recorded schema URL, if any; see
+    :func:`schema_url` for which URL is fetched.
 
     The cached copy for the image tag is revalidated with ``If-None-Match`` /
     ``If-Modified-Since``. The cached copy is also used when the fetch fails.
-    An invalid cache record is ignored and downloaded again.
+    An invalid cache record, or one fetched from another URL, is ignored and
+    downloaded again.
 
     Raises:
         SchemaNotFoundError: no schema is published for the image.
         SchemaFetchError: the fetch failed and nothing is cached.
     """
+    url = schema_url(image, recorded_url)
     cache = _cache_path(image)
     validators_path = cache.with_suffix(".validators.json")
     cached = _read_json(cache)
 
     headers = {}
     validators = _read_json(validators_path) if cached is not None else None
+    if validators and validators.get("url", url) != url:
+        # The cached schema came from another URL, for example before an
+        # override was set, so it is no evidence of what ``url`` serves.
+        cached = validators = None
     for key, header in (
         ("ETag", "If-None-Match"),
         ("Last-Modified", "If-Modified-Since"),
@@ -244,7 +419,6 @@ def fetch_base_schema(image: str) -> dict:
         if validators and isinstance(validators.get(key), str):
             headers[header] = validators[key]
 
-    url = published_schema_url(image)
     try:
         fetched = _http_get(url, headers)
     except SchemaFetchError as exc:
@@ -266,7 +440,7 @@ def fetch_base_schema(image: str) -> dict:
         print(f"Published schema for {image} changed since it was cached")
     cache.parent.mkdir(parents=True, exist_ok=True)
     _write_atomic(cache, json.dumps(schema, indent=2))
-    _write_atomic(validators_path, json.dumps(fetched.validators))
+    _write_atomic(validators_path, json.dumps({**fetched.validators, "url": url}))
     return schema
 
 
@@ -458,8 +632,9 @@ def generate_instance_schema(instance_dir: Path) -> bool:
             "skipping schema generation"
         )
         return False
+    recorded_url = RuntimeLock(instance_dir / RUNTIME_LOCK_NAME).schema_url
     try:
-        base = fetch_base_schema(image)
+        base = fetch_base_schema(image, recorded_url)
     except SchemaNotFoundError as exc:
         if isinstance(exc, SchemaFetchError) and schema_path.exists():
             raise StaleSchemaError(

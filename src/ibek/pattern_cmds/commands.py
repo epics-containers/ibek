@@ -19,11 +19,17 @@ from typing import Annotated
 
 import typer
 
-from ibek.globals import NaturalOrderGroup
+from ibek.globals import RUNTIME_LOCK_NAME, NaturalOrderGroup
 
 from . import vendor
-from .lock import Selection, SelectRule
-from .schema import generate_instance_schema, is_instance
+from .lock import RuntimeLock, Selection, SelectRule
+from .schema import (
+    SchemaNotFoundError,
+    expand_schema_url,
+    find_image,
+    generate_instance_schema,
+    is_instance,
+)
 from .sources import PatternError
 
 log = logging.getLogger(__name__)
@@ -175,9 +181,32 @@ def restore(
     typer.echo(f"restored {name or 'all patterns'} in {dest}")
 
 
+def _record_schema_url(dest: Path, url: str) -> None:
+    """Record ``url`` as the instance's schema URL; an empty ``url`` clears it."""
+    url = url.strip()
+    image = find_image(dest)
+    if url and image:
+        try:
+            expand_schema_url(url, image)  # reject an unknown placeholder now
+        except SchemaNotFoundError:
+            pass  # an unparseable image is reported by schema generation
+    lock = RuntimeLock(dest / RUNTIME_LOCK_NAME)
+    lock.schema_url = url or None
+    lock.save()
+
+
 @pattern_cli.command()
 def schema(
     dest: DestArg = Path("."),
+    schema_url: Annotated[
+        str | None,
+        typer.Option(
+            "--schema-url",
+            help="Record this base-schema URL in runtime-lock.yaml, replacing "
+            "the URL derived from the image; may contain {registry}, "
+            "{project}, {name} and {tag}. An empty string clears it",
+        ),
+    ] = None,
 ):
     """Generate the instance's ioc.schema.json and rewrite ioc.yaml's header.
 
@@ -194,6 +223,8 @@ def schema(
         )
         return
     try:
+        if schema_url is not None:
+            _record_schema_url(dest, schema_url)
         generate_instance_schema(dest)
     except PatternError as exc:
         _fail(exc)
