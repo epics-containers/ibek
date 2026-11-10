@@ -112,10 +112,17 @@ written.
 ``ioc.subst`` rows for a database file shared by several entity models are now
 written in the order of the file's headings. Previously each row followed its own
 entity model's arg order, so values could land under the wrong heading when two
-models listed the same args in a different order. Every entity that loads the
-same database file must now supply the same set of args; a mismatch fails with
-an error naming the file, the entity type and the missing and extra args,
-instead of writing a misaligned pattern row (#349).
+models listed the same args in a different order (#349).
+
+Entity models that load the same database file with different sets of args no
+longer stop generation with "do not match the args used by earlier entities".
+``ioc.subst`` gets one ``file`` block per distinct set of args, each with its
+own headings, so every entity keeps exactly its own args. Rows with the same
+set of args share a block. The blocks for one file are written next to each
+other, in the order each set first appears in the instance. ``msi`` accepts
+repeated ``file`` blocks for the same template. This lets a module combine,
+for example, a private base model and a public sibling with an extra object
+reference parameter, both using ``args: {.*: }`` (#383).
 
 ``ibek pattern schema`` failed with ``CERTIFICATE_VERIFY_FAILED`` on RHEL when
 run through ``uvx``, because the uv-managed Python looks for CA certificates

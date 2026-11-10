@@ -28,8 +28,9 @@ class RenderDb:
 
     def __init__(self, entities: Sequence[Entity]) -> None:
         self.entities = entities
-        # a mapping from template file name to details of instances of that template
-        self.render_templates: dict[str, RenderDb.RenderDbTemplate] = {}
+        # template file name -> one RenderDbTemplate per distinct set of args
+        # used with that file, in the order each set was first seen
+        self.render_templates: dict[str, list[RenderDb.RenderDbTemplate]] = {}
 
     def add_row(self, filename: str, params: Mapping[str, Any], entity: Entity) -> None:
         """
@@ -37,37 +38,33 @@ class RenderDb:
         Adding a new template file if it does not already exist.
         Convert all arguments to strings.
 
-        The first row added for a file fixes its headings. Later rows are
-        emitted in heading order, whatever order their args were declared in.
-        Every row for a file must supply the same set of args.
+        Rows for a file are grouped by their set of args: each distinct set
+        becomes its own ``pattern`` block in ioc.subst. The first row added
+        with a given set fixes that block's headings, and later rows with the
+        same set are emitted in heading order, whatever order their args were
+        declared in.
         """
         filename = UTILS.render(dict(entity), filename, "str")
-
-        if filename not in self.render_templates:
-            # for new filenames create a new RenderDbTemplate entry
-            keys = [str(i) for i in params.keys()]
-            self.render_templates[filename] = RenderDb.RenderDbTemplate(
-                filename=filename,
-                rows=[list(keys)],  # first row is the headings
-                columns=[0] * len(keys),
-                keys=keys,
-            )
-
-        template = self.render_templates[filename]
 
         # render argument values, expanding any Jinja template fields
         rendered = {
             str(k): v for k, v in UTILS.render_map(dict(entity), params).items()
         }
 
-        if set(rendered) != set(template.keys):
-            missing = [k for k in template.keys if k not in rendered]
-            extra = [k for k in rendered if k not in template.keys]
-            raise ValueError(
-                f"database '{filename}' args for entity type '{entity.type}' "
-                f"do not match the args used by earlier entities for this file. "
-                f"Missing: {missing}. Extra: {extra}."
+        templates = self.render_templates.setdefault(filename, [])
+        for template in templates:
+            if set(template.keys) == set(rendered):
+                break
+        else:
+            # a new set of args for this file starts a new block
+            keys = list(rendered)
+            template = RenderDb.RenderDbTemplate(
+                filename=filename,
+                rows=[list(keys)],  # first row is the headings
+                columns=[0] * len(keys),
+                keys=keys,
             )
+            templates.append(template)
 
         # save the new row, in heading order
         template.rows.append([rendered[k] for k in template.keys])
@@ -140,7 +137,8 @@ class RenderDb:
 
         # first calculate the column width for each template
         # including escaping spaces and quotes
-        for template in self.render_templates.values():
+        all_templates = [t for ts in self.render_templates.values() for t in ts]
+        for template in all_templates:
             for _, row in enumerate(template.rows):
                 for i, _ in enumerate(row):
                     row[i] = f'"{row[i]}"'
@@ -149,19 +147,24 @@ class RenderDb:
                     template.columns[i] = max(template.columns[i], len(row[i]))
 
         # now pad each column to the maximum width
-        for template in self.render_templates.values():
+        for template in all_templates:
             for row in template.rows:
                 for i, arg in enumerate(row):
                     row[i] = arg.ljust(template.columns[i])
 
     def render_database(
         self, extra_databases: list[tuple[Database, Entity]] | None = None
-    ) -> dict[str, list[str]]:
+    ) -> list[tuple[str, list[str]]]:
         """Render a database substitution file.
 
         Args:
             extra_databases: Databases to add that are not included on an Entity
 
+        Returns:
+            One (template file name, rows) pair per ``file`` block, the first
+            row being the headings. A file loaded with more than one set of
+            args has one pair per set, adjacent to each other, in the order
+            each set was first seen.
         """
         extra_databases = [] if extra_databases is None else extra_databases
 
@@ -169,9 +172,8 @@ class RenderDb:
         self.add_extra_databases(extra_databases)
         self.align_columns()
 
-        results = {}
-
-        for template in self.render_templates.values():
-            results[template.filename] = ["".join(row) for row in template.rows]
-
-        return results
+        return [
+            (template.filename, ["".join(row) for row in template.rows])
+            for templates in self.render_templates.values()
+            for template in templates
+        ]

@@ -1,0 +1,40 @@
+# yaml-language-server: $schema=../schemas/ibek.support.schema.json
+
+module: pump
+
+entity_models:
+  - name: _pumpTemplate
+    description: private base - loads the shared template
+    parameters:
+      device:
+        type: str
+        description: device name
+    databases:
+      - file: pump.template
+        args:
+          .*:
+
+  - name: pumpIonp
+    description: public sibling - has an extra param not used by the template
+    parameters:
+      device:
+        type: str
+        description: device name
+      CTLR:
+        type: str
+        description: reference to the parent controller (not a template macro)
+    databases:
+      - file: pump.template
+        args:
+          .*:
+
+  - name: pumpGroup
+    description: loads a different template, between the pump entities
+    parameters:
+      device:
+        type: str
+        description: group name
+    databases:
+      - file: pumpGroup.template
+        args:
+          device:
