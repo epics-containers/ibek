@@ -23,7 +23,12 @@ from ibek.globals import RUNTIME_LOCK_NAME, NaturalOrderGroup
 
 from . import vendor
 from .lock import RuntimeLock, Selection, SelectRule
-from .schema import SCHEMA_URL_ENV, generate_instance_schema, is_instance
+from .schema import (
+    SCHEMA_URL_ENV,
+    check_schema_url,
+    generate_instance_schema,
+    is_instance,
+)
 from .sources import PatternError
 
 log = logging.getLogger(__name__)
@@ -185,6 +190,7 @@ def _record_schema_url(dest: Path, url: str) -> None:
     url = url.strip()
     lock = RuntimeLock(dest / RUNTIME_LOCK_NAME)
     if url:
+        check_schema_url(url, "--schema-url")
         if os.getenv(SCHEMA_URL_ENV, "").strip():
             raise PatternError(
                 f"{SCHEMA_URL_ENV} is set and would replace the URL being "

@@ -8,21 +8,25 @@ Added
 ~~~~~
 
 ``ibek pattern schema`` finds the base schema of an image published on GitLab.
-For an image on any registry other than ``ghcr.io`` or Docker Hub, ibek reads
-the ``ibek.ioc.schema.json`` link of release ``<tag>`` through
+For an image on a GitLab host listed in ``IBEK_GITLAB_HOSTS`` (``host[:port]``
+entries) or the CI job's server, ibek reads the ``ibek.ioc.schema.json`` link
+of release ``<tag>`` through
 ``https://<web host>/api/v4/projects/<project path>/releases/<tag>/assets/links``,
 where the web host is the registry host without its port or ``registry.``
 prefix and the project path is the image path without its last part, then
-downloads that link. ibek sends ``GITLAB_TOKEN`` as ``PRIVATE-TOKEN`` only over
-HTTPS to a host listed in ``IBEK_GITLAB_HOSTS`` or equal to ``CI_SERVER_HOST``,
-never to GitHub, and never across a redirect to another origin; at DLS set
-``IBEK_GITLAB_HOSTS=gitlab.diamond.ac.uk``. Without ``GITLAB_TOKEN``, GitLab
-CI's ``CI_JOB_TOKEN`` is sent as ``JOB-TOKEN`` to ``CI_SERVER_HOST`` only. An
+downloads that link. An image on any other registry that is not GitHub or
+Docker Hub is skipped. At DLS set ``IBEK_GITLAB_HOSTS=gitlab.diamond.ac.uk``.
+ibek sends ``GITLAB_TOKEN`` as ``PRIVATE-TOKEN`` only over HTTPS to a listed
+host and port, never to GitHub, never across a redirect to another origin, and
+to a release asset only inside the same project; without it, GitLab CI's
+``CI_JOB_TOKEN`` is sent as ``JOB-TOKEN`` to the job's own server only. An
 instance can record its schema URL in ``runtime-lock.yaml`` with
 ``ibek pattern schema --schema-url URL``, which records it only after a schema
 is generated from it, and ``IBEK_SCHEMA_URL`` overrides it for one run; both
-accept ``{registry}``, ``{project}``, ``{name}`` and ``{tag}``. A lock with a
-``schema_url`` is written as ``version: 3``. See
+must be ``https://`` URLs and accept ``{registry}``, ``{project}``,
+``{project_encoded}``, ``{name}`` and ``{tag}``. ibek fetches schemas only over
+HTTPS, and refuses a fetched schema without the shape of an ibek IOC schema. A
+lock with a ``schema_url`` is written as ``version: 3``. See
 ``docs/reference/paths-and-environment.md`` (#375).
 
 Entity models accept a ``validate`` list of checks, each with an ``assert``
@@ -69,9 +73,9 @@ raw URL:
 Changed
 ~~~~~~~
 
-``runtime-lock.yaml`` refuses top-level keys other than ``version`` and
-``patterns`` rather than ignoring them and dropping them on the next save
-(#378).
+``runtime-lock.yaml`` refuses top-level keys other than ``version``,
+``schema_url`` and ``patterns`` rather than ignoring them and dropping them on
+the next save (#378, #375).
 
 ``ibek pattern check``/``add``/``update`` refuse a ``runtime-lock.yaml`` in any
 format they do not recognise, rather than special-casing one earlier shape. If

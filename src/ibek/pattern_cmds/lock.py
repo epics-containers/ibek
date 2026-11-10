@@ -46,6 +46,7 @@ from ruamel.yaml.error import YAMLError
 from ibek.globals import BaseSettings
 
 from .sources import PatternError
+from .urls import url_problem
 
 # The lock's root ``version:``. This exists so the on-disk format can evolve; it
 # is deliberately *not* a switch ibek branches on to convert what it reads (see
@@ -176,6 +177,12 @@ class RuntimeLock:
             if not isinstance(schema_url, str) or not schema_url.strip():
                 raise PatternError(
                     f"{self.path}: 'schema_url' must be a non-empty string"
+                )
+            problem = url_problem(schema_url.strip())
+            if problem:
+                raise PatternError(
+                    f"{self.path}: 'schema_url' {schema_url.strip()!r} {problem}; "
+                    "only https:// URLs are allowed"
                 )
             if version < SCHEMA_URL_LOCK_VERSION:
                 raise PatternError(

@@ -83,18 +83,23 @@ ibek locates the base schema from the instance image:
 
 | Registry | Where ibek looks |
 | --- | --- |
-| `ghcr.io`, `docker.io` or none | `https://github.com/<org>/<repo>/releases/download/<tag>/ibek.ioc.schema.json` |
-| any other host | the `ibek.ioc.schema.json` link of GitLab release `<tag>`, listed by `https://<web host>/api/v4/projects/<project path>/releases/<tag>/assets/links` |
+| `ghcr.io`, `docker.io`, `index.docker.io`, `registry-1.docker.io` or none | `https://github.com/<org>/<repo>/releases/download/<tag>/ibek.ioc.schema.json` |
+| a GitLab registry whose web host is listed in `IBEK_GITLAB_HOSTS` or is the CI job's server | the `ibek.ioc.schema.json` link of GitLab release `<tag>`, listed by `https://<web host>/api/v4/projects/<project path>/releases/<tag>/assets/links` |
+| any other host, such as `quay.io` or `localhost:5000` | nothing: generation is skipped with a message |
 
 For GitHub, `<org>` is the first part of the image path and `<repo>` the last
-part. For any other registry ibek assumes GitLab, whose ioc-template pushes
-`<registry>/<project path>/<project name>-<arch>-<target>:<tag>`:
+part. For a listed GitLab host, ibek follows GitLab's ioc-template, which
+pushes `<registry>/<project path>/<project name>-<arch>-<target>:<tag>`:
 
 - the web host is the registry host without its port and without a
   `registry.` prefix;
 - the project path is the image path without its last part, URL-encoded.
 
-ibek then downloads the link's `url`, the generic package file. In both
+ibek then downloads the link's `url`, the generic package file, sending the
+token only if that URL is on the same origin as the links URL and inside the
+same project: `/api/v4/projects/<project path or id>/packages/...` or
+`/<project path>/-/...`. A link anywhere else is fetched without a token. In
+both
 cases the last part loses a final `-developer` or `-runtime` and its optional
 `-linux` or `-rtems-beatnik`. For example:
 
@@ -110,7 +115,13 @@ a non-public project and answers `404` or `401` instead of redirecting to a
 sign-in page, and because it also finds a schema link that has no
 `direct_asset_path`.
 
-Two overrides replace the derived location, highest precedence first:
+Two overrides replace the derived location, highest precedence first. Both
+must be plain `https://` URLs: ibek refuses any other scheme (`file:`, `ftp:`,
+`data:`, `http:` or none), user information (`user@`) and backslashes, when it
+reads the lock, the `--schema-url` option or `IBEK_SCHEMA_URL`, and again once
+the placeholders are filled. It fetches only over HTTPS: no handler for any
+other scheme is installed, and a redirect to a refused URL fails.
+
 
 1. **`IBEK_SCHEMA_URL`**: a one-off for every instance in this run, for
    example to try a URL before recording it.
@@ -135,11 +146,13 @@ these placeholders, filled from the instance image:
 | --- | --- |
 | `{registry}` | Registry host, with any port; `docker.io` when the image names none. |
 | `{project}` | Image path without its last part. |
+| `{project_encoded}` | `{project}` with each `/` encoded as `%2F`, as the GitLab API wants a project path. |
 | `{name}` | Last part of the image path, without its developer/runtime suffix. |
 | `{tag}` | Image tag. |
 
 Any other `{...}` is an error. Use `{tag}` so that the URL follows image
-upgrades. A lock with a `schema_url` is written as `version: 3`; ibek releases
+upgrades; for a GitLab project, for example,
+`https://gitlab.diamond.ac.uk/api/v4/projects/{project_encoded}/packages/generic/ioc-schema/{tag}/ibek.ioc.schema.json`. A lock with a `schema_url` is written as `version: 3`; ibek releases
 that read only versions 1 and 2 refuse it with "unsupported lock version 3",
 rather than dropping the URL. An instance without vendored patterns can still
 have a lock that records only a `schema_url`. Every tool that runs
@@ -149,21 +162,22 @@ and pre-commit hooks, needs an ibek that reads version 3.
 (schema-auth)=
 ## Schema download authentication
 
-A schema on a public GitLab project downloads without a token. ibek sends a
-GitLab token only to hosts the operator lists, never to a host named only by
-repository content: image refs and schema URLs are repository text, and a
-change that pointed them at another host would otherwise collect the token of
-whoever ran the hook or the CI job.
+ibek looks schemas up only on GitLab hosts the operator lists, and sends a
+GitLab token only to them, never to a host named only by repository content:
+image refs and schema URLs are repository text, and a change that pointed
+them at another host would otherwise collect the token of whoever ran the
+hook or the CI job. A schema on a public project of a listed host downloads
+without a token.
 
 | Variable | Meaning |
 | --- | --- |
-| `IBEK_GITLAB_HOSTS` | Comma-separated hostnames that may receive a token. At DLS: `IBEK_GITLAB_HOSTS=gitlab.diamond.ac.uk`. |
+| `IBEK_GITLAB_HOSTS` | Comma-separated `host[:port]` entries: the GitLab servers ibek looks schemas up on and may send a token to. A bare host means the default HTTPS port only. At DLS: `IBEK_GITLAB_HOSTS=gitlab.diamond.ac.uk`. |
 | `GITLAB_TOKEN` | Sent as `PRIVATE-TOKEN` to a listed host or to `CI_SERVER_HOST`. A personal, group or project access token with `read_api` scope. |
-| `CI_JOB_TOKEN`, `CI_SERVER_HOST` | Set by GitLab CI. Without `GITLAB_TOKEN`, the job token is sent as `JOB-TOKEN`, and only to `CI_SERVER_HOST`. |
+| `CI_JOB_TOKEN`, `CI_SERVER_HOST`, `CI_SERVER_PORT` | Set by GitLab CI; the job's server counts as listed. Without `GITLAB_TOKEN`, the job token is sent as `JOB-TOKEN`, and only to that server. |
 
-Hostnames are compared without regard to case. A token is sent only over
-HTTPS, never to `github.com`, `ghcr.io` or `githubusercontent.com` even if
-listed, and only to the host the URL names. A redirect keeps the token only
+Hostnames are compared without regard to case, and ports must match. A token
+is sent only over HTTPS, never to `github.com`, `ghcr.io` or
+`githubusercontent.com` even if listed, and only to the host the URL names. A redirect keeps the token only
 when it stays on the same scheme, host and port; a redirect to any other
 origin is followed without it.
 
@@ -181,7 +195,13 @@ How GitLab answers decides what ibek reports:
 | `404` with a token sent | Skipped: no such project or release. |
 | `401` with a token sent | Failed fetch: the token was refused, or the project does not exist. |
 | Release lists no `ibek.ioc.schema.json` | Skipped: nothing published. |
-| Redirect to `/users/sign_in` (an override URL on a GitLab web route) | Skipped with no token sent; a failed fetch with one. |
+| Redirect to a path ending in `/users/sign_in` (an override URL on a GitLab web route) | Skipped with no token sent; a failed fetch with one. |
+| Asset outside the project, fetched without a token, not found | Skipped; the message says the token was withheld. |
+
+A fetched schema must have the shape of an ibek IOC schema: a JSON object
+whose `properties.entities.items` (inline or through a `$ref` into `$defs`)
+has a `oneOf` list and a `discriminator.mapping`. Anything else stops the
+command with exit 1, and the instance's `ioc.schema.json` is left unchanged.
 
 A failed fetch uses the cached schema, or with no cached copy exits 1 when an
 `ioc.schema.json` already exists, as described below.

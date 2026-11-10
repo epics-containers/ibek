@@ -157,10 +157,12 @@ first-line schema comment in `config/ioc.yaml` to reference
 `../ioc.schema.json`.
 
 The base schema is located from the image: a GitHub release asset for an
-image on `ghcr.io`, or the schema link of a GitLab release for an image on
-another registry. For a non-public GitLab project, list its host in
-`IBEK_GITLAB_HOSTS` and set `GITLAB_TOKEN`; ibek sends a token to no other
-host. If an image's schema lives elsewhere, record its URL with the instance:
+image on `ghcr.io` or Docker Hub, or the schema link of a GitLab release for
+an image on a GitLab host listed in `IBEK_GITLAB_HOSTS` (at DLS,
+`IBEK_GITLAB_HOSTS=gitlab.diamond.ac.uk`). Other registries are skipped. For a
+non-public GitLab project, also set `GITLAB_TOKEN`; ibek sends a token to no
+unlisted host. If an image's schema lives elsewhere, record its `https://` URL with the
+instance:
 
 ```bash
 ibek pattern schema services/my-ioc --schema-url 'https://example.org/{tag}/ibek.ioc.schema.json'

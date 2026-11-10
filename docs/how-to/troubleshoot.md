@@ -29,6 +29,12 @@ repository's `ibek.ioc.schema.json` release asset. The message names the URL
 that was tried; see {ref}`schema-url` for how it is derived and how to
 override it. A skip leaves an existing schema untouched and exits 0.
 
+A skip saying the registry is not a GitLab host listed in `IBEK_GITLAB_HOSTS`
+means ibek did not look the image up: list the GitLab web host, for example
+`IBEK_GITLAB_HOSTS=gitlab.diamond.ac.uk`. `the base schema ... is left
+unchanged` with exit 1 means the URL served JSON that is not an ibek IOC
+schema; check a recorded `schema_url` or `IBEK_SCHEMA_URL`.
+
 A skip saying the GitLab project `may be private or may not exist` means
 GitLab answered without a token. If the project is private, add its host to
 `IBEK_GITLAB_HOSTS` and set `GITLAB_TOKEN` to a token with `read_api` scope
