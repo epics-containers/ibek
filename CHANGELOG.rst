@@ -17,8 +17,10 @@ prefix and the project path is the image path without its last part, then
 downloads that link. An image on any other registry that is not GitHub or
 Docker Hub is skipped. At DLS set ``IBEK_GITLAB_HOSTS=gitlab.diamond.ac.uk``.
 ibek sends ``GITLAB_TOKEN`` as ``PRIVATE-TOKEN`` only over HTTPS to a listed
-host and port, never to GitHub, never across a redirect to another origin, and
-to a release asset only inside the same project; without it, GitLab CI's
+host and port, never to GitHub, and never after a redirect to another origin,
+even one that redirects back; the token is scoped to the listed origin, not to
+one project, and as defence in depth a release asset gets it only at a package
+or project web path on that origin; without it, GitLab CI's
 ``CI_JOB_TOKEN`` is sent as ``JOB-TOKEN`` to the job's own server only. An
 instance can record its schema URL in ``runtime-lock.yaml`` with
 ``ibek pattern schema --schema-url URL``, which records it only after a schema

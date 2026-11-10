@@ -96,12 +96,18 @@ pushes `<registry>/<project path>/<project name>-<arch>-<target>:<tag>`:
 - the project path is the image path without its last part, URL-encoded.
 
 ibek then downloads the link's `url`, the generic package file, sending the
-token only if that URL is on the same origin as the links URL and inside the
-same project: `/api/v4/projects/<project path or id>/packages/...` or
-`/<project path>/-/...`. A link anywhere else is fetched without a token. In
-both
-cases the last part loses a final `-developer` or `-runtime` and its optional
-`-linux` or `-rtems-beatnik`. For example:
+token only if that URL is on the same origin as the links URL. The token is
+scoped to that allowlisted origin, not to one project: anyone who can edit
+the release can point its link at another project on the same server that the
+token can read. As defence in depth, the link must also be a package file,
+`/api/v4/projects/<project path or numeric id>/packages/...`, or under the
+project's web path, `/<project path>/-/...`, after `.` and `..` segments are
+resolved; ibek does not check that a numeric id is the same project. A link
+anywhere else is fetched without a token, and so is every redirect after one
+that leaves the origin.
+
+For both GitHub and GitLab, the last part loses a final `-developer` or
+`-runtime` and its optional `-linux` or `-rtems-beatnik`. For example:
 
 ```text
 Image: gitlab.diamond.ac.uk:5050/controls/containers/iocs/ioc-dlslinuxvac/ioc-dlslinuxvac-linux-runtime:2026.11.3

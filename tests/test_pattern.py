@@ -1067,6 +1067,23 @@ def test_redirect_to_another_origin_drops_token(newurl):
     assert "pat" not in dict(new.header_items()).values()
 
 
+def test_redirect_back_to_the_origin_after_leaving_it_drops_token():
+    """gitlab -> elsewhere -> gitlab: the last hop is chosen by the other
+    server, so the token must not be added back."""
+    import urllib.request
+
+    auth = {"PRIVATE-TOKEN": "pat"}
+    request = urllib.request.Request(PERMALINK_URL)
+    request.add_unredirected_header("PRIVATE-TOKEN", "pat")
+    handler = schema._RedirectHandler(PERMALINK_URL, auth)
+    away = handler.redirect_request(
+        request, None, 302, "Found", {}, "https://objects.example.com/x"
+    )
+    back = handler.redirect_request(away, None, 302, "Found", {}, PACKAGE_URL)
+    assert back.full_url == PACKAGE_URL
+    assert "pat" not in dict(back.header_items()).values()
+
+
 @pytest.mark.parametrize(
     "newurl",
     [
@@ -1207,26 +1224,74 @@ def test_cache_from_another_url_is_not_revalidated(tmp_path: Path, monkeypatch):
         schema.fetch_base_schema(IMAGE, "https://other.example.com/{tag}.json")
 
 
-def test_cache_without_a_recorded_url_is_not_trusted(tmp_path: Path, monkeypatch):
-    """A validators record with no ``url`` cannot say where its schema came from."""
-    monkeypatch.setenv("IBEK_SCHEMA_CACHE", str(tmp_path / "cache"))
-    cache = schema._cache_path(IMAGE)
+def _write_record_without_url(image: str, cached: dict) -> None:
+    """A cache record as ibek wrote it before records named their URL."""
+    cache = schema._cache_path(image)
     cache.parent.mkdir(parents=True)
-    cache.write_text(json.dumps({"from": "unknown"}))
+    cache.write_text(json.dumps(cached))
     cache.with_suffix(".validators.json").write_text(json.dumps({"ETag": '"v1"'}))
+
+
+def test_cache_without_a_recorded_url_is_not_trusted(tmp_path: Path, monkeypatch):
+    """A validators record with no ``url`` is not evidence of what an override
+    serves: only the derived GitHub URL was fetched when it was written."""
+    monkeypatch.setenv("IBEK_SCHEMA_CACHE", str(tmp_path / "cache"))
+    _write_record_without_url(IMAGE, {"from": "unknown"})
     server = FakeServer({"from": "server"})
     monkeypatch.setattr(schema, "_http_get", server)
 
-    assert schema.fetch_base_schema(IMAGE) == {"from": "server"}
+    assert schema.fetch_base_schema(IMAGE, RECORDED_URL) == {"from": "server"}
     assert server.requests == [{}]  # not revalidated with the unknown ETag
 
     server.offline = True
-    cache.with_suffix(".validators.json").write_text(json.dumps({"ETag": '"v1"'}))
+    schema._cache_path(IMAGE).with_suffix(".validators.json").write_text(
+        json.dumps({"ETag": '"v1"'})
+    )
     with pytest.raises(schema.SchemaFetchError):
-        schema.fetch_base_schema(IMAGE)
+        schema.fetch_base_schema(IMAGE, RECORDED_URL)
+
+
+def test_cache_without_a_url_is_kept_for_the_derived_github_url(
+    tmp_path: Path, monkeypatch
+):
+    """A record written before records named their URL is for the derived
+    GitHub URL, so offline it still serves the instance, as it did then."""
+    monkeypatch.setenv("IBEK_SCHEMA_CACHE", str(tmp_path / "cache"))
+    _write_record_without_url(IMAGE, {"from": "cache"})
+    server = FakeServer({"from": "server"})
+    server.offline = True
+    monkeypatch.setattr(schema, "_http_get", server)
+
+    assert schema.fetch_base_schema(IMAGE) == {"from": "cache"}
+    assert server.requests == [{"If-None-Match": '"v1"'}]
+    # the derived URL given as an override is the same source
+    github = schema.published_schema_url(IMAGE)
+    assert schema.fetch_base_schema(IMAGE, github) == {"from": "cache"}
+
+
+def test_unshaped_schema_is_not_cached(tmp_path: Path, monkeypatch):
+    """A JSON reply that is not an ibek IOC schema must not reach the cache,
+    where a later run would revalidate it and keep it."""
+    monkeypatch.setenv("IBEK_SCHEMA_CACHE", str(tmp_path / "cache"))
+    server = FakeServer({"not": "a schema"})
+    monkeypatch.setattr(schema, "_http_get", server)
+
+    assert schema.fetch_base_schema(IMAGE) == {"not": "a schema"}
+    cache = schema._cache_path(IMAGE)
+    assert not cache.exists()
+    assert not cache.with_suffix(".validators.json").exists()
+    # the next run fetches it unconditionally
+    schema.fetch_base_schema(IMAGE)
+    assert server.requests == [{}, {}]
 
 
 IMAGE = "ghcr.io/epics-containers/ioc-adsimdetector-runtime:2025.11.1"
+
+
+def shaped(version: int) -> dict:
+    """The smallest schema with the shape of an ibek IOC schema."""
+    union = {"oneOf": [], "discriminator": {"mapping": {}}}
+    return {"version": version, "properties": {"entities": {"items": union}}}
 
 
 class FakeServer:
@@ -1281,18 +1346,18 @@ class GitLabServer(FakeServer):
 def test_fetch_gitlab_schema_through_release_links(tmp_path: Path, monkeypatch):
     monkeypatch.setenv("IBEK_SCHEMA_CACHE", str(tmp_path / "cache"))
     monkeypatch.setenv("IBEK_GITLAB_HOSTS", GITLAB_HOST)
-    server = GitLabServer({"version": 1})
+    server = GitLabServer(shaped(1))
     monkeypatch.setattr(schema, "_http_get", server)
 
-    assert schema.fetch_base_schema(DLSLINUXVAC) == {"version": 1}
+    assert schema.fetch_base_schema(DLSLINUXVAC) == shaped(1)
     assert server.urls == [LINKS_URL, PACKAGE_URL]
     # revalidated at the asset, looked up again through the links
-    assert schema.fetch_base_schema(DLSLINUXVAC) == {"version": 1}
+    assert schema.fetch_base_schema(DLSLINUXVAC) == shaped(1)
     assert server.urls[2:] == [LINKS_URL, PACKAGE_URL]
     assert server.requests[-1] == {"If-None-Match": '"v1"'}
     # offline, the cache keyed on the links URL is used
     server.offline = True
-    assert schema.fetch_base_schema(DLSLINUXVAC) == {"version": 1}
+    assert schema.fetch_base_schema(DLSLINUXVAC) == shaped(1)
 
 
 def test_gitlab_release_without_schema_asset_is_not_found(tmp_path: Path, monkeypatch):
@@ -1324,32 +1389,32 @@ def test_gitlab_links_404_hint(tmp_path: Path, monkeypatch, token):
 
 def test_fetch_base_schema_revalidates_cache(tmp_path: Path, monkeypatch, capsys):
     monkeypatch.setenv("IBEK_SCHEMA_CACHE", str(tmp_path / "cache"))
-    server = FakeServer({"version": 1})
+    server = FakeServer(shaped(1))
     monkeypatch.setattr(schema, "_http_get", server)
 
-    assert schema.fetch_base_schema(IMAGE) == {"version": 1}
+    assert schema.fetch_base_schema(IMAGE) == shaped(1)
     assert server.requests[-1] == {}
 
     # unchanged asset: conditional request, 304, cached copy used
-    assert schema.fetch_base_schema(IMAGE) == {"version": 1}
+    assert schema.fetch_base_schema(IMAGE) == shaped(1)
     assert server.requests[-1] == {"If-None-Match": '"v1"'}
 
     # re-uploaded asset for the same tag reaches the cache
-    server.schema, server.etag = {"version": 2}, '"v2"'
-    assert schema.fetch_base_schema(IMAGE) == {"version": 2}
+    server.schema, server.etag = shaped(2), '"v2"'
+    assert schema.fetch_base_schema(IMAGE) == shaped(2)
     assert "changed since it was cached" in capsys.readouterr().out
     server.offline = True
-    assert schema.fetch_base_schema(IMAGE) == {"version": 2}
+    assert schema.fetch_base_schema(IMAGE) == shaped(2)
 
 
 def test_fetch_base_schema_uses_cache_when_offline(tmp_path: Path, monkeypatch, capsys):
     monkeypatch.setenv("IBEK_SCHEMA_CACHE", str(tmp_path / "cache"))
-    server = FakeServer({"version": 1})
+    server = FakeServer(shaped(1))
     monkeypatch.setattr(schema, "_http_get", server)
     schema.fetch_base_schema(IMAGE)
 
     server.offline = True
-    assert schema.fetch_base_schema(IMAGE) == {"version": 1}
+    assert schema.fetch_base_schema(IMAGE) == shaped(1)
     assert "Using cached schema" in capsys.readouterr().out
 
 
@@ -1359,10 +1424,10 @@ def test_fetch_base_schema_without_validators_refetches(tmp_path: Path, monkeypa
     cache = schema._cache_path(IMAGE)
     cache.parent.mkdir(parents=True)
     cache.write_text(json.dumps({"version": "old"}))
-    server = FakeServer({"version": 1})
+    server = FakeServer(shaped(1))
     monkeypatch.setattr(schema, "_http_get", server)
 
-    assert schema.fetch_base_schema(IMAGE) == {"version": 1}
+    assert schema.fetch_base_schema(IMAGE) == shaped(1)
     assert server.requests == [{}]
 
 
@@ -1372,16 +1437,16 @@ def test_fetch_base_schema_recovers_from_invalid_cache(
 ):
     """A partial or corrupt cache record must lead to a fresh download."""
     monkeypatch.setenv("IBEK_SCHEMA_CACHE", str(tmp_path / "cache"))
-    server = FakeServer({"version": 1})
+    server = FakeServer(shaped(1))
     monkeypatch.setattr(schema, "_http_get", server)
     schema.fetch_base_schema(IMAGE)
     cache = schema._cache_path(IMAGE)
     broken = cache if record == "schema" else cache.with_suffix(".validators.json")
     broken.write_text('{"trunc')
 
-    assert schema.fetch_base_schema(IMAGE) == {"version": 1}
+    assert schema.fetch_base_schema(IMAGE) == shaped(1)
     assert server.requests[-1] == {}
-    assert json.loads(cache.read_text()) == {"version": 1}
+    assert json.loads(cache.read_text()) == shaped(1)
     assert not list(cache.parent.glob(".*"))  # no temporary files left behind
 
 
@@ -3054,6 +3119,8 @@ REFUSED_URLS = [
     ("https://gitlab.diamond.ac.uk\\@evil.example/s.json", "backslash"),
     ("https:///s.json", "has no host"),
     ("https://gitlab.diamond.ac.uk:x/s.json", "invalid port"),
+    # urlsplit raises for a netloc that NFKC normalisation changes
+    ("https://gitlab.diamond.ac.uk\uff03@evil.example/s.json", "cannot be parsed"),
 ]
 
 
@@ -3117,6 +3184,64 @@ def test_opener_handles_only_https():
     for url in ("file:///etc/passwd", "data:,{}", "http://localhost/"):
         with pytest.raises(urllib.error.URLError, match="unknown url type"):
             opener.open(url)
+
+
+def _clear_proxies(monkeypatch):
+    for name in ("https_proxy", "http_proxy", "no_proxy", "all_proxy"):
+        monkeypatch.delenv(name, raising=False)
+        monkeypatch.delenv(name.upper(), raising=False)
+
+
+@pytest.mark.parametrize("name", ["HTTPS_PROXY", "https_proxy"])
+def test_opener_honours_https_proxy(monkeypatch, name):
+    import ssl
+    import urllib.request
+
+    _clear_proxies(monkeypatch)
+    monkeypatch.setenv(name, "http://proxy.example:3128")
+    monkeypatch.setenv("FTP_PROXY", "http://proxy.example:3128")
+    opener = schema._opener(
+        ssl.create_default_context(), schema._RedirectHandler("https://x/", {})
+    )
+    proxies = [h for h in opener.handlers if isinstance(h, urllib.request.ProxyHandler)]
+    assert len(proxies) == 1
+    # only the https proxy, so no other scheme gains a handler
+    assert proxies[0].proxies == {"https": "http://proxy.example:3128"}
+
+
+def test_http_get_connects_through_https_proxy(monkeypatch) -> None:
+    """A fetch goes to the proxy named by HTTPS_PROXY as a CONNECT tunnel."""
+    import socket
+    import threading
+
+    _clear_proxies(monkeypatch)
+    server = socket.socket()
+    server.bind(("127.0.0.1", 0))
+    server.listen(1)
+    server.settimeout(5)
+    seen: list[bytes] = []
+
+    def accept():
+        try:
+            conn, _ = server.accept()
+        except OSError:
+            return
+        with conn:
+            conn.settimeout(5)
+            seen.append(conn.recv(4096))
+            conn.sendall(b"HTTP/1.1 403 Forbidden\r\nContent-Length: 0\r\n\r\n")
+
+    thread = threading.Thread(target=accept)
+    thread.start()
+    port = server.getsockname()[1]
+    monkeypatch.setenv("HTTPS_PROXY", f"http://127.0.0.1:{port}")
+    try:
+        with pytest.raises(schema.SchemaFetchError):
+            schema._http_get("https://schema.example/s.json", {})
+    finally:
+        thread.join(10)
+        server.close()
+    assert seen and seen[0].startswith(b"CONNECT schema.example:443 ")
 
 
 @pytest.mark.parametrize("url, problem", REFUSED_URLS)
@@ -3184,6 +3309,36 @@ def test_job_token_follows_ci_server_port(monkeypatch):
         ("https://evil.example/api/v4/projects/6713/packages/x", False),
         (PACKAGE_URL.replace(GITLAB_HOST, GITLAB_HOST + ":8443"), False),
         ("https://u@gitlab.diamond.ac.uk/api/v4/projects/6713/packages/x", False),
+        # dot segments that climb out of the packages API or the project
+        (
+            "https://gitlab.diamond.ac.uk/api/v4/projects/6713/packages/../../../user",
+            False,
+        ),
+        (
+            "https://gitlab.diamond.ac.uk/api/v4/projects/6713/packages/%2e%2e/variables",
+            False,
+        ),
+        (
+            "https://gitlab.diamond.ac.uk/api/v4/projects/6713/packages/%2E./%2e%2E/x",
+            False,
+        ),
+        ("https://gitlab.diamond.ac.uk/api/v4/projects/6713/packages/..%2fx", False),
+        (
+            "https://gitlab.diamond.ac.uk/controls/containers/iocs/ioc-dlslinuxvac"
+            "/-/../../other/-/raw/main/s.json",
+            False,
+        ),
+        (
+            "https://gitlab.diamond.ac.uk/controls/containers/iocs/ioc-dlslinuxvac"
+            "/-/%2e%2e/%2e%2e/other/-/raw/main/s.json",
+            False,
+        ),
+        # dot segments that stay inside
+        (
+            "https://gitlab.diamond.ac.uk/api/v4/projects/6713/packages/./generic/x",
+            True,
+        ),
+        ("https://gitlab.diamond.ac.uk/x/../api/v4/projects/6713/packages/x", True),
     ],
 )
 def test_token_may_follow_only_into_the_project(asset, expected):

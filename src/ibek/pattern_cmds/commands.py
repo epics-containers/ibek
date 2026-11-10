@@ -216,8 +216,8 @@ def schema(
             "--schema-url",
             help="Generate the schema from this base-schema URL and, if that "
             "works, record the URL in runtime-lock.yaml, replacing the one "
-            "derived from the image; may contain {registry}, {project}, {name} "
-            "and {tag}. An empty string clears it",
+            "derived from the image; may contain {registry}, {project}, "
+            "{project_encoded}, {name} and {tag}. An empty string clears it",
         ),
     ] = None,
 ):

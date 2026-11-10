@@ -393,8 +393,8 @@ class _RedirectHandler(urllib.request.HTTPRedirectHandler):
 
     urllib copies a request's ordinary headers to every redirect, whatever its
     host, so the token travels as an unredirected header and this handler
-    re-adds it only when the redirect stays on the scheme, host and port the
-    token was meant for. A GitLab release asset redirects to the package API
+    re-adds it only while every redirect so far has stayed on the scheme, host
+    and port the token was meant for. A GitLab release asset redirects to the package API
     on the same host, which needs the token again for a non-public project.
     """
 
@@ -402,6 +402,9 @@ class _RedirectHandler(urllib.request.HTTPRedirectHandler):
         super().__init__()
         self.origin = _origin(url)
         self.auth = auth
+        # Set once a redirect leaves the origin: a later hop back to it may
+        # be chosen by the other server, so it gets no token either.
+        self.left_origin = False
 
     def redirect_request(self, req, fp, code, msg, headers, newurl):
         problem = url_problem(newurl)
@@ -420,7 +423,9 @@ class _RedirectHandler(urllib.request.HTTPRedirectHandler):
             if self.auth:
                 raise SchemaFetchError(f"{message}; {REFUSED_HINT}")
             raise SchemaNotFoundError(f"{message}; {_no_token_hint(req.full_url)}")
-        if _origin(newurl) == self.origin:
+        if _origin(newurl) != self.origin:
+            self.left_origin = True
+        if not self.left_origin:
             for key, value in self.auth.items():
                 new.add_unredirected_header(key, value)
         return new
@@ -433,10 +438,16 @@ def _opener(
 
     ``build_opener`` would add handlers for ``file:``, ``ftp:``, ``data:`` and
     plain ``http:`` URLs; a schema URL is repository text, so none of them is
-    installed and such a URL fails as an unknown URL type.
+    installed and such a URL fails as an unknown URL type. The proxy handler
+    honours ``HTTPS_PROXY`` and ``NO_PROXY``, and is given only the ``https``
+    proxy, so no other proxy setting can add a handler for another scheme.
     """
+    proxies = urllib.request.getproxies()
     opener = urllib.request.OpenerDirector()
     for handler in (
+        urllib.request.ProxyHandler(
+            {"https": proxies["https"]} if "https" in proxies else {}
+        ),
         urllib.request.UnknownHandler(),
         urllib.request.HTTPSHandler(context=context),
         urllib.request.HTTPDefaultErrorHandler(),
@@ -542,12 +553,37 @@ def _gitlab_asset_url(links_url: str) -> str:
     )
 
 
-def _token_may_follow(links_url: str, asset_url: str) -> bool:
-    """True if a release's asset link is inside the project the links name.
+def _normal_path(path: str) -> str | None:
+    """``path`` with its dot segments removed, as a server resolves them.
 
-    The link must be on the links URL's origin, and under that project:
+    ``%2e`` is decoded first, since servers treat it as ``.``. Returns None if
+    a dot segment survives full decoding, for example one written with an
+    encoded ``/``, which servers split differently.
+    """
+    path = re.sub("%2e", ".", path, flags=re.I)
+    segments: list[str] = []
+    for segment in path.split("/"):
+        if segment == "..":
+            if len(segments) > 1:
+                segments.pop()
+        elif segment != ".":
+            segments.append(segment)
+    if path.endswith(("/.", "/..")):
+        segments.append("")
+    normal = "/".join(segments)
+    if any(part in (".", "..") for part in unquote(normal).split("/")):
+        return None
+    return normal
+
+
+def _token_may_follow(links_url: str, asset_url: str) -> bool:
+    """True if a release's asset link may be fetched with the token.
+
+    The token is scoped to the links URL's origin: the link must be on it. As
+    defence in depth the link must also be a package file,
     ``/api/v4/projects/<path or id>/packages/...`` (GitLab writes package
-    links with the numeric project id) or ``/<project path>/-/...``.
+    links with the numeric project id, which this does not resolve), or under
+    the project's web path, ``/<project path>/-/...``.
     """
     if url_problem(asset_url) or _origin(asset_url) != _origin(links_url):
         return False
@@ -557,7 +593,9 @@ def _token_may_follow(links_url: str, asset_url: str) -> bool:
         return False
     root, encoded = match.groups()
     project = unquote(encoded)
-    path = urlsplit(asset_url).path
+    path = _normal_path(urlsplit(asset_url).path)
+    if path is None:
+        return False
     api = re.escape(f"{root}/api/v4/projects/")
     return bool(
         re.match(rf"{api}(?:{re.escape(encoded)}|\d+)/packages/", path, re.I)
@@ -585,6 +623,15 @@ def _fetch_gitlab_asset(
         raise SchemaNotFoundError(message) from exc
 
 
+def _is_derived_github_url(image: str, url: str) -> bool:
+    """True if ``url`` is the GitHub release asset URL derived from ``image``."""
+    try:
+        on_github = _on_github(parse_image_ref(image))
+        return on_github and url == published_schema_url(image)
+    except SchemaNotFoundError:
+        return False
+
+
 def fetch_base_schema(image: str, recorded_url: str | None = None) -> dict:
     """Return the published base schema for ``image``.
 
@@ -594,7 +641,10 @@ def fetch_base_schema(image: str, recorded_url: str | None = None) -> dict:
     The cached copy for the image tag is revalidated with ``If-None-Match`` /
     ``If-Modified-Since``. The cached copy is also used when the fetch fails.
     An invalid cache record, or one that does not record the same source URL,
-    is ignored and downloaded again.
+    is ignored and downloaded again; a record with no URL is taken to be for
+    the GitHub URL derived from the image, the only one ibek fetched before
+    records named their URL. A fetched schema without the shape of an ibek
+    IOC schema is returned for the caller to refuse, and not cached.
 
     Raises:
         SchemaNotFoundError: no schema is published for the image.
@@ -608,6 +658,14 @@ def fetch_base_schema(image: str, recorded_url: str | None = None) -> dict:
 
     headers = {}
     validators = _read_json(validators_path) if cached is not None else None
+    if (
+        validators is not None
+        and "url" not in validators
+        and _is_derived_github_url(image, url)
+    ):
+        # Written before records named their URL, when ibek fetched only the
+        # GitHub URL derived from the image.
+        validators["url"] = url
     if validators is None or validators.get("url") != url:
         # The cached schema came from another source, for example before an
         # override was set, or does not say where it came from, so it is no
@@ -642,6 +700,10 @@ def fetch_base_schema(image: str, recorded_url: str | None = None) -> dict:
     except json.JSONDecodeError as exc:
         raise SchemaNotFoundError(f"{asset_url} did not return JSON: {exc}") from exc
 
+    if schema_shape_problem(schema):
+        # Not cached: the caller refuses it, and a later run must fetch again
+        # rather than revalidate it.
+        return schema
     if cached is not None and schema != cached:
         print(f"Published schema for {image} changed since it was cached")
     cache.parent.mkdir(parents=True, exist_ok=True)

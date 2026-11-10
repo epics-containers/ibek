@@ -20,7 +20,12 @@ def url_problem(url: str) -> str | None:
         return "contains a backslash"
     if any(ord(char) <= 32 or ord(char) == 127 for char in url):
         return "contains whitespace or a control character"
-    parts = urlsplit(url)
+    try:
+        parts = urlsplit(url)
+    except ValueError:
+        # For example a netloc that NFKC normalisation changes, such as a
+        # fullwidth "#" before "@".
+        return "cannot be parsed"
     if parts.scheme.lower() != "https":
         return "is not an https:// URL"
     if "@" in parts.netloc:
