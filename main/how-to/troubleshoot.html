@@ -7,7 +7,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Troubleshoot ibek &#8212; ibek 4.8.4.dev2+g37faa8bbc documentation</title>
+    <title>Troubleshoot ibek &#8212; ibek 4.8.4.dev8+gbbe37dcce documentation</title>
   
   
   
@@ -41,7 +41,7 @@
   <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=64cc4de3f052d77215f0" />
 <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=64cc4de3f052d77215f0" />
 
-    <script src="../_static/documentation_options.js?v=95d3a2ef"></script>
+    <script src="../_static/documentation_options.js?v=c3abbc5d"></script>
     <script src="../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -513,8 +513,18 @@ directory to reproduce a first download; the complete recipe and cache key are
 in <a class="reference internal" href="../reference/paths-and-environment.html"><span class="doc">Paths and environment</span></a>.</p>
 <p>If the command reports that schema generation was skipped, check the image
 in <code class="docutils literal notranslate"><span class="pre">values.yaml</span></code> or <code class="docutils literal notranslate"><span class="pre">compose.yml</span></code> / <code class="docutils literal notranslate"><span class="pre">compose.yaml</span></code>, its explicit tag, and the
-repository’s <code class="docutils literal notranslate"><span class="pre">ibek.ioc.schema.json</span></code> release asset. A skip leaves an existing
-schema untouched and exits 0.</p>
+repository’s <code class="docutils literal notranslate"><span class="pre">ibek.ioc.schema.json</span></code> release asset. The message names the URL
+that was tried; see <a class="reference internal" href="../reference/paths-and-environment.html#schema-url"><span class="std std-ref">Published schema URL</span></a> for how it is derived and how to
+override it. A skip leaves an existing schema untouched and exits 0.</p>
+<p>A skip saying the registry is not a GitLab host listed in <code class="docutils literal notranslate"><span class="pre">IBEK_GITLAB_HOSTS</span></code>
+means ibek did not look the image up: list the GitLab web host, for example
+<code class="docutils literal notranslate"><span class="pre">IBEK_GITLAB_HOSTS=gitlab.diamond.ac.uk</span></code>. <code class="docutils literal notranslate"><span class="pre">the</span> <span class="pre">base</span> <span class="pre">schema</span> <span class="pre">...</span> <span class="pre">is</span> <span class="pre">left</span> <span class="pre">unchanged</span></code> with exit 1 means the URL served JSON that is not an ibek IOC
+schema; check a recorded <code class="docutils literal notranslate"><span class="pre">schema_url</span></code> or <code class="docutils literal notranslate"><span class="pre">IBEK_SCHEMA_URL</span></code>.</p>
+<p>A skip saying the GitLab project <code class="docutils literal notranslate"><span class="pre">may</span> <span class="pre">be</span> <span class="pre">private</span> <span class="pre">or</span> <span class="pre">may</span> <span class="pre">not</span> <span class="pre">exist</span></code> means
+GitLab answered without a token. If the project is private, add its host to
+<code class="docutils literal notranslate"><span class="pre">IBEK_GITLAB_HOSTS</span></code> and set <code class="docutils literal notranslate"><span class="pre">GITLAB_TOKEN</span></code> to a token with <code class="docutils literal notranslate"><span class="pre">read_api</span></code> scope
+(see <a class="reference internal" href="../reference/paths-and-environment.html#schema-auth"><span class="std std-ref">Schema download authentication</span></a>). <code class="docutils literal notranslate"><span class="pre">the</span> <span class="pre">token</span> <span class="pre">was</span> <span class="pre">refused</span></code> means the token is invalid
+or expired, or cannot see the project.</p>
 <p>If the command exits 1 with <code class="docutils literal notranslate"><span class="pre">Cannot</span> <span class="pre">refresh</span> <span class="pre">...</span> <span class="pre">ioc.schema.json</span></code>, the fetch
 failed and ibek has no cached copy for the image tag. The message includes the
 cause: check network access and TLS certificates, or retry after a server error

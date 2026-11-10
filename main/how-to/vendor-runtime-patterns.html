@@ -7,7 +7,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Vendor runtime support &#8212; ibek 4.8.4.dev2+g37faa8bbc documentation</title>
+    <title>Vendor runtime support &#8212; ibek 4.8.4.dev8+gbbe37dcce documentation</title>
   
   
   
@@ -41,7 +41,7 @@
   <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=64cc4de3f052d77215f0" />
 <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=64cc4de3f052d77215f0" />
 
-    <script src="../_static/documentation_options.js?v=95d3a2ef"></script>
+    <script src="../_static/documentation_options.js?v=c3abbc5d"></script>
     <script src="../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -620,6 +620,20 @@ schema, and adds entities from top-level <code class="docutils literal notransla
 Existing base entity types are retained, not overridden. It also updates the
 first-line schema comment in <code class="docutils literal notranslate"><span class="pre">config/ioc.yaml</span></code> to reference
 <code class="docutils literal notranslate"><span class="pre">../ioc.schema.json</span></code>.</p>
+<p>The base schema is located from the image: a GitHub release asset for an
+image on <code class="docutils literal notranslate"><span class="pre">ghcr.io</span></code> or Docker Hub, or the schema link of a GitLab release for
+an image on a GitLab host listed in <code class="docutils literal notranslate"><span class="pre">IBEK_GITLAB_HOSTS</span></code> (at DLS,
+<code class="docutils literal notranslate"><span class="pre">IBEK_GITLAB_HOSTS=gitlab.diamond.ac.uk</span></code>). Other registries are skipped. For a
+non-public GitLab project, also set <code class="docutils literal notranslate"><span class="pre">GITLAB_TOKEN</span></code>; ibek sends a token to no
+unlisted host. If an image’s schema lives elsewhere, record its <code class="docutils literal notranslate"><span class="pre">https://</span></code> URL with the
+instance:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>ibek<span class="w"> </span>pattern<span class="w"> </span>schema<span class="w"> </span>services/my-ioc<span class="w"> </span>--schema-url<span class="w"> </span><span class="s1">'https://example.org/{tag}/ibek.ioc.schema.json'</span>
+</pre></div>
+</div>
+<p>This generates the schema from that URL and, if that works, writes
+<code class="docutils literal notranslate"><span class="pre">schema_url</span></code> to <code class="docutils literal notranslate"><span class="pre">runtime-lock.yaml</span></code>. For a single run,
+<code class="docutils literal notranslate"><span class="pre">IBEK_SCHEMA_URL</span></code> overrides both. See <a class="reference internal" href="../reference/paths-and-environment.html#schema-url"><span class="std std-ref">Published schema URL</span></a> and
+<a class="reference internal" href="../reference/paths-and-environment.html#schema-auth"><span class="std std-ref">Schema download authentication</span></a>.</p>
 <p>If no suitable image is found, or the image has no published schema (a 404 or
 410 response), schema generation prints a message and leaves the existing schema
 untouched; this is not a command failure. Vendoring still completes.</p>
@@ -669,7 +683,7 @@ copyable fresh-cache command.</p>
 </tr>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">runtime-lock.yaml</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">&lt;instance&gt;/</span></code></p></td>
-<td><p>Per-pattern version + source label + per-file SHA-256 (local-drift check), keyed relative to the instance root.</p></td>
+<td><p>Per-pattern version + source label + per-file SHA-256 (local-drift check), keyed relative to the instance root; optional <code class="docutils literal notranslate"><span class="pre">schema_url</span></code>.</p></td>
 </tr>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">ioc.schema.json</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">&lt;instance&gt;/</span></code></p></td>
