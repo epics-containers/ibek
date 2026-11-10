@@ -29,10 +29,11 @@ repository's `ibek.ioc.schema.json` release asset. The message names the URL
 that was tried; see {ref}`schema-url` for how it is derived and how to
 override it. A skip leaves an existing schema untouched and exits 0.
 
-`GitLab requires sign-in` means the image's GitLab project is not public: set
-`GITLAB_TOKEN` to a token with `read_api` scope (see {ref}`schema-auth`). A
-GitLab release whose schema link has no `direct_asset_path` returns 404 at the
-derived URL; record the package URL with `--schema-url` instead.
+A skip saying the GitLab project `may be private or may not exist` means
+GitLab answered without a token. If the project is private, add its host to
+`IBEK_GITLAB_HOSTS` and set `GITLAB_TOKEN` to a token with `read_api` scope
+(see {ref}`schema-auth`). `the token was refused` means the token is invalid
+or expired, or cannot see the project.
 
 If the command exits 1 with `Cannot refresh ... ioc.schema.json`, the fetch
 failed and ibek has no cached copy for the image tag. The message includes the

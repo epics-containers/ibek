@@ -23,13 +23,7 @@ from ibek.globals import RUNTIME_LOCK_NAME, NaturalOrderGroup
 
 from . import vendor
 from .lock import RuntimeLock, Selection, SelectRule
-from .schema import (
-    SchemaNotFoundError,
-    expand_schema_url,
-    find_image,
-    generate_instance_schema,
-    is_instance,
-)
+from .schema import SCHEMA_URL_ENV, generate_instance_schema, is_instance
 from .sources import PatternError
 
 log = logging.getLogger(__name__)
@@ -182,17 +176,29 @@ def restore(
 
 
 def _record_schema_url(dest: Path, url: str) -> None:
-    """Record ``url`` as the instance's schema URL; an empty ``url`` clears it."""
+    """Generate the schema from ``url``, then record ``url`` in the lock.
+
+    The URL is recorded only once a schema has been generated from it, so a
+    wrong URL leaves the lock as it was. An empty ``url`` clears the record,
+    and the schema is then generated from the URL derived from the image.
+    """
     url = url.strip()
-    image = find_image(dest)
-    if url and image:
-        try:
-            expand_schema_url(url, image)  # reject an unknown placeholder now
-        except SchemaNotFoundError:
-            pass  # an unparseable image is reported by schema generation
     lock = RuntimeLock(dest / RUNTIME_LOCK_NAME)
+    if url:
+        if os.getenv(SCHEMA_URL_ENV, "").strip():
+            raise PatternError(
+                f"{SCHEMA_URL_ENV} is set and would replace the URL being "
+                "recorded; unset it to record a schema URL"
+            )
+        if not generate_instance_schema(dest, candidate_url=url):
+            raise PatternError(
+                f"no schema was generated from {url}; it is not recorded in "
+                f"{lock.path.name}"
+            )
     lock.schema_url = url or None
     lock.save()
+    if not url:
+        generate_instance_schema(dest)
 
 
 @pattern_cli.command()
@@ -202,9 +208,10 @@ def schema(
         str | None,
         typer.Option(
             "--schema-url",
-            help="Record this base-schema URL in runtime-lock.yaml, replacing "
-            "the URL derived from the image; may contain {registry}, "
-            "{project}, {name} and {tag}. An empty string clears it",
+            help="Generate the schema from this base-schema URL and, if that "
+            "works, record the URL in runtime-lock.yaml, replacing the one "
+            "derived from the image; may contain {registry}, {project}, {name} "
+            "and {tag}. An empty string clears it",
         ),
     ] = None,
 ):
@@ -225,6 +232,7 @@ def schema(
     try:
         if schema_url is not None:
             _record_schema_url(dest, schema_url)
-        generate_instance_schema(dest)
+        else:
+            generate_instance_schema(dest)
     except PatternError as exc:
         _fail(exc)

@@ -8,18 +8,22 @@ Added
 ~~~~~
 
 ``ibek pattern schema`` finds the base schema of an image published on GitLab.
-An image on any registry other than ``ghcr.io`` or Docker Hub maps to
-``https://<web host>/<project path>/-/releases/<tag>/downloads/ibek.ioc.schema.json``,
+For an image on any registry other than ``ghcr.io`` or Docker Hub, ibek reads
+the ``ibek.ioc.schema.json`` link of release ``<tag>`` through
+``https://<web host>/api/v4/projects/<project path>/releases/<tag>/assets/links``,
 where the web host is the registry host without its port or ``registry.``
-prefix and the project path is the image path without its last part. ibek
-sends ``GITLAB_TOKEN`` as ``PRIVATE-TOKEN``, or GitLab CI's ``CI_JOB_TOKEN`` as
-``JOB-TOKEN``, only to a GitLab host over HTTPS, and never across a redirect
-to another origin. A non-public project with no token is reported as needing
-a token rather than as having no schema. An instance can record its schema URL
-in ``runtime-lock.yaml`` with ``ibek pattern schema --schema-url URL``, and
-``IBEK_SCHEMA_URL`` overrides it for one run; both accept ``{registry}``,
-``{project}``, ``{name}`` and ``{tag}``. A lock with a ``schema_url`` is written
-as ``version: 3``. See ``docs/reference/paths-and-environment.md`` (#375).
+prefix and the project path is the image path without its last part, then
+downloads that link. ibek sends ``GITLAB_TOKEN`` as ``PRIVATE-TOKEN`` only over
+HTTPS to a host listed in ``IBEK_GITLAB_HOSTS`` or equal to ``CI_SERVER_HOST``,
+never to GitHub, and never across a redirect to another origin; at DLS set
+``IBEK_GITLAB_HOSTS=gitlab.diamond.ac.uk``. Without ``GITLAB_TOKEN``, GitLab
+CI's ``CI_JOB_TOKEN`` is sent as ``JOB-TOKEN`` to ``CI_SERVER_HOST`` only. An
+instance can record its schema URL in ``runtime-lock.yaml`` with
+``ibek pattern schema --schema-url URL``, which records it only after a schema
+is generated from it, and ``IBEK_SCHEMA_URL`` overrides it for one run; both
+accept ``{registry}``, ``{project}``, ``{name}`` and ``{tag}``. A lock with a
+``schema_url`` is written as ``version: 3``. See
+``docs/reference/paths-and-environment.md`` (#375).
 
 Entity models accept a ``validate`` list of checks, each with an ``assert``
 Jinja expression (written without ``{{ }}``) and a ``message`` that may contain

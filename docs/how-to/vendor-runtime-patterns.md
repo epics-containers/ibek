@@ -156,16 +156,18 @@ Existing base entity types are retained, not overridden. It also updates the
 first-line schema comment in `config/ioc.yaml` to reference
 `../ioc.schema.json`.
 
-The base schema URL is derived from the image: a GitHub release asset for an
-image on `ghcr.io`, or a GitLab release asset for an image on another
-registry. Set `GITLAB_TOKEN` for a non-public GitLab project. If an image's
-schema lives elsewhere, record its URL with the instance:
+The base schema is located from the image: a GitHub release asset for an
+image on `ghcr.io`, or the schema link of a GitLab release for an image on
+another registry. For a non-public GitLab project, list its host in
+`IBEK_GITLAB_HOSTS` and set `GITLAB_TOKEN`; ibek sends a token to no other
+host. If an image's schema lives elsewhere, record its URL with the instance:
 
 ```bash
 ibek pattern schema services/my-ioc --schema-url 'https://example.org/{tag}/ibek.ioc.schema.json'
 ```
 
-This writes `schema_url` to `runtime-lock.yaml`. For a single run,
+This generates the schema from that URL and, if that works, writes
+`schema_url` to `runtime-lock.yaml`. For a single run,
 `IBEK_SCHEMA_URL` overrides both. See {ref}`schema-url` and
 {ref}`schema-auth`.
 
