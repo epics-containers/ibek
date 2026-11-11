@@ -53,38 +53,57 @@ from .sources import (
 from .vendor import CheckResult
 
 IMAGE_LOCK_VERSION = 1
-IMAGE_LOCK_KEYS = ("version", "patterns")
+IMAGE_LOCK_KEYS = ("version", "libraries")
 
 PVI_SUFFIX = ".pvi.device.yaml"
 PROTOCOL_SUFFIXES = (".proto", ".protocol")
 DATABASE_SUFFIXES = (".template", ".db")
 REQ_SUFFIX = ".req"
 
+# Folders under SUPPORT that are not a module's, so never a library's db home.
+RESERVED_SUPPORT_FOLDERS = frozenset({"configure"})
+
+# A pattern is identified by its library and its name: (library, pattern).
+PatternKey = tuple[str, str]
+
+
+def label(key: PatternKey) -> str:
+    """A pattern key as the ``library:pattern`` text of a reference."""
+    return f"{key[0]}:{key[1]}"
+
 
 class InstalledPattern(BaseSettings):
     """One installed pattern's image lock record.
 
-    ``files`` keys are paths relative to ``EPICS_ROOT``. ``commit`` is the
-    library commit for a git source, and None for a local folder, which has no
-    pinned commit.
+    ``files`` keys are paths relative to ``EPICS_ROOT``. ``verified`` is true
+    when the files came from a git clone of the library at ``version``, whose
+    ``commit`` is recorded; a local ``--source`` folder is used as it stands,
+    so its ``version`` is only a label, ``commit`` is None and ``verified`` is
+    false.
     """
 
-    library: str
     version: str
     source: str
     commit: str | None = None
+    verified: bool
     modules: list[str]
     files: dict[str, str]
 
 
 class ImageLock:
-    """Read/modify/write the image's pattern lock."""
+    """Read/modify/write the image's pattern lock.
+
+    On disk the patterns are grouped by library, under ``libraries:``.
+    """
 
     def __init__(self, path: Path):
         self.path = path
-        self.patterns: dict[str, InstalledPattern] = {}
+        self.patterns: dict[PatternKey, InstalledPattern] = {}
         if path.exists():
             self.load()
+
+    def libraries(self) -> set[str]:
+        return {library for library, _ in self.patterns}
 
     def load(self) -> None:
         try:
@@ -107,38 +126,44 @@ class ImageLock:
                 f"{self.path}: unknown top-level key(s) {', '.join(unknown)} "
                 f"(an image lock holds only {', '.join(IMAGE_LOCK_KEYS)})"
             )
-        patterns = raw.get("patterns") or {}
-        if not isinstance(patterns, dict):
-            raise PatternError(f"{self.path}: 'patterns' must be a mapping")
+        libraries = raw.get("libraries") or {}
+        if not isinstance(libraries, dict) or not all(
+            isinstance(patterns, dict) for patterns in libraries.values()
+        ):
+            raise PatternError(
+                f"{self.path}: 'libraries' must map each library to its patterns"
+            )
         try:
             self.patterns = {
-                str(name): InstalledPattern(**entry) for name, entry in patterns.items()
+                (str(library), str(name)): InstalledPattern(**entry)
+                for library, patterns in libraries.items()
+                for name, entry in patterns.items()
             }
         except (TypeError, ValidationError) as exc:
             raise PatternError(f"{self.path}: invalid pattern entry: {exc}") from exc
-        for name, entry in self.patterns.items():
-            for key in entry.files:
-                if _escapes(key):
+        for key, entry in self.patterns.items():
+            problem = library_problem(key[0])
+            if problem:
+                raise PatternError(f"{self.path}: library {key[0]!r} {problem}")
+            for rel in entry.files:
+                if _escapes(rel):
                     raise PatternError(
-                        f"{self.path}: pattern {name!r} file {key!r} is not a "
-                        "path inside EPICS_ROOT"
+                        f"{self.path}: pattern {label(key)!r} file {rel!r} is not "
+                        "a path inside EPICS_ROOT"
                     )
 
     def save(self) -> None:
-        data = {
-            "version": IMAGE_LOCK_VERSION,
-            "patterns": {
-                name: {
-                    "library": entry.library,
-                    "version": entry.version,
-                    "source": entry.source,
-                    "commit": entry.commit,
-                    "modules": list(entry.modules),
-                    "files": dict(sorted(entry.files.items())),
-                }
-                for name, entry in sorted(self.patterns.items())
-            },
-        }
+        libraries: dict[str, dict] = {}
+        for (library, name), entry in sorted(self.patterns.items()):
+            libraries.setdefault(library, {})[name] = {
+                "version": entry.version,
+                "source": entry.source,
+                "commit": entry.commit,
+                "verified": entry.verified,
+                "modules": list(entry.modules),
+                "files": dict(sorted(entry.files.items())),
+            }
+        data = {"version": IMAGE_LOCK_VERSION, "libraries": libraries}
         yaml = YAML()
         yaml.default_flow_style = False
         yaml.width = 4096
@@ -153,6 +178,21 @@ def _escapes(key: str) -> bool:
     return path.is_absolute() or ".." in path.parts
 
 
+def library_problem(library: str) -> str | None:
+    """Why ``library`` cannot name its folder under SUPPORT, or None if it can.
+
+    The library names the folder its database and req files go in, so it must
+    be one plain folder name, and not a folder SUPPORT reserves.
+    """
+    if not library or "/" in library or "\\" in library:
+        return "must be a single folder name"
+    if library.startswith("."):
+        return "must not start with '.'"
+    if library in RESERVED_SUPPORT_FOLDERS:
+        return f"is reserved: {library}/ under the support folder is not a module"
+    return None
+
+
 @dataclass
 class _Fetched:
     """A pattern fetched for installing."""
@@ -163,12 +203,16 @@ class _Fetched:
     source: str
     commit: str | None
 
+    @property
+    def key(self) -> PatternKey:
+        return (self.library, self.ref.name)
+
 
 @dataclass
 class _Placement:
     """One file to install: where it comes from and where it goes."""
 
-    pattern: str
+    pattern: PatternKey
     source: Path
     target: Path
 
@@ -193,7 +237,7 @@ def parse_install_refs(refs: list[str]) -> list[PatternRef]:
     if not refs:
         raise PatternError("no patterns to install")
     parsed: list[PatternRef] = []
-    seen: set[str] = set()
+    seen: set[PatternKey] = set()
     for text in refs:
         ref = parse_ref(text)
         if not ref.library or not ref.version:
@@ -201,9 +245,13 @@ def parse_install_refs(refs: list[str]) -> list[PatternRef]:
                 f"{text!r}: install needs library:pattern@version, "
                 "e.g. ibek-runtime-streamdevice:lakeshore340@1.0.0"
             )
-        if ref.name in seen:
-            raise PatternError(f"pattern {ref.name!r} is listed more than once")
-        seen.add(ref.name)
+        problem = library_problem(ref.library)
+        if problem:
+            raise PatternError(f"{text!r}: library {ref.library!r} {problem}")
+        key = (ref.library, ref.name)
+        if key in seen:
+            raise PatternError(f"pattern {label(key)!r} is listed more than once")
+        seen.add(key)
         parsed.append(ref)
     return parsed
 
@@ -296,6 +344,35 @@ def _image_modules() -> dict[str, Path]:
     return modules
 
 
+def _refuse_nested_references(path: Path, pattern: str) -> None:
+    """Refuse a support YAML that names a database or PVI file by a path.
+
+    Install places every file by its name alone, in a folder on the search
+    path for its type, so a reference such as ``db/x.template`` would name a
+    file that is not there.
+    """
+    data = YAML(typ="safe").load(path)
+    for model in data.get("entity_models") or []:
+        if not isinstance(model, dict):
+            continue
+        references = [
+            database.get("file")
+            for database in model.get("databases") or []
+            if isinstance(database, dict)
+        ]
+        pvi = model.get("pvi")
+        if isinstance(pvi, dict):
+            references.append(pvi.get("yaml_path"))
+        for reference in references:
+            if isinstance(reference, str) and "/" in reference:
+                raise PatternError(
+                    f"{pattern}: {path.name} entity model {model.get('name')!r} "
+                    f"refers to {reference!r}; install places files by name "
+                    "alone, so a pattern installed in an image must refer to "
+                    "its database and PVI files by name"
+                )
+
+
 class _Planner:
     """Plans the placements of one run, refusing anything that would collide."""
 
@@ -303,12 +380,12 @@ class _Planner:
         self.modules: dict[str, str] = {
             module: str(path) for module, path in _image_modules().items()
         }
-        self.owners: dict[Path, str] = {}
+        self.owners: dict[Path, PatternKey] = {}
         # database and req file names this run installs, across every library
         self.names: dict[str, Path] = {}
         self._support_reqs: dict[str, Path] | None = None
         self.placements: list[_Placement] = []
-        self.pattern_modules: dict[str, list[str]] = {}
+        self.pattern_modules: dict[PatternKey, list[str]] = {}
 
     def support_reqs(self) -> dict[str, Path]:
         """Every req file under SUPPORT by name; read once, when first needed."""
@@ -319,7 +396,8 @@ class _Planner:
         return self._support_reqs
 
     def plan(self, fetched: _Fetched) -> None:
-        name = fetched.ref.name
+        key = fetched.key
+        name = label(key)
         selected = plan_vendor(fetched.pattern_dir)
         support = [src for src, _ in selected if src.name.endswith(SUPPORT_YAML_SUFFIX)]
         if not support:
@@ -327,6 +405,7 @@ class _Planner:
         modules = []
         for path in support:
             module = _defined_module(path, name)
+            _refuse_nested_references(path, name)
             if module in self.modules:
                 raise PatternError(
                     f"{name}: module {module!r} is already defined by "
@@ -334,11 +413,13 @@ class _Planner:
                 )
             self.modules[module] = f"pattern {name} ({path.name})"
             modules.append(module)
-        self.pattern_modules[name] = sorted(modules)
+        self.pattern_modules[key] = sorted(modules)
         for src, _ in selected:
-            self._place(name, fetched.library, src)
+            self._place(key, src)
 
-    def _place(self, name: str, library: str, src: Path) -> None:
+    def _place(self, key: PatternKey, src: Path) -> None:
+        name = label(key)
+        library = key[0]
         file_name = src.name
         folder = _destination(file_name, library)
         if folder is None:
@@ -355,8 +436,8 @@ class _Planner:
             other = self.owners[target]
             raise PatternError(
                 f"{name}: {target} is installed twice by this pattern"
-                if other == name
-                else f"{name} and {other} both install {target}"
+                if other == key
+                else f"{name} and {label(other)} both install {target}"
             )
         if file_name.endswith(DATABASE_SUFFIXES):
             # msi takes the first match on its ${SUPPORT}/*/db include path
@@ -379,8 +460,8 @@ class _Planner:
                     "autosave would use only one of them"
                 )
             self._refuse_planned_name(name, target)
-        self.owners[target] = name
-        self.placements.append(_Placement(pattern=name, source=src, target=target))
+        self.owners[target] = key
+        self.placements.append(_Placement(pattern=key, source=src, target=target))
 
     def _refuse_planned_name(self, name: str, target: Path) -> None:
         other = self.names.get(target.name)
@@ -406,40 +487,51 @@ def install(
     """
     lock = ImageLock(GLOBALS.IMAGE_PATTERN_LOCK)
     parsed = parse_install_refs(refs)
+    installed_libraries = lock.libraries()
     for ref in parsed:
-        if ref.name in lock.patterns:
-            entry = lock.patterns[ref.name]
+        assert ref.library  # parse_install_refs guarantees it
+        key = (ref.library, ref.name)
+        if key in lock.patterns:
             raise PatternError(
-                f"pattern {ref.name!r} is already installed in this image "
-                f"({entry.library}@{entry.version})"
+                f"pattern {label(key)!r} is already installed in this image "
+                f"(version {lock.patterns[key].version})"
+            )
+        folder = GLOBALS.SUPPORT / ref.library
+        if ref.library not in installed_libraries and (
+            folder.exists() or folder.is_symlink()
+        ):
+            raise PatternError(
+                f"{label(key)!r}: {folder} already exists and holds no installed "
+                "pattern; a library must not share a support module's folder"
             )
     with tempfile.TemporaryDirectory() as tmp:
         fetched = _fetch_all(parsed, source_override, extra_libraries, Path(tmp))
         planner = _Planner()
         for item in fetched:
             planner.plan(item)
-        files: dict[str, dict[str, str]] = {item.ref.name: {} for item in fetched}
+        files: dict[PatternKey, dict[str, str]] = {item.key: {} for item in fetched}
         for placement in planner.placements:
             # The hash is taken from the bytes read, not a re-read of the
-            # target, as for `add`.
+            # target, as for `add`. A write that fails here (a full disk, a
+            # permission) leaves the files written so far and no lock entry;
+            # at image build time that fails the build step.
             data = placement.source.read_bytes()
             placement.target.parent.mkdir(parents=True, exist_ok=True)
             placement.target.write_bytes(data)
-            key = placement.target.relative_to(GLOBALS.EPICS_ROOT).as_posix()
-            files[placement.pattern][key] = file_hash(data)
+            rel = placement.target.relative_to(GLOBALS.EPICS_ROOT).as_posix()
+            files[placement.pattern][rel] = file_hash(data)
     for item in fetched:
-        name = item.ref.name
         assert item.ref.version  # parse_install_refs guarantees it
-        lock.patterns[name] = InstalledPattern(
-            library=item.library,
+        lock.patterns[item.key] = InstalledPattern(
             version=item.ref.version,
             source=item.source,
             commit=item.commit,
-            modules=planner.pattern_modules[name],
-            files=files[name],
+            verified=item.commit is not None,
+            modules=planner.pattern_modules[item.key],
+            files=files[item.key],
         )
     lock.save()
-    return [item.ref.name for item in fetched]
+    return [label(item.key) for item in fetched]
 
 
 def check_image(allow_dirty: bool = False) -> CheckResult:
@@ -450,7 +542,8 @@ def check_image(allow_dirty: bool = False) -> CheckResult:
     except PatternError as exc:
         result.failures.append(str(exc))
         return result
-    for name, entry in lock.patterns.items():
+    for key, entry in lock.patterns.items():
+        name = label(key)
         for rel, expected in entry.files.items():
             target = GLOBALS.EPICS_ROOT / rel
             if not target.is_file():

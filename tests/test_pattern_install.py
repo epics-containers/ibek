@@ -128,8 +128,8 @@ def test_install_routes_files_and_writes_lock(tmp_epics_root: Path, library: Pat
     lock = read_lock()
     assert GLOBALS.IMAGE_PATTERN_LOCK == epics / "ibek-defs" / IMAGE_LOCK_NAME
     assert lock["version"] == 1
-    entry = lock["patterns"]["dev"]
-    assert entry["library"] == "mylib"
+    entry = lock["libraries"]["mylib"]["dev"]
+    assert entry["verified"] is False
     assert entry["version"] == "1.0.0"
     assert entry["source"] == str(library)
     assert entry["commit"] is None
@@ -148,7 +148,7 @@ def test_install_list_file(tmp_epics_root: Path, library: Path, tmp_path: Path, 
     listing.write_text("# vacuum devices\nmylib:dev@1.0.0\n\nmylib:other@1.0.0  # x\n")
     code, output = run("install", "--list", listing, "--source", library)
     assert code == 0, output
-    assert set(read_lock()["patterns"]) == {"dev", "other"}
+    assert set(read_lock()["libraries"]["mylib"]) == {"dev", "other"}
 
 
 def test_check_image_reports_changes(tmp_epics_root: Path, library: Path, run):
@@ -169,6 +169,7 @@ def test_check_image_reports_changes(tmp_epics_root: Path, library: Path, run):
 def test_check_image_without_lock(tmp_epics_root: Path, run):
     code, output = run("check", "--image")
     assert code == 0, output
+    assert "no image lock: nothing installed" in output
 
 
 def test_check_image_refuses_bad_lock(tmp_epics_root: Path, run):
@@ -179,9 +180,9 @@ def test_check_image_refuses_bad_lock(tmp_epics_root: Path, run):
 
 def test_lock_refuses_escaping_key(tmp_epics_root: Path, run):
     GLOBALS.IMAGE_PATTERN_LOCK.write_text(
-        "version: 1\npatterns:\n  dev:\n    library: l\n    version: '1'\n"
-        "    source: s\n    modules: [dev]\n    files:\n"
-        "      ../etc/passwd: sha256:00\n"
+        "version: 1\nlibraries:\n  l:\n    dev:\n      version: '1'\n"
+        "      source: s\n      verified: false\n      modules: [dev]\n"
+        "      files:\n        ../etc/passwd: sha256:00\n"
     )
     code, _ = run("check", "--image")
     assert code == 1
@@ -192,7 +193,7 @@ def test_second_run_appends_and_refuses_reinstall(
 ):
     assert run("install", "mylib:dev@1.0.0", "--source", library)[0] == 0
     assert run("install", "mylib:other@1.0.0", "--source", library)[0] == 0
-    assert set(read_lock()["patterns"]) == {"dev", "other"}
+    assert set(read_lock()["libraries"]["mylib"]) == {"dev", "other"}
 
     before = snapshot(tmp_epics_root)
     code, output = run("install", "mylib:dev@1.0.0", "--source", library)
@@ -235,9 +236,10 @@ def test_install_from_git_records_commit_and_clones_once(
     code, output = run("install", "mylib:dev@1.0.0", "mylib:other@1.0.0")
     assert code == 0, output
     assert clones == [(str(library), "1.0.0")]
-    lock = read_lock()
-    assert lock["patterns"]["dev"]["commit"] == commit
-    assert lock["patterns"]["other"]["commit"] == commit
+    patterns = read_lock()["libraries"]["mylib"]
+    assert patterns["dev"]["commit"] == commit
+    assert patterns["other"]["commit"] == commit
+    assert patterns["dev"]["verified"] is True
 
 
 # --------------------------------------------------------------------------- #
@@ -326,17 +328,42 @@ def _setup_missing_pattern(epics: Path, library: Path) -> list[str]:
     return ["mylib:dev@1", "mylib:absent@1"]
 
 
+def _setup_nested_database(epics: Path, library: Path) -> list[str]:
+    (library / "other" / "other.ibek.support.yaml").write_text(
+        support_yaml("other").replace(
+            "    parameters: {}\n",
+            "    parameters: {}\n    databases:\n      - file: db/other.template\n",
+        )
+    )
+    return ["mylib:dev@1", "mylib:other@1"]
+
+
+def _setup_nested_pvi(epics: Path, library: Path) -> list[str]:
+    (library / "other" / "other.ibek.support.yaml").write_text(
+        support_yaml("other").replace(
+            "    parameters: {}\n",
+            "    parameters: {}\n    pvi:\n      yaml_path: x/other.pvi.device.yaml\n",
+        )
+    )
+    return ["mylib:dev@1", "mylib:other@1"]
+
+
+def _setup_library_is_module_folder(epics: Path, library: Path) -> list[str]:
+    # the sample tree's support/ holds the compiled module ADSimDetector
+    return ["mylib:dev@1", "ADSimDetector:other@1"]
+
+
 @pytest.mark.parametrize(
     "setup, message",
     [
         (_setup_module_in_image, "module 'dev' is already defined by"),
         (_setup_existing_file, "dev.proto already exists"),
-        (_setup_shared_file, "other and dev both install"),
-        (_setup_shared_module, "module 'dev' is already defined by pattern dev"),
+        (_setup_shared_file, "mylib:other and mylib:dev both install"),
+        (_setup_shared_module, "module 'dev' is already defined by pattern mylib:dev"),
         (_setup_same_name_twice_in_pattern, "is installed twice by this pattern"),
         (_setup_listed_twice, "listed more than once"),
         (_setup_selects_nothing, "nothing would be vendored"),
-        (_setup_no_support_yaml, "other: selects no *.ibek.support.yaml"),
+        (_setup_no_support_yaml, "mylib:other: selects no *.ibek.support.yaml"),
         (_setup_no_module, "declares no module"),
         (_setup_template_elsewhere, "dummy.template is also installed as"),
         (_setup_req_in_support, "dummy_settings.req is also installed as"),
@@ -345,6 +372,9 @@ def _setup_missing_pattern(epics: Path, library: Path) -> list[str]:
         (_setup_no_version, "install needs library:pattern@version"),
         (_setup_no_library, "install needs library:pattern@version"),
         (_setup_missing_pattern, "pattern 'absent' not found"),
+        (_setup_nested_database, "refers to 'db/other.template'"),
+        (_setup_nested_pvi, "refers to 'x/other.pvi.device.yaml'"),
+        (_setup_library_is_module_folder, "a library must not share a support"),
     ],
 )
 def test_install_refusals_write_nothing(
@@ -420,3 +450,42 @@ def test_warn_shadowed_modules(tmp_path: Path, capsys):
 
     warn_shadowed_modules([other], [instance])
     assert capsys.readouterr().err == ""
+
+
+@pytest.mark.parametrize(
+    "library_name, message",
+    [
+        ("../../outside", "must be a single folder name"),
+        ("a/b", "must be a single folder name"),
+        (".hidden", "must not start with '.'"),
+        ("..", "must not start with '.'"),
+        ("configure", "is reserved"),
+    ],
+)
+def test_library_name_must_be_a_plain_folder(
+    tmp_epics_root: Path, library: Path, run, library_name: str, message: str
+):
+    before = snapshot(tmp_epics_root.parent)
+    code, output = run("install", f"{library_name}:dev@1.0", "--source", library)
+    assert code == 1
+    assert message in output
+    assert snapshot(tmp_epics_root.parent) == before
+
+
+def test_same_pattern_name_in_two_libraries(
+    tmp_epics_root: Path, tmp_path: Path, run, monkeypatch
+):
+    """A pattern is identified by its library and its name together."""
+    lib_a = make_pattern(tmp_path / "a", "dev", device_files("dev"))
+    lib_b = make_pattern(tmp_path / "b", "dev", device_files("dev2"))
+    monkeypatch.setenv("IBEK_PATTERN_LIBRARIES", f"liba={lib_a},libb={lib_b}")
+    code, output = run("install", "liba:dev@1", "libb:dev@1")
+    assert code == 0, output
+    libraries = read_lock()["libraries"]
+    assert libraries["liba"]["dev"]["modules"] == ["dev"]
+    assert libraries["libb"]["dev"]["modules"] == ["dev2"]
+    assert run("check", "--image")[0] == 0
+
+    code, output = run("install", "libb:dev@1")
+    assert code == 1
+    assert "'libb:dev' is already installed" in output

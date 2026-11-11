@@ -227,6 +227,11 @@ def check(
     """Verify vendored files match runtime-lock.yaml (vendor integrity)."""
     allow = allow_dirty or os.getenv("IBEK_ALLOW_DIRTY") == "1"
     if image:
+        if not GLOBALS.IMAGE_PATTERN_LOCK.exists():
+            typer.echo(
+                f"no image lock: nothing installed ({GLOBALS.IMAGE_PATTERN_LOCK})"
+            )
+            return
         result = image_install.check_image(allow_dirty=allow)
         ok_message = f"{GLOBALS.EPICS_ROOT}: installed patterns match the image lock"
     else:

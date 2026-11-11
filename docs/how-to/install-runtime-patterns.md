@@ -20,14 +20,20 @@ To vendor a pattern into one instance instead, see
 
 Each reference is `library:pattern@version`: both the library and the version
 are required, because an image is built from pins and the library names the
-support folder the pattern's database files go in. `--list FILE` reads further
-references from a file, one per line, with `#` starting a comment. A pattern
-may appear only once in a run.
+support folder the pattern's database files go in. A library name must
+therefore be a single folder name that does not start with `.`; it may not be
+`configure`, or the name of a folder already under `/epics/support` other
+than one an earlier `ibek pattern install` created for that library.
+`--list FILE` reads further references from a file, one per line, with `#`
+starting a comment. A pattern is identified by its library and its name
+together, and may appear only once in a run.
 
 `--source` fetches every pattern from one library location (a git URL or a
 local folder) instead of the one its library name resolves to; see
 {doc}`../reference/paths-and-environment` for `IBEK_PATTERN_LIBRARIES`. Each git
 library is cloned once per version, however many of its patterns are listed.
+A local folder is used as it stands, without checking out the version, so its
+version is only a label: the lock records such a pattern as not verified.
 
 ## Where the files go
 
@@ -42,15 +48,23 @@ image's compiled support modules put theirs:
 | `*.proto`, `*.protocol` | `/epics/support/configure/protocol` | the start script, which copies it to the protocol path |
 | `*.template`, `*.db`, `*.req` | `/epics/support/<library>/db` | msi's `/epics/support/*/db` include path, autosave's req file search |
 
-A selected file of any other type is refused. The paths follow `EPICS_ROOT`.
-`ibek ioc extract-runtime-assets` carries all of them into the runtime image
-with its default assets.
+A selected file of any other type is refused. Files are placed by name alone,
+so a pattern's support YAML must name its databases (`databases[].file`) and
+PVI files (`pvi.yaml_path`) without a folder; one that names them by a path is
+refused. The paths follow `EPICS_ROOT`.
+
+`ibek ioc extract-runtime-assets` carries all of them into the runtime image:
+`ibek-defs`, `pvi-defs` and `support/configure` are among its default assets,
+and `support/<library>/db` is picked up by its search for modules' `db`
+folders.
 
 ## What is refused
 
 Every pattern in a run is fetched and every destination planned before any
 file is written. If anything below is found, the install fails and writes
-nothing:
+nothing. (A write that fails part way, on a full disk for example, leaves the
+files written so far and no lock entry; in a Dockerfile that fails the build
+step.)
 
 - a module that a support YAML in `/epics/ibek-defs`, or an earlier pattern in
   the run, already defines;
@@ -59,6 +73,9 @@ nothing:
 - a pattern listed twice, or one already recorded in the image lock;
 - a pattern that selects no files or no `*.ibek.support.yaml`, or a support
   YAML that declares no `module`;
+- a support YAML that names a database or PVI file by a path;
+- a library name that is not a plain folder name, or that names an existing
+  support module's folder;
 - a `.template` or `.db` name already in another module's `db/` folder, or
   installed from another library in the same run: msi loads the first match on
   its include path;
@@ -72,24 +89,27 @@ What a run installs is recorded in `/epics/ibek-defs/runtime-patterns.lock.yaml`
 
 ```yaml
 version: 1
-patterns:
-  EdwardsScroll:
-    library: ibek-runtime-streamdevice
-    version: 0.7.3
-    source: github.com/epics-containers/ibek-runtime-streamdevice
-    commit: 4f0c1e2...
-    modules:
-    - EdwardsScroll
-    files:
-      ibek-defs/EdwardsScroll.ibek.support.yaml: sha256:...
-      support/configure/protocol/EdScroll.proto: sha256:...
-      support/ibek-runtime-streamdevice/db/EdwardsScroll.template: sha256:...
+libraries:
+  ibek-runtime-streamdevice:
+    EdwardsScroll:
+      version: 0.7.3
+      source: github.com/epics-containers/ibek-runtime-streamdevice
+      commit: 4f0c1e2...
+      verified: true
+      modules:
+      - EdwardsScroll
+      files:
+        ibek-defs/EdwardsScroll.ibek.support.yaml: sha256:...
+        support/configure/protocol/EdScroll.proto: sha256:...
+        support/ibek-runtime-streamdevice/db/EdwardsScroll.template: sha256:...
 ```
 
-`commit` is the library commit the version resolved to; it is empty for a local
-`--source` folder, which has no pinned commit. `modules` lists the modules the
-pattern's support YAML defines, so a tool can tell which modules the image
-provides from patterns. File paths are relative to `EPICS_ROOT`.
+Patterns are grouped by library. `commit` is the library commit the version
+resolved to, and `verified` is `true`, when the library was cloned from git at
+that version. A pattern from a local `--source` folder has `commit: null` and
+`verified: false`: its files are whatever the folder held. `modules` lists the
+modules the pattern's support YAML defines, so a tool can tell which modules
+the image provides from patterns. File paths are relative to `EPICS_ROOT`.
 
 A later `ibek pattern install` adds its patterns to the lock. The lock is in
 `/epics/ibek-defs`, so it reaches the runtime image with the support YAML it
@@ -98,6 +118,9 @@ describes. Verify the installed files against it, in either stage:
 ```bash
 ibek pattern check --image
 ```
+
+In an image with no lock it reports `no image lock: nothing installed` and
+succeeds.
 
 ## Instances that also vendor a pattern
 
