@@ -102,8 +102,18 @@ class ImageLock:
         if path.exists():
             self.load()
 
-    def libraries(self) -> set[str]:
-        return {library for library, _ in self.patterns}
+    def support_folder_owners(self) -> set[str]:
+        """Libraries whose own installed files are under ``support/<library>/``.
+
+        Only such a library made its support folder; one whose patterns had no
+        database or req files did not, so a folder of its name is someone
+        else's.
+        """
+        return {
+            library
+            for (library, _), entry in self.patterns.items()
+            if any(Path(rel).parts[:2] == ("support", library) for rel in entry.files)
+        }
 
     def load(self) -> None:
         try:
@@ -364,7 +374,7 @@ def _refuse_nested_references(path: Path, pattern: str) -> None:
         if isinstance(pvi, dict):
             references.append(pvi.get("yaml_path"))
         for reference in references:
-            if isinstance(reference, str) and "/" in reference:
+            if isinstance(reference, str) and ("/" in reference or "\\" in reference):
                 raise PatternError(
                     f"{pattern}: {path.name} entity model {model.get('name')!r} "
                     f"refers to {reference!r}; install places files by name "
@@ -487,7 +497,7 @@ def install(
     """
     lock = ImageLock(GLOBALS.IMAGE_PATTERN_LOCK)
     parsed = parse_install_refs(refs)
-    installed_libraries = lock.libraries()
+    folder_owners = lock.support_folder_owners()
     for ref in parsed:
         assert ref.library  # parse_install_refs guarantees it
         key = (ref.library, ref.name)
@@ -497,7 +507,7 @@ def install(
                 f"(version {lock.patterns[key].version})"
             )
         folder = GLOBALS.SUPPORT / ref.library
-        if ref.library not in installed_libraries and (
+        if ref.library not in folder_owners and (
             folder.exists() or folder.is_symlink()
         ):
             raise PatternError(

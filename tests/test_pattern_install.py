@@ -348,6 +348,16 @@ def _setup_nested_pvi(epics: Path, library: Path) -> list[str]:
     return ["mylib:dev@1", "mylib:other@1"]
 
 
+def _setup_nested_backslash(epics: Path, library: Path) -> list[str]:
+    (library / "other" / "other.ibek.support.yaml").write_text(
+        support_yaml("other").replace(
+            "    parameters: {}\n",
+            "    parameters: {}\n    databases:\n      - file: db\\other.template\n",
+        )
+    )
+    return ["mylib:dev@1", "mylib:other@1"]
+
+
 def _setup_library_is_module_folder(epics: Path, library: Path) -> list[str]:
     # the sample tree's support/ holds the compiled module ADSimDetector
     return ["mylib:dev@1", "ADSimDetector:other@1"]
@@ -374,6 +384,7 @@ def _setup_library_is_module_folder(epics: Path, library: Path) -> list[str]:
         (_setup_missing_pattern, "pattern 'absent' not found"),
         (_setup_nested_database, "refers to 'db/other.template'"),
         (_setup_nested_pvi, "refers to 'x/other.pvi.device.yaml'"),
+        (_setup_nested_backslash, "refers to 'db\\\\other.template'"),
         (_setup_library_is_module_folder, "a library must not share a support"),
     ],
 )
@@ -489,3 +500,23 @@ def test_same_pattern_name_in_two_libraries(
     code, output = run("install", "libb:dev@1")
     assert code == 1
     assert "'libb:dev' is already installed" in output
+
+
+def test_module_folder_after_install_without_database_files(
+    tmp_epics_root: Path, tmp_path: Path, run
+):
+    """A library in the lock owns support/<library> only if it put files there."""
+    files = device_files("dev")
+    del files["db/dev.template"], files["db/dev_settings.req"]
+    lib = make_pattern(tmp_path / "lib2", "dev", files)
+    make_pattern(lib, "other", device_files("other"))
+    assert run("install", "mylib:dev@1", "--source", lib)[0] == 0
+    assert not (tmp_epics_root / "support" / "mylib").exists()
+
+    # a compiled module of the library's name is built after that install
+    (tmp_epics_root / "support" / "mylib" / "db").mkdir(parents=True)
+    before = snapshot(tmp_epics_root)
+    code, output = run("install", "mylib:other@1", "--source", lib)
+    assert code == 1
+    assert "a library must not share a support" in output
+    assert snapshot(tmp_epics_root) == before
