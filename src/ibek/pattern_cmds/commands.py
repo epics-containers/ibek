@@ -8,6 +8,10 @@ integrity hashes. Which files are copied and where they land is declared by the
 pattern's ``ibek.manifest.yaml``. This restores a per-instance version axis
 independent of the image, and makes "what is this IOC running?" answerable from
 the committed lock with cryptographic certainty.
+
+``ibek pattern install`` instead installs patterns into a generic IOC image at
+build time, beside the image's compiled support modules, recorded in the image
+lock ``GLOBALS.IMAGE_PATTERN_LOCK``.
 """
 
 from __future__ import annotations
@@ -19,8 +23,9 @@ from typing import Annotated
 
 import typer
 
-from ibek.globals import RUNTIME_LOCK_NAME, NaturalOrderGroup
+from ibek.globals import GLOBALS, RUNTIME_LOCK_NAME, NaturalOrderGroup
 
+from . import install as image_install
 from . import vendor
 from .lock import RuntimeLock, Selection, SelectRule
 from .schema import (
@@ -126,6 +131,61 @@ def add(
 
 
 @pattern_cli.command()
+def install(
+    refs: Annotated[
+        list[str] | None,
+        typer.Argument(
+            help="Pattern references: library:name@version, "
+            "e.g. ibek-runtime-streamdevice:lakeshore340@1.0.0",
+            show_default=False,
+        ),
+    ] = None,
+    list_file: Annotated[
+        Path | None,
+        typer.Option(
+            "--list",
+            "-l",
+            help="Also install the references in this file, one per line; "
+            "'#' starts a comment",
+            exists=True,
+            dir_okay=False,
+            file_okay=True,
+        ),
+    ] = None,
+    source: Annotated[
+        str | None,
+        typer.Option(
+            "--source",
+            "-s",
+            help="Fetch every pattern from this library source (git URL or "
+            "local path) instead of the one its library name resolves to",
+        ),
+    ] = None,
+):
+    """Install patterns into this generic IOC image, beside its support modules.
+
+    Run at image build time. Support YAML goes to $EPICS_ROOT/ibek-defs, PVI
+    device YAML to $EPICS_ROOT/pvi-defs, protocols to
+    $EPICS_ROOT/support/configure/protocol, and database templates and req
+    files to $EPICS_ROOT/support/<library>/db. Nothing is written unless every
+    pattern installs without a collision; what is installed is recorded in the
+    image lock, which `ibek pattern check --image` verifies.
+    """
+    try:
+        all_refs = list(refs or [])
+        if list_file is not None:
+            all_refs += image_install.read_list_file(list_file)
+        names = image_install.install(all_refs, source_override=source)
+    except PatternError as exc:
+        _fail(exc)
+        return
+    typer.echo(
+        f"installed {len(names)} pattern(s) into {GLOBALS.EPICS_ROOT}: "
+        + ", ".join(names)
+    )
+
+
+@pattern_cli.command()
 def update(
     dest: DestArg = Path("."),
     name: NameOpt = None,
@@ -154,17 +214,31 @@ def check(
             "(also enabled by IBEK_ALLOW_DIRTY=1)",
         ),
     ] = False,
+    image: Annotated[
+        bool,
+        typer.Option(
+            "--image",
+            help="Verify the patterns `ibek pattern install` installed in this "
+            "image against the image lock in $EPICS_ROOT/ibek-defs, instead of "
+            "a destination's runtime-lock.yaml; DEST is not used",
+        ),
+    ] = False,
 ):
     """Verify vendored files match runtime-lock.yaml (vendor integrity)."""
     allow = allow_dirty or os.getenv("IBEK_ALLOW_DIRTY") == "1"
-    result = vendor.check(dest, allow_dirty=allow)
+    if image:
+        result = image_install.check_image(allow_dirty=allow)
+        ok_message = f"{GLOBALS.EPICS_ROOT}: installed patterns match the image lock"
+    else:
+        result = vendor.check(dest, allow_dirty=allow)
+        ok_message = f"{dest}: vendored files match the lock"
     for warning in result.warnings:
         typer.echo(f"warning: {warning}")
     for failure in result.failures:
         typer.echo(f"error: {failure}", err=True)
     if not result.ok:
         raise typer.Exit(1)
-    typer.echo(f"{dest}: vendored files match the lock")
+    typer.echo(ok_message)
 
 
 @pattern_cli.command()

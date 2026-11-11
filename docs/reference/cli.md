@@ -8,6 +8,7 @@ version. The complete command reference below is generated from the CLI.
 | Phase | Commands | Purpose |
 | --- | --- | --- |
 | Container build | `support generate-schema`, `support apt-install-runtime-packages` | Describe support YAML and install declared runtime Debian packages. |
+| Container build | `pattern install`, `pattern check --image` | Install runtime patterns beside the image's support modules, and verify them. |
 | Container build | `ioc generate-schema`, `ioc extract-runtime-assets` | Describe the image's available entities and package its runtime files. |
 | Container startup | `runtime generate2`, `runtime place-files`, `runtime generate-autosave`, `ioc do-wait` | Generate the instance, place its files, prepare autosave, and wait for hardware. |
 | Development container | `dev instance`, `ioc build-docker` | Select a checked-out instance; experimentally execute Dockerfile steps. |
@@ -34,7 +35,9 @@ folder. Repeated `--instance` / `-i` options add files **before** those two;
 the first file supplies the IOC name and later files append entities. Without
 `--definitions`, support definitions are discovered recursively in
 `$EPICS_ROOT/ibek-defs` and the config folder. Supplying `--definitions` replaces
-that automatic discovery; repeat it for each required file.
+that automatic discovery; repeat it for each required file. A module defined in
+both places is reported with a warning: the config folder's entity models
+replace the image's of the same name.
 
 Generation recreates the output directory (default `/epics/runtime`), writing
 `st.cmd`, `ioc.subst`, and any generated auxiliary files. Run `place-files`

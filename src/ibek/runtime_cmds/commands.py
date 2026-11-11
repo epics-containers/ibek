@@ -6,6 +6,7 @@ from pvi._format.base import IndexEntry
 from pvi._format.dls import DLSFormatter
 from pvi._format.template import format_template
 from pvi.device import Device
+from ruamel.yaml.error import YAMLError
 
 from ibek.entity_factory import EntityFactory
 from ibek.entity_model import Database
@@ -15,6 +16,7 @@ from ibek.ibek_builtin.wait import DoWaitEntity
 from ibek.ioc import IOC, BuiltInEntity, Entity
 from ibek.ioc_factory import IocFactory
 from ibek.runtime_cmds.autosave import AutosaveGenerator, link_req_files
+from ibek.support import support_yaml_module
 from ibek.utils import UTILS
 
 runtime_cli = typer.Typer(cls=NaturalOrderGroup)
@@ -82,10 +84,12 @@ def generate2(
 
     if len(definitions) == 0:
         # get definitions from the default locations
-        definitions += Path(GLOBALS.IBEK_DEFS).glob("**/*ibek.support.yaml")
-        definitions += config_folder.glob(
-            "**/*.ibek.support.yaml", recurse_symlinks=True
+        image_definitions = list(Path(GLOBALS.IBEK_DEFS).glob("**/*ibek.support.yaml"))
+        instance_definitions = list(
+            config_folder.glob("**/*.ibek.support.yaml", recurse_symlinks=True)
         )
+        warn_shadowed_modules(image_definitions, instance_definitions)
+        definitions += image_definitions + instance_definitions
 
     do_generate(instance_files, definitions, output_folder, pvi)
 
@@ -130,6 +134,40 @@ def generate(
 ):
     """LEGACY single-instance generate; superseded by `generate2`."""
     do_generate([instance], definitions, output_folder, pvi)
+
+
+def _modules_defined(definitions: list[Path]) -> dict[str, Path]:
+    """The module each readable support YAML declares, and the first file."""
+    modules: dict[str, Path] = {}
+    for path in definitions:
+        try:
+            module = support_yaml_module(path)
+        except (OSError, YAMLError):
+            continue  # reported when the definitions are loaded
+        if module:
+            modules.setdefault(module, path)
+    return modules
+
+
+def warn_shadowed_modules(
+    image_definitions: list[Path], instance_definitions: list[Path]
+) -> None:
+    """Warn for each module both the image and the instance define.
+
+    The instance's definitions are loaded after the image's, so each entity
+    model the instance defines replaces the image's model of the same name: an
+    instance that vendored a pattern its image also provides runs the vendored
+    copy. That is a usable override, but it should not be a silent one.
+    """
+    image = _modules_defined(image_definitions)
+    instance = _modules_defined(instance_definitions)
+    for module in sorted(image.keys() & instance.keys()):
+        typer.echo(
+            f"WARNING: module {module!r} is defined by both the image "
+            f"({image[module]}) and the instance ({instance[module]}); the "
+            "instance's entity models replace the image's of the same name",
+            err=True,
+        )
 
 
 def place_runtime_files(config_dir: Path) -> None:
