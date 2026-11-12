@@ -20,6 +20,18 @@ again only when its ``install.yml`` asks for a different source. ``ibek dev
 instance`` prints the same report. In an image with no stamp each command
 says so and exits 0. See ``docs/reference/cli.md``.
 
+``ibek pattern install library:pattern@version ...`` installs runtime patterns
+into a generic IOC image at build time, beside its compiled support modules:
+support YAML to ``/epics/ibek-defs``, PVI device YAML to ``/epics/pvi-defs``,
+protocols to ``/epics/support/configure/protocol``, and templates, databases
+and req files to ``/epics/support/<library>/db``. Every destination is planned
+first, and a run that would collide with the image or with itself writes
+nothing. Installed patterns are recorded, with each file's SHA-256 and the
+library commit, in ``/epics/ibek-defs/runtime-patterns.lock.yaml``, which
+``ibek pattern check --image`` verifies. ``ibek runtime generate2`` warns when
+an instance's ``config/`` defines a module the image also defines.
+See `#395 <https://github.com/epics-containers/ibek/issues/395>`_.
+
 ``ibek pattern schema`` finds the base schema of an image published on GitLab.
 For an image on a GitLab host listed in ``IBEK_GITLAB_HOSTS`` (``host[:port]``
 entries) or the CI job's server, ibek reads the ``ibek.ioc.schema.json`` link
