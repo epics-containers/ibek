@@ -77,6 +77,20 @@ class _Globals:
         return self.RUNTIME_OUTPUT / "protocol"
 
     @property
+    def SUPPORT_PROTOCOL(self):
+        """Directory of the image's StreamDevice protocol files.
+
+        Support modules install their protocols here at build time, and the IOC
+        start script copies it to ``RUNTIME_PROTOCOL`` at boot.
+        """
+        return self.SUPPORT / "configure" / "protocol"
+
+    @property
+    def IMAGE_PATTERN_LOCK(self):
+        """The lock recording the runtime patterns installed in this image."""
+        return self.IBEK_DEFS / IMAGE_LOCK_NAME
+
+    @property
     def RUNTIME_DB(self):
         """Directory of instance db/template files placed for IOC boot."""
         return self.RUNTIME_OUTPUT / "db"
@@ -120,6 +134,10 @@ AUTOSAVE_PATTERN = "*.req"
 # ConfigMap — runtime inputs only, and therefore the usual vendoring target).
 RUNTIME_LOCK_NAME = "runtime-lock.yaml"
 IOC_SCHEMA_NAME = "ioc.schema.json"
+# The lock of the patterns `ibek pattern install` installed into an image. It
+# lives in IBEK_DEFS beside the support YAML it records, which
+# `ibek ioc extract-runtime-assets` carries into the runtime image whole.
+IMAGE_LOCK_NAME = "runtime-patterns.lock.yaml"
 
 GLOBALS = _Globals()
 

@@ -34,7 +34,8 @@ cli.add_typer(
 cli.add_typer(
     pattern_cli,
     name="pattern",
-    help="Commands for vendoring runtime-support patterns into a services repo",
+    help="Commands for vendoring runtime-support patterns into a services "
+    "repo, or installing them into a generic IOC image",
 )
 
 yaml = YAML()

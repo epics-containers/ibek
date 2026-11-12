@@ -1582,6 +1582,15 @@ def test_default_manifest_plan_preserves_nesting(pattern_library: Path):
     ]
 
 
+def test_add_refuses_pattern_name_outside_library(tmp_path: Path, library: Path):
+    """A pattern name is one folder of its library, never a path out of it."""
+    (tmp_path / "x").mkdir()
+    instance = make_instance(tmp_path)
+    with pytest.raises(PatternError, match="must be a single folder name"):
+        vendor.add("mylib:../x@1.0.0", instance, source_override=str(library))
+    assert not (instance / RUNTIME_LOCK_NAME).exists()
+
+
 def test_add_default_manifest_vendors_everything(tmp_path: Path, pattern_library: Path):
     instance = make_instance(tmp_path)
     vendor.add("mydevice@1.0.0", instance, source_override=str(pattern_library))

@@ -4,7 +4,8 @@ Run `ibek pattern` in an IOC instance repository, usually outside the IOC
 container. It copies support YAML and runtime files from a pattern library
 into an instance's `config/`, recording the source, version, and file hashes in
 `runtime-lock.yaml`. This adds configuration and templates to an existing
-image; it does not install compiled drivers.
+image; it does not install compiled drivers. To build patterns into a generic
+IOC image for all its instances, see {doc}`install-runtime-patterns`.
 
 For why it works this way, see
 [ADR 0003](../explanations/decisions/0003-vendored-pattern-tag-is-authority.md),

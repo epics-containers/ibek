@@ -17,6 +17,7 @@ from .sources import (
     PatternError,
     PatternRef,
     fetch_pattern,
+    folder_name_problem,
     parse_ref,
     resolve_source,
     source_label,
@@ -192,6 +193,9 @@ def _do_vendor(
     and swallowing it there would silently degrade a broken manifest into
     "could not resolve pattern X".
     """
+    problem = folder_name_problem(ref.name)
+    if problem:
+        raise PatternError(f"pattern {ref.name!r} {problem}")
     if source_override:
         source_override = _source_uri(source_override, extra_libraries)
     uri, candidates = resolve_source(ref, source_override, extra_libraries)

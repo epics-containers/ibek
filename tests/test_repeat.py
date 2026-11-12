@@ -29,8 +29,8 @@ def test_subentity_repeats(tmp_epics_root: Path, tmp_path, samples):
         )
 
     # make sure that quadem_repeat and quadem are identical
-    files = (samples / "outputs").glob("quadem_repeat/*")
-    if len(list(files)) == 0:
+    files = list((samples / "outputs").glob("quadem_repeat/*"))
+    if len(files) == 0:
         raise AssertionError("No files found in quadem_repeat")
 
     for f in files:

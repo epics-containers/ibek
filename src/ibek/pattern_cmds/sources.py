@@ -58,6 +58,22 @@ def parse_ref(qualified: str) -> PatternRef:
     )
 
 
+def folder_name_problem(name: str) -> str | None:
+    """Why ``name`` is not one plain folder name, or None if it is.
+
+    Library and pattern names are joined to folder paths, so neither may hold a
+    path separator, be a dot folder such as ``..``, or begin or end with
+    whitespace.
+    """
+    if not name or "/" in name or "\\" in name:
+        return "must be a single folder name"
+    if name != name.strip():
+        return "must not start or end with whitespace"
+    if name.startswith("."):
+        return "must not start with '.'"
+    return None
+
+
 def library_registry(extra: dict[str, str] | None = None) -> dict[str, str]:
     """Return the library->source registry (defaults + env + ``extra``)."""
     registry = dict(DEFAULT_LIBRARIES)
@@ -78,7 +94,7 @@ def source_label(uri: str) -> str:
     return label.rstrip("/")
 
 
-def _is_local(uri: str) -> bool:
+def is_local(uri: str) -> bool:
     if uri.startswith("file://"):
         return True
     if re.match(r"^[a-z]+://", uri):
@@ -106,8 +122,8 @@ def _refuse_symlinked_pattern(pattern_dir: Path, name: str, source: str) -> None
         )
 
 
-def _clone_pattern(uri: str, name: str, version: str | None, dest: Path) -> Path:
-    """Clone ``uri`` at ``version`` and return the ``name`` pattern folder."""
+def clone_library(uri: str, version: str | None, dest: Path) -> Path:
+    """Shallow-clone the library ``uri`` at ``version`` into ``dest/clone``."""
     clone_dir = dest / "clone"
     cmd = ["git", "clone", "--depth", "1", "--quiet"]
     if version:
@@ -120,6 +136,25 @@ def _clone_pattern(uri: str, name: str, version: str | None, dest: Path) -> Path
         raise PatternError(
             f"failed to clone {uri}@{version or 'HEAD'}: {result.stderr.strip()}"
         )
+    return clone_dir
+
+
+def library_commit(clone_dir: Path) -> str:
+    """The commit a library clone made by :func:`clone_library` is at."""
+    result = subprocess.run(
+        ["git", "-C", str(clone_dir), "rev-parse", "HEAD"],
+        capture_output=True,
+        text=True,
+    )
+    if result.returncode != 0:
+        raise PatternError(
+            f"cannot read the commit of {clone_dir}: {result.stderr.strip()}"
+        )
+    return result.stdout.strip()
+
+
+def cloned_pattern(clone_dir: Path, name: str, uri: str, version: str | None) -> Path:
+    """Return the ``name`` pattern folder of a library clone, or raise."""
     pattern_dir = clone_dir / name
     _refuse_symlinked_pattern(pattern_dir, name, uri)
     if not pattern_dir.is_dir():
@@ -129,12 +164,17 @@ def _clone_pattern(uri: str, name: str, version: str | None, dest: Path) -> Path
     return pattern_dir
 
 
+def _clone_pattern(uri: str, name: str, version: str | None, dest: Path) -> Path:
+    """Clone ``uri`` at ``version`` and return the ``name`` pattern folder."""
+    return cloned_pattern(clone_library(uri, version, dest), name, uri, version)
+
+
 def fetch_pattern(uri: str, name: str, version: str | None, dest: Path) -> Path:
     """Materialise the ``name`` pattern folder from ``uri`` into ``dest``.
 
     Returns the path to the folder holding the pattern's file-set.
     """
-    if _is_local(uri):
+    if is_local(uri):
         pattern_dir = _local_path(uri) / name
         _refuse_symlinked_pattern(pattern_dir, name, uri)
         if not pattern_dir.is_dir():
