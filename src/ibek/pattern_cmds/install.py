@@ -44,6 +44,7 @@ from .sources import (
     clone_library,
     cloned_pattern,
     fetch_pattern,
+    folder_name_problem,
     is_local,
     library_commit,
     library_registry,
@@ -192,19 +193,6 @@ class ImageLock:
 def _escapes(key: str) -> bool:
     path = Path(key)
     return path.is_absolute() or ".." in path.parts
-
-
-def folder_name_problem(name: str) -> str | None:
-    """Why ``name`` is not one plain folder name, or None if it is.
-
-    Library and pattern names are joined to folder paths, so neither may hold a
-    path separator or be a dot folder such as ``..``.
-    """
-    if not name or "/" in name or "\\" in name:
-        return "must be a single folder name"
-    if name.startswith("."):
-        return "must not start with '.'"
-    return None
 
 
 def library_problem(library: str) -> str | None:

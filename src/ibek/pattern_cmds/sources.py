@@ -58,6 +58,22 @@ def parse_ref(qualified: str) -> PatternRef:
     )
 
 
+def folder_name_problem(name: str) -> str | None:
+    """Why ``name`` is not one plain folder name, or None if it is.
+
+    Library and pattern names are joined to folder paths, so neither may hold a
+    path separator, be a dot folder such as ``..``, or begin or end with
+    whitespace.
+    """
+    if not name or "/" in name or "\\" in name:
+        return "must be a single folder name"
+    if name != name.strip():
+        return "must not start or end with whitespace"
+    if name.startswith("."):
+        return "must not start with '.'"
+    return None
+
+
 def library_registry(extra: dict[str, str] | None = None) -> dict[str, str]:
     """Return the library->source registry (defaults + env + ``extra``)."""
     registry = dict(DEFAULT_LIBRARIES)

@@ -342,6 +342,10 @@ def _setup_nested_pattern_name(epics: Path, library: Path) -> list[str]:
     return ["mylib:dev@1", "mylib:other/db@1"]
 
 
+def _setup_padded_pattern_name(epics: Path, library: Path) -> list[str]:
+    return ["mylib:dev@1", "mylib:other @1"]
+
+
 def _setup_template_elsewhere(epics: Path, library: Path) -> list[str]:
     # the sample tree's ADSimDetector/db holds dummy.template
     (library / "other" / "db" / "dummy.template").write_text("record(ai, y) {}\n")
@@ -427,6 +431,7 @@ def _setup_library_is_module_folder(epics: Path, library: Path) -> list[str]:
         (_setup_invalid_support, "other.ibek.support.yaml is not a valid support"),
         (_setup_pattern_outside_library, "'../outside' must be a single folder"),
         (_setup_nested_pattern_name, "'other/db' must be a single folder name"),
+        (_setup_padded_pattern_name, "'other ' must not start or end with"),
         (_setup_template_elsewhere, "dummy.template is also installed as"),
         (_setup_req_in_support, "dummy_settings.req is also installed as"),
         (_setup_req_in_autosave, "dev_settings.req is also installed as"),
@@ -522,6 +527,7 @@ def test_warn_shadowed_modules(tmp_path: Path, capsys):
         ("a/b", "must be a single folder name"),
         (".hidden", "must not start with '.'"),
         ("..", "must not start with '.'"),
+        ("mylib ", "must not start or end with whitespace"),
         ("configure", "is reserved"),
     ],
 )
