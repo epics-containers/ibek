@@ -14,6 +14,7 @@ import hashlib
 import json
 import os
 import re
+import shlex
 from collections.abc import Callable, Iterable, Iterator
 from dataclasses import asdict, dataclass, field
 from pathlib import Path
@@ -67,6 +68,34 @@ class Module:
     build: str | None = None
     # what decides the source that is cloned
     source: str | None = None
+    # the rest of the module's `RUN ansible.sh` line in the Dockerfile:
+    # what comes before the module name, and what comes after it
+    options: list[str] = field(default_factory=list)
+    args: list[str] = field(default_factory=list)
+
+    def tags(self) -> tuple[set[str] | None, set[str], list[str]]:
+        """The line's --tags (None: no limit), --skip-tags, and other args."""
+        tags: set[str] | None = None
+        skip: set[str] = set()
+        rest: list[str] = []
+        args = list(self.args)
+        while args:
+            arg = args.pop(0)
+            key, _, value = arg.partition("=")
+            if key in ("--tags", "-t", "--skip-tags"):
+                value = value if "=" in arg else (args.pop(0) if args else "")
+                if key == "--skip-tags":
+                    skip.update(value.split(","))
+                else:
+                    tags = (tags or set()) | set(value.split(","))
+            else:
+                rest.append(arg)
+        return tags, skip, rest
+
+    def runs(self, tag: str) -> bool:
+        """Whether the module's Dockerfile line runs the tasks of this tag."""
+        tags, skip, _ = self.tags()
+        return tag not in skip and (tags is None or bool(tags & {tag, "all"}))
 
 
 @dataclass
@@ -182,7 +211,7 @@ def _install(name: str) -> dict | None:
     return values if isinstance(values, dict) else None
 
 
-def _source(name: str) -> str | None:
+def _source(name: str, options: list[str]) -> str | None:
     """
     Hash what a module's install.yml says to clone: None when it is unreadable.
 
@@ -194,6 +223,9 @@ def _source(name: str) -> str | None:
     if folder is None or values is None:
         return None
     total = json.dumps([values.get(key) for key in keys], default=str).encode()
+    if options:
+        # `-v` on the Dockerfile line overrides the version
+        total += json.dumps(options).encode()
     patch = values.get("patch_file")
     patch = patch.get("path") if isinstance(patch, dict) else None
     if patch and (folder / str(patch)).is_file():
@@ -213,10 +245,40 @@ def support_folder(name: str) -> Path | None:
     return GLOBALS.SUPPORT / str(values.get("module") or name)
 
 
-def _module(name: str) -> Module:
+def _line(text: str) -> tuple[str, list[str], list[str]] | None:
+    """
+    Split what follows `RUN ansible.sh` into the module name, the options
+    before it and the arguments after it, as ansible.sh reads them.
+
+    None for a line that names no module. A line that ibek could not issue
+    again as it stands is an error.
+    """
+    refuse = StampError(
+        f"cannot repeat this line of {source() / 'Dockerfile'}: RUN ansible.sh {text}"
+    )
+    try:
+        words = shlex.split(text)
+    except ValueError as error:
+        raise refuse from error
+    # shell syntax: more than the one command
+    if any(set(word) & set("&|;<>$`\\") for word in words):
+        raise refuse
+    options: list[str] = []
+    while words and words[0].startswith("-"):
+        # -v VERSION or -vVERSION: the option that ansible.sh takes
+        count = 2 if words[0] == "-v" else 1
+        if not words[0].startswith("-v") or len(words) < count:
+            raise refuse
+        options, words = options + words[:count], words[count:]
+    if not words or words[0] == "ioc":
+        return None
+    return words[0], options, words[1:]
+
+
+def _module(name: str, options: list[str], args: list[str]) -> Module:
     folder = module_folder(name)
     if folder is None:
-        return Module(name)
+        return Module(name, options=options, args=args)
 
     def is_def(path: str) -> bool:
         return "/" not in path and any(fnmatch.fnmatchcase(path, p) for p in DEFS)
@@ -226,7 +288,9 @@ def _module(name: str) -> Module:
         name,
         defs=_hash(f for f in files if is_def(f[0])),
         build=_hash(f for f in files if not is_def(f[0])),
-        source=_source(name),
+        source=_source(name, options),
+        options=options,
+        args=args,
     )
 
 
@@ -266,9 +330,13 @@ def compute() -> Stamp:
         )
 
     # the module list, as the ansible all_support role reads it
-    matches = (re.match(r"RUN *ansible.sh ([^ ]*)", line) for line in dockerfile)
+    matches = (re.match(r"RUN *ansible.sh (.*)", line) for line in dockerfile)
+    lines = (_line(match.group(1)) for match in matches if match)
     # a module named twice is one module, where it is first named
-    names = list(dict.fromkeys(match.group(1) for match in matches if match))
+    modules: dict[str, tuple[str, list[str], list[str]]] = {}
+    for line in lines:
+        if line:
+            modules.setdefault(line[0], line)
     base = [" ".join(line.split()) for line in dockerfile]
     base = [line for line in base if line.startswith(("ARG ", "FROM "))]
 
@@ -277,5 +345,5 @@ def compute() -> Stamp:
         requirements=_hash_text(requirements.replace("\r\n", "\n")),
         # the find role writes into vars/
         ansible=_hash(_files(ansible_folder(), lambda path: path == "vars")),
-        modules=[_module(name) for name in names if name not in ("", "ioc")],
+        modules=[_module(*line) for line in modules.values()],
     )

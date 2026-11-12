@@ -95,7 +95,8 @@ def sync(
     regenerates the IOC schema. Everything that needs a build is reported and
     left alone unless --build is given.
     """
-    # with --build, having nothing to compare is an error: nothing can be built
+    # with --build, a stamp or a source tree that cannot be read is an error:
+    # nothing can be built. No stamp at all is one line and exit 0, as ever.
     state = _state(strict=build)
     if state is None:
         return

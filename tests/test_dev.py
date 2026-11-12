@@ -95,8 +95,13 @@ class Tree:
         """The folder a module is cloned to and built in."""
         return self.epics / "support" / name
 
-    def ansible_sh(self, module: str, *args: str) -> None:
+    def ansible_sh(self, *words: str) -> None:
         """Do what ansible.sh does with these arguments."""
+        # -v VERSION, the module, then arguments for ansible-playbook
+        override = words[1] if words[0] == "-v" else None
+        module, *rest = words[2:] if override else words
+        args = tuple(rest)
+        tags = args[args.index("--tags") + 1] if "--tags" in args else None
         folder = self.built(module)
         install = (
             self.module(module) / f"{module}.install.yml" if module != "ioc" else None
@@ -105,26 +110,27 @@ class Tree:
         def clone() -> None:
             assert install is not None
             version = install.read_text().split("version: ")[1].split()[0]
-            write(folder / "VERSION", version)
+            write(folder / "VERSION", override or version)
 
-        if "--tags" in args and "clone" in args:
+        if tags == "clone":
             # the clone tasks: with force_clone the folder is removed first
             if "force_clone=true" in args and folder.exists():
                 shutil.rmtree(folder)
             if not folder.exists():
                 clone()
-        elif "--tags" in args:
+        elif tags == "runtime":
             # the runtime tasks: link the definition files of each module
-            assert args == ("--tags", "runtime")
             for name in module.split(","):
                 for target in self.module(name).iterdir():
                     for defs, pattern in LINKS:
                         link = self.epics / defs / target.name
                         if target.match(pattern) and not link.is_symlink():
                             link.symlink_to(target)
+        elif tags is not None:
+            # some other tasks, which neither clone nor build
+            write(self.epics / "tools" / module, tags)
         else:
             # every task: an existing folder is not cloned again
-            assert args == ()
             if module != "ioc" and not folder.exists():
                 clone()
             if self.fail_on == module:
@@ -209,7 +215,14 @@ def test_stamp_file(tree: Tree):
 
     assert stamp["schema"] == 1
     assert [module["name"] for module in stamp["modules"]] == ["asyn", "busy", "motor"]
-    assert set(stamp["modules"][0]) == {"name", "defs", "build", "source"}
+    assert set(stamp["modules"][0]) == {
+        "name",
+        "defs",
+        "build",
+        "source",
+        "options",
+        "args",
+    }
     assert set(stamp) == {
         "schema",
         "base",
@@ -834,6 +847,140 @@ def test_level_2_module_removed(tree: Tree):
         output = tree.dev(*args)
         assert installed in output
         assert "matches" not in output and "out of date" not in output
+    assert tree.calls == []
+
+
+def test_stamped_module_gone_from_the_tree_and_back(tree: Tree):
+    """Its links are removed with it, and made again when it is back."""
+    dockerfile = tree.source / "Dockerfile"
+    text = dockerfile.read_text()
+    busy = tree.module("busy")
+    links = [
+        tree.epics / "ibek-defs" / "busy.ibek.support.yaml",
+        tree.epics / "autosave" / "busy_settings.req",
+    ]
+
+    # a checkout that has neither the Dockerfile line nor the folder
+    dockerfile.write_text(text.replace("RUN ansible.sh busy\n", ""))
+    shutil.move(busy, tree.epics / "busy")
+    assert "2 dangling definition links" in tree.dev("status")
+    tree.dev("sync")
+    assert not any(link.is_symlink() for link in links)
+
+    # the first checkout again
+    dockerfile.write_text(text)
+    shutil.move(tree.epics / "busy", busy)
+    tree.calls.clear()
+    output = tree.dev("status")
+    assert "definitions changed: busy" in output and "out of date" not in output
+    assert "matches" in tree.dev("sync")
+    assert tree.ansible() == [["busy", "--tags", "runtime"]]
+    assert all(link.is_symlink() and link.exists() for link in links)
+    tree.calls.clear()
+    assert "matches" in tree.dev("sync", "--build")
+    assert tree.calls == []
+
+
+def line(tree: Tree, text: str) -> None:
+    """Give busy this line in the Dockerfile."""
+    dockerfile = tree.source / "Dockerfile"
+    dockerfile.write_text(
+        dockerfile.read_text().replace("RUN ansible.sh busy\n", text + "\n")
+    )
+
+
+def test_dockerfile_line_with_tags_that_neither_clone_nor_build(tree: Tree):
+    """The line is issued as it stands: no clone, no links."""
+    tags = ["--tags", "system,pre_build_tasks"]
+    line(tree, "RUN ansible.sh busy --tags system,pre_build_tasks")
+    output = tree.dev("status")
+    assert "busy: its Dockerfile line changed" in output
+    assert "rebuilds: busy, motor, then the IOC" in output
+    assert "matches" in tree.dev("sync", "--build")
+    assert tree.ansible() == [["busy", *tags], ["motor"], ["ioc"]]
+    stamp = load()
+    assert stamp is not None and stamp.modules[1].args == tags
+
+    # another version: the line again, and the folder is not cloned again
+    tree.calls.clear()
+    write(tree.module("busy") / "busy.install.yml", "module: busy\nversion: R2\n")
+    output = tree.dev("status")
+    assert "busy: version, repository or patch changed" in output
+    assert "clones" not in output
+    assert "matches" in tree.dev("sync", "--build")
+    assert tree.ansible() == [["busy", *tags], ["motor"], ["ioc"]]
+    assert (tree.built("busy") / "VERSION").read_text() == "R1-0"
+
+    # its definition files are not linked by the line, so not by sync
+    tree.calls.clear()
+    write(tree.module("busy") / "busy_settings.req", "$(P)busy2\n")
+    assert "matches" in tree.dev("sync")
+    assert tree.calls == []
+
+
+def test_dockerfile_line_with_a_version(tree: Tree):
+    """-v decides the source: it goes with every command for the module."""
+    line(tree, "RUN ansible.sh -v R2 busy")
+    output = tree.dev("status")
+    assert "busy: version, repository or patch changed" in output
+    assert f"clones busy again: {tree.built('busy')}" in output
+    assert "matches" in tree.dev("sync", "--build")
+    assert tree.ansible() == [
+        ["-v", "R2", "busy", "--tags", "clone", "-e", "force_clone=true"],
+        ["-v", "R2", "busy"],
+        ["motor"],
+        ["ioc"],
+    ]
+    assert (tree.built("busy") / "VERSION").read_text() == "R2"
+
+    tree.calls.clear()
+    write(tree.module("busy") / "busy_settings.req", "$(P)busy2\n")
+    write(tree.module("asyn") / "asyn.ibek.support.yaml", "module: asyn\n# more\n")
+    assert "matches" in tree.dev("sync")
+    assert tree.ansible() == [
+        ["asyn", "--tags", "runtime"],
+        ["-v", "R2", "busy", "--tags", "runtime"],
+    ]
+
+
+def test_dockerfile_line_with_other_arguments(tree: Tree):
+    """They go with every command for the module, after ibek's own tags."""
+    extra = ["-e", "skip_clean=true"]
+    line(tree, "RUN ansible.sh busy -e skip_clean=true")
+    assert "busy: its Dockerfile line changed" in tree.dev("status")
+    assert "matches" in tree.dev("sync", "--build")
+    assert tree.ansible() == [["busy", *extra], ["motor"], ["ioc"]]
+
+    tree.calls.clear()
+    write(tree.module("busy") / "busy.install.yml", "module: busy\nversion: R2\n")
+    write(tree.module("busy") / "busy_settings.req", "$(P)busy2\n")
+    assert "matches" in tree.dev("sync", "--build")
+    assert tree.ansible() == [
+        ["busy", "--tags", "runtime", *extra],
+        ["busy", "--tags", "clone", "-e", "force_clone=true", *extra],
+        ["busy", *extra],
+        ["motor"],
+        ["ioc"],
+    ]
+
+
+@pytest.mark.parametrize(
+    "text",
+    [
+        "RUN ansible.sh busy && echo done",
+        "RUN ansible.sh busy \\",
+        "RUN ansible.sh -x busy",
+        "RUN ansible.sh busy 'unfinished",
+    ],
+)
+def test_dockerfile_line_that_cannot_be_repeated(tree: Tree, text: str):
+    """One line that names it, and nothing run."""
+    line(tree, text)
+    message = f"ibek dev: cannot repeat this line of {tree.source / 'Dockerfile'}: "
+
+    for args, code in ((["status"], 0), (["sync"], 0), (["sync", "--build"], 1)):
+        assert tree.dev(*args, code=code).splitlines() == [message + text]
+    tree.dev("stamp", code=1)
     assert tree.calls == []
 
 

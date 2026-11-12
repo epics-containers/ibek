@@ -21,6 +21,7 @@ from .stamp import (
     StampError,
     ansible_folder,
     ioc_sources,
+    module_folder,
     source,
     support_folder,
 )
@@ -57,8 +58,8 @@ def run(command: list[str], quiet: bool = False) -> None:
         raise typer.Exit(code)
 
 
-def ansible(module: str, *args: str, quiet: bool = False) -> None:
-    run([str(ansible_folder() / "ansible.sh"), module, *args], quiet=quiet)
+def ansible(*args: str, quiet: bool = False) -> None:
+    run([str(ansible_folder() / "ansible.sh"), *args], quiet=quiet)
 
 
 @dataclass
@@ -144,13 +145,19 @@ def compare(stamp: Stamp, live: Stamp) -> Drift:
             out_of_date(index, f"{name}: version, repository or patch changed")
         elif was.build != module.build:
             out_of_date(index, f"{name}: build files changed")
-        if was is not None and module.defs is not None and was.defs != module.defs:
+        elif (was.options, was.args) != (module.options, module.args):
+            out_of_date(index, f"{name}: its Dockerfile line changed")
+        # a Dockerfile line whose tags leave out runtime links no definitions
+        linked = module.defs is not None and module.runs("runtime")
+        if was is not None and linked and was.defs != module.defs:
             drift.defs.append(name)
 
         # Clone again only when install.yml asks for a source other than the
         # one in the module folder. With no folder there is nothing to remove,
-        # and a link is someone's own folder: it is built as it is.
-        if was and was.source and module.source and was.source != module.source:
+        # and a link is someone's own folder: it is built as it is. A
+        # Dockerfile line whose tags leave out clone has no source to replace.
+        changed = was and was.source and module.source and was.source != module.source
+        if changed and module.runs("clone"):
             folder = support_folder(name)
             if folder is not None and folder.is_symlink():
                 drift.links[name] = folder
@@ -225,8 +232,17 @@ def schema() -> None:
 
 def fix_defs(stamp: Stamp, live: Stamp, drift: Drift) -> None:
     """Level 1: link the definition files as they are now and remake the schema."""
+    # a module whose Dockerfile line has more than its name is linked on its
+    # own, with the line's options and its arguments other than tags
+    modules = [m for name in drift.defs if (m := live.module(name))]
+    plain = [m.name for m in modules if not m.options and not m.tags()[2]]
+    if plain:
+        ansible(",".join(plain), "--tags", "runtime", quiet=True)
+    for m in modules:
+        if m.name not in plain:
+            rest = m.tags()[2]
+            ansible(*m.options, m.name, "--tags", "runtime", *rest, quiet=True)
     if drift.defs:
-        ansible(",".join(drift.defs), "--tags", "runtime", quiet=True)
         names = ", ".join(drift.defs)
         print(f"ibek dev: linked the definition files of {names}", flush=True)
     links = dangling()
@@ -240,6 +256,8 @@ def fix_defs(stamp: Stamp, live: Stamp, drift: Drift) -> None:
         # a module whose folder has gone lost its links: make them when it is back
         if now and (was.name in drift.defs or now.defs is None):
             was.defs = now.defs
+        elif now is None and module_folder(was.name) is None:
+            was.defs = None
     stamp.save()
 
 
@@ -281,16 +299,20 @@ def build(stamp: Stamp, live: Stamp, drift: Drift) -> None:
     stamp.save()
 
     for name in modules:
+        now = live.module(name)
+        assert now is not None
         if name in force:
             # The clone is a step of its own, recorded before the build: a
             # build that fails is then retried on the source that is there,
             # with whatever was done to it, and not on a fresh clone.
             print(f"ibek dev: removing {force[name]} to clone {name} again")
-            ansible(name, "--tags", "clone", "-e", "force_clone=true")
+            clone = ("--tags", "clone", "-e", "force_clone=true", *now.tags()[2])
+            ansible(*now.options, name, *clone)
             record(name, source_only=True)
         elif name in drift.links:
             print(f"ibek dev: {drift.links[name]} is a link: it is left alone")
-        ansible(name)
+        # the module's own line of the Dockerfile
+        ansible(*now.options, name, *now.args)
         record(name)
 
     ansible("ioc")

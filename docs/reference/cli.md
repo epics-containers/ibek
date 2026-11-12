@@ -107,10 +107,14 @@ folder in `ibek-support*`, split into its definition files
 (`*.ibek.support.yaml`, `*.pvi.device.yaml`, `*.req`) and the rest. A third
 hash per module covers what its `install.yml` says to clone: `module`,
 `version`, `organization`, `git_repo`, `recursive`, `patch_file` and the
-content of the patch. The hashes cover file names and content, with CRLF read
+content of the patch, with any `-v <version>` of the module's Dockerfile line.
+The stamp also holds the rest of that line: what comes before the module name
+and what comes after it. The hashes cover file names and content, with CRLF read
 as LF. They leave out file modes and a fixed list of names: `.git`,
 `.ansible`, `__pycache__`, `*.pyc`, `*build.log`, `*~`, `*.swp` and
 `.DS_Store`. Any other file in a hashed folder counts, tracked by git or not.
+The stamp does not cover the files that `ibek pattern install` writes into the
+image: they are not compared, and `dev sync` leaves them as they are.
 
 ```bash
 ibek dev status          # show the differences, change nothing
@@ -138,6 +142,22 @@ the next `dev sync --build` builds the folder as it then is, without cloning
 again. A module with no folder in `/epics/support` is cloned by its build. A
 module the Dockerfile no longer builds stays installed, and reported, until
 the container is recreated from an image built without it.
+
+`dev sync --build` builds a module with its own line of the Dockerfile:
+`RUN ansible.sh -v R2 motor -e skip_clean=true` is run again as
+`ansible.sh -v R2 motor -e skip_clean=true`, and a change to the line counts
+as a change to the module. The two commands that ibek issues with tags of its
+own keep the line's `-v` and its arguments other than `--tags` and
+`--skip-tags`, after ibek's: `ansible.sh -v R2 motor --tags runtime -e
+skip_clean=true`. A line whose tags leave out `runtime`, such as
+`RUN ansible.sh vdct --tags system,pre_build_tasks`, links no definition
+files, so `dev sync` links none for it. A line whose tags leave out `clone`
+is never cloned again: a change to what its `install.yml` says to clone runs
+the line again. A line that is more than one `ansible.sh` command (`&&`, `;`,
+a pipe, a redirect, a variable, a continuation `\`), or that has an option
+before the module other than `-v`, cannot be run again as it stands: `dev
+stamp` and `dev sync --build` stop with one line that names it, and `dev
+status` and `dev sync` report it.
 
 The IOC line goes when the IOC binary is newer than each of the files and
 the build it is compared with, as it is once `make` has built it.
