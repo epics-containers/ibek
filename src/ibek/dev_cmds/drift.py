@@ -26,21 +26,39 @@ from .stamp import (
 )
 
 
-def run(command: list[str]) -> None:
-    """Run a command, and stop with its exit code if it fails."""
-    print("+ " + " ".join(command), flush=True)
+def run(command: list[str], quiet: bool = False) -> None:
+    """
+    Run a command, and stop with its exit code if it fails.
+
+    With quiet, what the command prints is shown only if it fails.
+    """
+    output = ""
+    if not quiet:
+        print("+ " + " ".join(command), flush=True)
     try:
-        code = subprocess.run(command).returncode
+        if quiet:
+            done = subprocess.run(
+                command,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.STDOUT,
+                text=True,
+                errors="replace",
+            )
+            code, output = done.returncode, done.stdout
+        else:
+            code = subprocess.run(command).returncode
     except OSError as error:
         typer.echo(f"ibek dev: {error}", err=True)
         code = 1
     if code != 0:
+        if output:
+            typer.echo(output.rstrip("\n"), err=True)
         typer.echo(f"ibek dev: failed: {' '.join(command)}", err=True)
         raise typer.Exit(code)
 
 
-def ansible(module: str, *args: str) -> None:
-    run([str(ansible_folder() / "ansible.sh"), module, *args])
+def ansible(module: str, *args: str, quiet: bool = False) -> None:
+    run([str(ansible_folder() / "ansible.sh"), module, *args], quiet=quiet)
 
 
 @dataclass
@@ -200,15 +218,22 @@ def report(drift: Drift) -> list[str]:
 def schema() -> None:
     """Regenerate the IOC schema from the linked definition files."""
     output = str(GLOBALS.IBEK_DEFS / IOC_SCHEMA_NAME)
-    run([sys.executable, "-m", "ibek", "ioc", "generate-schema", "--output", output])
+    command = [sys.executable, "-m", "ibek", "ioc", "generate-schema"]
+    run([*command, "--output", output], quiet=True)
+    print(f"ibek dev: regenerated {output}", flush=True)
 
 
 def fix_defs(stamp: Stamp, live: Stamp, drift: Drift) -> None:
     """Level 1: link the definition files as they are now and remake the schema."""
     if drift.defs:
-        ansible(",".join(drift.defs), "--tags", "runtime")
-    for link in dangling():
+        ansible(",".join(drift.defs), "--tags", "runtime", quiet=True)
+        names = ", ".join(drift.defs)
+        print(f"ibek dev: linked the definition files of {names}", flush=True)
+    links = dangling()
+    for link in links:
         link.unlink()
+    if links:
+        print(f"ibek dev: removed {len(links)} dangling definition links", flush=True)
     schema()
     for was in stamp.modules:
         now = live.module(was.name)

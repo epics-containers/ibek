@@ -184,8 +184,11 @@ def tree(tmp_path: Path, mocker: MockerFixture) -> Tree:
     write(source / "ioc" / "bin" / "linux-x86_64" / "ioc")
     (made.epics / "ioc").symlink_to(source / "ioc")
 
-    def run(command: list[str]) -> None:
+    def run(command: list[str], quiet: bool = False) -> None:
         made.calls.append(command)
+        # only the definition links and the schema are done quietly
+        level_1 = "runtime" in command or "generate-schema" in command
+        assert quiet == level_1
         if made.fail_on == "schema" and "generate-schema" in command:
             raise typer.Exit(2)
         if "generate-schema" in command and drift.dangling():
@@ -522,6 +525,54 @@ def test_run_gives_the_exit_code_of_a_failed_command():
     with pytest.raises(typer.Exit) as failed:
         RUN(["/nowhere/no-such-command"])
     assert failed.value.exit_code == 1
+
+
+def test_quiet_run_shows_its_output_only_when_it_fails(capfd):
+    noisy = "import sys; print('PLAY'); print('+ set -x', file=sys.stderr); "
+
+    RUN([sys.executable, "-c", noisy + "sys.exit(0)"], quiet=True)
+    assert capfd.readouterr() == ("", "")
+
+    with pytest.raises(typer.Exit) as failure:
+        RUN([sys.executable, "-c", noisy + "sys.exit(3)"], quiet=True)
+    assert failure.value.exit_code == 3
+    out, err = capfd.readouterr()
+    lines = err.splitlines()
+    assert out == "" and sorted(lines[:2]) == ["+ set -x", "PLAY"]
+    assert lines[2].startswith("ibek dev: failed: ") and len(lines) == 3
+
+
+@pytest.mark.parametrize("failing", ["", "runtime", "generate-schema"])
+def test_level_1_output(tree: Tree, mocker: MockerFixture, failing: str):
+    """One line for each thing done; the commands' own output on a failure."""
+
+    def run(command: list[str], quiet: bool = False) -> None:
+        tree.calls.append(command)
+        code = 3 if failing and failing in command else 0
+        script = f"import sys; print('NOISE', {command[-1]!r}); sys.exit({code})"
+        RUN([sys.executable, "-c", script], quiet=quiet)
+
+    mocker.patch.object(drift, "run", run)
+    write(tree.module("asyn") / "asyn.ibek.support.yaml", "module: asyn\n# more\n")
+    write(tree.module("busy") / "busy_settings.req", "$(P)busy2\n")
+    (tree.epics / "pvi-defs" / "gone.pvi.device.yaml").symlink_to("nowhere")
+    schema = tree.epics / "ibek-defs" / "ioc.schema.json"
+
+    lines = tree.dev("sync", code=3 if failing else 0).splitlines()
+
+    done = [
+        "ibek dev: linked the definition files of asyn, busy",
+        "ibek dev: removed 1 dangling definition links",
+        f"ibek dev: regenerated {schema}",
+    ]
+    if not failing:
+        assert lines == [*done, f"ibek dev: this container matches {tree.source}"]
+    elif failing == "runtime":
+        assert lines[0] == "NOISE runtime" and len(lines) == 2
+        assert lines[1].startswith("ibek dev: failed: ")
+    else:
+        assert lines[:3] == [*done[:2], f"NOISE {schema}"] and len(lines) == 4
+        assert lines[3].startswith("ibek dev: failed: ")
 
 
 def test_failing_ansible_run_stops_the_build(tree: Tree, mocker: MockerFixture):
