@@ -449,6 +449,29 @@ def test_dockerfile_module_with_no_ibek_support_folder(tree: Tree):
     assert tree.calls == []
 
 
+def test_built_module_whose_ibek_support_folder_has_gone(tree: Tree):
+    """The modules after it are not out of date: nothing is rebuilt."""
+    shutil.rmtree(tree.module("busy"))
+    line = (
+        f"busy: the Dockerfile builds it, but {tree.source} does not have "
+        "one ibek-support*/busy folder"
+    )
+
+    assert "rebuilds" not in tree.dev("status")
+    reports = [tree.dev("sync", "--build").splitlines()[-2:] for _ in range(2)]
+
+    assert reports[0] == reports[1]
+    assert [text.strip() for text in reports[0]] == [
+        f"ibek dev: this container differs from {tree.source}:",
+        line,
+    ]
+    assert tree.ansible() == []
+    assert (tree.built("motor") / "lib" / "libmotor.a").read_text() == "built"
+    stamp = load()
+    assert stamp is not None and stamp.names() == ["asyn", "busy", "motor"]
+    assert stamp.pending == [] and stamp.rebuilt is None
+
+
 def test_run_gives_the_exit_code_of_a_failed_command():
     RUN([sys.executable, "-c", "pass"])
 

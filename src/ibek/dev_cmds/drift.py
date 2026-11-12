@@ -143,8 +143,9 @@ def compare(stamp: Stamp, live: Stamp) -> Drift:
     # module with no ibek-support folder cannot be built, so it is not counted.
     missing = [module.name for module in live.modules if module.build is None]
     present = [name for name in names if name not in missing]
+    had = [name for name in built if name not in missing]
     parts = next(
-        (names.index(n) for i, n in enumerate(present) if built[i : i + 1] != [n]),
+        (names.index(n) for i, n in enumerate(present) if had[i : i + 1] != [n]),
         first,
     )
     if parts < first:
