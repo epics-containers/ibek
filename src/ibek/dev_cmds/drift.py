@@ -16,7 +16,14 @@ import typer
 
 from ibek.globals import GLOBALS, IOC_SCHEMA_NAME
 
-from .stamp import Stamp, ansible_folder, ioc_sources, source, support_folder
+from .stamp import (
+    Stamp,
+    StampError,
+    ansible_folder,
+    ioc_sources,
+    source,
+    support_folder,
+)
 
 
 def run(command: list[str]) -> None:
@@ -51,6 +58,8 @@ class Drift:
     # level 2: those of them whose source is the wrong one, with the folder
     # that is removed to clone each again
     force: dict[str, Path] = field(default_factory=dict)
+    # level 2: those whose folder is a link, which is never removed
+    links: dict[str, Path] = field(default_factory=dict)
     requirements: bool = False
     # level 3
     base: bool = False
@@ -86,7 +95,11 @@ def ioc_reminder(stamp: Stamp) -> str:
 
 def compare(stamp: Stamp, live: Stamp) -> Drift:
     """Work out what differs between the stamp and the live source tree."""
-    drift = Drift(dangling=dangling(), ioc=ioc_reminder(stamp))
+    drift = Drift(dangling=dangling())
+    try:
+        drift.ioc = ioc_reminder(stamp)
+    except StampError as error:
+        drift.problems.append(str(error))
     names, built = live.names(), stamp.names()
     first = len(names)
 
@@ -102,7 +115,8 @@ def compare(stamp: Stamp, live: Stamp) -> Drift:
         name, was = module.name, stamp.module(module.name)
         if module.build is None:
             drift.problems.append(
-                f"{name}: not in exactly one ibek-support* folder of {source()}"
+                f"{name}: the Dockerfile builds it, but {source()} does not "
+                f"have one ibek-support*/{name} folder"
             )
         elif name in stamp.pending:
             out_of_date(index, f"{name}: rebuild not finished")
@@ -116,15 +130,22 @@ def compare(stamp: Stamp, live: Stamp) -> Drift:
             drift.defs.append(name)
 
         # Clone again only when install.yml asks for a source other than the
-        # one in the module folder. With no folder there is nothing to remove.
+        # one in the module folder. With no folder there is nothing to remove,
+        # and a link is someone's own folder: it is built as it is.
         if was and was.source and module.source and was.source != module.source:
             folder = support_folder(name)
-            if folder is not None and (folder.exists() or folder.is_symlink()):
+            if folder is not None and folder.is_symlink():
+                drift.links[name] = folder
+            elif folder is not None and folder.exists():
                 drift.force[name] = folder
 
-    # a module added, moved or removed: rebuild from where the lists part
+    # A module added, moved or removed: rebuild from where the lists part. A
+    # module with no ibek-support folder cannot be built, so it is not counted.
+    missing = [module.name for module in live.modules if module.build is None]
+    present = [name for name in names if name not in missing]
     parts = next(
-        (i for i, name in enumerate(names) if built[i : i + 1] != [name]), first
+        (names.index(n) for i, n in enumerate(present) if built[i : i + 1] != [n]),
+        first,
     )
     if parts < first:
         out_of_date(parts, "the Dockerfile's module list changed")
@@ -135,9 +156,9 @@ def compare(stamp: Stamp, live: Stamp) -> Drift:
             "this container is recreated from an image built without it"
         )
 
-    missing = [module.name for module in live.modules if module.build is None]
     drift.rebuild = [name for name in names[first:] if name not in missing]
     drift.force = {n: f for n, f in drift.force.items() if n in drift.rebuild}
+    drift.links = {n: f for n, f in drift.links.items() if n in drift.rebuild}
     drift.requirements = stamp.requirements != live.requirements
     drift.base = stamp.base != live.base
     return drift
@@ -162,6 +183,8 @@ def report(drift: Drift) -> list[str]:
             lines.append(
                 f"    clones {name} again: {folder} and edits in it are removed"
             )
+        for name, folder in drift.links.items():
+            lines.append(f"    {name}: {folder} is a link, built as it is")
         lines.append("    fix: ibek dev sync --build")
     if drift.base:
         lines.append(
@@ -194,15 +217,14 @@ def fix_defs(stamp: Stamp, live: Stamp, drift: Drift) -> None:
     stamp.save()
 
 
-def build(
-    stamp: Stamp, live: Stamp, modules: list[str], force: dict[str, Path]
-) -> None:
+def build(stamp: Stamp, live: Stamp, drift: Drift) -> None:
     """
-    Level 2: build modules in the order given, then the IOC.
+    Level 2: build the out of date modules in Dockerfile order, then the IOC.
 
     The stamp records each step as it is done, so a build that fails part way
     is picked up by the next one.
     """
+    modules, force = drift.rebuild, drift.force
     clone_task = ansible_folder() / "roles" / "support" / "tasks" / "clone.yml"
     if force and "force_clone" not in clone_task.read_text():
         typer.echo(
@@ -240,6 +262,8 @@ def build(
             print(f"ibek dev: removing {force[name]} to clone {name} again")
             ansible(name, "--tags", "clone", "-e", "force_clone=true")
             record(name, source_only=True)
+        elif name in drift.links:
+            print(f"ibek dev: {drift.links[name]} is a link: it is left alone")
         ansible(name)
         record(name)
 

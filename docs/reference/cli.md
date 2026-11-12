@@ -126,7 +126,9 @@ ibek dev sync --build    # also rebuild what is out of date
 A module is built from the source already in `/epics/support/<module>`,
 unless what its `install.yml` says to clone has changed. Then
 `ansible.sh <module> --tags clone -e force_clone=true` first removes that
-folder and clones it again: **edits made in the folder are discarded**. Both
+folder and clones it again: **edits made in the folder are discarded**. A
+folder that is a symbolic link is never removed: the module is built in it
+as it is. Both
 `dev status` and `dev sync` name each folder that `dev sync --build` would
 remove. The new clone is recorded before the build, so if the build fails,
 the next `dev sync --build` builds the folder as it then is, without cloning
@@ -141,8 +143,10 @@ the build it is compared with, as it is once `make` has built it.
 that fails gives its exit code. The stamp records each module as it is built,
 so after a failed build the next `dev sync --build` starts at the module that
 failed. In an image with no stamp, each of these commands says so in one line
-and exits 0. A stamp that cannot be read is one line too: `dev status` and
-`dev sync` exit 0, `dev sync --build` exits 1. `dev instance` prints the same
+and exits 0. A stamp that cannot be read, a missing `Dockerfile` or
+`requirements.txt`, an `ibek-support` submodule that is not checked out, and
+a module folder that cannot be read are one line too: `dev status` and `dev sync`
+exit 0, `dev sync --build` exits 1. `dev instance` prints the same
 report after linking the instance, and a note when the instance's image tag
 differs from `ioc-version` in `/epics/versions.json`.
 

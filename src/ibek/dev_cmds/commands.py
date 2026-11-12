@@ -20,24 +20,20 @@ def _state(strict: bool = False) -> tuple[Stamp, Stamp] | None:
     Read the stamp and the live source tree.
 
     When there is nothing to compare, say why in one line and return None.
-    With strict, a stamp that cannot be read is an error.
+    With strict, a stamp or a source tree that cannot be read is an error.
     """
     try:
         made = load()
+        if made is None:
+            print(
+                f"ibek dev: no {stamp_file()}: this image was built without "
+                "`ibek dev stamp`, nothing to compare"
+            )
+            return None
+        return made, compute()
     except StampError as error:
         if strict:
             raise _fail(error) from error
-        print(f"ibek dev: {error}")
-        return None
-    if made is None:
-        print(
-            f"ibek dev: no {stamp_file()}: this image was built without "
-            "`ibek dev stamp`, nothing to compare"
-        )
-        return None
-    try:
-        return made, compute()
-    except StampError as error:
         print(f"ibek dev: {error}")
         return None
 
@@ -101,7 +97,7 @@ def sync(
     regenerates the IOC schema. Everything that needs a build is reported and
     left alone unless --build is given.
     """
-    # with --build a stamp that cannot be read is an error: nothing can be built
+    # with --build, having nothing to compare is an error: nothing can be built
     state = _state(strict=build)
     if state is None:
         return
@@ -125,7 +121,7 @@ def sync(
         if found.defs or found.dangling:
             drift.fix_defs(made, live, found)
         if build and (found.rebuild or found.ioc):
-            drift.build(made, live, found.rebuild, found.force)
+            drift.build(made, live, found)
     except StampError as error:
         raise _fail(error) from error
     _show(drift.compare(made, live))

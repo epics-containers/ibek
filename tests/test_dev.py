@@ -9,6 +9,7 @@ does to a container: it removes, clones and builds module folders.
 import json
 import os
 import shutil
+import sys
 import time
 from dataclasses import dataclass, field
 from pathlib import Path
@@ -24,6 +25,9 @@ from ibek.dev_cmds.stamp import compute, load
 from ibek.globals import GLOBALS
 
 runner = CliRunner()
+
+# the function that the tree fixture puts a stand-in for
+RUN = drift.run
 
 DOCKERFILE = """\
 ARG REGISTRY=ghcr.io/epics-containers
@@ -47,18 +51,6 @@ RUN ibek dev stamp
 FROM developer AS runtime_prep
 """
 
-SUPPORT_VARS = """\
-module:
-version:
-organization: https://github.com/epics-modules
-git_repo: "{{ organization.rstrip('/') }}/{{ module }}"
-local_path: "{{ support_folder }}/{{ module }}"
-patch_file:
-  path:
-  commit:
-  when:
-"""
-
 
 def write(path: Path, text: str = "") -> Path:
     path.parent.mkdir(parents=True, exist_ok=True)
@@ -69,7 +61,6 @@ def write(path: Path, text: str = "") -> Path:
 @dataclass
 class Tree:
     epics: Path
-    workspaces: Path
     # every command ibek asked to run
     calls: list[list[str]] = field(default_factory=list)
     # the ansible.sh run with these arguments fails, e.g. "busy" or "ioc"
@@ -141,16 +132,14 @@ class Tree:
 @pytest.fixture
 def tree(tmp_path: Path, mocker: MockerFixture) -> Tree:
     """A built generic IOC of three support modules, with its stamp."""
-    made = Tree(tmp_path / "epics", tmp_path / "workspaces")
+    made = Tree(tmp_path / "epics")
     source = made.source
-    made.workspaces.mkdir()
 
     write(source / "Dockerfile", DOCKERFILE)
     write(source / "requirements.txt", "ibek>=5\n")
     ansible = source / "ibek-support" / "_ansible"
     write(ansible / "ansible.sh", "#!/bin/bash\n")
     write(ansible / "epics.ibek.support.yaml", "module: epics\n")
-    write(ansible / "roles" / "support" / "vars" / "main.yml", SUPPORT_VARS)
     write(ansible / "roles" / "support" / "tasks" / "clone.yml", "force_clone\n")
 
     for folder, name in (
@@ -382,7 +371,9 @@ def test_submodule_not_checked_out(tree: Tree, tmp_path: Path, submodule: str):
     (instance / "config").mkdir(parents=True)
 
     for args in (["status"], ["sync"], ["sync", "--build"], ["instance", instance]):
-        lines = tree.dev(*args).splitlines()
+        # asked to build, there is nothing it can build: an error
+        code = 1 if args == ["sync", "--build"] else 0
+        lines = tree.dev(*args, code=code).splitlines()
         assert lines[-1].startswith(f"ibek dev: {tree.source / submodule} is not")
         assert "run `git submodule update --init` in the project" in lines[-1]
         assert len(lines) == (2 if args[0] == "instance" else 1)
@@ -390,6 +381,103 @@ def test_submodule_not_checked_out(tree: Tree, tmp_path: Path, submodule: str):
     assert tree.calls == []
     # the links are left for when the submodule is there
     assert (tree.epics / "ibek-defs" / "motor.ibek.support.yaml").is_symlink()
+
+
+def test_no_dockerfile(tree: Tree):
+    (tree.source / "Dockerfile").unlink()
+
+    for args, code in ((["status"], 0), (["sync"], 0), (["sync", "--build"], 1)):
+        lines = tree.dev(*args, code=code).splitlines()
+        assert lines == [
+            f"ibek dev: {tree.source / 'Dockerfile'} not found: nothing to compare"
+        ]
+    assert tree.calls == []
+
+
+def test_unreadable_module_folder(tree: Tree, mocker: MockerFixture):
+    """One line that names the folder."""
+    asyn = tree.module("asyn")
+    scandir = os.scandir
+
+    def refuse(path):
+        if Path(path) == asyn:
+            raise PermissionError(13, "Permission denied", str(path))
+        return scandir(path)
+
+    mocker.patch("ibek.dev_cmds.stamp.os.scandir", refuse)
+
+    for args, code in ((["status"], 0), (["sync"], 0), (["sync", "--build"], 1)):
+        lines = tree.dev(*args, code=code).splitlines()
+        assert lines == [f"ibek dev: cannot read {asyn}: Permission denied"]
+    assert tree.calls == []
+
+
+def test_module_named_twice_in_the_dockerfile(tree: Tree):
+    """The module list is ordered and unique: the first naming counts."""
+    dockerfile = tree.source / "Dockerfile"
+    dockerfile.write_text(
+        dockerfile.read_text().replace(
+            "RUN ansible.sh motor", "RUN ansible.sh motor\nRUN ansible.sh busy"
+        )
+    )
+    assert compute().names() == ["asyn", "busy", "motor"]
+    assert "matches" in tree.dev("status")
+
+    write(tree.module("busy") / "busy.install.yml.orig", "a stray file")
+    assert "matches" in tree.dev("sync", "--build")
+    assert tree.ansible() == [["busy"], ["motor"], ["ioc"]]
+    stamp = load()
+    assert stamp is not None and stamp.names() == ["asyn", "busy", "motor"]
+
+
+def test_dockerfile_module_with_no_ibek_support_folder(tree: Tree):
+    """Nothing ibek can build: said as it is, with no command that cannot fix it."""
+    dockerfile = tree.source / "Dockerfile"
+    dockerfile.write_text(
+        dockerfile.read_text().replace(
+            "RUN ansible.sh busy", "RUN ansible.sh ghost\nRUN ansible.sh busy"
+        )
+    )
+
+    for args in (["status"], ["sync"], ["sync", "--build"]):
+        lines = tree.dev(*args).splitlines()
+        assert len(lines) == 2
+        assert lines[1].strip() == (
+            f"ghost: the Dockerfile builds it, but {tree.source} does not have "
+            "one ibek-support*/ghost folder"
+        )
+    assert tree.calls == []
+
+
+def test_run_gives_the_exit_code_of_a_failed_command():
+    RUN([sys.executable, "-c", "pass"])
+
+    with pytest.raises(typer.Exit) as failed:
+        RUN([sys.executable, "-c", "import sys; sys.exit(3)"])
+    assert failed.value.exit_code == 3
+
+    with pytest.raises(typer.Exit) as failed:
+        RUN(["/nowhere/no-such-command"])
+    assert failed.value.exit_code == 1
+
+
+def test_failing_ansible_run_stops_the_build(tree: Tree, mocker: MockerFixture):
+    """With a real ansible.sh that fails: its exit code, and nothing after it."""
+    log = tree.epics / "ansible.log"
+    script = tree.source / "ibek-support" / "_ansible" / "ansible.sh"
+    script.write_text(f'#!/bin/bash\necho "$@" >> {log}\nexit 7\n')
+    script.chmod(0o755)
+    tree.dev("stamp")
+    mocker.patch.object(drift, "run", RUN)
+    write(tree.module("busy") / "busy.install.yml.orig", "a stray file")
+
+    output = tree.dev("sync", "--build", code=7)
+
+    assert f"ibek dev: failed: {script} busy" in output
+    assert log.read_text() == "busy\n"
+    stamp = load()
+    assert stamp is not None and stamp.pending == ["busy", "motor"]
+    assert "busy: rebuild not finished" in tree.dev("status")
 
 
 def test_level_1_definitions(tree: Tree):
@@ -505,6 +593,28 @@ def test_level_2_failed_build_is_retried_on_the_same_clone(tree: Tree):
     assert fix.read_text() == "what makes it build"
     assert (folder / "lib" / "libbusy.a").exists()
     assert "removing" not in output and "matches" in output
+
+
+def test_level_2_module_folder_that_is_a_link(tree: Tree):
+    """A link is someone's own folder: never removed, built as it is."""
+    folder = tree.built("busy")
+    elsewhere = tree.epics / "elsewhere"
+    shutil.move(folder, elsewhere)
+    folder.symlink_to(elsewhere)
+    edit = write(elsewhere / "edit.c", "work in progress")
+    write(tree.module("busy") / "busy.install.yml", "module: busy\nversion: R2\n")
+
+    output = tree.dev("status")
+    assert "busy: version, repository or patch changed" in output
+    assert f"busy: {folder} is a link, built as it is" in output
+    assert "clones" not in output
+
+    output = tree.dev("sync", "--build")
+    assert tree.ansible() == [["busy"], ["motor"], ["ioc"]]
+    assert f"ibek dev: {folder} is a link: it is left alone" in output
+    assert "removing" not in output and "matches" in output
+    assert folder.resolve() == elsewhere and edit.read_text() == "work in progress"
+    assert (elsewhere / "VERSION").read_text() == "R1-0"
 
 
 @pytest.mark.parametrize(
@@ -686,7 +796,7 @@ def test_ioc_reminder_is_cleared_by_make(tree: Tree):
     write(ioc / "iocApp" / "src" / "O.linux-x86_64" / "main.o")
     write(ioc / "configure" / "O.linux-x86_64" / "Makefile")
     write(ioc / "dbd" / "ioc.dbd")
-    (ioc / "config").symlink_to(tree.workspaces)
+    (ioc / "config").symlink_to(tree.epics)
     assert "matches" in tree.dev("status")
 
     # each kind of file that make builds the binary from
@@ -721,15 +831,17 @@ def test_ioc_reminder_is_cleared_by_make(tree: Tree):
 def test_missing_module_folder(tree: Tree):
     motor = tree.module("motor")
     write(motor.parent / "README.md", "the submodule is checked out\n")
-    shutil.move(motor, tree.workspaces / "motor")
+    shutil.move(motor, tree.epics / "motor")
 
     output = tree.dev("sync", "--build")
-    assert "motor: not in exactly one ibek-support* folder" in output
+    assert "motor: the Dockerfile builds it, but" in output
+    assert "have one ibek-support*/motor folder" in output
+    assert "ibek dev sync --build" not in output
     assert tree.ansible() == []
     assert not (tree.epics / "pvi-defs" / "motor.pvi.device.yaml").is_symlink()
 
     # when the folder is back its definition files are linked again
-    shutil.move(tree.workspaces / "motor", motor)
+    shutil.move(tree.epics / "motor", motor)
     tree.calls.clear()
     assert "definitions changed: motor" in tree.dev("status")
     tree.dev("sync")

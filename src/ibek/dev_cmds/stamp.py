@@ -127,7 +127,11 @@ def _files(
     """
 
     def scan(folder: Path, prefix: str) -> Iterator[tuple[str, Path]]:
-        for entry in sorted(os.scandir(folder), key=lambda e: e.name):
+        try:
+            entries = sorted(os.scandir(folder), key=lambda e: e.name)
+        except OSError as error:
+            raise StampError(f"cannot read {folder}: {error.strerror}") from error
+        for entry in entries:
             path = prefix + entry.name
             if any(fnmatch.fnmatchcase(entry.name, junk) for junk in JUNK):
                 continue
@@ -145,10 +149,13 @@ def _files(
 def _hash(files: Iterable[tuple[str, Path]]) -> str:
     total = hashlib.sha256()
     for name, path in files:
-        if path.is_symlink():
-            content = b"link " + os.readlink(path).encode()
-        else:
-            content = path.read_bytes().replace(b"\r\n", b"\n")
+        try:
+            if path.is_symlink():
+                content = b"link " + os.readlink(path).encode()
+            else:
+                content = path.read_bytes().replace(b"\r\n", b"\n")
+        except OSError as error:
+            raise StampError(f"cannot read {path}: {error.strerror}") from error
         total.update(name.encode() + b"\0" + hashlib.sha256(content).digest())
     return total.hexdigest()
 
@@ -257,7 +264,8 @@ def compute() -> Stamp:
 
     # the module list, as the ansible all_support role reads it
     matches = (re.match(r"RUN *ansible.sh ([^ ]*)", line) for line in dockerfile)
-    names = [match.group(1) for match in matches if match]
+    # a module named twice is one module, where it is first named
+    names = list(dict.fromkeys(match.group(1) for match in matches if match))
     base = [" ".join(line.split()) for line in dockerfile]
     base = [line for line in base if line.startswith(("ARG ", "FROM "))]
 
