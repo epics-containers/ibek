@@ -1,4 +1,3 @@
-import json
 import logging
 import shutil
 from pathlib import Path
@@ -6,7 +5,6 @@ from pathlib import Path
 import typer
 
 from ibek.globals import GLOBALS, NaturalOrderGroup
-from ibek.pattern_cmds.schema import find_image, parse_image_ref
 
 from . import drift
 from .stamp import Stamp, StampError, compute, load, source, stamp_file
@@ -131,23 +129,12 @@ def sync(
     _show(drift.compare(made, live))
 
 
-def _instance_report(instance: Path) -> None:
+def _instance_report() -> None:
     """Report drift for someone about to run an instance. Never an error."""
     try:
         state = _state()
         if state is not None:
             _show(drift.compare(*state))
-        image = find_image(instance)
-        versions = GLOBALS.EPICS_ROOT / "versions.json"
-        if image is None or not versions.exists():
-            return
-        wanted = parse_image_ref(image).tag
-        here = json.loads(versions.read_text()).get("ioc-version")
-        if here and here != wanted:
-            print(
-                f"note: {instance.name} names image version {wanted}, "
-                f"this container is {here}"
-            )
     except Exception as error:
         print(f"ibek dev: no comparison with {source()}: {error}")
 
@@ -195,7 +182,7 @@ def instance(
     print(f"Symlinking {instance_config} to {config_folder}")
     config_folder.symlink_to(instance_config)
 
-    _instance_report(instance)
+    _instance_report()
 
 
 @dev_cli.command()

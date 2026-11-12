@@ -147,8 +147,7 @@ and exits 0. A stamp that cannot be read, a missing `Dockerfile` or
 `requirements.txt`, an `ibek-support` submodule that is not checked out, and
 a module folder that cannot be read are one line too: `dev status` and `dev sync`
 exit 0, `dev sync --build` exits 1. `dev instance` prints the same
-report after linking the instance, and a note when the instance's image tag
-differs from `ioc-version` in `/epics/versions.json`.
+report after linking the instance.
 
 `dev support` is a placeholder and raises `NotImplementedError`.
 `ioc build-docker` is experimental: it interprets supported Dockerfile steps

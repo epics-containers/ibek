@@ -951,9 +951,6 @@ def test_missing_module_folder(tree: Tree):
 def test_instance_reports_drift(tree: Tree, tmp_path: Path):
     instance = tmp_path / "bl01t-ea-test-01"
     write(instance / "config" / "ioc.yaml", "ioc_name: test\n")
-    image = "ghcr.io/epics-containers/ioc-generic-runtime:2026.1.1"
-    write(instance / "values.yaml", f"ioc-instance:\n  image: {image}\n")
-    write(tree.epics / "versions.json", '{"ioc-version": "2026.11.2"}')
     write(tree.module("asyn") / "asyn.install.yml", "module: asyn\nversion: R2\n")
 
     output = tree.dev("instance", instance)
@@ -961,12 +958,9 @@ def test_instance_reports_drift(tree: Tree, tmp_path: Path):
     assert (tree.epics / "ioc" / "config").resolve() == instance / "config"
     assert "asyn: version, repository or patch changed" in output
     assert "fix: ibek dev sync --build" in output
-    assert "names image version 2026.1.1, this container is 2026.11.2" in output
     assert tree.calls == []
 
-    # the same version: no note. A stamp that cannot be read: still no error
-    write(tree.epics / "versions.json", '{"ioc-version": "2026.1.1"}')
+    # a stamp that cannot be read: still no error
     (tree.epics / "dev-stamp.json").write_text("{")
     output = tree.dev("instance", instance)
-    assert "names image version" not in output
     assert "cannot read" in output
