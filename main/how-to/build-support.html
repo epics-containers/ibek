@@ -7,7 +7,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Build support with Ansible &#8212; ibek 4.10.0b2.dev4+g066b059fe documentation</title>
+    <title>Build support with Ansible &#8212; ibek 4.10.1.dev14+g389585d59 documentation</title>
   
   
   
@@ -41,7 +41,7 @@
   <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=75c7c72ae941e8b558d8" />
 <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=75c7c72ae941e8b558d8" />
 
-    <script src="../_static/documentation_options.js?v=32c05fc1"></script>
+    <script src="../_static/documentation_options.js?v=8ae25f56"></script>
     <script src="../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -648,8 +648,9 @@ that revision in the source tree. On a fresh clone the wrapper accepts:</p>
 </div>
 <p>Put <code class="docutils literal notranslate"><span class="pre">-v</span> <span class="pre">VERSION</span></code> <strong>before</strong> the module name; later arguments are passed to
 <code class="docutils literal notranslate"><span class="pre">ansible-playbook</span></code>. Prefer recording release versions in the recipe for
-repeatable image builds. The declared <code class="docutils literal notranslate"><span class="pre">force_clone</span></code> and <code class="docutils literal notranslate"><span class="pre">force_build</span></code> variables
-are not implemented switches.</p>
+repeatable image builds. <code class="docutils literal notranslate"><span class="pre">-e</span> <span class="pre">force_clone=true</span></code> removes the module folder and
+clones it again at the <code class="docutils literal notranslate"><span class="pre">install.yml</span></code> version; it refuses a module folder that
+is a symlink.</p>
 <p>Inspect the registered files and generated schema, then render a small instance
 using the module, as in <a class="reference internal" href="write-support.html"><span class="std std-doc">writing support</span></a>. Finally run it in
 the matching IOC image: compilation and YAML validation do not check hardware

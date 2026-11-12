@@ -29,9 +29,9 @@ to ibek-support, so use the version selected by your generic IOC project.
 | `skip_clean` | False; true skips the final `make clean`, **not** the initial clean before compilation. |
 
 An existing `local_path` is used as-is: it is not fetched, checked out at
-`version`, or reset. `patch_file` also runs only on a fresh clone. The declared
-`force_clone` and `force_build` variables currently have no implementing tasks;
-they do not change that behavior.
+`version`, or reset. `patch_file` also runs only on a fresh clone.
+`-e force_clone=true` removes the folder and clones it again at `version`; it
+refuses a folder that is a symlink.
 
 ## Dependencies and runtime assets
 

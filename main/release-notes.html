@@ -7,7 +7,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Changelog &#8212; ibek 4.10.0b2.dev4+g066b059fe documentation</title>
+    <title>Changelog &#8212; ibek 4.10.1.dev14+g389585d59 documentation</title>
   
   
   
@@ -41,7 +41,7 @@
   <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=75c7c72ae941e8b558d8" />
 <link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=75c7c72ae941e8b558d8" />
 
-    <script src="_static/documentation_options.js?v=32c05fc1"></script>
+    <script src="_static/documentation_options.js?v=8ae25f56"></script>
     <script src="_static/doctools.js?v=fd6eb6e6"></script>
     <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="_static/clipboard.min.js?v=a7894cd8"></script>
@@ -499,6 +499,18 @@
 <h2>Unreleased<a class="headerlink" href="#unreleased" title="Link to this heading">#</a></h2>
 <section id="added">
 <h3>Added<a class="headerlink" href="#added" title="Link to this heading">#</a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">ibek</span> <span class="pre">dev</span></code> commands for a devcontainer that runs a pre-built generic IOC
+image, where the host project mounted over <code class="docutils literal notranslate"><span class="pre">/epics/generic-source</span></code> can
+differ from the tree the image was built from. <code class="docutils literal notranslate"><span class="pre">ibek</span> <span class="pre">dev</span> <span class="pre">stamp</span></code>, run as the
+last step of the Dockerfile’s developer stage, records that tree in
+<code class="docutils literal notranslate"><span class="pre">/epics/dev-stamp.json</span></code>. <code class="docutils literal notranslate"><span class="pre">ibek</span> <span class="pre">dev</span> <span class="pre">status</span></code> shows how the mounted project
+differs. <code class="docutils literal notranslate"><span class="pre">ibek</span> <span class="pre">dev</span> <span class="pre">sync</span></code> links changed support definition files, removes
+dangling links and regenerates the IOC schema, and reports what needs a
+build; <code class="docutils literal notranslate"><span class="pre">ibek</span> <span class="pre">dev</span> <span class="pre">sync</span> <span class="pre">--build</span></code> also rebuilds the out of date support
+modules, those after them in the Dockerfile, and the IOC, cloning a module
+again only when its <code class="docutils literal notranslate"><span class="pre">install.yml</span></code> asks for a different source. <code class="docutils literal notranslate"><span class="pre">ibek</span> <span class="pre">dev</span>
+<span class="pre">instance</span></code> prints the same report. In an image with no stamp each command
+says so and exits 0. See <code class="docutils literal notranslate"><span class="pre">docs/reference/cli.md</span></code>.</p>
 <p><code class="docutils literal notranslate"><span class="pre">ibek</span> <span class="pre">pattern</span> <span class="pre">install</span> <span class="pre">library:pattern&#64;version</span> <span class="pre">...</span></code> installs runtime patterns
 into a generic IOC image at build time, beside its compiled support modules:
 support YAML to <code class="docutils literal notranslate"><span class="pre">/epics/ibek-defs</span></code>, PVI device YAML to <code class="docutils literal notranslate"><span class="pre">/epics/pvi-defs</span></code>,
