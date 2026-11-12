@@ -1080,9 +1080,13 @@ def test_level_2_build_resumes_after_a_failure(tree: Tree):
     assert tree.ansible() == [["busy"], ["motor"], ["ioc"]]
 
 
-def test_level_2_needs_force_clone_in_ibek_support(tree: Tree):
-    ansible = tree.source / "ibek-support" / "_ansible"
-    write(ansible / "roles" / "support" / "tasks" / "clone.yml", "- name: Clone\n")
+@pytest.mark.parametrize("text", ["- name: Clone\n", None])
+def test_level_2_needs_force_clone_in_ibek_support(tree: Tree, text: str | None):
+    clone = tree.source / "ibek-support/_ansible/roles/support/tasks/clone.yml"
+    if text is None:
+        clone.unlink()
+    else:
+        clone.write_text(text)
     tree.dev("stamp")
     write(tree.module("asyn") / "asyn.install.yml", "module: asyn\nversion: R3\n")
 

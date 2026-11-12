@@ -113,6 +113,7 @@ and what comes after it. The hashes cover file names and content, with CRLF read
 as LF. They leave out file modes and a fixed list of names: `.git`,
 `.ansible`, `__pycache__`, `*.pyc`, `*build.log`, `*~`, `*.swp` and
 `.DS_Store`. Any other file in a hashed folder counts, tracked by git or not.
+A symbolic link counts as its link text, not as what it points at.
 The stamp does not cover the files that `ibek pattern install` writes into the
 image: they are not compared, and `dev sync` leaves them as they are.
 
@@ -130,7 +131,8 @@ ibek dev sync --build    # also rebuild what is out of date
 | The base image | Reported: pull a newer developer image or rebuild it locally. | The same. |
 | The IOC binary is missing, older than `ioc/Makefile` or a file in `ioc/configure` or `ioc/iocApp` (`O.*` folders apart), or older than the start of the last build by `dev sync --build` | Reported: run `make` in `/epics/ioc`. | Runs `ansible.sh ioc`. |
 
-A module is built from the source already in `/epics/support/<module>`,
+A module is built from the source already in `/epics/support/<module>`, or
+in the folder that a `local_path` in its `install.yml` names,
 unless what its `install.yml` says to clone has changed. Then
 `ansible.sh <module> --tags clone -e force_clone=true` first removes that
 folder and clones it again: **edits made in the folder are discarded**. A

@@ -270,7 +270,11 @@ def build(stamp: Stamp, live: Stamp, drift: Drift) -> None:
     """
     modules, force = drift.rebuild, drift.force
     clone_task = ansible_folder() / "roles" / "support" / "tasks" / "clone.yml"
-    if force and "force_clone" not in clone_task.read_text():
+    try:
+        can_force = "force_clone" in clone_task.read_text()
+    except (OSError, ValueError):
+        can_force = False
+    if force and not can_force:
         typer.echo(
             f"ibek dev: {', '.join(force)} must be cloned again, which this "
             "ibek-support cannot do (no force_clone): update ibek-support",
