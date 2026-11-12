@@ -10,7 +10,9 @@ path settings; this variable does not rewrite them.
 | --- | --- |
 | `/epics/support` | Built support modules and `configure/RELEASE`. |
 | `/epics/ibek-defs` | Installed support YAML definitions. |
+| `/epics/ibek-defs/runtime-patterns.lock.yaml` | The runtime patterns `pattern install` installed in the image, with file hashes. |
 | `/epics/pvi-defs` | Installed PVI device YAML. |
+| `/epics/support/configure/protocol` | The image's StreamDevice protocols, copied to `/epics/runtime/protocol` by the start script. |
 | `/epics/ioc/config` | Instance inputs; also searched for PVI and autosave overrides. |
 | `/epics/runtime` | Generated `st.cmd`, `ioc.subst`, PVI templates, and wait list. |
 | `/epics/runtime/protocol` | Instance StreamDevice protocols copied by `runtime place-files`. |
