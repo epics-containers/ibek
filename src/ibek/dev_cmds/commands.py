@@ -107,11 +107,11 @@ def sync(
         if build and found.requirements:
             requirements = source() / "requirements.txt"
             drift.run(["uv", "pip", "install", "--upgrade", "-r", str(requirements)])
-            made.requirements = live.requirements
-            made.save()
             # the packages on disk are not the ones this process has loaded:
             # the schema comes from a fresh ibek, anything more from a fresh run
             drift.schema()
+            made.requirements = live.requirements
+            made.save()
             print(
                 "ibek dev: upgraded the Python packages of requirements.txt. "
                 "Run `ibek dev sync --build` again if more remains:"

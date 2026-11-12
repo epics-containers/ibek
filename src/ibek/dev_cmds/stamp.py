@@ -113,7 +113,7 @@ def load() -> Stamp | None:
             )
         modules = [Module(**module) for module in data.pop("modules")]
         return Stamp(modules=modules, **data)
-    except (ValueError, TypeError, KeyError, AttributeError) as error:
+    except (OSError, ValueError, TypeError, KeyError, AttributeError) as error:
         raise StampError(f"cannot read {stamp_file()}: {error}") from error
 
 
@@ -246,7 +246,10 @@ def ioc_sources() -> Iterator[Path]:
 def _read(path: Path) -> str:
     if not path.is_file():
         raise StampError(f"{path} not found: nothing to compare")
-    return path.read_text()
+    try:
+        return path.read_text()
+    except (OSError, ValueError) as error:
+        raise StampError(f"cannot read {path}: {error}") from error
 
 
 def compute() -> Stamp:

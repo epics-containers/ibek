@@ -52,6 +52,14 @@ FROM developer AS runtime_prep
 """
 
 
+# the folders that the ansible runtime tasks link definition files into
+LINKS = (
+    ("ibek-defs", "*.ibek.support.yaml"),
+    ("pvi-defs", "*.pvi.device.yaml"),
+    ("autosave", "*.req"),
+)
+
+
 def write(path: Path, text: str = "") -> Path:
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(text)
@@ -63,7 +71,8 @@ class Tree:
     epics: Path
     # every command ibek asked to run
     calls: list[list[str]] = field(default_factory=list)
-    # the ansible.sh run with these arguments fails, e.g. "busy" or "ioc"
+    # the ansible.sh run with these arguments fails, e.g. "busy" or "ioc";
+    # "schema" fails the schema generation
     fail_on: str = ""
 
     @property
@@ -105,7 +114,14 @@ class Tree:
             if not folder.exists():
                 clone()
         elif "--tags" in args:
+            # the runtime tasks: link the definition files of each module
             assert args == ("--tags", "runtime")
+            for name in module.split(","):
+                for target in self.module(name).iterdir():
+                    for defs, pattern in LINKS:
+                        link = self.epics / defs / target.name
+                        if target.match(pattern) and not link.is_symlink():
+                            link.symlink_to(target)
         else:
             # every task: an existing folder is not cloned again
             assert args == ()
@@ -156,11 +172,7 @@ def tree(tmp_path: Path, mocker: MockerFixture) -> Tree:
     write(made.module("busy") / "busy_settings.req", "$(P)busy\n")
 
     # the links that the ansible runtime tasks make at image build
-    for folder, pattern in (
-        ("ibek-defs", "*.ibek.support.yaml"),
-        ("pvi-defs", "*.pvi.device.yaml"),
-        ("autosave", "*.req"),
-    ):
+    for folder, pattern in LINKS:
         (made.epics / folder).mkdir()
         for target in source.glob(f"ibek-support*/*/{pattern}"):
             (made.epics / folder / target.name).symlink_to(target)
@@ -174,6 +186,8 @@ def tree(tmp_path: Path, mocker: MockerFixture) -> Tree:
 
     def run(command: list[str]) -> None:
         made.calls.append(command)
+        if made.fail_on == "schema" and "generate-schema" in command:
+            raise typer.Exit(2)
         if command[0].endswith("/ansible.sh"):
             made.ansible_sh(*command[1:])
 
@@ -344,12 +358,13 @@ def test_no_stamp(tree: Tree, tmp_path: Path):
         ('{"schema": 99}', "has schema 99, this ibek reads 1"),
         ("{", "cannot read"),
         ('{"schema": 1, "modules": 3}', "cannot read"),
+        (b"\xff", "cannot read"),
     ],
 )
-def test_unreadable_stamp(tree: Tree, text: str, message: str):
+def test_unreadable_stamp(tree: Tree, text: str | bytes, message: str):
     """One line: reported by status and sync, an error when asked to build."""
     stamp = tree.epics / "dev-stamp.json"
-    stamp.write_text(text)
+    stamp.write_bytes(text.encode() if isinstance(text, str) else text)
     write(tree.module("busy") / "busy.install.yml", "module: busy\nversion: R2\n")
 
     for args, code in ((["status"], 0), (["sync"], 0), (["sync", "--build"], 1)):
@@ -358,7 +373,7 @@ def test_unreadable_stamp(tree: Tree, text: str, message: str):
         assert message in lines[0] and str(stamp) in lines[0]
 
     assert tree.calls == []
-    assert stamp.read_text() == text
+    assert stamp.read_bytes() == (text.encode() if isinstance(text, str) else text)
     assert (tree.built("busy") / "VERSION").read_text() == "R1-0"
 
 
@@ -391,6 +406,28 @@ def test_no_dockerfile(tree: Tree):
         assert lines == [
             f"ibek dev: {tree.source / 'Dockerfile'} not found: nothing to compare"
         ]
+    assert tree.calls == []
+
+
+def test_stamp_file_that_is_a_folder(tree: Tree):
+    stamp = tree.epics / "dev-stamp.json"
+    stamp.unlink()
+    stamp.mkdir()
+
+    for args, code in ((["status"], 0), (["sync"], 0), (["sync", "--build"], 1)):
+        lines = tree.dev(*args, code=code).splitlines()
+        assert len(lines) == 1 and lines[0].startswith(f"ibek dev: cannot read {stamp}")
+    assert tree.calls == []
+
+
+@pytest.mark.parametrize("name", ["Dockerfile", "requirements.txt"])
+def test_dockerfile_or_requirements_that_is_not_text(tree: Tree, name: str):
+    (tree.source / name).write_bytes(b"\xff")
+
+    for args, code in ((["status"], 0), (["sync"], 0), (["sync", "--build"], 1)):
+        lines = tree.dev(*args, code=code).splitlines()
+        assert len(lines) == 1
+        assert lines[0].startswith(f"ibek dev: cannot read {tree.source / name}")
     assert tree.calls == []
 
 
@@ -529,6 +566,7 @@ def test_level_1_definitions(tree: Tree):
     ]
     assert len(tree.calls) == 2
     assert not stale.is_symlink()
+    assert (tree.epics / "ibek-defs" / "asyn2.ibek.support.yaml").exists()
     assert "matches" in output
 
     # the stamp now describes the definitions in use
@@ -760,6 +798,21 @@ def test_level_2_requirements(tree: Tree):
         ["motor"],
         ["ioc"],
     ]
+
+
+def test_level_2_requirements_when_the_schema_fails(tree: Tree):
+    """The upgrade is not recorded, so the next run makes the schema."""
+    write(tree.source / "requirements.txt", "ibek>=6\n")
+
+    tree.fail_on = "schema"
+    tree.dev("sync", "--build", code=2)
+    assert "requirements.txt changed" in tree.dev("status")
+
+    tree.fail_on = ""
+    tree.calls.clear()
+    assert "matches" in tree.dev("sync", "--build")
+    assert tree.calls[0][0] == "uv"
+    assert "generate-schema" in tree.calls[1] and len(tree.calls) == 2
 
 
 def test_level_2_build_resumes_after_a_failure(tree: Tree):
