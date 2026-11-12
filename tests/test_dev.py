@@ -593,6 +593,31 @@ def test_dangling_links_alone(tree: Tree):
     assert (tree.epics / "ibek-defs" / "asyn.ibek.support.yaml").is_symlink()
 
 
+def test_sync_leaves_regular_files_in_the_definition_folders(tree: Tree):
+    """Files that `ibek pattern install` writes there are not links: kept."""
+    files = {
+        tree.epics / "ibek-defs" / "lakeshore.ibek.support.yaml": "module: lake\n",
+        tree.epics / "ibek-defs" / "runtime-patterns.lock.yaml": "version: 1\n",
+        tree.epics / "pvi-defs" / "lakeshore.pvi.device.yaml": "label: lake\n",
+        tree.epics / "autosave" / "lakeshore_settings.req": "$(P)lake\n",
+    }
+    for path, text in files.items():
+        write(path, text)
+    assert "matches" in tree.dev("status")
+
+    # both parts of the level 1 fix: links made again, dangling links removed
+    write(tree.module("asyn") / "asyn.ibek.support.yaml", "module: asyn\n# more\n")
+    (tree.epics / "pvi-defs" / "gone.pvi.device.yaml").symlink_to("nowhere")
+    output = tree.dev("status")
+    assert "definitions changed: asyn; 1 dangling definition links" in output
+
+    assert "matches" in tree.dev("sync")
+    assert tree.ansible() == [["asyn", "--tags", "runtime"]]
+    assert not (tree.epics / "pvi-defs" / "gone.pvi.device.yaml").is_symlink()
+    for path, text in files.items():
+        assert not path.is_symlink() and path.read_text() == text
+
+
 def test_level_2_is_reported_and_built_only_on_request(tree: Tree):
     """A new version in install.yml: the module is cloned again, with a warning."""
     write(tree.module("busy") / "busy.install.yml", "module: busy\nversion: R2\n")
