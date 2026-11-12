@@ -188,6 +188,9 @@ def tree(tmp_path: Path, mocker: MockerFixture) -> Tree:
         made.calls.append(command)
         if made.fail_on == "schema" and "generate-schema" in command:
             raise typer.Exit(2)
+        if "generate-schema" in command and drift.dangling():
+            # the schema reads every link in the definition folder
+            raise typer.Exit(1)
         if command[0].endswith("/ansible.sh"):
             made.ansible_sh(*command[1:])
 
@@ -813,6 +816,27 @@ def test_level_2_requirements_when_the_schema_fails(tree: Tree):
     assert "matches" in tree.dev("sync", "--build")
     assert tree.calls[0][0] == "uv"
     assert "generate-schema" in tree.calls[1] and len(tree.calls) == 2
+
+
+def test_level_2_requirements_with_a_dangling_link(tree: Tree):
+    """The links are put right before the schema, which reads them all."""
+    write(tree.source / "requirements.txt", "ibek>=6\n")
+    (tree.module("busy") / "busy.ibek.support.yaml").unlink()
+    stale = tree.epics / "ibek-defs" / "busy.ibek.support.yaml"
+    assert stale.is_symlink()
+
+    output = tree.dev("sync", "--build")
+    assert tree.calls[0][0] == "uv" and "generate-schema" in tree.calls[-1]
+    assert tree.ansible() == [["busy", "--tags", "runtime"]]
+    assert not stale.is_symlink()
+    assert "Run `ibek dev sync --build` again if more remains" in output
+    assert "matches" in output
+    stamp = load()
+    assert stamp is not None and stamp.requirements == compute().requirements
+
+    tree.calls.clear()
+    assert "matches" in tree.dev("sync", "--build")
+    assert tree.calls == []
 
 
 def test_level_2_build_resumes_after_a_failure(tree: Tree):

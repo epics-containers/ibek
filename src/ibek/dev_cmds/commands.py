@@ -108,8 +108,12 @@ def sync(
             requirements = source() / "requirements.txt"
             drift.run(["uv", "pip", "install", "--upgrade", "-r", str(requirements)])
             # the packages on disk are not the ones this process has loaded:
-            # the schema comes from a fresh ibek, anything more from a fresh run
-            drift.schema()
+            # the schema comes from a fresh ibek, anything more from a fresh run.
+            # The schema cannot be made while a definition link dangles.
+            if found.defs or found.dangling:
+                drift.fix_defs(made, live, found)
+            else:
+                drift.schema()
             made.requirements = live.requirements
             made.save()
             print(
