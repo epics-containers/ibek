@@ -7,6 +7,19 @@ Unreleased
 Added
 ~~~~~
 
+``ibek dev`` commands for a devcontainer that runs a pre-built generic IOC
+image, where the host project mounted over ``/epics/generic-source`` can
+differ from the tree the image was built from. ``ibek dev stamp``, run as the
+last step of the Dockerfile's developer stage, records that tree in
+``/epics/dev-stamp.json``. ``ibek dev status`` shows how the mounted project
+differs. ``ibek dev sync`` links changed support definition files, removes
+dangling links and regenerates the IOC schema, and reports what needs a
+build; ``ibek dev sync --build`` also rebuilds the out of date support
+modules, those after them in the Dockerfile, and the IOC, cloning a module
+again only when its ``install.yml`` asks for a different source. ``ibek dev
+instance`` prints the same report. In an image with no stamp each command
+says so and exits 0. See ``docs/reference/cli.md``.
+
 ``ibek pattern schema`` finds the base schema of an image published on GitLab.
 For an image on a GitLab host listed in ``IBEK_GITLAB_HOSTS`` (``host[:port]``
 entries) or the CI job's server, ibek reads the ``ibek.ioc.schema.json`` link
