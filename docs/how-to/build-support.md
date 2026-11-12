@@ -139,8 +139,9 @@ ansible.sh -v R1-3 motorMotorSim
 
 Put `-v VERSION` **before** the module name; later arguments are passed to
 `ansible-playbook`. Prefer recording release versions in the recipe for
-repeatable image builds. The declared `force_clone` and `force_build` variables
-are not implemented switches.
+repeatable image builds. `-e force_clone=true` removes the module folder and
+clones it again at the `install.yml` version; it refuses a module folder that
+is a symlink.
 
 Inspect the registered files and generated schema, then render a small instance
 using the module, as in [writing support](write-support.md). Finally run it in

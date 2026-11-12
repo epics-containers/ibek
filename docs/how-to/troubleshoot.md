@@ -75,10 +75,12 @@ For image building, deployment, and operational debugging, use the
 
 The clone step reuses an existing `/epics/support/<module>` checkout without
 fetching or switching revisions. Changing `version` or passing `ansible.sh -v`
-only selects a revision for a new clone; the declared `force_clone` variable
-does not implement a refresh. Check the existing checkout's Git revision and
-local changes. Use a fresh developer build to test the recipe from scratch,
-or deliberately switch the source checkout after preserving local work.
+only selects a revision for a new clone. Check the existing checkout's Git
+revision and local changes. `ansible.sh <module> -e force_clone=true` removes
+the checkout and clones it again at the `install.yml` version; it refuses a
+module folder that is a symlink. Otherwise use a fresh developer build to test
+the recipe from scratch, or deliberately switch the source checkout after
+preserving local work.
 See [rebuilding support](build-support.md).
 
 ## A module builds but its entities are not recognised
