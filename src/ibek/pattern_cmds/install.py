@@ -34,7 +34,7 @@ from ruamel.yaml import YAML
 from ruamel.yaml.error import YAMLError
 
 from ibek.globals import GLOBALS, BaseSettings
-from ibek.support import support_yaml_module
+from ibek.support import Support, support_yaml_module
 
 from .lock import file_hash
 from .manifest import SUPPORT_YAML_SUFFIX, plan_vendor
@@ -117,13 +117,11 @@ class ImageLock:
 
     def load(self) -> None:
         try:
-            raw = YAML(typ="safe").load(self.path) or {}
+            raw = YAML(typ="safe").load(self.path)
         except YAMLError as exc:
             raise PatternError(f"{self.path}: invalid YAML: {exc}") from exc
         if not isinstance(raw, dict):
             raise PatternError(f"{self.path}: expected a mapping at the top level")
-        if not raw:
-            return
         version = raw.get("version")
         if version != IMAGE_LOCK_VERSION:
             raise PatternError(
@@ -136,7 +134,12 @@ class ImageLock:
                 f"{self.path}: unknown top-level key(s) {', '.join(unknown)} "
                 f"(an image lock holds only {', '.join(IMAGE_LOCK_KEYS)})"
             )
-        libraries = raw.get("libraries") or {}
+        missing = [key for key in IMAGE_LOCK_KEYS if key not in raw]
+        if missing:
+            raise PatternError(
+                f"{self.path}: missing top-level key(s) {', '.join(missing)}"
+            )
+        libraries = raw["libraries"]
         if not isinstance(libraries, dict) or not all(
             isinstance(patterns, dict) for patterns in libraries.values()
         ):
@@ -155,6 +158,9 @@ class ImageLock:
             problem = library_problem(key[0])
             if problem:
                 raise PatternError(f"{self.path}: library {key[0]!r} {problem}")
+            problem = folder_name_problem(key[1])
+            if problem:
+                raise PatternError(f"{self.path}: pattern {key[1]!r} {problem}")
             for rel in entry.files:
                 if _escapes(rel):
                     raise PatternError(
@@ -188,16 +194,28 @@ def _escapes(key: str) -> bool:
     return path.is_absolute() or ".." in path.parts
 
 
+def folder_name_problem(name: str) -> str | None:
+    """Why ``name`` is not one plain folder name, or None if it is.
+
+    Library and pattern names are joined to folder paths, so neither may hold a
+    path separator or be a dot folder such as ``..``.
+    """
+    if not name or "/" in name or "\\" in name:
+        return "must be a single folder name"
+    if name.startswith("."):
+        return "must not start with '.'"
+    return None
+
+
 def library_problem(library: str) -> str | None:
     """Why ``library`` cannot name its folder under SUPPORT, or None if it can.
 
     The library names the folder its database and req files go in, so it must
     be one plain folder name, and not a folder SUPPORT reserves.
     """
-    if not library or "/" in library or "\\" in library:
-        return "must be a single folder name"
-    if library.startswith("."):
-        return "must not start with '.'"
+    problem = folder_name_problem(library)
+    if problem:
+        return problem
     if library in RESERVED_SUPPORT_FOLDERS:
         return f"is reserved: {library}/ under the support folder is not a module"
     return None
@@ -258,6 +276,9 @@ def parse_install_refs(refs: list[str]) -> list[PatternRef]:
         problem = library_problem(ref.library)
         if problem:
             raise PatternError(f"{text!r}: library {ref.library!r} {problem}")
+        problem = folder_name_problem(ref.name)
+        if problem:
+            raise PatternError(f"{text!r}: pattern {ref.name!r} {problem}")
         key = (ref.library, ref.name)
         if key in seen:
             raise PatternError(f"pattern {label(key)!r} is listed more than once")
@@ -332,12 +353,25 @@ def _destination(file_name: str, library: str) -> Path | None:
 
 
 def _defined_module(path: Path, pattern: str) -> str:
+    """The module a pattern's support YAML defines, once the whole file is valid.
+
+    The file is validated against the full ``Support`` model here, before any
+    file is written, so that a file ``ioc generate-schema`` would reject is
+    refused by install instead.
+    """
     try:
         module = support_yaml_module(path)
+        data = YAML(typ="safe").load(path)
     except (OSError, YAMLError) as exc:
         raise PatternError(f"{pattern}: cannot read {path.name}: {exc}") from exc
     if not module:
         raise PatternError(f"{pattern}: {path.name} declares no module")
+    try:
+        Support.model_validate(data)
+    except ValidationError as exc:
+        raise PatternError(
+            f"{pattern}: {path.name} is not a valid support YAML: {exc}"
+        ) from exc
     return module
 
 

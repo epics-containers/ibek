@@ -25,7 +25,8 @@ therefore be a single folder name that does not start with `.`; it may not be
 `configure`, or the name of a folder already under `/epics/support` other
 than one an earlier `ibek pattern install` created for that library.
 `--list FILE` reads further references from a file, one per line, with `#`
-starting a comment. A pattern is identified by its library and its name
+starting a comment. The pattern name, too, must be a single folder name that
+does not start with `.`. A pattern is identified by its library and its name
 together, and may appear only once in a run.
 
 `--source` fetches every pattern from one library location (a git URL or a
@@ -72,10 +73,10 @@ step.)
 - two patterns, or two files of one pattern, installing the same file;
 - a pattern listed twice, or one already recorded in the image lock;
 - a pattern that selects no files or no `*.ibek.support.yaml`, or a support
-  YAML that declares no `module`;
+  YAML that declares no `module` or is not a valid support YAML;
 - a support YAML that names a database or PVI file by a path;
-- a library name that is not a plain folder name, or that names an existing
-  support module's folder;
+- a library or pattern name that is not a plain folder name, or a library
+  name that names an existing support module's folder;
 - a `.template` or `.db` name already in another module's `db/` folder, or
   installed from another library in the same run: msi loads the first match on
   its include path;
@@ -120,7 +121,8 @@ ibek pattern check --image
 ```
 
 In an image with no lock it reports `no image lock: nothing installed` and
-succeeds.
+succeeds. A lock that is empty, or lacks its `version` or `libraries`,
+fails both `check --image` and a later `install`.
 
 ## Instances that also vendor a pattern
 

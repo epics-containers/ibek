@@ -172,10 +172,43 @@ def test_check_image_without_lock(tmp_epics_root: Path, run):
     assert "no image lock: nothing installed" in output
 
 
-def test_check_image_refuses_bad_lock(tmp_epics_root: Path, run):
-    GLOBALS.IMAGE_PATTERN_LOCK.write_text("version: 7\npatterns: {}\n")
-    code, _ = run("check", "--image", "--allow-dirty")
+@pytest.mark.parametrize(
+    "text, message",
+    [
+        ("version: 7\npatterns: {}\n", "unsupported image lock version 7"),
+        ("", "expected a mapping at the top level"),
+        ("null\n", "expected a mapping at the top level"),
+        ("{}\n", "unsupported image lock version None"),
+        ("version: 1\n", "missing top-level key(s) libraries"),
+        ("version: 1\nlibraries:\n", "'libraries' must map each library"),
+    ],
+)
+def test_check_image_refuses_bad_lock(tmp_epics_root: Path, run, text, message):
+    GLOBALS.IMAGE_PATTERN_LOCK.write_text(text)
+    code, output = run("check", "--image", "--allow-dirty")
     assert code == 1
+    assert message in output
+
+
+def test_install_refuses_bad_lock(tmp_epics_root: Path, library: Path, run):
+    """An incomplete lock is not replaced by the next install's record."""
+    GLOBALS.IMAGE_PATTERN_LOCK.write_text("")
+    before = snapshot(tmp_epics_root)
+    code, output = run("install", "mylib:dev@1", "--source", library)
+    assert code == 1
+    assert "expected a mapping at the top level" in output
+    assert snapshot(tmp_epics_root) == before
+
+
+def test_lock_refuses_path_as_pattern_name(tmp_epics_root: Path, run):
+    GLOBALS.IMAGE_PATTERN_LOCK.write_text(
+        "version: 1\nlibraries:\n  l:\n    ../dev:\n      version: '1'\n"
+        "      source: s\n      verified: false\n      modules: [dev]\n"
+        "      files: {}\n"
+    )
+    code, output = run("check", "--image")
+    assert code == 1
+    assert "pattern '../dev' must be a single folder name" in output
 
 
 def test_lock_refuses_escaping_key(tmp_epics_root: Path, run):
@@ -293,6 +326,22 @@ def _setup_no_module(epics: Path, library: Path) -> list[str]:
     return ["mylib:dev@1", "mylib:other@1"]
 
 
+def _setup_invalid_support(epics: Path, library: Path) -> list[str]:
+    (library / "other" / "other.ibek.support.yaml").write_text(
+        "module: other\nentity_models: false\n"
+    )
+    return ["mylib:dev@1", "mylib:other@1"]
+
+
+def _setup_pattern_outside_library(epics: Path, library: Path) -> list[str]:
+    make_pattern(library.parent, "outside", device_files("outside"))
+    return ["mylib:dev@1", "mylib:../outside@1"]
+
+
+def _setup_nested_pattern_name(epics: Path, library: Path) -> list[str]:
+    return ["mylib:dev@1", "mylib:other/db@1"]
+
+
 def _setup_template_elsewhere(epics: Path, library: Path) -> list[str]:
     # the sample tree's ADSimDetector/db holds dummy.template
     (library / "other" / "db" / "dummy.template").write_text("record(ai, y) {}\n")
@@ -332,7 +381,7 @@ def _setup_nested_database(epics: Path, library: Path) -> list[str]:
     (library / "other" / "other.ibek.support.yaml").write_text(
         support_yaml("other").replace(
             "    parameters: {}\n",
-            "    parameters: {}\n    databases:\n      - file: db/other.template\n",
+            "    parameters: {}\n    databases:\n      - file: db/other.template\n        args: {}\n",
         )
     )
     return ["mylib:dev@1", "mylib:other@1"]
@@ -352,7 +401,7 @@ def _setup_nested_backslash(epics: Path, library: Path) -> list[str]:
     (library / "other" / "other.ibek.support.yaml").write_text(
         support_yaml("other").replace(
             "    parameters: {}\n",
-            "    parameters: {}\n    databases:\n      - file: db\\other.template\n",
+            "    parameters: {}\n    databases:\n      - file: db\\other.template\n        args: {}\n",
         )
     )
     return ["mylib:dev@1", "mylib:other@1"]
@@ -375,6 +424,9 @@ def _setup_library_is_module_folder(epics: Path, library: Path) -> list[str]:
         (_setup_selects_nothing, "nothing would be vendored"),
         (_setup_no_support_yaml, "mylib:other: selects no *.ibek.support.yaml"),
         (_setup_no_module, "declares no module"),
+        (_setup_invalid_support, "other.ibek.support.yaml is not a valid support"),
+        (_setup_pattern_outside_library, "'../outside' must be a single folder"),
+        (_setup_nested_pattern_name, "'other/db' must be a single folder name"),
         (_setup_template_elsewhere, "dummy.template is also installed as"),
         (_setup_req_in_support, "dummy_settings.req is also installed as"),
         (_setup_req_in_autosave, "dev_settings.req is also installed as"),
