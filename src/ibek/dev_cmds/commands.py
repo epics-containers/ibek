@@ -6,7 +6,7 @@ import typer
 
 from ibek.globals import GLOBALS, NaturalOrderGroup
 
-from . import drift
+from . import clones, drift
 from .stamp import (
     Stamp,
     StampError,
@@ -16,6 +16,7 @@ from .stamp import (
     load,
     source,
     stamp_file,
+    support_folder,
 )
 
 log = logging.getLogger(__name__)
@@ -73,10 +74,12 @@ def _show(found: drift.Drift) -> None:
     lines = drift.report(found)
     if not lines:
         print(f"ibek dev: this container matches {source()}")
-        return
-    print(f"ibek dev: this container differs from {source()}:")
+    else:
+        print(f"ibek dev: this container differs from {source()}:")
     for line in lines:
         print(f"  {line}")
+    for name, clone in found.clones.items():
+        print(f"ibek dev: {name} is linked to its clone {clone}")
 
 
 def _fail(message: object) -> typer.Exit:
@@ -228,16 +231,120 @@ def instance(
     _instance_report()
 
 
+def _release(modules: list[str]) -> None:
+    """Stop building modules from their clones. The clones are left alone."""
+    nothing = []
+    try:
+        declared = clones.declared()
+        for name in modules:
+            folder = support_folder(name) or GLOBALS.SUPPORT / name
+            # the declaration goes first: a link with none is reported, and
+            # nothing links the module again
+            clones.declare(name, None)
+            if clones.unlink(folder):
+                print(f"ibek dev: removed the link {folder}: its clone is left alone")
+            elif name in declared:
+                print(f"ibek dev: {name} is no longer declared for development")
+            else:
+                nothing.append(name)
+    except StampError as error:
+        raise _fail(error) from error
+    state = _state()
+    if state is not None:
+        _show(drift.compare(*state))
+    if nothing:
+        raise _fail(
+            f"{', '.join(nothing)}: not declared for development, and no link to remove"
+        )
+
+
 @dev_cli.command()
 def support(
-    module: Path = typer.Argument(
+    modules: list[str] = typer.Argument(
         ...,
-        help="The filepath to the support module to work on",
-        autocompletion=lambda: [],  # Forces path autocompletion
+        help="The support modules to work on, as the Dockerfile names them",
+    ),
+    release: bool = typer.Option(
+        False,
+        "--release",
+        help="Stop building the modules from their clones: remove the links "
+        "and the declarations, and leave the clones alone",
     ),
 ):
     """
-    enable a support module for development.
-    """
+    Build support modules from clones on the host, to work on their source.
 
-    raise NotImplementedError
+    Clones each module's repository to /workspaces/<module> at the version of
+    its install.yml, or uses a clone of that repository that is already
+    there, with whatever it has checked out. Removes the module that the
+    image built, links /epics/support/<module> to the clone, then builds it,
+    the modules after it in the Dockerfile and the IOC. Run it again to build
+    again after a change.
+
+    The build edits some tracked files of a clone, such as configure/RELEASE,
+    and names them: do not commit those edits.
+
+    The modules are declared in .ibek-dev.yaml in the project. In a container
+    that is created again, `ibek dev sync` reports them and
+    `ibek dev sync --build` links and builds them.
+
+    With --release, nothing is built: `ibek dev sync --build` then clones the
+    modules at the version of install.yml and builds them.
+    """
+    _warn_stale_container()
+    if release:
+        _release(modules)
+        return
+    state = _state(strict=True)
+    if state is None:
+        raise typer.Exit(1)
+    made, live = state
+    names = live.names()
+    try:
+        # every clone is checked or made before anything changes
+        plan: dict[str, Path] = {}
+        for name in dict.fromkeys(modules):
+            module = live.module(name)
+            if module is None or module.build is None or not module.runs("clone"):
+                raise StampError(
+                    f"{name} is not a support module that the Dockerfile "
+                    f"clones and builds: those are {', '.join(names)}"
+                )
+            info = clones.install(name, module.options)
+            folder = support_folder(name)
+            if folder is None:
+                raise StampError(f"cannot read the install.yml of {name}")
+            clone = clones.WORKSPACES / name
+            if folder.is_symlink() and not clones.points_at(folder, clone):
+                raise StampError(
+                    f"{folder} is a link to {clones.target(folder)}, not to "
+                    f"{clone}: `ibek dev support --release {name}` removes it"
+                )
+            if clone.exists() or clone.is_symlink():
+                clones.check(name, info, clone)
+            else:
+                clones.make(name, info, clone)
+            if info.patch is not None:
+                print(
+                    f"ibek dev: {name}.install.yml applies {info.patch} to the "
+                    f"clone that it makes. It is not applied to {clone}: "
+                    "apply it there with `git apply` if the build needs it."
+                )
+            plan[name] = clone
+        for name, clone in plan.items():
+            clones.declare(name, clone)
+
+        # build from the first of the modules, whatever else is out of date
+        found = drift.compare(made, live)
+        first = min(names.index(name) for name in plan)
+        rebuild = [m.name for m in live.modules[first:] if m.build is not None]
+        found.rebuild = rebuild
+        found.force = {n: f for n, f in found.force.items() if n in rebuild}
+        found.links = {n: f for n, f in found.links.items() if n in rebuild}
+        found.unlinked = {n: f for n, f in found.unlinked.items() if n in rebuild}
+        drift.build(made, live, found)
+    except StampError as error:
+        raise _fail(error) from error
+    _show(drift.compare(made, live))
+    # what the build printed has pushed the warning out of sight
+    _warn_stale_container()
