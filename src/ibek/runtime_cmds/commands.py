@@ -1,5 +1,6 @@
 import shutil
-from pathlib import Path
+from collections.abc import Sequence
+from pathlib import Path, PurePosixPath
 
 import typer
 from pvi._format.base import IndexEntry
@@ -11,10 +12,14 @@ from ruamel.yaml.error import YAMLError
 from ibek.entity_factory import EntityFactory
 from ibek.entity_model import Database
 from ibek.gen_scripts import create_boot_script, create_db_script
-from ibek.globals import GLOBALS, NaturalOrderGroup
+from ibek.globals import GLOBALS, RUNTIME_LOCK_NAME, NaturalOrderGroup
 from ibek.ibek_builtin.wait import DoWaitEntity
 from ibek.ioc import IOC, BuiltInEntity, Entity
 from ibek.ioc_factory import IocFactory
+from ibek.pattern_cmds.lock import RuntimeLock
+from ibek.pattern_cmds.manifest import SUPPORT_YAML_SUFFIX
+from ibek.pattern_cmds.sources import PatternError
+from ibek.render_db import str_to_bool
 from ibek.runtime_cmds.autosave import AutosaveGenerator, link_req_files
 from ibek.support import support_yaml_module
 from ibek.utils import UTILS
@@ -91,7 +96,7 @@ def generate2(
         warn_shadowed_modules(image_definitions, instance_definitions)
         definitions += image_definitions + instance_definitions
 
-    do_generate(instance_files, definitions, output_folder, pvi)
+    do_generate(instance_files, definitions, output_folder, pvi, config_folder)
 
 
 @runtime_cli.command()
@@ -170,6 +175,83 @@ def warn_shadowed_modules(
         )
 
 
+def _narrowed_modules(instance_root: Path) -> dict[str, tuple[str, str, set[str]]]:
+    """Each module vendored by a pattern whose lock narrows its file-set.
+
+    Maps the module the pattern's support YAML declares to the pattern's name,
+    its pinned version and the base names of the files it vendored. Empty when
+    the instance has no lock, or a lock ``ibek pattern check`` would refuse.
+    """
+    lock_path = instance_root / RUNTIME_LOCK_NAME
+    if not lock_path.is_file():
+        return {}
+    try:
+        lock = RuntimeLock(lock_path)
+    except PatternError:
+        return {}  # `ibek pattern check` reports a lock it cannot read
+    narrowed: dict[str, tuple[str, str, set[str]]] = {}
+    for pattern, entry in lock.patterns.items():
+        if entry.select is None or not entry.select.narrows():
+            continue
+        names = {PurePosixPath(key).name for key in entry.files}
+        for key in entry.files:
+            if not key.endswith(SUPPORT_YAML_SUFFIX):
+                continue
+            try:
+                module = support_yaml_module(instance_root / key)
+            except (OSError, YAMLError):
+                continue
+            if module:
+                narrowed[module] = (pattern, entry.version, names)
+    return narrowed
+
+
+def check_vendored_models(config_folder: Path, entities: Sequence[Entity]) -> None:
+    """Fail for an entity whose model's database files were not vendored.
+
+    ``ibek pattern add --only`` / ``--model`` vendor part of a pattern, while
+    its support YAML, vendored whole, still defines every model. An entity of a
+    model whose database file was left out would otherwise generate cleanly
+    and fail when the IOC loads its database. The instance's lock sits beside
+    ``config_folder``; without one there is nothing to check.
+
+    Only a database file given as a plain file name is checked: a path (such
+    as ``$(ADCORE)/db/NDStats.template``) names a file in a support module of
+    the image, and a template expression names no single file. A file present
+    at the root of ``config_folder`` counts as vendored.
+    """
+    narrowed = _narrowed_modules(config_folder.resolve().parent)
+    if not narrowed:
+        return
+    errors: list[str] = []
+    for entity in entities:
+        module = entity.type.rpartition(".")[0]
+        if module not in narrowed or not entity.entity_enabled:
+            continue
+        pattern, version, names = narrowed[module]
+        model = entity._model.name
+        for database in entity._model.databases or []:
+            file = database.file.strip()
+            if "{{" in file or "{%" in file or "/" in file:
+                continue
+            if not str_to_bool(UTILS.render(entity, database.enabled, "str")):
+                continue
+            base = PurePosixPath(file).name
+            if base in names or (config_folder / base).is_file():
+                continue
+            errors.append(
+                f"entity {entity.type} uses model {model} whose files were not "
+                f"vendored from pattern {pattern} ({base} is missing); re-add "
+                f"with `ibek pattern add <library>:{pattern}@{version} "
+                f"<instance> --model {model}`, keeping the models and files "
+                "already selected"
+            )
+    if errors:
+        for error in dict.fromkeys(errors):
+            typer.echo(f"Error: {error}", err=True)
+        raise typer.Exit(code=1)
+
+
 def place_runtime_files(config_dir: Path) -> None:
     """Place declared runtime artifacts from an IOC instance config folder.
 
@@ -201,6 +283,7 @@ def do_generate(
     definitions: list[Path],
     output_folder: Path,
     pvi: bool = True,
+    config_folder: Path | None = None,
 ):
     """
     Build a startup script for an IOC instance
@@ -211,6 +294,8 @@ def do_generate(
         definitions: List of filepaths to support module entity model definition files
         output_folder: Folder to write generated runtime files to
         pvi: Whether to generate pvi files and databases
+        config_folder: The instance's config folder; when given, entities are
+                       checked against the files its runtime-lock.yaml vendored
     """
     # the file name under of the instance definition provides the IOC name
     UTILS.set_file_name(instance_yamls[0])
@@ -225,6 +310,11 @@ def do_generate(
 
     # post processing to insert SubEntity instances
     all_entities = entity_factory.resolve_sub_entities(ioc_instance.entities, {})
+
+    if config_folder is not None:
+        check_vendored_models(
+            config_folder, [e for e in all_entities if hasattr(e, "_model")]
+        )
 
     # Clear out generated files so developers know if something stops being generated
     shutil.rmtree(output_folder, ignore_errors=True)
