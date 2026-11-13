@@ -23,6 +23,11 @@ from .stamp import StampError, ansible_folder, module_folder, source
 WORKSPACES = Path("/workspaces")
 
 
+def valid_name(name: str) -> bool:
+    """Whether a module name is a plain folder name, as the Dockerfile has it."""
+    return bool(re.fullmatch(r"[A-Za-z0-9_+-][A-Za-z0-9_.+-]*", name))
+
+
 def declarations_file() -> Path:
     return source() / ".ibek-dev.yaml"
 
@@ -102,10 +107,13 @@ def install(name: str, options: list[str]) -> Install:
     assert folder is not None
     defaults = ansible_folder() / "roles" / "support" / "vars" / "main.yml"
     yaml = YAML(typ="safe")
+    values: dict = {}
     try:
-        values: dict = {}
         if defaults.is_file():
             values.update(yaml.load(defaults.read_text()) or {})
+    except (OSError, ValueError, TypeError, YAMLError) as error:
+        raise StampError(f"cannot read {defaults}: {error}") from error
+    try:
         values.update(yaml.load(path.read_text()) or {})
         version = values.get("version")
         if len(options) == 2:
@@ -113,11 +121,17 @@ def install(name: str, options: list[str]) -> Install:
         elif options:
             version = options[0].removeprefix("-v")
         if not values.get("module") or not version:
-            raise StampError(f"{path} must set both module and version")
+            raise StampError("it must set both module and version")
         values.setdefault("organization", "https://github.com/epics-modules")
         values.setdefault("git_repo", "{{ organization.rstrip('/') }}/{{ module }}")
         for key in ("organization", "git_repo"):
-            values[key] = Template(str(values[key])).render(values)
+            try:
+                values[key] = Template(str(values[key])).render(values)
+            except Exception as error:
+                # a template can fail in any way that Python can
+                raise StampError(f"{key}: {error!r}") from error
+        if not values["git_repo"] or values["git_repo"].startswith("-"):
+            raise StampError(f"git_repo is {values['git_repo']!r}")
         patch = values.get("patch_file")
         patch = patch.get("path") if isinstance(patch, dict) else None
         return Install(
@@ -126,7 +140,14 @@ def install(name: str, options: list[str]) -> Install:
             recursive=str(values.get("recursive")).lower() in ("true", "yes", "1"),
             patch=folder / str(patch) if patch else None,
         )
-    except (OSError, ValueError, TypeError, YAMLError, TemplateError) as error:
+    except (
+        OSError,
+        ValueError,
+        TypeError,
+        YAMLError,
+        TemplateError,
+        StampError,
+    ) as error:
         raise StampError(f"cannot read {path}: {error}") from error
 
 
@@ -170,10 +191,14 @@ def same_repo(one: str, other: str) -> bool:
         host = host.rsplit("@", 1)[-1].split(":")[0]
         return f"{host}/{path}"
 
-    return normal(one) == normal(other)
+    def tidy(url: str) -> str:
+        host, _, path = normal(url).partition("/")
+        return host + "/" + re.sub("/+", "/", path).strip("/")
+
+    return tidy(one) == tidy(other)
 
 
-def check(name: str, info: Install, clone: Path) -> None:
+def check(name: str, info: Install, clone: Path, quiet: bool = False) -> None:
     """
     Refuse a clone that is not of the module's repository.
 
@@ -206,6 +231,8 @@ def check(name: str, info: Install, clone: Path) -> None:
             return ""
 
     head = commit("HEAD^{commit}")
+    if quiet:
+        return
     if not head or head != commit(f"{info.version}^{{commit}}"):
         try:
             at = git(clone, "rev-parse", "--abbrev-ref", "HEAD").strip()
@@ -226,7 +253,7 @@ def make(name: str, info: Install, clone: Path) -> None:
         clone.parent.mkdir(parents=True, exist_ok=True)
     except OSError as error:
         raise StampError(f"cannot make {clone.parent}: {error}") from error
-    git(clone.parent, "clone", info.git_repo, str(clone), show=True)
+    git(clone.parent, "clone", "--", info.git_repo, str(clone), show=True)
     try:
         git(
             clone,
@@ -267,8 +294,10 @@ def link(folder: Path, clone: Path) -> None:
     """Remove the module that is in the container and link the clone there."""
     try:
         unlink(folder)
-        if folder.exists():
+        if folder.is_dir():
             shutil.rmtree(folder)
+        elif folder.exists():
+            folder.unlink()
         folder.parent.mkdir(parents=True, exist_ok=True)
         folder.symlink_to(clone)
     except OSError as error:
@@ -286,6 +315,35 @@ def unlink(folder: Path) -> bool:
         raise StampError(f"cannot remove the link {folder}: {error}") from error
 
 
+# a file in a clone's git folder, out of git's sight, that says the clone was
+# built after it was linked: a clone made again or a build that stopped has none
+BUILT = "ibek-dev-built"
+
+
+def marker(clone: Path) -> Path:
+    path = Path(git(clone, "rev-parse", "--git-path", BUILT).strip())
+    return path if path.is_absolute() else clone / path
+
+
+def built(clone: Path) -> bool:
+    """Whether a build of the clone finished, as far as ibek dev knows."""
+    try:
+        return marker(clone).is_file()
+    except (StampError, OSError):
+        return False
+
+
+def mark(clone: Path, done: bool) -> None:
+    """Record that a build of the clone starts, or that it finished."""
+    try:
+        if done:
+            marker(clone).write_text("built by ibek dev\n")
+        else:
+            marker(clone).unlink(missing_ok=True)
+    except OSError as error:
+        raise StampError(f"cannot record the build of {clone}: {error}") from error
+
+
 # the untracked paths of a clone, and when each tracked file that differs
 # from its commit was last written: None for one that is removed
 Changes = tuple[set[str], dict[str, int | None]]
@@ -293,7 +351,16 @@ Changes = tuple[set[str], dict[str, int | None]]
 
 def changes(clone: Path) -> Changes:
     """What `git status` shows in a clone."""
-    status = git(clone, "status", "--porcelain", "-z").split("\0")
+    # every untracked file, whatever the clone's settings; what is made inside
+    # a submodule is the submodule's to show
+    status = git(
+        clone,
+        "status",
+        "--porcelain",
+        "-z",
+        "--untracked-files=normal",
+        "--ignore-submodules=untracked",
+    ).split("\0")
     untracked: set[str] = set()
     edited: dict[str, int | None] = {}
     entries = iter(status)
@@ -340,15 +407,21 @@ def after_build(clone: Path, before: Changes | None) -> None:
             )
             exclude = exclude if exclude.is_absolute() else clone / exclude
             exclude.parent.mkdir(parents=True, exist_ok=True)
+            # a name that a pattern cannot hold stays in sight
+            made = [path for path in made if "\n" not in path]
             with exclude.open("a") as stream:
                 stream.write("# made by an ibek dev build\n")
                 for path in made:
-                    stream.write("/" + re.sub(r"([\\*?\[])", r"\\\1", path) + "\n")
+                    pattern = re.sub(r"([\\*?\[!#])", r"\\\1", path)
+                    pattern = re.sub(r" (?= *$)", r"\\ ", pattern)
+                    stream.write("/" + pattern + "\n")
             print(
-                f"ibek dev: {len(made)} paths that the build made in {clone} "
-                f"are listed in {exclude}, so git does not show them",
+                f"ibek dev: git does not show these paths that the build made in "
+                f"{clone}: they are listed in {exclude}",
                 flush=True,
             )
+            for path in made:
+                print(f"    {path}", flush=True)
 
         # written during the build: one that differed before it has a new time
         files = sorted(

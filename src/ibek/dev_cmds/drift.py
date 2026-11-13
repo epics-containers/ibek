@@ -83,8 +83,10 @@ class Drift:
     # level 2: those declared with `ibek dev support` whose folder is not a
     # link to their clone, with the folder and the clone
     unlinked: dict[str, tuple[Path, Path]] = field(default_factory=dict)
-    # the modules that are built from their declared clone
+    # the modules that are linked to their declared clone
     clones: dict[str, Path] = field(default_factory=dict)
+    # level 2: those of them whose clone was not built since it was linked
+    unbuilt: list[str] = field(default_factory=list)
     requirements: bool = False
     # level 3
     base: bool = False
@@ -152,14 +154,28 @@ def compare(stamp: Stamp, live: Stamp) -> Drift:
         folder, clone = support_folder(name), declared.get(name)
         release = f"`ibek dev support --release {name}`"
         gone = False
+        unusable = ""
+        if clone is not None and clone.is_dir():
+            try:
+                info = clones.install(name, module.options)
+                clones.check(name, info, clone, quiet=True)
+            except StampError as error:
+                unusable = str(error)
         if clone is not None and folder is None:
             drift.problems.append(
                 f"{name}: declared for development, but its install.yml cannot "
                 "be read to find the folder it is built in"
             )
+        elif clone is not None and unusable:
+            drift.problems.append(
+                f"{name}: declared for development, and its clone cannot be "
+                f"built: {unusable}. {release} drops it"
+            )
         elif clone is not None and folder is not None:
             if clones.linked(folder, clone):
                 drift.clones[name] = clone
+                if not clones.built(clone):
+                    drift.unbuilt.append(name)
             elif not clone.is_dir():
                 drift.problems.append(
                     f"{name}: declared for development, but its clone {clone} "
@@ -180,6 +196,11 @@ def compare(stamp: Stamp, live: Stamp) -> Drift:
             )
         elif folder is not None and was is not None and module.runs("clone"):
             gone = not folder.exists()
+            if folder.exists() and not folder.is_dir():
+                drift.problems.append(
+                    f"{name}: {folder} is a file, not a module folder: remove it "
+                    "and run `ibek dev sync --build`"
+                )
 
         if module.build is None:
             drift.problems.append(
@@ -196,6 +217,8 @@ def compare(stamp: Stamp, live: Stamp) -> Drift:
             out_of_date(index, f"{name}: {folder} is missing")
         elif name in stamp.pending:
             out_of_date(index, f"{name}: rebuild not finished")
+        elif name in drift.unbuilt:
+            out_of_date(index, f"{name}: its clone {clone} is not built")
         elif was is None:
             out_of_date(index, f"{name}: not built in this container")
         elif was.source != module.source:
@@ -331,6 +354,11 @@ def build(stamp: Stamp, live: Stamp, drift: Drift) -> None:
     is picked up by the next one.
     """
     modules, force = drift.rebuild, drift.force
+    for name, (_, to) in drift.unlinked.items():
+        # the clone on the host may have changed since it was declared
+        declared = live.module(name)
+        assert declared is not None
+        clones.check(name, clones.install(name, declared.options), to, quiet=True)
     for name in modules:
         folder = support_folder(name)
         if folder is not None and folder.is_symlink() and not folder.exists():
@@ -396,12 +424,17 @@ def build(stamp: Stamp, live: Stamp, drift: Drift) -> None:
             print(f"ibek dev: {drift.links[name]} is a link: it is left alone")
         # the module's own line of the Dockerfile
         linked = drift.clones.get(name)
-        before = clones.before_build(linked) if linked else None
+        before = None
+        if linked:
+            clones.mark(linked, False)
+            before = clones.before_build(linked)
         try:
             ansible(*now.options, name, *now.args)
         finally:
             if linked:
                 clones.after_build(linked, before)
+        if linked:
+            clones.mark(linked, True)
         record(name)
 
     ansible("ioc")

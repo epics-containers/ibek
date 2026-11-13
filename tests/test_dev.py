@@ -2060,3 +2060,202 @@ def test_autosave_links_through_a_module_link(work: Work):
     )
     record = autosave / "busyRecord_settings.req"
     assert record.resolve() == clone / "db" / "busyRecord_settings.req"
+
+
+@pytest.mark.parametrize("kind", ["other repo", "not a clone", "hand edited"])
+def test_declared_clone_that_is_no_longer_the_module(work: Work, kind: str):
+    """Checked again whenever it is reported or linked, not only when declared."""
+    tree, clone, folder = work.tree, work.clone("busy"), work.tree.built("busy")
+    tree.dev("support", "busy")
+    work.recreate()
+    if kind == "hand edited":
+        # a clone of another module
+        text = (tree.source / ".ibek-dev.yaml").read_text()
+        work.own_clone("asyn")
+        (tree.source / ".ibek-dev.yaml").write_text(
+            text.replace(str(clone), str(work.clone("asyn")))
+        )
+    else:
+        shutil.rmtree(clone)
+        if kind == "other repo":
+            work.own_clone("busy", "https://example.com/other/thing.git")
+        else:
+            write(clone / "README", "not a clone\n")
+    tree.calls.clear()
+
+    for command in ("status", "sync", "sync --build"):
+        output = tree.dev(*command.split())
+        assert "matches" not in output
+        assert "busy: declared for development, and its clone cannot be" in output
+    assert tree.calls == []
+    assert folder.is_dir() and not folder.is_symlink()
+
+    tree.dev("support", "--release", "busy")
+    assert "matches" in tree.dev("sync", "--build")
+
+
+def test_linked_clone_that_was_made_again(work: Work):
+    """A fresh clone behind the link is not built: never a match."""
+    tree, clone = work.tree, work.clone("busy")
+    tree.dev("support", "busy")
+    shutil.rmtree(clone)
+    git(work.upstream, "clone", "--quiet", str(work.upstream / "busy"), str(clone))
+    tree.calls.clear()
+
+    for command in ("status", "sync"):
+        output = tree.dev(command)
+        assert "matches" not in output
+        assert f"busy: its clone {clone} is not built" in output
+        assert "rebuilds: busy, motor, then the IOC" in output
+    assert tree.calls == []
+    assert "matches" in tree.dev("sync", "--build")
+    assert tree.ansible() == [["busy"], ["motor"], ["ioc"]]
+
+
+def test_failed_build_of_a_clone_survives_a_new_stamp(work: Work):
+    tree = work.tree
+    tree.fail_on = "busy"
+    tree.dev("support", "busy", code=2)
+    # a stamp forgets what is pending; the clone still says it is not built
+    tree.dev("stamp")
+    output = tree.dev("status")
+    assert "matches" not in output and "is not built" in output
+    tree.fail_on = ""
+    assert "matches" in tree.dev("sync", "--build")
+
+
+@pytest.mark.parametrize("name", ["../ioc", "busy/", "/epics/ioc", ".", ".."])
+def test_release_takes_only_module_names(work: Work, name: str):
+    tree = work.tree
+    tree.dev("support", "busy")
+
+    output = tree.dev("support", "--release", name, code=1)
+    assert f"{name}: not the name of a support module" in output
+    assert (tree.epics / "ioc").is_symlink() and tree.built("busy").is_symlink()
+    assert set(work.declarations()) == {"busy"}
+
+
+def test_release_named_twice(work: Work):
+    tree = work.tree
+    tree.dev("support", "busy")
+    output = tree.dev("support", "--release", "busy", "busy")
+    assert output.count("removed the link") == 1
+    assert "no longer declared" not in output
+
+
+def test_support_will_not_clone_a_later_module_again(work: Work):
+    """That removes a folder which nobody has been told of: sync --build first."""
+    tree, folder = work.tree, work.tree.built("busy")
+    edit = write(folder / "edit.c", "an edit")
+    install = tree.module("busy") / "busy.install.yml"
+    install.write_text(install.read_text().replace("R1-0", "main"))
+
+    output = tree.dev("support", "asyn", code=1)
+    assert f"busy must be cloned again, which removes {folder}" in output
+    assert "run `ibek dev sync --build` for that first" in output
+    assert edit.exists() and tree.calls == []
+    assert not work.clone("asyn").exists() and work.declarations() == {}
+
+
+def test_support_checks_every_module_before_cloning(work: Work):
+    tree = work.tree
+    (tree.module("motor") / "motor.install.yml").write_text("module: motor\n")
+    tree.dev("stamp")
+
+    output = tree.dev("support", "busy", "motor", code=1)
+    assert "must set both module and version" in output
+    assert not work.clone("busy").exists() and tree.calls == []
+
+
+@pytest.mark.parametrize(
+    "repo, message",
+    [
+        ('"{{ 1 / 0 }}"', "ZeroDivisionError"),
+        ('""', "git_repo is ''"),
+        ("--upload-pack=touch", "git_repo is '--upload-pack=touch'"),
+    ],
+)
+def test_support_with_a_git_repo_that_cannot_be_cloned(
+    work: Work, repo: str, message: str
+):
+    tree = work.tree
+    (tree.module("busy") / "busy.install.yml").write_text(
+        f"module: busy\nversion: R1-0\ngit_repo: {repo}\n"
+    )
+    tree.dev("stamp")
+    output = tree.dev("support", "busy", code=1)
+    assert message in output
+    assert not work.clone("busy").exists()
+
+
+def test_support_with_bad_defaults_in_the_ansible_role(work: Work):
+    tree = work.tree
+    defaults = tree.source / "ibek-support/_ansible/roles/support/vars/main.yml"
+    write(defaults, "module: [\n")
+    output = tree.dev("support", "busy", code=1)
+    assert f"cannot read {defaults}" in output
+
+
+def test_module_folder_that_is_a_file(work: Work):
+    tree, folder = work.tree, work.tree.built("busy")
+    shutil.rmtree(folder)
+    write(folder, "not a folder")
+
+    output = tree.dev("status")
+    assert "matches" not in output
+    assert f"busy: {folder} is a file, not a module folder" in output
+
+    # replaced by the link to a clone
+    assert "matches" in tree.dev("support", "busy")
+    assert folder.resolve() == work.clone("busy")
+
+
+def test_same_repo_with_doubled_slashes():
+    assert clones.same_repo(
+        "https://github.com/epics-modules//busy",
+        "https://github.com/epics-modules/busy",
+    )
+
+
+def test_what_the_build_makes_is_named_and_hidden(work: Work):
+    """Names that git patterns treat specially are hidden all the same."""
+    tree, clone = work.tree, work.clone("busy")
+    work.own_clone("busy")
+    git(clone, "config", "status.showUntrackedFiles", "no")
+    names = ["a[1]*.o", "#notes", "!bang", "trailing ", "sp ace.d"]
+    ansible_sh = tree.ansible_sh
+
+    def build(*words: str) -> None:
+        ansible_sh(*words)
+        if words == ("busy",):
+            for name in names:
+                write(clone / "O.linux" / "x", "")
+                write(clone / name, "made")
+
+    tree.ansible_sh = build  # type: ignore[method-assign]
+
+    output = tree.dev("support", "busy")
+
+    status = subprocess.run(
+        ["git", "-C", str(clone), "status", "--porcelain", "--untracked-files=all"],
+        capture_output=True,
+        text=True,
+        check=True,
+    ).stdout.splitlines()
+    assert [line.strip() for line in status] == ["M configure/RELEASE"]
+    notice = output[output.index("git does not show these paths") :]
+    for name in [*names, "O.linux/", "lib/"]:
+        assert f"    {name}\n" in notice
+
+
+def test_autosave_order_is_kept_for_a_tree_with_no_links(tree: Tree):
+    """The first of two files of one name is the one that glob("**") finds."""
+    support = tree.epics / "support"
+    write(support / "asyn" / "db" / "same.req", "asyn\n")
+    write(support / "busy" / "db" / "same.req", "busy\n")
+    (tree.epics / "ioc" / "config").mkdir()
+    first = next(r for r in support.glob("**/*.req") if r.name == "same.req")
+
+    link_req_files()
+
+    assert (tree.epics / "autosave" / "same.req").resolve() == first

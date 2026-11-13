@@ -234,9 +234,12 @@ def instance(
 def _release(modules: list[str]) -> None:
     """Stop building modules from their clones. The clones are left alone."""
     nothing = []
+    bad = [name for name in modules if not clones.valid_name(name)]
+    if bad:
+        raise _fail(f"{', '.join(bad)}: not the name of a support module")
     try:
         declared = clones.declared()
-        for name in modules:
+        for name in dict.fromkeys(modules):
             folder = support_folder(name) or GLOBALS.SUPPORT / name
             # the declaration goes first: a link with none is reported, and
             # nothing links the module again
@@ -301,8 +304,9 @@ def support(
     made, live = state
     names = live.names()
     try:
-        # every clone is checked or made before anything changes
-        plan: dict[str, Path] = {}
+        # every module is checked, then every clone checked or made, before
+        # anything in the container changes
+        infos: dict[str, clones.Install] = {}
         for name in dict.fromkeys(modules):
             module = live.module(name)
             if module is None or module.build is None or not module.runs("clone"):
@@ -310,7 +314,7 @@ def support(
                     f"{name} is not a support module that the Dockerfile "
                     f"clones and builds: those are {', '.join(names)}"
                 )
-            info = clones.install(name, module.options)
+            infos[name] = clones.install(name, module.options)
             folder = support_folder(name)
             if folder is None:
                 raise StampError(f"cannot read the install.yml of {name}")
@@ -320,6 +324,20 @@ def support(
                     f"{folder} is a link to {clones.target(folder)}, not to "
                     f"{clone}: `ibek dev support --release {name}` removes it"
                 )
+        # a module that follows must not lose its folder to a clone that
+        # nobody has seen reported
+        found = drift.compare(made, live)
+        first = min(names.index(name) for name in infos)
+        force = [n for n in found.force if names.index(n) >= first]
+        if force:
+            raise StampError(
+                f"{', '.join(force)} must be cloned again, which removes "
+                f"{', '.join(str(found.force[n]) for n in force)}: run "
+                "`ibek dev sync --build` for that first"
+            )
+        plan: dict[str, Path] = {}
+        for name, info in infos.items():
+            clone = clones.WORKSPACES / name
             if clone.exists() or clone.is_symlink():
                 clones.check(name, info, clone)
             else:
@@ -336,7 +354,6 @@ def support(
 
         # build from the first of the modules, whatever else is out of date
         found = drift.compare(made, live)
-        first = min(names.index(name) for name in plan)
         rebuild = [m.name for m in live.modules[first:] if m.build is not None]
         found.rebuild = rebuild
         found.force = {n: f for n, f in found.force.items() if n in rebuild}
