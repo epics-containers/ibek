@@ -1012,7 +1012,7 @@ def test_level_2_requirements(tree: Tree):
     assert tree.calls[0] == ["uv", "pip", "install", "--upgrade", "-r", requirements]
     assert "generate-schema" in tree.calls[1]
     assert len(tree.calls) == 2
-    assert "Run `ibek dev sync --build` again if more remains" in output
+    assert "Run `ibek dev sync --build` again for anything more." in output
     assert "requirements.txt changed" not in output
     assert "rebuilds: busy, motor, then the IOC" in output
 
@@ -1052,7 +1052,7 @@ def test_level_2_requirements_with_a_dangling_link(tree: Tree):
     assert tree.calls[0][0] == "uv" and "generate-schema" in tree.calls[-1]
     assert tree.ansible() == [["busy", "--tags", "runtime"]]
     assert not stale.is_symlink()
-    assert "Run `ibek dev sync --build` again if more remains" in output
+    assert "Run `ibek dev sync --build` again for anything more." in output
     assert "matches" in output
     stamp = load()
     assert stamp is not None and stamp.requirements == compute().requirements
@@ -1191,3 +1191,219 @@ def test_instance_reports_drift(tree: Tree, tmp_path: Path):
     (tree.epics / "dev-stamp.json").write_text("{")
     output = tree.dev("instance", instance)
     assert "cannot read" in output
+
+
+WARNING = (
+    "WARNING: this container was created from a different developer image "
+    "than the one now on this machine. Use "
+    '"Dev Containers: Rebuild Container" in VS Code to move to it.'
+)
+
+
+def image_ids(tree: Tree, created: str | bytes | None, now: str | bytes | None) -> None:
+    """Write the image ID files; None leaves a file out."""
+    for path, text in (
+        (tree.epics / "dev-image-id", created),
+        (tree.source / ".devcontainer" / "image-id", now),
+    ):
+        if text is not None:
+            path.parent.mkdir(exist_ok=True)
+            path.write_bytes(text.encode() if isinstance(text, str) else text)
+
+
+def all_commands(tree: Tree, tmp_path: Path) -> dict[str, str]:
+    """The output of each command that reports, all of which exit 0."""
+    instance = tmp_path / "bl01t-ea-test-01"
+    (instance / "config").mkdir(parents=True, exist_ok=True)
+    outputs = {
+        "status": tree.dev("status"),
+        "sync": tree.dev("sync"),
+        "sync --build": tree.dev("sync", "--build"),
+        "instance": tree.dev("instance", instance),
+    }
+    assert (tree.epics / "ioc" / "config").resolve() == instance / "config"
+    return outputs
+
+
+def test_stale_container_warning(tree: Tree, tmp_path: Path):
+    """First in the report of each command, whose exit code stays 0."""
+    image_ids(tree, "sha256:aaa\n", "sha256:bbb\n")
+    stamp = (tree.epics / "dev-stamp.json").read_bytes()
+
+    outputs = all_commands(tree, tmp_path)
+
+    for command in ("status", "sync", "sync --build"):
+        lines = outputs[command].splitlines()
+        assert lines[0] == WARNING, command
+        assert len(lines) == 2 and "matches" in lines[1], command
+    # the instance command says what it links before it reports
+    lines = outputs["instance"].splitlines()
+    assert lines[0].startswith("Symlinking ")
+    assert lines[1] == WARNING
+    assert len(lines) == 3 and "matches" in lines[2]
+
+    assert tree.calls == []
+    assert (tree.epics / "dev-stamp.json").read_bytes() == stamp
+    assert (tree.epics / "dev-image-id").read_text() == "sha256:aaa\n"
+    assert (tree.source / ".devcontainer" / "image-id").read_text() == "sha256:bbb\n"
+
+
+@pytest.mark.parametrize(
+    "created, now",
+    [
+        ("sha256:aaa\n", "sha256:aaa\n"),
+        ("sha256:aaa\n", "aaa"),
+        ("aaa", "  sha256:aaa \r\n"),
+        ("sha256:aaa\n", None),
+        (None, "sha256:bbb\n"),
+        (None, None),
+        ("", "sha256:bbb\n"),
+        ("sha256:aaa\n", "\n"),
+        ("sha256:\n", "sha256:bbb\n"),
+    ],
+)
+def test_no_stale_container_warning(
+    tree: Tree, tmp_path: Path, created: str | None, now: str | None
+):
+    """The same image, or a file that is missing or empty: nothing is said."""
+    image_ids(tree, created, now)
+
+    for command, output in all_commands(tree, tmp_path).items():
+        assert "WARNING" not in output, command
+        assert "matches" in output, command
+
+
+@pytest.mark.parametrize(
+    "name", ["dev-image-id", "generic-source/.devcontainer/image-id"]
+)
+def test_no_stale_container_warning_for_an_unreadable_file(
+    tree: Tree, tmp_path: Path, name: str
+):
+    """A file that cannot be read is no error and no warning."""
+    image_ids(tree, "sha256:aaa\n", "sha256:bbb\n")
+    path = tree.epics / name
+    path.unlink()
+    path.mkdir()
+
+    for command, output in all_commands(tree, tmp_path).items():
+        assert "WARNING" not in output, command
+        assert "matches" in output, command
+
+
+@pytest.mark.parametrize(
+    "created, now",
+    [(b"\xff\xfe", "sha256:bbb\n"), ("sha256:aaa\n", b"\xff\xfe")],
+)
+def test_no_stale_container_warning_for_an_id_that_is_not_text(
+    tree: Tree, tmp_path: Path, created: str | bytes, now: str | bytes
+):
+    """A file that is not text is one that cannot be read."""
+    image_ids(tree, created, now)
+
+    for command, output in all_commands(tree, tmp_path).items():
+        assert "WARNING" not in output, command
+        assert "matches" in output, command
+
+
+def test_stale_container_warning_with_no_stamp(tree: Tree, tmp_path: Path):
+    """The warning does not need a stamp."""
+    (tree.epics / "dev-stamp.json").unlink()
+    image_ids(tree, "sha256:aaa\n", "sha256:bbb\n")
+
+    outputs = all_commands(tree, tmp_path)
+
+    for command, output in outputs.items():
+        lines = output.splitlines()
+        if command == "instance":
+            assert lines.pop(0).startswith("Symlinking ")
+        assert lines[0] == WARNING, command
+        assert len(lines) == 2 and "built without `ibek dev stamp`" in lines[1]
+    assert tree.calls == []
+    assert not (tree.epics / "dev-stamp.json").exists()
+
+
+def test_stale_container_warning_with_an_unreadable_stamp(tree: Tree):
+    """The warning comes before the error, which keeps its exit code."""
+    (tree.epics / "dev-stamp.json").write_text("{")
+    image_ids(tree, "sha256:aaa\n", "sha256:bbb\n")
+
+    for args, code in ((["status"], 0), (["sync"], 0), (["sync", "--build"], 1)):
+        lines = tree.dev(*args, code=code).splitlines()
+        assert lines[0] == WARNING
+        assert len(lines) == 2 and "cannot read" in lines[1]
+
+
+def test_stale_container_warning_with_other_drift(tree: Tree, tmp_path: Path):
+    """The warning comes first, and the build is still done."""
+    image_ids(tree, "sha256:aaa\n", "sha256:bbb\n")
+    write(tree.module("busy") / "busy.install.yml", "module: busy\nversion: R2\n")
+    instance = tmp_path / "bl01t-ea-test-01"
+    (instance / "config").mkdir(parents=True)
+
+    for args in (["status"], ["sync"]):
+        lines = tree.dev(*args).splitlines()
+        assert lines[0] == WARNING
+        assert "differs from" in lines[1]
+        assert "busy: version, repository or patch changed" in "\n".join(lines)
+    lines = tree.dev("instance", instance).splitlines()
+    assert lines[1] == WARNING and "differs from" in lines[2]
+    assert tree.calls == []
+
+    # a build prints a great deal: the warning is repeated after the report
+    lines = tree.dev("sync", "--build").splitlines()
+    assert lines[0] == WARNING and lines[-1] == WARNING
+    assert lines.count(WARNING) == 2
+    assert "matches" in lines[-2]
+    assert tree.ansible() == [
+        ["busy", "--tags", "clone", "-e", "force_clone=true"],
+        ["busy"],
+        ["motor"],
+        ["ioc"],
+    ]
+    assert (tree.built("busy") / "VERSION").read_text() == "R2"
+
+    # a build that fails keeps its exit code
+    write(tree.module("motor") / "motor.install.yml", "module: motor\nversion: R2\n")
+    tree.fail_on = "motor"
+    output = tree.dev("sync", "--build", code=2)
+    assert output.splitlines()[0] == WARNING
+
+
+def test_stale_container_warning_is_repeated_only_after_a_build(tree: Tree):
+    """Once when nothing is run or only links are made, twice after a build."""
+    image_ids(tree, "sha256:aaa\n", "sha256:bbb\n")
+
+    # nothing to do
+    assert tree.dev("sync", "--build").count(WARNING) == 1
+    assert tree.calls == []
+
+    # definition files alone: linked without a build
+    write(tree.module("motor") / "motor.ibek.support.yaml", "module: motor2\n")
+    lines = tree.dev("sync", "--build").splitlines()
+    assert lines[0] == WARNING and lines.count(WARNING) == 1
+    assert tree.ansible() == [["motor", "--tags", "runtime"]]
+
+    # the IOC alone
+    tree.calls.clear()
+    write(tree.source / "ioc" / "iocApp" / "src" / "Makefile", "PROD_IOC = ioc2\n")
+    os.utime(tree.binary, (0, 0))
+    assert tree.dev("sync").count(WARNING) == 1
+    lines = tree.dev("sync", "--build").splitlines()
+    assert lines[0] == WARNING and lines[-1] == WARNING
+    assert lines.count(WARNING) == 2
+    assert tree.ansible() == [["ioc"]]
+
+    # the upgrade of the Python packages
+    tree.calls.clear()
+    write(tree.source / "requirements.txt", "ibek>=6\n")
+    assert tree.dev("sync").count(WARNING) == 1
+    lines = tree.dev("sync", "--build").splitlines()
+    assert lines[0] == WARNING and lines[-1] == WARNING
+    assert lines.count(WARNING) == 2
+    assert "again for anything more." in "\n".join(lines)
+    assert tree.calls[0][:3] == ["uv", "pip", "install"]
+
+    # no warning, nothing repeated
+    (tree.epics / "dev-image-id").unlink()
+    write(tree.module("busy") / "busy.install.yml", "module: busy\nversion: R2\n")
+    assert "WARNING" not in tree.dev("sync", "--build")

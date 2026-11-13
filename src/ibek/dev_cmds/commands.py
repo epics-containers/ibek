@@ -7,10 +7,43 @@ import typer
 from ibek.globals import GLOBALS, NaturalOrderGroup
 
 from . import drift
-from .stamp import Stamp, StampError, compute, load, source, stamp_file
+from .stamp import (
+    Stamp,
+    StampError,
+    compute,
+    created_image_id_file,
+    image_id_file,
+    load,
+    source,
+    stamp_file,
+)
 
 log = logging.getLogger(__name__)
 dev_cli = typer.Typer(cls=NaturalOrderGroup)
+
+
+def _image_id(path: Path) -> str:
+    """The image ID in a file, or nothing if there is none to read."""
+    try:
+        return path.read_text().strip().removeprefix("sha256:")
+    except (OSError, UnicodeDecodeError):
+        return ""
+
+
+def _warn_stale_container() -> None:
+    """
+    Say when the developer image on the host is not the one this container
+    was created from. Says nothing unless both image IDs can be read.
+    """
+    created = _image_id(created_image_id_file())
+    now = _image_id(image_id_file())
+    if created and now and created != now:
+        print(
+            "WARNING: this container was created from a different developer "
+            "image than the one now on this machine. Use "
+            '"Dev Containers: Rebuild Container" in VS Code to move to it.',
+            flush=True,
+        )
 
 
 def _state(strict: bool = False) -> tuple[Stamp, Stamp] | None:
@@ -74,6 +107,7 @@ def status():
     """
     Show how this container differs from the mounted source. Changes nothing.
     """
+    _warn_stale_container()
     state = _state()
     if state is not None:
         _show(drift.compare(*state))
@@ -95,6 +129,7 @@ def sync(
     regenerates the IOC schema. Everything that needs a build is reported and
     left alone unless --build is given.
     """
+    _warn_stale_container()
     # with --build, a stamp or a source tree that cannot be read is an error:
     # nothing can be built. No stamp at all is one line and exit 0, as ever.
     state = _state(strict=build)
@@ -117,22 +152,29 @@ def sync(
             made.save()
             print(
                 "ibek dev: upgraded the Python packages of requirements.txt. "
-                "Run `ibek dev sync --build` again if more remains:"
+                "Run `ibek dev sync --build` again for anything more."
             )
             _show(drift.compare(made, live))
+            # what the upgrade printed has pushed the warning out of sight
+            _warn_stale_container()
             return
         if found.defs or found.dangling:
             drift.fix_defs(made, live, found)
-        if build and (found.rebuild or found.ioc):
+        built = build and bool(found.rebuild or found.ioc)
+        if built:
             drift.build(made, live, found)
     except StampError as error:
         raise _fail(error) from error
     _show(drift.compare(made, live))
+    if built:
+        # what the build printed has pushed the warning out of sight
+        _warn_stale_container()
 
 
 def _instance_report() -> None:
     """Report drift for someone about to run an instance. Never an error."""
     try:
+        _warn_stale_container()
         state = _state()
         if state is not None:
             _show(drift.compare(*state))

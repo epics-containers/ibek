@@ -57,6 +57,16 @@ def stamp_file() -> Path:
     return GLOBALS.EPICS_ROOT / "dev-stamp.json"
 
 
+def image_id_file() -> Path:
+    """The ID of the developer image on the host, written there at each start."""
+    return source() / ".devcontainer" / "image-id"
+
+
+def created_image_id_file() -> Path:
+    """A copy of image_id_file made when this container was created."""
+    return GLOBALS.EPICS_ROOT / "dev-image-id"
+
+
 def ansible_folder() -> Path:
     return source() / "ibek-support" / "_ansible"
 
