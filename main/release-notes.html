@@ -7,7 +7,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Changelog &#8212; ibek 4.10.1.dev14+g389585d59 documentation</title>
+    <title>Changelog &#8212; ibek 4.11.1.dev3+g50668b7a5 documentation</title>
   
   
   
@@ -41,7 +41,7 @@
   <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=75c7c72ae941e8b558d8" />
 <link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=75c7c72ae941e8b558d8" />
 
-    <script src="_static/documentation_options.js?v=8ae25f56"></script>
+    <script src="_static/documentation_options.js?v=041c601a"></script>
     <script src="_static/doctools.js?v=fd6eb6e6"></script>
     <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="_static/clipboard.min.js?v=a7894cd8"></script>
@@ -511,6 +511,15 @@ modules, those after them in the Dockerfile, and the IOC, cloning a module
 again only when its <code class="docutils literal notranslate"><span class="pre">install.yml</span></code> asks for a different source. <code class="docutils literal notranslate"><span class="pre">ibek</span> <span class="pre">dev</span>
 <span class="pre">instance</span></code> prints the same report. In an image with no stamp each command
 says so and exits 0. See <code class="docutils literal notranslate"><span class="pre">docs/reference/cli.md</span></code>.</p>
+<p><code class="docutils literal notranslate"><span class="pre">ibek</span> <span class="pre">dev</span> <span class="pre">status</span></code> and <code class="docutils literal notranslate"><span class="pre">ibek</span> <span class="pre">dev</span> <span class="pre">sync</span></code> start their report with a
+<code class="docutils literal notranslate"><span class="pre">WARNING:</span></code> line when the container was created from a different developer
+image than the one now on the host: when <code class="docutils literal notranslate"><span class="pre">/epics/dev-image-id</span></code>, written as
+the container is created, differs from
+<code class="docutils literal notranslate"><span class="pre">/epics/generic-source/.devcontainer/image-id</span></code>, written by the host as the
+devcontainer starts. <code class="docutils literal notranslate"><span class="pre">ibek</span> <span class="pre">dev</span> <span class="pre">instance</span></code> prints it after its <code class="docutils literal notranslate"><span class="pre">Symlinking</span></code>
+line, and <code class="docutils literal notranslate"><span class="pre">ibek</span> <span class="pre">dev</span> <span class="pre">sync</span> <span class="pre">--build</span></code> prints it again as its last line when it
+has built or upgraded anything. With either file missing, empty or unreadable
+nothing is said, and no exit code changes.</p>
 <p><code class="docutils literal notranslate"><span class="pre">ibek</span> <span class="pre">pattern</span> <span class="pre">install</span> <span class="pre">library:pattern&#64;version</span> <span class="pre">...</span></code> installs runtime patterns
 into a generic IOC image at build time, beside its compiled support modules:
 support YAML to <code class="docutils literal notranslate"><span class="pre">/epics/ibek-defs</span></code>, PVI device YAML to <code class="docutils literal notranslate"><span class="pre">/epics/pvi-defs</span></code>,
