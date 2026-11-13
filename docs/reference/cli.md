@@ -174,6 +174,20 @@ a module folder that cannot be read are one line too: `dev status` and `dev sync
 exit 0, `dev sync --build` exits 1. `dev instance` prints the same
 report after linking the instance.
 
+A container keeps the image it was created from: "Reopen in Container" in
+VS Code uses the existing container even when the host has pulled or built
+a different developer image, usually a later one. The devcontainer's
+start-up script on the host writes the ID of the image its tag points to into `.devcontainer/image-id`
+in the project, which the container sees as
+`/epics/generic-source/.devcontainer/image-id`. When a container is created,
+its `postCreateCommand` copies that file to `/epics/dev-image-id`. When both
+files can be read and name different images (a `sha256:` prefix and
+surrounding white space apart), `dev status`, `dev sync` and `dev instance`
+start their report with a line that begins `WARNING:` and says to use "Dev
+Containers: Rebuild Container". The warning changes no exit code and nothing
+that the commands do, and it does not need a stamp. With either file missing
+or empty, nothing is said.
+
 `dev support` is a placeholder and raises `NotImplementedError`.
 `ioc build-docker` is experimental: it interprets supported Dockerfile steps
 inside the development container; it is not a substitute for building an image.
