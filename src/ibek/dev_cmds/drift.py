@@ -367,10 +367,26 @@ def build(stamp: Stamp, live: Stamp, drift: Drift) -> None:
     declared = clones.declared()
     for name in modules:
         if name in declared:
+            own, folder = declared[name], support_folder(name)
+            release = f"`ibek dev support --release {name}`"
+            if not (own.exists() or own.is_symlink()):
+                raise StampError(
+                    f"{name} cannot be built: its declared clone {own} is "
+                    f"missing. `ibek dev support {name}` clones it again, "
+                    f"{release} goes back to the version of install.yml"
+                )
+            # ansible builds what the folder is, not what was declared
+            if folder is not None and folder.is_symlink():
+                if not clones.points_at(folder, own):
+                    raise StampError(
+                        f"{name} cannot be built: {folder} is a link to "
+                        f"{clones.target(folder)}, not to its declared clone "
+                        f"{own}. {release} removes it"
+                    )
             module = live.module(name)
             assert module is not None
             info = clones.install(name, module.options)
-            clones.check(name, info, declared[name], quiet=True)
+            clones.check(name, info, own, quiet=True)
     clone_task = ansible_folder() / "roles" / "support" / "tasks" / "clone.yml"
     try:
         can_force = "force_clone" in clone_task.read_text()

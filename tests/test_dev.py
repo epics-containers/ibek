@@ -2339,3 +2339,59 @@ def test_reports_when_git_cannot_be_run(work: Work, monkeypatch):
     output = tree.dev("status")
     assert "matches" not in output and "cannot run git" in output
     assert "move it away" not in output
+
+
+def test_declaration_with_a_relative_path(work: Work, monkeypatch):
+    tree, folder = work.tree, work.tree.built("busy")
+    work.own_clone("busy")
+    write(tree.source / ".ibek-dev.yaml", "support:\n  busy: busy\n")
+    monkeypatch.chdir(work.workspaces)
+
+    output = tree.dev("sync", "--build")
+    assert "absolute path of its clone" in output and "matches" not in output
+    assert folder.is_dir() and not folder.is_symlink() and tree.calls == []
+
+
+def test_declared_module_linked_elsewhere_is_not_built(work: Work):
+    tree, folder = work.tree, work.tree.built("busy")
+    tree.dev("support", "busy")
+    other = work.own_clone("motor")
+    folder.unlink()
+    folder.symlink_to(other)
+    write(tree.module("asyn") / "asyn.install.yml.orig", "a stray file")
+    tree.calls.clear()
+
+    output = tree.dev("sync", "--build", code=1)
+    assert f"busy cannot be built: {folder} is a link to {other}, not to" in output
+    assert tree.calls == [] and not (other / "lib").exists()
+
+
+def test_declared_clone_missing_with_an_earlier_module_to_build(work: Work):
+    tree, clone = work.tree, work.clone("motor")
+    tree.dev("support", "motor")
+    shutil.rmtree(clone)
+    write(tree.module("asyn") / "asyn.install.yml.orig", "a stray file")
+    tree.calls.clear()
+
+    output = tree.dev("sync", "--build", code=1)
+    assert f"is a link to {clone}, which is missing" in output
+    # in a container created again there is no link
+    work.recreate()
+    output = tree.dev("sync", "--build", code=1)
+    assert f"its declared clone {clone} is missing" in output
+    assert "move it away" not in output and tree.calls == []
+
+
+def test_exclude_file_with_no_newline_at_its_end(work: Work):
+    clone = work.own_clone("busy")
+    exclude = clone / ".git" / "info" / "exclude"
+    exclude.write_text("*.swp")
+    write(clone / "notes.swp", "mine")
+
+    work.tree.dev("support", "busy")
+
+    assert exclude.read_text().splitlines()[:2] == [
+        "*.swp",
+        "# made by an ibek dev build",
+    ]
+    assert "notes.swp" not in git(clone, "status", "--porcelain")

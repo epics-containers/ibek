@@ -38,8 +38,8 @@ def declared() -> dict[str, Path]:
     """The modules to build from a clone, with the folder of each clone."""
     path = declarations_file()
     shape = (
-        f"{path} holds `support:` with a `<module>: <folder of its clone>` "
-        "line for each module"
+        f"{path} holds `support:` with a `<module>: <absolute path of its "
+        "clone>` line for each module"
     )
     try:
         if not path.exists():
@@ -51,7 +51,7 @@ def declared() -> dict[str, Path]:
     if modules is None:
         return {}
     if not isinstance(modules, dict) or not all(
-        isinstance(name, str) and isinstance(clone, str) and clone
+        isinstance(name, str) and isinstance(clone, str) and clone.startswith("/")
         for name, clone in modules.items()
     ):
         raise StampError(f"cannot read {path}: {shape}")
@@ -350,7 +350,11 @@ def hide(clone: Path, paths: list[str]) -> Path:
     """Add paths at the top of a clone to its info/exclude."""
     exclude = exclude_file(clone)
     exclude.parent.mkdir(parents=True, exist_ok=True)
+    ends = exclude.read_bytes()[-1:] if exclude.is_file() else b""
     with exclude.open("a") as stream:
+        # the last line that is there may have no newline
+        if ends not in (b"", b"\n"):
+            stream.write("\n")
         stream.write("# made by an ibek dev build\n")
         for path in paths:
             pattern = re.sub(r"([\\*?\[!#])", r"\\\1", path)
