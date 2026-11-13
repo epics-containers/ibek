@@ -16,6 +16,7 @@ import typer
 
 from ibek.globals import GLOBALS, IOC_SCHEMA_NAME
 
+from . import clones
 from .stamp import (
     Stamp,
     StampError,
@@ -79,6 +80,13 @@ class Drift:
     force: dict[str, Path] = field(default_factory=dict)
     # level 2: those whose folder is a link, which is never removed
     links: dict[str, Path] = field(default_factory=dict)
+    # level 2: those declared with `ibek dev support` whose folder is not a
+    # link to their clone, with the folder and the clone
+    unlinked: dict[str, tuple[Path, Path]] = field(default_factory=dict)
+    # the modules that are linked to their declared clone
+    clones: dict[str, Path] = field(default_factory=dict)
+    # level 2: those of them whose clone was not built since it was linked
+    unbuilt: list[str] = field(default_factory=list)
     requirements: bool = False
     # level 3
     base: bool = False
@@ -121,6 +129,17 @@ def compare(stamp: Stamp, live: Stamp) -> Drift:
         drift.problems.append(str(error))
     names, built = live.names(), stamp.names()
     first = len(names)
+    try:
+        declared = clones.declared()
+    except StampError as error:
+        declared = {}
+        drift.problems.append(str(error))
+    for name in declared:
+        if name not in names:
+            drift.problems.append(
+                f"{name}: declared for development, and not a module of the "
+                f"Dockerfile: `ibek dev support --release {name}` drops it"
+            )
 
     def out_of_date(index: int, reason: str) -> None:
         nonlocal first
@@ -132,13 +151,74 @@ def compare(stamp: Stamp, live: Stamp) -> Drift:
 
     for index, module in enumerate(live.modules):
         name, was = module.name, stamp.module(module.name)
+        folder, clone = support_folder(name), declared.get(name)
+        release = f"`ibek dev support --release {name}`"
+        gone = False
+        unusable = ""
+        if clone is not None and clone.is_dir():
+            try:
+                info = clones.install(name, module.options)
+                clones.check(name, info, clone, quiet=True)
+            except StampError as error:
+                unusable = str(error)
+        if clone is not None and folder is None:
+            drift.problems.append(
+                f"{name}: declared for development, but its install.yml cannot "
+                "be read to find the folder it is built in"
+            )
+        elif clone is not None and unusable:
+            drift.problems.append(
+                f"{name}: declared for development, and its clone cannot be "
+                f"built: {unusable}. {release} drops it"
+            )
+        elif clone is not None and folder is not None:
+            if clones.linked(folder, clone):
+                drift.clones[name] = clone
+                if not clones.built(clone):
+                    drift.unbuilt.append(name)
+            elif not clone.is_dir():
+                drift.problems.append(
+                    f"{name}: declared for development, but its clone {clone} "
+                    f"is missing: `ibek dev support {name}` clones it again, "
+                    f"{release} goes back to the version of install.yml"
+                )
+            elif folder.is_symlink():
+                drift.problems.append(
+                    f"{name}: {folder} is a link to {clones.target(folder)}, "
+                    f"not to its declared clone {clone}: {release} removes it"
+                )
+            else:
+                drift.unlinked[name] = (folder, clone)
+        elif folder is not None and folder.is_symlink():
+            drift.problems.append(
+                f"{name}: {folder} is a link to {clones.target(folder)} that "
+                f"is not declared with `ibek dev support`: {release} removes it"
+            )
+        elif folder is not None and was is not None and module.runs("clone"):
+            gone = not folder.exists()
+            if folder.exists() and not folder.is_dir():
+                drift.problems.append(
+                    f"{name}: {folder} is a file, not a module folder: remove it "
+                    "and run `ibek dev sync --build`"
+                )
+
         if module.build is None:
             drift.problems.append(
                 f"{name}: the Dockerfile builds it, but {source()} does not "
                 f"have one ibek-support*/{name} folder"
             )
+        elif name in drift.unlinked:
+            out_of_date(
+                index,
+                f"{name}: declared for development in {clone}, but {folder} "
+                "is not a link to it",
+            )
+        elif gone:
+            out_of_date(index, f"{name}: {folder} is missing")
         elif name in stamp.pending:
             out_of_date(index, f"{name}: rebuild not finished")
+        elif name in drift.unbuilt:
+            out_of_date(index, f"{name}: its clone {clone} is not built")
         elif was is None:
             out_of_date(index, f"{name}: not built in this container")
         elif was.source != module.source:
@@ -157,11 +237,11 @@ def compare(stamp: Stamp, live: Stamp) -> Drift:
         # and a link is someone's own folder: it is built as it is. A
         # Dockerfile line whose tags leave out clone has no source to replace.
         changed = was and was.source and module.source and was.source != module.source
+        # A declared module is never cloned again: its clone is its owner's.
         if changed and module.runs("clone"):
-            folder = support_folder(name)
             if folder is not None and folder.is_symlink():
                 drift.links[name] = folder
-            elif folder is not None and folder.exists():
+            elif folder is not None and folder.exists() and clone is None:
                 drift.force[name] = folder
 
     # A module added, moved or removed: rebuild from where the lists part. A
@@ -185,6 +265,7 @@ def compare(stamp: Stamp, live: Stamp) -> Drift:
     drift.rebuild = [name for name in names[first:] if name not in missing]
     drift.force = {n: f for n, f in drift.force.items() if n in drift.rebuild}
     drift.links = {n: f for n, f in drift.links.items() if n in drift.rebuild}
+    drift.unlinked = {n: f for n, f in drift.unlinked.items() if n in drift.rebuild}
     drift.requirements = stamp.requirements != live.requirements
     drift.base = stamp.base != live.base
     return drift
@@ -211,6 +292,10 @@ def report(drift: Drift) -> list[str]:
             )
         for name, folder in drift.links.items():
             lines.append(f"    {name}: {folder} is a link, built as it is")
+        for name, (folder, clone) in drift.unlinked.items():
+            lines.append(
+                f"    links {folder} to {clone}: the {name} that is there is removed"
+            )
         lines.append("    fix: ibek dev sync --build")
     if drift.base:
         lines.append(
@@ -269,6 +354,39 @@ def build(stamp: Stamp, live: Stamp, drift: Drift) -> None:
     is picked up by the next one.
     """
     modules, force = drift.rebuild, drift.force
+    for name in modules:
+        folder = support_folder(name)
+        if folder is not None and folder.is_symlink() and not folder.exists():
+            raise StampError(
+                f"{name} cannot be built: {folder} is a link to "
+                f"{clones.target(folder)}, which is missing. "
+                f"`ibek dev support --release {name}` removes the link"
+            )
+    # A clone on the host may have changed since it was declared, linked or
+    # not: each one is checked before anything is built
+    declared = clones.declared()
+    for name in modules:
+        if name in declared:
+            own, folder = declared[name], support_folder(name)
+            release = f"`ibek dev support --release {name}`"
+            if not (own.exists() or own.is_symlink()):
+                raise StampError(
+                    f"{name} cannot be built: its declared clone {own} is "
+                    f"missing. `ibek dev support {name}` clones it again, "
+                    f"{release} goes back to the version of install.yml"
+                )
+            # ansible builds what the folder is, not what was declared
+            if folder is not None and folder.is_symlink():
+                if not clones.points_at(folder, own):
+                    raise StampError(
+                        f"{name} cannot be built: {folder} is a link to "
+                        f"{clones.target(folder)}, not to its declared clone "
+                        f"{own}. {release} removes it"
+                    )
+            module = live.module(name)
+            assert module is not None
+            info = clones.install(name, module.options)
+            clones.check(name, info, own, quiet=True)
     clone_task = ansible_folder() / "roles" / "support" / "tasks" / "clone.yml"
     try:
         can_force = "force_clone" in clone_task.read_text()
@@ -297,7 +415,9 @@ def build(stamp: Stamp, live: Stamp, drift: Drift) -> None:
         stamp.save()
 
     stamp.pending = list(dict.fromkeys([*stamp.pending, *modules]))
-    stamp.ansible = live.ansible
+    # the roles are on record once every module is built with them
+    if modules == [m.name for m in live.modules if m.build is not None]:
+        stamp.ansible = live.ansible
     # the IOC binary is out of date from here until it is built again
     stamp.rebuilt = time.time()
     stamp.save()
@@ -305,7 +425,14 @@ def build(stamp: Stamp, live: Stamp, drift: Drift) -> None:
     for name in modules:
         now = live.module(name)
         assert now is not None
-        if name in force:
+        if name in drift.unlinked:
+            # the stamp already has the module as pending: until its build is
+            # recorded, nothing reports the link as a built module
+            folder, to = drift.unlinked[name]
+            print(f"ibek dev: removing {folder} and linking it to {to}")
+            clones.link(folder, to)
+            drift.clones[name] = to
+        elif name in force:
             # The clone is a step of its own, recorded before the build: a
             # build that fails is then retried on the source that is there,
             # with whatever was done to it, and not on a fresh clone.
@@ -316,7 +443,18 @@ def build(stamp: Stamp, live: Stamp, drift: Drift) -> None:
         elif name in drift.links:
             print(f"ibek dev: {drift.links[name]} is a link: it is left alone")
         # the module's own line of the Dockerfile
-        ansible(*now.options, name, *now.args)
+        linked = drift.clones.get(name)
+        before = None
+        if linked:
+            clones.mark(linked, False)
+            before = clones.before_build(linked)
+        try:
+            ansible(*now.options, name, *now.args)
+        finally:
+            if linked:
+                clones.after_build(linked, before)
+        if linked:
+            clones.mark(linked, True)
         record(name)
 
     ansible("ioc")
