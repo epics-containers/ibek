@@ -126,8 +126,9 @@ class Selection(BaseSettings):
 
     ``only`` and ``models`` narrow the manifest's file-set instead: ``only``
     names pattern-relative files exactly, and ``models`` names entity models
-    whose database files (and the pattern's protocol files) are kept. The
-    pattern's support YAML is always kept. They cannot be combined with
+    whose database files, pvi device file and ``<stem>_settings.req`` /
+    ``<stem>_positions.req`` autosave files (and the pattern's protocol files)
+    are kept. The pattern's support YAML is always kept. They cannot be combined with
     ``exclude``; files an ``include`` rule places are vendored either way.
     """
 

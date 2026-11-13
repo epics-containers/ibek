@@ -198,11 +198,8 @@ def _narrowed_modules(instance_root: Path) -> dict[str, list[_NarrowedPattern]]:
     try:
         lock = RuntimeLock(lock_path)
     except (PatternError, OSError) as exc:
-        typer.echo(
-            f"WARNING: vendored model files not checked; cannot read "
-            f"{lock_path}: {exc}",
-            err=True,
-        )
+        # the error already names the lock
+        typer.echo(f"WARNING: vendored model files not checked: {exc}", err=True)
         return {}
     narrowed: dict[str, list[_NarrowedPattern]] = {}
     for pattern, entry in lock.patterns.items():

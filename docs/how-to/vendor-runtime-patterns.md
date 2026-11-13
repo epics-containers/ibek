@@ -112,7 +112,7 @@ patterns:
 - `--model` takes, from the support YAML, the `databases[].file` entries and
   the `pvi.yaml_path` of each named model and of the models it instantiates
   through `sub_entities`. For each database file it also vendors the autosave
-  request files `<template>_settings.req` and `<template>_positions.req`. It
+  request files `<stem>_settings.req` and `<stem>_positions.req`. It
   vendors every protocol file (`*.proto`, `*.protocol`) the manifest vendors
   too, because a StreamDevice template names its protocol inside a record link,
   where the support YAML cannot see it.

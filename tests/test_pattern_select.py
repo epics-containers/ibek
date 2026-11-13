@@ -807,3 +807,86 @@ def test_generate2_checks_pvi_files_only_with_pvi(
     result = pvi_generate2(instance, out, "controller", "--no-pvi", EXTRA="true")
     assert result.exit_code == 1
     assert "(extra.template is missing)" in result.output
+
+
+def psu_support(models: list[str]) -> str:
+    """A support YAML for module ODPsu defining ``models``, one template each."""
+    text = "module: ODPsu\n\nentity_models:\n"
+    for model in models:
+        text += (
+            f"  - name: {model}\n"
+            f"    description: loads {model}.template\n"
+            "    parameters:\n"
+            "      P:\n"
+            "        type: str\n"
+            "        description: pv prefix\n"
+            "    databases:\n"
+            f"      - file: {model}.template\n"
+            "        args:\n"
+            "          P:\n"
+        )
+    return text
+
+
+def test_generate2_one_module_from_two_narrowed_patterns(tmp_path: Path):
+    """Two narrowed patterns may declare one module; each vendors its own model."""
+    library = tmp_path / "lib"
+    make_pattern(
+        library,
+        "ODPsu",
+        {
+            "ODPsu.ibek.support.yaml": psu_support(["psuA", "psuC"]),
+            "psuA.template": "record(ai, $(P)A) {}\n",
+            "psuC.template": "record(ai, $(P)C) {}\n",
+        },
+    )
+    make_pattern(
+        library,
+        "ODPsu2",
+        {
+            "ODPsu2.ibek.support.yaml": psu_support(["psuB"]),
+            "psuB.template": "record(ai, $(P)B) {}\n",
+        },
+    )
+    instance = make_instance(tmp_path)
+    for name, model in ("ODPsu", "psuA"), ("ODPsu2", "psuB"):
+        vendor.add(
+            f"{name}@1.0.0",
+            instance,
+            source_override=str(library),
+            select=Selection(models=[model]),
+        )
+
+    def run(model: str):
+        (instance / "config" / "ioc.yaml").write_text(
+            "ioc_name: test\n"
+            "description: test\n"
+            "entities:\n"
+            f"  - type: ODPsu.{model}\n"
+            "    P: 'X:'\n"
+        )
+        return runner.invoke(
+            cli,
+            [
+                "runtime",
+                "generate2",
+                str(instance / "config"),
+                "--definitions",
+                str(instance / "config" / "ODPsu.ibek.support.yaml"),
+                "--definitions",
+                str(instance / "config" / "ODPsu2.ibek.support.yaml"),
+                "--output",
+                str(tmp_path / "out"),
+                "--no-pvi",
+            ],
+        )
+
+    for model in "psuA", "psuB":
+        result = run(model)
+        assert result.exit_code == 0, result.output
+    result = run("psuC")
+    assert result.exit_code == 1
+    assert (
+        "entity ODPsu.psuC uses model psuC whose files were not vendored from "
+        "pattern ODPsu or ODPsu2 (psuC.template is missing)"
+    ) in result.output
