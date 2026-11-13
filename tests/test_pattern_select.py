@@ -890,3 +890,87 @@ def test_generate2_one_module_from_two_narrowed_patterns(tmp_path: Path):
         "entity ODPsu.psuC uses model psuC whose files were not vendored from "
         "pattern ODPsu or ODPsu2 (psuC.template is missing)"
     ) in result.output
+
+
+def two_module_support(module: str, models: dict[str, list[str]]) -> str:
+    """A support YAML for ``module``: each model loads ``<module>_<model>.template``
+    and instantiates the given sub-entity types."""
+    text = f"module: {module}\n\nentity_models:\n"
+    for model, subs in models.items():
+        text += (
+            f"  - name: {model}\n"
+            "    description: test\n"
+            "    databases:\n"
+            f"      - file: {module}_{model}.template\n"
+            "        args: {}\n"
+        )
+        if subs:
+            text += "    sub_entities:\n" + "".join(
+                f"      - type: {t}\n" for t in subs
+            )
+    return text
+
+
+@pytest.fixture
+def two_module_library(tmp_path: Path) -> Path:
+    """One pattern whose two support YAMLs both define a model named Child."""
+    return make_pattern(
+        tmp_path / "lib",
+        "twomod",
+        {
+            "a.ibek.support.yaml": two_module_support(
+                "a", {"Parent": ["a.Child"], "Child": []}
+            ),
+            "b.ibek.support.yaml": two_module_support("b", {"Child": []}),
+            "a_Parent.template": "",
+            "a_Child.template": "",
+            "b_Child.template": "",
+        },
+    )
+
+
+@pytest.mark.parametrize(
+    "models, expected",
+    [
+        (["Parent"], {"config/a_Parent.template", "config/a_Child.template"}),
+        (["b.Child"], {"config/b_Child.template"}),
+        (["a.Child"], {"config/a_Child.template"}),
+    ],
+)
+def test_models_keep_their_module(
+    tmp_path: Path, two_module_library: Path, models: list[str], expected: set[str]
+):
+    instance = make_instance(tmp_path)
+    vendor.add(
+        "twomod@1.0.0",
+        instance,
+        source_override=str(two_module_library),
+        select=Selection(models=models),
+    )
+    files = set(RuntimeLock(instance / RUNTIME_LOCK_NAME).patterns["twomod"].files)
+    assert files == expected | {
+        "config/a.ibek.support.yaml",
+        "config/b.ibek.support.yaml",
+    }
+
+
+def test_model_name_of_two_modules_is_refused(tmp_path: Path, two_module_library: Path):
+    instance = make_instance(tmp_path)
+    with pytest.raises(ManifestError) as exc:
+        vendor.add(
+            "twomod@1.0.0",
+            instance,
+            source_override=str(two_module_library),
+            select=Selection(models=["Child"]),
+        )
+    assert "'Child' names models of several modules (a.Child, b.Child)" in str(
+        exc.value
+    )
+    with pytest.raises(ManifestError) as exc:
+        vendor.add(
+            "twomod@1.0.0",
+            instance,
+            source_override=str(two_module_library),
+            select=Selection(models=["Nope"]),
+        )
+    assert "its models are: a.Child, a.Parent, b.Child" in str(exc.value)

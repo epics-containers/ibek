@@ -63,12 +63,14 @@ class _Model:
         self.sub_types = sub_types
 
 
-def _load_models(
-    name: str, support_yamls: dict[str, Path]
-) -> tuple[dict[str, _Model], set[str]]:
-    """The entity models the pattern's support YAMLs define, and their modules."""
+def _load_models(name: str, support_yamls: dict[str, Path]) -> dict[str, _Model]:
+    """The entity models the pattern's support YAMLs define, by ``module.name``.
+
+    Keyed by the module-qualified type an entity uses, so two support YAMLs of
+    one pattern that declare models of the same name in different modules stay
+    distinct.
+    """
     models: dict[str, _Model] = {}
-    modules: set[str] = set()
     for rel, path in sorted(support_yamls.items()):
         try:
             data = YAML(typ="safe").load(path)
@@ -76,8 +78,7 @@ def _load_models(
             raise ManifestError(f"{name}: {rel} cannot be read: {exc}") from exc
         if not isinstance(data, dict):
             continue
-        if data.get("module"):
-            modules.add(str(data["module"]))
+        module = str(data.get("module") or "")
         for model in data.get("entity_models") or []:
             if not isinstance(model, dict) or "name" not in model:
                 continue
@@ -97,33 +98,53 @@ def _load_models(
                 if isinstance(pvi, dict) and pvi.get("yaml_path")
                 else None
             )
-            models[str(model["name"])] = _Model(databases, pvi_path, sub_types)
-    return models, modules
+            models[f"{module}.{model['name']}"] = _Model(databases, pvi_path, sub_types)
+    return models
+
+
+def _resolve_model(requested: str, models: dict[str, _Model]) -> list[str]:
+    """The qualified models ``requested`` names: ``module.name`` or ``name``."""
+    if requested in models:
+        return [requested]
+    return [key for key in models if key.rpartition(".")[2] == requested]
 
 
 def _models_closure(
-    name: str, requested: Sequence[str], models: dict[str, _Model], modules: set[str]
+    name: str, requested: Sequence[str], models: dict[str, _Model]
 ) -> list[str]:
-    """``requested`` plus every model of this pattern they instantiate."""
-    unknown = [model for model in requested if model not in models]
+    """The qualified ``requested`` models plus every model of this pattern they
+    instantiate."""
+    where = f"{name}: {RUNTIME_LOCK_NAME} select.models (--model):"
+    resolved: list[str] = []
+    unknown: list[str] = []
+    for model in requested:
+        keys = _resolve_model(model, models)
+        if not keys:
+            unknown.append(model)
+        elif len(keys) > 1:
+            raise ManifestError(
+                f"{where} {model!r} names models of several modules "
+                f"({', '.join(sorted(keys))}); give it as module.name"
+            )
+        else:
+            resolved.extend(keys)
     if unknown:
-        available = ", ".join(sorted(models)) or "none"
+        names = [key.rpartition(".")[2] for key in models]
+        # plain names unless two modules share one
+        listed = names if len(set(names)) == len(names) else list(models)
+        available = ", ".join(sorted(listed)) or "none"
         raise ManifestError(
-            f"{name}: {RUNTIME_LOCK_NAME} select.models (--model): no entity model "
-            f"{', '.join(repr(m) for m in unknown)} in the pattern's support "
-            f"YAML; its models are: {available}"
+            f"{where} no entity model {', '.join(repr(m) for m in unknown)} in "
+            f"the pattern's support YAML; its models are: {available}"
         )
     seen: list[str] = []
-    pending = list(requested)
+    pending = resolved
     while pending:
         model = pending.pop(0)
         if model in seen:
             continue
         seen.append(model)
-        for sub_type in models[model].sub_types:
-            module, _, sub_name = sub_type.rpartition(".")
-            if module in modules and sub_name in models:
-                pending.append(sub_name)
+        pending.extend(sub for sub in models[model].sub_types if sub in models)
     return seen
 
 
@@ -188,14 +209,15 @@ def narrow_plan(
     keep.update(select.only)
 
     if select.models:
-        models, modules = _load_models(name, support_yamls)
-        for model in _models_closure(name, select.models, models, modules):
-            for file in models[model].databases:
+        models = _load_models(name, support_yamls)
+        for key in _models_closure(name, select.models, models):
+            model = key.rpartition(".")[2]
+            for file in models[key].databases:
                 rel = _pattern_rel(name, model, "database file", file, vendored)
                 if rel is not None:
                     keep.add(rel)
                     keep.update(_req_rels(rel, vendored))
-            pvi = models[model].pvi
+            pvi = models[key].pvi
             if pvi is not None:
                 rel = _pattern_rel(name, model, "pvi device file", pvi, vendored)
                 if rel is not None:

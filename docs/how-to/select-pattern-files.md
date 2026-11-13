@@ -108,7 +108,9 @@ ibek pattern add ibek-runtime-streamdevice:CryoconM14@0.6.0 services/my-ioc \
   templates name their protocol inside a record link, not in the support YAML,
   so `--model` cannot tell which protocol a model needs, and a manifest has no
   protocol destination to go by, so protocol files are recognised by suffix.
-- An unknown model is an error that lists the pattern's models.
+- An unknown model is an error that lists the pattern's models. A pattern whose
+  support YAMLs declare models of one name in two modules needs the model given
+  as `module.name`.
 
 Both options can be given more than once, and together: ibek vendors the files
 of all of them. They cannot be combined with `--exclude`. `--include` works
