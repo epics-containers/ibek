@@ -2513,3 +2513,28 @@ def test_exclude_file_with_crlf_line_ends(work: Work):
 
     tree.dev("support", "busy")
     assert exclude.read_text().count("/.ibek-dev-built") == 1
+
+
+def test_a_visible_file_that_the_build_replaces_stays_in_sight(work: Work):
+    tree, clone = work.tree, work.clone("busy")
+    tree.dev("support", "busy")
+    mine = write(clone / "src" / "new.c", "int mine;\n")
+    notes = write(clone / "notes.txt", "mine\n")
+    ansible_sh = tree.ansible_sh
+
+    def build(*words: str) -> None:
+        ansible_sh(*words)
+        if words == ("busy",):
+            mine.write_text(f"replaced {time.time_ns()}\n")
+            notes.unlink(missing_ok=True)
+
+    tree.ansible_sh = build  # type: ignore[method-assign]
+    for _ in range(2):
+        output = tree.dev("support", "busy")
+        assert "    src/new.c\n" in output
+        assert "?? src/new.c" in git(clone, "status", "--porcelain")
+    # one that is removed and made again is in sight too
+    write(clone / "notes.txt", "mine again\n")
+    assert "?? notes.txt" in git(clone, "status", "--porcelain")
+    exclude = (clone / ".git" / "info" / "exclude").read_text()
+    assert "/src/new.c" not in exclude and "/notes.txt" not in exclude

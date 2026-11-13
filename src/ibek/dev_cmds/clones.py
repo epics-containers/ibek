@@ -475,9 +475,8 @@ def after_build(clone: Path, before: Changes | None) -> None:
     What the build made is listed in the clone's own .git/info/exclude, so
     git does not show it. Tracked files that the build edited are named: they
     show in `git status`, as the developer's own edits to them must. So are
-    files of the developer's that the build replaced or removed, once: those
-    and the ignored files that the build made are listed too, so a build that
-    writes them again says nothing of them.
+    files of the developer's that the build replaced or removed: an ignored
+    one is named once.
     """
     if before is None:
         return
@@ -534,10 +533,16 @@ def after_build(clone: Path, before: Changes | None) -> None:
             )
             for path in gone:
                 print(f"    {path}", flush=True)
-        # what the build wrote that git already ignored, and what was named
-        # above, are listed too: git ignores them already, or they are gone
-        quiet = (set(after) - set(before[2]) - ours) | set(gone)
-        quiet = {path for path in quiet if listable(path)}
+        # Ignored files that the build made, and ignored files named above
+        # that are still there, are listed too, so that they are not named
+        # again: git ignores them already, so nothing goes out of sight. A
+        # file that git shows stays in sight, and is named after each build.
+        quiet = {
+            path
+            for path in [*set(after) - set(before[2]), *gone]
+            if path in after and path not in untracked and path not in before[0]
+        }
+        quiet = {path for path in quiet - ours if listable(path)}
         if quiet:
             hide(clone, sorted(quiet))
     except (StampError, OSError) as error:
