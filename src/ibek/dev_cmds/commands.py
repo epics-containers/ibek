@@ -25,8 +25,8 @@ dev_cli = typer.Typer(cls=NaturalOrderGroup)
 def _image_id(path: Path) -> str:
     """The image ID in a file, or nothing if there is none to read."""
     try:
-        return path.read_text(errors="replace").strip().removeprefix("sha256:")
-    except OSError:
+        return path.read_text().strip().removeprefix("sha256:")
+    except (OSError, UnicodeDecodeError):
         return ""
 
 
@@ -155,14 +155,20 @@ def sync(
                 "Run `ibek dev sync --build` again for anything more."
             )
             _show(drift.compare(made, live))
+            # what the upgrade printed has pushed the warning out of sight
+            _warn_stale_container()
             return
         if found.defs or found.dangling:
             drift.fix_defs(made, live, found)
-        if build and (found.rebuild or found.ioc):
+        built = build and bool(found.rebuild or found.ioc)
+        if built:
             drift.build(made, live, found)
     except StampError as error:
         raise _fail(error) from error
     _show(drift.compare(made, live))
+    if built:
+        # what the build printed has pushed the warning out of sight
+        _warn_stale_container()
 
 
 def _instance_report() -> None:

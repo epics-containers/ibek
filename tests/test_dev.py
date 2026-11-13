@@ -1290,12 +1290,19 @@ def test_no_stale_container_warning_for_an_unreadable_file(
         assert "matches" in output, command
 
 
-def test_stale_container_warning_for_an_id_that_is_not_text(tree: Tree, tmp_path: Path):
-    """Two files that differ are two images, whatever is in them."""
-    image_ids(tree, b"\xff\xfe", "sha256:bbb\n")
+@pytest.mark.parametrize(
+    "created, now",
+    [(b"\xff\xfe", "sha256:bbb\n"), ("sha256:aaa\n", b"\xff\xfe")],
+)
+def test_no_stale_container_warning_for_an_id_that_is_not_text(
+    tree: Tree, tmp_path: Path, created: str | bytes, now: str | bytes
+):
+    """A file that is not text is one that cannot be read."""
+    image_ids(tree, created, now)
 
     for command, output in all_commands(tree, tmp_path).items():
-        assert WARNING in output, command
+        assert "WARNING" not in output, command
+        assert "matches" in output, command
 
 
 def test_stale_container_warning_with_no_stamp(tree: Tree, tmp_path: Path):
@@ -1342,9 +1349,11 @@ def test_stale_container_warning_with_other_drift(tree: Tree, tmp_path: Path):
     assert lines[1] == WARNING and "differs from" in lines[2]
     assert tree.calls == []
 
+    # a build prints a great deal: the warning is repeated after the report
     lines = tree.dev("sync", "--build").splitlines()
-    assert lines[0] == WARNING
-    assert "matches" in lines[-1]
+    assert lines[0] == WARNING and lines[-1] == WARNING
+    assert lines.count(WARNING) == 2
+    assert "matches" in lines[-2]
     assert tree.ansible() == [
         ["busy", "--tags", "clone", "-e", "force_clone=true"],
         ["busy"],
@@ -1358,3 +1367,43 @@ def test_stale_container_warning_with_other_drift(tree: Tree, tmp_path: Path):
     tree.fail_on = "motor"
     output = tree.dev("sync", "--build", code=2)
     assert output.splitlines()[0] == WARNING
+
+
+def test_stale_container_warning_is_repeated_only_after_a_build(tree: Tree):
+    """Once when nothing is run or only links are made, twice after a build."""
+    image_ids(tree, "sha256:aaa\n", "sha256:bbb\n")
+
+    # nothing to do
+    assert tree.dev("sync", "--build").count(WARNING) == 1
+    assert tree.calls == []
+
+    # definition files alone: linked without a build
+    write(tree.module("motor") / "motor.ibek.support.yaml", "module: motor2\n")
+    lines = tree.dev("sync", "--build").splitlines()
+    assert lines[0] == WARNING and lines.count(WARNING) == 1
+    assert tree.ansible() == [["motor", "--tags", "runtime"]]
+
+    # the IOC alone
+    tree.calls.clear()
+    write(tree.source / "ioc" / "iocApp" / "src" / "Makefile", "PROD_IOC = ioc2\n")
+    os.utime(tree.binary, (0, 0))
+    assert tree.dev("sync").count(WARNING) == 1
+    lines = tree.dev("sync", "--build").splitlines()
+    assert lines[0] == WARNING and lines[-1] == WARNING
+    assert lines.count(WARNING) == 2
+    assert tree.ansible() == [["ioc"]]
+
+    # the upgrade of the Python packages
+    tree.calls.clear()
+    write(tree.source / "requirements.txt", "ibek>=6\n")
+    assert tree.dev("sync").count(WARNING) == 1
+    lines = tree.dev("sync", "--build").splitlines()
+    assert lines[0] == WARNING and lines[-1] == WARNING
+    assert lines.count(WARNING) == 2
+    assert "again for anything more." in "\n".join(lines)
+    assert tree.calls[0][:3] == ["uv", "pip", "install"]
+
+    # no warning, nothing repeated
+    (tree.epics / "dev-image-id").unlink()
+    write(tree.module("busy") / "busy.install.yml", "module: busy\nversion: R2\n")
+    assert "WARNING" not in tree.dev("sync", "--build")

@@ -20,13 +20,15 @@ again only when its ``install.yml`` asks for a different source. ``ibek dev
 instance`` prints the same report. In an image with no stamp each command
 says so and exits 0. See ``docs/reference/cli.md``.
 
-``ibek dev status``, ``ibek dev sync`` and ``ibek dev instance`` start their
-report with a ``WARNING:`` line when the container was created from a different
-developer image than the one now on the host: when
-``/epics/dev-image-id``, written as the container is created, differs from
+``ibek dev status`` and ``ibek dev sync`` start their report with a
+``WARNING:`` line when the container was created from a different developer
+image than the one now on the host: when ``/epics/dev-image-id``, written as
+the container is created, differs from
 ``/epics/generic-source/.devcontainer/image-id``, written by the host as the
-devcontainer starts. With either file missing or empty nothing is said, and
-no exit code changes.
+devcontainer starts. ``ibek dev instance`` prints it after its ``Symlinking``
+line, and ``ibek dev sync --build`` prints it again as its last line when it
+has built or upgraded anything. With either file missing, empty or unreadable
+nothing is said, and no exit code changes.
 
 ``ibek pattern install library:pattern@version ...`` installs runtime patterns
 into a generic IOC image at build time, beside its compiled support modules:
