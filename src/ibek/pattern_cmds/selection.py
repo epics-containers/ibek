@@ -11,13 +11,17 @@ so every file kept lands where the manifest (or an ``include`` rule) puts it.
 - ``only`` names pattern-relative paths exactly. Each must be a file the
   manifest vendors.
 - ``models`` names entity models from the support YAML. Each model's
-  ``databases[].file`` entries are kept, as are those of the models it
-  instantiates through ``sub_entities``. A database file is matched to the
+  ``databases[].file`` entries and its ``pvi.yaml_path`` are kept, as are those
+  of the models it instantiates through ``sub_entities``. Each is matched to the
   pattern file at that pattern-relative path, or else to the one pattern file
-  with that base name; a file the pattern does not vendor is left to the image.
-  ``models`` also keeps every protocol file (``*.proto``, ``*.protocol``) the
-  manifest vendors: a StreamDevice template names its protocol inside an INP or
-  OUT link, which the support YAML does not describe.
+  with that base name; a name no pattern file has is left to the image. For each
+  database file kept, its autosave request files ``<stem>_settings.req`` and
+  ``<stem>_positions.req`` are kept too, which is how ``ibek runtime
+  generate-autosave`` pairs them. ``models`` also keeps every protocol file
+  (``*.proto``, ``*.protocol``) the manifest vendors: a StreamDevice template
+  names its protocol inside an INP or OUT link, which the support YAML does not
+  describe, and a manifest has no notion of a protocol destination, so protocol
+  files are recognised by suffix.
 - Files an ``include`` rule places are vendored whatever ``only`` and
   ``models`` say: an include is an explicit request for that file.
 
@@ -41,16 +45,21 @@ from .manifest import MANIFEST_NAME, SUPPORT_YAML_SUFFIX, ManifestError
 
 PROTOCOL_SUFFIXES = (".proto", ".protocol")
 
+# The autosave request files ``ibek runtime generate-autosave`` pairs with a
+# database template ``<stem>.template``: ``<stem>_<suffix>.req``.
+AUTOSAVE_REQ_SUFFIXES = ("settings", "positions")
+
 # A database file name holding Jinja is rendered per entity, so it names no one
 # pattern file that could be selected ahead of time.
 _JINJA_RE = re.compile(r"\{\{|\{%")
 
 
 class _Model:
-    """What one entity model loads: its database files and its sub-entity types."""
+    """What one entity model loads: database files, pvi device file, sub-entities."""
 
-    def __init__(self, databases: list[str], sub_types: list[str]):
+    def __init__(self, databases: list[str], pvi: str | None, sub_types: list[str]):
         self.databases = databases
+        self.pvi = pvi
         self.sub_types = sub_types
 
 
@@ -82,7 +91,13 @@ def _load_models(
                 for sub in model.get("sub_entities") or []
                 if isinstance(sub, dict) and "type" in sub
             ]
-            models[str(model["name"])] = _Model(databases, sub_types)
+            pvi = model.get("pvi")
+            pvi_path = (
+                str(pvi["yaml_path"])
+                if isinstance(pvi, dict) and pvi.get("yaml_path")
+                else None
+            )
+            models[str(model["name"])] = _Model(databases, pvi_path, sub_types)
     return models, modules
 
 
@@ -112,13 +127,13 @@ def _models_closure(
     return seen
 
 
-def _database_rel(
-    name: str, model: str, file: str, vendored: Sequence[str]
+def _pattern_rel(
+    name: str, model: str, kind: str, file: str, vendored: Sequence[str]
 ) -> str | None:
-    """The vendored pattern file a model's ``databases[].file`` names, if any."""
+    """The vendored pattern file a model's ``kind`` file names, if any."""
     if _JINJA_RE.search(file):
         raise ManifestError(
-            f"{name}: entity model {model!r} loads database file {file!r}, which "
+            f"{name}: entity model {model!r} loads {kind} {file!r}, which "
             "is a template expression and names no single pattern file; select "
             "its files with --only instead"
         )
@@ -128,11 +143,18 @@ def _database_rel(
     matches = [rel for rel in vendored if PurePosixPath(rel).name == base]
     if len(matches) > 1:
         raise ManifestError(
-            f"{name}: entity model {model!r} loads database file {file!r}, which "
+            f"{name}: entity model {model!r} loads {kind} {file!r}, which "
             f"matches several pattern files ({', '.join(matches)}); select them "
             "with --only instead"
         )
     return matches[0] if matches else None
+
+
+def _req_rels(database_rel: str, vendored: Sequence[str]) -> list[str]:
+    """The autosave request files paired with a kept database file."""
+    stem = PurePosixPath(database_rel).stem
+    names = {f"{stem}_{suffix}.req" for suffix in AUTOSAVE_REQ_SUFFIXES}
+    return [rel for rel in vendored if PurePosixPath(rel).name in names]
 
 
 def narrow_plan(
@@ -169,7 +191,13 @@ def narrow_plan(
         models, modules = _load_models(name, support_yamls)
         for model in _models_closure(name, select.models, models, modules):
             for file in models[model].databases:
-                rel = _database_rel(name, model, file, vendored)
+                rel = _pattern_rel(name, model, "database file", file, vendored)
+                if rel is not None:
+                    keep.add(rel)
+                    keep.update(_req_rels(rel, vendored))
+            pvi = models[model].pvi
+            if pvi is not None:
+                rel = _pattern_rel(name, model, "pvi device file", pvi, vendored)
                 if rel is not None:
                     keep.add(rel)
         keep.update(rel for rel in vendored if rel.endswith(PROTOCOL_SUFFIXES))

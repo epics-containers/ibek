@@ -109,15 +109,17 @@ patterns:
 
 - The pattern's support YAML is always vendored, whole and unmodified, so it
   still defines every model in the pattern.
-- `--model` takes the `databases[].file` entries of each named model, and of
-  the models it instantiates through `sub_entities`, from the support YAML. It
-  also vendors every protocol file (`*.proto`, `*.protocol`) the manifest
-  vendors, because a StreamDevice template names its protocol inside a record
-  link, where the support YAML cannot see it. A database file the pattern does
-  not hold, such as `$(ADCORE)/db/NDStats.template`, comes from the image and
-  is not vendored.
-- `--only` takes paths relative to the pattern folder, exactly. List protocol
-  files too if the templates need them.
+- `--model` takes, from the support YAML, the `databases[].file` entries and
+  the `pvi.yaml_path` of each named model and of the models it instantiates
+  through `sub_entities`. For each database file it also vendors the autosave
+  request files `<template>_settings.req` and `<template>_positions.req`. It
+  vendors every protocol file (`*.proto`, `*.protocol`) the manifest vendors
+  too, because a StreamDevice template names its protocol inside a record link,
+  where the support YAML cannot see it.
+- `--only` takes paths relative to the pattern folder, exactly. List every file
+  the model needs: its templates, its pvi device file (`*.pvi.device.yaml`),
+  its autosave request files (`*.req`) and the protocol files its templates
+  use.
 - Both options can be repeated and combined; the files of all of them are
   vendored. Files keep the destinations the manifest gives them.
 
@@ -127,8 +129,8 @@ moves to, so a model whose template is renamed still gets the right file; an
 `--only` file that the release no longer has is an error. `restore` vendors the
 same files again.
 
-An entity whose model's files were left out fails `ibek runtime generate2` with,
-for example:
+An entity whose model's database or pvi device files were left out fails
+`ibek runtime generate2` with, for example:
 
 ```
 Error: entity BL21I.ARMAirControl uses model ARMAirControl whose files were not

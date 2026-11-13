@@ -79,25 +79,35 @@ files the named entity models load:
 ibek pattern add ibek-runtime-support:BL21I@0.4.0 services/my-ioc \
     --model TTHBumpstripMonitor
 ibek pattern add ibek-runtime-streamdevice:CryoconM14@0.6.0 services/my-ioc \
-    --only M14.protocol --only M14_sensor.template
+    --only M14.protocol --only M14_sensor.template \
+    --only M14_sensor.pvi.device.yaml
 ```
 
 - The pattern's `*.ibek.support.yaml` is always vendored, whole and unmodified.
 - `--only` takes a path relative to the pattern folder, exactly as it appears
   there. It must be a file the manifest vendors; add any other file with
   `--include`. A name the pattern does not vendor is an error that lists the
-  files it does vendor.
-- `--model` takes the model's `databases[].file` entries from the support YAML,
-  and those of the models it instantiates through `sub_entities`. A database
-  file matches the pattern file at that path, or else the one pattern file with
-  that base name; a database file that the pattern does not hold comes from the
-  image and is not vendored. A database file given as a Jinja expression names
-  no single file, so `--model` refuses it; use `--only`.
+  files it does vendor. `--only` vendors nothing it is not given: list the
+  model's templates, its pvi device file (`*.pvi.device.yaml`), its autosave
+  request files (`*.req`) and the protocol files its templates use.
+- `--model` takes the model's `databases[].file` entries and its
+  `pvi.yaml_path` from the support YAML, and those of the models it
+  instantiates through `sub_entities`. Each matches the pattern file at that
+  path, or else the one pattern file with that base name; a base name that
+  several pattern files share is an error. A name that matches no file the
+  pattern vendors is not vendored: `$(ADCORE)/db/NDStats.template` comes from
+  the image unless the pattern itself holds an `NDStats.template`. A name given
+  as a Jinja expression names no single file, so `--model` refuses it; use
+  `--only`.
+- For each database file `--model` keeps, it also keeps the autosave request
+  files `<stem>_settings.req` and `<stem>_positions.req` that the manifest
+  vendors, which `ibek runtime generate-autosave` pairs with `<stem>.template`.
 - `--model` also vendors every protocol file the manifest vendors: each file
   whose name ends in `.proto` or `.protocol`. A pattern with no manifest vendors
   every file, so this is every protocol file in the pattern. StreamDevice
   templates name their protocol inside a record link, not in the support YAML,
-  so `--model` cannot tell which protocol a model needs.
+  so `--model` cannot tell which protocol a model needs, and a manifest has no
+  protocol destination to go by, so protocol files are recognised by suffix.
 - An unknown model is an error that lists the pattern's models.
 
 Both options can be given more than once, and together: ibek vendors the files
@@ -126,11 +136,17 @@ literally: if a later release removes one, `update` fails and writes nothing.
 `restore` vendors the same files again.
 
 The support YAML still defines every model of the pattern. An entity whose
-model's database files were not vendored fails `ibek runtime generate2`, naming
-the model and the `ibek pattern add --model` to re-add it with. `generate2`
-checks this when the instance's `runtime-lock.yaml` sits beside its config
-folder; it checks only database files given as plain file names, since a path
-such as `$(ADCORE)/db/NDStats.template` names a file in the image.
+model's database files, or pvi device file when pvi generation is on, were not
+vendored fails `ibek runtime generate2`, naming the model and the
+`ibek pattern add --model` to re-add it with. `generate2` checks this when the
+instance's `runtime-lock.yaml` sits beside its config folder; it warns and
+skips the check when it cannot read that lock. It checks only files given as
+plain file names, since a path such as `$(ADCORE)/db/NDStats.template` names a
+file in a support module and a Jinja expression names no single file. A file at
+the root of the config folder counts as vendored. A plain file name that the
+image supplies, rather than the pattern, is reported as missing too; runtime
+patterns name only their own files that way. The database files of a disabled
+entity, or of a disabled database, are not checked.
 
 ## How files are chosen
 
@@ -155,7 +171,8 @@ ibek pattern add ibek-runtime-streamdevice:CryoconM14@0.6.0 services/my-ioc \
     --exclude '.*' \
     --include 'CryoconM14\.ibek\.support\.yaml=config' \
     --include 'M14\.protocol=config' \
-    --include 'M14_sensor\.template=config'
+    --include 'M14_sensor\.template=config' \
+    --include 'M14_sensor\.pvi\.device\.yaml=config'
 ```
 
 Every part of a selection must have an effect. ibek fails, and writes no files,

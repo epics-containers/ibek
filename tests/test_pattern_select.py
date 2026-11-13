@@ -5,6 +5,7 @@ them.
 """
 
 import shutil
+import warnings
 from pathlib import Path
 
 import pytest
@@ -12,7 +13,7 @@ from pydantic import ValidationError
 from typer.testing import CliRunner
 
 from ibek.__main__ import cli
-from ibek.globals import RUNTIME_LOCK_NAME
+from ibek.globals import GLOBALS, RUNTIME_LOCK_NAME
 from ibek.pattern_cmds import lock as lock_module
 from ibek.pattern_cmds import vendor
 from ibek.pattern_cmds.lock import (
@@ -24,6 +25,7 @@ from ibek.pattern_cmds.lock import (
 )
 from ibek.pattern_cmds.manifest import ManifestError
 from ibek.pattern_cmds.sources import PatternError
+from ibek.runtime_cmds import commands as runtime_commands
 from tests.test_pattern import make_instance, make_pattern, tree
 
 runner = CliRunner()
@@ -133,9 +135,7 @@ def multi_library(tmp_path: Path) -> Path:
 
 
 def add(instance: Path, library: Path, select: Selection | None) -> None:
-    vendor.add(
-        "multidev@1.0.0", instance, source_override=str(library), select=select
-    )
+    vendor.add("multidev@1.0.0", instance, source_override=str(library), select=select)
 
 
 def locked_files(instance: Path) -> set[str]:
@@ -336,9 +336,9 @@ def test_cli_add_with_only_and_model(tmp_path: Path, multi_library: Path):
     result = cli_add(instance, multi_library, "--model", "nosuch")
     assert result.exit_code == 1
     # the refused re-add left the instance as it was
-    assert select == RuntimeLock(instance / RUNTIME_LOCK_NAME).patterns[
-        "multidev"
-    ].select
+    assert (
+        select == RuntimeLock(instance / RUNTIME_LOCK_NAME).patterns["multidev"].select
+    )
 
 
 # --------------------------------------------------------------------------- #
@@ -384,9 +384,7 @@ def lock_text(version: int, schema_url: str = "", select: str = "") -> str:
         + "patterns:\n"
         "  multidev:\n"
         "    version: 1.0.0\n"
-        "    source: /lib\n"
-        + select
-        + "    files:\n"
+        "    source: /lib\n" + select + "    files:\n"
         f"      config/alpha.template: {file_hash(b'a')}\n"
         f"      {SUPPORT_KEY}: {file_hash(b'b')}\n"
     )
@@ -450,9 +448,7 @@ def test_version_4_lock_is_refused_by_a_version_3_reader(
 ):
     instance = make_instance(tmp_path)
     add(instance, multi_library, Selection(models=["alpha"]))
-    monkeypatch.setattr(
-        lock_module, "SUPPORTED_LOCK_VERSIONS", frozenset({1, 2, 3})
-    )
+    monkeypatch.setattr(lock_module, "SUPPORTED_LOCK_VERSIONS", frozenset({1, 2, 3}))
     assert vendor.check(instance).failures == [
         f"{instance / RUNTIME_LOCK_NAME}: unsupported lock version 4 "
         "(this ibek reads: 1, 2, 3)"
@@ -577,3 +573,237 @@ def test_generate2_without_a_narrowed_lock_is_unchecked(
     (instance / "config" / "beta.template").unlink()
     result = generate2(instance, tmp_path, "multidev.beta")
     assert result.exit_code == 0, result.output
+
+
+def test_generate2_skips_a_lock_it_cannot_read(
+    tmp_path: Path, multi_library: Path, monkeypatch
+):
+    """`ibek pattern check` reports an unreadable lock; generate2 only warns."""
+    instance = make_instance(tmp_path)
+    add(instance, multi_library, Selection(models=["alpha"]))
+    lock_path = instance / RUNTIME_LOCK_NAME
+
+    def unreadable(path):
+        raise PermissionError(13, "Permission denied", str(path))
+
+    monkeypatch.setattr(runtime_commands, "RuntimeLock", unreadable)
+    result = generate2(instance, tmp_path, "multidev.gamma")
+    assert result.exit_code == 0, result.output
+    assert "vendored model files not checked" in result.output
+    monkeypatch.undo()
+
+    lock_path.write_text("multidev:\n  version: 1.0.0\n")  # another format
+    result = generate2(instance, tmp_path, "multidev.gamma")
+    assert result.exit_code == 0, result.output
+    assert "lock format not recognised" in result.output
+
+
+def test_ambiguous_database_basename_is_refused(tmp_path: Path):
+    files = dict(MULTI_FILES)
+    files["multidev.ibek.support.yaml"] = MULTI_SUPPORT.replace(
+        "file: alpha.template", "file: $(MULTIDEV)/db/alpha.template"
+    )
+    files["sub/alpha.template"] = "record(ai, $(P)A2) {}\n"
+    library = make_pattern(tmp_path / "lib", "multidev", files)  # no manifest
+    instance = make_instance(tmp_path)
+    with pytest.raises(ManifestError) as exc:
+        add(instance, library, Selection(models=["alpha"]))
+    assert "matches several pattern files (alpha.template, sub/alpha.template)" in (
+        str(exc.value)
+    )
+    assert not (instance / RUNTIME_LOCK_NAME).exists()
+
+
+# --------------------------------------------------------------------------- #
+# pvi device files and autosave request files follow their models
+# --------------------------------------------------------------------------- #
+PVI_SUPPORT = """\
+module: pvidev
+
+entity_models:
+  - name: controller
+    description: a controller with a pvi device and an optional extra template
+    parameters:
+      P:
+        type: str
+        description: pv prefix
+      EXTRA:
+        type: bool
+        description: load extra.template
+        default: false
+    databases:
+      - file: controller.template
+        args:
+          P:
+      - file: extra.template
+        enabled: "{{EXTRA}}"
+        args:
+          P:
+    pvi:
+      yaml_path: controller.pvi.device.yaml
+      ui_index: true
+      ui_macros:
+        P:
+
+  - name: pump
+    description: a pump with a pvi device
+    parameters:
+      P:
+        type: str
+        description: pv prefix
+    databases:
+      - file: pump.template
+        args:
+          P:
+    pvi:
+      yaml_path: pump.pvi.device.yaml
+      ui_macros:
+        P:
+"""
+
+
+def pvi_device(label: str) -> str:
+    return (
+        f"label: {label}\n"
+        "children:\n"
+        "  - type: SignalR\n"
+        "    name: Value\n"
+        "    read_pv: $(P)VALUE\n"
+        "    read_widget:\n"
+        "      type: TextRead\n"
+    )
+
+
+PVI_FILES = {
+    "pvidev.ibek.support.yaml": PVI_SUPPORT,
+    "pvidev.proto": "Terminator = CR;\n",
+    "controller.template": "record(ai, $(P)C) {}\n",
+    "extra.template": "record(ai, $(P)E) {}\n",
+    "pump.template": "record(ai, $(P)P) {}\n",
+    "controller_settings.req": "$(P)C\n",
+    "controller_positions.req": "$(P)C\n",
+    "pump_settings.req": "$(P)P\n",
+    "controller.pvi.device.yaml": pvi_device("Controller"),
+    "pump.pvi.device.yaml": pvi_device("Pump"),
+    "README.md": "docs\n",
+}
+
+PVI_MANIFEST = (
+    "version: 1\n"
+    "vendor:\n"
+    "  - src: '[^/]+\\.(template|proto|req|ibek\\.support\\.yaml"
+    "|pvi\\.device\\.yaml)'\n"
+    "    dest: config\n"
+)
+
+
+@pytest.fixture
+def pvi_library(tmp_path: Path) -> Path:
+    return make_pattern(tmp_path / "lib", "pvidev", PVI_FILES, PVI_MANIFEST)
+
+
+def test_model_keeps_its_pvi_device_and_req_files(tmp_path: Path, pvi_library: Path):
+    instance = make_instance(tmp_path)
+    vendor.add(
+        "pvidev@1.0.0",
+        instance,
+        source_override=str(pvi_library),
+        select=Selection(models=["controller"]),
+    )
+    files = set(RuntimeLock(instance / RUNTIME_LOCK_NAME).patterns["pvidev"].files)
+    assert files == {
+        "config/pvidev.ibek.support.yaml",
+        "config/pvidev.proto",
+        "config/controller.template",
+        "config/extra.template",
+        "config/controller_settings.req",
+        "config/controller_positions.req",
+        "config/controller.pvi.device.yaml",
+    }
+
+
+def pvi_generate2(instance: Path, out: Path, entity: str, *options: str, **params: str):
+    """Run generate2 on ``instance`` (the image's IOC folder) with pvi on."""
+    lines = "".join(f"    {key}: {value}\n" for key, value in params.items())
+    (instance / "config" / "ioc.yaml").write_text(
+        "ioc_name: test\n"
+        "description: test\n"
+        "entities:\n"
+        f"  - type: pvidev.{entity}\n"
+        "    P: 'X:'\n" + lines
+    )
+    shutil.rmtree(out, ignore_errors=True)
+    with warnings.catch_warnings():
+        # pvi's Device.deserialize_parents warns that `parent` is deprecated
+        warnings.simplefilter("ignore", DeprecationWarning)
+        return runner.invoke(
+            cli,
+            [
+                "runtime",
+                "generate2",
+                str(instance / "config"),
+                "--definitions",
+                str(instance / "config" / "pvidev.ibek.support.yaml"),
+                "--output",
+                str(out),
+                *options,
+            ],
+        )
+
+
+def test_generate2_with_pvi_on_a_model_with_pvi(
+    tmp_epics_root: Path, tmp_path: Path, pvi_library: Path
+):
+    """pvi generation reads the vendored pvi device file from the config folder."""
+    instance = GLOBALS.IOC_FOLDER
+    out = tmp_path / "out"
+    vendor.add(
+        "pvidev@1.0.0",
+        instance,
+        source_override=str(pvi_library),
+        select=Selection(models=["controller"]),
+    )
+    result = pvi_generate2(instance, out, "controller")
+    assert result.exit_code == 0, result.output
+    assert (GLOBALS.OPI_OUTPUT / "controller.pvi.bob").is_file()
+
+    # a disabled entity's database files are not checked ...
+    result = pvi_generate2(instance, out, "pump", "--no-pvi", entity_enabled="false")
+    assert result.exit_code == 0, result.output
+    # ... but pvi generation reads its pvi device file
+    result = pvi_generate2(instance, out, "pump", entity_enabled="false")
+    assert result.exit_code == 1
+    assert "(pump.pvi.device.yaml is missing)" in result.output
+    assert "(pump.template is missing)" not in result.output
+
+    result = pvi_generate2(instance, out, "pump")
+    assert result.exit_code == 1
+    assert (
+        "entity pvidev.pump uses model pump whose files were not vendored from "
+        "pattern pvidev (pump.template is missing)"
+    ) in result.output
+    assert "(pump.pvi.device.yaml is missing)" in result.output
+
+
+def test_generate2_checks_pvi_files_only_with_pvi(
+    tmp_epics_root: Path, tmp_path: Path, pvi_library: Path
+):
+    instance = GLOBALS.IOC_FOLDER
+    out = tmp_path / "out"
+    vendor.add(
+        "pvidev@1.0.0",
+        instance,
+        source_override=str(pvi_library),
+        select=Selection(only=["controller.template"]),
+    )
+    result = pvi_generate2(instance, out, "controller")
+    assert result.exit_code == 1
+    assert "(controller.pvi.device.yaml is missing)" in result.output
+
+    # extra.template is disabled by default, so only the pvi file was missing
+    result = pvi_generate2(instance, out, "controller", "--no-pvi")
+    assert result.exit_code == 0, result.output
+
+    result = pvi_generate2(instance, out, "controller", "--no-pvi", EXTRA="true")
+    assert result.exit_code == 1
+    assert "(extra.template is missing)" in result.output
