@@ -2460,3 +2460,35 @@ def test_what_an_earlier_build_made_is_not_said_to_be_replaced(work: Work):
     second = tree.dev("support", "busy")
     assert "replaced or removed" not in second
     assert "git does not show" not in second
+
+
+def test_developer_files_are_named_beside_what_builds_made(work: Work):
+    """
+    A file of the developer's that a build replaces is named, in a folder that
+    the same build made, or listed in info/exclude after what builds made.
+    """
+    tree, clone = work.tree, work.clone("busy")
+    tree.dev("support", "busy")
+    exclude = clone / ".git" / "info" / "exclude"
+    with exclude.open("a") as stream:
+        stream.write("/RELEASE.mine\n")
+    mine = write(clone / "RELEASE.mine", "mine\n")
+    write(clone / "foo" / ".gitignore", "*.local\n")
+    git(clone, "add", "foo/.gitignore")
+    local = write(clone / "foo" / "RELEASE.local", "mine\n")
+    ansible_sh = tree.ansible_sh
+
+    def build(*words: str) -> None:
+        ansible_sh(*words)
+        if words == ("busy",):
+            mine.write_text("replaced\n")
+            local.write_text("replaced\n")
+            write(clone / "foo" / "new.c", "made\n")
+            write(clone / "a\rb", "made\n")
+
+    tree.ansible_sh = build  # type: ignore[method-assign]
+    output = tree.dev("support", "busy")
+
+    notice = output[output.index("the build replaced or removed these files") :]
+    assert "    RELEASE.mine\n" in notice and "    foo/RELEASE.local\n" in notice
+    assert exclude.read_text().count("# end of what an ibek dev build made") == 3

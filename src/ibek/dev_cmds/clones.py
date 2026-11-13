@@ -349,18 +349,21 @@ def exclude_file(clone: Path) -> Path:
     return path if path.is_absolute() else clone / path
 
 
+# the lines that start and end each list that hide() adds to info/exclude
 HIDDEN = "# made by an ibek dev build"
+HIDDEN_END = "# end of what an ibek dev build made"
 
 
 def hidden(clone: Path) -> set[str]:
     """The paths that builds made and hide() listed, as git shows them."""
     try:
-        lines = exclude_file(clone).read_text(errors="replace").splitlines()
+        text = exclude_file(clone).read_bytes().decode(errors="replace")
     except (StampError, OSError):
         return set()
     paths, ours = set(), False
-    for line in lines:
-        if line.startswith("#"):
+    # git reads only a newline as the end of a line
+    for line in text.split("\n"):
+        if line.startswith("#") or not line:
             ours = line == HIDDEN
         elif ours and line.startswith("/"):
             paths.add(re.sub(r"\\(.)", r"\1", line[1:]))
@@ -381,6 +384,7 @@ def hide(clone: Path, paths: list[str]) -> Path:
             pattern = re.sub(r"([\\*?\[!#])", r"\\\1", path)
             pattern = re.sub(r" (?= *$)", r"\\ ", pattern)
             stream.write("/" + pattern + "\n")
+        stream.write(HIDDEN_END + "\n")
     return exclude
 
 
@@ -397,9 +401,7 @@ def mark(clone: Path, done: bool) -> None:
     try:
         if done:
             marker(clone).write_text("built by ibek dev\n")
-            exclude = exclude_file(clone)
-            hidden = exclude.read_text().splitlines() if exclude.is_file() else []
-            if "/" + BUILT not in hidden:
+            if BUILT not in hidden(clone):
                 hide(clone, [BUILT])
         else:
             marker(clone).unlink(missing_ok=True)
@@ -475,11 +477,13 @@ def after_build(clone: Path, before: Changes | None) -> None:
     if before is None:
         return
     try:
+        # what earlier builds made is theirs to write again
+        ours = hidden(clone)
         untracked, edited, _ = changes(clone)
         made = sorted(untracked - before[0])
         if made:
             # a name that a pattern cannot hold stays in sight
-            made = [path for path in made if "\n" not in path]
+            made = [path for path in made if "\n" not in path and "\r" not in path]
             exclude = hide(clone, made)
             print(
                 f"ibek dev: git does not show these paths that the build made in "
@@ -507,20 +511,12 @@ def after_build(clone: Path, before: Changes | None) -> None:
 
         # the build may replace or remove a file that was there, such as a
         # configure/RELEASE.local of the developer's own
-        # what earlier builds made is theirs to write again
-        ours = hidden(clone)
-
-        def made_before(path: str) -> bool:
-            parts = path.split("/")
-            folders = ("/".join(parts[:n]) + "/" for n in range(1, len(parts)))
-            return path in ours or any(folder in ours for folder in folders)
-
         gone = sorted(
             path
             for path, written in before[2].items()
             if written is not None
             and _written(clone, path) != written
-            and not made_before(path)
+            and path not in ours
         )
         if gone:
             print(
