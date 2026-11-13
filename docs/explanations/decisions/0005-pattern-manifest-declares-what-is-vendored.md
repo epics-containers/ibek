@@ -70,6 +70,10 @@ content, so a lock without a selection reads the same to every ibek, while one
 that could not apply a selection refuses the lock on its version rather than
 vendoring or checking a different file-set. Unknown top-level keys are refused
 for the same reason: ignored on read, they would be dropped on the next save.
+Every later version follows the same rule: version 3 adds a top-level
+`schema_url`, and version 4 adds `select.only` and `select.models`, which narrow
+the manifest's file-set to named files or to the files named entity models load
+(see [Select which pattern files an instance vendors](../../how-to/select-pattern-files.md)).
 
 ## Consequences
 
