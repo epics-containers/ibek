@@ -2440,3 +2440,23 @@ def test_declared_clone_that_holds_the_support_folder(work: Work):
     assert "is in or holds" in tree.dev("status")
     assert "is in or holds" in tree.dev("sync", "--build", code=1)
     assert not tree.built("busy").is_symlink() and tree.calls == []
+
+
+def test_what_an_earlier_build_made_is_not_said_to_be_replaced(work: Work):
+    """A build that writes its own products again says nothing of them."""
+    tree, clone = work.tree, work.clone("busy")
+    ansible_sh = tree.ansible_sh
+
+    def build(*words: str) -> None:
+        ansible_sh(*words)
+        if words == ("busy",):
+            write(clone / "src" / "envPaths", f"written at {time.time_ns()}\n")
+            write(clone / "O.linux" / "deep" / "x.o", f"{time.time_ns()}\n")
+
+    tree.ansible_sh = build  # type: ignore[method-assign]
+
+    first = tree.dev("support", "busy")
+    assert "    src/envPaths\n" in first[first.index("git does not show") :]
+    second = tree.dev("support", "busy")
+    assert "replaced or removed" not in second
+    assert "git does not show" not in second

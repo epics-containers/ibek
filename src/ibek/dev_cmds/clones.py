@@ -349,6 +349,24 @@ def exclude_file(clone: Path) -> Path:
     return path if path.is_absolute() else clone / path
 
 
+HIDDEN = "# made by an ibek dev build"
+
+
+def hidden(clone: Path) -> set[str]:
+    """The paths that builds made and hide() listed, as git shows them."""
+    try:
+        lines = exclude_file(clone).read_text(errors="replace").splitlines()
+    except (StampError, OSError):
+        return set()
+    paths, ours = set(), False
+    for line in lines:
+        if line.startswith("#"):
+            ours = line == HIDDEN
+        elif ours and line.startswith("/"):
+            paths.add(re.sub(r"\\(.)", r"\1", line[1:]))
+    return paths
+
+
 def hide(clone: Path, paths: list[str]) -> Path:
     """Add paths at the top of a clone to its info/exclude."""
     exclude = exclude_file(clone)
@@ -358,7 +376,7 @@ def hide(clone: Path, paths: list[str]) -> Path:
         # the last line that is there may have no newline
         if ends not in (b"", b"\n"):
             stream.write("\n")
-        stream.write("# made by an ibek dev build\n")
+        stream.write(HIDDEN + "\n")
         for path in paths:
             pattern = re.sub(r"([\\*?\[!#])", r"\\\1", path)
             pattern = re.sub(r" (?= *$)", r"\\ ", pattern)
@@ -489,10 +507,20 @@ def after_build(clone: Path, before: Changes | None) -> None:
 
         # the build may replace or remove a file that was there, such as a
         # configure/RELEASE.local of the developer's own
+        # what earlier builds made is theirs to write again
+        ours = hidden(clone)
+
+        def made_before(path: str) -> bool:
+            parts = path.split("/")
+            folders = ("/".join(parts[:n]) + "/" for n in range(1, len(parts)))
+            return path in ours or any(folder in ours for folder in folders)
+
         gone = sorted(
             path
             for path, written in before[2].items()
-            if written is not None and _written(clone, path) != written
+            if written is not None
+            and _written(clone, path) != written
+            and not made_before(path)
         )
         if gone:
             print(
