@@ -2464,31 +2464,52 @@ def test_what_an_earlier_build_made_is_not_said_to_be_replaced(work: Work):
 
 def test_developer_files_are_named_beside_what_builds_made(work: Work):
     """
-    A file of the developer's that a build replaces is named, in a folder that
-    the same build made, or listed in info/exclude after what builds made.
+    A file of the developer's that a build replaces is named once, in a folder
+    that the same build made, or listed in info/exclude after what builds
+    made. Ignored files that a build writes are not.
     """
     tree, clone = work.tree, work.clone("busy")
+    work.own_clone("busy")
+    write(clone / ".gitignore", "*.local\n")
+    git(clone, "add", ".gitignore")
+    git(clone, "commit", "--quiet", "-m", "ignore local files")
     tree.dev("support", "busy")
     exclude = clone / ".git" / "info" / "exclude"
     with exclude.open("a") as stream:
         stream.write("/RELEASE.mine\n")
     mine = write(clone / "RELEASE.mine", "mine\n")
-    write(clone / "foo" / ".gitignore", "*.local\n")
-    git(clone, "add", "foo/.gitignore")
+    # a folder that holds only an ignored file is not shown by git
     local = write(clone / "foo" / "RELEASE.local", "mine\n")
     ansible_sh = tree.ansible_sh
 
     def build(*words: str) -> None:
         ansible_sh(*words)
         if words == ("busy",):
-            mine.write_text("replaced\n")
-            local.write_text("replaced\n")
+            mine.write_text(f"replaced {time.time_ns()}\n")
+            local.write_text(f"replaced {time.time_ns()}\n")
             write(clone / "foo" / "new.c", "made\n")
+            write(clone / "configure" / "RELEASE.local", f"{time.time_ns()}\n")
             write(clone / "a\rb", "made\n")
 
     tree.ansible_sh = build  # type: ignore[method-assign]
     output = tree.dev("support", "busy")
 
+    assert "    foo/\n" in output[output.index("git does not show these") :]
     notice = output[output.index("the build replaced or removed these files") :]
-    assert "    RELEASE.mine\n" in notice and "    foo/RELEASE.local\n" in notice
-    assert exclude.read_text().count("# end of what an ibek dev build made") == 3
+    assert notice.splitlines()[1:3] == ["    RELEASE.mine", "    foo/RELEASE.local"]
+    # git quotes the name that it shows
+    assert '?? "a\\rb"' in git(clone, "status", "--porcelain")
+
+    # named once: a build that writes them again says nothing of them
+    output = tree.dev("support", "busy")
+    assert "replaced or removed" not in output and "git does not show" not in output
+
+
+def test_exclude_file_with_crlf_line_ends(work: Work):
+    tree, clone = work.tree, work.clone("busy")
+    tree.dev("support", "busy")
+    exclude = clone / ".git" / "info" / "exclude"
+    exclude.write_bytes(exclude.read_bytes().replace(b"\n", b"\r\n"))
+
+    tree.dev("support", "busy")
+    assert exclude.read_text().count("/.ibek-dev-built") == 1

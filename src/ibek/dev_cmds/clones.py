@@ -363,6 +363,8 @@ def hidden(clone: Path) -> set[str]:
     paths, ours = set(), False
     # git reads only a newline as the end of a line
     for line in text.split("\n"):
+        # git takes a carriage return at the end of a line as part of its end
+        line = line.removesuffix("\r")
         if line.startswith("#") or not line:
             ours = line == HIDDEN
         elif ours and line.startswith("/"):
@@ -472,18 +474,24 @@ def after_build(clone: Path, before: Changes | None) -> None:
 
     What the build made is listed in the clone's own .git/info/exclude, so
     git does not show it. Tracked files that the build edited are named: they
-    show in `git status`, as the developer's own edits to them must.
+    show in `git status`, as the developer's own edits to them must. So are
+    files of the developer's that the build replaced or removed, once: those
+    and the ignored files that the build made are listed too, so a build that
+    writes them again says nothing of them.
     """
     if before is None:
         return
     try:
         # what earlier builds made is theirs to write again
         ours = hidden(clone)
-        untracked, edited, _ = changes(clone)
-        made = sorted(untracked - before[0])
+        untracked, edited, after = changes(clone)
+
+        def listable(path: str) -> bool:
+            # a name that a pattern cannot hold
+            return "\n" not in path and "\r" not in path
+
+        made = [path for path in sorted(untracked - before[0]) if listable(path)]
         if made:
-            # a name that a pattern cannot hold stays in sight
-            made = [path for path in made if "\n" not in path and "\r" not in path]
             exclude = hide(clone, made)
             print(
                 f"ibek dev: git does not show these paths that the build made in "
@@ -526,5 +534,11 @@ def after_build(clone: Path, before: Changes | None) -> None:
             )
             for path in gone:
                 print(f"    {path}", flush=True)
+        # what the build wrote that git already ignored, and what was named
+        # above, are listed too: git ignores them already, or they are gone
+        quiet = (set(after) - set(before[2]) - ours) | set(gone)
+        quiet = {path for path in quiet if listable(path)}
+        if quiet:
+            hide(clone, sorted(quiet))
     except (StampError, OSError) as error:
         print(f"ibek dev: cannot tidy {clone} after its build: {error}", flush=True)
