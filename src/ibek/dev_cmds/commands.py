@@ -324,11 +324,14 @@ def support(
                     f"{folder} is a link to {clones.target(folder)}, not to "
                     f"{clone}: `ibek dev support --release {name}` removes it"
                 )
+            if clone.exists() or clone.is_symlink():
+                clones.check(name, infos[name], clone)
         # a module that follows must not lose its folder to a clone that
         # nobody has seen reported
         found = drift.compare(made, live)
         first = min(names.index(name) for name in infos)
-        force = [n for n in found.force if names.index(n) >= first]
+        # those named here are never cloned again: their folders are replaced
+        force = [n for n in found.force if names.index(n) >= first and n not in infos]
         if force:
             raise StampError(
                 f"{', '.join(force)} must be cloned again, which removes "
@@ -338,9 +341,7 @@ def support(
         plan: dict[str, Path] = {}
         for name, info in infos.items():
             clone = clones.WORKSPACES / name
-            if clone.exists() or clone.is_symlink():
-                clones.check(name, info, clone)
-            else:
+            if not (clone.exists() or clone.is_symlink()):
                 clones.make(name, info, clone)
             if info.patch is not None:
                 print(

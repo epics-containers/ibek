@@ -354,11 +354,6 @@ def build(stamp: Stamp, live: Stamp, drift: Drift) -> None:
     is picked up by the next one.
     """
     modules, force = drift.rebuild, drift.force
-    for name, (_, to) in drift.unlinked.items():
-        # the clone on the host may have changed since it was declared
-        declared = live.module(name)
-        assert declared is not None
-        clones.check(name, clones.install(name, declared.options), to, quiet=True)
     for name in modules:
         folder = support_folder(name)
         if folder is not None and folder.is_symlink() and not folder.exists():
@@ -367,6 +362,15 @@ def build(stamp: Stamp, live: Stamp, drift: Drift) -> None:
                 f"{clones.target(folder)}, which is missing. "
                 f"`ibek dev support --release {name}` removes the link"
             )
+    # A clone on the host may have changed since it was declared, linked or
+    # not: each one is checked before anything is built
+    declared = clones.declared()
+    for name in modules:
+        if name in declared:
+            module = live.module(name)
+            assert module is not None
+            info = clones.install(name, module.options)
+            clones.check(name, info, declared[name], quiet=True)
     clone_task = ansible_folder() / "roles" / "support" / "tasks" / "clone.yml"
     try:
         can_force = "force_clone" in clone_task.read_text()

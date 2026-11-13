@@ -17,6 +17,8 @@ from jinja2 import Template, TemplateError
 from ruamel.yaml import YAML
 from ruamel.yaml.error import YAMLError
 
+from ibek.globals import GLOBALS
+
 from .stamp import StampError, ansible_folder, module_folder, source
 
 # where a devcontainer mounts the folder that holds the host's projects
@@ -151,6 +153,10 @@ def install(name: str, options: list[str]) -> Install:
         raise StampError(f"cannot read {path}: {error}") from error
 
 
+class GitError(StampError):
+    """git itself cannot be run: nothing is known of the clone."""
+
+
 def git(folder: Path, *args: str, show: bool = False) -> str:
     """
     Run git in a folder and return what it printed.
@@ -167,9 +173,11 @@ def git(folder: Path, *args: str, show: bool = False) -> str:
             stderr=None if show else subprocess.PIPE,
             text=True,
             errors="replace",
+            # a clone is never read for long; only a clone or checkout fetches
+            timeout=None if show else 60,
         )
-    except OSError as error:
-        raise StampError(f"cannot run git: {error}") from error
+    except (OSError, subprocess.TimeoutExpired) as error:
+        raise GitError(f"cannot run git: {error}") from error
     if done.returncode != 0:
         said = "" if show else f": {done.stderr.strip()}"
         raise StampError(f"failed: {' '.join(command)}{said}")
@@ -205,9 +213,17 @@ def check(name: str, info: Install, clone: Path, quiet: bool = False) -> None:
     Its branch and version are its owner's: say when they are not the version
     that install.yml builds, and leave them alone.
     """
+    support = os.path.realpath(GLOBALS.SUPPORT)
+    if os.path.commonpath([support, os.path.realpath(clone)]) == support:
+        raise StampError(
+            f"{clone} is in {GLOBALS.SUPPORT}, where the image builds modules: "
+            "a clone to work on is kept on the host"
+        )
     try:
         top = Path(git(clone, "rev-parse", "--show-toplevel").strip())
         why = "" if top.samefile(clone) else f"it is a folder of {top}"
+    except GitError:
+        raise
     except (StampError, OSError) as error:
         why = str(error)
     if why:
@@ -315,14 +331,32 @@ def unlink(folder: Path) -> bool:
         raise StampError(f"cannot remove the link {folder}: {error}") from error
 
 
-# a file in a clone's git folder, out of git's sight, that says the clone was
-# built after it was linked: a clone made again or a build that stopped has none
-BUILT = "ibek-dev-built"
+# A file at the top of a clone, out of git's sight like the build products,
+# that says the clone was built after it was linked. A clone made again, a
+# build that stopped, or `git clean -fdx`, leaves none.
+BUILT = ".ibek-dev-built"
 
 
 def marker(clone: Path) -> Path:
-    path = Path(git(clone, "rev-parse", "--git-path", BUILT).strip())
+    return clone / BUILT
+
+
+def exclude_file(clone: Path) -> Path:
+    path = Path(git(clone, "rev-parse", "--git-path", "info/exclude").strip())
     return path if path.is_absolute() else clone / path
+
+
+def hide(clone: Path, paths: list[str]) -> Path:
+    """Add paths at the top of a clone to its info/exclude."""
+    exclude = exclude_file(clone)
+    exclude.parent.mkdir(parents=True, exist_ok=True)
+    with exclude.open("a") as stream:
+        stream.write("# made by an ibek dev build\n")
+        for path in paths:
+            pattern = re.sub(r"([\\*?\[!#])", r"\\\1", path)
+            pattern = re.sub(r" (?= *$)", r"\\ ", pattern)
+            stream.write("/" + pattern + "\n")
+    return exclude
 
 
 def built(clone: Path) -> bool:
@@ -338,9 +372,15 @@ def mark(clone: Path, done: bool) -> None:
     try:
         if done:
             marker(clone).write_text("built by ibek dev\n")
+            exclude = exclude_file(clone)
+            hidden = exclude.read_text().splitlines() if exclude.is_file() else []
+            if "/" + BUILT not in hidden:
+                hide(clone, [BUILT])
         else:
             marker(clone).unlink(missing_ok=True)
     except OSError as error:
+        raise StampError(f"cannot record the build of {clone}: {error}") from error
+    except StampError as error:
         raise StampError(f"cannot record the build of {clone}: {error}") from error
 
 
@@ -402,19 +442,9 @@ def after_build(clone: Path, before: Changes | None) -> None:
         untracked, edited = changes(clone)
         made = sorted(untracked - before[0])
         if made:
-            exclude = Path(
-                git(clone, "rev-parse", "--git-path", "info/exclude").strip()
-            )
-            exclude = exclude if exclude.is_absolute() else clone / exclude
-            exclude.parent.mkdir(parents=True, exist_ok=True)
             # a name that a pattern cannot hold stays in sight
             made = [path for path in made if "\n" not in path]
-            with exclude.open("a") as stream:
-                stream.write("# made by an ibek dev build\n")
-                for path in made:
-                    pattern = re.sub(r"([\\*?\[!#])", r"\\\1", path)
-                    pattern = re.sub(r" (?= *$)", r"\\ ", pattern)
-                    stream.write("/" + pattern + "\n")
+            exclude = hide(clone, made)
             print(
                 f"ibek dev: git does not show these paths that the build made in "
                 f"{clone}: they are listed in {exclude}",

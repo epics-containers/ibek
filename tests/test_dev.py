@@ -2259,3 +2259,83 @@ def test_autosave_order_is_kept_for_a_tree_with_no_links(tree: Tree):
     link_req_files()
 
     assert (tree.epics / "autosave" / "same.req").resolve() == first
+
+
+@pytest.mark.parametrize("command", ["sync --build", "support busy"])
+def test_linked_clone_swapped_for_another_repo_is_not_built(work: Work, command: str):
+    tree, clone = work.tree, work.clone("motor")
+    tree.dev("support", "motor")
+    shutil.rmtree(clone)
+    work.own_clone("motor", "https://example.com/other/thing.git")
+    write(tree.module("asyn") / "asyn.install.yml.orig", "a stray file")
+    tree.calls.clear()
+
+    assert "motor: declared for development, and its clone cannot be" in (
+        tree.dev("status")
+    )
+    output = tree.dev(*command.split(), code=1)
+    assert f"{clone} is not a clone of {work.upstream / 'motor'}" in output
+    assert tree.ansible() == []
+
+
+def test_git_clean_of_a_linked_clone_is_not_a_match(work: Work):
+    tree, clone = work.tree, work.clone("busy")
+    tree.dev("support", "busy")
+    git(clone, "clean", "-fdxq")
+
+    output = tree.dev("status")
+    assert "matches" not in output and f"busy: its clone {clone} is not built" in output
+    tree.calls.clear()
+    assert "matches" in tree.dev("sync", "--build")
+    assert tree.ansible() == [["busy"], ["motor"], ["ioc"]]
+    # the record of the build is out of git's sight too
+    assert git(clone, "status", "--porcelain") == "M configure/RELEASE"
+
+
+def test_support_of_a_module_whose_source_changed(work: Work):
+    """Its folder is replaced by the clone: there is nothing to clone again."""
+    tree = work.tree
+    install = tree.module("busy") / "busy.install.yml"
+    install.write_text(install.read_text().replace("R1-0", "main"))
+
+    output = tree.dev("support", "busy")
+    assert tree.ansible() == [["busy"], ["motor"], ["ioc"]]
+    assert "force_clone" not in str(tree.calls) and "matches" in output
+    assert git(work.clone("busy"), "rev-parse", "--abbrev-ref", "HEAD") == "main"
+
+
+def test_support_checks_every_existing_clone_before_cloning(work: Work):
+    tree = work.tree
+    work.own_clone("busy", "https://example.com/other/thing.git")
+
+    output = tree.dev("support", "asyn", "busy", code=1)
+    assert "is not a clone of" in output
+    assert not work.clone("asyn").exists() and tree.calls == []
+
+
+def test_declaration_of_the_folder_that_the_image_builds(work: Work):
+    tree, folder = work.tree, work.tree.built("busy")
+    # the clone that ansible made there
+    shutil.rmtree(folder)
+    git(work.upstream, "clone", "--quiet", str(work.upstream / "busy"), str(folder))
+    write(folder / "VERSION", "R1-0")
+    write(tree.source / ".ibek-dev.yaml", f"support:\n  busy: {folder}\n")
+
+    output = tree.dev("status")
+    assert f"{folder} is in {tree.epics / 'support'}, where the image builds" in output
+    # nothing to build, and the folder is left alone
+    assert "matches" not in tree.dev("sync", "--build")
+    write(tree.module("asyn") / "asyn.install.yml.orig", "a stray file")
+    assert "where the image builds" in tree.dev("sync", "--build", code=1)
+    assert folder.is_dir() and not folder.is_symlink()
+    assert (folder / "VERSION").read_text() == "R1-0"
+
+
+def test_reports_when_git_cannot_be_run(work: Work, monkeypatch):
+    tree = work.tree
+    tree.dev("support", "busy")
+    monkeypatch.setenv("PATH", str(tree.epics / "no-bin"))
+
+    output = tree.dev("status")
+    assert "matches" not in output and "cannot run git" in output
+    assert "move it away" not in output
