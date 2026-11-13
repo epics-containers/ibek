@@ -2322,7 +2322,7 @@ def test_declaration_of_the_folder_that_the_image_builds(work: Work):
     write(tree.source / ".ibek-dev.yaml", f"support:\n  busy: {folder}\n")
 
     output = tree.dev("status")
-    assert f"{folder} is in {tree.epics / 'support'}, where the image builds" in output
+    assert f"{folder} is in or holds {tree.epics / 'support'}, where" in output
     # nothing to build, and the folder is left alone
     assert "matches" not in tree.dev("sync", "--build")
     write(tree.module("asyn") / "asyn.install.yml.orig", "a stray file")
@@ -2395,3 +2395,48 @@ def test_exclude_file_with_no_newline_at_its_end(work: Work):
         "# made by an ibek dev build",
     ]
     assert "notes.swp" not in git(clone, "status", "--porcelain")
+
+
+def test_files_that_the_build_replaces_are_named(work: Work):
+    """Such as a configure/RELEASE.local of the developer's own."""
+    tree = work.tree
+    clone = work.own_clone("busy")
+    write(clone / ".gitignore", "*.local\n")
+    git(clone, "add", ".gitignore")
+    git(clone, "commit", "--quiet", "-m", "ignore local files")
+    mine = write(clone / "configure" / "RELEASE.local", "MINE=/somewhere\n")
+    untouched = write(clone / "notes.txt", "mine\n")
+    ansible_sh = tree.ansible_sh
+
+    def build(*words: str) -> None:
+        ansible_sh(*words)
+        if words == ("busy",):
+            mine.unlink()
+            mine.symlink_to("../../configure/RELEASE")
+
+    tree.ansible_sh = build  # type: ignore[method-assign]
+
+    output = tree.dev("support", "busy")
+
+    notice = output[output.index("the build replaced or removed these files") :]
+    assert notice.splitlines()[1].strip() == "configure/RELEASE.local"
+    assert "notes.txt" not in notice and untouched.exists()
+
+
+def test_declaration_with_a_nul(work: Work):
+    tree = work.tree
+    write(tree.source / ".ibek-dev.yaml", 'support:\n  busy: "/x\\0y"\n')
+    for command in ("status", "sync", "sync --build"):
+        assert "absolute path of its clone" in tree.dev(*command.split())
+
+
+def test_declared_clone_that_holds_the_support_folder(work: Work):
+    tree = work.tree
+    git(tree.epics, "init", "--quiet")
+    git(tree.epics, "remote", "add", "origin", str(work.upstream / "busy"))
+    write(tree.source / ".ibek-dev.yaml", f"support:\n  busy: {tree.epics}\n")
+    write(tree.module("asyn") / "asyn.install.yml.orig", "a stray file")
+
+    assert "is in or holds" in tree.dev("status")
+    assert "is in or holds" in tree.dev("sync", "--build", code=1)
+    assert not tree.built("busy").is_symlink() and tree.calls == []

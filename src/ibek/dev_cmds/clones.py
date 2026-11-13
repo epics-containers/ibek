@@ -51,7 +51,10 @@ def declared() -> dict[str, Path]:
     if modules is None:
         return {}
     if not isinstance(modules, dict) or not all(
-        isinstance(name, str) and isinstance(clone, str) and clone.startswith("/")
+        isinstance(name, str)
+        and isinstance(clone, str)
+        and clone.startswith("/")
+        and "\0" not in clone
         for name, clone in modules.items()
     ):
         raise StampError(f"cannot read {path}: {shape}")
@@ -213,11 +216,11 @@ def check(name: str, info: Install, clone: Path, quiet: bool = False) -> None:
     Its branch and version are its owner's: say when they are not the version
     that install.yml builds, and leave them alone.
     """
-    support = os.path.realpath(GLOBALS.SUPPORT)
-    if os.path.commonpath([support, os.path.realpath(clone)]) == support:
+    support, real = os.path.realpath(GLOBALS.SUPPORT), os.path.realpath(clone)
+    if os.path.commonpath([support, real]) in (support, real):
         raise StampError(
-            f"{clone} is in {GLOBALS.SUPPORT}, where the image builds modules: "
-            "a clone to work on is kept on the host"
+            f"{clone} is in or holds {GLOBALS.SUPPORT}, where the image builds "
+            "modules: a clone to work on is kept on the host"
         )
     try:
         top = Path(git(clone, "rev-parse", "--show-toplevel").strip())
@@ -388,9 +391,17 @@ def mark(clone: Path, done: bool) -> None:
         raise StampError(f"cannot record the build of {clone}: {error}") from error
 
 
-# the untracked paths of a clone, and when each tracked file that differs
-# from its commit was last written: None for one that is removed
-Changes = tuple[set[str], dict[str, int | None]]
+# The untracked paths of a clone; when each tracked file that differs from
+# its commit was last written, None for one that is removed; and when each
+# file that git does not track, or ignores, was last written.
+Changes = tuple[set[str], dict[str, int | None], dict[str, int | None]]
+
+
+def _written(clone: Path, path: str) -> int | None:
+    try:
+        return (clone / path).lstat().st_mtime_ns
+    except OSError:
+        return None
 
 
 def changes(clone: Path) -> Changes:
@@ -403,24 +414,27 @@ def changes(clone: Path) -> Changes:
         "--porcelain",
         "-z",
         "--untracked-files=normal",
+        "--ignored=matching",
         "--ignore-submodules=untracked",
     ).split("\0")
     untracked: set[str] = set()
     edited: dict[str, int | None] = {}
+    # files only: a folder that the build writes into is no news
+    untouched: dict[str, int | None] = {}
     entries = iter(status)
     for entry in entries:
         code, path = entry[:2], entry[3:]
-        if code == "??":
-            untracked.add(path)
+        if code in ("??", "!!"):
+            if code == "??":
+                untracked.add(path)
+            if not path.endswith("/"):
+                untouched[path] = _written(clone, path)
         elif path:
-            try:
-                edited[path] = (clone / path).lstat().st_mtime_ns
-            except OSError:
-                edited[path] = None
+            edited[path] = _written(clone, path)
             if "R" in code or "C" in code:
                 # the path that it was renamed or copied from
                 next(entries, None)
-    return untracked, edited
+    return untracked, edited, untouched
 
 
 def before_build(clone: Path) -> Changes | None:
@@ -443,7 +457,7 @@ def after_build(clone: Path, before: Changes | None) -> None:
     if before is None:
         return
     try:
-        untracked, edited = changes(clone)
+        untracked, edited, _ = changes(clone)
         made = sorted(untracked - before[0])
         if made:
             # a name that a pattern cannot hold stays in sight
@@ -471,6 +485,22 @@ def after_build(clone: Path, before: Changes | None) -> None:
                 flush=True,
             )
             for path in files:
+                print(f"    {path}", flush=True)
+
+        # the build may replace or remove a file that was there, such as a
+        # configure/RELEASE.local of the developer's own
+        gone = sorted(
+            path
+            for path, written in before[2].items()
+            if written is not None and _written(clone, path) != written
+        )
+        if gone:
+            print(
+                f"ibek dev: the build replaced or removed these files of {clone} "
+                "that git does not track or ignores:",
+                flush=True,
+            )
+            for path in gone:
                 print(f"    {path}", flush=True)
     except (StampError, OSError) as error:
         print(f"ibek dev: cannot tidy {clone} after its build: {error}", flush=True)
