@@ -245,7 +245,6 @@ def test_stamp_file(tree: Tree):
         "ansible",
         "modules",
         "pending",
-        "cloning",
         "rebuilt",
     }
     assert "matches" in tree.dev("status")
@@ -776,6 +775,7 @@ def test_level_2_failed_clone_is_cloned_again(tree: Tree):
     assert (folder / "VERSION").read_text() == "master"
     stamp = load()
     assert stamp is not None and stamp.cloning == ["busy"]
+    assert '"cloning"' in (tree.epics / "dev-stamp.json").read_text()
 
     # back to the version of the stamp: the source in the folder is still wrong
     install.write_text("module: busy\nversion: R1-0\n")
@@ -2273,6 +2273,29 @@ def test_support_of_a_module_whose_clone_failed(work: Work):
     assert folder.resolve() == clone and "matches" in output
     stamp = load()
     assert stamp is not None and stamp.cloning == []
+    assert '"cloning"' not in (tree.epics / "dev-stamp.json").read_text()
+
+
+def test_support_of_a_module_whose_clone_failed_and_build_fails(work: Work):
+    """Linked to its clone, the module is not said to need a clone."""
+    tree, clone = work.tree, work.clone("busy")
+    install = tree.module("busy") / "busy.install.yml"
+    released = install.read_text()
+    install.write_text(released.replace("R1-0", "R-unknown"))
+    tree.clone_fails = "busy"
+    tree.dev("sync", "--build", code=2)
+    install.write_text(released)
+    tree.clone_fails, tree.fail_on = "", "busy"
+    tree.dev("support", "busy", code=2)
+
+    tree.fail_on = ""
+    output = tree.dev("status")
+    assert "clone not finished" not in output and "clones" not in output
+    assert "busy: rebuild not finished" in output
+    tree.calls.clear()
+    assert "matches" in tree.dev("sync", "--build")
+    assert "force_clone" not in str(tree.calls)
+    assert tree.built("busy").resolve() == clone
 
 
 def test_support_checks_every_module_before_cloning(work: Work):

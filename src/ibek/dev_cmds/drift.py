@@ -215,7 +215,8 @@ def compare(stamp: Stamp, live: Stamp) -> Drift:
             )
         elif gone:
             out_of_date(index, f"{name}: {folder} is missing")
-        elif name in stamp.cloning:
+        # a module linked to its declared clone is not cloned again
+        elif name in stamp.cloning and name not in drift.clones:
             out_of_date(index, f"{name}: clone not finished")
         elif name in stamp.pending:
             out_of_date(index, f"{name}: rebuild not finished")
