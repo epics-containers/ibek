@@ -215,6 +215,8 @@ def compare(stamp: Stamp, live: Stamp) -> Drift:
             )
         elif gone:
             out_of_date(index, f"{name}: {folder} is missing")
+        elif name in stamp.cloning:
+            out_of_date(index, f"{name}: clone not finished")
         elif name in stamp.pending:
             out_of_date(index, f"{name}: rebuild not finished")
         elif name in drift.unbuilt:
@@ -237,8 +239,10 @@ def compare(stamp: Stamp, live: Stamp) -> Drift:
         # and a link is someone's own folder: it is built as it is. A
         # Dockerfile line whose tags leave out clone has no source to replace.
         changed = was and was.source and module.source and was.source != module.source
+        # A clone that did not finish may have left any source in the folder.
+        again = changed or (was is not None and name in stamp.cloning)
         # A declared module is never cloned again: its clone is its owner's.
-        if changed and module.runs("clone"):
+        if again and module.runs("clone"):
             if folder is not None and folder.is_symlink():
                 drift.links[name] = folder
             elif folder is not None and folder.exists() and clone is None:
@@ -403,6 +407,9 @@ def build(stamp: Stamp, live: Stamp, drift: Drift) -> None:
     def record(name: str, source_only: bool = False) -> None:
         was, now = stamp.module(name), live.module(name)
         assert now is not None
+        # a folder that is cloned or built no longer needs to be cloned again
+        if name in stamp.cloning:
+            stamp.cloning.remove(name)
         if source_only:
             assert was is not None
             was.source = now.source
@@ -437,6 +444,9 @@ def build(stamp: Stamp, live: Stamp, drift: Drift) -> None:
             # build that fails is then retried on the source that is there,
             # with whatever was done to it, and not on a fresh clone.
             print(f"ibek dev: removing {force[name]} to clone {name} again")
+            # until it succeeds, what is in the folder is not the source
+            stamp.cloning = list(dict.fromkeys([*stamp.cloning, name]))
+            stamp.save()
             clone = ("--tags", "clone", "-e", "force_clone=true", *now.tags()[2])
             ansible(*now.options, name, *clone)
             record(name, source_only=True)

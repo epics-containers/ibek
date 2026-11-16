@@ -118,6 +118,9 @@ class Stamp:
     modules: list[Module]
     # modules whose rebuild has started and not finished
     pending: list[str] = field(default_factory=list)
+    # modules whose folder is being cloned again: a clone that fails can leave
+    # another source in the folder, so it is cloned again until one succeeds
+    cloning: list[str] = field(default_factory=list)
     # when ibek dev last started to rebuild modules in this container
     rebuilt: float | None = None
 

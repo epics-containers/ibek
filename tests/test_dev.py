@@ -77,6 +77,9 @@ class Tree:
     # the ansible.sh run with these arguments fails, e.g. "busy" or "ioc";
     # "schema" fails the schema generation
     fail_on: str = ""
+    # the clone again of this module fails, as git does for a version it
+    # cannot find: after it has checked out the repository's default branch
+    clone_fails: str = ""
 
     @property
     def source(self) -> Path:
@@ -119,6 +122,9 @@ class Tree:
             # the clone tasks: with force_clone the folder is removed first
             if "force_clone=true" in args and folder.exists():
                 shutil.rmtree(folder)
+            if self.clone_fails == module:
+                write(folder / "VERSION", "master")
+                raise typer.Exit(2)
             if not folder.exists():
                 clone()
         elif tags == "runtime":
@@ -239,6 +245,7 @@ def test_stamp_file(tree: Tree):
         "ansible",
         "modules",
         "pending",
+        "cloning",
         "rebuilt",
     }
     assert "matches" in tree.dev("status")
@@ -755,6 +762,92 @@ def test_level_2_failed_build_is_retried_on_the_same_clone(tree: Tree):
     assert fix.read_text() == "what makes it build"
     assert (folder / "lib" / "libbusy.a").exists()
     assert "removing" not in output and "matches" in output
+
+
+def test_level_2_failed_clone_is_cloned_again(tree: Tree):
+    """A clone that fails leaves another source: it is never built as it is."""
+    install = tree.module("busy") / "busy.install.yml"
+    folder = tree.built("busy")
+    install.write_text("module: busy\nversion: R-unknown\n")
+
+    tree.clone_fails = "busy"
+    tree.dev("sync", "--build", code=2)
+    assert tree.ansible() == [["busy", "--tags", "clone", "-e", "force_clone=true"]]
+    assert (folder / "VERSION").read_text() == "master"
+    stamp = load()
+    assert stamp is not None and stamp.cloning == ["busy"]
+
+    # back to the version of the stamp: the source in the folder is still wrong
+    install.write_text("module: busy\nversion: R1-0\n")
+    tree.clone_fails = ""
+    tree.calls.clear()
+    output = tree.dev("status")
+    assert "busy: clone not finished" in output
+    assert "rebuilds: busy, motor, then the IOC" in output
+    assert f"clones busy again: {folder} and edits in it are removed" in output
+    assert tree.calls == []
+
+    output = tree.dev("sync", "--build")
+    assert tree.ansible() == [
+        ["busy", "--tags", "clone", "-e", "force_clone=true"],
+        ["busy"],
+        ["motor"],
+        ["ioc"],
+    ]
+    assert (folder / "VERSION").read_text() == "R1-0"
+    assert "matches" in output
+    stamp = load()
+    assert stamp is not None and stamp.cloning == []
+
+
+def test_level_2_failed_clone_then_a_failed_build(tree: Tree):
+    """Once the clone succeeds, a failed build is retried on that clone."""
+    install = tree.module("busy") / "busy.install.yml"
+    install.write_text("module: busy\nversion: R2\n")
+    tree.clone_fails = "busy"
+    tree.dev("sync", "--build", code=2)
+
+    tree.clone_fails, tree.fail_on = "", "busy"
+    tree.calls.clear()
+    tree.dev("sync", "--build", code=2)
+    assert tree.ansible() == [
+        ["busy", "--tags", "clone", "-e", "force_clone=true"],
+        ["busy"],
+    ]
+    stamp = load()
+    assert stamp is not None and stamp.cloning == []
+
+    tree.fail_on = ""
+    tree.calls.clear()
+    assert "clones" not in tree.dev("status")
+    assert "matches" in tree.dev("sync", "--build")
+    assert tree.ansible() == [["busy"], ["motor"], ["ioc"]]
+    assert (tree.built("busy") / "VERSION").read_text() == "R2"
+
+
+def test_level_2_failed_clone_of_a_folder_made_a_link(tree: Tree):
+    """A link put in place of a failed clone is never removed."""
+    install = tree.module("busy") / "busy.install.yml"
+    install.write_text("module: busy\nversion: R-unknown\n")
+    tree.clone_fails = "busy"
+    tree.dev("sync", "--build", code=2)
+
+    install.write_text("module: busy\nversion: R1-0\n")
+    tree.clone_fails = ""
+    folder, elsewhere = tree.built("busy"), tree.epics / "elsewhere"
+    shutil.move(folder, elsewhere)
+    folder.symlink_to(elsewhere)
+    tree.calls.clear()
+    output = tree.dev("status")
+    assert "busy: clone not finished" in output
+    assert f"busy: {folder} is a link, built as it is" in output
+    assert "clones" not in output
+
+    tree.dev("sync", "--build")
+    assert tree.ansible() == [["busy"], ["motor"], ["ioc"]]
+    assert folder.resolve() == elsewhere
+    stamp = load()
+    assert stamp is not None and stamp.cloning == []
 
 
 def test_level_2_module_folder_that_is_a_link(tree: Tree):
@@ -2155,6 +2248,31 @@ def test_support_will_not_clone_a_later_module_again(work: Work):
     assert "run `ibek dev sync --build` for that first" in output
     assert edit.exists() and tree.calls == []
     assert not work.clone("asyn").exists() and work.declarations() == {}
+
+
+def test_support_of_a_module_whose_clone_failed(work: Work):
+    """A declared module is never cloned again: its folder becomes the link."""
+    tree, folder, clone = work.tree, work.tree.built("busy"), work.clone("busy")
+    install = tree.module("busy") / "busy.install.yml"
+    released = install.read_text()
+    install.write_text(released.replace("R1-0", "R-unknown"))
+    tree.clone_fails = "busy"
+    tree.dev("sync", "--build", code=2)
+    install.write_text(released)
+    tree.clone_fails = ""
+
+    # a later module's failed clone stops support of an earlier one
+    output = tree.dev("support", "asyn", code=1)
+    assert f"busy must be cloned again, which removes {folder}" in output
+    assert work.declarations() == {}
+
+    tree.calls.clear()
+    output = tree.dev("support", "busy")
+    assert "force_clone" not in str(tree.calls)
+    assert tree.ansible() == [["busy"], ["motor"], ["ioc"]]
+    assert folder.resolve() == clone and "matches" in output
+    stamp = load()
+    assert stamp is not None and stamp.cloning == []
 
 
 def test_support_checks_every_module_before_cloning(work: Work):
