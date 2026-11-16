@@ -31,6 +31,11 @@ published base schema. ``ibek pattern schema`` then fetches that URL instead of
 the one it derives from the instance image. A lock with a ``schema_url`` is
 written as ``version: 3``, so a reader that cannot honour it refuses the lock
 rather than dropping the URL on its next save.
+
+A ``select:`` may also narrow the manifest's file-set to named files
+(``only``) or to the files named entity models load (``models``). A lock that
+uses either is written as ``version: 4``, so a reader that cannot apply them
+refuses the lock rather than vendoring the whole pattern.
 """
 
 from __future__ import annotations
@@ -39,7 +44,7 @@ import hashlib
 from io import StringIO
 from pathlib import Path
 
-from pydantic import ValidationError
+from pydantic import ValidationError, model_validator
 from ruamel.yaml import YAML
 from ruamel.yaml.error import YAMLError
 
@@ -51,14 +56,21 @@ from .urls import url_problem
 # The lock's root ``version:``. This exists so the on-disk format can evolve; it
 # is deliberately *not* a switch ibek branches on to convert what it reads (see
 # ADR 0005). Version 2 is version 1 plus the per-pattern ``select:``, and
-# version 3 is version 2 plus the top-level ``schema_url:``. The version written
-# is the lowest one that can hold the lock's content, so a lock without either
+# version 3 is version 2 plus the top-level ``schema_url:``, and version 4 is
+# version 3 plus ``select.only`` and ``select.models``. The version written is
+# the lowest one that can hold the lock's content, so a lock without any of them
 # stays readable by every ibek that reads version 1.
 LOCK_VERSION = 1
 SELECT_LOCK_VERSION = 2
 SCHEMA_URL_LOCK_VERSION = 3
+SELECT_ONLY_LOCK_VERSION = 4
 SUPPORTED_LOCK_VERSIONS = frozenset(
-    {LOCK_VERSION, SELECT_LOCK_VERSION, SCHEMA_URL_LOCK_VERSION}
+    {
+        LOCK_VERSION,
+        SELECT_LOCK_VERSION,
+        SCHEMA_URL_LOCK_VERSION,
+        SELECT_ONLY_LOCK_VERSION,
+    }
 )
 LOCK_KEYS = ("version", "schema_url", "patterns")
 
@@ -77,6 +89,12 @@ UNRECOGNISED_LOCK_HINT = (
     "scripts/convert-runtime-lock.py <lock>' from anywhere, including a "
     "services repo with no ibek checkout "
     "(see docs/how-to/vendor-runtime-patterns.md)"
+)
+
+
+EXCLUDE_WITH_NARROW = (
+    "'exclude' cannot be combined with 'only' or 'models': name the files to "
+    "keep instead of the files to drop"
 )
 
 
@@ -105,13 +123,32 @@ class Selection(BaseSettings):
     ``exclude`` regexes drop files that would otherwise be vendored by the
     manifest. Both match the pattern-relative path with ``re.fullmatch``, like
     the manifest's ``src``.
+
+    ``only`` and ``models`` narrow the manifest's file-set instead: ``only``
+    names pattern-relative files exactly, and ``models`` names entity models
+    whose database files, pvi device file and ``<stem>_settings.req`` /
+    ``<stem>_positions.req`` autosave files (and the pattern's protocol files)
+    are kept. The pattern's support YAML is always kept. They cannot be combined with
+    ``exclude``; files an ``include`` rule places are vendored either way.
     """
 
     include: list[SelectRule] = []
     exclude: list[str] = []
+    only: list[str] = []
+    models: list[str] = []
+
+    @model_validator(mode="after")
+    def _narrow_or_exclude(self) -> Selection:
+        if self.exclude and self.narrows():
+            raise ValueError(EXCLUDE_WITH_NARROW)
+        return self
+
+    def narrows(self) -> bool:
+        """True if ``only`` or ``models`` narrows the manifest's file-set."""
+        return bool(self.only or self.models)
 
     def is_empty(self) -> bool:
-        return not self.include and not self.exclude
+        return not self.include and not self.exclude and not self.narrows()
 
 
 class PatternEntry(BaseSettings):
@@ -211,6 +248,17 @@ class RuntimeLock:
                     f"{SELECT_LOCK_VERSION}, so that an ibek which cannot apply "
                     "it refuses the lock"
                 )
+            if (
+                entry.select is not None
+                and entry.select.narrows()
+                and version < SELECT_ONLY_LOCK_VERSION
+            ):
+                raise PatternError(
+                    f"{self.path}: pattern {name!r} has a 'select.only' or "
+                    f"'select.models' but the lock is version {version}; a lock "
+                    f"with either is version {SELECT_ONLY_LOCK_VERSION}, so that "
+                    "an ibek which cannot apply them refuses the lock"
+                )
 
     def vendored_keys(self, name: str) -> set[str]:
         """A pattern's recorded files as destination-root-relative paths."""
@@ -251,12 +299,20 @@ class RuntimeLock:
                 ]
             if entry.select.exclude:
                 select["exclude"] = list(entry.select.exclude)
+            if entry.select.only:
+                select["only"] = list(entry.select.only)
+            if entry.select.models:
+                select["models"] = list(entry.select.models)
             data["select"] = select
         data["files"] = dict(entry.files)
         return data
 
     def _version(self) -> int:
         """The lowest lock version that can hold this lock's content."""
+        if any(
+            entry.select and entry.select.narrows() for entry in self.patterns.values()
+        ):
+            return SELECT_ONLY_LOCK_VERSION
         if self.schema_url:
             return SCHEMA_URL_LOCK_VERSION
         if any(entry.select for entry in self.patterns.values()):

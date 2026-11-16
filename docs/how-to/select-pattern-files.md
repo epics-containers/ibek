@@ -10,7 +10,7 @@ A **selection** changes the manifest's file-set for one instance only. It can:
 - **add** pattern files that the manifest leaves out, such as a simulation
   template in a pattern's `sim/` folder;
 - **narrow** the manifest's files, for example to one or two templates from a
-  large pattern;
+  large pattern, by file name or by entity model;
 - **place** a selected file at a destination path you choose.
 
 The selection is recorded in the instance's `runtime-lock.yaml`, so `update`,
@@ -70,6 +70,86 @@ patterns:
       sim/CryoconM14_sim.py: sha256:...
 ```
 
+## Narrow to named files or models
+
+`--only FILE` vendors only the named pattern files, and `--model NAME` only the
+files the named entity models load:
+
+```bash
+ibek pattern add ibek-runtime-support:BL21I@0.4.0 services/my-ioc \
+    --model TTHBumpstripMonitor
+ibek pattern add ibek-runtime-streamdevice:CryoconM14@0.6.0 services/my-ioc \
+    --only M14.protocol --only M14_sensor.template \
+    --only M14_sensor.pvi.device.yaml
+```
+
+- The pattern's `*.ibek.support.yaml` is always vendored, whole and unmodified.
+- `--only` takes a path relative to the pattern folder, exactly as it appears
+  there. It must be a file the manifest vendors; add any other file with
+  `--include`. A name the pattern does not vendor is an error that lists the
+  files it does vendor. `--only` vendors nothing it is not given: list the
+  model's templates, its pvi device file (`*.pvi.device.yaml`), its autosave
+  request files (`*.req`) and the protocol files its templates use.
+- `--model` takes the model's `databases[].file` entries and its
+  `pvi.yaml_path` from the support YAML, and those of the models it
+  instantiates through `sub_entities`. Each matches the pattern file at that
+  path, or else the one pattern file with that base name; a base name that
+  several pattern files share is an error. A name that matches no file the
+  pattern vendors is not vendored: `$(ADCORE)/db/NDStats.template` comes from
+  the image unless the pattern itself holds an `NDStats.template`. A name given
+  as a Jinja expression names no single file, so `--model` refuses it; use
+  `--only`.
+- For each database file `--model` keeps, it also keeps the autosave request
+  files `<stem>_settings.req` and `<stem>_positions.req` that the manifest
+  vendors, which `ibek runtime generate-autosave` pairs with `<stem>.template`.
+- `--model` also vendors every protocol file the manifest vendors: each file
+  whose name ends in `.proto` or `.protocol`. A pattern with no manifest vendors
+  every file, so this is every protocol file in the pattern. StreamDevice
+  templates name their protocol inside a record link, not in the support YAML,
+  so `--model` cannot tell which protocol a model needs, and a manifest has no
+  protocol destination to go by, so protocol files are recognised by suffix.
+- An unknown model is an error that lists the pattern's models. A pattern whose
+  support YAMLs declare models of one name in two modules needs the model given
+  as `module.name`.
+
+Both options can be given more than once, and together: ibek vendors the files
+of all of them. They cannot be combined with `--exclude`. `--include` works
+alongside them, and every file an `include` rule places is vendored.
+
+The first command records:
+
+```yaml
+version: 4
+patterns:
+  BL21I:
+    version: 0.4.0
+    source: github.com/epics-containers/ibek-runtime-support
+    select:
+      models:
+      - TTHBumpstripMonitor
+    files:
+      config/BL21I.ibek.support.yaml: sha256:...
+      config/BL21I_TTH_Bumpstrip_Monitor.template: sha256:...
+```
+
+`update` resolves `models` against the release it vendors, so a model whose
+template a later release renames still gets the right file. `only` names files
+literally: if a later release removes one, `update` fails and writes nothing.
+`restore` vendors the same files again.
+
+The support YAML still defines every model of the pattern. An entity whose
+model's database files, or pvi device file when pvi generation is on, were not
+vendored fails `ibek runtime generate2`, naming the model and the
+`ibek pattern add --model` to re-add it with. `generate2` checks this when the
+instance's `runtime-lock.yaml` sits beside its config folder; it warns and
+skips the check when it cannot read that lock. It checks only files given as
+plain file names, since a path such as `$(ADCORE)/db/NDStats.template` names a
+file in a support module and a Jinja expression names no single file. A file at
+the root of the config folder counts as vendored. A plain file name that the
+image supplies, rather than the pattern, is reported as missing too; runtime
+patterns name only their own files that way. The database files of a disabled
+entity, or of a disabled database, are not checked.
+
 ## How files are chosen
 
 ibek considers each file in the pattern folder in this order:
@@ -81,16 +161,20 @@ ibek considers each file in the pattern folder in this order:
    If a manifest rule matches but an `exclude` regular expression also matches,
    ibek does not vendor the file.
 3. ibek does not vendor a file that matches none of the rules.
+4. If the selection has `only` or `models`, ibek keeps, of the files the
+   manifest placed, the support YAML and the files they name.
 
-To vendor only a few files from a large pattern, exclude everything and include
-the files you need:
+To vendor only a few files from a large pattern, `--only` and `--model` are
+simplest. Excluding everything and including the files you need also works,
+and lets you choose each file's destination:
 
 ```bash
 ibek pattern add ibek-runtime-streamdevice:CryoconM14@0.6.0 services/my-ioc \
     --exclude '.*' \
     --include 'CryoconM14\.ibek\.support\.yaml=config' \
     --include 'M14\.protocol=config' \
-    --include 'M14_sensor\.template=config'
+    --include 'M14_sensor\.template=config' \
+    --include 'M14_sensor\.pvi\.device\.yaml=config'
 ```
 
 Every part of a selection must have an effect. ibek fails, and writes no files,
@@ -115,8 +199,8 @@ checked but is not placed in the IOC.
 `add` records the selection given on its command line and replaces any
 selection that the pattern already has. Other patterns in the lock keep their
 selections and files. To change a selection, run `add` again with the complete
-new set of options. To remove it, run `add` with no `--include` or `--exclude`
-options.
+new set of options. To remove it, run `add` with no `--include`, `--exclude`,
+`--only` or `--model` options.
 
 ibek removes the pattern's files that are no longer in the file-set. This
 includes a file or folder the new file-set needs to replace, such as a folder
@@ -127,14 +211,23 @@ pattern did not vendor.
 You can also edit `select:` in `runtime-lock.yaml` and run
 `ibek pattern update`. ibek then vendors the files for the edited selection and
 removes files that are no longer in the file-set. A lock with a selection must
-have `version: 2`.
+have `version: 2` or above, and one whose selection has `only` or `models` must
+have `version: 4`.
 
 ## Lock versions
 
-ibek writes `version: 1` when no pattern in the lock has a selection, and
-`version: 2` when any pattern has one. A lock without a selection therefore
-stays readable by every ibek that reads version 1. An ibek that cannot apply a
-selection refuses a version 2 lock with `unsupported lock version 2`. It does
-not vendor or check a different file-set from the one recorded. Instances that
-use a selection need an ibek that reads version 2, including in pre-commit and
-CI.
+ibek writes the lowest lock version that can hold the lock's content:
+
+| Version | Adds | Written when |
+|---|---|---|
+| 1 | `version:` / `patterns:` | no later feature is used |
+| 2 | `select.include`, `select.exclude` | any pattern has a selection |
+| 3 | top-level `schema_url:` | the lock records a schema URL |
+| 4 | `select.only`, `select.models` | any pattern's selection has `only` or `models` |
+
+Each version is the one before plus its keys, so a lock that uses none of a
+version's keys reads the same to every ibek that reads the lower version, and
+ibek rewrites it byte for byte. An ibek that cannot apply a key refuses the
+lock with `unsupported lock version N`. It does not vendor or check a
+different file-set from the one recorded. Instances that use a selection need
+an ibek that reads its version, including in pre-commit and CI.

@@ -13,6 +13,7 @@ from ibek.globals import RUNTIME_LOCK_NAME
 from .lock import RuntimeLock, Selection, file_hash, is_dirty
 from .manifest import plan_vendor
 from .schema import generate_instance_schema
+from .selection import narrow_plan
 from .sources import (
     PatternError,
     PatternRef,
@@ -178,7 +179,8 @@ def _do_vendor(
     """Fetch + vendor ``ref`` into the destination; return (label, version, files).
 
     ``select`` is the destination's adjustment to the manifest's file-set,
-    applied by ``plan_vendor``. ``old_files`` are the keys the pattern's
+    applied by ``plan_vendor`` and narrowed to its ``only`` / ``models`` by
+    ``narrow_plan``, against the release being fetched. ``old_files`` are the keys the pattern's
     previous lock entry vendored; those the new plan drops are removed, so the
     destination holds exactly the new file-set whatever file and folder shapes
     the previous one left.
@@ -214,6 +216,7 @@ def _do_vendor(
             label = source_label(candidate_uri)
             select = select or Selection()
             plan = plan_vendor(pattern_dir, select.include, select.exclude)
+            plan = narrow_plan(pattern_dir, plan, select)
             orphans = set(old_files) - {key for _, key in plan}
             files = _vendor_files(plan, dest_dir, orphans)
             _prune_orphans(dest_dir, orphans)

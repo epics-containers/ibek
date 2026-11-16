@@ -18,6 +18,7 @@ from __future__ import annotations
 
 import logging
 import os
+from collections.abc import Sequence
 from pathlib import Path
 from typing import Annotated
 
@@ -70,21 +71,39 @@ NameOpt = Annotated[
 ]
 
 
-def _selection(include: list[str], exclude: list[str]) -> Selection | None:
-    """Build a ``select:`` from ``--include SRC=DEST`` / ``--exclude SRC`` options.
+def _unique(values: Sequence[str]) -> list[str]:
+    """``values`` without repeats, in the order first given."""
+    return list(dict.fromkeys(values))
+
+
+def _selection(
+    include: list[str],
+    exclude: list[str],
+    only: Sequence[str] = (),
+    models: Sequence[str] = (),
+) -> Selection | None:
+    """Build a ``select:`` from the ``--include`` / ``--exclude`` / ``--only`` /
+    ``--model`` options.
 
     ``SRC=DEST`` is split at its last ``=``: a regex may contain ``=`` (``(?=``),
     a destination path does not.
     """
+    if exclude and (only or models):
+        raise PatternError(
+            "--exclude cannot be combined with --only or --model: name the "
+            "files to keep instead of the files to drop"
+        )
     rules = []
     for text in include:
         src, sep, dest = text.rpartition("=")
         if not sep or not src or not dest:
             raise PatternError(f"--include {text!r}: expected SRC=DEST")
         rules.append(SelectRule(src=src, dest=dest))
-    if not rules and not exclude:
+    if not rules and not exclude and not only and not models:
         return None
-    return Selection(include=rules, exclude=exclude)
+    return Selection(
+        include=rules, exclude=exclude, only=_unique(only), models=_unique(models)
+    )
 
 
 def _fail(exc: Exception) -> None:
@@ -120,10 +139,30 @@ def add(
             "recorded in runtime-lock.yaml",
         ),
     ] = None,
+    only: Annotated[
+        list[str] | None,
+        typer.Option(
+            "--only",
+            help="Vendor only this pattern-relative file (and the pattern's "
+            "support YAML); list a model's templates, pvi device, req and "
+            "protocol files; repeatable; combines with --model; "
+            "recorded in runtime-lock.yaml",
+        ),
+    ] = None,
+    model: Annotated[
+        list[str] | None,
+        typer.Option(
+            "--model",
+            help="Vendor only the database, autosave req and pvi device files "
+            "this entity model loads, the pattern's protocol files and its "
+            "support YAML; repeatable; combines with --only; recorded in "
+            "runtime-lock.yaml",
+        ),
+    ] = None,
 ):
     """Vendor a pattern into a destination: files + runtime-lock.yaml + schema."""
     try:
-        select = _selection(include or [], exclude or [])
+        select = _selection(include or [], exclude or [], only or [], model or [])
         vendor.add(name, dest, source_override=source, select=select)
     except PatternError as exc:
         _fail(exc)

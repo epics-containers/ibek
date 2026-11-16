@@ -71,6 +71,78 @@ The manifest's file-set suits most instances. An instance that needs a
 different set of files can record a selection in its lock; see
 {doc}`select-pattern-files`.
 
+## Vendor part of a pattern
+
+A library pattern often defines many entity models when an instance uses one or
+two. `--model` vendors only the files the named models load, and `--only` names
+the files to vendor. For example, to take the bumpstrip monitor from the BL21I
+pattern and none of its other templates:
+
+```bash
+ibek pattern add ibek-runtime-support:BL21I@0.4.0 . --model TTHBumpstripMonitor
+```
+
+or, naming the template file instead of the model:
+
+```bash
+ibek pattern add ibek-runtime-support:BL21I@0.4.0 . \
+    --only BL21I_TTH_Bumpstrip_Monitor.template
+```
+
+Both vendor `config/BL21I.ibek.support.yaml` and
+`config/BL21I_TTH_Bumpstrip_Monitor.template`, and record the choice under
+`select:` in `runtime-lock.yaml`:
+
+```yaml
+version: 4
+patterns:
+  BL21I:
+    version: 0.4.0
+    source: github.com/epics-containers/ibek-runtime-support
+    select:
+      models:
+      - TTHBumpstripMonitor
+    files:
+      config/BL21I.ibek.support.yaml: sha256:...
+      config/BL21I_TTH_Bumpstrip_Monitor.template: sha256:...
+```
+
+- The pattern's support YAML is always vendored, whole and unmodified, so it
+  still defines every model in the pattern.
+- `--model` takes, from the support YAML, the `databases[].file` entries and
+  the `pvi.yaml_path` of each named model and of the models it instantiates
+  through `sub_entities`. For each database file it also vendors the autosave
+  request files `<stem>_settings.req` and `<stem>_positions.req`. It
+  vendors every protocol file (`*.proto`, `*.protocol`) the manifest vendors
+  too, because a StreamDevice template names its protocol inside a record link,
+  where the support YAML cannot see it.
+- `--only` takes paths relative to the pattern folder, exactly. List every file
+  the model needs: its templates, its pvi device file (`*.pvi.device.yaml`),
+  its autosave request files (`*.req`) and the protocol files its templates
+  use.
+- Both options can be repeated and combined; the files of all of them are
+  vendored. Files keep the destinations the manifest gives them.
+
+An unknown model or file fails before anything is written, listing the models
+or files the pattern has. `update` resolves `--model` against the release it
+moves to, so a model whose template is renamed still gets the right file; an
+`--only` file that the release no longer has is an error. `restore` vendors the
+same files again.
+
+An entity whose model's database or pvi device files were left out fails
+`ibek runtime generate2` with, for example:
+
+```
+Error: entity BL21I.ARMAirControl uses model ARMAirControl whose files were not
+vendored from pattern BL21I (BL21I_ARM_Air_Control.template is missing); re-add
+with `ibek pattern add <library>:BL21I@0.4.0 <instance> --model ARMAirControl`,
+keeping the models and files already selected
+```
+
+`generate2` makes this check when the instance's `runtime-lock.yaml` sits beside
+its config folder, as it does in a services repo, so pre-commit and CI catch it.
+See {doc}`select-pattern-files` for the full selection rules.
+
 ## Check and restore
 
 ```bash

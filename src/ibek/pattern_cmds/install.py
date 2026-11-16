@@ -38,6 +38,7 @@ from ibek.support import Support, support_yaml_module
 
 from .lock import file_hash
 from .manifest import SUPPORT_YAML_SUFFIX, plan_vendor
+from .selection import PROTOCOL_SUFFIXES
 from .sources import (
     PatternError,
     PatternRef,
@@ -57,7 +58,6 @@ IMAGE_LOCK_VERSION = 1
 IMAGE_LOCK_KEYS = ("version", "libraries")
 
 PVI_SUFFIX = ".pvi.device.yaml"
-PROTOCOL_SUFFIXES = (".proto", ".protocol")
 DATABASE_SUFFIXES = (".template", ".db")
 REQ_SUFFIX = ".req"
 
