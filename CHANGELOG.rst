@@ -15,8 +15,8 @@ records can override fields that the templates set. The lists from
 Each entry must be a plain file name at the top of the config folder, made
 only of letters, digits, ``.``, ``_``, ``-`` and ``+``, and not ``.`` or
 ``..``. ``ibek runtime generate2`` exits with an
-error naming each entry that is not, or, given the config folder, that is not
-a file in it. An empty or absent list leaves ``st.cmd``
+error naming each entry that is not, that is listed more than once, or,
+given the config folder, that is not a file in it. An empty or absent list leaves ``st.cmd``
 unchanged. See ``docs/reference/ioc-yaml.md``.
 
 ``ibek dev`` commands for a devcontainer that runs a pre-built generic IOC
