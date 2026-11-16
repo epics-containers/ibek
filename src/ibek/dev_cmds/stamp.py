@@ -118,6 +118,9 @@ class Stamp:
     modules: list[Module]
     # modules whose rebuild has started and not finished
     pending: list[str] = field(default_factory=list)
+    # modules whose folder is being cloned again: a clone that fails can leave
+    # another source in the folder, so it is cloned again until one succeeds
+    cloning: list[str] = field(default_factory=list)
     # when ibek dev last started to rebuild modules in this container
     rebuilt: float | None = None
 
@@ -128,7 +131,12 @@ class Stamp:
         return next((m for m in self.modules if m.name == name), None)
 
     def save(self) -> None:
-        text = json.dumps({"schema": SCHEMA, **asdict(self)}, indent=2)
+        data = asdict(self)
+        # only while a clone is unfinished: a stamp without it is one that
+        # each ibek of this schema reads
+        if not self.cloning:
+            del data["cloning"]
+        text = json.dumps({"schema": SCHEMA, **data}, indent=2)
         # written whole or not at all
         temporary = stamp_file().with_name(stamp_file().name + ".tmp")
         try:

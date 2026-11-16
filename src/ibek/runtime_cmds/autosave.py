@@ -24,7 +24,13 @@ def link_req_files() -> None:
     3a.  do overwrite existing req files
     """
     Path.mkdir(GLOBALS.AUTOSAVE, exist_ok=True)
-    for req in GLOBALS.SUPPORT.glob("**/*.req"):
+    # `**` does not go through links, so a link that loops inside a module is
+    # not followed. A module folder that is itself a link, to a clone from
+    # `ibek dev support`, is searched on its own.
+    support = GLOBALS.SUPPORT
+    linked = sorted(f for f in support.glob("*") if f.is_symlink() and f.is_dir())
+    reqs = [*support.glob("**/*.req"), *(r for f in linked for r in f.glob("**/*.req"))]
+    for req in reqs:
         link = GLOBALS.AUTOSAVE / req.name
         if not link.exists():
             link.symlink_to(req)
