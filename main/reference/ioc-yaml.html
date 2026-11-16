@@ -7,7 +7,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>IOC YAML &#8212; ibek 4.11.3.dev13+g6e66567bf documentation</title>
+    <title>IOC YAML &#8212; ibek 4.11.3.dev19+g341981735 documentation</title>
   
   
   
@@ -41,7 +41,7 @@
   <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=75c7c72ae941e8b558d8" />
 <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=75c7c72ae941e8b558d8" />
 
-    <script src="../_static/documentation_options.js?v=339df3d3"></script>
+    <script src="../_static/documentation_options.js?v=766fe06e"></script>
     <script src="../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -531,6 +531,9 @@ configurations, use the types offered by your image’s schema.</p>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">shared</span></code></p></td>
 <td><p>Optional list for YAML anchors; does not create Jinja variables.</p></td>
 </tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">post_db_files</span></code></p></td>
+<td><p>Optional list of database files to load after the generated database; see <a class="reference internal" href="#post-db-files"><span class="std std-ref">Loading extra database files</span></a>.</p></td>
+</tr>
 </tbody>
 </table>
 </div>
@@ -606,9 +609,52 @@ runtime implementation is not yet available.</p>
 <p><code class="docutils literal notranslate"><span class="pre">ibek</span> <span class="pre">runtime</span> <span class="pre">generate2</span></code> accepts <code class="docutils literal notranslate"><span class="pre">config/ioc.yaml</span></code> and optional
 <code class="docutils literal notranslate"><span class="pre">config/runtime.yaml</span></code>, plus explicit <code class="docutils literal notranslate"><span class="pre">--instance</span></code> files. Each is a complete IOC
 YAML document with <code class="docutils literal notranslate"><span class="pre">ioc_name</span></code>, <code class="docutils literal notranslate"><span class="pre">description</span></code> and <code class="docutils literal notranslate"><span class="pre">entities</span></code>; their entity lists
-are concatenated. Use the same <code class="docutils literal notranslate"><span class="pre">ioc_name</span></code> in all files: the main IOC retains
+and <code class="docutils literal notranslate"><span class="pre">post_db_files</span></code> lists are concatenated. Use the same <code class="docutils literal notranslate"><span class="pre">ioc_name</span></code> in all files: the main IOC retains
 the first document’s name, while later loads update the Jinja <code class="docutils literal notranslate"><span class="pre">ioc_name</span></code>.
 The <a class="reference internal" href="cli.html"><span class="std std-doc">CLI reference</span></a> describes file discovery and explicit ordering.</p>
+</section>
+<section id="post-db-files">
+<span id="loading-extra-database-files"></span><h2>Loading extra database files<a class="headerlink" href="#post-db-files" title="Link to this heading">#</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">post_db_files</span></code> lists database files at the top of the instance config folder,
+by file name. The generated <code class="docutils literal notranslate"><span class="pre">st.cmd</span></code> loads each one with
+<code class="docutils literal notranslate"><span class="pre">dbLoadRecords</span> <span class="pre">config/&lt;file&gt;</span></code>, in order, after <code class="docutils literal notranslate"><span class="pre">/epics/runtime/ioc.db</span></code> and
+before <code class="docutils literal notranslate"><span class="pre">iocInit</span></code>:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">ioc_name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">demo</span>
+<span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Example device IOC</span>
+<span class="nt">entities</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">example.Device</span>
+<span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">device1</span>
+<span class="w">    </span><span class="nt">P</span><span class="p">:</span><span class="w"> </span><span class="s">"DEMO:"</span>
+<span class="w">    </span><span class="nt">count</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">4</span>
+<span class="nt">post_db_files</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">records.db</span>
+</pre></div>
+</div>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>dbLoadRecords /epics/runtime/ioc.db
+dbLoadRecords config/records.db
+iocInit
+</pre></div>
+</div>
+<p>Because these files load after <code class="docutils literal notranslate"><span class="pre">ioc.db</span></code>, a record in one of them that has the
+name of a record in <code class="docutils literal notranslate"><span class="pre">ioc.db</span></code> sets fields of that record, overriding the values
+the templates gave it. The files are loaded as they are, without macro
+substitution.</p>
+<p><code class="docutils literal notranslate"><span class="pre">st.cmd</span></code> changes to the IOC folder (<code class="docutils literal notranslate"><span class="pre">/epics/ioc</span></code>) first, where the instance
+config folder is mounted as <code class="docutils literal notranslate"><span class="pre">config</span></code>, so the relative paths resolve at boot.
+<code class="docutils literal notranslate"><span class="pre">ibek</span> <span class="pre">runtime</span> <span class="pre">place-files</span></code> also copies every <code class="docutils literal notranslate"><span class="pre">config/*.db</span></code> into the runtime db
+folder, but the boot script loads each entry from <code class="docutils literal notranslate"><span class="pre">config/&lt;file&gt;</span></code>.</p>
+<p>Each entry must be a plain file name: not <code class="docutils literal notranslate"><span class="pre">.</span></code> or <code class="docutils literal notranslate"><span class="pre">..</span></code>, and made only of
+letters, digits, <code class="docutils literal notranslate"><span class="pre">.</span></code>, <code class="docutils literal notranslate"><span class="pre">_</span></code>, <code class="docutils literal notranslate"><span class="pre">-</span></code> and <code class="docutils literal notranslate"><span class="pre">+</span></code>. The ioc-instance helm chart mounts
+only the files at the top of <code class="docutils literal notranslate"><span class="pre">config/</span></code>, so a file in a subfolder would be
+missing at boot, and iocsh would split a name at whitespace or a comma and
+expand a <code class="docutils literal notranslate"><span class="pre">$</span></code> macro in it. <code class="docutils literal notranslate"><span class="pre">ibek</span> <span class="pre">runtime</span> <span class="pre">generate2</span></code>
+stops with an error naming each entry that breaks these rules, and each entry
+listed more than once. Given the config folder, as it is when the container
+starts, it also stops for an entry that is not a file in that folder. The
+single-file <code class="docutils literal notranslate"><span class="pre">ibek</span> <span class="pre">runtime</span> <span class="pre">generate</span></code> has no config folder, so it checks the names
+but not that the files exist.</p>
+<p>The lists from each instance file (<code class="docutils literal notranslate"><span class="pre">ioc.yaml</span></code>, <code class="docutils literal notranslate"><span class="pre">runtime.yaml</span></code> and any
+<code class="docutils literal notranslate"><span class="pre">--instance</span></code> files) are concatenated in the order the files are read.</p>
 </section>
 <section id="schemas">
 <span id="id1"></span><h2>Schemas<a class="headerlink" href="#schemas" title="Link to this heading">#</a></h2>
@@ -706,6 +752,7 @@ caching and reproducible schema downloads.</p>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#repeating-entities">Repeating entities</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#waiting-for-hardware">Waiting for hardware</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#multiple-files">Multiple files</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#post-db-files">Loading extra database files</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#schemas">Schemas</a></li>
 </ul>
   </nav></div>

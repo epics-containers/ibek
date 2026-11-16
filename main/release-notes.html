@@ -7,7 +7,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Changelog &#8212; ibek 4.11.3.dev13+g6e66567bf documentation</title>
+    <title>Changelog &#8212; ibek 4.11.3.dev19+g341981735 documentation</title>
   
   
   
@@ -41,7 +41,7 @@
   <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=75c7c72ae941e8b558d8" />
 <link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=75c7c72ae941e8b558d8" />
 
-    <script src="_static/documentation_options.js?v=339df3d3"></script>
+    <script src="_static/documentation_options.js?v=766fe06e"></script>
     <script src="_static/doctools.js?v=fd6eb6e6"></script>
     <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="_static/clipboard.min.js?v=a7894cd8"></script>
@@ -499,6 +499,17 @@
 <h2>Unreleased<a class="headerlink" href="#unreleased" title="Link to this heading">#</a></h2>
 <section id="added">
 <h3>Added<a class="headerlink" href="#added" title="Link to this heading">#</a></h3>
+<p>An IOC YAML <code class="docutils literal notranslate"><span class="pre">post_db_files</span></code> list names database files in the instance
+config folder. The generated <code class="docutils literal notranslate"><span class="pre">st.cmd</span></code> loads each with <code class="docutils literal notranslate"><span class="pre">dbLoadRecords</span>
+<span class="pre">config/&lt;file&gt;</span></code>, in order, after <code class="docutils literal notranslate"><span class="pre">ioc.db</span></code> and before <code class="docutils literal notranslate"><span class="pre">iocInit</span></code>, so their
+records can override fields that the templates set. The lists from
+<code class="docutils literal notranslate"><span class="pre">ioc.yaml</span></code>, <code class="docutils literal notranslate"><span class="pre">runtime.yaml</span></code> and <code class="docutils literal notranslate"><span class="pre">--instance</span></code> files are concatenated.
+Each entry must be a plain file name at the top of the config folder, made
+only of letters, digits, <code class="docutils literal notranslate"><span class="pre">.</span></code>, <code class="docutils literal notranslate"><span class="pre">_</span></code>, <code class="docutils literal notranslate"><span class="pre">-</span></code> and <code class="docutils literal notranslate"><span class="pre">+</span></code>, and not <code class="docutils literal notranslate"><span class="pre">.</span></code> or
+<code class="docutils literal notranslate"><span class="pre">..</span></code>. <code class="docutils literal notranslate"><span class="pre">ibek</span> <span class="pre">runtime</span> <span class="pre">generate2</span></code> exits with an
+error naming each entry that is not, that is listed more than once, or,
+given the config folder, that is not a file in it. An empty or absent list leaves <code class="docutils literal notranslate"><span class="pre">st.cmd</span></code>
+unchanged. See <code class="docutils literal notranslate"><span class="pre">docs/reference/ioc-yaml.md</span></code>.</p>
 <p><code class="docutils literal notranslate"><span class="pre">ibek</span> <span class="pre">dev</span></code> commands for a devcontainer that runs a pre-built generic IOC
 image, where the host project mounted over <code class="docutils literal notranslate"><span class="pre">/epics/generic-source</span></code> can
 differ from the tree the image was built from. <code class="docutils literal notranslate"><span class="pre">ibek</span> <span class="pre">dev</span> <span class="pre">stamp</span></code>, run as the
