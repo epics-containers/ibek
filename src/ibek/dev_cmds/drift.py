@@ -241,7 +241,7 @@ def compare(stamp: Stamp, live: Stamp) -> Drift:
         # Dockerfile line whose tags leave out clone has no source to replace.
         changed = was and was.source and module.source and was.source != module.source
         # A clone that did not finish may have left any source in the folder.
-        again = changed or (was is not None and name in stamp.cloning)
+        again = changed or name in stamp.cloning
         # A declared module is never cloned again: its clone is its owner's.
         if again and module.runs("clone"):
             if folder is not None and folder.is_symlink():
@@ -412,8 +412,9 @@ def build(stamp: Stamp, live: Stamp, drift: Drift) -> None:
         if name in stamp.cloning:
             stamp.cloning.remove(name)
         if source_only:
-            assert was is not None
-            was.source = now.source
+            # a module not built in this container has no source on record
+            if was is not None:
+                was.source = now.source
         else:
             done = {m.name: m for m in stamp.modules} | {name: now}
             # in the order of the Dockerfile, then those it has dropped
@@ -421,6 +422,13 @@ def build(stamp: Stamp, live: Stamp, drift: Drift) -> None:
             stamp.modules = [done[n] for n in order if n in done]
             stamp.pending.remove(name)
         stamp.save()
+
+    def missing(name: str) -> bool:
+        """Whether the module's line clones it into a folder that is not there."""
+        folder, now = support_folder(name), live.module(name)
+        assert now is not None
+        exists = folder is not None and (folder.exists() or folder.is_symlink())
+        return folder is not None and not exists and now.runs("clone")
 
     stamp.pending = list(dict.fromkeys([*stamp.pending, *modules]))
     # the roles are on record once every module is built with them
@@ -440,16 +448,19 @@ def build(stamp: Stamp, live: Stamp, drift: Drift) -> None:
             print(f"ibek dev: removing {folder} and linking it to {to}")
             clones.link(folder, to)
             drift.clones[name] = to
-        elif name in force:
+        elif name in force or missing(name):
             # The clone is a step of its own, recorded before the build: a
             # build that fails is then retried on the source that is there,
-            # with whatever was done to it, and not on a fresh clone.
-            print(f"ibek dev: removing {force[name]} to clone {name} again")
-            # until it succeeds, what is in the folder is not the source
+            # with whatever was done to it, and not on a fresh clone. A clone
+            # that fails can leave another source in the folder, which the
+            # clone tasks then keep: until one succeeds, it is cloned again.
             stamp.cloning = list(dict.fromkeys([*stamp.cloning, name]))
             stamp.save()
-            clone = ("--tags", "clone", "-e", "force_clone=true", *now.tags()[2])
-            ansible(*now.options, name, *clone)
+            clone = ["--tags", "clone"]
+            if name in force:
+                print(f"ibek dev: removing {force[name]} to clone {name} again")
+                clone += ["-e", "force_clone=true"]
+            ansible(*now.options, name, *clone, *now.tags()[2])
             record(name, source_only=True)
         elif name in drift.links:
             print(f"ibek dev: {drift.links[name]} is a link: it is left alone")

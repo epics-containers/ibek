@@ -141,12 +141,13 @@ as it is. Both
 `dev status` and `dev sync` name each folder that `dev sync --build` would
 remove. The new clone is recorded before the build, so if the build fails,
 the next `dev sync --build` builds the folder as it then is, without cloning
-again. If the clone fails, the folder may hold some other source, such as
-the repository's default branch: until a clone succeeds, `dev status`
+again. A module with no folder in `/epics/support` is cloned the same way,
+with `ansible.sh <module> --tags clone`, before its build. If a clone fails,
+the folder may hold some other source, such as the repository's default
+branch, which the clone tasks keep: until a clone succeeds, `dev status`
 reports `clone not finished` and each `dev sync --build` clones the module
 again, whatever its `install.yml` then says. A module declared with `dev
 support` is linked to its clone instead, and a link is built as it is. A
-module with no folder in `/epics/support` is cloned by its build. A
 module the Dockerfile no longer builds stays installed, and reported, until
 the container is recreated from an image built without it.
 

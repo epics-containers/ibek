@@ -925,7 +925,13 @@ def test_level_2_module_added(tree: Tree):
     assert tree.calls == []
 
     assert "matches" in tree.dev("sync", "--build")
-    assert tree.ansible() == [["calc"], ["busy"], ["motor"], ["ioc"]]
+    assert tree.ansible() == [
+        ["calc", "--tags", "clone"],
+        ["calc"],
+        ["busy"],
+        ["motor"],
+        ["ioc"],
+    ]
     assert (tree.built("calc") / "VERSION").read_text() == "R3-7"
     stamp = load()
     assert stamp is not None
@@ -1897,7 +1903,7 @@ def test_release(work: Work):
 
     # the build that the report names clones the version of install.yml
     output = tree.dev("sync", "--build")
-    assert tree.ansible() == [["busy"], ["motor"], ["ioc"]]
+    assert tree.ansible() == [["busy", "--tags", "clone"], ["busy"], ["motor"], ["ioc"]]
     assert folder.is_dir() and not folder.is_symlink()
     assert (folder / "VERSION").read_text() == "R1-0"
     assert "matches" in output and "busy is linked" not in output
@@ -2108,7 +2114,55 @@ def test_module_folder_that_has_gone(tree: Tree):
     assert tree.calls == []
 
     assert "matches" in tree.dev("sync", "--build")
-    assert tree.ansible() == [["busy"], ["motor"], ["ioc"]]
+    assert tree.ansible() == [["busy", "--tags", "clone"], ["busy"], ["motor"], ["ioc"]]
+
+
+def test_failed_clone_of_a_missing_folder_is_cloned_again(tree: Tree):
+    """The clone tasks keep a folder that is there, whatever it holds."""
+    folder = tree.built("busy")
+    shutil.rmtree(folder)
+    tree.clone_fails = "busy"
+    tree.dev("sync", "--build", code=2)
+    assert tree.ansible() == [["busy", "--tags", "clone"]]
+    assert (folder / "VERSION").read_text() == "master"
+
+    tree.clone_fails = ""
+    tree.calls.clear()
+    output = tree.dev("status")
+    assert "busy: clone not finished" in output
+    assert f"clones busy again: {folder} and edits in it are removed" in output
+
+    assert "matches" in tree.dev("sync", "--build")
+    assert tree.ansible() == [
+        ["busy", "--tags", "clone", "-e", "force_clone=true"],
+        ["busy"],
+        ["motor"],
+        ["ioc"],
+    ]
+    assert (folder / "VERSION").read_text() == "R1-0"
+
+
+def test_failed_clone_of_an_added_module_is_cloned_again(tree: Tree):
+    """A module with nothing on record is cloned again all the same."""
+    write(
+        tree.source / "ibek-support" / "calc" / "calc.install.yml",
+        "module: calc\nversion: R3-7\n",
+    )
+    dockerfile = tree.source / "Dockerfile"
+    dockerfile.write_text(
+        dockerfile.read_text().replace(
+            "RUN ansible.sh busy", "RUN ansible.sh calc\nRUN ansible.sh busy"
+        )
+    )
+    tree.clone_fails = "calc"
+    tree.dev("sync", "--build", code=2)
+
+    tree.clone_fails = ""
+    tree.calls.clear()
+    assert "calc: clone not finished" in tree.dev("status")
+    assert "matches" in tree.dev("sync", "--build")
+    assert tree.ansible()[0] == ["calc", "--tags", "clone", "-e", "force_clone=true"]
+    assert (tree.built("calc") / "VERSION").read_text() == "R3-7"
 
 
 def test_build_products_in_a_clone_with_a_git_folder_elsewhere(work: Work):
