@@ -1,3 +1,4 @@
+import re
 import shutil
 from collections import Counter
 from collections.abc import Sequence
@@ -291,14 +292,18 @@ def check_vendored_models(
         raise typer.Exit(code=1)
 
 
+POST_DB_FILE_NAME = re.compile(r"[A-Za-z0-9._+-]+")
+
+
 def post_db_file_error(name: str, config_folder: Path | None) -> str | None:
     """Why a post_db_files entry cannot be loaded, or None if it can.
 
     The boot script loads each entry as ``config/<entry>`` from the IOC folder,
     where the instance config folder is mounted. The ioc-instance helm chart
     mounts only the files at the top of that folder, and iocsh splits an
-    argument at whitespace, so an entry must be a plain file name. The checks
-    compare text: the files of a mounted ConfigMap are symlinks.
+    argument at whitespace and commas and expands ``$`` macros, so an entry must
+    be a plain file name of letters, digits, ``.``, ``_``, ``-`` and ``+``. The
+    checks compare text: the files of a mounted ConfigMap are symlinks.
     """
     if name == "":
         return "is empty"
@@ -306,8 +311,11 @@ def post_db_file_error(name: str, config_folder: Path | None) -> str | None:
         return "is not a file name"
     if "/" in name or "\\" in name:
         return "is not a plain file name (no folders: config/ is mounted flat)"
-    if any(c.isspace() for c in name) or '"' in name:
-        return "contains whitespace or a quote"
+    if not POST_DB_FILE_NAME.fullmatch(name):
+        return (
+            "has a character other than letters, digits, '.', '_', '-' and '+' "
+            "(iocsh would split or expand it)"
+        )
     if config_folder is not None and not (config_folder / name).is_file():
         return f"is not a file in {config_folder}"
     return None

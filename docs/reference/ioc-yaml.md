@@ -147,10 +147,11 @@ config folder is mounted as `config`, so the relative paths resolve at boot.
 `ibek runtime place-files` also copies every `config/*.db` into the runtime db
 folder, but the boot script loads each entry from `config/<file>`.
 
-Each entry must be a plain file name: not empty, not `.` or `..`, and with no
-`/`, `\`, whitespace or `"`. The ioc-instance helm chart mounts only the
-files at the top of `config/`, so a file in a subfolder would be missing at
-boot, and iocsh would split a name at whitespace. `ibek runtime generate2`
+Each entry must be a plain file name: not `.` or `..`, and made only of
+letters, digits, `.`, `_`, `-` and `+`. The ioc-instance helm chart mounts
+only the files at the top of `config/`, so a file in a subfolder would be
+missing at boot, and iocsh would split a name at whitespace or a comma and
+expand a `$` macro in it. `ibek runtime generate2`
 stops with an error naming each entry that breaks these rules, and each entry
 listed more than once. Given the config folder, as it is when the container
 starts, it also stops for an entry that is not a file in that folder. The

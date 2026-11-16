@@ -70,8 +70,11 @@ BAD_ENTRIES = [
     ("../outside.db", "is not a plain file name"),
     ("/etc/hostname", "is not a plain file name"),
     ("..", "is not a file name"),
-    ("my file.db", "contains whitespace"),
-    ("tab\tfile.db", "contains whitespace"),
+    ("my file.db", "has a character other than letters"),
+    ("tab\tfile.db", "has a character other than letters"),
+    ("records,extra.db", "has a character other than letters"),
+    ("${MODE}.db", "has a character other than letters"),
+    ('quote".db', "has a character other than letters"),
     ("", "is empty"),
 ]
 
@@ -90,6 +93,7 @@ def test_bad_post_db_file_is_an_error(
     (config / "sub").mkdir()
     (config / "sub" / "more.db").touch()
     (config / "my file.db").touch()
+    (config / "records,extra.db").touch()
     (tmp_path / "outside.db").touch()
 
     with pytest.raises(typer.Exit):
