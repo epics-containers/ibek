@@ -7,7 +7,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Vendor runtime support &#8212; ibek 4.11.1.dev3+g50668b7a5 documentation</title>
+    <title>Vendor runtime support &#8212; ibek 4.11.2 documentation</title>
   
   
   
@@ -41,7 +41,7 @@
   <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=75c7c72ae941e8b558d8" />
 <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=75c7c72ae941e8b558d8" />
 
-    <script src="../_static/documentation_options.js?v=041c601a"></script>
+    <script src="../_static/documentation_options.js?v=70aa39c2"></script>
     <script src="../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -51,7 +51,7 @@
     <script>
         DOCUMENTATION_OPTIONS.theme_version = '0.24.0';
         DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://epics-containers.github.io/ibek/switcher.json';
-        DOCUMENTATION_OPTIONS.theme_switcher_version_match = 'main';
+        DOCUMENTATION_OPTIONS.theme_switcher_version_match = '4.11.2';
         DOCUMENTATION_OPTIONS.show_version_warning_banner =
             false;
         </script>
@@ -64,7 +64,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="color-scheme" content="light dark"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="main" />
+  <meta name="docsearch:version" content="4.11.2" />
   
     
     <script src="../_static/searchtools.js"></script>
@@ -552,6 +552,70 @@ The full format, including validation rules, is in the
 different set of files can record a selection in its lock; see
 <a class="reference internal" href="select-pattern-files.html"><span class="doc">Select which pattern files an instance vendors</span></a>.</p>
 </section>
+<section id="vendor-part-of-a-pattern">
+<h2>Vendor part of a pattern<a class="headerlink" href="#vendor-part-of-a-pattern" title="Link to this heading">#</a></h2>
+<p>A library pattern often defines many entity models when an instance uses one or
+two. <code class="docutils literal notranslate"><span class="pre">--model</span></code> vendors only the files the named models load, and <code class="docutils literal notranslate"><span class="pre">--only</span></code> names
+the files to vendor. For example, to take the bumpstrip monitor from the BL21I
+pattern and none of its other templates:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>ibek<span class="w"> </span>pattern<span class="w"> </span>add<span class="w"> </span>ibek-runtime-support:BL21I@0.4.0<span class="w"> </span>.<span class="w"> </span>--model<span class="w"> </span>TTHBumpstripMonitor
+</pre></div>
+</div>
+<p>or, naming the template file instead of the model:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>ibek<span class="w"> </span>pattern<span class="w"> </span>add<span class="w"> </span>ibek-runtime-support:BL21I@0.4.0<span class="w"> </span>.<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--only<span class="w"> </span>BL21I_TTH_Bumpstrip_Monitor.template
+</pre></div>
+</div>
+<p>Both vendor <code class="docutils literal notranslate"><span class="pre">config/BL21I.ibek.support.yaml</span></code> and
+<code class="docutils literal notranslate"><span class="pre">config/BL21I_TTH_Bumpstrip_Monitor.template</span></code>, and record the choice under
+<code class="docutils literal notranslate"><span class="pre">select:</span></code> in <code class="docutils literal notranslate"><span class="pre">runtime-lock.yaml</span></code>:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">4</span>
+<span class="nt">patterns</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">BL21I</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.4.0</span>
+<span class="w">    </span><span class="nt">source</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">github.com/epics-containers/ibek-runtime-support</span>
+<span class="w">    </span><span class="nt">select</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">models</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">TTHBumpstripMonitor</span>
+<span class="w">    </span><span class="nt">files</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">config/BL21I.ibek.support.yaml</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sha256:...</span>
+<span class="w">      </span><span class="nt">config/BL21I_TTH_Bumpstrip_Monitor.template</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sha256:...</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>The pattern’s support YAML is always vendored, whole and unmodified, so it
+still defines every model in the pattern.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--model</span></code> takes, from the support YAML, the <code class="docutils literal notranslate"><span class="pre">databases[].file</span></code> entries and
+the <code class="docutils literal notranslate"><span class="pre">pvi.yaml_path</span></code> of each named model and of the models it instantiates
+through <code class="docutils literal notranslate"><span class="pre">sub_entities</span></code>. For each database file it also vendors the autosave
+request files <code class="docutils literal notranslate"><span class="pre">&lt;stem&gt;_settings.req</span></code> and <code class="docutils literal notranslate"><span class="pre">&lt;stem&gt;_positions.req</span></code>. It
+vendors every protocol file (<code class="docutils literal notranslate"><span class="pre">*.proto</span></code>, <code class="docutils literal notranslate"><span class="pre">*.protocol</span></code>) the manifest vendors
+too, because a StreamDevice template names its protocol inside a record link,
+where the support YAML cannot see it.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--only</span></code> takes paths relative to the pattern folder, exactly. List every file
+the model needs: its templates, its pvi device file (<code class="docutils literal notranslate"><span class="pre">*.pvi.device.yaml</span></code>),
+its autosave request files (<code class="docutils literal notranslate"><span class="pre">*.req</span></code>) and the protocol files its templates
+use.</p></li>
+<li><p>Both options can be repeated and combined; the files of all of them are
+vendored. Files keep the destinations the manifest gives them.</p></li>
+</ul>
+<p>An unknown model or file fails before anything is written, listing the models
+or files the pattern has. <code class="docutils literal notranslate"><span class="pre">update</span></code> resolves <code class="docutils literal notranslate"><span class="pre">--model</span></code> against the release it
+moves to, so a model whose template is renamed still gets the right file; an
+<code class="docutils literal notranslate"><span class="pre">--only</span></code> file that the release no longer has is an error. <code class="docutils literal notranslate"><span class="pre">restore</span></code> vendors the
+same files again.</p>
+<p>An entity whose model’s database or pvi device files were left out fails
+<code class="docutils literal notranslate"><span class="pre">ibek</span> <span class="pre">runtime</span> <span class="pre">generate2</span></code> with, for example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>Error: entity BL21I.ARMAirControl uses model ARMAirControl whose files were not
+vendored from pattern BL21I (BL21I_ARM_Air_Control.template is missing); re-add
+with `ibek pattern add &lt;library&gt;:BL21I@0.4.0 &lt;instance&gt; --model ARMAirControl`,
+keeping the models and files already selected
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">generate2</span></code> makes this check when the instance’s <code class="docutils literal notranslate"><span class="pre">runtime-lock.yaml</span></code> sits beside
+its config folder, as it does in a services repo, so pre-commit and CI catch it.
+See <a class="reference internal" href="select-pattern-files.html"><span class="doc">Select which pattern files an instance vendors</span></a> for the full selection rules.</p>
+</section>
 <section id="check-and-restore">
 <h2>Check and restore<a class="headerlink" href="#check-and-restore" title="Link to this heading">#</a></h2>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>ibek<span class="w"> </span>pattern<span class="w"> </span>check<span class="w"> </span>services/my-ioc
@@ -747,6 +811,7 @@ copyable fresh-cache command.</p>
     <ul class="pst-show_toc_level nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#add-and-update">Add and update</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#what-gets-vendored">What gets vendored</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#vendor-part-of-a-pattern">Vendor part of a pattern</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#check-and-restore">Check and restore</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#unrecognised-locks">Unrecognised locks</a></li>
 </ul>
@@ -761,7 +826,7 @@ copyable fresh-cache command.</p>
 
   
   <div class="tocsection editthispage">
-    <a href="https://github.com/epics-containers/ibek/edit/main/docs/how-to/vendor-runtime-patterns.md">
+    <a href="https://github.com/epics-containers/ibek/edit/4.11.2/docs/how-to/vendor-runtime-patterns.md">
       <i class="fa-solid fa-pencil"></i>
       
       

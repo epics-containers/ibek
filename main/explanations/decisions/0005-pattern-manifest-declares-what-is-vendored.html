@@ -7,7 +7,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>5. A pattern declares what is vendored &#8212; ibek 4.11.1.dev3+g50668b7a5 documentation</title>
+    <title>5. A pattern declares what is vendored &#8212; ibek 4.11.2 documentation</title>
   
   
   
@@ -41,7 +41,7 @@
   <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=75c7c72ae941e8b558d8" />
 <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=75c7c72ae941e8b558d8" />
 
-    <script src="../../_static/documentation_options.js?v=041c601a"></script>
+    <script src="../../_static/documentation_options.js?v=70aa39c2"></script>
     <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -51,7 +51,7 @@
     <script>
         DOCUMENTATION_OPTIONS.theme_version = '0.24.0';
         DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://epics-containers.github.io/ibek/switcher.json';
-        DOCUMENTATION_OPTIONS.theme_switcher_version_match = 'main';
+        DOCUMENTATION_OPTIONS.theme_switcher_version_match = '4.11.2';
         DOCUMENTATION_OPTIONS.show_version_warning_banner =
             false;
         </script>
@@ -63,7 +63,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="color-scheme" content="light dark"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="main" />
+  <meta name="docsearch:version" content="4.11.2" />
   
     
     <script src="../../_static/searchtools.js"></script>
@@ -561,7 +561,11 @@ version 1 plus that key, and ibek writes the lowest version that holds the
 content, so a lock without a selection reads the same to every ibek, while one
 that could not apply a selection refuses the lock on its version rather than
 vendoring or checking a different file-set. Unknown top-level keys are refused
-for the same reason: ignored on read, they would be dropped on the next save.</p>
+for the same reason: ignored on read, they would be dropped on the next save.
+Every later version follows the same rule: version 3 adds a top-level
+<code class="docutils literal notranslate"><span class="pre">schema_url</span></code>, and version 4 adds <code class="docutils literal notranslate"><span class="pre">select.only</span></code> and <code class="docutils literal notranslate"><span class="pre">select.models</span></code>, which narrow
+the manifest’s file-set to named files or to the files named entity models load
+(see <a class="reference internal" href="../../how-to/select-pattern-files.html"><span class="std std-doc">Select which pattern files an instance vendors</span></a>).</p>
 </section>
 <section id="consequences">
 <h2>Consequences<a class="headerlink" href="#consequences" title="Link to this heading">#</a></h2>
@@ -671,7 +675,7 @@ for a pattern’s <em>content</em> lives, and the
 
   
   <div class="tocsection editthispage">
-    <a href="https://github.com/epics-containers/ibek/edit/main/docs/explanations/decisions/0005-pattern-manifest-declares-what-is-vendored.md">
+    <a href="https://github.com/epics-containers/ibek/edit/4.11.2/docs/explanations/decisions/0005-pattern-manifest-declares-what-is-vendored.md">
       <i class="fa-solid fa-pencil"></i>
       
       
