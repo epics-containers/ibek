@@ -10,6 +10,9 @@ ioc_registerRecordDeviceDriver pdbbase
 
 {{ script_elements }}
 dbLoadRecords {{ _global.get_env('RUNTIME_DIR') }}/ioc.db
+{% for f in post_db_files -%}
+dbLoadRecords {{ f }}
+{% endfor -%}
 iocInit
 {% if post_ioc_init_elements %}
 {{ post_ioc_init_elements }}

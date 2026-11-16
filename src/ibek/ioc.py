@@ -173,6 +173,13 @@ class IOC(BaseSettings):
     ioc_name: str = Field(description="Name of IOC instance")
     description: str = Field(description="Description of what the IOC does")
     entities: list[Entity]
+    post_db_files: list[str] = Field(
+        description="Database files to load with dbLoadRecords after ioc.db and "
+        "before iocInit, in order. Each is the plain name of a file at the top "
+        "of the IOC instance config folder. A record in one of these files can set fields of a "
+        "record of the same name in ioc.db",
+        default=[],
+    )
     shared: Sequence[Any] = Field(
         description="A place to create any anchors required for repeating YAML",
         default=(),

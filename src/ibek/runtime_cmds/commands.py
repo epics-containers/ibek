@@ -1,4 +1,6 @@
+import re
 import shutil
+from collections import Counter
 from collections.abc import Sequence
 from pathlib import Path, PurePosixPath
 
@@ -290,6 +292,60 @@ def check_vendored_models(
         raise typer.Exit(code=1)
 
 
+POST_DB_FILE_NAME = re.compile(r"[A-Za-z0-9._+-]+")
+
+
+def post_db_file_error(name: str, config_folder: Path | None) -> str | None:
+    """Why a post_db_files entry cannot be loaded, or None if it can.
+
+    The boot script loads each entry as ``config/<entry>`` from the IOC folder,
+    where the instance config folder is mounted. The ioc-instance helm chart
+    mounts only the files at the top of that folder, and iocsh splits an
+    argument at whitespace and commas and expands ``$`` macros, so an entry must
+    be a plain file name of letters, digits, ``.``, ``_``, ``-`` and ``+``. The
+    checks compare text: the files of a mounted ConfigMap are symlinks.
+    """
+    if name == "":
+        return "is empty"
+    if name in (".", ".."):
+        return "is not a file name"
+    if "/" in name or "\\" in name:
+        return "is not a plain file name (no folders: config/ is mounted flat)"
+    if not POST_DB_FILE_NAME.fullmatch(name):
+        return (
+            "has a character other than letters, digits, '.', '_', '-' and '+' "
+            "(iocsh would split or expand it)"
+        )
+    if config_folder is not None and not (config_folder / name).is_file():
+        return f"is not a file in {config_folder}"
+    return None
+
+
+def check_post_db_files(
+    post_db_files: Sequence[str], config_folder: Path | None
+) -> None:
+    """Exit with an error naming each post_db_files entry that cannot be loaded.
+
+    Without a config folder only the names are checked, not that the files exist.
+    An entry listed more than once, from any of the instance files, is an error.
+    """
+    errors = [
+        f"Error: post_db_files entry {name!r} {reason}"
+        for name in post_db_files
+        if (reason := post_db_file_error(name, config_folder)) is not None
+    ]
+    counts = Counter(post_db_files)
+    errors += [
+        f"Error: post_db_files entry {name!r} is listed {count} times"
+        for name, count in counts.items()
+        if count > 1
+    ]
+    if errors:
+        for error in errors:
+            typer.echo(error, err=True)
+        raise typer.Exit(code=1)
+
+
 def place_runtime_files(config_dir: Path) -> None:
     """Place declared runtime artifacts from an IOC instance config folder.
 
@@ -345,6 +401,9 @@ def do_generate(
         for yaml in instance_yamls[1:]:
             instance = IocFactory().deserialize_ioc(yaml, entity_models)
             ioc_instance.entities.extend(instance.entities)
+            ioc_instance.post_db_files.extend(instance.post_db_files)
+
+    check_post_db_files(ioc_instance.post_db_files, config_folder)
 
     # post processing to insert SubEntity instances
     all_entities = entity_factory.resolve_sub_entities(ioc_instance.entities, {})
@@ -385,7 +444,7 @@ def do_generate(
         generate_index(ioc_instance.ioc_name, pvi_index_entries)
 
     # Generate the boot script for the IOC instance.
-    script_txt = create_boot_script(ioc_instance.entities)
+    script_txt = create_boot_script(ioc_instance.entities, ioc_instance.post_db_files)
     script_output = output_folder / "st.cmd"
     script_output.parent.mkdir(parents=True, exist_ok=True)
     with script_output.open("w") as stream:

@@ -26,6 +26,7 @@ configurations, use the types offered by your image's schema.
 | `description` | Required description. |
 | `entities` | Required ordered list of entity instances. |
 | `shared` | Optional list for YAML anchors; does not create Jinja variables. |
+| `post_db_files` | Optional list of database files to load after the generated database; see {ref}`post-db-files`. |
 
 Every entity supplies `type: <module>.<model>` and the parameters declared by
 that model. Parameters with defaults may be omitted. Unknown fields, missing
@@ -106,9 +107,59 @@ runtime implementation is not yet available.
 `ibek runtime generate2` accepts `config/ioc.yaml` and optional
 `config/runtime.yaml`, plus explicit `--instance` files. Each is a complete IOC
 YAML document with `ioc_name`, `description` and `entities`; their entity lists
-are concatenated. Use the same `ioc_name` in all files: the main IOC retains
+and `post_db_files` lists are concatenated. Use the same `ioc_name` in all files: the main IOC retains
 the first document's name, while later loads update the Jinja `ioc_name`.
 The [CLI reference](cli.md) describes file discovery and explicit ordering.
+
+(post-db-files)=
+## Loading extra database files
+
+`post_db_files` lists database files at the top of the instance config folder,
+by file name. The generated `st.cmd` loads each one with
+`dbLoadRecords config/<file>`, in order, after `/epics/runtime/ioc.db` and
+before `iocInit`:
+
+```yaml
+ioc_name: demo
+description: Example device IOC
+entities:
+  - type: example.Device
+    name: device1
+    P: "DEMO:"
+    count: 4
+post_db_files:
+  - records.db
+```
+
+```text
+dbLoadRecords /epics/runtime/ioc.db
+dbLoadRecords config/records.db
+iocInit
+```
+
+Because these files load after `ioc.db`, a record in one of them that has the
+name of a record in `ioc.db` sets fields of that record, overriding the values
+the templates gave it. The files are loaded as they are, without macro
+substitution.
+
+`st.cmd` changes to the IOC folder (`/epics/ioc`) first, where the instance
+config folder is mounted as `config`, so the relative paths resolve at boot.
+`ibek runtime place-files` also copies every `config/*.db` into the runtime db
+folder, but the boot script loads each entry from `config/<file>`.
+
+Each entry must be a plain file name: not `.` or `..`, and made only of
+letters, digits, `.`, `_`, `-` and `+`. The ioc-instance helm chart mounts
+only the files at the top of `config/`, so a file in a subfolder would be
+missing at boot, and iocsh would split a name at whitespace or a comma and
+expand a `$` macro in it. `ibek runtime generate2`
+stops with an error naming each entry that breaks these rules, and each entry
+listed more than once. Given the config folder, as it is when the container
+starts, it also stops for an entry that is not a file in that folder. The
+single-file `ibek runtime generate` has no config folder, so it checks the names
+but not that the files exist.
+
+The lists from each instance file (`ioc.yaml`, `runtime.yaml` and any
+`--instance` files) are concatenated in the order the files are read.
 
 (schemas)=
 ## Schemas
