@@ -12,8 +12,10 @@ config folder. The generated ``st.cmd`` loads each with ``dbLoadRecords
 config/<file>``, in order, after ``ioc.db`` and before ``iocInit``, so their
 records can override fields that the templates set. The lists from
 ``ioc.yaml``, ``runtime.yaml`` and ``--instance`` files are concatenated.
-``ibek runtime generate2`` given a config folder exits with an error naming
-any entry that is not a file in it. An empty or absent list leaves ``st.cmd``
+Each entry must be a plain file name at the top of the config folder, with no
+``/``, ``..``, whitespace or quote. ``ibek runtime generate2`` exits with an
+error naming each entry that is not, or, given the config folder, that is not
+a file in it. An empty or absent list leaves ``st.cmd``
 unchanged. See ``docs/reference/ioc-yaml.md``.
 
 ``ibek dev`` commands for a devcontainer that runs a pre-built generic IOC

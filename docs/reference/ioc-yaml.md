@@ -114,8 +114,8 @@ The [CLI reference](cli.md) describes file discovery and explicit ordering.
 (post-db-files)=
 ## Loading extra database files
 
-`post_db_files` lists database files in the instance config folder, as paths
-relative to that folder. The generated `st.cmd` loads each one with
+`post_db_files` lists database files at the top of the instance config folder,
+by file name. The generated `st.cmd` loads each one with
 `dbLoadRecords config/<file>`, in order, after `/epics/runtime/ioc.db` and
 before `iocInit`:
 
@@ -144,11 +144,18 @@ substitution.
 
 `st.cmd` changes to the IOC folder (`/epics/ioc`) first, where the instance
 config folder is mounted as `config`, so the relative paths resolve at boot.
-When `ibek runtime generate2` is given the config folder, it stops with an error
-if an entry is absolute or is not a file in that folder; with only `--instance`
-files it does not check them. The lists from each instance file (`ioc.yaml`,
-`runtime.yaml` and any `--instance` files) are concatenated in the order the
-files are read.
+
+Each entry must be a plain file name: not empty, not `.` or `..`, and with no
+`/`, `\`, whitespace or `"`. The ioc-instance helm chart mounts only the
+files at the top of `config/`, so a file in a subfolder would be missing at
+boot, and iocsh would split a name at whitespace. `ibek runtime generate2`
+stops with an error naming each entry that breaks these rules. Given the config
+folder, as it is when the container starts, it also stops for an entry that is
+not a file in that folder. The single-file `ibek runtime generate` has no config
+folder, so it checks the names but not that the files exist.
+
+The lists from each instance file (`ioc.yaml`, `runtime.yaml` and any
+`--instance` files) are concatenated in the order the files are read.
 
 (schemas)=
 ## Schemas

@@ -290,24 +290,43 @@ def check_vendored_models(
         raise typer.Exit(code=1)
 
 
-def check_post_db_files(config_folder: Path, post_db_files: Sequence[str]) -> None:
-    """Exit with an error unless each post_db_files entry is a file in config_folder.
+def post_db_file_error(name: str, config_folder: Path | None) -> str | None:
+    """Why a post_db_files entry cannot be loaded, or None if it can.
 
     The boot script loads each entry as ``config/<entry>`` from the IOC folder,
-    where the instance config folder is mounted, so an entry must be a relative
-    path to a file inside that folder.
+    where the instance config folder is mounted. The ioc-instance helm chart
+    mounts only the files at the top of that folder, and iocsh splits an
+    argument at whitespace, so an entry must be a plain file name. The checks
+    compare text: the files of a mounted ConfigMap are symlinks.
     """
-    missing = [
-        f
-        for f in post_db_files
-        if Path(f).is_absolute() or not (config_folder / f).is_file()
+    if name == "":
+        return "is empty"
+    if name in (".", ".."):
+        return "is not a file name"
+    if "/" in name or "\\" in name:
+        return "is not a plain file name (no folders: config/ is mounted flat)"
+    if any(c.isspace() for c in name) or '"' in name:
+        return "contains whitespace or a quote"
+    if config_folder is not None and not (config_folder / name).is_file():
+        return f"is not a file in {config_folder}"
+    return None
+
+
+def check_post_db_files(
+    post_db_files: Sequence[str], config_folder: Path | None
+) -> None:
+    """Exit with an error naming each post_db_files entry that cannot be loaded.
+
+    Without a config folder only the names are checked, not that the files exist.
+    """
+    errors = [
+        f"Error: post_db_files entry {name!r} {reason}"
+        for name in post_db_files
+        if (reason := post_db_file_error(name, config_folder)) is not None
     ]
-    if missing:
-        typer.echo(
-            f"Error: post_db_files entries are not files in {config_folder}: "
-            + ", ".join(missing),
-            err=True,
-        )
+    if errors:
+        for error in errors:
+            typer.echo(error, err=True)
         raise typer.Exit(code=1)
 
 
@@ -368,8 +387,7 @@ def do_generate(
             ioc_instance.entities.extend(instance.entities)
             ioc_instance.post_db_files.extend(instance.post_db_files)
 
-    if config_folder is not None:
-        check_post_db_files(config_folder, ioc_instance.post_db_files)
+    check_post_db_files(ioc_instance.post_db_files, config_folder)
 
     # post processing to insert SubEntity instances
     all_entities = entity_factory.resolve_sub_entities(ioc_instance.entities, {})
