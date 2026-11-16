@@ -1,4 +1,5 @@
 import shutil
+from collections import Counter
 from collections.abc import Sequence
 from pathlib import Path, PurePosixPath
 
@@ -318,11 +319,18 @@ def check_post_db_files(
     """Exit with an error naming each post_db_files entry that cannot be loaded.
 
     Without a config folder only the names are checked, not that the files exist.
+    An entry listed more than once, from any of the instance files, is an error.
     """
     errors = [
         f"Error: post_db_files entry {name!r} {reason}"
         for name in post_db_files
         if (reason := post_db_file_error(name, config_folder)) is not None
+    ]
+    counts = Counter(post_db_files)
+    errors += [
+        f"Error: post_db_files entry {name!r} is listed {count} times"
+        for name, count in counts.items()
+        if count > 1
     ]
     if errors:
         for error in errors:

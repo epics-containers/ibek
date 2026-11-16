@@ -159,3 +159,34 @@ def test_schema_has_post_db_files(tmp_path: Path, samples: Path):
     assert field["items"] == {"type": "string"}
     assert field["default"] == []
     assert "post_db_files" not in schema.get("required", [])
+
+
+def test_duplicate_post_db_files_are_an_error(
+    tmp_epics_root: Path,
+    samples: Path,
+    tmp_path: Path,
+    capsys: pytest.CaptureFixture,
+):
+    """An entry repeated across ioc.yaml and runtime.yaml is named once"""
+    config = make_config(tmp_path, samples, ["a.db", "b.db"])
+    (config / "runtime.yaml").write_text(
+        "ioc_name: counter\n"
+        "description: runtime entities\n"
+        "entities: []\n"
+        "post_db_files: [a.db, c.db, a.db]\n"
+    )
+    for name in "a.db", "b.db", "c.db":
+        (config / name).touch()
+
+    with pytest.raises(typer.Exit):
+        generate(
+            tmp_epics_root,
+            samples,
+            [config / "ioc.yaml", config / "runtime.yaml"],
+            config,
+        )
+    err = capsys.readouterr().err
+    assert err.count("Error: post_db_files entry 'a.db' is listed 3 times") == 1
+    assert "'b.db'" not in err
+    assert "'c.db'" not in err
+    assert not (tmp_epics_root / "runtime" / "st.cmd").exists()
