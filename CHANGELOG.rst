@@ -7,6 +7,15 @@ Unreleased
 Added
 ~~~~~
 
+An IOC YAML ``post_db_files`` list names database files in the instance
+config folder. The generated ``st.cmd`` loads each with ``dbLoadRecords
+config/<file>``, in order, after ``ioc.db`` and before ``iocInit``, so their
+records can override fields that the templates set. The lists from
+``ioc.yaml``, ``runtime.yaml`` and ``--instance`` files are concatenated.
+``ibek runtime generate2`` given a config folder exits with an error naming
+any entry that is not a file in it. An empty or absent list leaves ``st.cmd``
+unchanged. See ``docs/reference/ioc-yaml.md``.
+
 ``ibek dev`` commands for a devcontainer that runs a pre-built generic IOC
 image, where the host project mounted over ``/epics/generic-source`` can
 differ from the tree the image was built from. ``ibek dev stamp``, run as the

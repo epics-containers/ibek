@@ -290,6 +290,27 @@ def check_vendored_models(
         raise typer.Exit(code=1)
 
 
+def check_post_db_files(config_folder: Path, post_db_files: Sequence[str]) -> None:
+    """Exit with an error unless each post_db_files entry is a file in config_folder.
+
+    The boot script loads each entry as ``config/<entry>`` from the IOC folder,
+    where the instance config folder is mounted, so an entry must be a relative
+    path to a file inside that folder.
+    """
+    missing = [
+        f
+        for f in post_db_files
+        if Path(f).is_absolute() or not (config_folder / f).is_file()
+    ]
+    if missing:
+        typer.echo(
+            f"Error: post_db_files entries are not files in {config_folder}: "
+            + ", ".join(missing),
+            err=True,
+        )
+        raise typer.Exit(code=1)
+
+
 def place_runtime_files(config_dir: Path) -> None:
     """Place declared runtime artifacts from an IOC instance config folder.
 
@@ -345,6 +366,10 @@ def do_generate(
         for yaml in instance_yamls[1:]:
             instance = IocFactory().deserialize_ioc(yaml, entity_models)
             ioc_instance.entities.extend(instance.entities)
+            ioc_instance.post_db_files.extend(instance.post_db_files)
+
+    if config_folder is not None:
+        check_post_db_files(config_folder, ioc_instance.post_db_files)
 
     # post processing to insert SubEntity instances
     all_entities = entity_factory.resolve_sub_entities(ioc_instance.entities, {})
@@ -385,7 +410,7 @@ def do_generate(
         generate_index(ioc_instance.ioc_name, pvi_index_entries)
 
     # Generate the boot script for the IOC instance.
-    script_txt = create_boot_script(ioc_instance.entities)
+    script_txt = create_boot_script(ioc_instance.entities, ioc_instance.post_db_files)
     script_output = output_folder / "st.cmd"
     script_output.parent.mkdir(parents=True, exist_ok=True)
     with script_output.open("w") as stream:

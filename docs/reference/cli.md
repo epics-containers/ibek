@@ -34,7 +34,8 @@ ibek ioc do-wait
 
 `generate2` reads `ioc.yaml` then `runtime.yaml` when present in the supplied
 folder. Repeated `--instance` / `-i` options add files **before** those two;
-the first file supplies the IOC name and later files append entities. Without
+the first file supplies the IOC name and later files append entities and
+`post_db_files` entries. Without
 `--definitions`, support definitions are discovered recursively in
 `$EPICS_ROOT/ibek-defs` and the config folder. Supplying `--definitions` replaces
 that automatic discovery; repeat it for each required file. A module defined in

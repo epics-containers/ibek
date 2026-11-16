@@ -8,7 +8,7 @@ from collections.abc import Sequence
 from ibek.utils import UTILS, make_template
 
 from .entity_model import Database
-from .globals import TEMPLATES
+from .globals import GLOBALS, TEMPLATES
 from .ioc import Entity
 from .render import Render
 from .render_db import RenderDb
@@ -36,9 +36,16 @@ def create_db_script(
             raise
 
 
-def create_boot_script(entities: Sequence[Entity]) -> str:
+def create_boot_script(
+    entities: Sequence[Entity], post_db_files: Sequence[str] = ()
+) -> str:
     """
     Create the boot script for an IOC
+
+    Args:
+        entities: the IOC instance's entities
+        post_db_files: database files in the instance config folder, loaded in
+            order after ioc.db and before iocInit
     """
     with open(TEMPLATES / "st.cmd.jinja") as f:
         template = make_template(f.read(), strict=False)
@@ -53,4 +60,6 @@ def create_boot_script(entities: Sequence[Entity]) -> str:
         env_var_elements=renderer.render_environment_variable_elements(entities),
         script_elements=renderer.render_pre_ioc_init_elements(entities),
         post_ioc_init_elements=renderer.render_post_ioc_init_elements(entities),
+        # st.cmd runs from the IOC folder, where the config folder is mounted
+        post_db_files=[f"{GLOBALS.CONFIG_DIR_NAME}/{f}" for f in post_db_files],
     )
