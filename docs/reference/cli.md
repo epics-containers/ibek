@@ -214,20 +214,22 @@ ibek dev support <module>... --release  # stop building them from the clones
 
 `dev support` builds each named support module, named as the Dockerfile names
 it, from a clone at `/workspaces/<module>` on the host. It clones the module's
-repository at the version of its `install.yml`, or uses a clone of that
-repository that is already there, with whatever it has checked out. It removes
-the module that the image built, links `/epics/support/<module>` to the clone,
-then builds it, the modules after it in the Dockerfile and the IOC. Run it
-again to build again after a change. The build edits some tracked files of a
-clone, such as `configure/RELEASE`, and names them: do not commit those edits.
+repository at the version its Dockerfile line gives with `-v`, or else the
+version of its `install.yml`, or uses a clone of that repository that is
+already there, with whatever it has checked out. It removes the module that
+the image built and links the module's support folder to the clone: that is
+`/epics/support/<module>`, or the `local_path` that its `install.yml` sets. It
+then builds the module, the modules after it in the Dockerfile and the IOC.
+Run it again to build again after a change. The build edits some tracked
+files of a clone, such as `configure/RELEASE`, and names them: do not commit
+those edits.
 
 The modules are declared in `.ibek-dev.yaml` in the generic IOC project, which
 is on the host and so outlives the container. In a container that is created
 again, `dev sync` reports them and `dev sync --build` links and builds them.
 With `--release`, nothing is built: the links and the declarations are removed
-and the clones are left alone. `/epics/support/<module>` is then missing until
-`dev sync --build` clones the module at the version of `install.yml` and builds
-it.
+and the clones are left alone. The module's support folder is then missing
+until `dev sync --build` clones the module at its version and builds it.
 
 ## Complete command reference
 

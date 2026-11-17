@@ -34,8 +34,9 @@ says so and exits 0. See ``docs/reference/cli.md``.
 
 ``ibek dev support <module>...`` builds support modules from clones on the
 host, to work on their source. It clones each module to
-``/workspaces/<module>`` at the version of its ``install.yml``, or uses a
-clone of that repository already there, links ``/epics/support/<module>`` to
+``/workspaces/<module>`` at the version its Dockerfile line gives with ``-v``,
+or else that of its ``install.yml``, or uses a
+clone of that repository already there, links the module's support folder to
 it, and builds it, the modules after it in the Dockerfile and the IOC. The
 modules are declared in ``.ibek-dev.yaml`` in the project, so ``ibek dev
 sync --build`` links and builds them again in a new container. ``--release``
