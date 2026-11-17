@@ -236,9 +236,10 @@ def compare(stamp: Stamp, live: Stamp) -> Drift:
             drift.defs.append(name)
 
         # Clone again only when install.yml, or the -v of the Dockerfile line,
-        # asks for a source other than the one in the module folder. With no folder there is nothing to remove,
-        # and a link is someone's own folder: it is built as it is. A
-        # Dockerfile line whose tags leave out clone has no source to replace.
+        # asks for a source other than the one in the module folder. With no
+        # folder there is nothing to remove, and a link is someone's own
+        # folder: it is built as it is. A Dockerfile line whose tags leave out
+        # clone has no source to replace.
         changed = was and was.source and module.source and was.source != module.source
         # A clone that did not finish may have left any source in the folder.
         again = changed or name in stamp.cloning

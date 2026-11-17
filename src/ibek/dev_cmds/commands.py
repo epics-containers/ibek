@@ -292,8 +292,9 @@ def support(
     that is created again, `ibek dev sync` reports them and
     `ibek dev sync --build` links and builds them.
 
-    With --release, nothing is built: `ibek dev sync --build` then clones the
-    modules at the versions that the Dockerfile builds and builds them.
+    With --release, nothing is built: `ibek dev sync --build` then clones each
+    module that was linked at the version that the Dockerfile builds, and
+    builds it.
     """
     _warn_stale_container()
     if release:
