@@ -281,9 +281,10 @@ def support(
     its Dockerfile line gives with -v, or else that of its install.yml, or
     uses a clone of that repository that is already there, with whatever it
     has checked out. Removes the module that the image built, links its
-    support folder (/epics/support/<module>, or the local_path of its
-    install.yml) to the clone, then builds it, the modules after it in the
-    Dockerfile and the IOC. Run it again to build again after a change.
+    support folder (/epics/support/ and the module of its install.yml, or
+    the local_path of its install.yml) to the clone, then builds it, the
+    modules after it in the Dockerfile and the IOC. Run it again to build
+    again after a change.
 
     The build edits some tracked files of a clone, such as configure/RELEASE,
     and names them: do not commit those edits.

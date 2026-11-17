@@ -218,12 +218,16 @@ it, from a clone at `/workspaces/<module>` on the host. It clones the module's
 repository at the version its Dockerfile line gives with `-v`, or else the
 version of its `install.yml`, or uses a clone of that repository that is
 already there, with whatever it has checked out. It removes the module that
-the image built and links the module's support folder to the clone: that is
-`/epics/support/<module>`, or the `local_path` that its `install.yml` sets. It
-then builds the module, the modules after it in the Dockerfile and the IOC.
-Run it again to build again after a change. The build edits some tracked
-files of a clone, such as `configure/RELEASE`, and names them: do not commit
-those edits.
+the image built, with any edits made in its folder, and links the module's
+support folder to the clone: that is `/epics/support/<name>`, where `<name>`
+is the `module` of its `install.yml`, or the `local_path` that its
+`install.yml` sets. It then builds the module, the modules after it in the
+Dockerfile and the IOC. Run it again to build again after a change. The build
+edits some tracked files of a clone, such as `configure/RELEASE`, and names
+them: do not commit those edits. The paths that the build makes are added to
+the clone's `.git/info/exclude`, between lines that start
+`# made by an ibek dev build`, so `git status` does not show them: a file
+added later under a directory listed there does not show either.
 
 The modules are declared in `.ibek-dev.yaml` in the generic IOC project, which
 is on the host and so outlives the container. In a container that is created
