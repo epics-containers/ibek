@@ -13,6 +13,7 @@ version. The complete command reference below is generated from the CLI.
 | Container startup | `runtime generate2`, `runtime place-files`, `runtime generate-autosave`, `ioc do-wait` | Generate the instance, place its files, prepare autosave, and wait for hardware. |
 | Container build | `dev stamp` | Record the source tree the image is built from. |
 | Development container | `dev status`, `dev sync` | Compare the container with the mounted project and bring it level. |
+| Development container | `dev support` | Build support modules from clones on the host, to work on their source. |
 | Development container | `dev instance`, `ioc build-docker` | Select a checked-out instance; experimentally execute Dockerfile steps. |
 | Outside the IOC container | `pattern add/update/check/restore/schema` | Maintain runtime support and editor schemas in an instance repository. |
 
@@ -199,11 +200,33 @@ unreadable (a file that is not text counts as unreadable), nothing is said.
 The warning changes no exit code and nothing that the commands do, and it
 does not need a stamp.
 
-`dev support` is a placeholder and raises `NotImplementedError`.
 `ioc build-docker` is experimental: it interprets supported Dockerfile steps
 inside the development container; it is not a substitute for building an image.
 `ioc extract-runtime-assets` moves files out of its source tree for speed;
 run it only in the disposable packaging stage intended by the image build.
+
+### Working on a support module
+
+```bash
+ibek dev support <module>...            # build these modules from clones on the host
+ibek dev support <module>... --release  # stop building them from the clones
+```
+
+`dev support` builds each named support module, named as the Dockerfile names
+it, from a clone at `/workspaces/<module>` on the host. It clones the module's
+repository at the version of its `install.yml`, or uses a clone of that
+repository that is already there, with whatever it has checked out. It removes
+the module that the image built, links `/epics/support/<module>` to the clone,
+then builds it, the modules after it in the Dockerfile and the IOC. Run it
+again to build again after a change. The build edits some tracked files of a
+clone, such as `configure/RELEASE`, and names them: do not commit those edits.
+
+The modules are declared in `.ibek-dev.yaml` in the generic IOC project, which
+is on the host and so outlives the container. In a container that is created
+again, `dev sync` reports them and `dev sync --build` links and builds them.
+With `--release`, nothing is built: the links and the declarations are removed
+and the clones are left alone, and `dev sync --build` then clones the modules
+at the version of `install.yml` and builds them.
 
 ## Complete command reference
 
