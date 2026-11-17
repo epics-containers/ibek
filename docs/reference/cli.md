@@ -225,8 +225,9 @@ The modules are declared in `.ibek-dev.yaml` in the generic IOC project, which
 is on the host and so outlives the container. In a container that is created
 again, `dev sync` reports them and `dev sync --build` links and builds them.
 With `--release`, nothing is built: the links and the declarations are removed
-and the clones are left alone, and `dev sync --build` then clones the modules
-at the version of `install.yml` and builds them.
+and the clones are left alone. `/epics/support/<module>` is then missing until
+`dev sync --build` clones the module at the version of `install.yml` and builds
+it.
 
 ## Complete command reference
 
