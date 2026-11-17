@@ -28,9 +28,21 @@ differs. ``ibek dev sync`` links changed support definition files, removes
 dangling links and regenerates the IOC schema, and reports what needs a
 build; ``ibek dev sync --build`` also rebuilds the out of date support
 modules, those after them in the Dockerfile, and the IOC, cloning a module
-again only when its ``install.yml`` asks for a different source. ``ibek dev
+again only when its ``install.yml``, or the ``-v`` of its Dockerfile line,
+asks for a different source. ``ibek dev
 instance`` prints the same report. In an image with no stamp each command
 says so and exits 0. See ``docs/reference/cli.md``.
+
+``ibek dev support <module>...`` builds support modules from clones on the
+host, to work on their source. It clones each module to
+``/workspaces/<module>`` at the version its Dockerfile line gives with ``-v``,
+or else that of its ``install.yml``, or uses a
+clone of that repository already there, links the module's support folder to
+it, and builds it, the modules after it in the Dockerfile and the IOC. The
+modules are declared in ``.ibek-dev.yaml`` in the project, so ``ibek dev
+sync --build`` links and builds them again in a new container. ``--release``
+removes the links and the declarations and leaves the clones alone. See
+``docs/reference/cli.md``.
 
 ``ibek dev status`` and ``ibek dev sync`` start their report with a
 ``WARNING:`` line when the container was created from a different developer

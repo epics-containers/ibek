@@ -180,7 +180,7 @@ def compare(stamp: Stamp, live: Stamp) -> Drift:
                 drift.problems.append(
                     f"{name}: declared for development, but its clone {clone} "
                     f"is missing: `ibek dev support {name}` clones it again, "
-                    f"{release} goes back to the version of install.yml"
+                    f"{release} goes back to the version that the Dockerfile builds"
                 )
             elif folder.is_symlink():
                 drift.problems.append(
@@ -235,10 +235,11 @@ def compare(stamp: Stamp, live: Stamp) -> Drift:
         if was is not None and linked and was.defs != module.defs:
             drift.defs.append(name)
 
-        # Clone again only when install.yml asks for a source other than the
-        # one in the module folder. With no folder there is nothing to remove,
-        # and a link is someone's own folder: it is built as it is. A
-        # Dockerfile line whose tags leave out clone has no source to replace.
+        # Clone again only when install.yml, or the -v of the Dockerfile line,
+        # asks for a source other than the one in the module folder. With no
+        # folder there is nothing to remove, and a link is someone's own
+        # folder: it is built as it is. A Dockerfile line whose tags leave out
+        # clone has no source to replace.
         changed = was and was.source and module.source and was.source != module.source
         # A clone that did not finish may have left any source in the folder.
         again = changed or name in stamp.cloning
@@ -378,7 +379,7 @@ def build(stamp: Stamp, live: Stamp, drift: Drift) -> None:
                 raise StampError(
                     f"{name} cannot be built: its declared clone {own} is "
                     f"missing. `ibek dev support {name}` clones it again, "
-                    f"{release} goes back to the version of install.yml"
+                    f"{release} goes back to the version that the Dockerfile builds"
                 )
             # ansible builds what the folder is, not what was declared
             if folder is not None and folder.is_symlink():
