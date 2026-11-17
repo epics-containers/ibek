@@ -28,7 +28,8 @@ differs. ``ibek dev sync`` links changed support definition files, removes
 dangling links and regenerates the IOC schema, and reports what needs a
 build; ``ibek dev sync --build`` also rebuilds the out of date support
 modules, those after them in the Dockerfile, and the IOC, cloning a module
-again only when its ``install.yml`` asks for a different source. ``ibek dev
+again only when its ``install.yml``, or the ``-v`` of its Dockerfile line,
+asks for a different source. ``ibek dev
 instance`` prints the same report. In an image with no stamp each command
 says so and exits 0. See ``docs/reference/cli.md``.
 

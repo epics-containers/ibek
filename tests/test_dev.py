@@ -1737,7 +1737,7 @@ def test_support_uses_a_clone_that_is_there(work: Work):
 
     output = tree.dev("support", "busy")
 
-    line = f"ibek dev: {clone} is at work, not at the R1-0 of busy.install.yml"
+    line = f"ibek dev: {clone} is at work, not at the R1-0 that the Dockerfile builds"
     assert output.count(line) == 1
     assert git(clone, "rev-parse", "--abbrev-ref", "HEAD") == "work"
     assert (clone / "src" / "busy.c").read_text() == "int edited;\n"

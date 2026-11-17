@@ -228,8 +228,9 @@ The modules are declared in `.ibek-dev.yaml` in the generic IOC project, which
 is on the host and so outlives the container. In a container that is created
 again, `dev sync` reports them and `dev sync --build` links and builds them.
 With `--release`, nothing is built: the links and the declarations are removed
-and the clones are left alone. The module's support folder is then missing
-until `dev sync --build` clones the module at its version and builds it.
+and the clones are left alone. The support folder of a module that was linked
+is then missing until `dev sync --build` clones the module at its version and
+builds it.
 
 ## Complete command reference
 

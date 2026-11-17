@@ -214,7 +214,7 @@ def check(name: str, info: Install, clone: Path, quiet: bool = False) -> None:
     Refuse a clone that is not of the module's repository.
 
     Its branch and version are its owner's: say when they are not the version
-    that install.yml builds, and leave them alone.
+    that the Dockerfile builds, and leave them alone.
     """
     support, real = os.path.realpath(GLOBALS.SUPPORT), os.path.realpath(clone)
     if os.path.commonpath([support, real]) in (support, real):
@@ -260,14 +260,14 @@ def check(name: str, info: Install, clone: Path, quiet: bool = False) -> None:
         except StampError:
             at = "no commit"
         print(
-            f"ibek dev: {clone} is at {at}, not at the {info.version} of "
-            f"{name}.install.yml: it is built as it is",
+            f"ibek dev: {clone} is at {at}, not at the {info.version} that "
+            "the Dockerfile builds: it is built as it is",
             flush=True,
         )
 
 
 def make(name: str, info: Install, clone: Path) -> None:
-    """Clone the module's repository, whole, at the version of install.yml."""
+    """Clone the module's repository, whole, at the version the Dockerfile builds."""
     try:
         clone.parent.mkdir(parents=True, exist_ok=True)
     except OSError as error:

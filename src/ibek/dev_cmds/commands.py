@@ -277,12 +277,13 @@ def support(
     """
     Build support modules from clones on the host, to work on their source.
 
-    Clones each module's repository to /workspaces/<module> at the version of
-    its install.yml, or uses a clone of that repository that is already
-    there, with whatever it has checked out. Removes the module that the
-    image built, links /epics/support/<module> to the clone, then builds it,
-    the modules after it in the Dockerfile and the IOC. Run it again to build
-    again after a change.
+    Clones each module's repository to /workspaces/<module> at the version
+    its Dockerfile line gives with -v, or else that of its install.yml, or
+    uses a clone of that repository that is already there, with whatever it
+    has checked out. Removes the module that the image built, links its
+    support folder (/epics/support/<module>, or the local_path of its
+    install.yml) to the clone, then builds it, the modules after it in the
+    Dockerfile and the IOC. Run it again to build again after a change.
 
     The build edits some tracked files of a clone, such as configure/RELEASE,
     and names them: do not commit those edits.
@@ -292,7 +293,7 @@ def support(
     `ibek dev sync --build` links and builds them.
 
     With --release, nothing is built: `ibek dev sync --build` then clones the
-    modules at the version of install.yml and builds them.
+    modules at the versions that the Dockerfile builds and builds them.
     """
     _warn_stale_container()
     if release:
