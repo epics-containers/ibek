@@ -13,6 +13,7 @@ version. The complete command reference below is generated from the CLI.
 | Container startup | `runtime generate2`, `runtime place-files`, `runtime generate-autosave`, `ioc do-wait` | Generate the instance, place its files, prepare autosave, and wait for hardware. |
 | Container build | `dev stamp` | Record the source tree the image is built from. |
 | Development container | `dev status`, `dev sync` | Compare the container with the mounted project and bring it level. |
+| Development container | `dev support` | Build support modules from clones on the host, to work on their source. |
 | Development container | `dev instance`, `ioc build-docker` | Select a checked-out instance; experimentally execute Dockerfile steps. |
 | Outside the IOC container | `pattern add/update/check/restore/schema` | Maintain runtime support and editor schemas in an instance repository. |
 
@@ -134,7 +135,8 @@ ibek dev sync --build    # also rebuild what is out of date
 
 A module is built from the source already in `/epics/support/<module>`, or
 in the folder that a `local_path` in its `install.yml` names,
-unless what its `install.yml` says to clone has changed. Then
+unless what its `install.yml` says to clone, or the `-v` of its Dockerfile
+line, has changed. Then
 `ansible.sh <module> --tags clone -e force_clone=true` first removes that
 folder and clones it again: **edits made in the folder are discarded**. A
 folder that is a symbolic link is never removed: the module is built in it
@@ -147,7 +149,7 @@ with `ansible.sh <module> --tags clone`, before its build. If a clone fails,
 the folder may hold some other source, such as the repository's default
 branch, which the clone tasks keep: until a clone succeeds, `dev status`
 reports `clone not finished` and each `dev sync --build` clones the module
-again, whatever its `install.yml` then says. A module declared with `dev
+again, at whatever version its `install.yml` and Dockerfile line then give. A module declared with `dev
 support` is linked to its clone instead, and a link is built as it is. A
 module the Dockerfile no longer builds stays installed, and reported, until
 the container is recreated from an image built without it.
@@ -162,7 +164,7 @@ skip_clean=true`. A line whose tags leave out `runtime`, such as
 `RUN ansible.sh vdct --tags system,pre_build_tasks`, links no definition
 files, so `dev sync` links none for it. A line whose tags leave out `clone`
 is never cloned again: a change to what its `install.yml` says to clone runs
-the line again. A line that is more than one `ansible.sh` command (`&&`, `;`,
+the line again, as a change to the line's `-v` does. A line that is more than one `ansible.sh` command (`&&`, `;`,
 a pipe, a redirect, a variable, a continuation `\`), or that has an option
 before the module other than `-v`, cannot be run again as it stands: `dev
 stamp` and `dev sync --build` stop with one line that names it, and `dev
@@ -199,11 +201,41 @@ unreadable (a file that is not text counts as unreadable), nothing is said.
 The warning changes no exit code and nothing that the commands do, and it
 does not need a stamp.
 
-`dev support` is a placeholder and raises `NotImplementedError`.
 `ioc build-docker` is experimental: it interprets supported Dockerfile steps
 inside the development container; it is not a substitute for building an image.
 `ioc extract-runtime-assets` moves files out of its source tree for speed;
 run it only in the disposable packaging stage intended by the image build.
+
+### Working on a support module
+
+```bash
+ibek dev support <module>...            # build these modules from clones on the host
+ibek dev support <module>... --release  # stop building them from the clones
+```
+
+`dev support` builds each named support module, named as the Dockerfile names
+it, from a clone at `/workspaces/<module>` on the host. It clones the module's
+repository at the version its Dockerfile line gives with `-v`, or else the
+version of its `install.yml`, or uses a clone of that repository that is
+already there, with whatever it has checked out. It removes the module that
+the image built, with any edits made in its folder, and links the module's
+support folder to the clone: that is `/epics/support/<name>`, where `<name>`
+is the `module` of its `install.yml`, or the `local_path` that its
+`install.yml` sets. It then builds the module, the modules after it in the
+Dockerfile and the IOC. Run it again to build again after a change. The build
+edits some tracked files of a clone, such as `configure/RELEASE`, and names
+them: do not commit those edits. The paths that the build makes are added to
+the clone's `.git/info/exclude`, between lines that start
+`# made by an ibek dev build`, so `git status` does not show them: a file
+added later under a directory listed there does not show either.
+
+The modules are declared in `.ibek-dev.yaml` in the generic IOC project, which
+is on the host and so outlives the container. In a container that is created
+again, `dev sync` reports them and `dev sync --build` links and builds them.
+With `--release`, nothing is built: the links and the declarations are removed
+and the clones are left alone. The support folder of a module that was linked
+is then missing until `dev sync --build` clones the module at its version and
+builds it.
 
 ## Complete command reference
 

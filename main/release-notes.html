@@ -7,7 +7,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Changelog &#8212; ibek 4.11.3.dev19+g341981735 documentation</title>
+    <title>Changelog &#8212; ibek 4.12.1.dev7+gf4c95bfb2 documentation</title>
   
   
   
@@ -41,7 +41,7 @@
   <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=75c7c72ae941e8b558d8" />
 <link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=75c7c72ae941e8b558d8" />
 
-    <script src="_static/documentation_options.js?v=766fe06e"></script>
+    <script src="_static/documentation_options.js?v=a15c1ee5"></script>
     <script src="_static/doctools.js?v=fd6eb6e6"></script>
     <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="_static/clipboard.min.js?v=a7894cd8"></script>
@@ -519,9 +519,20 @@ differs. <code class="docutils literal notranslate"><span class="pre">ibek</span
 dangling links and regenerates the IOC schema, and reports what needs a
 build; <code class="docutils literal notranslate"><span class="pre">ibek</span> <span class="pre">dev</span> <span class="pre">sync</span> <span class="pre">--build</span></code> also rebuilds the out of date support
 modules, those after them in the Dockerfile, and the IOC, cloning a module
-again only when its <code class="docutils literal notranslate"><span class="pre">install.yml</span></code> asks for a different source. <code class="docutils literal notranslate"><span class="pre">ibek</span> <span class="pre">dev</span>
+again only when its <code class="docutils literal notranslate"><span class="pre">install.yml</span></code>, or the <code class="docutils literal notranslate"><span class="pre">-v</span></code> of its Dockerfile line,
+asks for a different source. <code class="docutils literal notranslate"><span class="pre">ibek</span> <span class="pre">dev</span>
 <span class="pre">instance</span></code> prints the same report. In an image with no stamp each command
 says so and exits 0. See <code class="docutils literal notranslate"><span class="pre">docs/reference/cli.md</span></code>.</p>
+<p><code class="docutils literal notranslate"><span class="pre">ibek</span> <span class="pre">dev</span> <span class="pre">support</span> <span class="pre">&lt;module&gt;...</span></code> builds support modules from clones on the
+host, to work on their source. It clones each module to
+<code class="docutils literal notranslate"><span class="pre">/workspaces/&lt;module&gt;</span></code> at the version its Dockerfile line gives with <code class="docutils literal notranslate"><span class="pre">-v</span></code>,
+or else that of its <code class="docutils literal notranslate"><span class="pre">install.yml</span></code>, or uses a
+clone of that repository already there, links the module’s support folder to
+it, and builds it, the modules after it in the Dockerfile and the IOC. The
+modules are declared in <code class="docutils literal notranslate"><span class="pre">.ibek-dev.yaml</span></code> in the project, so <code class="docutils literal notranslate"><span class="pre">ibek</span> <span class="pre">dev</span>
+<span class="pre">sync</span> <span class="pre">--build</span></code> links and builds them again in a new container. <code class="docutils literal notranslate"><span class="pre">--release</span></code>
+removes the links and the declarations and leaves the clones alone. See
+<code class="docutils literal notranslate"><span class="pre">docs/reference/cli.md</span></code>.</p>
 <p><code class="docutils literal notranslate"><span class="pre">ibek</span> <span class="pre">dev</span> <span class="pre">status</span></code> and <code class="docutils literal notranslate"><span class="pre">ibek</span> <span class="pre">dev</span> <span class="pre">sync</span></code> start their report with a
 <code class="docutils literal notranslate"><span class="pre">WARNING:</span></code> line when the container was created from a different developer
 image than the one now on the host: when <code class="docutils literal notranslate"><span class="pre">/epics/dev-image-id</span></code>, written as
