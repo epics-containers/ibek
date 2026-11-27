@@ -22,6 +22,14 @@ so every file kept lands where the manifest (or an ``include`` rule) puts it.
   names its protocol inside an INP or OUT link, which the support YAML does not
   describe, and a manifest has no notion of a protocol destination, so protocol
   files are recognised by suffix.
+- Every template either option keeps (a ``.template`` or ``.db`` file) brings
+  along the pattern files it names in an msi ``include "file"`` line, and the
+  files those include in turn: the pattern file at that path, or else every
+  one with that base name. msi needs them to expand the template, and the
+  support YAML does not name them. An included name no pattern file has is
+  left to the image. Autosave request files are not paired with an included
+  template: ``ibek runtime generate-autosave`` pairs them only with the
+  database files the substitution file loads.
 - Files an ``include`` rule places are vendored whatever ``only`` and
   ``models`` say: an include is an explicit request for that file.
 
@@ -48,6 +56,12 @@ PROTOCOL_SUFFIXES = (".proto", ".protocol")
 # The autosave request files ``ibek runtime generate-autosave`` pairs with a
 # database template ``<stem>.template``: ``<stem>_<suffix>.req``.
 AUTOSAVE_REQ_SUFFIXES = ("settings", "positions")
+
+# The kept files whose msi ``include "file"`` lines are followed.
+MSI_SUFFIXES = (".template", ".db")
+
+# An msi include directive: ``include "file"`` at the start of a line.
+_MSI_INCLUDE_RE = re.compile(r'^[ \t]*include[ \t]+"([^"]+)"', re.MULTILINE)
 
 # A database file name holding Jinja is rendered per entity, so it names no one
 # pattern file that could be selected ahead of time.
@@ -158,10 +172,7 @@ def _pattern_rel(
             "is a template expression and names no single pattern file; select "
             "its files with --only instead"
         )
-    if file in vendored:
-        return file
-    base = PurePosixPath(file).name
-    matches = [rel for rel in vendored if PurePosixPath(rel).name == base]
+    matches = _matches(file, vendored)
     if len(matches) > 1:
         raise ManifestError(
             f"{name}: entity model {model!r} loads {kind} {file!r}, which "
@@ -169,6 +180,34 @@ def _pattern_rel(
             "with --only instead"
         )
     return matches[0] if matches else None
+
+
+def _matches(file: str, vendored: Sequence[str]) -> list[str]:
+    """The vendored pattern files ``file`` names: the one at that
+    pattern-relative path, or else every one with its base name."""
+    if file in vendored:
+        return [file]
+    base = PurePosixPath(file).name
+    return [rel for rel in vendored if PurePosixPath(rel).name == base]
+
+
+def _with_includes(
+    keep: set[str], by_rel: dict[str, Path], vendored: Sequence[str]
+) -> set[str]:
+    """``keep`` plus every pattern file its templates msi-include, transitively."""
+    kept = set(keep)
+    pending = sorted(rel for rel in keep if rel.endswith(MSI_SUFFIXES))
+    scheduled = set(pending)
+    while pending:
+        rel = pending.pop()
+        text = by_rel[rel].read_text(errors="replace")
+        for file in _MSI_INCLUDE_RE.findall(text):
+            for match in _matches(file, vendored):
+                kept.add(match)
+                if match not in scheduled:
+                    scheduled.add(match)
+                    pending.append(match)
+    return kept
 
 
 def _req_rels(database_rel: str, vendored: Sequence[str]) -> list[str]:
@@ -181,7 +220,8 @@ def _req_rels(database_rel: str, vendored: Sequence[str]) -> list[str]:
 def narrow_plan(
     pattern_dir: Path, plan: list[tuple[Path, str]], select: Selection
 ) -> list[tuple[Path, str]]:
-    """Keep the entries of ``plan`` that ``select.only`` / ``select.models`` name.
+    """Keep the entries of ``plan`` that ``select.only`` / ``select.models`` name,
+    and the pattern files their templates msi-include.
 
     ``plan`` is ``plan_vendor``'s ``(source path, destination key)`` list for the
     same ``select``; the entries kept are returned in the same order, with the
@@ -223,6 +263,7 @@ def narrow_plan(
                 if rel is not None:
                     keep.add(rel)
         keep.update(rel for rel in vendored if rel.endswith(PROTOCOL_SUFFIXES))
+    keep = _with_includes(keep, by_rel, vendored)
 
     includes = [re.compile(rule.src) for rule in select.include]
     return [

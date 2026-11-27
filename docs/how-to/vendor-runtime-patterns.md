@@ -120,6 +120,9 @@ patterns:
   the model needs: its templates, its pvi device file (`*.pvi.device.yaml`),
   its autosave request files (`*.req`) and the protocol files its templates
   use.
+- Both options also vendor the pattern files that a kept template pulls in with
+  an msi `include "file"` line, transitively, since msi cannot expand the
+  template without them.
 - Both options can be repeated and combined; the files of all of them are
   vendored. Files keep the destinations the manifest gives them.
 

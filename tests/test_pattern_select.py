@@ -615,6 +615,103 @@ def test_ambiguous_database_basename_is_refused(tmp_path: Path):
 
 
 # --------------------------------------------------------------------------- #
+# templates a kept template msi-includes come along
+# --------------------------------------------------------------------------- #
+INCLUDING_FILES = dict(MULTI_FILES)
+# alpha includes a loop template twice, which includes a leaf and alpha again
+# (a cycle), names a template the image holds, and comments out another
+INCLUDING_FILES["alpha.template"] = (
+    "record(ai, $(P)A) {}\n"
+    'substitute "N=1"\n'
+    'include "loop.template"\n'
+    'substitute "N=2"\n'
+    '  include "loop.template"\n'
+    'include "NDStats.template"\n'
+    '# include "beta.template"\n'
+)
+INCLUDING_FILES["loop.template"] = (
+    'record(ai, $(P)L$(N)) {}\ninclude "leaf.db"\ninclude "alpha.template"\n'
+)
+INCLUDING_FILES["leaf.db"] = "record(ai, $(P)LEAF) {}\n"
+INCLUDING_FILES["alpha_settings.req"] = "$(P)A\n"
+INCLUDING_FILES["loop_settings.req"] = "$(P)L$(N)\n"
+INCLUDING_MANIFEST = (
+    "version: 1\n"
+    "vendor:\n"
+    "  - src: '[^/]+\\.(template|db|req|proto|ibek\\.support\\.yaml)'\n"
+    "    dest: config\n"
+)
+INCLUDED = {"config/alpha.template", "config/loop.template", "config/leaf.db"}
+
+
+@pytest.mark.parametrize(
+    "select, expected",
+    [
+        (
+            # alpha's own req file is kept; an included template's is not
+            Selection(models=["alpha"]),
+            INCLUDED | {"config/alpha_settings.req", PROTO_KEY},
+        ),
+        (
+            # through a sub-entity's template
+            Selection(models=["gamma"]),
+            INCLUDED
+            | {"config/gamma.template", "config/alpha_settings.req", PROTO_KEY},
+        ),
+        (Selection(only=["alpha.template"]), INCLUDED),
+        (Selection(only=["loop.template"]), INCLUDED),
+        (Selection(only=["leaf.db"]), {"config/leaf.db"}),
+    ],
+)
+def test_narrowing_keeps_included_templates(
+    tmp_path: Path, select: Selection, expected: set[str]
+):
+    library = make_pattern(
+        tmp_path / "lib", "multidev", INCLUDING_FILES, INCLUDING_MANIFEST
+    )
+    instance = make_instance(tmp_path)
+    add(instance, library, select)
+    assert locked_files(instance) == expected | {SUPPORT_KEY}
+    assert vendor.check(instance).ok
+
+
+def test_included_file_of_another_suffix_is_followed(tmp_path: Path):
+    """A kept include target is scanned even when --only names it too."""
+    files = dict(INCLUDING_FILES)
+    files["loop.template"] = 'include "common.inc"\n'
+    files["common.inc"] = 'include "leaf.db"\n'
+    manifest = INCLUDING_MANIFEST + "  - src: common\\.inc\n    dest: config\n"
+    library = make_pattern(tmp_path / "lib", "multidev", files, manifest)
+    instance = make_instance(tmp_path)
+    add(instance, library, Selection(only=["loop.template", "common.inc"]))
+    assert locked_files(instance) == {
+        "config/loop.template",
+        "config/common.inc",
+        "config/leaf.db",
+        SUPPORT_KEY,
+    }
+
+
+def test_included_base_name_of_several_files_keeps_them_all(tmp_path: Path):
+    """msi picks among them by its include path, so every match is vendored."""
+    files = dict(INCLUDING_FILES)
+    del files["leaf.db"]
+    files["a/leaf.db"] = "record(ai, $(P)LEAFA) {}\n"
+    files["b/leaf.db"] = "record(ai, $(P)LEAFB) {}\n"
+    manifest = INCLUDING_MANIFEST + "  - src: '[ab]/leaf\\.db'\n    dest: config\n"
+    library = make_pattern(tmp_path / "lib", "multidev", files, manifest)
+    instance = make_instance(tmp_path)
+    add(instance, library, Selection(only=["loop.template"]))
+    assert locked_files(instance) == {
+        "config/alpha.template",
+        "config/loop.template",
+        "config/a/leaf.db",
+        "config/b/leaf.db",
+        SUPPORT_KEY,
+    }
+
+
+# --------------------------------------------------------------------------- #
 # pvi device files and autosave request files follow their models
 # --------------------------------------------------------------------------- #
 PVI_SUPPORT = """\
