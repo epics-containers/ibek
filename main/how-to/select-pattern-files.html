@@ -7,7 +7,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Select which pattern files an instance vendors &#8212; ibek 4.12.2.dev1+gdbcceb0d4 documentation</title>
+    <title>Select which pattern files an instance vendors &#8212; ibek 4.12.2.dev5+g00b5bfd6d documentation</title>
   
   
   
@@ -41,7 +41,7 @@
   <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=75c7c72ae941e8b558d8" />
 <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=75c7c72ae941e8b558d8" />
 
-    <script src="../_static/documentation_options.js?v=0dde4fbc"></script>
+    <script src="../_static/documentation_options.js?v=33a2331e"></script>
     <script src="../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -572,9 +572,10 @@ ibek<span class="w"> </span>pattern<span class="w"> </span>add<span class="w"> <
 <li><p><code class="docutils literal notranslate"><span class="pre">--only</span></code> takes a path relative to the pattern folder, exactly as it appears
 there. It must be a file the manifest vendors; add any other file with
 <code class="docutils literal notranslate"><span class="pre">--include</span></code>. A name the pattern does not vendor is an error that lists the
-files it does vendor. <code class="docutils literal notranslate"><span class="pre">--only</span></code> vendors nothing it is not given: list the
-model’s templates, its pvi device file (<code class="docutils literal notranslate"><span class="pre">*.pvi.device.yaml</span></code>), its autosave
-request files (<code class="docutils literal notranslate"><span class="pre">*.req</span></code>) and the protocol files its templates use.</p></li>
+files it does vendor. Apart from the templates they include (below), <code class="docutils literal notranslate"><span class="pre">--only</span></code>
+vendors nothing it is not given: list the model’s templates, its pvi device
+file (<code class="docutils literal notranslate"><span class="pre">*.pvi.device.yaml</span></code>), its autosave request files (<code class="docutils literal notranslate"><span class="pre">*.req</span></code>) and the
+protocol files its templates use.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">--model</span></code> takes the model’s <code class="docutils literal notranslate"><span class="pre">databases[].file</span></code> entries and its
 <code class="docutils literal notranslate"><span class="pre">pvi.yaml_path</span></code> from the support YAML, and those of the models it
 instantiates through <code class="docutils literal notranslate"><span class="pre">sub_entities</span></code>. Each matches the pattern file at that
@@ -593,6 +594,14 @@ every file, so this is every protocol file in the pattern. StreamDevice
 templates name their protocol inside a record link, not in the support YAML,
 so <code class="docutils literal notranslate"><span class="pre">--model</span></code> cannot tell which protocol a model needs, and a manifest has no
 protocol destination to go by, so protocol files are recognised by suffix.</p></li>
+<li><p>Both options also vendor the pattern files that a kept template (<code class="docutils literal notranslate"><span class="pre">*.template</span></code>
+or <code class="docutils literal notranslate"><span class="pre">*.db</span></code>) names in an msi <code class="docutils literal notranslate"><span class="pre">include</span> <span class="pre">&quot;file&quot;</span></code> line, and the files those
+include in turn, because msi needs them to expand the template. Each name
+matches the pattern file at that path, or else every pattern file with that
+base name. A name that matches no file the pattern vendors is left to the
+image. No autosave request files are kept for an included template:
+<code class="docutils literal notranslate"><span class="pre">ibek</span> <span class="pre">runtime</span> <span class="pre">generate-autosave</span></code> pairs them only with the database files that
+the substitution file loads.</p></li>
 <li><p>An unknown model is an error that lists the pattern’s models. A pattern whose
 support YAMLs declare models of one name in two modules needs the model given
 as <code class="docutils literal notranslate"><span class="pre">module.name</span></code>.</p></li>
@@ -643,7 +652,8 @@ If a manifest rule matches but an <code class="docutils literal notranslate"><sp
 ibek does not vendor the file.</p></li>
 <li><p>ibek does not vendor a file that matches none of the rules.</p></li>
 <li><p>If the selection has <code class="docutils literal notranslate"><span class="pre">only</span></code> or <code class="docutils literal notranslate"><span class="pre">models</span></code>, ibek keeps, of the files the
-manifest placed, the support YAML and the files they name.</p></li>
+manifest placed, the support YAML, the files they name and the templates
+those include.</p></li>
 </ol>
 <p>To vendor only a few files from a large pattern, <code class="docutils literal notranslate"><span class="pre">--only</span></code> and <code class="docutils literal notranslate"><span class="pre">--model</span></code> are
 simplest. Excluding everything and including the files you need also works,

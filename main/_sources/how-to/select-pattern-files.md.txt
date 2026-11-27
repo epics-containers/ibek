@@ -87,9 +87,10 @@ ibek pattern add ibek-runtime-streamdevice:CryoconM14@0.6.0 services/my-ioc \
 - `--only` takes a path relative to the pattern folder, exactly as it appears
   there. It must be a file the manifest vendors; add any other file with
   `--include`. A name the pattern does not vendor is an error that lists the
-  files it does vendor. `--only` vendors nothing it is not given: list the
-  model's templates, its pvi device file (`*.pvi.device.yaml`), its autosave
-  request files (`*.req`) and the protocol files its templates use.
+  files it does vendor. Apart from the templates they include (below), `--only`
+  vendors nothing it is not given: list the model's templates, its pvi device
+  file (`*.pvi.device.yaml`), its autosave request files (`*.req`) and the
+  protocol files its templates use.
 - `--model` takes the model's `databases[].file` entries and its
   `pvi.yaml_path` from the support YAML, and those of the models it
   instantiates through `sub_entities`. Each matches the pattern file at that
@@ -108,6 +109,14 @@ ibek pattern add ibek-runtime-streamdevice:CryoconM14@0.6.0 services/my-ioc \
   templates name their protocol inside a record link, not in the support YAML,
   so `--model` cannot tell which protocol a model needs, and a manifest has no
   protocol destination to go by, so protocol files are recognised by suffix.
+- Both options also vendor the pattern files that a kept template (`*.template`
+  or `*.db`) names in an msi `include "file"` line, and the files those
+  include in turn, because msi needs them to expand the template. Each name
+  matches the pattern file at that path, or else every pattern file with that
+  base name. A name that matches no file the pattern vendors is left to the
+  image. No autosave request files are kept for an included template:
+  `ibek runtime generate-autosave` pairs them only with the database files that
+  the substitution file loads.
 - An unknown model is an error that lists the pattern's models. A pattern whose
   support YAMLs declare models of one name in two modules needs the model given
   as `module.name`.
@@ -162,7 +171,8 @@ ibek considers each file in the pattern folder in this order:
    ibek does not vendor the file.
 3. ibek does not vendor a file that matches none of the rules.
 4. If the selection has `only` or `models`, ibek keeps, of the files the
-   manifest placed, the support YAML and the files they name.
+   manifest placed, the support YAML, the files they name and the templates
+   those include.
 
 To vendor only a few files from a large pattern, `--only` and `--model` are
 simplest. Excluding everything and including the files you need also works,

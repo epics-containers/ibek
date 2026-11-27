@@ -7,7 +7,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Changelog &#8212; ibek 4.12.2.dev1+gdbcceb0d4 documentation</title>
+    <title>Changelog &#8212; ibek 4.12.2.dev5+g00b5bfd6d documentation</title>
   
   
   
@@ -41,7 +41,7 @@
   <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=75c7c72ae941e8b558d8" />
 <link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=75c7c72ae941e8b558d8" />
 
-    <script src="_static/documentation_options.js?v=0dde4fbc"></script>
+    <script src="_static/documentation_options.js?v=33a2331e"></script>
     <script src="_static/doctools.js?v=fd6eb6e6"></script>
     <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="_static/clipboard.min.js?v=a7894cd8"></script>
@@ -632,6 +632,11 @@ test goldens under <code class="docutils literal notranslate"><span class="pre">
 </section>
 <section id="fixed">
 <h3>Fixed<a class="headerlink" href="#fixed" title="Link to this heading">#</a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">ibek</span> <span class="pre">pattern</span> <span class="pre">add</span> <span class="pre">--model</span></code> and <code class="docutils literal notranslate"><span class="pre">--only</span></code> also vendor the pattern files
+that a kept template names in an msi <code class="docutils literal notranslate"><span class="pre">include</span> <span class="pre">&quot;file&quot;</span></code> line, and those that
+they include in turn, so the vendored templates expand with msi. Before, a
+model such as <code class="docutils literal notranslate"><span class="pre">currAmpADC</span></code> left out <code class="docutils literal notranslate"><span class="pre">currAmpRangeADC.template</span></code> and msi
+failed with <code class="docutils literal notranslate"><span class="pre">Can't</span> <span class="pre">open</span> <span class="pre">file</span></code> (#406).</p>
 <p>A plain <code class="docutils literal notranslate"><span class="pre">dest</span></code> whose last part has a file extension, in a
 <code class="docutils literal notranslate"><span class="pre">pattern</span> <span class="pre">add</span> <span class="pre">--include</span> <span class="pre">SRC=DEST</span></code> or a manifest rule, is the destination file:
 <code class="docutils literal notranslate"><span class="pre">--include</span> <span class="pre">'sim/x_sim\.template=config/x.template'</span></code> writes
