@@ -197,13 +197,15 @@ def _with_includes(
     """``keep`` plus every pattern file its templates msi-include, transitively."""
     kept = set(keep)
     pending = sorted(rel for rel in keep if rel.endswith(MSI_SUFFIXES))
+    scheduled = set(pending)
     while pending:
         rel = pending.pop()
         text = by_rel[rel].read_text(errors="replace")
         for file in _MSI_INCLUDE_RE.findall(text):
             for match in _matches(file, vendored):
-                if match not in kept:
-                    kept.add(match)
+                kept.add(match)
+                if match not in scheduled:
+                    scheduled.add(match)
                     pending.append(match)
     return kept
 

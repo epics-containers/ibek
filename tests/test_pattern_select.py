@@ -675,6 +675,23 @@ def test_narrowing_keeps_included_templates(
     assert vendor.check(instance).ok
 
 
+def test_included_file_of_another_suffix_is_followed(tmp_path: Path):
+    """A kept include target is scanned even when --only names it too."""
+    files = dict(INCLUDING_FILES)
+    files["loop.template"] = 'include "common.inc"\n'
+    files["common.inc"] = 'include "leaf.db"\n'
+    manifest = INCLUDING_MANIFEST + "  - src: common\\.inc\n    dest: config\n"
+    library = make_pattern(tmp_path / "lib", "multidev", files, manifest)
+    instance = make_instance(tmp_path)
+    add(instance, library, Selection(only=["loop.template", "common.inc"]))
+    assert locked_files(instance) == {
+        "config/loop.template",
+        "config/common.inc",
+        "config/leaf.db",
+        SUPPORT_KEY,
+    }
+
+
 def test_included_base_name_of_several_files_keeps_them_all(tmp_path: Path):
     """msi picks among them by its include path, so every match is vendored."""
     files = dict(INCLUDING_FILES)
