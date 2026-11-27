@@ -143,9 +143,10 @@ def add(
         list[str] | None,
         typer.Option(
             "--only",
-            help="Vendor only this pattern-relative file (and the pattern's "
-            "support YAML); list a model's templates, pvi device, req and "
-            "protocol files; repeatable; combines with --model; "
+            help="Vendor only this pattern-relative file, the pattern files "
+            "a template msi-includes and the pattern's support YAML; list a "
+            "model's templates, pvi device, req and protocol files; "
+            "repeatable; combines with --model; "
             "recorded in runtime-lock.yaml",
         ),
     ] = None,
@@ -154,9 +155,9 @@ def add(
         typer.Option(
             "--model",
             help="Vendor only the database, autosave req and pvi device files "
-            "this entity model loads, the pattern's protocol files and its "
-            "support YAML; repeatable; combines with --only; recorded in "
-            "runtime-lock.yaml",
+            "this entity model loads, the pattern files its templates "
+            "msi-include, the pattern's protocol files and its support YAML; "
+            "repeatable; combines with --only; recorded in runtime-lock.yaml",
         ),
     ] = None,
 ):
