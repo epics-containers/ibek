@@ -218,7 +218,8 @@ def _req_rels(database_rel: str, vendored: Sequence[str]) -> list[str]:
 def narrow_plan(
     pattern_dir: Path, plan: list[tuple[Path, str]], select: Selection
 ) -> list[tuple[Path, str]]:
-    """Keep the entries of ``plan`` that ``select.only`` / ``select.models`` name.
+    """Keep the entries of ``plan`` that ``select.only`` / ``select.models`` name,
+    and the pattern files their templates msi-include.
 
     ``plan`` is ``plan_vendor``'s ``(source path, destination key)`` list for the
     same ``select``; the entries kept are returned in the same order, with the

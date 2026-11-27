@@ -675,6 +675,25 @@ def test_narrowing_keeps_included_templates(
     assert vendor.check(instance).ok
 
 
+def test_included_base_name_of_several_files_keeps_them_all(tmp_path: Path):
+    """msi picks among them by its include path, so every match is vendored."""
+    files = dict(INCLUDING_FILES)
+    del files["leaf.db"]
+    files["a/leaf.db"] = "record(ai, $(P)LEAFA) {}\n"
+    files["b/leaf.db"] = "record(ai, $(P)LEAFB) {}\n"
+    manifest = INCLUDING_MANIFEST + "  - src: '[ab]/leaf\\.db'\n    dest: config\n"
+    library = make_pattern(tmp_path / "lib", "multidev", files, manifest)
+    instance = make_instance(tmp_path)
+    add(instance, library, Selection(only=["loop.template"]))
+    assert locked_files(instance) == {
+        "config/alpha.template",
+        "config/loop.template",
+        "config/a/leaf.db",
+        "config/b/leaf.db",
+        SUPPORT_KEY,
+    }
+
+
 # --------------------------------------------------------------------------- #
 # pvi device files and autosave request files follow their models
 # --------------------------------------------------------------------------- #

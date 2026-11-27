@@ -160,7 +160,7 @@ Fixed
 that a kept template names in an msi ``include "file"`` line, and those that
 they include in turn, so the vendored templates expand with msi. Before, a
 model such as ``currAmpADC`` left out ``currAmpRangeADC.template`` and msi
-failed with ``Can't open file``.
+failed with ``Can't open file`` (#406).
 
 A plain ``dest`` whose last part has a file extension, in a
 ``pattern add --include SRC=DEST`` or a manifest rule, is the destination file:
